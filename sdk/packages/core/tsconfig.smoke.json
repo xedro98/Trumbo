@@ -1,0 +1,18 @@
+{
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"rootDir": "..",
+		"noEmit": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"paths": {
+			"@trembo/agents": ["../agents/src/index.ts"],
+			"@trembo/agents/*": ["../agents/src/*", "../agents/src/*/index.ts"],
+			"@trembo/llms": ["../llms/src/index.ts"],
+			"@trembo/shared": ["../shared/src/index.ts"],
+			"@trembo/shared/*": ["../shared/src/*", "../shared/src/*/index.ts"]
+		}
+	},
+	"include": ["scripts/**/*", "src/**/*"]
+}

@@ -1,0 +1,4 @@
+title = "Trembo SDK secret scanning"
+
+[extend]
+useDefault = true
