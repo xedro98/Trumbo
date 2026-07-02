@@ -1,7 +1,7 @@
 import { CLI_PROMO_CODE } from "../../../utils/trembo-pass-errors";
 
 const TREMBO_PASS_SUBSCRIPTION_PATH = "/dashboard/subscription";
-const DEFAULT_APP_BASE_URL = "https://app.trembo.bot";
+const DEFAULT_APP_BASE_URL = "http://0.0.0.0:0";
 
 export function buildTremboPassSubscriptionPageUrl(
 	appBaseUrl: string | undefined,

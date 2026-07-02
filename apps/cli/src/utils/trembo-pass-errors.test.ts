@@ -27,7 +27,7 @@ describe("trembo-pass-errors", () => {
 
 	it("formats the TremboPass subscription URL", () => {
 		expect(getCliSubscriptionUrl()).toBe(
-			"https://app.trembo.bot/promo?code=CLI-8OFF&personal=true",
+			"http://0.0.0.0:0/promo?code=CLI-8OFF&personal=true",
 		);
 	});
 

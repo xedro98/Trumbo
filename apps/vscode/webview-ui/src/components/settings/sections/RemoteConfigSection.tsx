@@ -2,8 +2,8 @@ import { EmptyRequest } from "@shared/proto/index.trembo"
 import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 import { useEffect, useRef, useState } from "react"
 import { RemoteConfigToggle } from "@/components/account/RemoteConfigToggle"
-import { useTremboAuth } from "@/context/TremboAuthContext"
 import { useExtensionState } from "@/context/ExtensionStateContext"
+import { useTremboAuth } from "@/context/TremboAuthContext"
 import { StateServiceClient } from "@/services/grpc-client"
 import Section from "../Section"
 
@@ -290,7 +290,7 @@ export function RemoteConfigSection({ renderSectionHeader }: RemoteConfigSection
 				<div className="flex flex-col justify-center gap-4">
 					<h3>
 						You haven't configured remote config yet. Do so through our{" "}
-						<VSCodeLink href="https://app.trembo.bot/dashboard/organization?tab=settings">dashboard</VSCodeLink>.
+						<VSCodeLink href="http://0.0.0.0:0/dashboard/organization?tab=settings">dashboard</VSCodeLink>.
 					</h3>
 
 					<RefreshButton />

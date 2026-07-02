@@ -75,7 +75,9 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 		checkpointRestoreInput,
 		queuedPrompts,
 	} = useExtensionState()
-	const isProdHostedApp = userInfo?.apiBaseUrl === "https://app.trembo.bot"
+	// The hosted Trembo app was removed; there is no upstream prod endpoint, so
+	// this gate is always false now (keeps the downstream variable in place).
+	const isProdHostedApp = false
 	const shouldShowQuickWins = isProdHostedApp && (!taskHistory || taskHistory.length < QUICK_WINS_HISTORY_THRESHOLD)
 
 	// Use custom hooks for state management

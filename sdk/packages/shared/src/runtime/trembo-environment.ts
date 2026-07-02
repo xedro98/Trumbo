@@ -16,24 +16,28 @@ export const TREMBO_ENVIRONMENTS: Readonly<
 > = {
 	production: {
 		environment: "production",
-		appBaseUrl: "https://app.trembo.bot",
-		apiBaseUrl: "https://api.trembo.bot",
-		mcpBaseUrl: "https://api.trembo.bot/v1/mcp",
-		workOsClientId: "client_01K3A541FN8TA3EPPHTD2325AR",
+		// External Trembo backend endpoints are intentionally disabled. These
+		// pointed at the upstream-hosted auth/API/MCP service; pointing them at
+		// a dead local address makes any call fail fast instead of reaching an
+		// external host. Bring-your-own-key providers are unaffected.
+		appBaseUrl: "http://0.0.0.0:0",
+		apiBaseUrl: "http://0.0.0.0:0",
+		mcpBaseUrl: "http://0.0.0.0:0/v1/mcp",
+		workOsClientId: "",
 	},
 	staging: {
 		environment: "staging",
-		appBaseUrl: "https://staging-app.trembo.bot",
-		apiBaseUrl: "https://core-api.staging.int.trembo.bot",
-		mcpBaseUrl: "https://core-api.staging.int.trembo.bot/v1/mcp",
-		workOsClientId: "client_01K3A5415VF6QBQBG3XYCW91G6",
+		appBaseUrl: "http://0.0.0.0:0",
+		apiBaseUrl: "http://0.0.0.0:0",
+		mcpBaseUrl: "http://0.0.0.0:0/v1/mcp",
+		workOsClientId: "",
 	},
 	local: {
 		environment: "local",
 		appBaseUrl: "http://localhost:3000",
 		apiBaseUrl: "http://localhost:7777",
 		mcpBaseUrl: "http://localhost:7777/v1/mcp",
-		workOsClientId: "client_01K6XQAY7JK6T5HXVSZW2S5VYK",
+		workOsClientId: "",
 	},
 };
 

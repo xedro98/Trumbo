@@ -304,28 +304,31 @@ class TremboEndpoint {
 			}
 		}
 
-		// Standard mode: use built-in environment URLs
+		// Standard mode: use built-in environment URLs.
+		// External Trembo backend endpoints are intentionally disabled (dead
+		// local address) so the extension never reaches an upstream-hosted
+		// auth/API/MCP service. Bring-your-own-key providers are unaffected.
 		switch (this.environment) {
 			case Environment.staging:
 				return {
 					environment: Environment.staging,
-					appBaseUrl: "https://staging-app.trembo.bot",
-					apiBaseUrl: "https://core-api.staging.int.trembo.bot",
-					mcpBaseUrl: "https://core-api.staging.int.trembo.bot/v1/mcp",
+					appBaseUrl: "http://0.0.0.0:0",
+					apiBaseUrl: "http://0.0.0.0:0",
+					mcpBaseUrl: "http://0.0.0.0:0/v1/mcp",
 				}
 			case Environment.local:
 				return {
 					environment: Environment.local,
 					appBaseUrl: "http://localhost:3000",
 					apiBaseUrl: "http://localhost:7777",
-					mcpBaseUrl: "https://api.trembo.bot/v1/mcp",
+					mcpBaseUrl: "http://localhost:7777/v1/mcp",
 				}
 			default:
 				return {
 					environment: Environment.production,
-					appBaseUrl: "https://app.trembo.bot",
-					apiBaseUrl: "https://api.trembo.bot",
-					mcpBaseUrl: "https://api.trembo.bot/v1/mcp",
+					appBaseUrl: "http://0.0.0.0:0",
+					apiBaseUrl: "http://0.0.0.0:0",
+					mcpBaseUrl: "http://0.0.0.0:0/v1/mcp",
 				}
 		}
 	}

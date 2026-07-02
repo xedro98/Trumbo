@@ -40,7 +40,7 @@ const useDevEnv = process.env.IS_DEV === "true" || process.env.TREMBO_ENVIRONMEN
 export const posthogConfig: PostHogClientConfig = {
 	apiKey: BUILD_CONSTANTS.TELEMETRY_SERVICE_API_KEY,
 	errorTrackingApiKey: BUILD_CONSTANTS.ERROR_SERVICE_API_KEY,
-	host: "https://data.trembo.bot",
+	host: "http://0.0.0.0:0",
 	uiHost: useDevEnv ? "https://us.i.posthog.com" : "https://us.posthog.com",
 	enableErrorAutocapture: BUILD_CONSTANTS.ENABLE_ERROR_AUTOCAPTURE === "true",
 }

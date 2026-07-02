@@ -1,5 +1,4 @@
 export const DEFAULT_REQUEST_HEADERS: Record<string, string> = {
-	"HTTP-Referer": "https://trembo.bot",
 	"X-Title": "Trembo",
 	"X-IS-MULTIROOT": "false",
 	"X-CLIENT-TYPE": "trembo-sdk",

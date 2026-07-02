@@ -14,8 +14,8 @@ interface CreditLimitErrorProps {
 }
 
 const DEFAULT_BUY_CREDITS_URL = {
-	USER: "https://app.trembo.bot/dashboard/account?tab=credits&redirect=true",
-	ORG: "https://app.trembo.bot/dashboard/organization?tab=credits&redirect=true",
+	USER: "http://0.0.0.0:0/dashboard/account?tab=credits&redirect=true",
+	ORG: "http://0.0.0.0:0/dashboard/organization?tab=credits&redirect=true",
 }
 
 const CreditLimitError: React.FC<CreditLimitErrorProps> = ({

@@ -16,7 +16,7 @@ mock.module("os", osMock)
 mock.module("node:os", osMock)
 
 import os from "os"
-import { TremboConfigurationError, TremboEndpoint, TremboEnv, Environment } from "../config"
+import { Environment, TremboConfigurationError, TremboEndpoint, TremboEnv } from "../config"
 
 describe("TremboEndpoint configuration", () => {
 	let sandbox: sinon.SinonSandbox
@@ -81,8 +81,8 @@ describe("TremboEndpoint configuration", () => {
 			const config = TremboEndpoint.config
 			config.environment.should.not.equal(Environment.selfHosted)
 			// Should use production defaults
-			config.appBaseUrl.should.equal("https://app.trembo.bot")
-			config.apiBaseUrl.should.equal("https://api.trembo.bot")
+			config.appBaseUrl.should.equal("http://0.0.0.0:0")
+			config.apiBaseUrl.should.equal("http://0.0.0.0:0")
 		})
 
 		it("should accept URLs with ports", async () => {
@@ -646,8 +646,8 @@ describe("TremboEndpoint configuration", () => {
 			// Should use production defaults
 			const config = TremboEndpoint.config
 			config.environment.should.not.equal(Environment.selfHosted)
-			config.appBaseUrl.should.equal("https://app.trembo.bot")
-			config.apiBaseUrl.should.equal("https://api.trembo.bot")
+			config.appBaseUrl.should.equal("http://0.0.0.0:0")
+			config.apiBaseUrl.should.equal("http://0.0.0.0:0")
 		})
 
 		it("should throw TremboConfigurationError for invalid bundled file", async () => {

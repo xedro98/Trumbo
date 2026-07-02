@@ -3,9 +3,9 @@ import { Controller } from "@core/controller/index"
 import axios from "axios"
 import { readFile } from "fs/promises"
 import { HostProvider } from "@/hosts/host-provider"
-import { TremboExtensionContext } from "@/shared/trembo"
 import { ShowMessageType } from "@/shared/proto/host/window"
 import { Logger } from "@/shared/services/Logger"
+import { TremboExtensionContext } from "@/shared/trembo"
 import { getNonce } from "./getNonce"
 
 export abstract class WebviewProvider {
@@ -106,7 +106,7 @@ export abstract class WebviewProvider {
 				<meta name="theme-color" content="#000000">
 				<link rel="stylesheet" type="text/css" href="${stylesUrl}">
 				<meta http-equiv="Content-Security-Policy" content="default-src 'none';
-					connect-src https://*.posthog.com https://*.trembo.bot; 
+					connect-src https://*.posthog.com;
 					font-src ${this.getCspSource()} data:; 
 					style-src ${this.getCspSource()} 'unsafe-inline'; 
 					img-src ${this.getCspSource()} https: data:; 

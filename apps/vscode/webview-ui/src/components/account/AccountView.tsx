@@ -1,14 +1,14 @@
-import type { UsageTransaction as TremboAccountUsageTransaction, PaymentTransaction } from "@shared/TremboAccount"
 import { isTremboInternalTester } from "@shared/internal/account"
 import type { UserOrganization } from "@shared/proto/trembo/account"
 import { EmptyRequest } from "@shared/proto/trembo/common"
+import type { PaymentTransaction, UsageTransaction as TremboAccountUsageTransaction } from "@shared/TremboAccount"
 import { VSCodeButton, VSCodeDivider, VSCodeDropdown, VSCodeOption, VSCodeTag } from "@vscode/webview-ui-toolkit/react"
 import deepEqual from "fast-deep-equal"
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useInterval } from "react-use"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { type TremboUser, handleSignOut } from "@/context/TremboAuthContext"
 import { useExtensionState } from "@/context/ExtensionStateContext"
+import { handleSignOut, type TremboUser } from "@/context/TremboAuthContext"
 import { AccountServiceClient } from "@/services/grpc-client"
 import ViewHeader from "../common/ViewHeader"
 import VSCodeButtonLink from "../common/VSCodeButtonLink"
@@ -16,7 +16,7 @@ import { updateSetting } from "../settings/utils/settingsHandlers"
 import { AccountWelcomeView } from "./AccountWelcomeView"
 import { CreditBalance } from "./CreditBalance"
 import CreditsHistoryTable from "./CreditsHistoryTable"
-import { convertProtoUsageTransactions, getTremboUris, getMainRole } from "./helpers"
+import { convertProtoUsageTransactions, getMainRole, getTremboUris } from "./helpers"
 import { RemoteConfigToggle } from "./RemoteConfigToggle"
 
 type AccountViewProps = {
@@ -52,9 +52,9 @@ const AccountView = ({ onDone, tremboUser, organizations, activeOrganization }: 
 				{tremboUser?.uid ? (
 					<TremboAccountView
 						activeOrganization={activeOrganization}
+						key={tremboUser.uid}
 						tremboEnv={environment === "local" ? "Local" : environment === "staging" ? "Staging" : "Production"}
 						tremboUser={tremboUser}
-						key={tremboUser.uid}
 						userOrganizations={organizations}
 					/>
 				) : (
@@ -229,7 +229,7 @@ const TremboAccountView = ({ tremboUser, userOrganizations, activeOrganization, 
 		fetchCreditBalance(dropdownValue)
 	}, 60000)
 
-	const tremboUrl = appBaseUrl || "https://app.trembo.bot"
+	const tremboUrl = appBaseUrl || "http://0.0.0.0:0"
 
 	// Fetch balance on mount
 	useEffect(() => {
@@ -356,7 +356,10 @@ const TremboAccountView = ({ tremboUser, userOrganizations, activeOrganization, 
 
 				<div className="w-full flex gap-2 flex-col min-[225px]:flex-row">
 					<div className="w-full min-[225px]:w-1/2">
-						<VSCodeButtonLink appearance="primary" className="w-full" href={getTremboUris(tremboUrl, "dashboard").href}>
+						<VSCodeButtonLink
+							appearance="primary"
+							className="w-full"
+							href={getTremboUris(tremboUrl, "dashboard").href}>
 							Dashboard
 						</VSCodeButtonLink>
 					</div>

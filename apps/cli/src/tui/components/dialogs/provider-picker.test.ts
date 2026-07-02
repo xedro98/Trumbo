@@ -4,15 +4,15 @@ import { buildTremboPassSubscriptionPageUrl } from "./provider-picker-helpers";
 describe("buildTremboPassSubscriptionPageUrl", () => {
 	it("opens the personal subscription page on production by default", () => {
 		expect(buildTremboPassSubscriptionPageUrl(undefined)).toBe(
-			"https://app.trembo.bot/dashboard/subscription?personal=true&code=CLI-8OFF",
+			"http://0.0.0.0:0/dashboard/subscription?personal=true&code=CLI-8OFF",
 		);
 	});
 
 	it("keeps the configured app base URL", () => {
 		expect(
-			buildTremboPassSubscriptionPageUrl("https://staging-app.trembo.bot"),
+			buildTremboPassSubscriptionPageUrl("http://127.0.0.1:9999"),
 		).toBe(
-			"https://staging-app.trembo.bot/dashboard/subscription?personal=true&code=CLI-8OFF",
+			"http://127.0.0.1:9999/dashboard/subscription?personal=true&code=CLI-8OFF",
 		);
 	});
 });

@@ -55,7 +55,7 @@ export function useAccountDialog(opts: {
 			return;
 		}
 		if (action === "learn-more") {
-			await open("https://trembo.bot", { wait: false }).catch(() => {});
+			await open("http://0.0.0.0:0", { wait: false }).catch(() => {});
 			refocusTextarea();
 			return;
 		}

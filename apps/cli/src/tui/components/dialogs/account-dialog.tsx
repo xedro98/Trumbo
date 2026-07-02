@@ -69,14 +69,14 @@ const UNAUTHENTICATED_ACTIONS: AccountAction[] = [
 	{
 		id: "login",
 		label: "Sign in or create account",
-		description: "Use Trembo OAuth",
-		enabled: true,
+		description: "Use Trembo OAuth (disabled)",
+		enabled: false,
 	},
 	{
 		id: "learn-more",
 		label: "Learn more",
-		description: "Open trembo.bot",
-		enabled: true,
+		description: "Trembo docs (disabled)",
+		enabled: false,
 	},
 ];
 

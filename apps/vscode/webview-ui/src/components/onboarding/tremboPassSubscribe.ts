@@ -4,7 +4,7 @@ import { UiServiceClient } from "@/services/grpc-client"
 // TremboPass subscription signup page in the dashboard (requires auth).
 const TREMBO_PASS_SUBSCRIBE_PATH = "/onboarding/individual-plan"
 const TREMBO_PASS_USAGE_PATH = "/dashboard/subscription"
-export const DEFAULT_APP_BASE_URL = "https://app.trembo.bot"
+export const DEFAULT_APP_BASE_URL = "http://0.0.0.0:0"
 
 // Module-level so the pending intent survives OnboardingView unmounting: handleAuthCallback
 // completes the welcome view (unmounting onboarding) before it pushes the auth-status update

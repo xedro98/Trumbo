@@ -20,7 +20,7 @@ import { identifyTelemetryAccount } from "../utils/telemetry";
 import type { Config } from "../utils/types";
 
 export const TREMBO_CREDITS_DASHBOARD_URL =
-	"https://app.trembo.bot/dashboard/account?tab=credits";
+	"http://0.0.0.0:0/dashboard/account?tab=credits";
 
 type TremboAccountConfig = Pick<Config, "apiKey" | "logger" | "providerId">;
 
