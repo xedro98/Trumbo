@@ -14,13 +14,7 @@ description: "Configure Trembo to work behind firewalls and proxies"
 ```
 
 
-If you sit behind a corporate proxy or firewall, you'll need to point Trembo at your proxy settings so it can reach AI providers. The exact steps depend on which Trembo surface you're using.
-
-## VSCode Extension
-
-The VSCode extension inherits VSCode's built-in proxy settings. See
-[Network Connections in Visual Studio Code, Proxy server support](https://code.visualstudio.com/docs/setup/network#_proxy-server-support)
-for how to configure proxies in VSCode. No extra Trembo-specific setup is required.
+If you sit behind a corporate proxy or firewall, you'll need to point Trembo at your proxy settings so it can reach AI providers.
 
 ## CLI
 
@@ -116,63 +110,6 @@ The Trembo CLI supports HTTP proxies only. It does not support SOCKS proxies,
 proxy autoconfiguration (PAC) scripts, or HTTP proxies that require
 authentication beyond a basic username and password.
 
-## JetBrains IDEs
-
-The JetBrains plugin uses the IDE's HTTP proxy settings.
-
-### Configure JetBrains Proxy
-
-1. Open Settings/Preferences:
-   - **Windows/Linux**: File > Settings
-   - **macOS**: IntelliJ IDEA > Preferences
-   - Or press `Ctrl+Alt+S` (Windows/Linux) or `Cmd+,` (macOS)
-
-2. Navigate to:
-   ```
-   Appearance & Behavior > System Settings > HTTP Proxy
-   ```
-
-3. Select "Manual proxy configuration"
-
-4. Configure your proxy:
-   - **Host name**: `proxy.company.com`
-   - **Port number**: `8080`
-   - **No proxy for**: `localhost,127.0.0.1`
-   - Check "Proxy authentication" if required
-   - Enter your username and password
-
-5. Click "Check connection" to verify the settings
-
-6. Click "OK" to apply
-
-7. Restart the IDE
-
-### Test Connection
-
-After configuring the proxy, confirm Trembo can reach your AI provider:
-
-1. Open the Trembo panel
-2. Try sending a simple message
-3. If the connection fails, check the IDE's Event Log for error messages
-
-### Custom Certificate Authority
-
-If your proxy uses a custom CA:
-
-1. Add the certificate to your system's trust store, or
-2. Import it into the JetBrains IDE:
-   - Settings > Tools > Server Certificates
-   - Click "+" to add your certificate
-
-### Known Limitations
-
-Trembo in JetBrains supports HTTP proxies only. It does not support SOCKS
-proxies, proxy autoconfiguration (PAC) scripts, or HTTP proxies that require
-authentication beyond a basic username and password.
-
-Trembo does not pick up changed proxy settings dynamically. After changing proxy
-settings, restart the IDE so Trembo picks them up.
-
 ## Troubleshooting
 
 ### Connection Timeouts
@@ -190,7 +127,6 @@ If you see certificate-related errors:
 1. Check that `NODE_EXTRA_CA_CERTS` points to the correct certificate file
 2. Make sure the certificate file is in PEM format
 3. Use curl to verify the certificate works, for example, `curl -x proxy.corp.example:8080 --cacert /path/to/ca-cert.pem -o - -vv http://0.0.0.0:0/`
-4. Consider disabling `http.proxyStrictSSL` in VSCode (not recommended for production)
 
 ### Testing Proxy Configuration
 
@@ -209,7 +145,7 @@ curl.exe -vv https://api.anthropic.com
 
 Use `--cacert $NODE_EXTRA_CA_CERTS` to specify a certificate if necessary.
 
-Next, check `~/.trembo/trembo-core-service.log` (CLI, JetBrains) for log messages
+Next, check `~/.trembo/trembo-core-service.log` (CLI) for log messages
 that confirm your proxy configuration and any network-related errors.
 
 ## Common Proxy Patterns

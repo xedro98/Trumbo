@@ -14,7 +14,7 @@ description: "A local daemon coordinates sessions across clients, while spoke wo
 ```
 
 
-The SDK uses a hub-spoke architecture for production deployments. A background daemon (the hub) coordinates session state and event routing, spoke workers run the agent loop, and clients (CLI, VS Code, JetBrains, etc.) attach as peers over WebSocket.
+The SDK uses a hub-spoke architecture for production deployments. A background daemon (the hub) coordinates session state and event routing, spoke workers run the agent loop, and clients (the CLI and any custom app) attach as peers over WebSocket.
 
 ## Why Hub-Spoke?
 
@@ -37,7 +37,7 @@ The hub-spoke model solves all of these by separating coordination from executio
     Worker process running `@trembo/core`. Executes the agent loop, calls tools, streams output. Reports events back to the hub. Owned by the daemon, not by any client.
   </Card>
   <Card title="Client" icon="display">
-    CLI, VS Code, JetBrains, or any custom app. Discovers the hub, registers over WebSocket, attaches to sessions, sends user input, receives streamed events.
+    The CLI or any custom app. Discovers the hub, registers over WebSocket, attaches to sessions, sends user input, receives streamed events.
   </Card>
 </CardGroup>
 
@@ -104,9 +104,9 @@ Use `remote` for:
 
 When multiple clients are attached to a session, the hub routes capability requests to whichever client can handle them. Clients advertise their capabilities at registration.
 
-For example, VS Code might register `open-file`, `reveal-diff`, and `run-build` capabilities. The CLI might register `shell` and `run-tests`. When the agent needs to open a diff, the hub routes the request to VS Code. When it needs to run a shell command, the hub routes to the CLI.
+For example, an editor client might register `open-file`, `reveal-diff`, and `run-build` capabilities. The CLI might register `shell` and `run-tests`. When the agent needs to open a diff, the hub routes the request to the editor client. When it needs to run a shell command, the hub routes to the CLI.
 
-This means a session gets richer as more clients join. A CLI session can later be enriched by VS Code attaching -- an IDE selection can be sent into a running terminal session, or a diff created by one client can be opened by another.
+This means a session gets richer as more clients join. A CLI session can later be enriched by another client attaching -- an IDE selection can be sent into a running terminal session, or a diff created by one client can be opened by another.
 
 ## Session Persistence
 
@@ -141,7 +141,7 @@ Multiple clients can connect to the same hub and attach to the same session simu
 # Terminal 1: start a task
 trembo "Work on feature X"
 
-# Terminal 2: attach to the same session from VS Code or another CLI
+# Terminal 2: attach to the same session from another CLI
 
 # Terminal 3: Telegram connector
 trembo connect telegram -k $TOKEN

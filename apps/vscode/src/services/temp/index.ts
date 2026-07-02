@@ -1,1 +1,0 @@
-export { TremboTempManager } from "./TremboTempManager"

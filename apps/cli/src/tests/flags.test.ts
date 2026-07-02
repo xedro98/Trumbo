@@ -32,9 +32,9 @@ test.describe("root flag descriptions", () => {
 			"omitted leaves provider default",
 			"consecutive mistakes",
 			"Output messages as JSON",
-			"Check for updates and install if available",
-			"Run the kanban app",
-		]);
+		"Check for updates and install if available",
+		"Removed: kanban is no longer bundled",
+	]);
 	});
 
 	test("all short flag aliases are shown", async ({ terminal }) => {

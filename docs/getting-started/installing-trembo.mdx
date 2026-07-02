@@ -1,6 +1,6 @@
 ---
 title: "Installing Trembo"
-description: "Choose your installation path: IDE Extension, CLI, SDK, or Kanban"
+description: "Choose your installation path: CLI or SDK"
 ---
 ```text
  _________  ________  _______   _____ ______   ________  ________
@@ -15,63 +15,8 @@ description: "Choose your installation path: IDE Extension, CLI, SDK, or Kanban"
 
 ## Choose Your Install Path
 
-- [IDE Extension](#ide-extension) — VS Code, Cursor, JetBrains, Windsurf, VSCodium, Antigravity
 - [CLI](#cli) — terminal workflows
-- [Kanban](#kanban) (preview) — coordinate many agents from a kanban board
 - [SDK](#sdk) — build with `@trembo/sdk`
-
-## IDE Extension
-
-Pick this if you want Trembo living inside your editor.
-
-<Tabs>
-  <Tab title="VS Code / Cursor / Windsurf / VSCodium / Antigravity">
-    <Steps>
-      <Step title="Open Extensions">
-        Press `Ctrl/Cmd + Shift + X`.
-      </Step>
-      <Step title="Search for Trembo">
-        Type `Trembo`.
-      </Step>
-      <Step title="Install">
-        Click **Install** on the Trembo extension.
-      </Step>
-      <Step title="Open Trembo">
-        Use the Trembo activity bar icon, or run `Trembo: Open In New Tab` from the Command Palette.
-      </Step>
-      <Step title="Authorize with Trembo">
-        After installing, finish provider setup in Trembo settings. Use the Trembo Provider for pay-as-you-go access, TremboPass for a flat monthly subscription, or bring your own provider key.
-
-        [Authorize with Trembo](/getting-started/authorizing-with-trembo)
-      </Step>
-    </Steps>
-
-    <Note>
-    Windsurf and VSCodium use Open VSX. The install flow is the same.
-    </Note>
-  </Tab>
-
-  <Tab title="JetBrains">
-    <Steps>
-      <Step title="Open Plugins Marketplace">
-        **Settings** → **Plugins** → **Marketplace**.
-      </Step>
-      <Step title="Install Trembo">
-        Search `Trembo`, click **Install**, then restart the IDE.
-      </Step>
-      <Step title="Open Trembo">
-        **View** → **Tool Windows** → **Trembo**.
-      </Step>
-      <Step title="Authorize with Trembo">
-        After installing, finish provider setup in Trembo settings. Use the Trembo Provider for pay-as-you-go access, TremboPass for a flat monthly subscription, or bring your own provider key.
-
-        [Authorize with Trembo](/getting-started/authorizing-with-trembo)
-      </Step>
-    </Steps>
-
-    Alternative: install from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/28247-trembo).
-  </Tab>
-</Tabs>
 
 ## CLI
 
@@ -101,23 +46,6 @@ Pick this if you want Trembo in terminal workflows, both interactive and automat
 </Steps>
 
 More details: [CLI Installation & Setup](/usage/cli-overview)
-
-## Kanban
-
-Pick this if you want task-board workflows backed by agent execution.
-
-<Steps>
-  <Step title="Install Node.js">
-    Install Node.js 18+.
-  </Step>
-  <Step title="Launch Kanban">
-    ```bash
-    npx kanban
-    ```
-  </Step>
-</Steps>
-
-More details: [Kanban](/usage/kanban)
 
 ## SDK
 

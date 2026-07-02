@@ -10,7 +10,7 @@
 
 # Trembo CLI
 
-Run Trembo in your terminal — an interactive chat for paired sessions, or a fully headless mode for CI/CD and scripting. The CLI shares its agent core with the [Trembo VS Code extension](https://github.com/xedro98/trembo/tree/main/apps/vscode) and the [Trembo SDK](https://github.com/xedro98/trembo/tree/main/sdk), so Plan/Act modes, MCP servers, checkpoints, rules, skills, and provider configuration all behave the same across surfaces.
+Run Trembo in your terminal — an interactive chat for paired sessions, or a fully headless mode for CI/CD and scripting. The CLI shares its agent core with the [Trembo SDK](https://github.com/xedro98/trembo/tree/main/sdk), so Plan/Act modes, MCP servers, checkpoints, rules, skills, and provider configuration all behave the same across surfaces.
 
 [Docs](https://github.com/xedro98/trembo) • [Issues](https://github.com/xedro98/trembo/issues) • [Discussions](https://github.com/xedro98/trembo/discussions)
 

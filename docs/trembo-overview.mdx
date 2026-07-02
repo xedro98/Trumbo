@@ -18,7 +18,7 @@ Welcome to the Trembo documentation. Whether you're setting up for the first tim
 
 ## What is Trembo?
 
-Trembo is an AI coding agent that lives in your editor and your terminal. It reads and writes files, runs terminal commands, drives a browser, and helps you build features through natural conversation. Every action waits for your explicit approval, so you stay in control the whole way through.
+Trembo is an AI coding agent that lives in your terminal. It reads and writes files, runs terminal commands, drives a browser, and helps you build features through natural conversation. Every action waits for your explicit approval, so you stay in control the whole way through.
 
 ## Model access
 
@@ -38,24 +38,13 @@ Pick the model access path that fits how you work:
 
 ## Applications
 
-These are the end-user apps built on top of Trembo's agent core:
+The end-user app built on top of Trembo's agent core:
 
-<CardGroup cols={2}>
+<CardGroup cols={1}>
   <Card title="CLI" icon="terminal" href="/usage/cli-overview">
     Run Trembo in your terminal with interactive chat or fully headless automation for CI/CD and scripting.
 
     `npm i -g trembo`
-  </Card>
-  <Card title="Kanban" icon="table-columns" href="https://github.com/xedro98/trembo">
-    Run many agents in parallel from a web-based task board with per-card worktrees, auto-commit, and dependency chains.
-
-    `npx kanban`
-  </Card>
-  <Card title="VS Code Extension" icon="code" href="https://github.com/xedro98/trembo/tree/main/apps/vscode">
-    AI coding assistant in your editor. Create files, run commands, browse the web, and use tools with human-in-the-loop approval.
-  </Card>
-  <Card title="JetBrains Plugin" icon="brain" href="https://plugins.jetbrains.com/plugin/27189-trembo">
-    The same Trembo experience in IntelliJ IDEA, PyCharm, WebStorm, GoLand, and the rest of the JetBrains family.
   </Card>
 </CardGroup>
 
@@ -66,15 +55,15 @@ The SDK is Trembo's agent core — use it to build your own applications, automa
 
 <CardGroup cols={1}>
   <Card title="SDK" icon="cube" href="/sdk/overview">
-    Build AI agents and integrations powered by the same core engine behind the CLI, Kanban, VS Code extension, and JetBrains plugin.
+    Build AI agents and integrations powered by the same core engine behind the CLI.
 
     `npm install @trembo/sdk`
   </Card>
 </CardGroup>
 
-## Other IDE Supports
+## Editor integration
 
-Trembo works across all major editors: **VS Code**, **Cursor**, **Windsurf**, **JetBrains** (IntelliJ, PyCharm, WebStorm), **Antigravity**, and **Zed**, **Neovim** via ACP mode.
+The Trembo CLI also integrates with ACP-capable editors (such as **Zed** and **Neovim**) via `trembo --acp`.
 
 
 ## Enterprise Solutions

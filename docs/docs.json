@@ -103,7 +103,6 @@
 					{
 						"group": "Usage",
 						"pages": [
-							"usage/ide",
 							"usage/tui",
 							{
 								"group": "CLI",
@@ -120,14 +119,6 @@
 											"cli/samples/supply-chain-alerts"
 										]
 									}
-								]
-							},
-							{
-								"group": "Kanban",
-								"pages": [
-									"usage/kanban",
-									"kanban/core-workflow",
-									"kanban/remote-access"
 								]
 							}
 						]
@@ -678,18 +669,6 @@
 		{
 			"source": "/cli/overview",
 			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/kanban/overview",
-			"destination": "/usage/kanban"
-		},
-		{
-			"source": "/kanban/getting-started",
-			"destination": "/usage/kanban"
-		},
-		{
-			"source": "/kanban/features",
-			"destination": "/usage/kanban"
 		},
 		{
 			"source": "/features/background-edit",

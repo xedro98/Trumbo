@@ -184,6 +184,23 @@ describe("auto update settings", () => {
 		await checkForUpdates({ includeKanban: false });
 
 		expect(fetchSpy).toHaveBeenCalled();
+		// Kanban is excluded from updates: only the CLI version check runs,
+		// never a second fetch for the kanban package version.
+		expect(fetchSpy).toHaveBeenCalledTimes(1);
+	});
+
+	it("excludes kanban from updates by default", async () => {
+		delete process.env.TREMBO_NO_AUTO_UPDATE;
+		const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+			ok: true,
+			json: async () => ({ version: "0.0.0" }),
+		} as Response);
+
+		await checkForUpdates();
+
+		// Default flow performs only the CLI version check; no kanban version
+		// check fetch and no kanban install path is reached.
+		expect(fetchSpy).toHaveBeenCalledTimes(1);
 	});
 });
 

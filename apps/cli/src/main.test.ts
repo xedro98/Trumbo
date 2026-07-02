@@ -352,6 +352,9 @@ describe("runCli lightweight command dispatch", () => {
 	});
 
 	it("does not load runtime modules for root kanban flag", async () => {
+		const consoleError = vi
+			.spyOn(console, "error")
+			.mockImplementation(() => undefined);
 		mockState.runAgentImports = 0;
 		mockState.runInteractiveImports = 0;
 
@@ -360,13 +363,19 @@ describe("runCli lightweight command dispatch", () => {
 		const { runCli } = await import("./main");
 
 		await expect(runCli()).resolves.toBeUndefined();
-		expect(process.exitCode).toBe(0);
-		expect(kanbanMocks.launchKanban).toHaveBeenCalledTimes(1);
+		expect(process.exitCode).toBe(1);
+		expect(kanbanMocks.launchKanban).not.toHaveBeenCalled();
+		expect(consoleError).toHaveBeenCalledWith(
+			expect.stringContaining("Kanban is no longer available in this build."),
+		);
 		expect(mockState.runAgentImports).toBe(0);
 		expect(mockState.runInteractiveImports).toBe(0);
 	});
 
 	it("rejects root kanban with a prompt", async () => {
+		const consoleError = vi
+			.spyOn(console, "error")
+			.mockImplementation(() => undefined);
 		mockState.runAgentImports = 0;
 		mockState.runInteractiveImports = 0;
 
@@ -377,6 +386,9 @@ describe("runCli lightweight command dispatch", () => {
 		await expect(runCli()).resolves.toBeUndefined();
 		expect(process.exitCode).toBe(1);
 		expect(kanbanMocks.launchKanban).not.toHaveBeenCalled();
+		expect(consoleError).toHaveBeenCalledWith(
+			expect.stringContaining("Kanban is no longer available in this build."),
+		);
 		expect(mockState.runAgentImports).toBe(0);
 		expect(mockState.runInteractiveImports).toBe(0);
 	});
@@ -1014,15 +1026,21 @@ describe("runCli lightweight command dispatch", () => {
 	});
 
 	it("runs kanban before loading runtime modules", async () => {
+		const consoleError = vi
+			.spyOn(console, "error")
+			.mockImplementation(() => undefined);
 		process.argv = ["bun", "src/index.ts", "kanban"];
 
 		const { runCli } = await import("./main");
 
 		await expect(runCli()).resolves.toBeUndefined();
-		expect(kanbanMocks.launchKanban).toHaveBeenCalledTimes(1);
+		expect(kanbanMocks.launchKanban).not.toHaveBeenCalled();
+		expect(consoleError).toHaveBeenCalledWith(
+			expect.stringContaining("Kanban is no longer available in this build."),
+		);
 		expect(mockState.runAgentImports).toBe(0);
 		expect(mockState.runInteractiveImports).toBe(0);
-		expect(process.exitCode).toBe(0);
+		expect(process.exitCode).toBe(1);
 	});
 
 	it("runs dashboard before loading runtime modules", async () => {
@@ -1057,24 +1075,17 @@ describe("runCli lightweight command dispatch", () => {
 	});
 
 	it("prints an install hint when kanban is missing", async () => {
-		const stderrWrite = vi
-			.spyOn(process.stderr, "write")
-			.mockImplementation(() => true);
-		kanbanMocks.launchKanban.mockImplementation(async () => {
-			process.stderr.write(
-				'kanban is not installed. Install it with "npm i -g kanban"\n',
-			);
-			return 1;
-		});
+		const consoleError = vi
+			.spyOn(console, "error")
+			.mockImplementation(() => undefined);
 		process.argv = ["bun", "src/index.ts", "kanban"];
 
 		const { runCli } = await import("./main");
 
 		await expect(runCli()).resolves.toBeUndefined();
-		expect(stderrWrite).toHaveBeenCalledWith(
-			expect.stringContaining(
-				'kanban is not installed. Install it with "npm i -g kanban"',
-			),
+		expect(kanbanMocks.launchKanban).not.toHaveBeenCalled();
+		expect(consoleError).toHaveBeenCalledWith(
+			expect.stringContaining("Kanban is no longer available in this build."),
 		);
 		expect(process.exitCode).toBe(1);
 	});

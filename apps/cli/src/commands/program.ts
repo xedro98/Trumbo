@@ -80,8 +80,8 @@ export function addRootOptions(cmd: Command): Command {
 				"--worktree",
 				"Auto-create a detached git worktree under ~/.trembo/worktrees/ and run the task there",
 			)
-			.option("--update", "Check for updates and install if available")
-			.option("--kanban", "Run the kanban app")
+		.option("--update", "Check for updates and install if available")
+		.option("--kanban", "Removed: kanban is no longer bundled")
 			.option("-v, --verbose", "Show verbose output")
 			// HIDDEN/LEGACY OPTIONS BELOW
 			.addOption(

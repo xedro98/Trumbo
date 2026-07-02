@@ -368,10 +368,8 @@ export async function checkForUpdates(
 	options: CheckForUpdatesOptions = {},
 ): Promise<number> {
 	const currentVersion = version;
-	const includeKanban = options.includeKanban ?? true;
-	writeln(
-		`${c.green}Checking for updates${includeKanban ? " to Trembo CLI and kanban" : ""}…${c.reset}`,
-	);
+	const includeKanban = options.includeKanban ?? false;
+	writeln(`${c.green}Checking for Trembo CLI updates…${c.reset}`);
 
 	const { packageName, updateCommand, packageManager } =
 		getInstallationInfo(currentVersion);

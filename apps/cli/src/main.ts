@@ -10,10 +10,7 @@ import {
 	commanderToParsedArgs,
 	createProgram,
 } from "./commands/program";
-import {
-	autoUpdateOnStartup,
-	getPreferredKanbanInstaller,
-} from "./commands/update";
+import { autoUpdateOnStartup } from "./commands/update";
 import { CLI_DEFAULT_CHECKPOINT_CONFIG } from "./runtime/defaults";
 import {
 	buildCliCompactionConfig,
@@ -683,12 +680,10 @@ export async function runCli(): Promise<void> {
 
 	program
 		.command("kanban")
-		.description("Run the kanban app")
+		.description("Removed: kanban is no longer bundled")
 		.action(async () => {
-			const { launchKanban } = await import("./commands/kanban");
-			ctx.exitCode = await launchKanban({
-				preferredInstaller: getPreferredKanbanInstaller(),
-			});
+			writeErr("Kanban is no longer available in this build.");
+			ctx.exitCode = 1;
 		});
 
 	try {
@@ -729,20 +724,8 @@ export async function runCli(): Promise<void> {
 		return;
 	}
 	if (rootOpts.kanban) {
-		if (rootOpts.tui) {
-			writeErr("Use either --kanban or --tui, not both.");
-			process.exitCode = 1;
-			return;
-		}
-		if (program.args.length > 0) {
-			writeErr("Use --kanban without a prompt.");
-			process.exitCode = 1;
-			return;
-		}
-		const { launchKanban } = await import("./commands/kanban");
-		process.exitCode = await launchKanban({
-			preferredInstaller: getPreferredKanbanInstaller(),
-		});
+		writeErr("Kanban is no longer available in this build.");
+		process.exitCode = 1;
 		return;
 	}
 

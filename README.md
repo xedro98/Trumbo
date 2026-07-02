@@ -12,7 +12,7 @@
 
 <h1 align="center">Trembo</h1>
 
-<p align="center">An open-source coding agent that lives in your terminal and your editor.<br/>Bring your own keys. No telemetry, no account, no upstream required.</p>
+<p align="center">An open-source, self-hostable AI coding agent for your terminal.<br/>Bring your own keys. No telemetry, no account, no upstream required.</p>
 
 <div align="center">
 
@@ -22,10 +22,9 @@
 
 ---
 
-Trembo is a self-hostable AI coding agent. It reads your project, plans a change, edits files across your codebase, runs shell commands, browses the web, and reports back — all with you in the loop. It runs three ways from one engine:
+Trembo is a self-hostable AI coding agent. It reads your project, plans a change, edits files across your codebase, runs shell commands, browses the web, and reports back — all with you in the loop. It runs two ways from one engine:
 
 - **CLI** — an interactive terminal app plus a headless JSON mode for CI/CD and scripting.
-- **VS Code extension** — the same agent inside your editor, with diff review and approvals.
 - **SDK** — a TypeScript API for building your own agents, tools, connectors, and scheduled automations.
 
 Everything is bring-your-own-key: plug in Anthropic, OpenAI, Google, OpenRouter, Bedrock, Vertex, Azure, Ollama, LM Studio, or any OpenAI-compatible endpoint. Trembo never phones home — telemetry is disabled and there is no hosted backend to sign in to.
@@ -35,7 +34,6 @@ Everything is bring-your-own-key: plug in Anthropic, OpenAI, Google, OpenRouter,
 | Package | What it is | Path |
 |---------|-----------|------|
 | **CLI** | Terminal UI, headless mode, connectors, schedules. | [`apps/cli/`](./apps/cli) |
-| **VS Code extension** | Editor integration, webview, approvals, diffs. | [`apps/vscode/`](./apps/vscode) |
 | **SDK** | Programmatic agent engine, tools, plugins, cron. | [`sdk/`](./sdk) |
 | **Docs** | Published documentation pages. | [`docs/`](./docs) |
 
@@ -61,7 +59,7 @@ bun --conditions=development --cwd apps/cli dev
 
 ## It edits code across your project
 
-Trembo maps your project structure, understands how files relate, and makes coordinated edits across them. It watches linter and compiler output as it works and fixes missing imports, type mismatches, and syntax errors before you see them. In VS Code, every edit is a diff you can review, tweak, or revert; checkpoints let you undo the agent's work in one step.
+Trembo maps your project structure, understands how files relate, and makes coordinated edits across them. It watches linter and compiler output as it works and fixes missing imports, type mismatches, and syntax errors before you see them. Every edit is a diff you can review, tweak, or revert; checkpoints let you undo the agent's work in one step.
 
 ## It runs your shell
 
@@ -73,7 +71,7 @@ Switch between **Plan** mode (explore, ask questions, lay out a strategy) and **
 
 ## Rules and skills
 
-Drop project rules into `.tremborules/` — coding standards, architecture conventions, deployment runbooks, testing requirements. They're picked up automatically by the CLI and the VS Code extension. Skills let the model load specific rule sets on demand.
+Drop project rules into `.tremborules/` — coding standards, architecture conventions, deployment runbooks, testing requirements. They're picked up automatically by the CLI. Skills let the model load specific rule sets on demand.
 
 ## Works with every model
 
