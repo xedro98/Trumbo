@@ -255,19 +255,19 @@ Works with every major LLM provider out of the box:
 
 ## Documentation
 
-Full documentation at [docs.trembo.bot/sdk](https://docs.trembo.bot/sdk/overview):
+Full documentation at [docs.example.invalid/sdk](https://github.com/xedro98/trembo/sdk/overview):
 
-- [Quickstart](https://docs.trembo.bot/sdk/quickstart) -- zero to running agent in 5 minutes
-- [Core Concepts](https://docs.trembo.bot/sdk/agents) -- agents, sessions, tools, events, extensions, hooks
-- [Guides](https://docs.trembo.bot/sdk/guides/building-an-agent) -- end-to-end tutorials for common patterns
-- [Architecture](https://docs.trembo.bot/sdk/architecture/overview) -- how the SDK is structured and why
-- [API Reference](https://docs.trembo.bot/sdk/reference/trembo-core) -- every method, type, and config option
+- [Quickstart](https://github.com/xedro98/trembo/sdk/quickstart) -- zero to running agent in 5 minutes
+- [Core Concepts](https://github.com/xedro98/trembo/sdk/agents) -- agents, sessions, tools, events, extensions, hooks
+- [Guides](https://github.com/xedro98/trembo/sdk/guides/building-an-agent) -- end-to-end tutorials for common patterns
+- [Architecture](https://github.com/xedro98/trembo/sdk/architecture/overview) -- how the SDK is structured and why
+- [API Reference](https://github.com/xedro98/trembo/sdk/reference/trembo-core) -- every method, type, and config option
 
 
 ## Contributing
 
-To contribute to the project, start with our [Contributing Guide](CONTRIBUTING.md) to learn the basics. You can also join our [Discord](https://discord.gg/trembo) to chat with other contributors in the `#contributors` channel. If you're looking for full-time work, check out our open positions on our [careers page](https://trembo.bot/join-us)!
+To contribute to the project, start with our [Contributing Guide](CONTRIBUTING.md) to learn the basics. You can also join our [Discord](https://discord.gg/trembo) to chat with other contributors in the `#contributors` channel. If you're looking for full-time work, check out our open positions on our [careers page](https://github.com/xedro98/trembo/join-us)!
 
 ## License
 
-[Apache 2.0 © 2026 Trembo Bot Inc.](./LICENSE)
+[Apache 2.0 Ã‚Â© 2026 Trembo Bot Inc.](./LICENSE)

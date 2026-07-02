@@ -97,7 +97,7 @@ describe("chat commands", () => {
 	it("detects commands addressed to the configured bot", () => {
 		expect(isCommandAddressedToBot("/new@trembobot", "trembobot")).toBe(true);
 		expect(isCommandAddressedToBot("/new@trembo_bot", "@trembo_bot")).toBe(true);
-		expect(isCommandAddressedToBot("/new@trembo.bot", "trembo.bot")).toBe(true);
+		expect(isCommandAddressedToBot("/new@trembo.test", "trembo.test")).toBe(true);
 		expect(isCommandAddressedToBot("/new@trembo-bot", "trembo-bot")).toBe(true);
 		expect(isCommandAddressedToBot("/new", "trembobot")).toBe(false);
 		expect(isCommandAddressedToBot("/new@otherbot", "trembobot")).toBe(false);
@@ -105,7 +105,7 @@ describe("chat commands", () => {
 	});
 
 	it("normalizes commands addressed to dotted and hyphenated bot names", () => {
-		expect(normalizeCommandName("/new@trembo.bot", "trembo.bot")).toBe("/new");
+		expect(normalizeCommandName("/new@trembo.test", "trembo.test")).toBe("/new");
 		expect(normalizeCommandName("/new@trembo-bot", "trembo-bot")).toBe("/new");
 	});
 

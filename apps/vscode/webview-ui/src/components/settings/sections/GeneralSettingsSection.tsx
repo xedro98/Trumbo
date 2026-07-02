@@ -46,14 +46,14 @@ const GeneralSettingsSection = ({ renderSectionHeader }: GeneralSettingsSectionP
 						ever sent. See our{" "}
 						<VSCodeLink
 							className="text-inherit"
-							href="https://docs.trembo.bot/more-info/telemetry"
+							href="https://github.com/xedro98/trembo/more-info/telemetry"
 							style={{ fontSize: "inherit", textDecoration: "underline" }}>
 							telemetry overview
 						</VSCodeLink>{" "}
 						and{" "}
 						<VSCodeLink
 							className="text-inherit"
-							href="https://trembo.bot/privacy"
+							href="https://github.com/xedro98/trembo/privacy"
 							style={{ fontSize: "inherit", textDecoration: "underline" }}>
 							privacy policy
 						</VSCodeLink>{" "}

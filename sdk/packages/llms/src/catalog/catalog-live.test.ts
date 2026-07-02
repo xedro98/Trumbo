@@ -400,7 +400,7 @@ describe("models-dev-catalog", () => {
 
 		expect(fetcher).toHaveBeenCalledWith("https://models.dev/api.json");
 		expect(fetcher).toHaveBeenCalledWith(
-			"https://api.trembo.bot/api/v1/ai/trembo/recommended-models",
+			"http://0.0.0.0:0/api/v1/ai/trembo/recommended-models",
 		);
 		expect(result.openrouter).toHaveProperty("vendor/live-base-model");
 		expect(result["trembo-pass"]?.["trembo-pass/live-base-model"]).toMatchObject({

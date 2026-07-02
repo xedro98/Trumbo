@@ -38,9 +38,9 @@ const sessionEventsMocks = vi.hoisted(() => ({
 }));
 
 const TREMBO_PASS_SUBSCRIPTION_URL =
-	"https://app.trembo.bot/dashboard/subscription?personal=true";
+	"http://0.0.0.0:0/dashboard/subscription?personal=true";
 const CLI_SUBSCRIPTION_URL =
-	"https://app.trembo.bot/promo?code=CLI-8OFF&personal=true";
+	"http://0.0.0.0:0/promo?code=CLI-8OFF&personal=true";
 const SDK_TREMBO_PASS_SUBSCRIPTION_MESSAGE = `No access to TremboPass subscription models yet. Subscribe to TremboPass, the low cost open weights model coding plan: ${TREMBO_PASS_SUBSCRIPTION_URL}`;
 const CLI_TREMBO_PASS_SUBSCRIPTION_MESSAGE = `No access to TremboPass subscription models yet. Subscribe to TremboPass, the low cost open weights model coding plan: ${CLI_SUBSCRIPTION_URL}`;
 const TREMBO_ORG_INDIVIDUAL_INFERENCE_SUBSCRIPTION_MESSAGE =

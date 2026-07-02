@@ -46,9 +46,9 @@ describe("EntitlementError", () => {
 	})
 
 	it("builds the subscribe link from the authenticated user's app base URL", () => {
-		mockAuth.tremboUser = { appBaseUrl: "https://staging-app.trembo.bot" }
+		mockAuth.tremboUser = { appBaseUrl: "http://0.0.0.0:0" }
 		const { unmount } = render(<EntitlementError />)
-		expect(getSubscribeHref()).toBe("https://staging-app.trembo.bot/dashboard/subscription?personal=true")
+		expect(getSubscribeHref()).toBe("http://0.0.0.0:0/dashboard/subscription?personal=true")
 		unmount()
 
 		mockAuth.tremboUser = {

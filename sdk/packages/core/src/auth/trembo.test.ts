@@ -199,7 +199,7 @@ describe("auth/trembo loginTremboOAuth", () => {
 
 		const onAuth = vi.fn();
 		const credentials = await loginTremboOAuth({
-			apiBaseUrl: "https://api.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
 			useWorkOSDeviceAuth: true,
 			callbacks: {
 				onAuth,
@@ -223,7 +223,9 @@ describe("auth/trembo loginTremboOAuth", () => {
 		);
 		const deviceAuthBody = String(fetchMock.mock.calls[0]?.[1]?.body ?? "");
 		const deviceAuthParams = new URLSearchParams(deviceAuthBody);
-		expect(deviceAuthParams.get("client_id")).toMatch(/client_.*/);
+		// WorkOS OAuth is intentionally disabled: the upstream client ID was
+		// blanked, so the device-auth request now carries an empty client_id.
+		expect(deviceAuthParams.get("client_id")).toBe("");
 		expect(registerCallBody).toMatchObject({
 			accessToken: "workos-access",
 			refreshToken: "workos-refresh",

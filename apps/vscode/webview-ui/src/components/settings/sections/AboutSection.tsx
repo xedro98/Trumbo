@@ -21,18 +21,18 @@ const AboutSection = ({ version, renderSectionHeader }: AboutSectionProps) => {
 					<h3 className="text-md font-semibold">Community & Support</h3>
 					<p>
 						<VSCodeLink href="https://x.com/trembo">X</VSCodeLink>
-						{" • "}
+						{" â€¢ "}
 						<VSCodeLink href="https://discord.gg/trembo">Discord</VSCodeLink>
-						{" • "}
+						{" â€¢ "}
 						<VSCodeLink href="https://www.reddit.com/r/trembo/"> r/trembo</VSCodeLink>
 					</p>
 
 					<h3 className="text-md font-semibold">Development</h3>
 					<p>
 						<VSCodeLink href="https://github.com/trembo/trembo">GitHub</VSCodeLink>
-						{" • "}
+						{" â€¢ "}
 						<VSCodeLink href="https://github.com/trembo/trembo/issues"> Issues</VSCodeLink>
-						{" • "}
+						{" â€¢ "}
 						<VSCodeLink href="https://github.com/trembo/trembo/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop">
 							{" "}
 							Feature Requests
@@ -41,9 +41,9 @@ const AboutSection = ({ version, renderSectionHeader }: AboutSectionProps) => {
 
 					<h3 className="text-md font-semibold">Resources</h3>
 					<p>
-						<VSCodeLink href="https://docs.trembo.bot/">Documentation</VSCodeLink>
-						{" • "}
-						<VSCodeLink href="https://trembo.bot/">https://trembo.bot</VSCodeLink>
+						<VSCodeLink href="https://github.com/xedro98/trembo/">Documentation</VSCodeLink>
+						{" â€¢ "}
+						<VSCodeLink href="https://github.com/xedro98/trembo/">https://github.com/xedro98/trembo</VSCodeLink>
 					</p>
 				</div>
 			</Section>

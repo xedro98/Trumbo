@@ -152,7 +152,7 @@ describe("models registry parsing", () => {
 // extractModelIdsFromPayload is tested indirectly via addLocalProvider
 // ===========================================================================
 
-describe("addLocalProvider – model ID parsing via modelsSourceUrl", () => {
+describe("addLocalProvider â€“ model ID parsing via modelsSourceUrl", () => {
 	let manager: ProviderSettingsManager;
 	let cleanup: () => void;
 
@@ -381,7 +381,7 @@ describe("addLocalProvider – model ID parsing via modelsSourceUrl", () => {
 			modelsSourceUrl: "https://example.invalid/models",
 		});
 
-		// manual-1, manual-2, fetched-1, fetched-2, manual-1 → Set → 4
+		// manual-1, manual-2, fetched-1, fetched-2, manual-1 â†’ Set â†’ 4
 		expect(result.modelsCount).toBe(4);
 		const { models } = await getLocalProviderModels("merged-provider");
 		const ids = models.map((m) => m.id).sort();
@@ -452,10 +452,10 @@ describe("addLocalProvider – model ID parsing via modelsSourceUrl", () => {
 });
 
 // ===========================================================================
-// addLocalProvider – validation guards
+// addLocalProvider â€“ validation guards
 // ===========================================================================
 
-describe("addLocalProvider – validation", () => {
+describe("addLocalProvider â€“ validation", () => {
 	let manager: ProviderSettingsManager;
 	let cleanup: () => void;
 
@@ -531,10 +531,10 @@ describe("addLocalProvider – validation", () => {
 });
 
 // ===========================================================================
-// addLocalProvider – delete compatibility path
+// addLocalProvider â€“ delete compatibility path
 // ===========================================================================
 
-describe("addLocalProvider – delete compatibility", () => {
+describe("addLocalProvider â€“ delete compatibility", () => {
 	let manager: ProviderSettingsManager;
 	let cleanup: () => void;
 
@@ -596,10 +596,10 @@ describe("addLocalProvider – delete compatibility", () => {
 });
 
 // ===========================================================================
-// addLocalProvider – defaultModelId selection
+// addLocalProvider â€“ defaultModelId selection
 // ===========================================================================
 
-describe("addLocalProvider – defaultModelId selection", () => {
+describe("addLocalProvider â€“ defaultModelId selection", () => {
 	let manager: ProviderSettingsManager;
 	let cleanup: () => void;
 
@@ -637,10 +637,10 @@ describe("addLocalProvider – defaultModelId selection", () => {
 });
 
 // ===========================================================================
-// addLocalProvider – capabilities → vision / reasoning flags
+// addLocalProvider â€“ capabilities â†’ vision / reasoning flags
 // ===========================================================================
 
-describe("addLocalProvider – capabilities", () => {
+describe("addLocalProvider â€“ capabilities", () => {
 	let manager: ProviderSettingsManager;
 	let cleanup: () => void;
 
@@ -762,7 +762,7 @@ describe("addLocalProvider – capabilities", () => {
 });
 
 // ===========================================================================
-// models.json – built-in provider model overlays
+// models.json â€“ built-in provider model overlays
 // ===========================================================================
 
 describe("models.json model overlays", () => {
@@ -801,7 +801,7 @@ describe("models.json model overlays", () => {
 			const provider = await LlmsModels.getProvider("trembo");
 			expect(provider).toMatchObject({
 				id: "trembo",
-				baseUrl: "https://api.trembo.bot/api/v1",
+				baseUrl: "http://0.0.0.0:0/api/v1",
 				defaultModelId: "anthropic/claude-sonnet-4.6",
 			});
 
@@ -1316,7 +1316,7 @@ describe("listLocalProviders", () => {
 			{
 				provider: "trembo",
 				apiKey: "test-key",
-				baseUrl: "https://api.trembo.bot/api/v1",
+				baseUrl: "http://0.0.0.0:0/api/v1",
 				model: "anthropic/claude-sonnet-4.6",
 			},
 			{ setLastUsed: false },

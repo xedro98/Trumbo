@@ -1,14 +1,14 @@
 import { EmptyRequest } from "@shared/proto/trembo/common"
 import {
-	TremboRulesToggles,
 	RefreshedRules,
 	RuleScope,
 	SkillInfo,
 	ToggleAgentsRuleRequest,
-	ToggleTremboRuleRequest,
 	ToggleCursorRuleRequest,
 	ToggleSkillRequest,
+	ToggleTremboRuleRequest,
 	ToggleWindsurfRuleRequest,
+	TremboRulesToggles,
 } from "@shared/proto/trembo/file"
 import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 import React, { useEffect, useRef, useState } from "react"
@@ -420,11 +420,11 @@ const TremboRulesToggleModal: React.FC = () => {
 						<div className="text-xs text-description mb-4">
 							{currentView === "rules" ? (
 								<p>
-									Rules allow you to provide Trembo with system-level guidance. Think of them as a persistent way
-									to include context and preferences for your projects or globally for every conversation.{" "}
+									Rules allow you to provide Trembo with system-level guidance. Think of them as a persistent
+									way to include context and preferences for your projects or globally for every conversation.{" "}
 									<VSCodeLink
 										className="text-xs"
-										href="https://docs.trembo.bot/features/trembo-rules"
+										href="https://github.com/xedro98/trembo/features/trembo-rules"
 										style={{ display: "inline", fontSize: "inherit" }}>
 										Docs
 									</VSCodeLink>
@@ -539,7 +539,7 @@ const TremboRulesToggleModal: React.FC = () => {
 											: "Toggle to enable/disable (chmod +x/-x)."}{" "}
 										<VSCodeLink
 											className="text-xs"
-											href="https://docs.trembo.bot/features/hooks"
+											href="https://github.com/xedro98/trembo/features/hooks"
 											style={{ display: "inline", fontSize: "inherit" }}>
 											Docs
 										</VSCodeLink>

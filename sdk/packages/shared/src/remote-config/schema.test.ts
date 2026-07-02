@@ -744,7 +744,7 @@ describe("Remote Config Schema", () => {
 							{ id: "claude-3-5-sonnet-20241022" },
 							{ id: "claude-3-5-sonnet-20241024", thinkingBudgetTokens: 1600 },
 						],
-						baseUrl: "https://example.trembo.bot",
+						baseUrl: "https://example.com",
 					},
 				},
 				enterpriseTelemetry: {
@@ -846,7 +846,7 @@ describe("Remote Config Schema", () => {
 				result.providerSettings?.Anthropic?.models?.[1].thinkingBudgetTokens,
 			).to.equal(1600);
 			expect(result.providerSettings?.Anthropic?.baseUrl).to.equal(
-				"https://example.trembo.bot",
+				"https://example.com",
 			);
 
 			// Verify OpenTelemetry settings

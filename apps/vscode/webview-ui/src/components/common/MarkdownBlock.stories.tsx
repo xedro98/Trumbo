@@ -126,10 +126,10 @@ export const WithLinks: Story = {
 		markdown: `Check out these resources:
 
 - Official documentation: https://github.com/trembo/trembo
-- API reference: https://api.trembo.bot/docs
-- Support forum: https://community.trembo.bot
+- API reference: http://0.0.0.0:0/docs
+- Support forum: https://community.example.invalid
 
-You can also visit our website at https://trembo.bot for more information.`,
+You can also visit our website at https://github.com/xedro98/trembo for more information.`,
 		compact: false,
 		showCursor: false,
 	},

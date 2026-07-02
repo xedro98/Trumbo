@@ -86,7 +86,7 @@ describe("TremboNotSubscribedError", () => {
 	it("detects the formatted TremboPass subscription message regardless of URL", () => {
 		expect(
 			isTremboNotSubscribedMessage(
-				"No access to TremboPass subscription models yet. Subscribe to TremboPass, the low cost open weights model coding plan: https://staging-app.trembo.bot/promo?code=CLI-8OFF&personal=true",
+				"No access to TremboPass subscription models yet. Subscribe to TremboPass, the low cost open weights model coding plan: http://0.0.0.0:0/promo?code=CLI-8OFF&personal=true",
 			),
 		).toBe(true);
 	});

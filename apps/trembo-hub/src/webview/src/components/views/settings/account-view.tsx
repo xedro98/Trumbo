@@ -398,7 +398,7 @@ export function AccountView() {
 					</Button>
 					<a
 						className="inline-flex h-9 items-center gap-2 rounded-lg border border-border px-3.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-						href="https://app.trembo.bot"
+						href="http://0.0.0.0:0"
 						rel="noopener noreferrer"
 						target="_blank"
 					>
@@ -482,7 +482,7 @@ export function AccountView() {
 									</div>
 									<div className="flex shrink-0 items-center gap-2">
 										<a
-											href="https://app.trembo.bot/dashboard"
+											href="http://0.0.0.0:0/dashboard"
 											target="_blank"
 											rel="noopener noreferrer"
 											className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
@@ -523,7 +523,7 @@ export function AccountView() {
 											</h3>
 										</div>
 										<a
-											href="https://app.trembo.bot/dashboard/organization?tab=credits&redirect=true"
+											href="http://0.0.0.0:0/dashboard/organization?tab=credits&redirect=true"
 											target="_blank"
 											rel="noopener noreferrer"
 											className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
@@ -556,7 +556,7 @@ export function AccountView() {
 										</h3>
 									</div>
 									<a
-										href="https://app.trembo.bot/onboarding?step=1"
+										href="http://0.0.0.0:0/onboarding?step=1"
 										target="_blank"
 										rel="noopener noreferrer"
 										className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"

@@ -723,7 +723,7 @@ class Controller {
   async downloadMcp(mcpId: string) {
     // Fetch server details from marketplace
     const response = await axios.post<McpDownloadResponse>(
-      "https://api.trembo.bot/v1/mcp/download",
+      "http://0.0.0.0:0/v1/mcp/download",
       { mcpId },
       {
         headers: { "Content-Type": "application/json" },

@@ -3,11 +3,11 @@ title: "TremboPass"
 description: "A low-cost monthly subscription that gives you reliable access to popular open coding models with 2-5x API rate limits."
 ---
 
-TremboPass is a low-cost monthly subscription — **$9.99/month** — that gives you reliable access to popular open coding models with **2-5x the API rate limits** of standard access.
+TremboPass is a low-cost monthly subscription Ã¢â‚¬â€ **$9.99/month** Ã¢â‚¬â€ that gives you reliable access to popular open coding models with **2-5x the API rate limits** of standard access.
 
 It's completely optional. You don't need TremboPass to use Trembo, and you can always use any other provider alongside it.
 
-<Card title="Subscribe to TremboPass" icon="credit-card" href="https://app.trembo.bot/dashboard/subscription?personal=true">
+<Card title="Subscribe to TremboPass" icon="credit-card" href="http://0.0.0.0:0/dashboard/subscription?personal=true">
   Get started for $9.99/month and unlock 2-5x API rate limits.
 </Card>
 
@@ -40,7 +40,7 @@ TremboPass solves this by:
 - Providing stable access through Trembo's infrastructure
 
 <Note>
-TremboPass is a separate provider from Trembo (usage-billing). You can use both independently — subscribe to TremboPass for 2-5x API rate limits, or use Trembo (usage-billing) for pay-as-you-go access.
+TremboPass is a separate provider from Trembo (usage-billing). You can use both independently Ã¢â‚¬â€ subscribe to TremboPass for 2-5x API rate limits, or use Trembo (usage-billing) for pay-as-you-go access.
 </Note>
 
 ## Models
@@ -64,14 +64,14 @@ TremboPass includes the following models, tested and benchmarked for coding agen
 
 You can use TremboPass models from your own scripts, apps, or automation through the Trembo API. The API uses the same OpenAI-compatible Chat Completions format as the rest of Trembo's API.
 
-To get started, create an API key from **Settings > API Keys** in [app.trembo.bot](https://app.trembo.bot). For the complete walkthrough, see the [Trembo API Getting Started guide](/api/getting-started).
+To get started, create an API key from **Settings > API Keys** in [app.example.invalid](http://0.0.0.0:0). For the complete walkthrough, see the [Trembo API Getting Started guide](/api/getting-started).
 
 Use the full TremboPass model slug in the `model` field:
 
 ```bash
 export TREMBO_API_KEY="your_api_key_here"
 
-curl -X POST https://api.trembo.bot/api/v1/chat/completions \
+curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
   -H "Authorization: Bearer $TREMBO_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -99,18 +99,18 @@ TremboPass is a flat monthly subscription, so you are not charged the individual
 | MiMo-V2.5-Pro | $1.74 | $3.48 | $0.0145 | - |
 | MiniMax M3 | $0.30 | $1.20 | $0.06 | - |
 | Qwen3.7 Max | $2.50 | $7.50 | $0.50 | $3.125 |
-| Qwen3.7 Plus (≤ 256K tokens) | $0.40 | $1.60 | $0.04 | $0.50 |
+| Qwen3.7 Plus (Ã¢â€°Â¤ 256K tokens) | $0.40 | $1.60 | $0.04 | $0.50 |
 | Qwen3.7 Plus (> 256K tokens) | $1.20 | $4.80 | $0.12 | $1.50 |
 
 ## Usage
 
 TremboPass measures usage against three limits:
 
-- **5-hour rolling window** — your usage within rolling 5-hour period
-- **Weekly** — your usage over the calendar week
-- **Monthly** — your usage over the calendar month
+- **5-hour rolling window** Ã¢â‚¬â€ your usage within rolling 5-hour period
+- **Weekly** Ã¢â‚¬â€ your usage over the calendar week
+- **Monthly** Ã¢â‚¬â€ your usage over the calendar month
 
-To check your current usage, visit your [Trembo dashboard](https://app.trembo.bot/dashboard/subscription?personal=true).
+To check your current usage, visit your [Trembo dashboard](http://0.0.0.0:0/dashboard/subscription?personal=true).
 
 ## Related
 

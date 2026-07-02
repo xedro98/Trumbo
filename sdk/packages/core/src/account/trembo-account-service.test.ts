@@ -5,7 +5,7 @@ describe("TremboAccountService", () => {
 	it("fetches current user balance and sends auth header", async () => {
 		const fetchImpl = vi.fn(async (input: unknown, init?: RequestInit) => {
 			expect(String(input)).toBe(
-				"https://api.trembo.bot/api/v1/users/user-1/balance",
+				"http://0.0.0.0:0/api/v1/users/user-1/balance",
 			);
 			expect(init?.headers).toMatchObject({
 				Authorization: "Bearer workos:token-123",
@@ -20,7 +20,7 @@ describe("TremboAccountService", () => {
 		});
 
 		const service = new TremboAccountService({
-			apiBaseUrl: "https://api.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
 			getAuthToken: async () => "workos:token-123",
 			getCurrentUserId: () => "user-1",
 			fetchImpl: fetchImpl as unknown as typeof fetch,
@@ -66,7 +66,7 @@ describe("TremboAccountService", () => {
 			);
 
 		const service = new TremboAccountService({
-			apiBaseUrl: "https://api.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
 			getAuthToken: async () => "workos:token-123",
 			fetchImpl: fetchImpl as unknown as typeof fetch,
 		});
@@ -77,7 +77,7 @@ describe("TremboAccountService", () => {
 
 		expect(fetchImpl).toHaveBeenCalledTimes(2);
 		expect(String(fetchImpl.mock.calls[1][0])).toBe(
-			"https://api.trembo.bot/api/v1/organizations/org-1/members/member-9/usages",
+			"http://0.0.0.0:0/api/v1/organizations/org-1/members/member-9/usages",
 		);
 		expect(transactions).toEqual([{ id: "tx-1" }]);
 	});
@@ -95,7 +95,7 @@ describe("TremboAccountService", () => {
 
 		const fetchImpl = vi.fn(async (input: unknown) => {
 			expect(String(input)).toBe(
-				"https://api.trembo.bot/api/v1/users/me/remote-config",
+				"http://0.0.0.0:0/api/v1/users/me/remote-config",
 			);
 			return new Response(
 				JSON.stringify({ success: true, data: remoteConfigPayload }),
@@ -104,7 +104,7 @@ describe("TremboAccountService", () => {
 		});
 
 		const service = new TremboAccountService({
-			apiBaseUrl: "https://api.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
 			getAuthToken: async () => "workos:token-123",
 			fetchImpl: fetchImpl as unknown as typeof fetch,
 		});
@@ -129,7 +129,7 @@ describe("TremboAccountService", () => {
 		];
 		const fetchImpl = vi.fn(async (input: unknown, init?: RequestInit) => {
 			expect(String(input)).toBe(
-				"https://api.trembo.bot/api/v1/plans?type=individual",
+				"http://0.0.0.0:0/api/v1/plans?type=individual",
 			);
 			expect(init?.headers).toMatchObject({
 				Authorization: "Bearer workos:token-123",
@@ -141,7 +141,7 @@ describe("TremboAccountService", () => {
 		});
 
 		const service = new TremboAccountService({
-			apiBaseUrl: "https://api.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
 			getAuthToken: async () => "workos:token-123",
 			fetchImpl: fetchImpl as unknown as typeof fetch,
 		});
@@ -166,7 +166,7 @@ describe("TremboAccountService", () => {
 		};
 		const fetchImpl = vi.fn(async (input: unknown, init?: RequestInit) => {
 			expect(String(input)).toBe(
-				"https://api.trembo.bot/api/v1/users/me/plan",
+				"http://0.0.0.0:0/api/v1/users/me/plan",
 			);
 			expect(init?.headers).toMatchObject({
 				Authorization: "Bearer workos:token-123",
@@ -178,7 +178,7 @@ describe("TremboAccountService", () => {
 		});
 
 		const service = new TremboAccountService({
-			apiBaseUrl: "https://api.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
 			getAuthToken: async () => "workos:token-123",
 			fetchImpl: fetchImpl as unknown as typeof fetch,
 		});
@@ -203,7 +203,7 @@ describe("TremboAccountService", () => {
 		});
 
 		const service = new TremboAccountService({
-			apiBaseUrl: "https://api.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
 			getAuthToken: async () => "workos:token-123",
 			fetchImpl: fetchImpl as unknown as typeof fetch,
 		});
@@ -226,7 +226,7 @@ describe("TremboAccountService", () => {
 		});
 
 		const service = new TremboAccountService({
-			apiBaseUrl: "https://api.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
 			getAuthToken: async () => "workos:token-123",
 			fetchImpl: fetchImpl as unknown as typeof fetch,
 		});
@@ -241,7 +241,7 @@ describe("TremboAccountService", () => {
 		});
 
 		const service = new TremboAccountService({
-			apiBaseUrl: "https://api.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
 			getAuthToken: async () => "workos:token-123",
 			fetchImpl: fetchImpl as unknown as typeof fetch,
 		});
@@ -257,7 +257,7 @@ describe("TremboAccountService", () => {
 		});
 
 		const service = new TremboAccountService({
-			apiBaseUrl: "https://api.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
 			getAuthToken: async () => "workos:token-123",
 			fetchImpl: fetchImpl as unknown as typeof fetch,
 		});
@@ -275,7 +275,7 @@ describe("TremboAccountService", () => {
 		});
 
 		const service = new TremboAccountService({
-			apiBaseUrl: "https://api.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
 			getAuthToken: async () => "workos:token-123",
 			fetchImpl: fetchImpl as unknown as typeof fetch,
 		});

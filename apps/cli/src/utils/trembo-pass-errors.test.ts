@@ -17,7 +17,7 @@ describe("trembo-pass-errors", () => {
 		).toBe(true);
 
 		const sdkFormatted =
-			"No access to TremboPass subscription models yet. Subscribe to TremboPass, the low cost open weights model coding plan: https://app.trembo.bot/dashboard/subscription?personal=true";
+			"No access to TremboPass subscription models yet. Subscribe to TremboPass, the low cost open weights model coding plan: http://0.0.0.0:0/dashboard/subscription?personal=true";
 		const formatted = getCliNotSubscribedMessage();
 		expect(isTremboPassSubscriptionError(sdkFormatted)).toBe(true);
 		expect(isTremboPassSubscriptionError(formatted)).toBe(true);

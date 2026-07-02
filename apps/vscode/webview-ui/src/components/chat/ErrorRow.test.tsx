@@ -100,7 +100,7 @@ describe("ErrorRow", () => {
 						total_spent: 10.5,
 						total_promotions: 5.0,
 						message: "You have run out of credits.",
-						buy_credits_url: "https://app.trembo.bot/dashboard",
+						buy_credits_url: "http://0.0.0.0:0/dashboard",
 					},
 				},
 			}
@@ -171,7 +171,7 @@ describe("ErrorRow", () => {
 
 		it("renders entitlement error when TremboError detects TremboNotSubscribedError", async () => {
 			const cliMessage =
-				"No access to TremboPass subscription models yet. Subscribe to TremboPass, the low cost open weights model coding plan: https://app.trembo.bot/promo?code=CLI-8OFF&personal=true"
+				"No access to TremboPass subscription models yet. Subscribe to TremboPass, the low cost open weights model coding plan: http://0.0.0.0:0/promo?code=CLI-8OFF&personal=true"
 			const mockTremboError = {
 				message: cliMessage,
 				isErrorType: vi.fn((type) => type === "entitlement"),

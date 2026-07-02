@@ -366,7 +366,7 @@ export function AccountView() {
 											</p>
 										</div>
 										<Link
-											href="https://app.trembo.bot/dashboard"
+											href="http://0.0.0.0:0/dashboard"
 											target="_blank"
 											rel="noopener noreferrer"
 											className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
@@ -389,7 +389,7 @@ export function AccountView() {
 												</h3>
 											</div>
 											<Link
-												href="https://app.trembo.bot/dashboard/organization?tab=credits&redirect=true"
+												href="http://0.0.0.0:0/dashboard/organization?tab=credits&redirect=true"
 												target="_blank"
 												rel="noopener noreferrer"
 												className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
@@ -422,7 +422,7 @@ export function AccountView() {
 											</h3>
 										</div>
 										<Link
-											href="https://app.trembo.bot/onboarding?step=1"
+											href="http://0.0.0.0:0/onboarding?step=1"
 											target="_blank"
 											rel="noopener noreferrer"
 											className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"

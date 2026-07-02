@@ -58,7 +58,7 @@ The isolated TREMBO_DIR is reported in `status()` and `launch()` responses:
 
 ```bash
 curl localhost:19229/api -d '{"method":"status"}'
-# → { "tremboDir": "/Users/you/.trembo2", ... }
+# â†’ { "tremboDir": "/Users/you/.trembo2", ... }
 ```
 
 To use a different directory: `--trembo-dir /tmp/test-trembo-dir`
@@ -88,8 +88,8 @@ The Trembo OAuth flow uses the SDK's local callback server. When the user
 clicks "Login", the SDK:
 
 1. Starts a local HTTP server on a random port
-2. Calls `openExternal(authorizationUrl)` — which we capture
-3. The user authenticates in the browser — which we need to simulate
+2. Calls `openExternal(authorizationUrl)` â€” which we capture
+3. The user authenticates in the browser â€” which we need to simulate
 4. The provider redirects to the local callback server with `?code=...`
 5. The SDK captures the code and exchanges it for tokens
 
@@ -103,7 +103,7 @@ curl localhost:19229/api -d '{"method":"ui.locator","params":{"text":"Login to T
 
 # 2. Check captured URLs to find the authorization URL
 curl localhost:19229/api -d '{"method":"oauth.captured_urls"}'
-# → { "urls": [{ "url": "https://api.trembo.bot/auth/authorize?callback_url=http://127.0.0.1:PORT/..." }] }
+# â†’ { "urls": [{ "url": "http://0.0.0.0:0/auth/authorize?callback_url=http://127.0.0.1:PORT/..." }] }
 
 # 3. The authorization URL has a callback_url pointing to the SDK's local server.
 #    To complete the flow, you need to either:
@@ -115,7 +115,7 @@ curl "http://127.0.0.1:PORT/auth/callback?code=TEST_CODE" 2>/dev/null
 
 # 4. Verify the token was stored
 curl localhost:19229/api -d '{"method":"oauth.read_stored_token"}'
-# → { "found": true, "hasAccountId": true, "keys": ["trembo:tremboAccountId"] }
+# â†’ { "found": true, "hasAccountId": true, "keys": ["trembo:tremboAccountId"] }
 
 # 5. Take a screenshot to verify the UI shows authenticated state
 curl localhost:19229/api -d '{"method":"ui.screenshot"}'
@@ -142,7 +142,7 @@ curl -s -D - -o /dev/null "<captured-authorize-url>" | grep -i '^location:'
 
 # 4. DELIVER the vscode:// callback to the extension. VSCode only routes real
 #    vscode:// URIs to the registered handler, which the harness can't
-#    synthesize — and the extension host is ESM, so you can't require() the
+#    synthesize â€” and the extension host is ESM, so you can't require() the
 #    handler module. Instead, call the __tremboHandleUri hook (see below):
 curl localhost:19229/api -d '{
   "method": "ext.evaluate",
@@ -156,12 +156,12 @@ curl localhost:19229/api -d '{
 curl localhost:19229/api -d '{"method":"oauth.read_stored_token"}'
 ```
 
-> **`globalThis.__tremboHandleUri(url)` — debug-only URI delivery hook.**
+> **`globalThis.__tremboHandleUri(url)` â€” debug-only URI delivery hook.**
 > Registered in `src/extension.ts` during activation, **only** when
 > `TREMBO_CAPTURE_BROWSER` is set (which the harness always sets), so it never
 > ships in production. It calls the same `SharedUriHandler.handleUri(url)` that
 > VSCode's real `registerUriHandler` invokes, returning a `Promise<boolean>`
-> (pass `awaitPromise: true`). Use it for any `vscode://` callback — MCP,
+> (pass `awaitPromise: true`). Use it for any `vscode://` callback â€” MCP,
 > OpenRouter, `/auth`, etc. `oauth.simulate_callback` only *builds* the URI; this
 > hook actually *delivers* it.
 
@@ -259,9 +259,9 @@ All commands are sent as `POST /api` with JSON body `{"method": "...", "params":
 Responses: `{"result": {...}}` on success, `{"error": "..."}` on failure.
 
 Convenience endpoints:
-- `GET /health` — `{"status": "ok"}`
-- `GET /status` — Full harness status
-- `POST /captured-url` — Internal: receives captured browser URLs from debugee
+- `GET /health` â€” `{"status": "ok"}`
+- `GET /status` â€” Full harness status
+- `POST /captured-url` â€” Internal: receives captured browser URLs from debugee
 
 ### Lifecycle
 
@@ -309,8 +309,8 @@ Call `connect_webview` first after the sidebar is open (only needed for breakpoi
 
 | Method | Params | Description |
 |--------|--------|-------------|
-| `ui.screenshot` | `{fullPage?}` | Take screenshot → returns `{path}` (use `read_file` on the path, don't `open` the file) |
-| `ui.sidebar_screenshot` | | Screenshot focused on sidebar → returns `{path}` |
+| `ui.screenshot` | `{fullPage?}` | Take screenshot â†’ returns `{path}` (use `read_file` on the path, don't `open` the file) |
+| `ui.sidebar_screenshot` | | Screenshot focused on sidebar â†’ returns `{path}` |
 | `ui.click` | `{selector, frame?, delay?}` | Click element (`frame: "sidebar"` for webview) |
 | `ui.fill` | `{selector, text, frame?}` | Fill input |
 | `ui.press` | `{key}` | Press key (e.g., "Enter", "Meta+Shift+p") |
@@ -390,8 +390,8 @@ curl localhost:19229/api -d '{"method":"ui.screenshot"}'
 
 ## How It Works
 
-1. **Build**: esbuild bundles `src/extension.ts` → `dist/extension.js` (unminified, with
-   sourcemaps). Vite builds `webview-ui/` → `webview-ui/build/` (unminified, inline sourcemaps).
+1. **Build**: esbuild bundles `src/extension.ts` â†’ `dist/extension.js` (unminified, with
+   sourcemaps). Vite builds `webview-ui/` â†’ `webview-ui/build/` (unminified, inline sourcemaps).
 
 2. **Launch**: Uses `@vscode/test-electron` to download VSCode, then Playwright's
    `_electron.launch()` to start it with `--inspect-extensions=9230` for Node.js inspector
@@ -425,11 +425,11 @@ curl localhost:19229/api -d '{"method":"ui.screenshot"}'
 
 ## Caveats
 
-**⚠️ Data Isolation**: The debugee uses `~/.trembo2` by default. If you need to test with
+**âš ï¸ Data Isolation**: The debugee uses `~/.trembo2` by default. If you need to test with
 existing data from your real `~/.trembo`, copy it: `cp -r ~/.trembo ~/.trembo2`. Be aware that
 secrets (API keys, auth tokens) will be shared if you do this.
 
-**⚠️ "Introducing Trembo Kanban" overlay**: On fresh launches, a full-screen promo overlay may
+**âš ï¸ "Introducing Trembo Kanban" overlay**: On fresh launches, a full-screen promo overlay may
 appear in the sidebar. It blocks all interactions and makes screenshots useless. **Dismiss it
 immediately after opening the sidebar**, before doing anything else:
 ```bash
@@ -438,13 +438,13 @@ curl localhost:19229/api -d '{"method":"web.evaluate","params":{"expression":"do
 ```
 
 **Screenshots**: `ui.screenshot` and `ui.sidebar_screenshot` save PNG files to `/tmp/trembo-debug/`
-and return `{path}` in the response. **Do NOT `open` the file** — on macOS this launches Preview.app
+and return `{path}` in the response. **Do NOT `open` the file** â€” on macOS this launches Preview.app
 which covers the VSCode window. Use `read_file` on the returned path to examine the image.
 
 **OAuth with real providers**: The browser capture only intercepts the URL that the debugee tries
 to open. For Trembo OAuth, the SDK's local callback server is still running and will accept
 redirects. For provider OAuth (OpenRouter, MCP), you need to simulate the `vscode://` callback
-URI — see the OAuth testing section above.
+URI â€” see the OAuth testing section above.
 
 **Trembo OAuth with invalid codes**: If you simulate the OAuth callback with a fake code, the
 SDK's token exchange will fail (the provider won't recognize the code). You need either a real

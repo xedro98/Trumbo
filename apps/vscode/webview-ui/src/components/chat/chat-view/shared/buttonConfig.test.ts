@@ -146,7 +146,7 @@ describe("getButtonConfig", () => {
 				{
 					type: "ask",
 					ask: "tool",
-					text: JSON.stringify({ tool: "webFetch", path: "https://docs.trembo.bot" }),
+					text: JSON.stringify({ tool: "webFetch", path: "https://github.com/xedro98/trembo" }),
 					ts: 2,
 				},
 				{
@@ -227,7 +227,7 @@ describe("buttonsForPhase (TurnState-driven)", () => {
 describe("getButtonConfigFromState (dispatch + legacy fallback)", () => {
 	const approvalAsk: TremboMessage = { ts: 100, type: "ask", ask: "command", text: "echo hi" }
 
-	it("prefers TurnState over the message tail (immune to trailing bookkeeping — RC1)", () => {
+	it("prefers TurnState over the message tail (immune to trailing bookkeeping â€” RC1)", () => {
 		// Tail is a trailing api_req_started, but the authoritative phase is awaiting_approval.
 		const messages: TremboMessage[] = [
 			approvalAsk,

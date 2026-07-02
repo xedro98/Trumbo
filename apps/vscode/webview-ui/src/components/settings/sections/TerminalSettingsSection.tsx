@@ -139,8 +139,8 @@ const TerminalSettingsSection: React.FC<TerminalSettingsSectionProps> = ({ rende
 							</VSCodeCheckbox>
 						</div>
 						<p className="text-xs text-(--vscode-descriptionForeground)">
-							When enabled, Trembo will reuse existing terminal windows that aren't in the current working directory.
-							Disable this if you experience issues with task lockout after a terminal command.
+							When enabled, Trembo will reuse existing terminal windows that aren't in the current working
+							directory. Disable this if you experience issues with task lockout after a terminal command.
 						</p>
 					</div>
 					{isVsCodePlatform && (
@@ -166,7 +166,7 @@ const TerminalSettingsSection: React.FC<TerminalSettingsSectionProps> = ({ rende
 							<strong>Having terminal issues?</strong> Check our{" "}
 							<a
 								className="text-(--vscode-textLink-foreground) underline hover:no-underline"
-								href="https://docs.trembo.bot/troubleshooting/terminal-quick-fixes"
+								href="https://github.com/xedro98/trembo/troubleshooting/terminal-quick-fixes"
 								rel="noopener noreferrer"
 								target="_blank">
 								Terminal Quick Fixes
@@ -174,7 +174,7 @@ const TerminalSettingsSection: React.FC<TerminalSettingsSectionProps> = ({ rende
 							or the{" "}
 							<a
 								className="text-(--vscode-textLink-foreground) underline hover:no-underline"
-								href="https://docs.trembo.bot/troubleshooting/terminal-integration-guide"
+								href="https://github.com/xedro98/trembo/troubleshooting/terminal-integration-guide"
 								rel="noopener noreferrer"
 								target="_blank">
 								Complete Troubleshooting Guide

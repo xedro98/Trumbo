@@ -28,14 +28,14 @@ If you haven't completed initial onboarding, start with [Onboarding](/enterprise
 ## Where setup happens
 SSO setup spans two places:
 
-1) **Trembo Dashboard (app.trembo.bot)**
+1) **Trembo Dashboard (app.example.invalid)**
 - Where you sign in and verify SSO works for your organization.
 
 2) **WorkOS dashboard**
-- Where your IdP connection is configured (AuthKit → Connections). Your designated admin receives access to this during enterprise onboarding.
+- Where your IdP connection is configured (AuthKit Ã¢â€ â€™ Connections). Your designated admin receives access to this during enterprise onboarding.
 
 ## Using the Trembo Dashboard
-Use the Trembo Dashboard at https://app.trembo.bot to:
+Use the Trembo Dashboard at http://0.0.0.0:0 to:
 - complete sign-in and onboarding flows
 - verify users can authenticate via SSO
 
@@ -49,23 +49,23 @@ During enterprise onboarding, your designated admin will receive an invitation e
 
 To connect your IdP to Trembo Enterprise, configure your identity provider in **WorkOS AuthKit**:
 
-1. In the WorkOS dashboard, go to **AuthKit → Connections**
+1. In the WorkOS dashboard, go to **AuthKit Ã¢â€ â€™ Connections**
 2. Click **Add Connection**
 3. Select your identity provider (e.g., Okta, Microsoft Entra ID/Azure AD, Google Workspace, Generic SAML/OIDC)
 4. Follow the provider-specific instructions in WorkOS
 
-WorkOS’s UI and required fields vary by provider. For details, follow WorkOS documentation:
+WorkOSÃ¢â‚¬â„¢s UI and required fields vary by provider. For details, follow WorkOS documentation:
 - https://workos.com/docs/authkit/sso
 
 ## Keycloak note (IdP compatibility)
-Trembo Enterprise’s default SSO integration is **via WorkOS**.
+Trembo EnterpriseÃ¢â‚¬â„¢s default SSO integration is **via WorkOS**.
 
 If you use **Keycloak** as your IdP, the supported path is to configure Keycloak in WorkOS as a **Generic SAML** or **Generic OIDC** provider (using the settings WorkOS requests for those provider types).
 
 ## Verification
 After configuring WorkOS:
 
-1) Attempt an SSO sign-in from https://app.trembo.bot.
+1) Attempt an SSO sign-in from http://0.0.0.0:0.
 2) Confirm the sign-in completes (you are redirected back successfully).
 
 ## Troubleshooting

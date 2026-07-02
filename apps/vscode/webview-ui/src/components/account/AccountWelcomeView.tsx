@@ -1,7 +1,7 @@
 import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 import { TremboAuthStatus } from "@/components/account/TremboAuthStatus"
-import { useTremboSignIn } from "@/context/TremboAuthContext"
 import { useExtensionState } from "@/context/ExtensionStateContext"
+import { useTremboSignIn } from "@/context/TremboAuthContext"
 import TremboLogoVariable from "../../assets/TremboLogoVariable"
 
 // export const AccountWelcomeView = () => (
@@ -32,8 +32,9 @@ export const AccountWelcomeView = () => {
 			<TremboAuthStatus message={authStatusMessage} />
 
 			<p className="text-(--vscode-descriptionForeground) text-xs text-center m-0">
-				By continuing, you agree to the <VSCodeLink href="https://trembo.bot/tos">Terms of Service</VSCodeLink> and{" "}
-				<VSCodeLink href="https://trembo.bot/privacy">Privacy Policy.</VSCodeLink>
+				By continuing, you agree to the{" "}
+				<VSCodeLink href="https://github.com/xedro98/trembo/tos">Terms of Service</VSCodeLink> and{" "}
+				<VSCodeLink href="https://github.com/xedro98/trembo/privacy">Privacy Policy.</VSCodeLink>
 			</p>
 		</div>
 	)

@@ -182,7 +182,7 @@ If you see certificate-related errors:
 
 1. Check that `NODE_EXTRA_CA_CERTS` points to the correct certificate file
 2. Ensure the certificate file is in PEM format
-3. Use curl to verify the certificate works, for example, `curl -x proxy.corp.example:8080 --cacert /path/to/ca-cert.pem -o - -vv https://api.trembo.bot/`
+3. Use curl to verify the certificate works, for example, `curl -x proxy.corp.example:8080 --cacert /path/to/ca-cert.pem -o - -vv http://0.0.0.0:0/`
 4. Consider disabling `http.proxyStrictSSL` in VSCode (not recommended for production)
 
 ### Testing Proxy Configuration

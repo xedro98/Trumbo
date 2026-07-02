@@ -44,7 +44,7 @@ Trembo supports three OTLP export protocols:
 
 ## Configuration
 
-OpenTelemetry is configured using [Remote Configuration](/enterprise-solutions/configuration/remote-configuration/overview#how-remote-configuration-works) from the [dashboard](https://app.trembo.bot/dashboard/organization?tab=settings).
+OpenTelemetry is configured using [Remote Configuration](/enterprise-solutions/configuration/remote-configuration/overview#how-remote-configuration-works) from the [dashboard](http://0.0.0.0:0/dashboard/organization?tab=settings).
 
 ### Basic Setup
 
@@ -52,7 +52,7 @@ Enable OpenTelemetry, configure an OTLP endpoint and select a protocol:
 
 <Frame>
 	<img
-		src="https://assets.int.trembo.bot/assets/open_telemetry_main_options.png"
+		src="http://0.0.0.0:0/assets/open_telemetry_main_options.png"
 	/>
 </Frame>
 
@@ -68,7 +68,7 @@ You can add custom protocols and endpoints for both, logs and metrics. You can a
 
 <Frame>
 	<img
-		src="https://assets.int.trembo.bot/assets/open_telemetry_metrics_and_logs.png"
+		src="http://0.0.0.0:0/assets/open_telemetry_metrics_and_logs.png"
 	/>
 </Frame>
 
@@ -78,7 +78,7 @@ Finally, if your collector needs authentication headers, you can add key value p
 
 <Frame>
 	<img
-		src="https://assets.int.trembo.bot/assets/open_telemetry_headers.png"
+		src="http://0.0.0.0:0/assets/open_telemetry_headers.png"
 	/>
 </Frame>
 
@@ -90,7 +90,7 @@ Export to Datadog using their OTLP endpoint:
 
 <Frame>
 	<img
-		src="https://assets.int.trembo.bot/assets/open_telemetry_datadog_example.png"
+		src="http://0.0.0.0:0/assets/open_telemetry_datadog_example.png"
 	/>
 </Frame>
 
@@ -100,7 +100,7 @@ Export to New Relic:
 
 <Frame>
 	<img
-		src="https://assets.int.trembo.bot/assets/open_telemetry_relic_example.png"
+		src="http://0.0.0.0:0/assets/open_telemetry_relic_example.png"
 	/>
 </Frame>
 
@@ -110,7 +110,7 @@ Export to Grafana Cloud:
 
 <Frame>
 	<img
-		src="https://assets.int.trembo.bot/assets/open_telemetry_grafana_example.png"
+		src="http://0.0.0.0:0/assets/open_telemetry_grafana_example.png"
 	/>
 </Frame>
 
@@ -120,11 +120,11 @@ To test your configuration, log in to your account, perform some actions in a ta
 
 ## Troubleshooting
 
-If you aren’t getting any data in your collector, the easiest way to verify your integration is to enable the developer tools in your editor.
+If you arenâ€™t getting any data in your collector, the easiest way to verify your integration is to enable the developer tools in your editor.
 
 To do this, open the [webview developer tools](https://code.visualstudio.com/api/extension-guides/webview#inspecting-and-debugging-webviews).
 
-Once you’ve done so, if you perform some actions that trigger metrics and/or logs (such as doing a task with Trembo), 
+Once youâ€™ve done so, if you perform some actions that trigger metrics and/or logs (such as doing a task with Trembo), 
 you will see error logs if any error occurs when sending the data to your collector.
 
 If you don't see any logs, enable [debug mode](#debug-mode).
@@ -177,12 +177,12 @@ Exported data is already anonymous and doesn't include code content, file paths,
 ## Limitations
 
 Current OpenTelemetry support in Trembo:
-- ✅ OTLP metrics export (gRPC, HTTP)
-- ✅ OTLP logs export (gRPC, HTTP)
-- ✅ Basic configuration via [Remote Configuration](/enterprise-solutions/configuration/remote-configuration/overview#how-remote-configuration-works)
-- ❌ Distributed tracing (not yet implemented)
-- ❌ Custom instrumentation API (not yet exposed)
-- ❌ Sampling configuration (uses defaults)
+- âœ… OTLP metrics export (gRPC, HTTP)
+- âœ… OTLP logs export (gRPC, HTTP)
+- âœ… Basic configuration via [Remote Configuration](/enterprise-solutions/configuration/remote-configuration/overview#how-remote-configuration-works)
+- âŒ Distributed tracing (not yet implemented)
+- âŒ Custom instrumentation API (not yet exposed)
+- âŒ Sampling configuration (uses defaults)
 
 ## Best Practices
 

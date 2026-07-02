@@ -5,10 +5,10 @@ const TREMBO_TRUSTED_TESTER_DOMAINS = ["fibilabs.tech"]
 
 /**
  * Checks if the given email belongs to a Trembo bot user.
- * E.g. Emails ending with @trembo.bot
+ * E.g. Emails ending with @example.invalid
  */
 function isTremboBotUser(email: string): boolean {
-	return email.endsWith("@trembo.bot")
+	return email.endsWith("@example.invalid")
 }
 
 export function isTremboInternalTester(email: string): boolean {

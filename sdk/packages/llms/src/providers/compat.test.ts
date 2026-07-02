@@ -247,7 +247,7 @@ describe("createGatewayApiHandler.getMessages", () => {
 		};
 
 		// The compat layer no longer detaches images into sibling user
-		// messages — that responsibility moved into
+		// messages â€” that responsibility moved into
 		// `toAiSdkToolResultOutput`, which extracts every nested `image`
 		// content block into native `image-data` content parts. The
 		// gateway request therefore contains the original
@@ -639,7 +639,7 @@ describe("createGatewayApiHandler.createMessage", () => {
 			| undefined;
 
 		await expect(
-			factoryConfig?.fetch?.("https://api.trembo.bot/api/v1/chat/completions", {
+			factoryConfig?.fetch?.("http://0.0.0.0:0/api/v1/chat/completions", {
 				method: "POST",
 			}),
 		).rejects.toBeInstanceOf(TremboNotSubscribedError);
@@ -647,7 +647,7 @@ describe("createGatewayApiHandler.createMessage", () => {
 });
 
 /**
- * Tests for compat.ts message conversion (LlmsProviders.Message → AgentMessage).
+ * Tests for compat.ts message conversion (LlmsProviders.Message â†’ AgentMessage).
  *
  * Specifically guards the read_file image-passing path: the orchestrator's
  * `tool_result` block carries an array of {text, image} content blocks, and we
@@ -657,7 +657,7 @@ describe("createGatewayApiHandler.createMessage", () => {
  * collapse the array to a string here the image bytes are dropped and the
  * model hallucinates.
  */
-describe("toGatewayRequestMessages — tool_result with images", () => {
+describe("toGatewayRequestMessages â€” tool_result with images", () => {
 	it("forwards text+image content arrays as the tool-result output", () => {
 		const messages: Message[] = [
 			{
@@ -702,8 +702,8 @@ describe("toGatewayRequestMessages — tool_result with images", () => {
 		expect(toolResult.toolName).toBe("read_file");
 		expect(toolResult.isError).toBe(false);
 
-		// `output` must be the full structured content-block array — including
-		// the image — so toAiSdkToolResultOutput can emit `{type:"content"}`.
+		// `output` must be the full structured content-block array â€” including
+		// the image â€” so toAiSdkToolResultOutput can emit `{type:"content"}`.
 		const output = toolResult.output as Array<Record<string, unknown>>;
 		expect(Array.isArray(output)).toBe(true);
 		expect(output).toHaveLength(2);
@@ -720,7 +720,7 @@ describe("toGatewayRequestMessages — tool_result with images", () => {
 
 	it("forwards text-only tool_result content unchanged for downstream normalisation", () => {
 		// The compat layer no longer collapses `[{type:'text', text}]` into
-		// a bare string — the AI SDK formatter accepts the content-block
+		// a bare string â€” the AI SDK formatter accepts the content-block
 		// array directly and emits it as a `{type:'content'}` tool-result
 		// output. (`toAiSdkToolResultOutput` then forwards the text part
 		// through unchanged.)

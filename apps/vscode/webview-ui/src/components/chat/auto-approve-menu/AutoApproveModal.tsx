@@ -71,7 +71,7 @@ const AutoApproveModal: React.FC<AutoApproveModalProps> = ({ isVisible, setIsVis
 					Let Trembo take these actions without asking for approval.{" "}
 					<a
 						className="text-link hover:text-link-hover"
-						href="https://docs.trembo.bot/features/auto-approve#auto-approve"
+						href="https://github.com/xedro98/trembo/features/auto-approve#auto-approve"
 						rel="noopener"
 						style={{ fontSize: "inherit" }}
 						target="_blank">

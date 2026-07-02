@@ -11,7 +11,7 @@
 	"logo": {
 		"light": "/assets/Trembo_Logo-complete_black.png",
 		"dark": "/assets/Trembo_Logo-complete_white.png",
-		"href": "https://trembo.bot/"
+		"href": "https://github.com/xedro98/trembo/"
 	},
 	"favicon": {
 		"light": "/assets/robot_panel_light.png",
@@ -51,7 +51,7 @@
 		"primary": {
 			"type": "button",
 			"label": "Install Trembo",
-			"href": "https://trembo.bot/install?utm_source=website&utm_medium=header"
+			"href": "https://github.com/xedro98/trembo/install?utm_source=website&utm_medium=header"
 		}
 	},
 	"navigation": {

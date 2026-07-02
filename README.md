@@ -14,7 +14,7 @@ The open source coding agent in your IDE and terminal.
 <table>
 <tbody>
 <td align="center">
-<a href="https://docs.trembo.bot" target="_blank"><strong>Docs</strong></a>
+<a href="https://github.com/xedro98/trembo" target="_blank"><strong>Docs</strong></a>
 </td>
 <td align="center">
 <a href="https://discord.gg/trembo" target="_blank"><strong>Discord</strong></a>
@@ -26,7 +26,7 @@ The open source coding agent in your IDE and terminal.
 <a href="https://github.com/trembo/trembo/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>Feature Requests</strong></a>
 </td>
 <td align="center">
-<a href="https://trembo.bot/join-us" target="_blank"><strong>Join us!</strong></a>
+<a href="https://github.com/xedro98/trembo/join-us" target="_blank"><strong>Join us!</strong></a>
 </td>
 </tbody>
 </table>
@@ -114,7 +114,7 @@ Build your own AI agents and integrations powered by the same engine that runs t
 npm install @trembo/sdk
 ```
 
-<a href="https://docs.trembo.bot/trembo-sdk/overview">Documentation</a>
+<a href="https://github.com/xedro98/trembo/trembo-sdk/overview">Documentation</a>
 <br><br>
 
 </td>
@@ -133,7 +133,7 @@ npm install @trembo/sdk
 | **VS Code Extension** | The Marketplace extension and extension host integration. | [`/`](https://github.com/trembo/trembo/tree/main) (WIP migrating) | [CHANGELOG.md](https://github.com/trembo/trembo/blob/main/CHANGELOG.md) |
 | **JetBrains Plugin** | JetBrains-hosted client that talks to the shared agent core. | Currently we are not open-sourcing JetBrains plugins | - |
 | **Kanban** | Web-based multi-agent task board. | [`trembo/kanban`](https://github.com/trembo/kanban) | [CHANGELOG.md](https://github.com/trembo/kanban/blob/main/CHANGELOG.md) |
-| **Docs site** | Public documentation pages. | [`docs/`](https://docs.trembo.bot/) | - |
+| **Docs site** | Public documentation pages. | [`docs/`](https://github.com/xedro98/trembo/) | - |
 
 ## Edits Code Across Your Project
 
@@ -232,8 +232,8 @@ trembo --json "List all TODO comments" | jq -r 'select(.type == "agent_event" an
 
 ## Contributing
 
-Start with the [Contributing Guide](CONTRIBUTING.md). Join our [Discord](https://discord.gg/trembo) and head to the `#contributors` channel to connect with other contributors. Check our [careers page](https://trembo.bot/join-us) for full-time roles.
+Start with the [Contributing Guide](CONTRIBUTING.md). Join our [Discord](https://discord.gg/trembo) and head to the `#contributors` channel to connect with other contributors. Check our [careers page](https://github.com/xedro98/trembo/join-us) for full-time roles.
 
 ## License
 
-[Apache 2.0 © 2026 Trembo Bot Inc.](./LICENSE)
+[Apache 2.0 Â© 2026 Trembo Bot Inc.](./LICENSE)

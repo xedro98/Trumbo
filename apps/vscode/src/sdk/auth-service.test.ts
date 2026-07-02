@@ -3,14 +3,14 @@
 // These tests verify the auth service's core logic:
 // - Token persistence (read/write/clear from secrets)
 // - Auth state management (authenticated/unauthenticated)
-// - Auth info conversion (SDK OAuthCredentials → TremboAuthInfo)
+// - Auth info conversion (SDK OAuthCredentials â†’ TremboAuthInfo)
 // - Logout flow
 // - Streaming subscription management
 // - workos: prefix handling
 
 import { getValidTremboCredentials, type OAuthCredentials } from "@trembo/core"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { AuthService, type TremboAuthInfo, LogoutReason } from "./auth-service"
+import { AuthService, LogoutReason, type TremboAuthInfo } from "./auth-service"
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -42,8 +42,8 @@ vi.mock("@/core/storage/StateManager", () => ({
 vi.mock("@/config", () => ({
 	TremboEnv: {
 		config: () => ({
-			apiBaseUrl: "https://api.trembo.bot",
-			appBaseUrl: "https://app.trembo.bot",
+			apiBaseUrl: "http://0.0.0.0:0",
+			appBaseUrl: "http://0.0.0.0:0",
 		}),
 	},
 }))
@@ -138,7 +138,7 @@ vi.mock("./provider-migration", () => ({
 }))
 
 // ---------------------------------------------------------------------------
-// Test helpers — typed access to private members for testing
+// Test helpers â€” typed access to private members for testing
 // ---------------------------------------------------------------------------
 
 /** Type that exposes private members for test access */
@@ -222,7 +222,7 @@ describe("AuthService", () => {
 		})
 	})
 
-	describe("getInfo() — auth state for webview", () => {
+	describe("getInfo() â€” auth state for webview", () => {
 		it("returns unauthenticated state when not logged in", () => {
 			const info = authService.getInfo()
 			// Unset proto message fields are `undefined`, not `null`.
@@ -333,7 +333,7 @@ describe("AuthService", () => {
 			testAccess(authService)._tremboAuthInfo = authInfo
 			testAccess(authService)._authenticated = true
 
-			// No refresh token → can't refresh
+			// No refresh token â†’ can't refresh
 			authInfo.refreshToken = undefined
 			const token = await authService.getAuthToken()
 			expect(token).toBeNull()
@@ -358,7 +358,7 @@ describe("AuthService", () => {
 		})
 	})
 
-	describe("handleDeauth() — logout", () => {
+	describe("handleDeauth() â€” logout", () => {
 		it("clears auth state and pushes unauthenticated state", async () => {
 			const authInfo = createTestAuthInfo()
 			testAccess(authService)._tremboAuthInfo = authInfo

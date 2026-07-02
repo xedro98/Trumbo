@@ -11,7 +11,7 @@ Welcome to the Trembo API documentation. Use the same models that power the Trem
 The Trembo API is an OpenAI-compatible Chat Completions endpoint. You authenticate once with a Trembo API key and get access to models from Anthropic, OpenAI, Google, and more through a single base URL. No need to manage separate keys for each provider.
 
 ```
-Your App  →  Trembo API (api.trembo.bot)  →  Anthropic / OpenAI / Google / etc.
+Your App  Ã¢â€ â€™  Trembo API (api.example.invalid)  Ã¢â€ â€™  Anthropic / OpenAI / Google / etc.
 ```
 
 <CardGroup cols={2}>
@@ -46,7 +46,7 @@ Your App  →  Trembo API (api.trembo.bot)  →  Anthropic / OpenAI / Google / e
 ## Quick Start
 
 ```bash
-curl -X POST https://api.trembo.bot/api/v1/chat/completions \
+curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -55,4 +55,4 @@ curl -X POST https://api.trembo.bot/api/v1/chat/completions \
   }'
 ```
 
-Get your API key at [app.trembo.bot](https://app.trembo.bot) (Settings > API Keys), then follow the [Getting Started](/api/getting-started) guide.
+Get your API key at [app.example.invalid](http://0.0.0.0:0) (Settings > API Keys), then follow the [Getting Started](/api/getting-started) guide.

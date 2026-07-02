@@ -13,9 +13,9 @@ calls. See `apps/vscode/src/dev/debug-harness/README.md` for the debug harness.
    `// Replaces classic src/core/... (see origin/main)` header and use
    `kb_search(name="trembo", commit="origin/main")` or
    `git show origin/main:path` to consult the prior implementation.
-3. **Single entry point.** There is one codepath — the SDK adapter. No
+3. **Single entry point.** There is one codepath â€” the SDK adapter. No
    `TREMBO_SDK` env flag.
-4. **Use `{appBaseUrl}`**, never hardcode `app.trembo.bot`.
+4. **Use `{appBaseUrl}`**, never hardcode `app.example.invalid`.
 5. **Avoid `as` casts.** Use explicit conversion functions with tests. The
    branded types in `apps/vscode/src/sdk/model-catalog/contracts.ts` exist so
    casts are unnecessary outside parse/compute boundaries.

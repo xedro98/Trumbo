@@ -15,7 +15,7 @@
 <a href="https://github.com/trembo/trembo/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>Feature Requests</strong></a>
 </td>
 <td align="center">
-<a href="https://docs.trembo.bot/getting-started/installing-trembo" target="_blank"><strong>Getting Started</strong></a>
+<a href="https://github.com/xedro98/trembo/getting-started/installing-trembo" target="_blank"><strong>Getting Started</strong></a>
 </td>
 </tbody>
 </table>
@@ -23,7 +23,7 @@
 
 Meet Trembo, an AI assistant that can use your **CLI** a**N**d **E**ditor.
 
-Thanks to [Claude Sonnet's agentic coding capabilities](https://www.anthropic.com/claude/sonnet), Trembo can handle complex software development tasks step-by-step. With tools that let him create & edit files, explore large projects, use the browser, and execute terminal commands (after you grant permission), he can assist you in ways that go beyond code completion or tech support. Trembo can even use the Model Context Protocol (MCP) to create new tools and extend his own capabilities. While autonomous AI scripts traditionally run in sandboxed environments, this extension provides a human-in-the-loop GUI to approve every file change and terminal command, providing a safe and accessible way to explore the potential of agentic AI.
+Thanks toÂ [Claude Sonnet's agentic coding capabilities](https://www.anthropic.com/claude/sonnet),Â Trembo can handle complex software development tasks step-by-step. With tools that let him create & edit files, explore large projects, use the browser, and execute terminal commands (after you grant permission), he can assist you in ways that go beyond code completion or tech support. Trembo can even use the Model Context Protocol (MCP) to create new tools and extend his own capabilities. While autonomous AI scripts traditionally run in sandboxed environments, this extension provides a human-in-the-loop GUI to approve every file change and terminal command, providing a safe and accessible way to explore the potential of agentic AI.
 
 1. Enter your task and add images to convert mockups into functional apps or fix bugs with screenshots.
 2. Trembo starts by analyzing your file structure & source code ASTs, running regex searches, and reading relevant files to get up to speed in existing projects. By carefully managing what information is added to context, Trembo can provide valuable assistance even for large, complex projects without overwhelming the context window.
@@ -31,10 +31,10 @@ Thanks to [Claude Sonnet's agentic coding capabilities](https://www.anthropic.c
     - Create and edit files + monitor linter/compiler errors along the way, letting him proactively fix issues like missing imports and syntax errors on his own.
     - Execute commands directly in your terminal and monitor their output as he works, letting him e.g., react to dev server issues after editing a file.
     - For web development tasks, Trembo can launch the site in a headless browser, click, type, scroll, and capture screenshots + console logs, allowing him to fix runtime errors and visual bugs.
-4. When a task is completed, Trembo will present the result to you with a terminal command like `open -a "Google Chrome" index.html`, which you run with a click of a button.
+4. When a task is completed, Trembo will present the result to you with a terminal command likeÂ `open -a "Google Chrome" index.html`, which you run with a click of a button.
 
 > [!TIP]
-> Follow [this guide](https://docs.trembo.bot/features/customization/opening-trembo-in-sidebar) to open Trembo on the right side of your editor. This lets you use Trembo side-by-side with your file explorer, and see how he changes your workspace more clearly.
+> Follow [this guide](https://github.com/xedro98/trembo/features/customization/opening-trembo-in-sidebar) to open Trembo on the right side of your editor. This lets you use Trembo side-by-side with your file explorer, and see how he changes your workspace more clearly.
 
 ---
 
@@ -56,7 +56,7 @@ The extension also keeps track of total tokens and API usage cost for the entire
 
 Thanks to the new [shell integration updates in VSCode v1.93](https://code.visualstudio.com/updates/v1_93#_terminal-shell-integration-api), Trembo can execute commands directly in your terminal and receive the output. This allows him to perform a wide range of tasks, from installing packages and running build scripts to deploying applications, managing databases, and executing tests, all while adapting to your dev environment & toolchain to get the job done right.
 
-For long running processes like dev servers, use the "Proceed While Running" button to let Trembo continue in the task while the command runs in the background. As Trembo works he’ll be notified of any new terminal output along the way, letting him react to issues that may come up, such as compile-time errors when editing files.
+For long running processes like dev servers, use the "Proceed While Running" button to let Trembo continue in the task while the command runs in the background. As Trembo works heâ€™ll be notified of any new terminal output along the way, letting him react to issues that may come up, such as compile-time errors when editing files.
 
 <!-- Transparent pixel to create line break after floating image -->
 
@@ -104,13 +104,13 @@ Thanks to the [Model Context Protocol](https://github.com/modelcontextprotocol),
 
 ### Add Context
 
-**`@url`:** Paste in a URL for the extension to fetch and convert to markdown, useful when you want to give Trembo the latest docs
+**`@url`:**Â Paste in a URL for the extension to fetch and convert to markdown, useful when you want to give Trembo the latest docs
 
-**`@problems`:** Add workspace errors and warnings ('Problems' panel) for Trembo to fix
+**`@problems`:**Â Add workspace errors and warnings ('Problems' panel) for Trembo to fix
 
-**`@file`:** Adds a file's contents so you don't have to waste API requests approving read file (+ type to search files)
+**`@file`:**Â Adds a file's contents so you don't have to waste API requests approving read file (+ type to search files)
 
-**`@folder`:** Adds folder's files all at once to speed up your workflow even more
+**`@folder`:**Â Adds folder's files all at once to speed up your workflow even more
 
 <!-- Transparent pixel to create line break after floating image -->
 
@@ -130,13 +130,13 @@ For example, when working with a local web server, you can use 'Restore Workspac
 
 ## Contributing
 
-To contribute to the project, start with our [Contributing Guide](CONTRIBUTING.md) to learn the basics. You can also join our [Discord](https://discord.gg/trembo) to chat with other contributors in the `#contributors` channel. If you're looking for full-time work, check out our open positions on our [careers page](https://trembo.bot/join-us)!
+To contribute to the project, start with our [Contributing Guide](CONTRIBUTING.md) to learn the basics. You can also join our [Discord](https://discord.gg/trembo) to chat with other contributors in the `#contributors` channel. If you're looking for full-time work, check out our open positions on our [careers page](https://github.com/xedro98/trembo/join-us)!
 
 ## Enterprise
 
-Get the same Trembo experience with enterprise-grade controls: SSO (SAML/OIDC), global policies and configuration, observability with audit trails, private networking (VPC/private link), and self-hosted or on-prem deployments, and enterprise support. Learn more at our [enterprise page](https://trembo.bot/enterprise) or [talk to us](https://trembo.bot/contact-sales).
+Get the same Trembo experience with enterprise-grade controls: SSO (SAML/OIDC), global policies and configuration, observability with audit trails, private networking (VPC/private link), and self-hosted or on-prem deployments, and enterprise support. Learn more at our [enterprise page](https://github.com/xedro98/trembo/enterprise) or [talk to us](https://github.com/xedro98/trembo/contact-sales).
 
 
 ## License
 
-[Apache 2.0 © 2026 Trembo Bot Inc.](./LICENSE)
+[Apache 2.0 Â© 2026 Trembo Bot Inc.](./LICENSE)

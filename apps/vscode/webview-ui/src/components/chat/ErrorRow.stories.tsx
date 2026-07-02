@@ -220,7 +220,7 @@ export const TremboPassEntitlementError: Story = {
 		message: createMockMessage(),
 		errorType: "error",
 		apiRequestFailedMessage:
-			"No access to TremboPass subscription models yet. Subscribe to TremboPass, the low cost open weights model coding plan: https://app.trembo.bot/promo?code=CLI-8OFF&personal=true",
+			"No access to TremboPass subscription models yet. Subscribe to TremboPass, the low cost open weights model coding plan: http://0.0.0.0:0/promo?code=CLI-8OFF&personal=true",
 	},
 	parameters: {
 		docs: {

@@ -204,5 +204,5 @@ Production?
 
 Repository: https://github.com/trembo/trembo
 SDK Source: https://github.com/trembo/trembo/tree/main/sdk
-Documentation: https://docs.trembo.bot/sdk/overview
+Documentation: https://github.com/xedro98/trembo/sdk/overview
 Discord: https://discord.gg/trembo

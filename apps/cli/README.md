@@ -23,7 +23,7 @@
 <a href="https://github.com/trembo/trembo/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank">Feature Requests</a>
 </td>
 <td align="center">
-<a href="https://docs.trembo.bot" target="_blank">Docs</a>
+<a href="https://github.com/xedro98/trembo" target="_blank">Docs</a>
 </td>
 </tbody>
 </table>
@@ -355,4 +355,4 @@ See [DEVELOPMENT.md](./DEVELOPMENT.md) for local development setup, monorepo str
 
 ## License
 
-[Apache 2.0 © Trembo Bot Inc.](https://github.com/trembo/trembo/blob/main/LICENSE)
+[Apache 2.0 Â© Trembo Bot Inc.](https://github.com/trembo/trembo/blob/main/LICENSE)

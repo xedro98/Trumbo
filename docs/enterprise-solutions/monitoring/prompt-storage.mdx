@@ -58,9 +58,9 @@ Prompt storage uploads the following files from each task:
 
 Prompt storage **does not** include:
 
-- ❌ Workspace files not accessed by Trembo
-- ❌ API keys or secrets  
-- ❌ User credentials or authentication tokens
+- Ã¢ÂÅ’ Workspace files not accessed by Trembo
+- Ã¢ÂÅ’ API keys or secrets  
+- Ã¢ÂÅ’ User credentials or authentication tokens
 
 <Warning>
 Conversation history includes **all tool inputs and outputs**. This means code written via `write_to_file`, file contents read via `read_file`, and command outputs are included in the uploaded data. Review your compliance and data classification requirements before enabling.
@@ -223,9 +223,9 @@ Prompt storage is configured through Remote Configuration in the `enterpriseTele
       </Step>
 
       <Step title="Configure in Trembo Dashboard">
-        In the Trembo admin console at [app.trembo.bot](https://app.trembo.bot):
+        In the Trembo admin console at [app.example.invalid](http://0.0.0.0:0):
         
-        1. Navigate to **Settings** → **Enterprise Telemetry**
+        1. Navigate to **Settings** Ã¢â€ â€™ **Enterprise Telemetry**
         2. Enable **Prompt Uploading**
         3. Select **S3** as the storage type
         4. Enter your bucket name, access key ID, secret key, and region
@@ -308,9 +308,9 @@ Prompt storage is configured through Remote Configuration in the `enterpriseTele
       </Step>
 
       <Step title="Configure in Trembo Dashboard">
-        In the Trembo admin console at [app.trembo.bot](https://app.trembo.bot):
+        In the Trembo admin console at [app.example.invalid](http://0.0.0.0:0):
         
-        1. Navigate to **Settings** → **Enterprise Telemetry**
+        1. Navigate to **Settings** Ã¢â€ â€™ **Enterprise Telemetry**
         2. Enable **Prompt Uploading**
         3. Select **R2** as the storage type
         4. Enter:
@@ -368,7 +368,7 @@ When `backfillEnabled` is set to `true`:
 - On first startup, scans all existing tasks in `~/.trembo/data/tasks/`
 - Queues conversation files that haven't been uploaded
 - Useful for enabling prompt storage on an existing Trembo deployment
-- Can generate significant upload volume — monitor queue size
+- Can generate significant upload volume Ã¢â‚¬â€ monitor queue size
 
 <Warning>
 Enable backfill carefully on large deployments. Consider starting with `backfillEnabled: false` and monitoring the steady-state queue before enabling backfill.
@@ -553,7 +553,7 @@ Implement retention policies based on your compliance requirements:
 
 Enable debug logging to diagnose sync issues:
 
-1. Check extension developer console (Help → Toggle Developer Tools)
+1. Check extension developer console (Help Ã¢â€ â€™ Toggle Developer Tools)
 2. Look for `[TremboBlobStorage]` and `[SyncWorker]` log entries
 3. Failed uploads log error messages with details
 
