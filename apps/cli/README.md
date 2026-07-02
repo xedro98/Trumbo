@@ -11,7 +11,7 @@
 <a href="https://www.npmjs.com/package/trembo" target="_blank">NPM</a>
 </td>
 <td align="center">
-<a href="https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev" target="_blank">VS Code Extension</a>
+<a href="https://github.com/trembo/trembo/tree/main/apps/vscode" target="_blank">VS Code Extension</a>
 </td>
 <td align="center">
 <a href="https://discord.gg/trembo" target="_blank">Discord</a>
@@ -29,7 +29,7 @@
 </table>
 </div>
 
-Run Trembo in your terminal. Interactive chat for paired sessions, or fully headless for CI/CD and scripting. The CLI shares its agent core with the [Trembo VS Code extension](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev), JetBrains plugin, and SDK, so plan/act modes, MCP servers, checkpoints, rules, skills, and provider configuration all behave the same across surfaces.
+Run Trembo in your terminal. Interactive chat for paired sessions, or fully headless for CI/CD and scripting. The CLI shares its agent core with the [Trembo VS Code extension](https://github.com/trembo/trembo/tree/main/apps/vscode), JetBrains plugin, and SDK, so plan/act modes, MCP servers, checkpoints, rules, skills, and provider configuration all behave the same across surfaces.
 
 ## Install
 

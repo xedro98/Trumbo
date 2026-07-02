@@ -38,24 +38,24 @@ describe("storage home directory fallback", () => {
 	it("uses USERPROFILE when HOME is unset", async () => {
 		snapshot = captureEnv();
 		delete process.env.HOME;
-		process.env.USERPROFILE = "C:\\Users\\saoud";
+		process.env.USERPROFILE = "C:\\Users\\trembo";
 		delete process.env.HOMEDRIVE;
 		delete process.env.HOMEPATH;
 		delete process.env.TREMBO_DIR;
 
 		const { resolveTremboDir } = await import("./paths");
-		expect(resolveTremboDir()).toBe(join("C:\\Users\\saoud", ".trembo"));
+		expect(resolveTremboDir()).toBe(join("C:\\Users\\trembo", ".trembo"));
 	});
 
 	it("treats HOME=~ as unset and falls back to USERPROFILE", async () => {
 		snapshot = captureEnv();
 		process.env.HOME = "~";
-		process.env.USERPROFILE = "C:\\Users\\saoud";
+		process.env.USERPROFILE = "C:\\Users\\trembo";
 		delete process.env.HOMEDRIVE;
 		delete process.env.HOMEPATH;
 		delete process.env.TREMBO_DIR;
 
 		const { resolveTremboDir } = await import("./paths");
-		expect(resolveTremboDir()).toBe(join("C:\\Users\\saoud", ".trembo"));
+		expect(resolveTremboDir()).toBe(join("C:\\Users\\trembo", ".trembo"));
 	});
 });

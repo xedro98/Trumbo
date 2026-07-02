@@ -7,7 +7,7 @@ The Trembo extension exposes an API that can be used by other extensions. To use
 3. Get access to the API with the following code:
 
     ```ts
-    const tremboExtension = vscode.extensions.getExtension<TremboAPI>("saoudrizwan.claude-dev")
+    const tremboExtension = vscode.extensions.getExtension<TremboAPI>("trembo-bot.trembo")
 
     if (!tremboExtension?.isActive) {
     	throw new Error("Trembo extension is not activated")
@@ -37,11 +37,11 @@ The Trembo extension exposes an API that can be used by other extensions. To use
     }
     ```
 
-    **Note:** To ensure that the `saoudrizwan.claude-dev` extension is activated before your extension, add it to the `extensionDependencies` in your `package.json`:
+    **Note:** To ensure that the `trembo-bot.trembo` extension is activated before your extension, add it to the `extensionDependencies` in your `package.json`:
 
     ```json
     "extensionDependencies": [
-        "saoudrizwan.claude-dev"
+        "trembo-bot.trembo"
     ]
     ```
 

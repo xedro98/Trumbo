@@ -3,7 +3,7 @@
 <table>
 <tbody>
 <td align="center">
-<a href="https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev" target="_blank"><strong>Download on VS Marketplace</strong></a>
+<a href="https://github.com/trembo/trembo/tree/main/apps/vscode" target="_blank"><strong>Source on GitHub</strong></a>
 </td>
 <td align="center">
 <a href="https://discord.gg/trembo" target="_blank"><strong>Discord</strong></a>

@@ -13,9 +13,9 @@
 				"--extensionDevelopmentPath=${workspaceFolder}/apps/vscode",
 				"--disable-workspace-trust",
 				"--disable-extension",
-				"saoudrizwan.claude-dev", // Avoid conflicts with installed Trembo
+				"trembo-bot.trembo", // Avoid conflicts with installed Trembo
 				"--disable-extension",
-				"saoudrizwan.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
+				"trembo-bot.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
 				"${workspaceFolder}/apps/vscode",
 				"--disable-extensions"
 			],
@@ -38,9 +38,9 @@
 				"--extensionDevelopmentPath=${workspaceFolder}/apps/vscode",
 				"--disable-workspace-trust",
 				"--disable-extension",
-				"saoudrizwan.claude-dev", // Avoid conflicts with installed Trembo
+				"trembo-bot.trembo", // Avoid conflicts with installed Trembo
 				"--disable-extension",
-				"saoudrizwan.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
+				"trembo-bot.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
 				"${workspaceFolder}/apps/vscode"
 			],
 			"outFiles": [
@@ -62,9 +62,9 @@
 				"--extensionDevelopmentPath=${workspaceFolder}/apps/vscode",
 				"--disable-workspace-trust",
 				"--disable-extension",
-				"saoudrizwan.claude-dev", // Avoid conflicts with installed Trembo
+				"trembo-bot.trembo", // Avoid conflicts with installed Trembo
 				"--disable-extension",
-				"saoudrizwan.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
+				"trembo-bot.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
 				"${workspaceFolder}/apps/vscode"
 			],
 			"outFiles": [
@@ -88,9 +88,9 @@
 				"--profile-temp",
 				"--sync=off",
 				"--disable-extension",
-				"saoudrizwan.claude-dev", // Avoid conflicts with installed Trembo
+				"trembo-bot.trembo", // Avoid conflicts with installed Trembo
 				"--disable-extension",
-				"saoudrizwan.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
+				"trembo-bot.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
 				"--extensionDevelopmentPath=${workspaceFolder}/apps/vscode",
 				"${workspaceFolder}/apps/vscode"
 			],

@@ -881,7 +881,10 @@ class DebugHarness {
 	async uiOpenSidebar(): Promise<any> {
 		if (!this.page) throw new Error("VSCode not running")
 		try {
-			await this.page.getByRole("tab", { name: /Trembo/ }).locator("a").click()
+			await this.page
+				.getByRole("tab", { name: /Trembo/ })
+				.locator("a")
+				.click()
 		} catch {
 			// Activity bar might need a different approach
 			await this.page.keyboard.press("Meta+Shift+p")
@@ -1240,7 +1243,7 @@ class DebugHarness {
 		if (!this.app) throw new Error("VSCode not running")
 
 		// Build the URI
-		const extensionId = "saoudrizwan.claude-dev"
+		const extensionId = "trembo-bot.trembo"
 		const scheme = "vscode"
 		const searchParams = new URLSearchParams()
 		if (params.code) searchParams.set("code", params.code)

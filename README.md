@@ -81,7 +81,7 @@ AI coding assistant in your editor.
 Create files, run commands, browse the web,
 and use tools with human-in-the-loop approval.
 
-<a href="https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev">Install from VS Marketplace</a>
+<a href="./apps/vscode">Learn more</a>
 <br><br>
 
 </td>
