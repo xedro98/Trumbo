@@ -2,6 +2,16 @@
 title: "Remote Access"
 description: "Access Kanban from other devices on your network or from anywhere using tunnels, VPNs, and cloud services"
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 By default, Kanban binds to `127.0.0.1:3484` and is only accessible from the machine it's running on. This guide shows how to enable remote access for mobile devices, remote machines, or team collaboration.
 
@@ -204,7 +214,7 @@ export class KanbanEc2Stack extends cdk.Stack {
             "sudo dnf install -y nodejs",
 
             // 4) Clone and build the app
-            "git clone -b main https://github.com/trembo/kanban.git /opt/kanban",
+            "git clone -b main https://github.com/xedro98/trembo.git /opt/kanban",
 
             // 5) Create systemd service for the kanban app
             `cat > /etc/systemd/system/kanban.service << 'UNIT'

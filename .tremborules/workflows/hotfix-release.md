@@ -1,14 +1,14 @@
 # Hotfix Release
 
-Create a hotfix release by cherry-picking specific commits from main onto the latest release tag.
+Create a hotfix release by cherry-picking specific commits from `main` onto the latest release tag.
 
 ## Overview
 
-This workflow helps you:
-1. Select specific commits from main to include in a hotfix
-2. Create a release notes commit on main (changelog + version bump)
-3. Cherry-pick everything onto the latest release tag
-4. Tag and push the new release
+This workflow walks you through:
+1. Picking specific commits from main to include in a hotfix
+2. Creating a release-notes commit on main (changelog + version bump)
+3. Cherry-picking everything onto the latest release tag
+4. Tagging and pushing the new release
 
 ## Step 1: Setup and Gather Information
 
@@ -165,8 +165,8 @@ git checkout main
 ```
 VS Code Hotfix v{VERSION} Published
 
-- Description of fix 1 https://github.com/trembo/trembo/pull/{PR_NUMBER}
-- Description of fix 2 https://github.com/trembo/trembo/pull/{PR_NUMBER}
+- Description of fix 1 https://github.com/xedro98/trembo/pull/{PR_NUMBER}
+- Description of fix 2 https://github.com/xedro98/trembo/pull/{PR_NUMBER}
 ```
 
 Present a final summary:
@@ -176,7 +176,7 @@ Present a final summary:
 - Slack message copied to clipboard: yes
 
 Remind the user to:
-1. Manually trigger the publish release GitHub Action at: https://github.com/trembo/trembo/actions/workflows/ext-vscode-publish-stable.yml (paste `v{VERSION}` as the tag)
+1. Manually trigger the publish release GitHub Action at: https://github.com/xedro98/trembo/actions/workflows/ext-vscode-publish-stable.yml (paste `v{VERSION}` as the tag)
 2. Post the Slack message to announce the hotfix
 
 ## Important Notes

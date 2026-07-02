@@ -1,4 +1,4 @@
-# Agent API Reference
+# Agent API reference
 
 ## Constructor
 

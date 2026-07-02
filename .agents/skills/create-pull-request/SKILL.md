@@ -3,15 +3,15 @@ name: create-pull-request
 description: Create a GitHub pull request following project conventions. Use when the user asks to create a PR, submit changes for review, or open a pull request. Handles commit analysis, branch management, PR template usage, and PR creation using the gh CLI tool.
 ---
 
-# Create Pull Request
+# Create pull request
 
 This skill guides you through creating a well-structured GitHub pull request that follows project conventions and best practices.
 
-## Prerequisites Check
+## Prerequisites check
 
 Before proceeding, verify the following:
 
-### 1. Check if `gh` CLI is installed
+### 1. Check that `gh` CLI is installed
 
 ```bash
 gh --version
@@ -22,7 +22,7 @@ If not installed, inform the user:
 > - macOS: `brew install gh`
 > - Other: https://cli.github.com/
 
-### 2. Check if authenticated with GitHub
+### 2. Check authentication with GitHub
 
 ```bash
 gh auth status
@@ -30,7 +30,7 @@ gh auth status
 
 If not authenticated, guide the user to run `gh auth login`.
 
-### 3. Verify clean working directory
+### 3. Verify a clean working directory
 
 ```bash
 git status
@@ -41,7 +41,7 @@ If there are uncommitted changes, ask the user whether to:
 - Stash them temporarily
 - Discard them (with caution)
 
-## Gather Context
+## Gather context
 
 ### 1. Identify the current branch
 
@@ -49,7 +49,7 @@ If there are uncommitted changes, ask the user whether to:
 git branch --show-current
 ```
 
-Ensure you're not on `main` or `master`. If so, ask the user to create or switch to a feature branch.
+Ensure you are not on `main` or `master`. If so, ask the user to create or switch to a feature branch.
 
 ### 2. Find the base branch
 
@@ -78,38 +78,38 @@ git diff origin/main..HEAD --stat
 
 This shows which files changed and helps identify the type of change.
 
-## Information Gathering
+## Information gathering
 
-Before creating the PR, you need the following information. Check if it can be inferred from:
+Before creating the PR, gather the following information. Check whether it can be inferred from:
 - Commit messages
-- Branch name (e.g., `fix/issue-123`, `feature/new-login`)
+- Branch name (e.g. `fix/issue-123`, `feature/new-login`)
 - Changed files and their content
 
 If any critical information is missing, use `ask_followup_question` to ask the user:
 
-### Required Information
+### Required information
 
-1. **Related Issue Number**: Look for patterns like `#123`, `fixes #123`, or `closes #123` in commit messages
-2. **Description**: What problem does this solve? Why were these changes made?
-3. **Type of Change**: Bug fix, new feature, breaking change, refactor, cosmetic, documentation, or workflow
-4. **Test Procedure**: How was this tested? What could break?
+1. **Related issue number**: look for patterns like `#123`, `fixes #123`, or `closes #123` in commit messages.
+2. **Description**: what problem does this solve? Why were these changes made?
+3. **Type of change**: bug fix, new feature, breaking change, refactor, cosmetic, documentation, or workflow.
+4. **Test procedure**: how was this tested? What could break?
 
 ### Example clarifying question
 
 If the issue number is not found:
-> I couldn't find a related issue number in the commit messages or branch name. What GitHub issue does this PR address? (Enter the issue number, e.g., "123" or "N/A" for small fixes)
+> I couldn't find a related issue number in the commit messages or branch name. What GitHub issue does this PR address? (Enter the issue number, e.g. "123", or "N/A" for small fixes)
 
-## Git Best Practices
+## Git best practices
 
 Before creating the PR, consider these best practices:
 
-### Commit Hygiene
+### Commit hygiene
 
-1. **Atomic commits**: Each commit should represent a single logical change
-2. **Clear commit messages**: Follow conventional commit format when possible
-3. **No merge commits**: Prefer rebasing over merging to keep history clean
+1. **Atomic commits**: each commit should represent a single logical change.
+2. **Clear commit messages**: follow conventional commit format when possible.
+3. **No merge commits**: prefer rebasing over merging to keep history clean.
 
-### Branch Management
+### Branch management
 
 1. **Rebase on latest main** (if needed):
    ```bash
@@ -117,13 +117,13 @@ Before creating the PR, consider these best practices:
    git rebase origin/main
    ```
 
-2. **Squash if appropriate**: If there are many small "WIP" commits, consider interactive rebase:
+2. **Squash if appropriate**: if there are many small "WIP" commits, consider an interactive rebase:
    ```bash
    git rebase -i origin/main
    ```
-   Only suggest this if commits appear messy and the user is comfortable with rebasing.
+   Only suggest this if commits look messy and the user is comfortable with rebasing.
 
-### Push Changes
+### Push changes
 
 Ensure all commits are pushed:
 ```bash
@@ -135,17 +135,17 @@ If the branch was rebased, you may need:
 git push origin HEAD --force-with-lease
 ```
 
-## Create the Pull Request
+## Create the pull request
 
-**IMPORTANT**: Read and use the PR template at `.github/pull_request_template.md`. The PR body format must **strictly match** the template structure. Do not deviate from the template format.
+**Important**: read and use the PR template at `.github/pull_request_template.md`. The PR body format must **strictly match** the template structure. Do not deviate from the template format.
 
 When filling out the template:
-- Replace `#XXXX` with the actual issue number, or keep as `#XXXX` if no issue exists (for small fixes)
-- Fill in all sections with relevant information gathered from commits and context
-- Mark the appropriate "Type of Change" checkbox(es)
-- Complete the "Pre-flight Checklist" items that apply
+- Replace `#XXXX` with the actual issue number, or keep `#XXXX` if no issue exists (for small fixes).
+- Fill in all sections with relevant information gathered from commits and context.
+- Mark the appropriate "Type of Change" checkbox(es).
+- Complete the "Pre-flight Checklist" items that apply.
 
-### Create PR with gh CLI
+### Create the PR with gh CLI
 
 **Use a temporary file for the PR body** to avoid shell escaping issues, newline problems, and other command-line flakiness:
 
@@ -171,41 +171,41 @@ gh pr create --title "PR_TITLE" --body-file /tmp/pr-body.md --base main --draft
 
 **Why use a file?** Passing complex markdown with newlines, special characters, and checkboxes directly via `--body` is error-prone. The `--body-file` flag handles all content reliably.
 
-## Post-Creation
+## Post-creation
 
 After creating the PR:
 
-1. **Display the PR URL** so the user can review it
-2. **Remind about CI checks**: Tests and linting will run automatically
+1. **Display the PR URL** so the user can review it.
+2. **Remind about CI checks**: tests and linting run automatically.
 3. **Suggest next steps**:
    - Add reviewers if needed: `gh pr edit --add-reviewer USERNAME`
    - Add labels if needed: `gh pr edit --add-label "bug"`
 
-## Error Handling
+## Error handling
 
-### Common Issues
+### Common issues
 
-1. **No commits ahead of main**: The branch has no changes to submit
-   - Ask if the user meant to work on a different branch
+1. **No commits ahead of main**: the branch has no changes to submit.
+   - Ask if the user meant to work on a different branch.
 
-2. **Branch not pushed**: Remote doesn't have the branch
+2. **Branch not pushed**: the remote doesn't have the branch.
    - Push the branch first: `git push -u origin HEAD`
 
-3. **PR already exists**: A PR for this branch already exists
+3. **PR already exists**: a PR for this branch already exists.
    - Show the existing PR: `gh pr view`
-   - Ask if they want to update it instead
+   - Ask if they want to update it instead.
 
-4. **Merge conflicts**: Branch conflicts with base
-   - Guide user through resolving conflicts or rebasing
+4. **Merge conflicts**: the branch conflicts with the base.
+   - Guide the user through resolving conflicts or rebasing.
 
-## Summary Checklist
+## Summary checklist
 
 Before finalizing, ensure:
 - [ ] `gh` CLI is installed and authenticated
 - [ ] Working directory is clean
 - [ ] All commits are pushed
-- [ ] Branch is up-to-date with base branch
-- [ ] Related issue number is identified, or placeholder is used
+- [ ] Branch is up-to-date with the base branch
+- [ ] Related issue number is identified, or a placeholder is used
 - [ ] PR description follows the template exactly
 - [ ] Appropriate type of change is selected
 - [ ] Pre-flight checklist items are addressed

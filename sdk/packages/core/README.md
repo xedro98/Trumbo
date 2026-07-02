@@ -1,8 +1,16 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # [experimental] @trembo/core
 
-`@trembo/core` is the stateful orchestration layer of the Trembo SDK. It
-connects the agent runtime, provider settings, storage, default tools, and
-session lifecycle into a host-ready runtime.
+`@trembo/core` is the stateful orchestration layer of the Trembo SDK. It wires the agent runtime, provider settings, storage, default tools, and session lifecycle together into a host-ready runtime.
 
 ## What You Get
 
@@ -55,10 +63,7 @@ await trembo.dispose();
 
 `TremboCore.create(...)` also accepts `prepare(input)`.
 
-Use it when a host needs to prepare workspace-scoped runtime state before each
-session starts, then apply watcher/extensions/telemetry inputs through
-explicit `localRuntime` bootstrap fields without widening the shared host
-contract.
+Use it when a host needs to prepare workspace-scoped runtime state before each session starts, then apply watcher/extensions/telemetry inputs through explicit `localRuntime` bootstrap fields without widening the shared host contract.
 
 ## Main APIs
 
@@ -72,13 +77,7 @@ Use `@trembo/core` for host-facing runtime assembly:
 - `HubRuntimeHost` and `RemoteRuntimeHost`
 - `DefaultRuntimeBuilder`
 
-`TremboCore` is the app-facing session API. The lower-level `RuntimeHost`
-boundary uses runtime-primitive names such as `startSession` and `runTurn` so
-transport adapters stay distinct from product methods like `start` and `send`.
-Service-style operations such as pending prompt edits, accumulated usage lookup,
-and active-session model switching are exposed through `TremboCore` when the
-selected transport supports them rather than being part of the minimal host
-primitive vocabulary.
+`TremboCore` is the app-facing session API. The lower-level `RuntimeHost` boundary uses runtime-primitive names such as `startSession` and `runTurn` so transport adapters stay distinct from product methods like `start` and `send`. Service-style operations such as pending prompt edits, accumulated usage lookup, and active-session model switching are exposed through `TremboCore` when the selected transport supports them, rather than being part of the minimal host primitive vocabulary.
 
 ### Default Tools
 
@@ -105,6 +104,6 @@ The package also exports storage and settings helpers such as:
 
 ## More Examples
 
-- Repo examples: [examples](https://github.com/trembo/sdk/tree/main/examples), [apps/examples](https://github.com/trembo/sdk/tree/main/apps/examples)
-- Workspace overview: [README.md](https://github.com/trembo/trembo/blob/main/README.md)
-- API and architecture references: [DOC.md](https://github.com/trembo/trembo/blob/main/DOC.md), [ARCHITECTURE.md](https://github.com/trembo/trembo/blob/main/ARCHITECTURE.md)
+- Repo examples: [sdk/examples](https://github.com/xedro98/trembo/tree/main/sdk/examples), [apps/examples](https://github.com/xedro98/trembo/tree/main/apps/examples)
+- Workspace overview: [README.md](https://github.com/xedro98/trembo/blob/main/sdk/README.md)
+- Architecture reference: [ARCHITECTURE.md](https://github.com/xedro98/trembo/blob/main/sdk/ARCHITECTURE.md)

@@ -1,12 +1,18 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Model Catalog Semantics
 
-The generated catalog is the SDK's normalized copy of provider and model
-metadata. Most built-in catalog data comes from [models.dev](https://models.dev)
-through `catalog-live.ts` and is written to `catalog.generated.ts` by the model
-generation scripts.
+The generated catalog is the SDK's normalized copy of provider and model metadata. Most built-in catalog data comes from [models.dev](https://models.dev) through `catalog-live.ts` and is written to `catalog.generated.ts` by the model generation scripts.
 
-This file documents the intended meaning of the token-limit fields and the
-boundary between catalog metadata and runtime request policy.
+This file documents the intended meaning of the token-limit fields and the boundary between catalog metadata and runtime request policy.
 
 ## Source Fields
 
@@ -18,9 +24,7 @@ limit.input    optional stricter prompt/input-token budget
 limit.output   maximum output tokens reported for generation
 ```
 
-`limit.input` is not present for every model. When it is present, it should be
-treated as the best available prompt/input ceiling. When it is absent, the
-catalog falls back to `limit.context` for the prompt/input ceiling.
+`limit.input` is not present for every model. When it is present, it should be treated as the best available prompt/input ceiling. When it is absent, the catalog falls back to `limit.context` for the prompt/input ceiling.
 
 ## Trembo Fields
 
@@ -32,8 +36,7 @@ maxInputTokens  prompt/input-token budget used by compaction and diagnostics
 maxTokens       provider-reported output-token budget
 ```
 
-These fields are not additive guarantees. In particular, this is valid catalog
-metadata:
+These fields are not additive guarantees. In particular, this is valid catalog metadata:
 
 ```text
 contextWindow:  200000
@@ -49,18 +52,13 @@ the model may be capable of generating up to 128000 tokens
 an individual request still needs prompt + output to fit the provider's rules
 ```
 
-Do not infer that `maxInputTokens + maxTokens` must be less than or equal to
-`contextWindow`. Many provider catalogs expose separate maxima that share an
-underlying context budget.
+Do not infer that `maxInputTokens + maxTokens` must be less than or equal to `contextWindow`. Many provider catalogs expose separate maxima that share an underlying context budget.
 
 ## Catalog Data vs Request Limits
 
-The catalog should describe reported model capabilities. It should avoid baking
-in Trembo request defaults, product-level safety limits, or provider-specific
-workarounds unless there is no better place to represent a stable fact.
+The catalog should describe reported model capabilities. It should avoid baking in Trembo request defaults, product-level safety limits, or provider-specific workarounds unless there is no better place to represent a stable fact.
 
-The code that sends a model request is responsible for deciding how many output
-tokens to ask for on that specific turn. That decision can depend on:
+The code that sends a model request is responsible for deciding how many output tokens to ask for on that specific turn. That decision can depend on:
 
 - actual prompt size for the current request
 - provider context-window behavior
@@ -69,9 +67,7 @@ tokens to ask for on that specific turn. That decision can depend on:
 - tokenizer drift and hidden provider overhead
 - reasoning, tool, image, and formatting tokens
 
-For models where prompt and output tokens both have to fit into the same context
-window, the request limit should be based on the current prompt, not invented
-while generating the catalog. Conceptually:
+For models where prompt and output tokens both have to fit into the same context window, the request limit should be based on the current prompt, not invented while generating the catalog. Conceptually:
 
 ```text
 safeOutputTokens = min(
@@ -81,17 +77,13 @@ safeOutputTokens = min(
 )
 ```
 
-The SDK gateway only sends an output token limit when the caller provides
-`request.options.maxTokens` or an equivalent host configuration. Catalog
-metadata does not become a request parameter by itself.
+The SDK gateway only sends an output token limit when the caller provides `request.options.maxTokens` or an equivalent host configuration. Catalog metadata does not become a request parameter by itself.
 
-The exact request-limit policy belongs in the provider/gateway/core request
-path, not in generated catalog data.
+The exact request-limit policy belongs in the provider/gateway/core request path, not in generated catalog data.
 
 ## Do Not Invent Output Limits
 
-The catalog generator should not turn ambiguous provider metadata into a new
-Trembo output limit.
+The catalog generator should not turn ambiguous provider metadata into a new Trembo output limit.
 
 For example, if a provider reports:
 
@@ -108,9 +100,7 @@ maxInputTokens: 202800
 maxTokens:      202800
 ```
 
-Trembo may still ask for fewer output tokens on a given request. That belongs in
-the request path because only the request path knows the current prompt size and
-the user's configured output cap.
+Trembo may still ask for fewer output tokens on a given request. That belongs in the request path because only the request path knows the current prompt size and the user's configured output cap.
 
 ## Generation Flow
 
@@ -135,8 +125,7 @@ Use the package script when regenerating:
 bun -F @trembo/llms generate:models
 ```
 
-Catalog changes should usually include tests in `catalog-live.test.ts` that
-document how source `limit` fields map to `ModelInfo`.
+Catalog changes should usually include tests in `catalog-live.test.ts` that document how source `limit` fields map to `ModelInfo`.
 
 ## Provider Differences
 
@@ -148,12 +137,9 @@ Provider token semantics are not uniform:
 - Some providers reject `prompt + requestedOutput > contextWindow`.
 - Some providers truncate, compress, or stop generation instead.
 - Reasoning tokens may count against output budgets.
-- Tool schemas, tool calls, images, and provider formatting can consume hidden
-  input or output budget.
+- Tool schemas, tool calls, images, and provider formatting can consume hidden input or output budget.
 
-Because of those differences, catalog generation should preserve source
-metadata as much as possible, while runtime request policy should be conservative
-and observable.
+Because of those differences, catalog generation should preserve source metadata as much as possible, while runtime request policy should be conservative and observable.
 
 ## Related Files
 

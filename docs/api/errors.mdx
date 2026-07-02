@@ -3,8 +3,18 @@ title: "Errors"
 sidebarTitle: "Errors"
 description: "Error codes, error formats, mid-stream errors, and retry strategies for the Trembo API."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-The Trembo API returns errors in a consistent JSON format. Understanding these errors helps you build reliable integrations.
+
+The Trembo API reports errors in a single, predictable JSON shape. Knowing what each code means and when to retry makes your integrations resilient.
 
 ## Error Format
 
@@ -30,7 +40,7 @@ All errors follow the OpenAI error format:
 
 ### HTTP Errors
 
-These are returned as the HTTP response status code and in the error body:
+These come back as the HTTP response status and are mirrored in the error body:
 
 | Code | Name | Cause | What to do |
 |------|------|-------|------------|
@@ -46,7 +56,7 @@ These are returned as the HTTP response status code and in the error body:
 
 ### Mid-Stream Errors
 
-When streaming, errors can occur after the response has started. These appear as a chunk with `finish_reason: "error"`:
+During a streaming response, failures can occur after the connection is already open. They arrive as a chunk whose `finish_reason` is `error`:
 
 ```json
 {
@@ -72,14 +82,14 @@ Common mid-stream error codes:
 | `server_error` | Upstream provider failed during generation |
 
 <Warning>
-  Mid-stream errors do not produce an HTTP error code (the connection was already 200 OK). Always check `finish_reason` in your streaming handler.
+  Mid-stream errors never produce an HTTP error code because the connection already returned 200 OK. Always inspect `finish_reason` inside your streaming handler.
 </Warning>
 
 ## Retry Strategies
 
 ### Exponential Backoff
 
-For transient errors (429, 500, 502, 503), retry with exponential backoff:
+For transient failures (429, 500, 502, 503), retry with exponential backoff:
 
 ```python
 import time
@@ -125,7 +135,7 @@ def call_api_with_retry(payload, max_retries=3):
 
 ### Rate Limits
 
-If you hit rate limits frequently:
+If you bump into rate limits often:
 
 - Add delays between requests
 - Reduce the number of concurrent requests
@@ -133,7 +143,7 @@ If you hit rate limits frequently:
 
 ## Debugging
 
-When reporting issues, include:
+When reporting an issue, include:
 
 1. The **error code and message** from the response
 2. The **model ID** you were using

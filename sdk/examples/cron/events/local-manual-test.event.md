@@ -24,5 +24,8 @@ metadata:
   owner: platform
   source: local-smoke-test
 ---
-Use the normalized trigger event context to confirm event-driven automation is
-working locally. Summarize the event id, subject, topic, and payload message.
+This is a smoke test for event-driven automation, run entirely locally with no
+external service. Read the normalized trigger event from the run context and
+confirm the pipeline is wired correctly. Report the event id, subject, topic,
+and the payload message back in your summary so the operator can see the event
+arrived intact.

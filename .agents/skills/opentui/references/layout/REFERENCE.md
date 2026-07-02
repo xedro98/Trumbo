@@ -1,14 +1,14 @@
-# OpenTUI Layout System
+# OpenTUI layout system
 
 OpenTUI uses the Yoga layout engine, providing CSS Flexbox-like capabilities for positioning and sizing components in the terminal.
 
 ## Overview
 
 Key concepts:
-- **Flexbox model**: Familiar CSS Flexbox properties
-- **Yoga engine**: Facebook's cross-platform layout engine
-- **Terminal units**: Dimensions are in character cells (columns x rows)
-- **Percentage support**: Relative sizing based on parent
+- **Flexbox model**: familiar CSS Flexbox properties
+- **Yoga engine**: a cross-platform layout engine
+- **Terminal units**: dimensions are in character cells (columns x rows)
+- **Percentage support**: relative sizing based on the parent
 
 ## Flex Container Properties
 

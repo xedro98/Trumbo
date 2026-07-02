@@ -1,4 +1,4 @@
-# Agent Gotchas
+# Agent gotchas
 
 ## Agent Loop Never Stops
 

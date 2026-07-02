@@ -1,24 +1,16 @@
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/a05da977-2cb7-498a-88ca-20f24c9562e1" width="100%" />
-</p>
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-<div align="center">
-<table>
-<tbody>
-<td align="center">
-<a href="https://discord.gg/trembo" target="_blank"><strong>Discord</strong></a>
-</td>
-<td align="center">
-<a href="https://www.reddit.com/r/trembo/" target="_blank"><strong>r/trembo</strong></a>
-</td>
-<td align="center">
-<a href="https://github.com/trembo/trembo/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>Feature Requests</strong></a>
-</td>
-</tbody>
-</table>
-</div>
+# Trembo SDK
 
-The Trembo SDK is a TypeScript framework for building AI agents that can edit files, run shell commands, browse the web, call APIs, and use any custom tool you give them. It's the same engine that powers [Trembo](https://github.com/trembo/trembo), packaged as a library you can embed in your own applications.
+The Trembo SDK is a TypeScript framework for building AI agents that do real work, not just generate text. An agent built on Trembo can edit files, run shell commands, browse the web, call APIs, and use any custom tool you hand it. It is the same engine that powers the [Trembo CLI and VS Code extension](https://github.com/xedro98/trembo), repackaged as a library you can embed in your own applications, bots, and automation pipelines.
 
 ```typescript
 import { Agent } from "@trembo/sdk"
@@ -34,7 +26,7 @@ const result = await agent.run("Create a REST API with Express and TypeScript")
 console.log(result.text)
 ```
 
-That's it. The agent streams its response, calls tools if you give it any, and returns when the task is done.
+That is the entire loop. The agent streams its response, calls tools when you give it any, and returns control when the task is finished.
 
 ## Install
 
@@ -42,19 +34,9 @@ That's it. The agent streams its response, calls tools if you give it any, and r
 npm install @trembo/sdk
 ```
 
-## SDK Skill
-
-If you use a coding agent (Claude Code, Codex, Trembo, etc.), install the [Trembo SDK skill](https://github.com/trembo/sdk-skill) to give your agent context on the SDK's APIs and best practices to help you build with the Trembo SDK.
-
-```bash
-npx skills add trembo/sdk-skill
-```
-
-Prompt it to scaffold agents, create custom tools, wire up plugins, configure providers, and more.
-
 ## What You Can Build
 
-Coding agents, Slack bots, scheduled automations, code review pipelines, multi-agent teams, IDE integrations -- anything that benefits from an LLM that can take actions, not just generate text.
+Coding agents, Slack bots, scheduled automations, code-review pipelines, multi-agent teams, IDE integrations — anything that benefits from an LLM that can take actions, not just produce prose.
 
 ```typescript
 // Slack bot: each thread gets its own agent with conversation memory
@@ -80,7 +62,7 @@ async function handleMessage(threadId: string, message: string) {
 }
 ```
 
-Explore full working examples in [`examples/`](examples) and app examples in [`apps/examples/`](apps/examples):
+Full working examples live in [`examples/`](examples) and [`apps/examples/`](../apps/examples):
 
 | Example | Description |
 |---------|-------------|
@@ -88,12 +70,12 @@ Explore full working examples in [`examples/`](examples) and app examples in [`a
 | [Subagent Orchestration](examples/plugins/agents-squad) | Spawn and manage background agents with presets, skills, and cross-agent handoffs |
 | [Hooks](examples/hooks) | File-based and runtime hooks for logging, review gates, context injection, and lifecycle automation |
 | [Cron Automations](examples/cron) | Recurring and event-driven automation specs for scheduled quality checks and PR workflows |
-| [Desktop App](apps/examples/desktop-app) | Tauri desktop shell with a Bun sidecar backend and Next.js UI |
-| [VS Code Extension App](apps/examples/vscode) | VS Code extension example that runs Trembo sessions over the RPC runtime |
+| [Desktop App](../apps/examples/desktop-app) | Tauri desktop shell with a Bun sidecar backend and Next.js UI |
+| [VS Code Extension App](../apps/examples/vscode) | VS Code extension example that runs Trembo sessions over the RPC runtime |
 
 ## Custom Tools
 
-Tools are how agents interact with the world. Define a tool with a name, a description the model reads, a JSON Schema for inputs, and a function that does the work:
+Tools are how agents reach into the world. Define a tool with a name, a description the model reads, a JSON Schema for its inputs, and a function that does the work:
 
 ```typescript
 import { createTool } from "@trembo/sdk"
@@ -122,11 +104,11 @@ const agent = new Agent({
 })
 ```
 
-The agent decides when to call the tool based on the description. It sees the result and incorporates it into its response.
+The agent decides when to call the tool from the description, observes the result, and folds it back into its response.
 
 ## Streaming Events
 
-Every event during execution is observable in real time:
+Every event during a run is observable in real time:
 
 ```typescript
 const agent = new Agent({
@@ -152,7 +134,7 @@ const agent = new Agent({
 
 ## Plugins
 
-Package reusable capabilities as extensions. An extension can register tools, observe lifecycle events, and modify agent behavior:
+Package reusable capabilities as extensions. An extension can register tools, observe lifecycle events, and reshape agent behavior:
 
 ```typescript
 const metrics: AgentPlugin = {
@@ -182,7 +164,7 @@ const metrics: AgentPlugin = {
 
 ## TremboCore: Full Runtime
 
-When you need session persistence, built-in tools, config discovery, and multi-process support, use `TremboCore`:
+When you need session persistence, built-in tools, config discovery, and multi-process support, reach for `TremboCore`:
 
 ```typescript
 import { TremboCore } from "@trembo/sdk"
@@ -203,7 +185,7 @@ const session = await trembo.start({
 console.log(session.result?.text)
 ```
 
-`TremboCore` gives the agent built-in tools (`bash`, `editor`, `read_files`, `apply_patch`, `search`, `fetch_web`), persists sessions to SQLite, discovers config from `.trembo/` directories, and optionally connects to an RPC sidecar for scheduled agents and cross-process session management.
+`TremboCore` arms the agent with built-in tools (`bash`, `editor`, `read_files`, `apply_patch`, `search`, `fetch_web`), persists sessions to SQLite, discovers config from `.trembo/` directories, and can connect to an RPC sidecar for scheduled agents and cross-process session management.
 
 ## Packages
 
@@ -211,13 +193,13 @@ The SDK is a layered stack. Use as much or as little as you need:
 
 | Package | What it does |
 |---------|-------------|
-| `@trembo/sdk` | Everything you need -- install this one |
+| `@trembo/sdk` | Everything you need — install this one |
 | `@trembo/core` | Sessions, persistence, built-in tools, config discovery, RPC |
 | `@trembo/agents` | Stateless agent loop with tool execution and streaming |
 | `@trembo/llms` | LLM provider gateway (Anthropic, OpenAI, Google, Bedrock, Mistral, and more) |
 | `@trembo/shared` | Types, tool creation helpers, hook engine |
 
-`@trembo/sdk` is an alias for `@trembo/core` that re-exports from all packages, so a single install gives you the full API. The individual packages are available if you want a minimal dependency footprint.
+`@trembo/sdk` is an alias for `@trembo/core` that re-exports from every package, so a single install gives you the full API. The individual packages are there if you want a smaller dependency footprint.
 
 ## CLI
 
@@ -238,7 +220,7 @@ trembo connect telegram -k "$TELEGRAM_BOT_TOKEN"
 # Then send /help or /start to the bot in Telegram
 ```
 
-For Telegram-specific connector behavior, see [`apps/cli/src/connectors/adapters/telegram.md`](./apps/cli/src/connectors/adapters/telegram.md).
+For Telegram-specific connector behavior, see [`apps/cli/src/connectors/adapters/telegram.md`](../apps/cli/src/connectors/adapters/telegram.md).
 
 ## Providers
 
@@ -255,19 +237,19 @@ Works with every major LLM provider out of the box:
 
 ## Documentation
 
-Full documentation at [docs.example.invalid/sdk](https://github.com/xedro98/trembo/sdk/overview):
+The SDK ships its own docs alongside the source. Start here:
 
-- [Quickstart](https://github.com/xedro98/trembo/sdk/quickstart) -- zero to running agent in 5 minutes
-- [Core Concepts](https://github.com/xedro98/trembo/sdk/agents) -- agents, sessions, tools, events, extensions, hooks
-- [Guides](https://github.com/xedro98/trembo/sdk/guides/building-an-agent) -- end-to-end tutorials for common patterns
-- [Architecture](https://github.com/xedro98/trembo/sdk/architecture/overview) -- how the SDK is structured and why
-- [API Reference](https://github.com/xedro98/trembo/sdk/reference/trembo-core) -- every method, type, and config option
+- [SDK overview](./README.md) and [architecture](./ARCHITECTURE.md) — what the packages do and how they fit together
+- [Contributing guide](./CONTRIBUTING.md) — workspace setup, development workflow, and publishing
+- [Development reference](./AGENTS.md) — package boundaries and change routing for active development
+- [Packages overview](./packages/README.md) — per-package responsibilities and entry points
 
+For the project root, issues, and discussions, see [https://github.com/xedro98/trembo](https://github.com/xedro98/trembo).
 
 ## Contributing
 
-To contribute to the project, start with our [Contributing Guide](CONTRIBUTING.md) to learn the basics. You can also join our [Discord](https://discord.gg/trembo) to chat with other contributors in the `#contributors` channel. If you're looking for full-time work, check out our open positions on our [careers page](https://github.com/xedro98/trembo/join-us)!
+Contributions are welcome. Read the [Contributing Guide](CONTRIBUTING.md) for workspace setup and release workflow, and open issues or discussions at [https://github.com/xedro98/trembo/issues](https://github.com/xedro98/trembo/issues).
 
 ## License
 
-[Apache 2.0 Ã‚Â© 2026 Trembo Bot Inc.](./LICENSE)
+[Apache 2.0 © 2026 Trembo Bot Inc.](../LICENSE)

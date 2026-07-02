@@ -1,4 +1,4 @@
-# Solid Gotchas
+# Solid gotchas
 
 ## Critical
 

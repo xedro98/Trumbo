@@ -1,18 +1,23 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # [experimental] @trembo/agents
 
-`@trembo/agents` is the runtime-agnostic agent loop package in the Trembo SDK.
-It gives you the core primitives for building tool-using LLM agents without
-bringing in session storage, hub transport, or host-specific default tools.
+`@trembo/agents` is the runtime-agnostic agent loop package in the Trembo SDK. It gives you the core primitives for building tool-using LLM agents without pulling in session storage, hub transport, or host-specific default tools.
 
 ## What You Get
 
-- `Agent` / `AgentRuntime` — the same class under two names — for running and
-  continuing tool-using agent conversations
+- `Agent` / `AgentRuntime` — the same class under two names — for running and continuing tool-using agent conversations
 - `createAgent` / `createAgentRuntime` — factory-function equivalents
-- `AgentRuntimeHooks` for lifecycle interception (`beforeRun`, `afterRun`,
-  `beforeModel`, `afterModel`, `beforeTool`, `afterTool`, `onEvent`)
-- Event streaming via `agent.subscribe(listener)` and the `hooks.onEvent`
-  callback
+- `AgentRuntimeHooks` for lifecycle interception (`beforeRun`, `afterRun`, `beforeModel`, `afterModel`, `beforeTool`, `afterTool`, `onEvent`)
+- Event streaming via `agent.subscribe(listener)` and the `hooks.onEvent` callback
 - Plugin setup callbacks for contributing tools and hooks at boot
 
 ## What This Package Does Not Include
@@ -24,8 +29,7 @@ bringing in session storage, hub transport, or host-specific default tools.
 - Shared hub runtime/session transport lives in `@trembo/core` (see `@trembo/core/hub`)
 - Sub-agent and team coordination primitives live in `@trembo/core`
 
-That split keeps this package usable in Node, browser, and custom host
-environments where you want to supply your own tools and runtime policy.
+That split keeps this package usable in Node, the browser, and custom host environments where you want to supply your own tools and runtime policy.
 
 ## Installation
 
@@ -68,8 +72,7 @@ console.log(result.outputText);
 
 `Agent` / `AgentRuntime` accepts two config shapes:
 
-**Provider form** — friendly entrypoint. The runtime builds an `AgentModel` for
-you via `@trembo/llms`:
+**Provider form** — friendly entrypoint. The runtime builds an `AgentModel` for you via `@trembo/llms`:
 
 ```ts
 new Agent({
@@ -81,9 +84,7 @@ new Agent({
 });
 ```
 
-**Model form** — advanced. Supply a pre-built `AgentModel` directly. Useful
-when the host already owns gateway construction (this is what `@trembo/core`
-uses internally):
+**Model form** — advanced. Supply a pre-built `AgentModel` directly. Useful when the host already owns gateway construction (this is what `@trembo/core` uses internally):
 
 ```ts
 import { createGateway } from "@trembo/llms";
@@ -101,9 +102,7 @@ new Agent({
 
 ### Tools
 
-Tools conform to the `AgentTool<TInput, TOutput>` interface from
-`@trembo/shared`. Each tool has a JSON Schema `inputSchema` and an
-`execute(input, context)` function that returns the tool output directly:
+Tools conform to the `AgentTool<TInput, TOutput>` interface from `@trembo/shared`. Each tool has a JSON Schema `inputSchema` and an `execute(input, context)` function that returns the tool output directly:
 
 ```ts
 import type { AgentTool } from "@trembo/shared";
@@ -124,9 +123,7 @@ const summarize: AgentTool<{ text: string }, { summary: string }> = {
 };
 ```
 
-The runtime wraps successful tool outputs in an internal tool-result message.
-Throw from `execute(...)` to report a tool failure, or use an `afterTool` hook
-to transform the internal `AgentToolResult` envelope.
+The runtime wraps successful tool outputs in an internal tool-result message. Throw from `execute(...)` to report a tool failure, or use an `afterTool` hook to transform the internal `AgentToolResult` envelope.
 
 ### Events
 
@@ -153,30 +150,20 @@ new Agent({
 });
 ```
 
-`AgentRuntimeEvent` covers run/turn boundaries, assistant text and reasoning
-deltas, tool lifecycle, usage updates, and run completion/failure. See
-`AgentRuntimeEvent` in `@trembo/shared` for the full union.
+`AgentRuntimeEvent` covers run/turn boundaries, assistant text and reasoning deltas, tool lifecycle, usage updates, and run completion/failure. See `AgentRuntimeEvent` in `@trembo/shared` for the full union.
 
 ### Conversation Control
 
-- `agent.run(input)` — start a run. `input` may be a string, an `AgentMessage`,
-  or an array of messages. Also accepts `undefined` to continue without adding
-  a new user turn.
+- `agent.run(input)` — start a run. `input` may be a string, an `AgentMessage`, or an array of messages. Also accepts `undefined` to continue without adding a new user turn.
 - `agent.continue(input?)` — convenience alias for `run(input?)`.
-- `agent.abort(reason?)` — cancel the active run. `.run()` resolves with
-  `status: "aborted"`.
-- `agent.snapshot()` — immutable view of the current
-  `AgentRuntimeStateSnapshot` (messages, usage, iteration, status, etc.).
-- `agent.restore(messages)` — replace the conversation with a persisted
-  message array. Resets run/turn state but preserves subscribers, tools,
-  hooks, plugins, and the model.
+- `agent.abort(reason?)` — cancel the active run. `.run()` resolves with `status: "aborted"`.
+- `agent.snapshot()` — immutable view of the current `AgentRuntimeStateSnapshot` (messages, usage, iteration, status, etc.).
+- `agent.restore(messages)` — replace the conversation with a persisted message array. Resets run/turn state but preserves subscribers, tools, hooks, plugins, and the model.
 - `initialMessages` in the constructor seeds the conversation on boot.
 
 ### Hooks
 
-Pass a `hooks` bag (`AgentRuntimeHooks`) to observe or influence the loop.
-All hooks may be async; any that return `{ stop: true, reason }` will halt the
-run with an `aborted` status.
+Pass a `hooks` bag (`AgentRuntimeHooks`) to observe or influence the loop. All hooks may be async; any that return `{ stop: true, reason }` halt the run with an `aborted` status.
 
 ```ts
 new Agent({
@@ -203,8 +190,7 @@ new Agent({
 });
 ```
 
-For richer, host-side hook orchestration (15-stage `HookEngine`,
-subprocess-backed hooks, MCP extensions), use `@trembo/core`.
+For richer, host-side hook orchestration (15-stage `HookEngine`, subprocess-backed hooks, MCP extensions), use `@trembo/core`.
 
 ### Plugins
 
@@ -248,31 +234,23 @@ import {
 } from "@trembo/core";
 ```
 
-These helpers provide coordination primitives for delegated runs,
-mailboxes, task management, and outcome convergence.
+These helpers provide coordination primitives for delegated runs, mailboxes, task management, and outcome convergence.
 
 ## Entry Point
 
-- `@trembo/agents` — the single package entrypoint. The `package.json`
-  `exports` map automatically serves a browser-safe bundle when bundlers
-  resolve the `browser` condition.
+- `@trembo/agents` — the single package entrypoint. The `package.json` `exports` map automatically serves a browser-safe bundle when bundlers resolve the `browser` condition.
 
 ## Related Packages
 
-- `@trembo/shared`: shared types (`AgentTool`, `AgentMessage`,
-  `AgentRuntimeEvent`, `AgentRuntimeHooks`, etc.)
-- `@trembo/llms`: provider settings, model catalogs, and gateway/handler
-  creation
-- `@trembo/core`: stateful runtime assembly, storage, default tools,
-  subprocess hooks, hub transport, and MCP integration
+- `@trembo/shared`: shared types (`AgentTool`, `AgentMessage`, `AgentRuntimeEvent`, `AgentRuntimeHooks`, etc.)
+- `@trembo/llms`: provider settings, model catalogs, and gateway/handler creation
+- `@trembo/core`: stateful runtime assembly, storage, default tools, subprocess hooks, hub transport, and MCP integration
 
 ## More Examples
 
 - Repo examples:
-  [examples/plugins](https://github.com/trembo/sdk/tree/main/examples/plugins),
-  [examples/hooks](https://github.com/trembo/sdk/tree/main/examples/hooks),
-  [examples/cron](https://github.com/trembo/sdk/tree/main/examples/cron)
-- Workspace overview: [README.md](https://github.com/trembo/sdk/blob/main/README.md)
-- API and architecture references:
-  [DOC.md](https://github.com/trembo/sdk/blob/main/DOC.md),
-  [ARCHITECTURE.md](https://github.com/trembo/sdk/blob/main/ARCHITECTURE.md)
+  [examples/plugins](https://github.com/xedro98/trembo/tree/main/sdk/examples/plugins),
+  [examples/hooks](https://github.com/xedro98/trembo/tree/main/sdk/examples/hooks),
+  [examples/cron](https://github.com/xedro98/trembo/tree/main/sdk/examples/cron)
+- Workspace overview: [README.md](https://github.com/xedro98/trembo/blob/main/sdk/README.md)
+- Architecture reference: [ARCHITECTURE.md](https://github.com/xedro98/trembo/blob/main/sdk/ARCHITECTURE.md)

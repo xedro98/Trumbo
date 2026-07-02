@@ -1,21 +1,32 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Hook Template for New Fixtures
 
-This directory contains a template for creating new hook fixtures. When adding a new hook fixture, copy from this template and customize as needed.
+This directory is the starting point for new hook fixtures. When you need a new fixture, copy from this template and tailor it to your scenario.
 
 ## Files in This Template
 
-- `HookName` - Hook script template (executable Node.js script)
-- `README.md` - This file
+- `HookName` — hook script template (an executable Node.js script)
+- `README.md` — this file
 
 ## How to Create a New Fixture
 
 ### Step 1: Choose the Scenario Type
 
 Decide what your hook fixture should test:
-- `success` - Returns success immediately
-- `blocking` - Blocks tool execution
-- `context-injection` - Adds context information
-- `error` - Exits with error code
+
+- `success` — returns success immediately
+- `blocking` — blocks tool execution
+- `context-injection` — adds context information
+- `error` — exits with an error code
 
 ### Step 2: Create the Directory Structure
 
@@ -65,6 +76,7 @@ console.log(JSON.stringify({
 ### Step 4: Update Documentation
 
 Add your new fixture to `fixtures/README.md` with:
+
 - Fixture path
 - What it returns
 - What it's used for testing
@@ -73,24 +85,28 @@ Add your new fixture to `fixtures/README.md` with:
 ## Best Practices
 
 ### Keep Fixtures Focused
+
 - Test one specific scenario per fixture
-- Use simple, easy-to-understand logic
+- Use simple, easy-to-follow logic
 - Document complex behavior with comments
 
 ### Platform Compatibility
+
 - Write portable Node.js code
-- These fixtures work via embedded shell (like git hooks)
+- These fixtures run via an embedded shell (like git hooks)
 - Avoid platform-specific logic
 
 ### Naming Conventions
-- Use UPPERCASE for context type prefixes (e.g., `WORKSPACE_RULES:`, `FILE_OPERATIONS:`)
-- Be descriptive about what the fixture tests
-- Follow existing naming patterns in other fixtures
+
+- Use UPPERCASE for context type prefixes (e.g. `WORKSPACE_RULES:`, `FILE_OPERATIONS:`)
+- Pick names that describe what the fixture tests
+- Follow the naming patterns already used by existing fixtures
 
 ## Examples from Existing Fixtures
 
 See the existing fixtures for real-world examples:
-- `../hooks/pretooluse/success/` - Simple success case
-- `../hooks/pretooluse/blocking/` - How to block execution
-- `../hooks/pretooluse/context-injection/` - How to inject context
-- `../hooks/pretooluse/error/` - How to return errors
+
+- `../hooks/pretooluse/success/` — a simple success case
+- `../hooks/pretooluse/blocking/` — how to block execution
+- `../hooks/pretooluse/context-injection/` — how to inject context
+- `../hooks/pretooluse/error/` — how to return errors

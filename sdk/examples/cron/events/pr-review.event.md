@@ -27,6 +27,7 @@ metadata:
   owner: platform
   source: normalized-event-ingress
 ---
-Review the opened pull request from the trigger event context. Summarize the
-highest-risk changes, call out missing tests or migration risks, and recommend
-the next action for the author.
+A new pull request was opened. Read it from the trigger event context and review
+it. Call out the highest-risk changes, note any missing tests or migration
+risks, and tell the author the single most important next step. Keep it short
+and reviewer-shaped — lead with risk, not with a recap of the diff.

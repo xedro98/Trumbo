@@ -1,19 +1,31 @@
-# React + TypeScript + Vite
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Trembo VS Code webview
 
-Currently, two official plugins are available:
+This is the webview frontend for the [`@trembo/vscode`](..) example extension — the React surface that renders inside the VS Code chat panel. It is built with Vite + React + TypeScript, so most of the tooling here is standard Vite template plumbing. The interesting Trembo-specific wiring lives one level up in the extension host; this directory is concerned with rendering chat messages, streaming deltas, and posting user input back to the extension.
+
+## Toolchain
+
+The webview is a minimal Vite + React + TypeScript setup with HMR and a small ESLint config. Vite ships two official React plugins you can choose between:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
 ## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The React Compiler is not enabled in this template because of its impact on dev and build performance. To add it, see [the React Compiler installation guide](https://react.dev/learn/react-compiler/installation).
 
 ## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+If you are tightening this into a production app, switch the config to type-aware lint rules:
 
 ```js
 export default defineConfig([

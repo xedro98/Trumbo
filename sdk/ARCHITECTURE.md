@@ -1,21 +1,34 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Trembo SDK Architecture
 
-This document is the architecture source of truth for the Trembo SDK repository. It describes how the system is organized, how components interact, and the design principles that guide development decisions.
+This document is the architecture source of truth for the Trembo SDK repository. It describes how the system is organized, how the components interact, and the design principles behind development decisions.
 
 **Who should read this?**
+
 - SDK contributors working across multiple packages
-- Developers building integrations or host applications using `@trembo/core`
-- Plugin authors understanding the runtime and extension systems
+- Developers building integrations or host applications on `@trembo/core`
+- Plugin authors who need to understand the runtime and extension systems
 
 **What this covers:**
+
 - Package boundaries and responsibilities
 - Dependency direction and layering rules
 - Runtime flows (local, hub-backed, remote-config managed)
-- Design seams (repeated patterns instead of one-off integrations)
+- Design seams (repeated patterns rather than one-off integrations)
 - Architectural constraints and why they exist
 
-**What this is NOT:**
-- An onboarding guide for new contributors (see README.md and CONTRIBUTING.md)
+**What this is not:**
+
+- An onboarding guide for new contributors (see `README.md` and `CONTRIBUTING.md`)
 - A detailed API reference (see package READMEs and inline JSDoc)
 - A user guide (see the main documentation)
 
@@ -56,7 +69,7 @@ Owns reusable low-level contracts and infrastructure:
 
 Design rule:
 
-- `shared` should not depend on higher-level runtime packages.
+- `shared` must not depend on higher-level runtime packages.
 
 ### `@trembo/llms`
 
@@ -70,7 +83,7 @@ Owns model/provider runtime concerns:
 
 Design rule:
 
-- provider-specific behavior should be isolated here, not spread across `core` or apps.
+- provider-specific behavior stays isolated here, not spread across `core` or apps.
 
 ### `@trembo/agents`
 
@@ -85,7 +98,7 @@ Owns the stateless runtime loop:
 
 Design rule:
 
-- `agents` should not own persistent storage or host lifecycle concerns.
+- `agents` must not own persistent storage or host lifecycle concerns.
 
 ### `@trembo/core`
 
@@ -126,16 +139,7 @@ Design rules:
 6. `@trembo/agents` runs the loop using `@trembo/llms` handlers.
 7. `@trembo/core` persists state, artifacts, and metadata.
 
-Completion telemetry is anchored to the assistant's explicit completion
-declaration, not session shutdown. After each agent turn, the local
-runtime inspects `AgentResult.toolCalls` and emits `task.completed` the
-moment a successful `submit_and_exit` (the SDK analog of original
-Trembo's `attempt_completion`) is observed. `shutdownSession(...)`
-retains a fallback emission for completed sessions that finished
-without an explicit completion-tool observation, so non-interactive
-runs not using the yolo preset still produce a `task.completed` signal.
-Each session emits at most one `task.completed`. See `DOC.md` for the
-event payload and `source` field.
+Completion telemetry is anchored to the assistant's explicit completion declaration, not session shutdown. After each agent turn, the local runtime inspects `AgentResult.toolCalls` and emits `task.completed` the moment a successful `submit_and_exit` (the SDK analog of original Trembo's `attempt_completion`) is observed. `shutdownSession(...)` retains a fallback emission for completed sessions that finished without an explicit completion-tool observation, so non-interactive runs that do not use the yolo preset still produce a `task.completed` signal. Each session emits at most one `task.completed`. See `DOC.md` for the event payload and `source` field.
 
 ### Hub-Backed Runtime
 
@@ -149,29 +153,11 @@ event payload and `source` field.
 8. Hub client adapters exported from `@trembo/core/hub` (`NodeHubClient`, `HubSessionClient`, `HubUIClient`, `connectToHub`) translate command/reply and event streams into host-facing APIs.
 9. Hub `session.get` records include both canonical root-session usage and explicit aggregate usage from the hub-owned `RuntimeHost`, so attached clients can intentionally render either root-only or root-plus-teammate costs without replaying event streams.
 
-Detached daemon startup retries transient `ETXTBSY` spawn failures before
-polling discovery. This covers package-manager updates that replace the CLI
-binary immediately before a command restarts the shared hub.
+Detached daemon startup retries transient `ETXTBSY` spawn failures before polling discovery. This covers package-manager updates that replace the CLI binary immediately before a command restarts the shared hub.
 
-Local hub discovery also carries the authentication contract for the shared
-daemon. On startup, the hub server generates a cryptographically random
-per-process auth token, stores it in the owner discovery record, and writes that
-record with owner-only file permissions. Local clients resolve the token from
-the discovery file at connection time rather than embedding it in endpoint URLs.
-The server validates the token with a constant-time comparison before accepting
-`/hub` WebSocket upgrades or `/shutdown` requests; WebSocket clients send it via
-the `Sec-WebSocket-Protocol` header and shutdown requests use an
-`Authorization: Bearer` header. Unauthenticated local processes can still probe
-public health/build metadata, but they cannot attach to sessions, issue
-commands, or stop the daemon.
+Local hub discovery also carries the authentication contract for the shared daemon. On startup, the hub server generates a cryptographically random per-process auth token, stores it in the owner discovery record, and writes that record with owner-only file permissions. Local clients resolve the token from the discovery file at connection time rather than embedding it in endpoint URLs. The server validates the token with a constant-time comparison before accepting `/hub` WebSocket upgrades or `/shutdown` requests; WebSocket clients send it via the `Sec-WebSocket-Protocol` header and shutdown requests use an `Authorization: Bearer` header. Unauthenticated local processes can still probe public health/build metadata, but they cannot attach to sessions, issue commands, or stop the daemon.
 
-Local hub rediscovery is limited to managed shared-daemon endpoints obtained
-through discovery or `ensure*HubServer(...)` startup paths. Explicit endpoints,
-including loopback URLs such as `ws://127.0.0.1:<port>/hub`, are sticky exact
-targets: reconnects may retry the same socket URL, but command recovery and
-startup-deadlock recovery must not replace them with the workspace-discovered
-hub. This keeps custom local hubs and remote hubs from silently drifting to a
-different process.
+Local hub rediscovery is limited to managed shared-daemon endpoints obtained through discovery or `ensure*HubServer(...)` startup paths. Explicit endpoints, including loopback URLs such as `ws://127.0.0.1:<port>/hub`, are sticky exact targets: reconnects may retry the same socket URL, but command recovery and startup-deadlock recovery must not replace them with the workspace-discovered hub. This keeps custom local hubs and remote hubs from silently drifting to a different process.
 
 ### Interactive CLI Startup
 
@@ -245,22 +231,12 @@ Design implication:
 - `RuntimeHost` inputs stay transport-safe, while `TremboCore.start(...)` is the app-facing facade that normalizes broad local config before delegation
 - `RuntimeSessionConfig` is transport-neutral across local, shared hub, and remote hub modes; host-local bootstrap concerns stay under `localRuntime`
 - client-local runtime behaviors that must survive hub mode, such as `defaultToolExecutors`, are attached at session start and proxied through hub capability requests instead of changing host selection
-- pending prompt list/update/delete are exposed through the grouped
-  `TremboCore.pendingPrompts` service. Usage summary lookup and active-session
-  model switching are also service-style capabilities exposed through
-  `TremboCore` when the concrete transport implements them. These service APIs
-  are intentionally outside the minimal `RuntimeHost` primitive vocabulary.
-- The usage service's `getAccumulatedUsage(sessionId)` method returns a summary
-  with two explicit buckets: `usage` for the root/lead agent and
-  `aggregateUsage` for root plus teammates/subagents. Local execution tracks
-  root usage and teammate usage as separate buckets, then derives aggregate
-  totals from those buckets while telemetry remains scoped to the primary
-  lead/root agent.
+- pending prompt list/update/delete are exposed through the grouped `TremboCore.pendingPrompts` service. Usage summary lookup and active-session model switching are also service-style capabilities exposed through `TremboCore` when the concrete transport implements them. These service APIs are intentionally outside the minimal `RuntimeHost` primitive vocabulary.
+- The usage service's `getAccumulatedUsage(sessionId)` method returns a summary with two explicit buckets: `usage` for the root/lead agent and `aggregateUsage` for root plus teammates/subagents. Local execution tracks root usage and teammate usage as separate buckets, then derives aggregate totals from those buckets while telemetry remains scoped to the primary lead/root agent.
 
 ### 4. Settings Mutation Boundary
 
-Core owns settings snapshots and mutations through `packages/core/src/settings`.
-The hub exposes the same path through `settings.list` and `settings.toggle`.
+Core owns settings snapshots and mutations through `packages/core/src/settings`. The hub exposes the same path through `settings.list` and `settings.toggle`.
 
 Design implication:
 
@@ -368,115 +344,66 @@ If a capability is truly generic and app-facing, add a generic core seam. Reusab
 
 ### Use One-Way Optional Layers
 
-Optional higher-level integrations may depend on lower layers.
-Lower layers should not depend on optional feature packages.
+Optional higher-level integrations may depend on lower layers. Lower layers should not depend on optional feature packages.
 
 For remote config, that means shared owns the reusable bundle/materialization/blob primitives and core owns only the session-oriented wrapper exported to apps.
 
 ## File-Based And Event-Driven Automation (`TremboCore` / `CronService`)
 
-`@trembo/core` ships a file-based automation subsystem under
-`packages/core/src/cron/`. It lets operators author recurring and one-off
-tasks as Markdown files under global `~/.trembo/cron/` by default, and
-event-driven tasks as `events/*.event.md` specs. All trigger kinds run
-through the same durable queue and runtime handlers. `TremboCore` exposes the
-SDK-facing `trembo.automation.*` entry points; `CronService` is the internal
-orchestrator used by core and hub layers.
+`@trembo/core` ships a file-based automation subsystem under `packages/core/src/cron/`. It lets operators author recurring and one-off tasks as Markdown files under global `~/.trembo/cron/` by default, and event-driven tasks as `events/*.event.md` specs. All trigger kinds run through the same durable queue and runtime handlers. `TremboCore` exposes the SDK-facing `trembo.automation.*` entry points; `CronService` is the internal orchestrator used by core and hub layers.
 
 ### Layers
 
-1. **Spec parser** (`cron/specs/cron-spec-parser.ts`): parses YAML frontmatter + body
-   into a `CronSpec` discriminated union (`one_off | schedule | event`).
-   Types live in `@trembo/shared` under `src/cron/cron-spec-types.ts`
-   so other packages can consume them without the YAML parser. Schedule
-   expressions and timezones are validated before a spec can become
-   runnable.
-2. **Store** (`cron/store/sqlite-cron-store.ts`): owns `cron.db` at
-   `resolveCronDbPath()` (default `.trembo/data/db/cron.db`). Schema is
-   bootstrapped from `cron/store/cron-schema.ts` — sessions and cron live in separate
-   DBs so their lifecycles stay decoupled.
-3. **Reconciler** (`cron/specs/cron-reconciler.ts`): scans the configured cron specs
-   directory (global `~/.trembo/cron/` by default, or workspace-scoped when
-   configured), parses each file independently, and upserts spec state.
-   Invalid specs are recorded
-   with `parse_status='invalid'` so state is durable rather than silently
-   dropped. Files that disappear between scans get `removed=1` and their
-   queued runs are cancelled.
-4. **Watcher** (`cron/specs/cron-watcher.ts`): `node:fs watch({ recursive: true })`
-   with a ~250ms per-path debounce. Watcher events always trigger a
-   re-reconcile — the reconciler is always the source of truth, not the
-   watcher stream.
-5. **Materializer** (`cron/runner/cron-materializer.ts`): turns file-triggered specs into
-   queued `cron_runs`. One-off: at most one run record per `(spec_id,
-   revision)`, including failed runs so specs do not retry accidentally.
-   Schedule: "one overdue catch-up on startup then advance" using
-   timezone-aware `getNextCronTime`.
-6. **Event ingress** (`cron/events/cron-event-ingress.ts`): accepts already-normalized
-   `AutomationEventEnvelope` values, persists them into `cron_event_log`,
-   matches enabled event specs by `event_type` plus declarative filters,
-   applies dedupe/debounce/cooldown policy, and enqueues `cron_runs` with
-   `trigger_kind='event'`. It never executes agents directly. Plugins can
-   declare `automationEvents` and submit normalized events through
-   `ctx.automation.ingestEvent(...)`; sandboxed plugins forward those events
-   through the core plugin event bridge.
-7. **Runner** (`cron/runner/cron-runner.ts`): polls `cron.db`, atomically claims
-   queued runs, executes them via the existing `HubScheduleRuntimeHandlers`
-   (`startSession` → `sendSession` → `stopSession` / `abortSession`),
-   renews the run claim while execution is active, writes a markdown report
-   per run, and transactionally updates status. File specs can constrain
-   tool availability, config extension loading (`rules`, `skills`,
-   `plugins`), session source, and a notes directory that is injected into
-   the system prompt. Event runs include the normalized trigger event context
-   in the prompt.
-8. **Reports** (`cron/reports/cron-report-writer.ts`): writes
-   `.trembo/cron/reports/<run-id>.md` with run frontmatter plus
-   `## Summary`, `## Usage`, `## Tool Calls`, and, for event runs,
-   `## Trigger Event` sections.
-9. **Service** (`cron/service/cron-service.ts`): orchestrates all of the above.
-   `TremboCore.create({ automation })` owns the SDK-facing lifecycle and exposes
-   `trembo.automation.*` methods. Hub-side callers can submit normalized events
-   through the `cron.event.ingest` command.
+1. **Spec parser** (`cron/specs/cron-spec-parser.ts`): parses YAML frontmatter + body into a `CronSpec` discriminated union (`one_off | schedule | event`). Types live in `@trembo/shared` under `src/cron/cron-spec-types.ts` so other packages can consume them without the YAML parser. Schedule expressions and timezones are validated before a spec can become runnable.
+2. **Store** (`cron/store/sqlite-cron-store.ts`): owns `cron.db` at `resolveCronDbPath()` (default `.trembo/data/db/cron.db`). Schema is bootstrapped from `cron/store/cron-schema.ts` — sessions and cron live in separate DBs so their lifecycles stay decoupled.
+3. **Reconciler** (`cron/specs/cron-reconciler.ts`): scans the configured cron specs directory (global `~/.trembo/cron/` by default, or workspace-scoped when configured), parses each file independently, and upserts spec state. Invalid specs are recorded with `parse_status='invalid'` so state is durable rather than silently dropped. Files that disappear between scans get `removed=1` and their queued runs are cancelled.
+4. **Watcher** (`cron/specs/cron-watcher.ts`): `node:fs watch({ recursive: true })` with a ~250ms per-path debounce. Watcher events always trigger a re-reconcile — the reconciler is always the source of truth, not the watcher stream.
+5. **Materializer** (`cron/runner/cron-materializer.ts`): turns file-triggered specs into queued `cron_runs`. One-off: at most one run record per `(spec_id, revision)`, including failed runs so specs do not retry accidentally. Schedule: "one overdue catch-up on startup then advance" using timezone-aware `getNextCronTime`.
+6. **Event ingress** (`cron/events/cron-event-ingress.ts`): accepts already-normalized `AutomationEventEnvelope` values, persists them into `cron_event_log`, matches enabled event specs by `event_type` plus declarative filters, applies dedupe/debounce/cooldown policy, and enqueues `cron_runs` with `trigger_kind='event'`. It never executes agents directly. Plugins can declare `automationEvents` and submit normalized events through `ctx.automation.ingestEvent(...)`; sandboxed plugins forward those events through the core plugin event bridge.
+7. **Runner** (`cron/runner/cron-runner.ts`): polls `cron.db`, atomically claims queued runs, executes them via the existing `HubScheduleRuntimeHandlers` (`startSession` → `sendSession` → `stopSession` / `abortSession`), renews the run claim while execution is active, writes a markdown report per run, and transactionally updates status. File specs can constrain tool availability, config extension loading (`rules`, `skills`, `plugins`), session source, and a notes directory that is injected into the system prompt. Event runs include the normalized trigger event context in the prompt.
+8. **Reports** (`cron/reports/cron-report-writer.ts`): writes `.trembo/cron/reports/<run-id>.md` with run frontmatter plus `## Summary`, `## Usage`, `## Tool Calls`, and, for event runs, `## Trigger Event` sections.
+9. **Service** (`cron/service/cron-service.ts`): orchestrates all of the above. `TremboCore.create({ automation })` owns the SDK-facing lifecycle and exposes `trembo.automation.*` methods. Hub-side callers can submit normalized events through the `cron.event.ingest` command.
 
-The detached hub daemon passes its workspace root as `cronOptions`, so
-normal CLI/hub startup watches `${workspaceRoot}/.trembo/cron/` without a
-custom host needing to opt in.
+The detached hub daemon passes its workspace root as `cronOptions`, so normal CLI/hub startup watches `${workspaceRoot}/.trembo/cron/` without a custom host needing to opt in.
 
-Programmatic hub schedules are stored as `cron_specs` with source
-`hub-schedule` and execute through the same `cron_runs`
-claim/requeue/report flow as file-backed one-off, recurring, and
-event-driven specs. The hub schedule command surface remains a thin adapter;
-there is no separate schedules table, schedule store, or schedule runner.
+Programmatic hub schedules are stored as `cron_specs` with source `hub-schedule` and execute through the same `cron_runs` claim/requeue/report flow as file-backed one-off, recurring, and event-driven specs. The hub schedule command surface remains a thin adapter; there is no separate schedules table, schedule store, or schedule runner.
 
 ## Navigating the Codebase
 
 ### Starting Points by Task
 
 **I want to understand the agent loop and tool execution:**
+
 - Start: `packages/agents/src/agent.ts` — the stateless runtime loop
 - Then: `packages/agents/src/agent-step.ts` — individual iteration steps
 - Extensions: `packages/core/src/extensions/plugin/` — plugin discovery and sandboxing
 
 **I want to understand session persistence and state:**
+
 - Start: `packages/core/src/runtime/host/local-runtime-host.ts` — local session lifecycle
 - Then: `packages/core/src/runtime/orchestration/` — session orchestration
 - Settings: `packages/core/src/settings/` — settings mutation and state
 
 **I want to understand the hub system:**
+
 - Start: `packages/core/src/hub/server/` — WebSocket server and hub command handlers
 - Clients: `packages/core/src/hub/client/` — host-side hub clients
 - Transport: `packages/core/src/hub/runtime-host/` — hub-backed runtime hosts
 
 **I want to add a new tool:**
+
 - Tools registry: `packages/core/src/extensions/tools/` — built-in tool definitions
 - Tool execution: `packages/agents/src/tool-use.ts` — how tools are called
 - Plugin tools: `packages/core/src/extensions/plugin/` — plugin-registered tools
 
 **I want to understand settings and configuration:**
+
 - Watcher system: `packages/core/src/extensions/config/` — file watching and loading
 - Provider config: `packages/core/src/runtime/config/` — provider settings resolution
 - Settings services: `packages/core/src/settings/` — settings state and mutation
 
 **I want to add a new runtime feature (hook/extension):**
+
 - Hook contracts: `packages/shared/src/hooks/` — hook types and engine
 - Plugin system: `packages/core/src/extensions/plugin/` — plugin discovery and execution
 - Runtime builder: `packages/core/src/services/local-runtime-bootstrap.ts` — how runtime is composed

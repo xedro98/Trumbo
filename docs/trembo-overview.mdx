@@ -3,16 +3,26 @@ title: "Trembo Overview"
 sidebarTitle: "Trembo Overview"
 description: "Your AI-powered coding agent for complex work. Read files, write code, run commands, all with your approval."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-Welcome to the Trembo documentation. Whether you're just getting started or looking to unlock advanced capabilities, you'll find everything you need here.
+
+Welcome to the Trembo documentation. Whether you're setting up for the first time or pushing into advanced capabilities, everything you need is here.
 
 ## What is Trembo?
 
-Trembo is an AI coding agent that lives in your editor and your terminal. It can read and write files, run terminal commands, use a browser, and help you build features through natural conversation. Every action requires your explicit approval. You're always in control.
+Trembo is an AI coding agent that lives in your editor and your terminal. It reads and writes files, runs terminal commands, drives a browser, and helps you build features through natural conversation. Every action waits for your explicit approval, so you stay in control the whole way through.
 
 ## Model access
 
-Choose the model access path that fits your workflow:
+Pick the model access path that fits how you work:
 
 <CardGroup cols={3}>
   <Card title="Trembo (usage-billing)" icon="bolt" href="/getting-started/trembo-provider">
@@ -28,7 +38,7 @@ Choose the model access path that fits your workflow:
 
 ## Applications
 
-These are end-user applications built on top of Trembo's agent core:
+These are the end-user apps built on top of Trembo's agent core:
 
 <CardGroup cols={2}>
   <Card title="CLI" icon="terminal" href="/usage/cli-overview">
@@ -36,12 +46,12 @@ These are end-user applications built on top of Trembo's agent core:
 
     `npm i -g trembo`
   </Card>
-  <Card title="Kanban" icon="table-columns" href="https://github.com/trembo/kanban">
+  <Card title="Kanban" icon="table-columns" href="https://github.com/xedro98/trembo">
     Run many agents in parallel from a web-based task board with per-card worktrees, auto-commit, and dependency chains.
 
     `npx kanban`
   </Card>
-  <Card title="VS Code Extension" icon="code" href="https://github.com/trembo/trembo/tree/main/apps/vscode">
+  <Card title="VS Code Extension" icon="code" href="https://github.com/xedro98/trembo/tree/main/apps/vscode">
     AI coding assistant in your editor. Create files, run commands, browse the web, and use tools with human-in-the-loop approval.
   </Card>
   <Card title="JetBrains Plugin" icon="brain" href="https://plugins.jetbrains.com/plugin/27189-trembo">
@@ -52,10 +62,10 @@ These are end-user applications built on top of Trembo's agent core:
 
 ## Agent Core (SDK)
 
-The SDK is Trembo's agent coreâ€”use it to build your own applications, automations, and integrations. See SDK section for detailed functionality and architectural design of the Trembo Agent.
+The SDK is Trembo's agent core — use it to build your own applications, automations, and integrations. See the SDK section for the full functionality and architecture of the Trembo Agent.
 
 <CardGroup cols={1}>
-  <Card title="SDK" icon="cube" href="https://github.com/xedro98/trembo/sdk/overview">
+  <Card title="SDK" icon="cube" href="/sdk/overview">
     Build AI agents and integrations powered by the same core engine behind the CLI, Kanban, VS Code extension, and JetBrains plugin.
 
     `npm install @trembo/sdk`

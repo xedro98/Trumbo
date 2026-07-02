@@ -3,6 +3,16 @@ title: "Configure AWS Bedrock in VS Code (Members)"
 sidebarTitle: "Configure AWS Bedrock (Member)"
 description: "Guide for engineers configuring AWS Bedrock credentials in VS Code after admin setup"
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 As a team member, you can connect your local development environment to your organization's AWS Bedrock setup. This guide walks you through configuring your AWS credentials in VS Code so you can start using models through your organization's Bedrock infrastructure. Your administrator has already configured the provider settings-you just need to add your credentials to get started.
 
@@ -37,7 +47,7 @@ If you don't have AWS credentials yet, reach out to your IT or cloud team to get
 <Step title="Open Trembo Settings">
 Open VS Code and access the Trembo settings panel using either of these methods:
 
-- Click the settings icon (âš™ï¸) in the Trembo panel
+- Click the settings icon (⚙️) in the Trembo panel
 - Click on the API Provider dropdown located directly below the chat area (it will display as `bedrock.anthropic.claude-sonnet-4-20250514-v1:0` or similar)
 
 </Step>
@@ -82,9 +92,9 @@ The AWS Region is preconfigured by your administrator and does not need to be se
 <Step title="Verify Configuration">
 After selecting your authentication method, the extension will display checkmarks for enabled features:
 
-- âœ“ Supports images
-- âœ“ Supports browser use
-- âœ“ Supports prompt caching
+- ✓ Supports images
+- ✓ Supports browser use
+- ✓ Supports prompt caching
 
 Additional settings like cross-region inference and global inference profile will be locked (shown with a lock icon ðŸ”’) as they're controlled by your administrator.
 </Step>

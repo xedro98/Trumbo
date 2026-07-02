@@ -1,9 +1,19 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Packages Overview
 
-This directory is the single documentation source for package-level responsibilities.
+This directory is the single source of truth for package-level responsibilities.
 
 - High-level package roles: this file (`packages/README.md`)
-- Package interaction and runtime flows: [`ARCHITECTURE.md`](./ARCHITECTURE.md)
+- Package interaction and runtime flows: [`ARCHITECTURE.md`](../ARCHITECTURE.md)
 
 ## Package Responsibilities
 
@@ -17,7 +27,7 @@ This directory is the single documentation source for package-level responsibili
 ## How Packages Work Together
 
 1. `@trembo/llms` defines model/provider capabilities and builds concrete handlers.
-2. `@trembo/agents` runs the agent loop on top of those handlers and tool execution primitives.
+2. `@trembo/agents` runs the agent loop on top of those handlers and the tool-execution primitives.
 3. `@trembo/core` composes runtime behavior with persistent sessions/storage and local or hub-backed runtime services.
 4. `@trembo/core` hub services orchestrate scheduled runtime execution, execution history, and schedule command handling.
 5. `@trembo/core/hub` exposes discovery, the detached hub daemon, and session-oriented client APIs (`HubSessionClient`, `HubUIClient`) when hosts need a shared daemon.

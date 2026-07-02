@@ -3,11 +3,21 @@ title: "CLI Overview"
 sidebarTitle: "CLI Overview"
 description: "Use Trembo CLI for interactive terminal sessions and automated headless workflows."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 ## Prerequisites
 
 - Trembo CLI installed (install via `npm i -g trembo`)
-- Provider authenticated (`trembo auth`) — use the Trembo Provider, TremboPass, or your own provider key ([Authorization Guide](/getting-started/authorizing-with-trembo#cli-setup))
+- A provider authenticated (`trembo auth`) — use the Trembo Provider, TremboPass, or your own provider key ([Authorization Guide](/getting-started/authorizing-with-trembo#cli-setup))
 
 ## Quick Start
 
@@ -24,9 +34,9 @@ trembo --json "list TODO comments"
 
 ## Headless mode
 
-Use headless mode for scripts/automation and processable output.
+Use headless mode for scripts and automation where you want processable output.
 
-Headless is triggered when using flags like `--json`, when stdin is piped, or when output is redirected.
+Headless kicks in when you pass flags like `--json`, when stdin is piped, or when output is redirected.
 
 #### When headless activates
 
@@ -48,13 +58,13 @@ See: [Headless Mode](#headless-mode)
 
 ### Autonomous execution
 
-For fully unattended runs, use auto-approval:
+For fully unattended runs, turn on auto-approval:
 
 ```bash
 trembo --auto-approve true "run tests and fix failures"
 ```
 
-Mode selection also works in headless runs:
+Mode selection works in headless runs too:
 
 ```bash
 # plan-first
@@ -65,7 +75,7 @@ trembo "apply migration"
 ```
 
 <Warning>
-Autonomous execution can modify files and run commands without further prompts. Use a clean branch and review results.
+Autonomous execution can modify files and run commands without further prompts. Run it on a clean branch and review the results.
 </Warning>
 
 ## High-Value Commands
@@ -142,7 +152,7 @@ trembo --timeout 600 "run full test suite"
 
 ## JSON Output Schema
 
-When using `--json`, each line is a JSON message object.
+With `--json`, each line is a JSON message object.
 
 ```json
 {"type":"say","text":"I'll create the file now.","ts":1760501486669,"say":"text"}

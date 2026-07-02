@@ -1,17 +1,17 @@
-# Animation System
+# Animation system
 
 OpenTUI provides a timeline-based animation system for smooth property transitions.
 
 ## Overview
 
 Animations in OpenTUI use:
-- **Timeline**: Orchestrates multiple animations
-- **Animation Engine**: Manages timelines and rendering
-- **Easing Functions**: Control animation curves
+- **Timeline**: orchestrates multiple animations
+- **Animation engine**: manages timelines and rendering
+- **Easing functions**: control animation curves
 
-## When to Use
+## When to use
 
-Use this reference when you need timeline-driven animations, easing curves, or progressive transitions.
+Use this reference for timeline-driven animations, easing curves, or progressive transitions.
 
 ## Basic Usage
 

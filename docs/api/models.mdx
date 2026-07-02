@@ -3,25 +3,33 @@ title: "Models"
 sidebarTitle: "Models"
 description: "Available models, pricing tiers, free models, and how model IDs work in the Trembo API."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-The Trembo API gives you access to models from multiple providers through a single endpoint. Model IDs follow the `provider/model-name` format, the same convention used by [OpenRouter](https://openrouter.ai).
+
+The Trembo API opens one endpoint to models from many providers. Model IDs use the `provider/model-name` format, the same convention popularized by [OpenRouter](https://openrouter.ai).
 
 ## Model ID Format
 
-Every model is identified by a string in the format:
+Every model is addressed by a string of the form:
 
 ```
 provider/model-name
 ```
 
-For example:
+A few examples:
 - `anthropic/claude-sonnet-4-6` - Claude Sonnet 4.6 from Anthropic
 - `openai/gpt-4o` - GPT-4o from OpenAI
 - `google/gemini-2.5-pro` - Gemini 2.5 Pro from Google
 
-Pass this string as the `model` parameter in your [Chat Completions](/api/chat-completions) request.
-
-Example:
+Pass that string as the `model` parameter in your [Chat Completions](/api/chat-completions) request:
 
 ```bash
 curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
@@ -35,13 +43,13 @@ curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
 
 ## Reasoning Models
 
-Some models support extended thinking, where the model reasons through a problem before responding. When using these models:
+Some models think through a problem before they answer. When you use one of these:
 
-- Reasoning content appears in `delta.reasoning` during streaming
-- Some providers return encrypted reasoning blocks in `delta.reasoning_details`
-- Reasoning tokens are counted separately from output tokens
+- Reasoning content streams through `delta.reasoning`
+- Some providers also return encrypted reasoning blocks in `delta.reasoning_details`
+- Reasoning tokens are metered separately from output tokens
 
-Models with reasoning support include most Claude, Gemini 2.5, and Grok 3 models. Check the model's `supportsReasoning` capability in the model catalog.
+Reasoning-capable families include most Claude, Gemini 2.5, and Grok 3 models. Confirm support for a specific model by checking its `supportsReasoning` capability in the model catalog.
 
 ## Choosing a Model
 
@@ -54,11 +62,11 @@ Models with reasoning support include most Claude, Gemini 2.5, and Grok 3 models
 | Multi-modal (text + images) | `openai/gpt-4o` or `anthropic/claude-sonnet-4-6` |
 | Complex reasoning | Any model with reasoning support |
 
-For setup and account flow details, see the [Trembo Provider guide](/getting-started/trembo-provider).
+For account and setup details, see the [Trembo Provider guide](/getting-started/trembo-provider).
 
 ## Image Support
 
-Models that support images accept base64-encoded image content in the `messages` array:
+Image-capable models accept base64-encoded image content inside the `messages` array:
 
 ```json
 {
@@ -75,7 +83,7 @@ Models that support images accept base64-encoded image content in the `messages`
 }
 ```
 
-Not all models support images. Check the model's `supportsImages` capability before sending image content.
+Not every model accepts images. Check the model's `supportsImages` capability before sending image content.
 
 ## Related
 

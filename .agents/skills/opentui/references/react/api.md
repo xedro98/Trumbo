@@ -1,4 +1,4 @@
-# React API Reference
+# React API reference
 
 ## Rendering
 

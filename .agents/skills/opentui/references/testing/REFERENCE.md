@@ -1,17 +1,17 @@
-# Testing OpenTUI Applications
+# Testing OpenTUI applications
 
 How to test terminal user interfaces built with OpenTUI.
 
 ## Overview
 
 OpenTUI provides:
-- **Test Renderer**: Headless renderer for testing
-- **Snapshot Testing**: Verify visual output
-- **Interaction Testing**: Simulate user input
+- **Test renderer**: a headless renderer for testing
+- **Snapshot testing**: verify visual output
+- **Interaction testing**: simulate user input
 
-## When to Use
+## When to use
 
-Use this reference when you need snapshot tests, interaction testing, or renderer-based regression checks.
+Use this reference for snapshot tests, interaction testing, or renderer-based regression checks.
 
 ## Test Setup
 

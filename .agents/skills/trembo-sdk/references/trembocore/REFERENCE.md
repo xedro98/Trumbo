@@ -1,8 +1,8 @@
-# TremboCore Runtime
+# TremboCore runtime
 
 `TremboCore` is the full-featured runtime from `@trembo/core`. It wraps the `Agent` loop with session persistence, built-in tools (bash, editor, file reading, search, web fetch), config discovery, plugin loading, and optional hub-backed multi-process support.
 
-## When to Use TremboCore
+## When to use TremboCore
 
 | Use TremboCore when... | Use Agent instead when... |
 |---|---|

@@ -1,4 +1,4 @@
-# Solid Configuration
+# Solid configuration
 
 ## Project Setup
 

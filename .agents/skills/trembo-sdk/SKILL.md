@@ -5,11 +5,11 @@ metadata:
    references: agent, trembocore
 ---
 
-# Trembo SDK Skill
+# Trembo SDK skill
 
-Consolidated skill for building AI agents with the Trembo SDK. Use the decision trees below to find the right entry point and API surface, then load detailed references.
+Consolidated skill for building AI agents with the Trembo SDK. Use the decision trees below to find the right entry point and API surface, then load the detailed references.
 
-## Critical Rules
+## Critical rules
 
 Follow these rules in all Trembo SDK code:
 
@@ -202,7 +202,7 @@ Production?
 
 ## Resources
 
-Repository: https://github.com/trembo/trembo
-SDK Source: https://github.com/trembo/trembo/tree/main/sdk
-Documentation: https://github.com/xedro98/trembo/sdk/overview
-Discord: https://discord.gg/trembo
+- Repository: https://github.com/xedro98/trembo
+- SDK source: https://github.com/xedro98/trembo/tree/main/sdk
+- Documentation: https://github.com/xedro98/trembo/tree/main/sdk
+- Discussions: https://github.com/xedro98/trembo/discussions

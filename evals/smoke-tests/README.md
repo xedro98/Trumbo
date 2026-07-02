@@ -1,3 +1,13 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Smoke Tests
 
 Curated smoke tests that verify Trembo works correctly with LLM providers.
@@ -5,6 +15,7 @@ Curated smoke tests that verify Trembo works correctly with LLM providers.
 ## Purpose
 
 These tests catch regressions in:
+
 - Tool execution (read, write, edit files)
 - Provider response parsing
 - Tool chaining (multiple operations)
@@ -72,6 +83,7 @@ Scenarios can specify their own model(s) via the `models` field in `config.json`
 If you pass `--model`, it overrides any per-scenario `models` list.
 
 Examples:
+
 ```bash
 # Run apply_patch scenario with its default model (GPT-5)
 npm run eval:smoke:run -- --scenario 06-apply-patch
@@ -103,7 +115,7 @@ Shows `pass@1` when trials < 3, `pass@3` otherwise.
      "timeout": 60
    }
    ```
-3. (Optional) Add `template/` directory with starting files
+3. (Optional) Add a `template/` directory with starting files
 
 ## CI Integration
 

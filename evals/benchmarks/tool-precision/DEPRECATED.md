@@ -1,3 +1,13 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # DEPRECATED
 
 This framework is kept for backward compatibility but is scheduled for removal.
@@ -10,7 +20,7 @@ This framework is kept for backward compatibility but is scheduled for removal.
 
 ## If You're Using This
 
-Contact @ara or @robin before this gets removed. We can help migrate your use case to the smoke tests or trembo-bench framework.
+Before this gets removed, open an issue at [https://github.com/xedro98/trembo/issues](https://github.com/xedro98/trembo/issues) so the maintainers can help migrate your use case to the smoke tests or trembo-bench framework.
 
 ## Removal Timeline
 

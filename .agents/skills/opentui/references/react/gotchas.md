@@ -1,4 +1,4 @@
-# React Gotchas
+# React gotchas
 
 ## Critical
 

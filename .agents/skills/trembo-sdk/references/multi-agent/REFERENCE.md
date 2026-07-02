@@ -1,4 +1,4 @@
-# Multi-Agent Coordination
+# Multi-agent coordination
 
 The Trembo SDK supports two models for multi-agent work: sub-agents (parent-child) and teams (peer-to-peer).
 

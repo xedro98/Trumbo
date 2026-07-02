@@ -1,33 +1,46 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Trembo SDK Examples
 
-Learn how to build with the Trembo SDK through practical, runnable examples.
+Runnable, copy-pasteable examples for the Trembo SDK. Trembo is an open-source,
+self-hostable AI coding agent: a CLI, a VS Code extension, and a TypeScript SDK.
+You bring your own model keys, there is no hosted backend, and everything here
+runs locally against your own providers.
 
-## 📁 Plugin, Hook, and Automation Examples
+Use these examples as starting points — copy a file, point it at your repo, swap
+in your provider, and ship.
 
-Plugins extend the CLI and SDK with custom capabilities. Install local files, GitHub file URLs, package directories, git repos, and npm packages with `trembo plugin install`:
+## Plugins, hooks, and automations
 
 ### [`./plugins/`](./plugins/)
 
-**Plugin module examples** showing how to extend the CLI and SDK with custom capabilities:
-
-- Register custom tools
-- Hook into agent lifecycle events
-- Export a reusable plugin module for `.trembo/plugins`
-
-Examples include:
-- `weather-metrics.ts` - Weather query tool
-- `mac-notify.ts` - macOS Notification Center alerts
-- `custom-compaction.ts` - Custom context compaction
-- `automation-events.ts` - Plugin event emission
-- `background-terminal.ts` - Background shell jobs with setup and job logging
+A plugin is a single TypeScript file (or a small directory) that extends every
+Trembo agent surface — CLI, VS Code, Kanban, or anything built on the Core SDK.
+Install from a local file, a directory, a git repo, an npm package, or a raw
+GitHub URL:
 
 ```bash
-trembo plugin install https://github.com/trembo/trembo/blob/main/sdk/examples/plugins/weather-metrics.ts
+trembo plugin install https://github.com/xedro98/trembo/blob/main/sdk/examples/plugins/weather-metrics.ts
 trembo -i "What's the weather like in Tokyo and Paris?"
 ```
 
-Plugin setup receives a host logger through the second `setup` argument. Use
-`ctx.logger` for setup-time diagnostics and logs emitted during tool calls:
+What a plugin can do:
+
+- Register custom tools the agent can call.
+- Hook into the agent lifecycle (`beforeRun`, `beforeModel`, `afterTool`, …).
+- Rewrite provider-bound messages (custom compaction, redaction).
+- Emit automation events into the runtime.
+
+The setup callback receives a host logger through its second argument. Use
+`ctx.logger` for setup diagnostics and for logs emitted from inside tool calls:
 
 ```ts
 setup(api, ctx) {
@@ -37,7 +50,7 @@ setup(api, ctx) {
   });
 
   try {
-    // Register tools or perform plugin setup work.
+    // Register tools or do other setup work here.
   } catch (error) {
     if (ctx.logger?.error) {
       ctx.logger.error("my-plugin setup failed", { error });
@@ -49,70 +62,74 @@ setup(api, ctx) {
 }
 ```
 
-`ctx.logger` is session-scoped. For detached work that can outlive the session,
-such as background processes, persist status to plugin-owned storage or report
-completion through the host event channel instead of calling the captured logger
-from long-lived callbacks.
+`ctx.logger` is scoped to the current session. For work that outlives the
+session (detached background processes, long-running jobs), persist status to
+plugin-owned storage or push completion back through the host event channel
+instead of holding on to the captured logger.
+
+Standalone examples in that directory: `weather-metrics.ts` (tool + lifecycle
+metrics), `mac-notify.ts` (macOS Notification Center), `custom-compaction.ts`
+(context compaction), `automation-events.ts` (plugin event emission),
+`background-terminal.ts` (detached shell jobs with completion steering).
 
 ### [`./plugins/typescript-lsp/`](./plugins/typescript-lsp)
 
-TypeScript LSP plugin that gives the agent a `goto_definition` tool powered by the TypeScript Language Service API. Resolves through imports, re-exports, and type aliases -- much more precise than text search.
+A plugin that gives the agent a `goto_definition` tool backed by the TypeScript
+Language Service. It resolves through imports, re-exports, and type aliases —
+far more precise than grep.
 
-- Register a tool via `createTool()` and `AgentExtension`
-- Use the TypeScript Language Service to resolve symbol definitions
-- Cache the language service for efficient repeated lookups
-- Zero extra dependencies -- resolves `typescript` from the target project
+- Registers a tool via `createTool()` and `AgentExtension`.
+- Reuses the target project's own `typescript` from `node_modules`.
+- Caches the language service across calls in the same session.
+- Zero extra dependencies.
 
 ```bash
-trembo plugin install https://github.com/trembo/trembo/blob/main/sdk/examples/plugins/typescript-lsp/index.ts
+trembo plugin install https://github.com/xedro98/trembo/blob/main/sdk/examples/plugins/typescript-lsp/index.ts
 trembo -i "Find where createTool is defined"
 ```
 
 ### [`./plugins/agents-squad/`](./plugins/agents-squad)
 
-**Portable subagent plugin** that adds background agent orchestration tools to the CLI and SDK:
+A portable subagent plugin that adds background agent orchestration to the CLI
+and SDK. Start subagents from the main session, each with its own provider,
+model, and system prompt; load bundled or custom agent presets and skills; pass
+notes between subagents through a shared handoff store.
 
-- Export a reusable plugin module for `.trembo/plugins`
-- Start background subagents from the main session
-- Load bundled or custom agent presets and skills
-- Log setup, subagent starts, and follow-ups through `ctx.logger`
+Bundled agents:
 
-Includes pre-configured agents:
-- **Anvil** - Build and compile
-- **Inquisitor** - Investigation and discovery
-- **Oracle** - Planning and architecture
-- **Phantom** - Stealth and optimization
+- **Anvil** — surgical implementation.
+- **Inquisitor** — adversarial review.
+- **Oracle** — opinionated planning.
+- **Phantom** — fast codebase recon.
 
-Skills available:
-- API design, code review, debugging, documentation, migration, refactoring, test generation
+Bundled skills: API design, code review, debugging, documentation, migration,
+refactoring, test generation.
 
 ```bash
 trembo plugin install ./examples/plugins/agents-squad
 trembo -i "Use subagents to inspect this repository and report back."
 ```
 
-Once loaded, the agent can call tools like `start_subagent`, `message_subagent`, `get_subagent`, `list_agent_presets`, `list_skills`, and the handoff tools.
+Once loaded, the agent can call `start_subagent`, `message_subagent`,
+`get_subagent`, `list_agent_presets`, `list_skills`, and the handoff tools.
 
-## 📁 Cron & hooks Examples
+## Cron and hooks
 
 ### [`./cron/`](./cron)
 
-**Example file-based and event-driven automation specs** for global `~/.trembo/cron/`:
+File-based automation specs for `~/.trembo/cron/`. Two flavors:
 
-Recurring jobs for continuous quality:
-- **changelog-generator** — Auto-generate CHANGELOG from commits
-- **dependency-check** — Weekly security and update audits
-- **test-coverage-report** — Daily coverage metrics
-- **performance-baseline** — Build time and bundle size tracking
-- **type-check-strict** — TypeScript type safety audits
-- **code-style-audit** — Linting and formatting checks
-- **dead-code-finder** — Identify unused code
-- **documentation-check** — API documentation coverage
-- **weekly-metrics-summary** — Fun team metrics report 🎉
+- **Recurring** (`.cron.md`) — run on a cron schedule.
+- **Event-driven** (`.event.md`) — run when a normalized event lands.
 
-Event-driven jobs for PR workflows:
-- **pr-changelog-check** — Verify CHANGELOG is updated in PRs
-- **pr-test-coverage** — Analyze coverage impact of changes
+Recurring examples ship defaults for continuous quality work:
+`changelog-generator`, `dependency-check`, `test-coverage-report`,
+`performance-baseline`, `type-check-strict`, `code-style-audit`,
+`dead-code-finder`, `documentation-check`, `weekly-metrics-summary`.
+
+Event-driven examples cover PR workflows: `pr-review`, `pr-changelog-check`,
+`pr-test-coverage`, plus `local-manual-test` and `local-plugin-event` for
+testing the event pipeline without external services.
 
 ```bash
 mkdir -p ~/.trembo/cron
@@ -121,76 +138,89 @@ mkdir -p ~/.trembo/cron/events
 cp examples/cron/events/pr-changelog-check.event.md ~/.trembo/cron/events/
 ```
 
-See [cron/README.md](./cron/README.md) for full descriptions and usage patterns.
+See [cron/README.md](./cron/README.md) for the full field reference and usage
+patterns.
 
 ### [`./hooks/`](./hooks)
 
-**Lifecycle hooks** written in bash, Python, or TypeScript that intercept agent actions at key points:
+Lifecycle hooks written in bash, Python, or TypeScript that intercept agent
+actions at well-defined points. Use them to log tool calls, block destructive
+operations, require review on critical files, inject context, or track session
+lifecycle events (`TaskStart`, `TaskComplete`, `SessionShutdown`).
 
-- Log all tool calls (PreToolUse) and results (PostToolUse)
-- Block destructive operations
-- Require review for critical files
-- Inject contextual information
-- Track lifecycle events (TaskStart, TaskComplete, SessionShutdown)
-
-Hooks live in `.trembo/hooks/` and are named after the event they handle (PreToolUse, PostToolUse, TaskStart, etc.):
+Hooks live in `.trembo/hooks/` and are named after the event they handle:
 
 ```bash
 mkdir -p ~/.trembo/hooks
 
-# Bash hook
+# Bash
 cp examples/hooks/PreToolUse.sh ~/.trembo/hooks/
 chmod +x ~/.trembo/hooks/PreToolUse.sh
 
-# Or Python
+# Python
 cp examples/hooks/PreToolUse.py ~/.trembo/hooks/PreToolUse.py
 chmod +x ~/.trembo/hooks/PreToolUse.py
 
-# Or TypeScript (runs via bun)
+# TypeScript (runs via bun)
 cp examples/hooks/PreToolUse.ts ~/.trembo/hooks/PreToolUse.ts
 chmod +x ~/.trembo/hooks/PreToolUse.ts
 
-trembo -i "do something"  # Hooks will execute automatically
+trembo -i "do something"  # hooks fire automatically
 ```
 
-## 🚀 Quick Start
+## Quick start for the SDK
 
-To use the SDK in your own Node app (outside this monorepo), start with:
+To use the SDK in your own Node app, outside this monorepo:
 
 ```bash
 npm add @trembo/core
 ```
 
-Add `@trembo/agents` or `@trembo/llms` only if you intentionally want lower-level control. For RPC client helpers, prefer importing from `@trembo/core` when you want the app-facing SDK surface.
+Reach for `@trembo/agents` or `@trembo/llms` only when you want lower-level
+control over the agent loop or model transport. For RPC client helpers, import
+from `@trembo/core` to stay on the app-facing surface.
 
 Current SDK layering:
 
-- `@trembo/core` owns config discovery/watchers, runtime plugin loading, and the context pipeline
-- context compaction is core-owned and runs through turn preparation before model calls
-- most app integrations should stay on the `@trembo/core` surface unless they intentionally need lower-level agent or model control
+- `@trembo/core` owns config discovery and watchers, runtime plugin loading, and
+  the context pipeline (compaction runs here, during turn preparation, before
+  model calls).
+- Most app integrations should stay on `@trembo/core` unless they intentionally
+  need lower-level agent or model control.
 
-## 📚 Learning Path
+## Learning path
 
 **Building plugins?**
-- Start with [`./plugins/`](./plugins/) for basic tool and event patterns
-- Explore [`./plugins/typescript-lsp/`](./plugins/typescript-lsp) for integration with language services
-- See [`./plugins/agents-squad/`](./plugins/agents-squad) for advanced agent orchestration
+
+- Start with [`./plugins/`](./plugins/) for tool and event patterns.
+- Move to [`./plugins/typescript-lsp/`](./plugins/typescript-lsp) for language
+  service integration.
+- See [`./plugins/agents-squad/`](./plugins/agents-squad) for multi-agent
+  orchestration.
 
 **Building integrations?**
-- Review [`./cron/`](./cron) for automation and event-driven workflows
-- Explore [`desktop-app/`](../../apps/examples/desktop-app), [`vscode/`](../../apps/examples/vscode), and [`menubar/`](../../apps/examples/menubar) for app integration patterns
+
+- Review [`./cron/`](./cron) for scheduled and event-driven workflows.
+- Browse [`desktop-app/`](../../apps/examples/desktop-app),
+  [`vscode/`](../../apps/examples/vscode), and
+  [`menubar/`](../../apps/examples/menubar) for app integration patterns.
 
 **Controlling agent behavior?**
-- Explore [`./hooks/`](./hooks) to intercept and modify tool execution, log actions, or enforce policies
 
-## 📖 Documentation
+- Explore [`./hooks/`](./hooks) to intercept and modify tool execution, log
+  actions, or enforce policy.
+
+## Documentation
 
 - [Trembo SDK README](../packages/README.md)
-- [Architecture Guide](../ARCHITECTURE.md)
-- [Individual Package Docs](../packages/)
+- [Architecture guide](../ARCHITECTURE.md)
+- [Individual package docs](../packages/)
 
-## 🛠️ Requirements
+## Requirements
 
-- **Node.js 22+** - For package compatibility
-- **API Key** - Set `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, or provider-specific key (for SDK examples)
-- **Bun** - Optional, install from [bun.sh](https://bun.sh) for running examples
+- **Node.js 22+** for package compatibility.
+- **A model API key** — set `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, or the
+  provider-specific key your setup uses. Trembo is bring-your-own-key; there is
+  no hosted backend to sign in to.
+- **Bun** (optional) for running TypeScript examples directly. Install from
+  [bun.sh](https://bun.sh).

@@ -1,176 +1,97 @@
-<p align="center">
-  <img src="assets/icons/icon.png" width="80" alt="Trembo" />
-</p>
+<div align="center">
+<pre>
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+</pre>
+</div>
 
 <h1 align="center">Trembo</h1>
 
-<p align="center">
-The open source coding agent in your IDE and terminal.
-</p>
+<p align="center">An open-source coding agent that lives in your terminal and your editor.<br/>Bring your own keys. No telemetry, no account, no upstream required.</p>
 
 <div align="center">
 
-<div align="center">
-<table>
-<tbody>
-<td align="center">
-<a href="https://github.com/xedro98/trembo" target="_blank"><strong>Docs</strong></a>
-</td>
-<td align="center">
-<a href="https://discord.gg/trembo" target="_blank"><strong>Discord</strong></a>
-</td>
-<td align="center">
-<a href="https://www.reddit.com/r/trembo/" target="_blank"><strong>r/trembo</strong></a>
-</td>
-<td align="center">
-<a href="https://github.com/trembo/trembo/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>Feature Requests</strong></a>
-</td>
-<td align="center">
-<a href="https://github.com/xedro98/trembo/join-us" target="_blank"><strong>Join us!</strong></a>
-</td>
-</tbody>
-</table>
-</div>
+[Docs](https://github.com/xedro98/trembo) • [Issues](https://github.com/xedro98/trembo/issues) • [Discussions](https://github.com/xedro98/trembo/discussions)
 
-</div>
-
-<br>
-
-<div align="center">
-<table>
-<tr>
-<td align="center" width="50%">
-
-### CLI
-
-Run Trembo in your terminal.
-Interactive chat or fully headless
-for CI/CD and scripting.
-
-```
-npm i -g trembo
-```
-
-<a href="./apps/cli/README.md">Learn more</a>
-<br><br>
-
-</td>
-<td align="center" width="50%">
-
-### Kanban
-
-Run many agents in parallel from a
-web-based task board. Each card gets its own
-worktree, auto-commit, and dependency chains.
-
-```
-npm i -g kanban
-```
-
-<a href="https://github.com/trembo/kanban">Learn more</a>
-<br><br>
-
-</td>
-</tr>
-<tr>
-<td align="center" width="50%">
-
-### VS Code Extension
-
-AI coding assistant in your editor.
-Create files, run commands, browse the web,
-and use tools with human-in-the-loop approval.
-
-<a href="./apps/vscode">Learn more</a>
-<br><br>
-
-</td>
-<td align="center" width="50%">
-
-### JetBrains Plugin
-
-The same Trembo experience in IntelliJ IDEA,
-PyCharm, WebStorm, GoLand, and the rest of
-the JetBrains family.
-
-<a href="https://plugins.jetbrains.com/plugin/28247-trembo">Install from JetBrains Marketplace</a>
-<br><br>
-
-</td>
-</tr>
-</table>
-</div>
-
-<div align="center">
-<table>
-<tr>
-<td align="center">
-
-### SDK
-
-Build your own AI agents and integrations powered by the same engine that runs the CLI, Kanban, VS Code extension, and JetBrains plugin. Custom tools, multi-agent teams, connectors, scheduled automations, and more.
-
-```
-npm install @trembo/sdk
-```
-
-<a href="https://github.com/xedro98/trembo/trembo-sdk/overview">Documentation</a>
-<br><br>
-
-</td>
-</tr>
-</table>
 </div>
 
 ---
 
-## Index
+Trembo is a self-hostable AI coding agent. It reads your project, plans a change, edits files across your codebase, runs shell commands, browses the web, and reports back — all with you in the loop. It runs three ways from one engine:
 
-| Product | Description | Location | CHANGELOG |
-|---------|------------|--------------|--------------|
-| **SDK** | Node.js programmatic agent API and extension exports. | [`sdk/`](https://github.com/trembo/trembo/tree/main/sdk) | [CHANGELOG.md](https://github.com/trembo/trembo/blob/main/sdk/CHANGELOG.md) |
-| **CLI** | Terminal UI, headless mode, shell commands, and CLI-specific flows. | [`apps/cli/`](https://github.com/trembo/trembo/tree/main/apps/cli) | [CHANGELOG.md](https://github.com/trembo/trembo/blob/main/apps/cli/CHANGELOG.md) |
-| **VS Code Extension** | The Marketplace extension and extension host integration. | [`/`](https://github.com/trembo/trembo/tree/main) (WIP migrating) | [CHANGELOG.md](https://github.com/trembo/trembo/blob/main/CHANGELOG.md) |
-| **JetBrains Plugin** | JetBrains-hosted client that talks to the shared agent core. | Currently we are not open-sourcing JetBrains plugins | - |
-| **Kanban** | Web-based multi-agent task board. | [`trembo/kanban`](https://github.com/trembo/kanban) | [CHANGELOG.md](https://github.com/trembo/kanban/blob/main/CHANGELOG.md) |
-| **Docs site** | Public documentation pages. | [`docs/`](https://github.com/xedro98/trembo/) | - |
+- **CLI** — an interactive terminal app plus a headless JSON mode for CI/CD and scripting.
+- **VS Code extension** — the same agent inside your editor, with diff review and approvals.
+- **SDK** — a TypeScript API for building your own agents, tools, connectors, and scheduled automations.
 
-## Edits Code Across Your Project
+Everything is bring-your-own-key: plug in Anthropic, OpenAI, Google, OpenRouter, Bedrock, Vertex, Azure, Ollama, LM Studio, or any OpenAI-compatible endpoint. Trembo never phones home — telemetry is disabled and there is no hosted backend to sign in to.
 
-Trembo reads your project structure, understands the relationships between files, and makes coordinated changes across your codebase. It monitors linter and compiler errors as it works, fixing issues like missing imports, type mismatches, and syntax errors before you even see them. In VS Code and JetBrains, every edit shows up as a diff you can review, modify, or revert. All changes are tracked with checkpoints, so you can easily undo the agent's work.
+## What's in this repo
 
-## Runs Bash Commands
+| Package | What it is | Path |
+|---------|-----------|------|
+| **CLI** | Terminal UI, headless mode, connectors, schedules. | [`apps/cli/`](./apps/cli) |
+| **VS Code extension** | Editor integration, webview, approvals, diffs. | [`apps/vscode/`](./apps/vscode) |
+| **SDK** | Programmatic agent engine, tools, plugins, cron. | [`sdk/`](./sdk) |
+| **Docs** | Published documentation pages. | [`docs/`](./docs) |
 
-Trembo executes commands directly in your terminal and watches the output in real time. Install packages, run build scripts, execute tests, deploy applications, manage databases. For long-running processes like dev servers, Trembo continues working in the background and reacts to new output as it appears, catching compile errors, test failures, and server crashes as they happen.
+## Quick start
+
+```bash
+# Install the CLI
+npm i -g trembo
+
+# Run it in your project
+cd my-project
+trembo
+```
+
+Or, from source:
+
+```bash
+git clone https://github.com/xedro98/trembo.git
+cd trembo
+bun install
+bun --conditions=development --cwd apps/cli dev
+```
+
+## It edits code across your project
+
+Trembo maps your project structure, understands how files relate, and makes coordinated edits across them. It watches linter and compiler output as it works and fixes missing imports, type mismatches, and syntax errors before you see them. In VS Code, every edit is a diff you can review, tweak, or revert; checkpoints let you undo the agent's work in one step.
+
+## It runs your shell
+
+Trembo runs commands in your terminal and reads the output live — install deps, run builds, execute tests, deploy. Long-running processes (dev servers, watchers) keep running in the background and Trembo reacts to new output, catching compile errors and test failures as they happen.
 
 ## Plan and Act
 
-Toggle between Plan mode and Act mode. In Plan mode, Trembo explores your codebase, asks clarifying questions, and lays out a strategy. Once you're aligned, switch to Act mode and Trembo executes the plan. Every file edit and terminal command requires your approval, so you stay in control of what actually changes. Or toggle auto-approve and let Trembo run autonomously.
+Switch between **Plan** mode (explore, ask questions, lay out a strategy) and **Act** mode (execute the plan). Every file edit and command can require your approval, or flip on auto-approve to let it run autonomously.
 
-## Rules and Skills
+## Rules and skills
 
-Define project-specific rules in `.tremborules` files that guide how Trembo works in your codebase: coding standards, architecture conventions, deployment procedures, testing requirements. Rules are picked up automatically by the CLI, VS Code extension, and JetBrains plugin. Use skills to let the model load specific rules when needed. 
+Drop project rules into `.tremborules/` — coding standards, architecture conventions, deployment runbooks, testing requirements. They're picked up automatically by the CLI and the VS Code extension. Skills let the model load specific rule sets on demand.
 
-## Works With Every Model
-
-Trembo is not locked to a single AI provider. Use whichever model fits your workflow:
+## Works with every model
 
 | Provider | Models |
 |----------|--------|
 | Anthropic | Claude Opus, Sonnet, Haiku |
-| OpenAI | GPT series model |
-| Google | Gemini series model |
+| OpenAI | GPT series |
+| Google | Gemini series |
 | OpenRouter | 200+ models from any provider |
-| Vercel AI Gateway | Models through Vercel AI Gateway |
 | AWS Bedrock | Claude, Llama, and more |
 | Azure / GCP Vertex | All hosted models |
-| Cerebras / Groq | Fast inference models |
-| Ollama / LM Studio | Run local models on your machine |
+| Cerebras / Groq | Fast inference |
+| Ollama / LM Studio | Local models on your machine |
 | Any OpenAI-compatible API | Self-hosted or third-party endpoints |
 
-## Extend With Plugins or MCP Servers
+## Extend with plugins or MCP servers
 
-Extend Trembo's capabilities with plugins. Using the SDK, register tools and lifecycle hooks programmatically through the plugin system for logging, auditing, policy enforcement, or adding domain-specific capabilities. Simple plugin example below.
+Register tools and lifecycle hooks programmatically:
 
 ```typescript
 import { Agent, createTool } from "@trembo/sdk"
@@ -184,21 +105,22 @@ const deployTool = createTool({
   },
 })
 
-const agent = new Agent({ tools: [deployTool], /* ... */ })
+const agent = new Agent({ tools: [deployTool] })
 ```
-...or use [MCP servers](https://github.com/modelcontextprotocol) to connect to databases, query APIs, manage cloud infrastructure, and interact with external systems. Use [community-built servers](https://github.com/modelcontextprotocol/servers) or ask Trembo to create custom tools on the fly. In the CLI, manage servers with `trembo mcp`.
 
-## Multi-Agent Teams
+…or connect [MCP servers](https://modelcontextprotocol.io) for databases, APIs, cloud infra, and external systems. Manage them from the CLI with `trembo mcp`.
 
-Coordinate multiple agents working together on complex tasks. A coordinator agent breaks the work into subtasks and delegates to specialist agents, each with their own tools and context. Team state persists across sessions so you can pick up where you left off.
+## Multi-agent teams
+
+A coordinator agent splits work into subtasks and delegates to specialist agents, each with its own tools and context. Team state persists across sessions.
 
 ```bash
 trembo --team-name auth-sprint "Plan and implement user authentication with tests"
 ```
 
-## Scheduled Agents
+## Scheduled agents
 
-Run agents on cron schedules for recurring automations. Daily PR summaries, weekly dependency checks, codebase health reports. Schedules persist across restarts and run independently of any terminal session.
+Run agents on cron schedules for recurring work — daily PR summaries, weekly dependency checks, health reports. Schedules persist across restarts and run independently of any terminal.
 
 ```bash
 trembo schedule create "PR summary" \
@@ -207,33 +129,29 @@ trembo schedule create "PR summary" \
   --workspace /path/to/repo
 ```
 
-## Connect to Slack, Telegram, Discord, and More
+## Connect to Slack, Telegram, Discord, and more
 
-Chat with your agent from any messaging platform: Telegram, Slack, Discord, Google Chat, WhatsApp, and Linear. Each conversation thread maps to an agent session with full context. Set up access control to restrict who can interact with your agent.
+Chat with your agent from Telegram, Slack, Discord, Google Chat, WhatsApp, or Linear. Each thread maps to an agent session with full context.
 
 ```bash
-# Connect to Telegram
 trembo connect telegram -k $BOT_TOKEN
-# Connect to Slack through webhook
 trembo connect slack --bot-token $SLACK_TOKEN --signing-secret $SECRET --base-url $URL
-# Connect to Slack using socket mode
-trembo connect slack --bot-token $SLACK_TOKEN --app-token $SLACK_APP_TOKEN
 ```
 
 ## Headless CLI for CI/CD
 
-Run Trembo with zero interaction for scripting and automation. Pipe input, get JSON output, chain commands, integrate into CI/CD pipelines.
+Pipe input, get JSON out, chain commands, wire it into pipelines.
 
 ```bash
 trembo "Run tests and fix any failures"
-git diff origin/main | trembo  "Review these changes for issues"
+git diff origin/main | trembo "Review these changes for issues"
 trembo --json "List all TODO comments" | jq -r 'select(.type == "agent_event" and .event.text) | .event.text'
 ```
 
 ## Contributing
 
-Start with the [Contributing Guide](CONTRIBUTING.md). Join our [Discord](https://discord.gg/trembo) and head to the `#contributors` channel to connect with other contributors. Check our [careers page](https://github.com/xedro98/trembo/join-us) for full-time roles.
+Read the [Contributing Guide](CONTRIBUTING.md). Open an [issue](https://github.com/xedro98/trembo/issues) or start a [discussion](https://github.com/xedro98/trembo/discussions) if you want to help.
 
 ## License
 
-[Apache 2.0 Â© 2026 Trembo Bot Inc.](./LICENSE)
+[Apache 2.0 © 2026 Trembo Bot Inc.](./LICENSE)

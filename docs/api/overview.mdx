@@ -3,15 +3,25 @@ title: "Trembo API"
 sidebarTitle: "Overview"
 description: "Programmatic access to AI models through an OpenAI-compatible Chat Completions API."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-Welcome to the Trembo API documentation. Use the same models that power the Trembo extension and CLI from any language, framework, or tool that speaks the OpenAI format.
+
+This is the Trembo API reference. The same models that drive the Trembo extension and CLI are available to any client that speaks the OpenAI Chat Completions format, in any language or runtime.
 
 ## What is the Trembo API?
 
-The Trembo API is an OpenAI-compatible Chat Completions endpoint. You authenticate once with a Trembo API key and get access to models from Anthropic, OpenAI, Google, and more through a single base URL. No need to manage separate keys for each provider.
+The Trembo API exposes a single OpenAI-compatible Chat Completions endpoint. Authenticate once with a Trembo API key and route requests to models from Anthropic, OpenAI, Google, and other providers through one base URL, without juggling a separate key per provider.
 
 ```
-Your App  Ã¢â€ â€™  Trembo API (api.example.invalid)  Ã¢â€ â€™  Anthropic / OpenAI / Google / etc.
+Your App  →  Trembo API (api.example.invalid)  →  Anthropic / OpenAI / Google / etc.
 ```
 
 <CardGroup cols={2}>
@@ -55,4 +65,4 @@ curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
   }'
 ```
 
-Get your API key at [app.example.invalid](http://0.0.0.0:0) (Settings > API Keys), then follow the [Getting Started](/api/getting-started) guide.
+Grab an API key from [app.example.invalid](http://0.0.0.0:0) under Settings → API Keys, then continue with the [Getting Started](/api/getting-started) guide.

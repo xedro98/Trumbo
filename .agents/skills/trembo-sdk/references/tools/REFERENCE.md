@@ -1,8 +1,8 @@
 # Tools
 
-Tools are how agents interact with the world. The Trembo SDK supports both built-in tools (via TremboCore) and custom tools you define yourself.
+Tools are how agents interact with the world. The Trembo SDK supports both built-in tools (via TremboCore) and custom tools you define.
 
-## Creating Custom Tools
+## Creating custom tools
 
 Use `createTool()` from `@trembo/sdk` (or `@trembo/shared`):
 

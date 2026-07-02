@@ -1,7 +1,17 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Beyond Autocomplete: True Agentic Planning
 
-**Trembo analyzes your request, explores your code, and presents a clear plan.**
+**Trembo reads your request, explores the relevant code, and lays out a plan before touching anything.**
 
-Watch Trembo break down complex tasks, ask clarifying questions, and outline its approach. Understand the 'why' before any code is written, ensuring changes align with your architecture and intent.
+Rather than jumping straight to a diff, Trembo decomposes the task, asks clarifying questions when intent is ambiguous, and drafts an explicit approach. You see the reasoning first, so every change stays aligned with how your project actually fits together.
 
-![Trembo planning demonstration](https://storage.googleapis.com/trembo_public_images/docs/assets/trembo-plan-hifi-1_compress.webp)
+Trembo is fully open source and self-hostable — bring your own API keys, run it anywhere, and keep full control of your workflow.

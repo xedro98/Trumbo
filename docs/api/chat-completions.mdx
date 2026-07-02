@@ -3,8 +3,18 @@ title: "Chat Completions"
 sidebarTitle: "Chat Completions"
 description: "Full reference for the POST /chat/completions endpoint including all parameters, streaming, and tool calling."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-The Chat Completions endpoint generates model responses from a conversation. It follows the [OpenAI Chat Completions](https://platform.openai.com/docs/api-reference/chat/create) format.
+
+The Chat Completions endpoint turns a conversation into a model response. It mirrors the [OpenAI Chat Completions](https://platform.openai.com/docs/api-reference/chat/create) contract, so existing clients work with minimal changes.
 
 ## Endpoint
 
@@ -33,7 +43,7 @@ POST http://0.0.0.0:0/api/v1/chat/completions
 
 ### Message Format
 
-Each message in the `messages` array has this structure:
+Each entry in the `messages` array looks like this:
 
 ```json
 {
@@ -52,7 +62,7 @@ Each message in the `messages` array has this structure:
 
 ### Multi-Turn Conversation
 
-Include previous messages to maintain context:
+Pass prior messages back to keep context across turns:
 
 ```json
 {
@@ -68,7 +78,7 @@ Include previous messages to maintain context:
 
 ## Streaming Response
 
-When `stream: true` (the default), the response is a series of [Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-Sent_Events):
+With `stream: true` (the default), the reply arrives as a sequence of [Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-Sent_Events):
 
 ```
 data: {"id":"gen-abc123","choices":[{"delta":{"role":"assistant"},"index":0}],"model":"anthropic/claude-sonnet-4-6"}
@@ -82,7 +92,7 @@ data: {"id":"gen-abc123","choices":[{"delta":{"content":" is Paris."},"index":0,
 data: [DONE]
 ```
 
-Each `data:` line contains a JSON chunk. Key fields:
+Every `data:` line is a JSON chunk. The fields you'll rely on:
 
 | Field | Description |
 |-------|-------------|
@@ -94,7 +104,7 @@ Each `data:` line contains a JSON chunk. Key fields:
 
 ### Usage Object
 
-The final chunk includes token usage and cost:
+The final chunk carries token usage and cost:
 
 ```json
 {
@@ -118,7 +128,7 @@ The final chunk includes token usage and cost:
 
 ## Non-Streaming Response
 
-When `stream: false`, the response is a single JSON object:
+With `stream: false`, you get a single JSON object back:
 
 ```json
 {
@@ -143,7 +153,7 @@ When `stream: false`, the response is a single JSON object:
 
 ## Tool Calling
 
-You can define tools that the model can call using the OpenAI function calling format:
+Define tools the model can invoke using the OpenAI function-calling shape:
 
 ```json
 {
@@ -173,7 +183,7 @@ You can define tools that the model can call using the OpenAI function calling f
 }
 ```
 
-When the model decides to call a tool, the response includes a `tool_calls` array:
+When the model elects to call a tool, the response includes a `tool_calls` array:
 
 ```json
 {
@@ -198,7 +208,7 @@ When the model decides to call a tool, the response includes a `tool_calls` arra
 }
 ```
 
-To continue the conversation after a tool call, include the tool result:
+To continue the conversation after a tool call, return the tool result as a `tool` message:
 
 ```json
 {
@@ -212,16 +222,16 @@ To continue the conversation after a tool call, include the tool result:
 
 ## Reasoning Models
 
-Some models support extended thinking (reasoning). When using these models, the response may include reasoning content in the streaming delta:
+Some models perform extended thinking before answering. With those models, the streaming delta can carry reasoning content alongside the main output:
 
 ```json
 {"choices":[{"delta":{"reasoning":"Let me think about this step by step..."}}]}
 ```
 
-Reasoning tokens are separate from the main content and appear in the `delta.reasoning` field. Some providers return encrypted reasoning blocks via `delta.reasoning_details` that can be passed back in subsequent requests to preserve the reasoning trace.
+Reasoning tokens are separate from the main content and surface in `delta.reasoning`. Some providers also return encrypted reasoning blocks via `delta.reasoning_details`, which you can echo back in later requests to preserve the reasoning trace.
 
 <Note>
-  Not all models support reasoning. See [Models](/api/models) for which models have reasoning capabilities.
+  Not all models support reasoning. See [Models](/api/models) for which ones do.
 </Note>
 
 ## Complete Example

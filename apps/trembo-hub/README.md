@@ -1,16 +1,26 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Trembo Hub
 
 A browser dashboard for the local Trembo hub. Open it to see who's connected, what sessions are running, drive a session from a chat box, and restart the hub when you need a fresh daemon.
 
 ## Capabilities
 
-- live list of connected hub clients (from `HubUIClient.subscribeUI`)
-- live list of active sessions with status, model, and titles
-- click a session to view its message history and stream new assistant output
-- start a new session from an initial prompt — workspace/provider/model are reused from the most recent session, or `TREMBO_PROVIDER` / `TREMBO_MODEL` env vars
-- send messages to the selected session and watch chunks stream back
-- **Restart Hub** button: gracefully stops the local detached hub and respawns a fresh one
-- optional LAN/tunnel exposure gated by a shared `ROOM_SECRET`
+- Live list of connected hub clients (from `HubUIClient.subscribeUI`)
+- Live list of active sessions with status, model, and titles
+- Click a session to view its message history and stream new assistant output
+- Start a new session from an initial prompt — workspace/provider/model are reused from the most recent session, or taken from `TREMBO_PROVIDER` / `TREMBO_MODEL` env vars
+- Send messages to the selected session and watch chunks stream back
+- **Restart Hub** button — gracefully stops the local detached hub and respawns a fresh one
+- Optional LAN/tunnel exposure gated by a shared `ROOM_SECRET`
 
 The dashboard registers two clients with the hub: a `trembo-hub-server` (via `TremboCore`) for driving sessions and a `trembo-hub-server` (via `HubUIClient`) for the admin view.
 
@@ -21,7 +31,7 @@ cd apps/trembo-hub
 bun run start
 ```
 
-Open <http://127.0.0.1:8787> and click **Connect**. The server will discover or spawn a local detached hub on startup; the hub endpoint is printed in the console and shown in the sidebar.
+Open <http://127.0.0.1:8787> and click **Connect**. The server discovers or spawns a local detached hub on startup; the hub endpoint is printed in the console and shown in the sidebar.
 
 For webview development with Vite hot reload:
 
@@ -32,7 +42,7 @@ bun run dev
 
 This starts the Vite webview server on <http://127.0.0.1:5173> and the hub dashboard on <http://127.0.0.1:8787>. Open the dashboard URL; the served page loads webview modules from Vite, so changes under `src/webview/src` hot reload without rebuilding. Use `TREMBO_HUB_WEBVIEW_DEV_PORT` or `TREMBO_HUB_WEBVIEW_DEV_HOST` to change the Vite bind address.
 
-To start a brand-new session, the dashboard needs to know which provider and model to use. It picks them up automatically from the most recent session on the hub. If there are no recent sessions, set `TREMBO_PROVIDER` and `TREMBO_MODEL` in the environment before running.
+To start a brand-new session the dashboard needs a provider and model. It picks them up automatically from the most recent session on the hub; if there are none, set `TREMBO_PROVIDER` and `TREMBO_MODEL` in the environment before running.
 
 ## Configuration
 
@@ -40,7 +50,7 @@ Environment variables:
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `HOST` | `127.0.0.1` | Bind host for the dashboard. Use the default for same-machine development. Set `HOST=0.0.0.0` only when intentionally exposing the dashboard on a LAN/tunnel. |
+| `HOST` | `127.0.0.1` | Bind host for the dashboard. Use the default for same-machine development; set `HOST=0.0.0.0` only when intentionally exposing on a LAN/tunnel. |
 | `TREMBO_HUB_DASHBOARD_PORT` | `8787` | Dashboard HTTP/WebSocket port. |
 | `PUBLIC_URL` | `http://<HOST>:<PORT>` (`127.0.0.1` when binding `0.0.0.0`) | URL printed for humans to open/copy. Set this to your LAN URL or tunnel URL. |
 | `ROOM_SECRET` | unset | Shared invite secret required for browser WebSocket connections when `HOST` is non-local. |
@@ -69,9 +79,7 @@ ROOM_SECRET='use-a-long-random-secret' \
 bun run start
 ```
 
-Share the printed invite URL with another machine on the same LAN.
-
-`ROOM_SECRET` is required for `HOST=0.0.0.0`; without it the dashboard exits before listening.
+Share the printed invite URL with another machine on the same LAN. `ROOM_SECRET` is required for `HOST=0.0.0.0`; without it the dashboard exits before listening.
 
 ## Tunnel usage
 
@@ -107,8 +115,8 @@ Clicking **Restart Hub** in the sidebar:
 3. Calls `ensureDetachedHubServer(workspaceRoot)` to spawn a fresh hub.
 4. Reconnects and broadcasts the new hub state to every open browser tab.
 
-Sessions running on the previous hub are stopped along with the hub. Other clients connected to that hub (CLI, VS Code, menubar) will see their connection drop and reconnect to the new daemon on next request.
+Sessions running on the previous hub are stopped along with the hub. Other clients connected to that hub (CLI, VS Code, menubar) see their connection drop and reconnect to the new daemon on the next request.
 
 ## Security warning
 
-This is an example dashboard, not a production admin tool. Exposing it on a LAN or tunnel lets anyone with the invite secret list clients/sessions on your hub, drive sessions, and restart the hub. Use a long random `ROOM_SECRET`, only share the URL with trusted participants, and stop the process when you are done. The hub and agent runtime remain owned by the host machine.
+This is an example dashboard, not a production admin tool. Exposing it on a LAN or tunnel lets anyone with the invite secret list clients/sessions on your hub, drive sessions, and restart the hub. Use a long random `ROOM_SECRET`, share the URL only with trusted participants, and stop the process when you're done. The hub and agent runtime remain owned by the host machine.

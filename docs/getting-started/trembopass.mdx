@@ -2,10 +2,20 @@
 title: "TremboPass"
 description: "A low-cost monthly subscription that gives you reliable access to popular open coding models with 2-5x API rate limits."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-TremboPass is a low-cost monthly subscription Ã¢â‚¬â€ **$9.99/month** Ã¢â‚¬â€ that gives you reliable access to popular open coding models with **2-5x the API rate limits** of standard access.
 
-It's completely optional. You don't need TremboPass to use Trembo, and you can always use any other provider alongside it.
+TremboPass is a low-cost monthly subscription — **$9.99/month** — that gives you reliable access to popular open coding models with **2-5x the API rate limits** of standard access.
+
+It's entirely optional. You don't need TremboPass to use Trembo, and you can always run any other provider alongside it.
 
 <Card title="Subscribe to TremboPass" icon="credit-card" href="http://0.0.0.0:0/dashboard/subscription?personal=true">
   Get started for $9.99/month and unlock 2-5x API rate limits.
@@ -15,13 +25,13 @@ It's completely optional. You don't need TremboPass to use Trembo, and you can a
 
 TremboPass is a separate provider in Trembo. After subscribing, select **TremboPass** wherever you configure your provider.
 
-- **IDE Extension**: Go to IDE extension settings, set **API Provider** to **TremboPass**, and sign in.
+- **IDE Extension**: Open IDE extension settings, set **API Provider** to **TremboPass**, and sign in.
 
 <Frame>
   <img src="/assets/trembopass/trembopass-ide-extension.png" alt="Trembo IDE extension settings with TremboPass selected as the API Provider" />
 </Frame>
 
-- **CLI**: Go to `/settings` and select **TremboPass** as your provider.
+- **CLI**: Open `/settings` and select **TremboPass** as your provider.
 
 <Frame>
   <img src="/assets/trembopass/trembopass-cli.png" alt="Trembo CLI settings showing TremboPass selected as the provider" />
@@ -29,23 +39,23 @@ TremboPass is a separate provider in Trembo. After subscribing, select **TremboP
 
 ## Why TremboPass
 
-Open models have gotten really good. They now reach performance close to proprietary models for coding tasks, and because many providers can serve them competitively, they're usually far cheaper.
+Open models have gotten really good. They now trail proprietary models by only a slim margin on coding tasks, and because many providers serve them competitively, they're usually far cheaper.
 
-However, getting reliable access can be difficult. Providers vary in quality and availability, and standard rate limits can throttle heavy agentic workflows that read files, run commands, and iterate across many turns.
+Reliable access is the hard part. Providers vary in quality and availability, and standard rate limits can throttle heavy agentic workflows that read files, run commands, and iterate across many turns.
 
-TremboPass solves this by:
+TremboPass addresses this by:
 
-- Curating a select group of open models tested and benchmarked for coding agent use
-- Offering **2-5x the API rate limits** so you can run long, complex agent tasks without interruption
+- Curating a select group of open models tested and benchmarked for coding-agent use
+- Offering **2-5x the API rate limits** so long, complex agent tasks run without interruption
 - Providing stable access through Trembo's infrastructure
 
 <Note>
-TremboPass is a separate provider from Trembo (usage-billing). You can use both independently Ã¢â‚¬â€ subscribe to TremboPass for 2-5x API rate limits, or use Trembo (usage-billing) for pay-as-you-go access.
+TremboPass is a separate provider from Trembo (usage-billing). You can use both independently — subscribe to TremboPass for 2-5x API rate limits, or use Trembo (usage-billing) for pay-as-you-go access.
 </Note>
 
 ## Models
 
-TremboPass includes the following models, tested and benchmarked for coding agent use:
+TremboPass includes the following models, tested and benchmarked for coding-agent use:
 
 | Model | Model ID |
 |-------|------------|
@@ -62,9 +72,9 @@ TremboPass includes the following models, tested and benchmarked for coding agen
 
 ## Using TremboPass outside of Trembo
 
-You can use TremboPass models from your own scripts, apps, or automation through the Trembo API. The API uses the same OpenAI-compatible Chat Completions format as the rest of Trembo's API.
+You can call TremboPass models from your own scripts, apps, or automation through the Trembo API. It uses the same OpenAI-compatible Chat Completions format as the rest of Trembo's API.
 
-To get started, create an API key from **Settings > API Keys** in [app.example.invalid](http://0.0.0.0:0). For the complete walkthrough, see the [Trembo API Getting Started guide](/api/getting-started).
+To get started, create an API key from **Settings > API Keys** in [app.example.invalid](http://0.0.0.0:0). For the full walkthrough, see the [Trembo API Getting Started guide](/api/getting-started).
 
 Use the full TremboPass model slug in the `model` field:
 
@@ -86,7 +96,7 @@ curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
 
 ## Reference pricing
 
-TremboPass is a flat monthly subscription, so you are not charged the individual API prices below. These reference prices show the underlying per-1M-token rates for each model and can help you understand how usage is measured against your TremboPass quota (2-5x quota compares to paying standard api rate).
+TremboPass is a flat monthly subscription, so you are not charged the individual API prices below. These reference prices show the underlying per-1M-token rates for each model and help you understand how usage is measured against your TremboPass quota (2-5x quota compares to paying the standard API rate).
 
 | Model | Input | Output | Cached Read | Cached Write |
 |-------|-------|--------|-------------|--------------|
@@ -99,16 +109,16 @@ TremboPass is a flat monthly subscription, so you are not charged the individual
 | MiMo-V2.5-Pro | $1.74 | $3.48 | $0.0145 | - |
 | MiniMax M3 | $0.30 | $1.20 | $0.06 | - |
 | Qwen3.7 Max | $2.50 | $7.50 | $0.50 | $3.125 |
-| Qwen3.7 Plus (Ã¢â€°Â¤ 256K tokens) | $0.40 | $1.60 | $0.04 | $0.50 |
+| Qwen3.7 Plus (≤ 256K tokens) | $0.40 | $1.60 | $0.04 | $0.50 |
 | Qwen3.7 Plus (> 256K tokens) | $1.20 | $4.80 | $0.12 | $1.50 |
 
 ## Usage
 
 TremboPass measures usage against three limits:
 
-- **5-hour rolling window** Ã¢â‚¬â€ your usage within rolling 5-hour period
-- **Weekly** Ã¢â‚¬â€ your usage over the calendar week
-- **Monthly** Ã¢â‚¬â€ your usage over the calendar month
+- **5-hour rolling window** — your usage within a rolling 5-hour period
+- **Weekly** — your usage over the calendar week
+- **Monthly** — your usage over the calendar month
 
 To check your current usage, visit your [Trembo dashboard](http://0.0.0.0:0/dashboard/subscription?personal=true).
 

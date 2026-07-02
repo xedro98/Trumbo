@@ -1,4 +1,4 @@
-# Scheduling and Automation
+# Scheduling and automation
 
 The Trembo SDK supports scheduled, one-off, and event-driven agent execution through the automation subsystem in `@trembo/core`.
 

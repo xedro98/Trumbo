@@ -3,6 +3,16 @@ title: "Managing Members"
 sidebarTitle: "Managing Members"
 description: "Complete guide to managing team members, roles, and permissions in your Trembo Enterprise organization"
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 Effective member management is essential for maintaining security and enabling your team to work productively. This guide covers everything you need to know about roles, permissions, and day-to-day member administration.
 
@@ -37,24 +47,24 @@ Understand exactly what each role can do with this comprehensive permissions bre
 | Permission | Member | Admin | Owner |
 | :--- | :---: | :---: | :---: |
 | **General Usage** | | | |
-| Use Trembo | Ã¢Å“â€¦ | Ã¢Å“â€¦ | Ã¢Å“â€¦ |
-| Access Shared API Providers | Ã¢Å“â€¦ | Ã¢Å“â€¦ | Ã¢Å“â€¦ |
+| Use Trembo | ✅ | ✅ | ✅ |
+| Access Shared API Providers | ✅ | ✅ | ✅ |
 | | | | |
 | **Member Management** | | | |
-| View Members | Ã¢ÂÅ’ | Ã¢Å“â€¦ | Ã¢Å“â€¦ |
-| Invite New Members | Ã¢ÂÅ’ | Ã¢Å“â€¦ | Ã¢Å“â€¦ |
-| Edit Member Roles | Ã¢ÂÅ’ | Ã¢Å“â€¦ | Ã¢Å“â€¦ |
-| Remove Members | Ã¢ÂÅ’ | Ã¢Å“â€¦ | Ã¢Å“â€¦ |
-| Remove Admins | Ã¢ÂÅ’ | Ã¢ÂÅ’ | Ã¢Å“â€¦ |
+| View Members | ❌ | ✅ | ✅ |
+| Invite New Members | ❌ | ✅ | ✅ |
+| Edit Member Roles | ❌ | ✅ | ✅ |
+| Remove Members | ❌ | ✅ | ✅ |
+| Remove Admins | ❌ | ❌ | ✅ |
 | | | | |
 | **Configuration** | | | |
-| Configure API Providers | Ã¢ÂÅ’ | Ã¢Å“â€¦ | Ã¢Å“â€¦ |
-| Manage Security Settings | Ã¢ÂÅ’ | Ã¢ÂÅ’ | Ã¢Å“â€¦ |
+| Configure API Providers | ❌ | ✅ | ✅ |
+| Manage Security Settings | ❌ | ❌ | ✅ |
 | | | | |
 | **Billing & Ownership** | | | |
-| View Billing Information | Ã¢ÂÅ’ | Ã¢ÂÅ’ | Ã¢Å“â€¦ |
-| Manage Subscription | Ã¢ÂÅ’ | Ã¢ÂÅ’ | Ã¢Å“â€¦ |
-| Transfer Ownership | Ã¢ÂÅ’ | Ã¢ÂÅ’ | Ã¢Å“â€¦ |
+| View Billing Information | ❌ | ❌ | ✅ |
+| Manage Subscription | ❌ | ❌ | ✅ |
+| Transfer Ownership | ❌ | ❌ | ✅ |
 
 <Note>
 **Quick Reference:** Most users should be **Members**. Grant **Admin** only to those managing users or configs. Reserve **Owner** for 1-2 account leaders.
@@ -82,7 +92,7 @@ Understand exactly what each role can do with this comprehensive permissions bre
        - Each pending invitation holds one seat from your license
     
     <Tip>
-    **Bulk Invitations:** Need to add multiple users? Contact support@example.com for assistance with bulk invite CSV imports.
+    **Bulk Invitations:** Need to add multiple users? Contact support@example.invalid for assistance with bulk invite CSV imports.
     </Tip>
   </Tab>
   
@@ -115,7 +125,7 @@ Understand exactly what each role can do with this comprehensive permissions bre
        - Locate the user to remove
     
     2. **Remove User**
-       - Click the menu icon (Ã¢â€¹Â®) next to their name
+       - Click the menu icon (⋯) next to their name
        - Select "Remove from Organization"
        - Confirm the removal
     
@@ -278,7 +288,7 @@ Follow these guidelines to maintain a secure organization:
   <Accordion title="Can't Remove an Admin" icon="user-slash">
     **Cause:** Only Owners can remove Admins.
     
-    **Solution:** Ask an Owner to perform the removal, or if you need to remove your organization's sole Owner, contact support@example.com.
+    **Solution:** Ask an Owner to perform the removal, or if you need to remove your organization's sole Owner, contact support@example.invalid.
   </Accordion>
   
   <Accordion title="Out of Seats" icon="triangle-exclamation">

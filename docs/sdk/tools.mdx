@@ -3,8 +3,18 @@ title: "Tools"
 sidebarTitle: "Tools"
 description: "Tools let agents read, write, search, call APIs, and run domain-specific actions."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-Tools are functions the model can call during execution. Tools consist of a name, description, and schema which the SDK sends to the model. Then the model can direct the SDK to execute tool functions and send results back into the conversation.
+
+Tools are functions the model can call during execution. Each tool has a name, description, and schema that the SDK sends to the model. The model can then direct the SDK to execute a tool function and feed the result back into the conversation.
 
 ## Built-In Tools
 
@@ -28,7 +38,7 @@ Tools are functions the model can call during execution. Tools consist of a name
 
 ## Custom Tools with createTool
 
-One of the most powerful features of the SDK is the ability to create and register custom tools. This allows you to add and share capabilities that are context efficient and behave deterministically because they are implemented in code rather than prompts.
+One of the SDK's most powerful features is the ability to create and register custom tools. This lets you add and share capabilities that are context-efficient and behave deterministically, because they're implemented in code rather than prompts.
 
 ### Quick Example
 
@@ -72,7 +82,7 @@ const searchDatabase = createTool({
 })
 ```
 
-For complete examples of tools in action, see the [cli-agent](https://github.com/trembo/trembo/tree/main/apps/examples/cli-agent) (shell tool) and [code-review-bot](https://github.com/trembo/trembo/tree/main/apps/examples/code-review-bot) (multiple tools with completion lifecycle).
+For complete examples of tools in action, see the [cli-agent](https://github.com/xedro98/trembo/tree/main/apps/examples/cli-agent) (shell tool) and [code-review-bot](https://github.com/xedro98/trembo/tree/main/apps/examples/code-review-bot) (multiple tools with completion lifecycle).
 
 For a full tutorial, see [Creating Custom Tools](/sdk/guides/creating-custom-tools). For exact types, see [Tools API](/sdk/reference/tools-api).
 

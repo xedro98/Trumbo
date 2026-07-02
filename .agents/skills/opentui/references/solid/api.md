@@ -1,4 +1,4 @@
-# Solid API Reference
+# Solid API reference
 
 ## Rendering
 

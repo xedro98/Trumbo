@@ -1,14 +1,24 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Trembo Testing Platform
 
-A CLI testing framework for the Trembo Core extension, providing gRPC-based integration clients and utilities for automated scenarios.
+A CLI testing framework for the Trembo Core extension. It ships gRPC-based integration clients and the surrounding harness for running automated scenarios against the extension.
 
 ## Overview
 
-The platform enables end-to-end validation of Trembo's core functionality through:
+The platform drives end-to-end validation of Trembo's core functionality through three pieces:
 
-- **gRPC Adapters** – clients for Trembo’s gRPC services  
-- **Test Harness** – runner, utilities, and type definitions  
-- **Spec Files** – JSON instructions for automated test cases  
+- **gRPC Adapters** — clients for Trembo's gRPC services
+- **Test Harness** — the runner, utilities, and type definitions
+- **Spec Files** — JSON instructions that describe automated test cases
 
 ## Structure
 
@@ -24,10 +34,10 @@ testing-platform/
 
 ## Prerequisites
 
-- **Node.js** ≥ 18 (the runtime) and **bun** (package manager + task runner)  
-- **Protocol Buffers** (used for gRPC)  
+- **Node.js** >= 18 (the runtime) and **bun** (package manager + task runner)
+- **Protocol Buffers** (used for gRPC)
 
-Generate proto files in the **root Trembo project**:
+Generate the proto files from the **root of the Trembo project**:
 
 ```bash
 bun run protos
@@ -52,14 +62,14 @@ bun run build
 
 ## Running Spec File Tests
 
-Before running specs, make sure the standalone Trembo Core gRPC server (that runs mocks and host gRPC as well) is running:
+Before running specs, start the standalone Trembo Core gRPC server (which runs the mocks and the host gRPC):
 
 ```bash
 bun run test:sca-server
 ```
 
-Then finally you can run the cli as:
+Then run the CLI against a spec file or folder:
 
 ```bash
 bun run start:dev <spec-file-or-folder>
-```bash
+```

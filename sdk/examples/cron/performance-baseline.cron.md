@@ -19,14 +19,16 @@ metadata:
   owner: platform
   metricsFile: .perf-baseline.json
 ---
-Measure and track performance baselines for the project:
+Measure the project's performance baseline and record it for trend tracking.
 
-1. Build the project and measure build time: `npm run build`
-2. Bundle size analysis (if applicable): Run bundler with size reporting
-3. Cold start time if this is a CLI/server tool
-4. Run performance benchmarks if they exist
+1. Build the project and capture build time: `npm run build`.
+2. Bundle size, if the project ships a bundle — run the bundler with size
+   reporting on.
+3. Cold start time, if this is a CLI or server.
+4. Any existing benchmarks the repo already ships.
 
-Create or update `.perf-baseline.json` with:
+Write or update `.perf-baseline.json`:
+
 ```json
 {
   "timestamp": "ISO-8601",
@@ -37,9 +39,10 @@ Create or update `.perf-baseline.json` with:
 }
 ```
 
-Detect performance regressions:
-- If build time increased by >10%, flag as warning
-- If bundle size increased by >5%, flag as concern
-- Compare to previous day's baseline
+Compare against the previous baseline and flag regressions:
 
-Report findings with recommendations for optimization if regressions detected.
+- Build time up more than 10% → warning.
+- Bundle size up more than 5% → concern.
+- Anything else that moved the wrong direction → note it.
+
+Close with concrete optimization suggestions for any regression you flagged.

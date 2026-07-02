@@ -19,40 +19,41 @@ metadata:
   owner: development
   reportType: analysis
 ---
-Scan the codebase for dead code and unused exports:
+Hunt for code that nothing reaches and exports that nothing imports. Stay in
+`plan` mode — propose removals, do not delete.
 
-1. Identify unused exports:
-   - Functions not called within the module or by external modules
-   - Classes with no instantiations
-   - Constants/variables not referenced
-   - Type definitions not used
+1. Unused exports:
+   - Functions never called inside the module or imported elsewhere.
+   - Classes with no instantiations.
+   - Constants and variables nobody references.
+   - Type definitions with no users.
 
-2. Detect unreachable code patterns:
-   - Statements after return/throw
-   - Unreachable branches in conditionals
-   - Dead try-catch blocks
-   - Unused catch parameters
+2. Unreachable code:
+   - Statements after `return`/`throw`.
+   - Branches that can never be taken.
+   - Dead `try`/`catch` blocks and unused catch bindings.
 
-3. Analyze file-level patterns:
-   - Modules that are never imported
-   - Test files without corresponding implementation
-   - Example/demo code in main codebase
-   - Deprecated or marked-for-removal code
+3. File-level waste:
+   - Modules that are never imported.
+   - Test files with no matching implementation.
+   - Demo or example code living in the main source tree.
+   - Code marked for removal that's still around.
 
-Generate a comprehensive report with:
-- Dead code segments (with file locations and line numbers)
-- Confidence level for each finding (high/medium/low)
-- Safe-to-remove vs requires-review items
-- Estimated code reduction if cleanup is done
+For each finding, report the file and line range, a confidence level
+(high/medium/low), and whether it is safe to remove or needs a human eye.
 
-Safe removals candidates:
-- Variables only assigned, never read
-- Functions declared but never called
-- Exported items with no external references
+Safe-to-remove candidates:
 
-Requires review:
-- Code that might be called dynamically
-- Public APIs (check if external consumers exist)
-- Backwards-compatibility concerns
+- Variables only ever assigned, never read.
+- Functions declared but never called.
+- Exports with no external references.
 
-Use plan mode to suggest removals without applying them.
+Needs review:
+
+- Anything that might be called dynamically (reflection, string-based
+  dispatch, test fixtures).
+- Public API surface — check for external consumers before removing.
+- Backwards-compatibility shims still within their deprecation window.
+
+Close with an estimate of how much code would disappear if the safe-to-remove
+set were deleted.

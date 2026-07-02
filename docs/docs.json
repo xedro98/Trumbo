@@ -40,18 +40,18 @@
 			{
 				"label": "GitHub",
 				"icon": "github",
-				"href": "https://github.com/trembo/trembo"
+				"href": "https://github.com/xedro98/trembo"
 			},
 			{
-				"label": "Discord",
-				"icon": "discord",
-				"href": "https://discord.gg/trembo"
+				"label": "Discussions",
+				"icon": "comments",
+				"href": "https://github.com/xedro98/trembo/discussions"
 			}
 		],
 		"primary": {
 			"type": "button",
 			"label": "Install Trembo",
-			"href": "https://github.com/xedro98/trembo/install?utm_source=website&utm_medium=header"
+			"href": "https://github.com/xedro98/trembo"
 		}
 	},
 	"navigation": {
@@ -351,9 +351,8 @@
 	},
 	"footer": {
 		"socials": {
-			"x": "https://x.com/trembo",
-			"github": "https://github.com/trembo/trembo",
-			"discord": "https://discord.gg/trembo"
+			"github": "https://github.com/xedro98/trembo",
+			"discord": "https://github.com/xedro98/trembo/discussions"
 		}
 	},
 	"anchors": [

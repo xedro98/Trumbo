@@ -1,8 +1,18 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 ### Preview
 
 ![Trembo Hub Monitor preview](./assets/hub-monitor-preview.jpg)
 
-### Architecture Overview
+### Architecture overview
 
 ```
 Any Client (CLI, VS Code, agents)
@@ -35,10 +45,12 @@ Rust Tauri App (apps/examples/menubar/src-tauri/src/main.rs)
     └── Logs notifications to stderr (with severity)
 ```
 
-### Dev Commands
+The menubar app is a thin Tauri shell that subscribes to a Trembo hub over WebSocket and surfaces what it sees — hub health, running sessions, and notifications — as a compact window plus a system tray icon. Any client that speaks the hub protocol (the Trembo CLI, the VS Code extension, custom agents) can push `ui.notify` and `ui.show_window` commands; the hub fans those out to every subscriber, and this app is one of them.
 
-From `apps/examples/menubar/`:
+### Dev commands
 
-- `bun run dev:ui` - run only the Hub Monitor UI at `http://127.0.0.1:3466/` with preview data
-- `bun run dev` - run the full Tauri app with the real hub sidecar
-- `bun run typecheck` - TypeScript check
+Run from `apps/examples/menubar/`:
+
+- `bun run dev:ui` — run only the Hub Monitor UI at <http://127.0.0.1:3466/> with preview data.
+- `bun run dev` — run the full Tauri app against the real hub sidecar.
+- `bun run typecheck` — TypeScript check.

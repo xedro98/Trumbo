@@ -3,41 +3,51 @@ title: "CLI Profile (SSO)"
 sidebarTitle: "CLI Profile (SSO)"
 description: "Configure AWS Bedrock to use AWS CLI profiles for authentication with Trembo. Best for SSO/federated roles and secure enterprise access."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 ### Overview
 
-Trembo offers the option of utilizing AWS credentials or AWS profiles to access AWS Bedrock services. SSO/Federated roles are suggested over Legacy IAM configuration; this guide describes how to configure your environment so that Trembo uses SSO roles for authentication.
+Trembo can use AWS credentials or AWS profiles to access AWS Bedrock services. SSO/Federated roles are recommended over legacy IAM configuration; this guide walks through configuring your environment so Trembo authenticates with SSO roles.
 
 ---
 
 ### Configuration Steps
 
-1. Install the [latest version](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) of AWS CLI
+1. Install the [latest version](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) of the AWS CLI.
 
-    - Follow the AWS docs to install your OS-specific version of AWS CLI
+    - Follow the AWS docs to install the OS-specific version of the AWS CLI.
 
-2. [Configure IAM authentication](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html) with the AWS CLI
+2. [Configure IAM authentication](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html) with the AWS CLI.
 
-    - If you do not already have AWS access through the IAM Identity Center, follow the [IAM User Guide](https://docs.aws.amazon.com/singlesignon/latest/userguide/getting-started.html) to set up IAM users and roles. Ensure you have a `PowerUserAccess` role.
-    - If you have access to AWS through your employer, open your AWS access portal and find the appropriate account. Ensure you have `PowerUserAccess` permissions.
-    - Open the `Access keys` link and note the `SSO start URL` and `SSO region`, which are needed in the next step
+    - If you don't already have AWS access through the IAM Identity Center, follow the [IAM User Guide](https://docs.aws.amazon.com/singlesignon/latest/userguide/getting-started.html) to set up IAM users and roles. Make sure you have a `PowerUserAccess` role.
+    - If you have AWS access through your employer, open your AWS access portal and find the appropriate account. Make sure you have `PowerUserAccess` permissions.
+    - Open the `Access keys` link and note the `SSO start URL` and `SSO region`, which you'll need in the next step.
 
-3. Continue configuring your profile using [the `aws configure sso` CLI wizard](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html#cli-configure-sso-configure)
+3. Continue configuring your profile using [the `aws configure sso` CLI wizard](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html#cli-configure-sso-configure).
 
-    - Once configured, use the following command to authenticate the AWS CLI: `aws sso login --profile <AWS-profile-name>`
-    - Note which profile name you attach to your AWS account, this is needed to configure Trembo in the following steps
+    - Once configured, authenticate the AWS CLI with: `aws sso login --profile <AWS-profile-name>`
+    - Note the profile name you attach to your AWS account — you'll need it to configure Trembo in the next steps.
 
-4. If you haven't already done so, install VSCode and the Trembo extension. Consult the [Getting Started](/getting-started/installing-trembo) page for guidance.
+4. If you haven't already, install VS Code and the Trembo extension. See the [Getting Started](/getting-started/installing-trembo) page for guidance.
 
-5. Open the Trembo extension, then click on the settings button ⚙️ to select your API Provider.
-    - From the API Provider dropdown, select AWS Bedrock
-    - Select the AWS Profile radio button, then enter the AWS Profile Name from step 3
-    - Select your AWS Region from the dropdown menu
-    - Selecting the cross-region inference checkbox is required for some models
+5. Open the Trembo extension, then click the settings button ⚙️ to select your API Provider.
+    - From the API Provider dropdown, select AWS Bedrock.
+    - Select the AWS Profile radio button, then enter the AWS Profile Name from step 3.
+    - Select your AWS Region from the dropdown menu.
+    - Selecting the cross-region inference checkbox is required for some models.
 
 <Frame>
 	<img
-		src="https://storage.googleapis.com/trembo_public_images/docs/assets/trembo-aws-setup-markup%20(1).png"
+		src="/assets/trembo-aws-setup.png"
 		alt="AWS Bedrock configuration in Trembo settings showing profile authentication setup"
 	/>
 </Frame>

@@ -1,30 +1,30 @@
-# Trembo Protobuf Development Guide
+# Trembo protobuf development guide
 
-This guide outlines how to add new gRPC endpoints for communication between the webview (frontend) and the extension host (backend).
+This guide covers how to add new gRPC endpoints for communication between the webview (frontend) and the extension host (backend).
 
 ## Overview
 
-Trembo uses [Protobuf](https://protobuf.dev/) to define a strongly-typed API, ensuring efficient and type-safe communication. All definitions are in the `/proto` directory. The compiler and plugins are included as project dependencies, so no manual installation is needed.
+Trembo uses [Protobuf](https://protobuf.dev/) to define a strongly-typed API, giving the webview and extension host efficient, type-safe communication. All definitions live in the `/proto` directory. The compiler and plugins ship as project dependencies, so no manual installation is needed.
 
-## Key Concepts & Best Practices
+## Key concepts and best practices
 
--   **File Structure**: Each feature domain should have its own `.proto` file (e.g., `account.proto`, `task.proto`).
--   **Message Design**:
-    -   For simple, single-value data, use the shared types in `proto/common.proto` (e.g., `StringRequest`, `Empty`, `Int64Request`). This promotes consistency.
-    -   For complex data structures, define custom messages within the feature's `.proto` file (see `task.proto` for examples like `NewTaskRequest`).
--   **Naming Conventions**:
-    -   Services: `PascalCaseService` (e.g., `AccountService`).
-    -   RPCs: `camelCase` (e.g., `accountEmailIdentified`).
-    -   Messages: `PascalCase` (e.g., `StringRequest`).
--   **Streaming**: For server-to-client streaming, use the `stream` keyword on the response type. See `subscribeToAuthCallback` in `account.proto` for an example.
+- **File structure**: each feature domain gets its own `.proto` file (e.g. `account.proto`, `task.proto`).
+- **Message design**:
+  - For simple, single-value data, reuse the shared types in `proto/common.proto` (e.g. `StringRequest`, `Empty`, `Int64Request`) for consistency.
+  - For complex data structures, define custom messages in the feature's `.proto` file (see `task.proto` for examples like `NewTaskRequest`).
+- **Naming conventions**:
+  - Services: `PascalCaseService` (e.g. `AccountService`).
+  - RPCs: `camelCase` (e.g. `accountEmailIdentified`).
+  - Messages: `PascalCase` (e.g. `StringRequest`).
+- **Streaming**: for server-to-client streaming, use the `stream` keyword on the response type. See `subscribeToAuthCallback` in `account.proto` for an example.
 
 ---
 
-## 4-Step Development Workflow
+## 4-step development workflow
 
-Here’s how to add a new RPC, using `scrollToSettings` as an example.
+Here is how to add a new RPC, using `scrollToSettings` as the example.
 
-### 1. Define the RPC in a `.proto` File
+### 1. Define the RPC in a `.proto` file
 
 Add your service method to the appropriate file in the `proto/` directory.
 
@@ -36,19 +36,19 @@ service UiService {
   rpc scrollToSettings(StringRequest) returns (KeyValuePair);
 }
 ```
-Here, we use the common `StringRequest` and `KeyValuePair` types.
+Here we reuse the common `StringRequest` and `KeyValuePair` types.
 
-### 2. Compile Definitions
+### 2. Compile definitions
 
-After editing a `.proto` file, regenerate the TypeScript code. From the project root, run:
+After editing a `.proto` file, regenerate the TypeScript code. From the project root:
 ```bash
 bun run protos
 ```
-This command compiles all `.proto` files and outputs the generated code to `src/generated/` and `src/shared/`. Do not edit these generated files manually.
+This compiles all `.proto` files and emits generated code into `src/generated/` and `src/shared/`. Do not edit generated files by hand.
 
-### 3. Implement the Backend Handler
+### 3. Implement the backend handler
 
-Create the RPC implementation in the backend. Handlers are located in `src/core/controller/[service-name]/`.
+Create the RPC implementation in the backend. Handlers live in `src/core/controller/[service-name]/`.
 
 **File: `src/core/controller/ui/scrollToSettings.ts`**
 ```typescript
@@ -69,11 +69,11 @@ export async function scrollToSettings(controller: Controller, request: StringRe
 }
 ```
 
-### 4. Call the RPC from the Webview
+### 4. Call the RPC from the webview
 
 Call the new RPC from a React component in `webview-ui/`. The generated client makes this simple.
 
-**File: `webview-ui/src/components/browser/BrowserSettingsMenu.tsx`** (Example)
+**File: `webview-ui/src/components/browser/BrowserSettingsMenu.tsx`** (example)
 ```tsx
 import { UiServiceClient } from "../../../services/grpc"
 import { StringRequest } from "../../../../shared/proto/common"

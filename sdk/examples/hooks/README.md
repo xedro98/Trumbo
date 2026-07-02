@@ -1,20 +1,35 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Hook Examples
 
-Examples for file-based hooks and runtime hooks.
+Examples for file-based hooks and runtime hooks in Trembo.
 
-## Hook Terminology
+## Hook terminology
 
 Use these terms consistently:
 
-- **Runtime hooks**: Typed in-process plugin/agent lifecycle callbacks such as `beforeRun`, `beforeModel`, and `afterTool`.
-- **File hooks**: External scripts discovered from hook config directories and run with serialized JSON payloads.
-- **Hook events**: Serialized payload names used by file hooks, such as `agent_end`, `tool_call`, and `prompt_submit`.
+- **Runtime hooks** — typed, in-process plugin/agent lifecycle callbacks such
+  as `beforeRun`, `beforeModel`, and `afterTool`.
+- **File hooks** — external scripts discovered from hook config directories and
+  run with a serialized JSON payload on stdin.
+- **Hook events** — the serialized payload names file hooks receive, such as
+  `agent_end`, `tool_call`, and `prompt_submit`.
 
-File hooks are an adapter on top of the runtime hook layer. Core discovers hook files, maps their event names onto runtime hook callbacks, then executes the matching script with a JSON payload on stdin.
+File hooks are an adapter on top of the runtime hook layer. Core discovers hook
+files, maps their event names onto runtime hook callbacks, then runs the
+matching script with a JSON payload on stdin.
 
-## File Hooks vs Runtime Hooks
+## File hooks vs runtime hooks
 
-| File Hook File Name | File Hook Event | Runtime Hook Backing It |
+| File hook file name | File hook event | Runtime hook backing it |
 | ------------------- | --------------- | ----------------------- |
 | `TaskStart` | `agent_start` | `beforeRun` |
 | `TaskResume` | `agent_resume` | `beforeRun` with resume context |
@@ -23,29 +38,37 @@ File hooks are an adapter on top of the runtime hook layer. Core discovers hook 
 | `PostToolUse` | `tool_result` | `afterTool` |
 | `TaskComplete` | `agent_end` | `afterRun` when completed |
 | `TaskError` | `agent_error` | `afterRun` when failed |
-| `TaskCancel` | `agent_abort` | `afterRun` or session shutdown with abort/cancel reason |
+| `TaskCancel` | `agent_abort` | `afterRun` or session shutdown with an abort/cancel reason |
 | `SessionShutdown` | `session_shutdown` | session cleanup / runtime shutdown |
 | `PreCompact` | not wired for file hooks today | none |
 
-**Use file hooks** when you want a workspace or user-configured shell/Python script. **Use runtime hooks** when writing a plugin and needing typed, in-process access to runtime state or wanting to influence model/tool execution.
+Reach for **file hooks** when you want a workspace- or user-configured shell or
+Python script. Reach for **runtime hooks** when you're writing a plugin and need
+typed, in-process access to runtime state, or want to influence model and tool
+execution directly.
 
-`beforeRun` and `afterRun` wrap one runtime `run()` or `continue()` invocation. In an interactive session, that means one submitted user turn. `afterRun` fires for completed, aborted, and failed runs; check `result.status` if you only want successful task completion.
+`beforeRun` and `afterRun` wrap a single runtime `run()` or `continue()` call —
+in an interactive session, that's one user turn. `afterRun` fires for completed,
+aborted, and failed runs; check `result.status` if you only care about
+successful completions.
 
-For file hooks, successful task completion maps to the `agent_end` event. For a plugin, use `afterRun` and check `result.status === "completed"`.
+For file hooks, successful task completion maps to the `agent_end` event. For a
+plugin, use `afterRun` and check `result.status === "completed"`.
 
-## 📂 Examples in This Directory
+## Examples in this directory
 
-### Bash Examples
+### Bash
 
 #### `PreToolUse.sh`
 
-Log every tool call and its inputs. Useful for auditing what the agent is about to do.
+Log every tool call and its inputs. Handy for auditing what the agent is about
+to do.
 
 ```bash
 mkdir -p .trembo/hooks
 cp examples/hooks/PreToolUse.sh .trembo/hooks/
 chmod +x .trembo/hooks/PreToolUse.sh
-trembo -i "do something"  # See tool calls logged to stderr
+trembo -i "do something"  # tool calls get logged to stderr
 ```
 
 #### `PostToolUse.sh`
@@ -56,45 +79,46 @@ Inspect tool results and add supplementary context.
 mkdir -p .trembo/hooks
 cp examples/hooks/PostToolUse.sh .trembo/hooks/
 chmod +x .trembo/hooks/PostToolUse.sh
-trembo -i "do something"  # See tool results logged and enriched
+trembo -i "do something"  # tool results logged and enriched
 ```
 
 #### `PreToolUse_BlockDestructive.sh`
 
-Prevent destructive operations like force pushes or bulk deletes.
+Block destructive operations such as force pushes or bulk deletes.
 
 ```bash
 mkdir -p .trembo/hooks
 cp examples/hooks/PreToolUse_BlockDestructive.sh .trembo/hooks/PreToolUse.sh
 chmod +x .trembo/hooks/PreToolUse.sh
-trembo -i "clean up the repo"  # Destructive operations will be blocked
+trembo -i "clean up the repo"  # destructive ops get blocked
 ```
 
 #### `PreToolUse_RequireReview.sh`
 
-Require user review before certain operations (file writes to critical files).
+Require a human review before certain operations (writes to critical files).
 
 ```bash
 mkdir -p .trembo/hooks
 cp examples/hooks/PreToolUse_RequireReview.sh .trembo/hooks/PreToolUse.sh
 chmod +x .trembo/hooks/PreToolUse.sh
-trembo -i "update dependencies"  # Critical file writes will pause for review
+trembo -i "update dependencies"  # critical-file writes pause for review
 ```
 
 #### `PreToolUse_InjectFileContext.sh`
 
-Extract and inject file context before tool execution (related test files, lock files, environment context).
+Pull related file context into the agent's next turn before a tool runs —
+related tests, lock files, environment context.
 
 ```bash
 mkdir -p .trembo/hooks
 cp examples/hooks/PreToolUse_InjectFileContext.sh .trembo/hooks/PreToolUse.sh
 chmod +x .trembo/hooks/PreToolUse.sh
-trembo -i "review the configuration"  # Related files will be mentioned automatically
+trembo -i "review the configuration"  # related files mentioned automatically
 ```
 
 #### `TaskStart.sh`, `TaskComplete.sh`, `SessionShutdown.sh`
 
-Track agent session lifecycle events (start, end, shutdown).
+Track agent session lifecycle events — start, end, shutdown.
 
 ```bash
 mkdir -p .trembo/hooks
@@ -102,94 +126,95 @@ cp examples/hooks/TaskStart.sh .trembo/hooks/
 cp examples/hooks/TaskComplete.sh .trembo/hooks/
 cp examples/hooks/SessionShutdown.sh .trembo/hooks/
 chmod +x .trembo/hooks/Task*.sh .trembo/hooks/SessionShutdown.sh
-trembo -i "do something"  # Session lifecycle will be logged
+trembo -i "do something"  # session lifecycle gets logged
 ```
 
-### Python Examples
+### Python
 
 #### `PreToolUse.py`
 
-Python-based hook to log and filter tool calls.
+A Python hook to log and filter tool calls.
 
 ```bash
 mkdir -p .trembo/hooks
 cp examples/hooks/PreToolUse.py .trembo/hooks/
 chmod +x .trembo/hooks/PreToolUse.py
-trembo -i "do something"  # Python hook will log tool calls
+trembo -i "do something"  # Python hook logs tool calls
 ```
 
 #### `PostToolUse.py`
 
-Python-based post-tool-use hook for result enrichment.
+A Python post-tool-use hook for result enrichment.
 
 ```bash
 mkdir -p .trembo/hooks
 cp examples/hooks/PostToolUse.py .trembo/hooks/
 chmod +x .trembo/hooks/PostToolUse.py
-trembo -i "do something"  # Python hook will enrich tool results
+trembo -i "do something"  # Python hook enriches tool results
 ```
 
 #### `PreToolUse_InjectContext.py`
 
-Python-based context injection with file analysis (test files, config files, lock files, Node.js version, git branch).
+Python context injection with file analysis — test files, config files, lock
+files, Node version, git branch.
 
 ```bash
 mkdir -p .trembo/hooks
 cp examples/hooks/PreToolUse_InjectContext.py .trembo/hooks/PreToolUse.py
 chmod +x .trembo/hooks/PreToolUse.py
-trembo -i "add a new feature"  # Related files and environment will be injected
+trembo -i "add a new feature"  # related files and environment injected
 ```
 
-### TypeScript Examples
+### TypeScript
 
 #### `PreToolUse.ts`
 
-TypeScript hook for advanced tool call filtering and logging.
+A TypeScript hook for advanced tool-call filtering and logging.
 
 ```bash
 mkdir -p .trembo/hooks
 cp examples/hooks/PreToolUse.ts .trembo/hooks/
 chmod +x .trembo/hooks/PreToolUse.ts
-trembo -i "do something"  # TypeScript hook will execute via bun
+trembo -i "do something"  # TypeScript hook runs via bun
 ```
 
 #### `PostToolUse.ts`
 
-TypeScript hook for post-execution actions.
+A TypeScript hook for post-execution actions.
 
 ```bash
 mkdir -p .trembo/hooks
 cp examples/hooks/PostToolUse.ts .trembo/hooks/
 chmod +x .trembo/hooks/PostToolUse.ts
-trembo -i "do something"  # TypeScript hook will execute via bun
+trembo -i "do something"  # TypeScript hook runs via bun
 ```
 
 #### `PreToolUse_ModifyInput.ts`
 
-Modify tool inputs before execution (normalize paths, add defaults, sanitize).
+Rewrite tool inputs before execution — normalize paths, add defaults, sanitize.
 
 ```bash
 mkdir -p .trembo/hooks
 cp examples/hooks/PreToolUse_ModifyInput.ts .trembo/hooks/PreToolUse.ts
 chmod +x .trembo/hooks/PreToolUse.ts
-trembo -i "install dependencies"  # npm install will have --save-exact added automatically
+trembo -i "install dependencies"  # npm install gets --save-exact added automatically
 ```
 
-## Getting Started
+## Getting started
 
-### 1. Copy a hook to your project
+### 1. Copy a hook into your project
 
-**File hooks** go in `.trembo/hooks/` and must be named after the event they handle:
+File hooks live in `.trembo/hooks/` and are named after the event they handle:
 
 ```bash
 mkdir -p .trembo/hooks
 
-# Copy PreToolUse example (pick your language)
+# Copy a PreToolUse example (pick a language)
 cp examples/hooks/PreToolUse.sh .trembo/hooks/PreToolUse.sh      # Bash
 cp examples/hooks/PreToolUse.py .trembo/hooks/PreToolUse.py      # Python
 cp examples/hooks/PreToolUse.ts .trembo/hooks/PreToolUse.ts      # TypeScript
 
-# Copy PostToolUse example
+# Copy a PostToolUse example
 cp examples/hooks/PostToolUse.sh .trembo/hooks/PostToolUse.sh    # Bash
 cp examples/hooks/PostToolUse.py .trembo/hooks/PostToolUse.py    # Python
 cp examples/hooks/PostToolUse.ts .trembo/hooks/PostToolUse.ts    # TypeScript
@@ -206,17 +231,18 @@ chmod +x .trembo/hooks/PostToolUse.*
 
 ```bash
 trembo -i "test prompt"
-# Or load from a custom hooks directory:
+# Or load hooks from a custom directory:
 trembo --hooks-dir ./my-hooks -i "test prompt"
 ```
 
-## Hook Input/Output Format
+## Hook input/output format
 
-All hooks receive a detailed JSON event on stdin and must return JSON on stdout.
+Every hook receives a JSON event on stdin and must return JSON on stdout.
 
 ### Input
 
 **PreToolUse event:**
+
 ```json
 {
   "hookName": "tool_call",
@@ -235,6 +261,7 @@ All hooks receive a detailed JSON event on stdin and must return JSON on stdout.
 ```
 
 **PostToolUse event:**
+
 ```json
 {
   "hookName": "tool_result",
@@ -252,6 +279,7 @@ All hooks receive a detailed JSON event on stdin and must return JSON on stdout.
 ```
 
 **TaskStart and other lifecycle events:**
+
 ```json
 {
   "hookName": "agent_start",
@@ -265,21 +293,22 @@ All hooks receive a detailed JSON event on stdin and must return JSON on stdout.
 
 ### Output
 
-Return a JSON object from stdout. Empty `{}` means "do nothing."
+Print a JSON object to stdout. An empty `{}` means "do nothing."
 
-**Available fields:**
+Available fields:
 
 | Field | Type | Effect | Event(s) |
 |-------|------|--------|----------|
 | `cancel` | boolean | Cancels the pending tool call | `PreToolUse` |
 | `review` | boolean | Pauses and prompts for user review | `PreToolUse` |
-| `context` | string | Injects context into agent's next turn | `PreToolUse`, `PostToolUse` |
+| `context` | string | Injects context into the agent's next turn | `PreToolUse`, `PostToolUse` |
 | `errorMessage` | string | Surfaces an error to the agent | `PreToolUse` |
 | `overrideInput` | object | Replaces tool input before execution | `PreToolUse` |
 
-## Common Patterns
+## Common patterns
 
 ### Log and proceed (bash)
+
 ```bash
 #!/usr/bin/env bash
 input=$(cat)
@@ -288,7 +317,8 @@ echo "Action: $tool" >&2
 echo '{}'
 ```
 
-### Inject context into next turn
+### Inject context into the next turn
+
 ```bash
 #!/usr/bin/env bash
 input=$(cat)
@@ -302,6 +332,7 @@ fi
 ```
 
 ### Modify tool input before execution
+
 ```bash
 #!/usr/bin/env bash
 input=$(cat)
@@ -317,6 +348,7 @@ fi
 ```
 
 ### Block specific tools or commands
+
 ```bash
 #!/usr/bin/env bash
 input=$(cat)
@@ -331,6 +363,7 @@ fi
 ```
 
 ### Require review for sensitive files
+
 ```bash
 #!/usr/bin/env bash
 input=$(cat)
@@ -345,7 +378,8 @@ else
 fi
 ```
 
-### Python: Parse and manipulate JSON
+### Python: parse and manipulate JSON
+
 ```python
 #!/usr/bin/env python3
 import sys
@@ -365,7 +399,8 @@ else:
     print(json.dumps({}))
 ```
 
-### TypeScript: Type-safe hook with async operations
+### TypeScript: type-safe hook with async operations
+
 ```typescript
 #!/usr/bin/env bun
 interface HookEvent {
@@ -387,49 +422,61 @@ async function getGitBranch(): Promise<string> {
 }
 ```
 
-## Debugging Hooks
+## Debugging hooks
 
 ### Print hook invocations
+
 ```bash
 trembo --verbose "your prompt"
 ```
 
 ### Test a hook manually
+
 ```bash
 echo '{"tool_call": {"name": "read_files", "input": {"filePath": "test.ts"}}}' | .trembo/hooks/PreToolUse.sh
 ```
 
-### Check hook output
+### Inspect hook output
+
 ```bash
 .trembo/hooks/PreToolUse.sh < input.json | jq .
 ```
 
-## Runtime Hooks: Custom Compaction
+## Runtime hooks: custom compaction
 
-File hooks observe lifecycle events. For more advanced use cases like message compaction, use a TypeScript **runtime hook** plugin:
+File hooks observe lifecycle events. For heavier work like message compaction,
+use a TypeScript runtime hook plugin instead:
 
 ```bash
-trembo plugin install https://github.com/trembo/trembo/blob/main/sdk/examples/hooks/custom-compaction-hook.example.ts --cwd .
+trembo plugin install https://github.com/xedro98/trembo/blob/main/sdk/examples/hooks/custom-compaction-hook.example.ts --cwd .
 
 trembo -i "Search the codebase for dispatcher usage, then summarize it"
 ```
 
-This example uses `hooks.beforeModel` to estimate request size and replace older middle history with a summary message before the provider request.
+This example uses `hooks.beforeModel` to estimate request size and replace older
+middle history with a summary message before the provider request goes out.
 
-### Runtime Hook vs Message-Builder Compaction
+### Runtime hook vs message-builder compaction
 
-| Example | Extension Point | Message Shape | Best For |
+| Example | Extension point | Message shape | Best for |
 | ------- | --------------- | ------------- | -------- |
-| `custom-compaction-hook.example.ts` (in `.trembo/plugins/`) | `hooks.beforeModel` runtime hook | Agent runtime request messages with runtime parts such as `tool-call`, `tool-result`, `reasoning`, `image`, and `file` | Cases needing runtime-hook context, current runtime snapshot, or direct request mutation |
-| `plugins/custom-compaction.ts` | `api.registerMessageBuilder()` | SDK/provider-bound `Message[]` after runtime messages are converted for model delivery | Most reusable plugin-owned message rewrites and compaction policies |
+| `custom-compaction-hook.example.ts` (in `.trembo/plugins/`) | `hooks.beforeModel` runtime hook | Agent runtime request messages with runtime parts such as `tool-call`, `tool-result`, `reasoning`, `image`, and `file` | Cases that need runtime-hook context, the current runtime snapshot, or direct request mutation |
+| `plugins/custom-compaction.ts` | `api.registerMessageBuilder()` | SDK/provider-bound `Message[]` after runtime messages are converted for model delivery | Most reusable, plugin-owned message rewrites and compaction policies |
 
-**Prefer `registerMessageBuilder()`** for normal plugin-owned provider-message rewrites because it runs in the core message pipeline before the built-in provider-safety builder. **Use `beforeModel`** when the compaction logic needs runtime hook context or needs to inspect the exact runtime request object.
+Prefer `registerMessageBuilder()` for normal plugin-owned provider-message
+rewrites — it runs in the core message pipeline before the built-in
+provider-safety builder. Reach for `beforeModel` only when the compaction logic
+needs runtime hook context or has to inspect the exact runtime request object.
 
 ## Tips
 
-- **Hooks are disabled in `--yolo` mode** — use `--act` or `--plan` to enable them
-- **Use stderr for logging** — stdout is reserved for JSON output
-- **Keep hooks fast** — they run before every tool call, so performance matters
-- **Test with `jq`** — JSON parsing is finicky; use `jq` for safe extraction
-- **Use multiple hooks** — different event files can coexist in `.trembo/hooks/`
-- **Load from custom dirs** — use `--hooks-dir ./ci/hooks` to load from elsewhere
+- **Hooks are disabled in `--yolo` mode** — use `--act` or `--plan` to enable
+  them.
+- **Log to stderr, return JSON on stdout** — stdout is reserved for the JSON
+  result.
+- **Keep hooks fast** — they run before every tool call, so latency adds up.
+- **Test with `jq`** — JSON parsing is finicky; `jq` makes extraction safe.
+- **Run multiple hooks** — different event files can coexist in
+  `.trembo/hooks/`.
+- **Load from custom dirs** — `--hooks-dir ./ci/hooks` loads hooks from
+  elsewhere.

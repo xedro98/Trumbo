@@ -2,12 +2,22 @@
 title: "GitHub Actions Integration"
 description: "Automatically respond to GitHub issues by mentioning @trembo in comments using Trembo CLI in GitHub Actions."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-Automate GitHub issue analysis with AI. Mention `@trembo` in any issue comment to trigger an autonomous investigation that reads files, analyzes code, and provides actionable insights - all running automatically in GitHub Actions.
+
+Automate GitHub issue analysis with AI. Mention `@trembo` in any issue comment to trigger an autonomous investigation that reads files, analyzes code, and provides actionable insights — all running automatically in GitHub Actions.
 
 
 <Note>
-**New to Trembo CLI?** This sample assumes you understand Trembo CLI basics and have completed the [Installation Guide](https://github.com/xedro98/trembo/getting-started/installing-trembo). If you're new to Trembo CLI, we recommend starting with the [GitHub RCA sample](./github-issue-rca) first, as it's simpler and will help you understand the fundamentals before setting up GitHub Actions.
+**New to Trembo CLI?** This sample assumes you understand Trembo CLI basics and have completed the [Installation Guide](/getting-started/installing-trembo). If you're new to Trembo CLI, we recommend starting with the [GitHub RCA sample](./github-issue-rca) first, as it's simpler and will help you understand the fundamentals before setting up GitHub Actions.
 </Note>
 
 ## The Workflow
@@ -15,13 +25,13 @@ Automate GitHub issue analysis with AI. Mention `@trembo` in any issue comment t
 Trigger Trembo by mentioning `@trembo` in any issue comment:
 
 <Frame>
-  <img src="https://storage.googleapis.com/trembo_public_images/ss0a-comment.png" alt="Issue comment with @trembo mention" width="600" />
+  <img src="/assets/ss0a-comment.png" alt="Issue comment with @trembo mention" width="600" />
 </Frame>
 
 Trembo's automated analysis appears as a new comment, with insights drawn from your actual codebase:
 
 <Frame>
-  <img src="https://storage.googleapis.com/trembo_public_images/ss0b-final.png" alt="Automated analysis response from Trembo" width="600" />
+  <img src="/assets/ss0b-final.png" alt="Automated analysis response from Trembo" width="600" />
 </Frame>
 
 The entire investigation runs autonomously in GitHub Actions - from file exploration to posting results.
@@ -32,7 +42,7 @@ Let's configure your repository.
 
 Before you begin, you'll need:
 
-- **Trembo CLI knowledge** - Completed the [Installation Guide](https://github.com/xedro98/trembo/getting-started/installing-trembo) and understand basic usage
+- **Trembo CLI knowledge** - Completed the [Installation Guide](/getting-started/installing-trembo) and understand basic usage
 - **GitHub repository** - With admin access to configure Actions and secrets
 - **GitHub Actions familiarity** - Basic understanding of workflows and CI/CD
 - **API provider account** - OpenRouter, Anthropic, or similar with API key
@@ -48,7 +58,7 @@ Copy the workflow file from this sample to your repository. The workflow file mu
 ```bash
 # In your repository root
 mkdir -p .github/workflows
-curl -o .github/workflows/trembo-responder.yml https://raw.githubusercontent.com/trembo/trembo/main/src/samples/cli/github-integration/trembo-responder.yml
+curl -o .github/workflows/trembo-responder.yml https://raw.githubusercontent.com/xedro98/trembo/main/src/samples/cli/github-integration/trembo-responder.yml
 ```
 
 Alternatively, you can copy the full workflow file directly into `.github/workflows/trembo-responder.yml`:
@@ -175,10 +185,10 @@ start up the Trembo CLI to dig into the issue, providing feedback as a reply to 
 Add your AI provider API keys as repository secrets:
 
 1. Go to your GitHub repository
-2. Navigate to **Settings** â†’ **Environment** and Add a new environment.
+2. Navigate to **Settings** → **Environment** and Add a new environment.
 
    <Frame>
-     <img src="https://storage.googleapis.com/trembo_public_images/ss01-environment.png" alt="Navigate to Actions secrets" width="600" />
+     <img src="/assets/ss01-environment.png" alt="Navigate to Actions secrets" width="600" />
    </Frame>
 
    Make sure to name it "trembo-actions" so that it matches the `environment`
@@ -189,13 +199,13 @@ Add your AI provider API keys as repository secrets:
    [openrouter.com](https://openrouter.com).
 
    <Frame>
-     <img src="https://storage.googleapis.com/trembo_public_images/ss02-api-key.png" alt="Add API key secret" width="600" />
+     <img src="/assets/ss02-api-key.png" alt="Add API key secret" width="600" />
    </Frame>
 
 5. Verify your secret is configured:
 
    <Frame>
-     <img src="https://storage.googleapis.com/trembo_public_images/ss03-ready.png" alt="API key configured" width="600" />
+     <img src="/assets/ss03-ready.png" alt="API key configured" width="600" />
    </Frame>
 
 Now you're ready to supply Trembo with the credentials it needs in a GitHub Action.
@@ -209,7 +219,7 @@ Add the analysis script from the `github-issue-rca` sample to your repository. *
 ```bash
 # In your repository root, create the directory and download the script
 mkdir -p git-scripts
-curl -o git-scripts/analyze-issue.sh https://raw.githubusercontent.com/trembo/trembo/main/src/samples/cli/github-issue-rca/analyze-issue.sh
+curl -o git-scripts/analyze-issue.sh https://raw.githubusercontent.com/xedro98/trembo/main/src/samples/cli/github-issue-rca/analyze-issue.sh
 chmod +x git-scripts/analyze-issue.sh
 ```
 

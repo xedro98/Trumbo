@@ -1,8 +1,8 @@
-# Text & Display Components
+# Text and display components
 
 Components for displaying text content in OpenTUI.
 
-## Text Component
+## Text component
 
 The primary component for displaying styled text.
 

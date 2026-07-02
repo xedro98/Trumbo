@@ -1,24 +1,24 @@
-# Storage Architecture
+# Storage architecture
 
-Global settings, secrets and workspace state are stored in **file-backed JSON stores** under `~/.trembo/data/`. This is the shared storage layer used by VSCode, CLI, and JetBrains.
+Global settings, secrets, and workspace state live in **file-backed JSON stores** under `~/.trembo/data/`. This is the shared storage layer used by VS Code, CLI, and JetBrains.
 
-## Key Abstractions
+## Key abstractions
 
 ### `StorageContext` (src/shared/storage/storage-context.ts)
-The entry point. Created via `createStorageContext()` and passed to `StateManager.initialize()`. Contains three `TremboFileStorage` instances:
+The entry point. Created via `createStorageContext()` and passed to `StateManager.initialize()`. Holds three `TremboFileStorage` instances:
 - `globalState` → `~/.trembo/data/globalState.json`
 - `secrets` → `~/.trembo/data/secrets.json` (mode 0o600)
 - `workspaceState` → `~/.trembo/data/workspaces/<hash>/workspaceState.json`
 
 ### `TremboFileStorage` (src/shared/storage/TremboFileStorage.ts)
-Synchronous JSON key-value store backed by a single file. Supports `get()`, `set()`, `setBatch()`, `delete()`. Writes are atomic (write-then-rename).
+A synchronous JSON key-value store backed by a single file. Supports `get()`, `set()`, `setBatch()`, `delete()`. Writes are atomic (write-then-rename).
 
 ### `StateManager` (src/core/storage/StateManager.ts)
-In-memory cache on top of `StorageContext`. All runtime reads hit the cache; writes update cache immediately and debounce-flush to disk.
+An in-memory cache on top of `StorageContext`. All runtime reads hit the cache; writes update the cache immediately and debounce-flush to disk.
 
-## ⚠️ Do NOT Use VSCode's ExtensionContext for Storage
+## Do NOT use VS Code's ExtensionContext for storage
 
-**Do not** read from or write to `context.globalState`, `context.workspaceState`, or `context.secrets` for persistent data. These are VSCode-specific and not available on CLI or JetBrains.
+**Do not** read from or write to `context.globalState`, `context.workspaceState`, or `context.secrets` for persistent data. These are VS Code-specific and are not available on CLI or JetBrains.
 
 Instead, use:
 ```typescript
@@ -33,23 +33,23 @@ StateManager.get().setSecret("mySecretKey", value)
 StateManager.get().setWorkspaceState("myWsKey", value)
 ```
 
-Remember that your data may be read by a different client than the one that wrote it. For example, a value written by Trembo in JetBrains may be read by Trembo CLI.
+Remember that data may be read by a different client than the one that wrote it. A value written by Trembo in JetBrains may be read by Trembo CLI.
 
-## VSCode Migration (src/hosts/vscode/vscode-to-file-migration.ts)
+## VS Code migration (src/hosts/vscode/vscode-to-file-migration.ts)
 
-On VSCode startup, a migration copies data from VSCode's `ExtensionContext` storage into the file-backed stores. This runs in `src/common.ts` before `StateManager.initialize()`.
+On VS Code startup, a migration copies data from VS Code's `ExtensionContext` storage into the file-backed stores. It runs in `src/common.ts` before `StateManager.initialize()`.
 
 - **Sentinel**: `__vscodeMigrationVersion` key in global state and workspace state — prevents re-migration.
-- **Merge strategy**: File store wins. Existing values are never overwritten.
-- **Safe downgrade**: VSCode storage is NOT cleared, so older extension versions still work.
+- **Merge strategy**: file store wins. Existing values are never overwritten.
+- **Safe downgrade**: VS Code storage is NOT cleared, so older extension versions still work.
 
-## Adding New Storage Keys
+## Adding new storage keys
 
-1. Add to `src/shared/storage/state-keys.ts` (see existing patterns)
-2. Read/write via `StateManager` (NOT via `context.globalState`)
-3. If adding a secret, add to `SecretKeys` array in `state-keys.ts`
+1. Add to `src/shared/storage/state-keys.ts` (follow existing patterns).
+2. Read and write via `StateManager` (NOT via `context.globalState`).
+3. If adding a secret, add it to the `SecretKeys` array in `state-keys.ts`.
 
-## File Layout
+## File layout
 
 ```
 ~/.trembo/

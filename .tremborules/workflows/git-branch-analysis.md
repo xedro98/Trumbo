@@ -1,4 +1,4 @@
-# Git Diff Analysis Workflow
+# Git diff analysis workflow
 
 ## Objective
 Analyze the current branch's changes against main to provide informed insights and context for development decisions.

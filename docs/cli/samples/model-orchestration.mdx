@@ -2,8 +2,18 @@
 title: "Model Orchestration"
 description: "Use multiple AI models strategically: optimize costs, reduce bias, and leverage model-specific strengths in your workflows"
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-Trembo CLI's `--config` and `--thinking` flags enable sophisticated multi-model workflows. Instead of using a single model for all tasks, you can route different work to different models based on cost, capability, and specialization.
+
+Trembo CLI's `--config` and `--thinking` flags enable sophisticated multi-model workflows. Instead of relying on a single model for every task, you can route different work to different models based on cost, capability, and specialization.
 
 ## Why Orchestrate Multiple Models?
 
@@ -21,7 +31,7 @@ Certain models excel in specific domains: Codex and DeepSeek are strong at code 
 
 ## Pattern 1: CI/CD Code Review
 
-See our production GitHub Actions workflow that uses Trembo CLI for automated PR reviews: [trembo-pr-review.yml](https://github.com/trembo/trembo/blob/main/.github/workflows/trembo-pr-review.yml)
+See our production GitHub Actions workflow that uses Trembo CLI for automated PR reviews: [trembo-pr-review.yml](https://github.com/xedro98/trembo/blob/main/.github/workflows/trembo-pr-review.yml)
 
 **Key capabilities demonstrated:**
 - **Automated inline suggestions**: Creates GitHub suggestion blocks that authors can commit with one click

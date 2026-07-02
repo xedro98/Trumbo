@@ -24,32 +24,34 @@ metadata:
     - branchCoverage
     - newFilesCoverage
 ---
-Analyze test coverage impact when a PR is updated:
+A pull request targeting `main` was just updated. Measure how the change moved
+coverage and leave a comment that helps the author without blocking them.
 
-1. Checkout the PR branch
-2. Run test coverage: `npm run test:coverage`
-3. Compare coverage to main branch:
-   - Lines added with coverage
-   - Lines added without coverage
-   - Files with decreased coverage
-   - New files with low coverage
+1. Check out the PR branch.
+2. Run coverage: `npm run test:coverage`.
+3. Compare against `main`:
+   - New lines that are covered.
+   - New lines that are not covered.
+   - Files where coverage dropped.
+   - New files with low coverage.
 
-4. Generate a coverage impact report showing:
-   - Coverage change percentage
-   - Files with added uncovered code
-   - Critical gaps in new functionality
-   - Suggestions for missing tests
+4. Build a coverage-impact report:
+   - Coverage change as a percentage.
+   - Files with newly uncovered code.
+   - Critical gaps in the new functionality.
+   - Concrete suggestions for the missing tests.
 
-5. Post results as PR comment with:
-   - Overall coverage impact (↑ or ↓)
-   - File-by-file breakdown
-   - Specific line ranges needing tests
-   - Recommendations for test additions
+5. Post the results as a PR comment:
+   - Overall impact, with an up or down arrow.
+   - A file-by-file breakdown.
+   - Specific line ranges that need tests.
+   - Recommendations for what to add.
 
-Color code the feedback:
-- 🟢 Coverage improved
-- 🟡 Coverage maintained
-- 🔴 Coverage decreased
-- ⚫ New code without tests
+Color the verdict so it reads at a glance:
 
-Help maintain test quality standards without blocking the PR.
+- 🟢 Coverage improved.
+- 🟡 Coverage held steady.
+- 🔴 Coverage dropped.
+- ⚫ New code with no tests at all.
+
+Aim to guide the author toward better test habits, not to gatekeep the PR.

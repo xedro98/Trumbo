@@ -3,7 +3,7 @@ name: publish-cli
 description: Use when preparing, tagging, and publishing an apps/cli npm release. Guides changelog drafting, apps/cli/package.json version bumps, cli-vX.Y.Z tags, local npm publishing, and the publish-cli GitHub workflow.
 ---
 
-# CLI Release
+# CLI release
 
 Use this skill when the user asks to release the CLI, publish `trembo`, bump the CLI version, draft release notes, create a `cli-vX.Y.Z` tag, or trigger the CLI publish workflow.
 
@@ -11,7 +11,7 @@ The CLI is npm-only. Do not add alternate distribution or signing steps.
 
 > Working directory: run every command below from the repository root. Paths and scripts (e.g. `apps/cli/package.json`, `sdk/packages/`, `bun release cli`, `bun run version`) are written relative to the repo root.
 
-The skill should guide the user through one release preparation flow, then offer the publish path options. The two normal publish paths are GitHub Actions and local publishing from an authenticated machine.
+The skill guides the user through one release-preparation flow, then offers the publish-path options. The two normal publish paths are GitHub Actions and local publishing from an authenticated machine.
 
 ## Release contract
 

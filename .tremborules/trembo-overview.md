@@ -1,10 +1,10 @@
-# Trembo Extension Architecture & Development Guide
+# Trembo extension architecture and development guide
 
-## Project Overview
+## Project overview
 
-Trembo is a VSCode extension that provides AI assistance through a combination of a core extension backend and a React-based webview frontend. The extension is built with TypeScript and follows a modular architecture pattern.
+Trembo is a VS Code extension that delivers AI assistance through a core extension backend paired with a React-based webview frontend. It is written in TypeScript and follows a modular architecture.
 
-## Architecture Overview
+## Architecture overview
 
 ```mermaid
 graph TB
@@ -14,8 +14,8 @@ graph TB
             WebviewProvider[WebviewProvider<br/>src/core/webview/index.ts]
             Controller[Controller<br/>src/core/controller/index.ts]
             Task[Task<br/>src/core/task/index.ts]
-            GlobalState[VSCode Global State]
-            SecretsStorage[VSCode Secrets Storage]
+            GlobalState[VS Code Global State]
+            SecretsStorage[VS Code Secrets Storage]
             McpHub[McpHub<br/>src/services/mcp/McpHub.ts]
         end
 
@@ -70,51 +70,51 @@ graph TB
     style apiProviders fill:#fdb,stroke:#333,stroke-width:2px
 ```
 
-## Definitions 
+## Definitions
 
-- **Core Extension**: Anything inside the src folder, organized into modular components
-- **Core Extension State**: Managed by the Controller class in src/core/controller/index.ts, which serves as the single source of truth for the extension's state. It manages multiple types of persistent storage (global state, workspace state, and secrets), handles state distribution to both the core extension and webview components, and coordinates state across multiple extension instances. This includes managing API configurations, task history, settings, and MCP configurations.
-- **Webview**: Anything inside the webview-ui. All the react or view's seen by the user and user interaction components
-- **Webview State**: Managed by ExtensionStateContext in webview-ui/src/context/ExtensionStateContext.tsx, which provides React components with access to the extension's state through a context provider pattern. It maintains local state for UI components, handles real-time updates through message events, manages partial message updates, and provides methods for state modifications. The context includes extension version, messages, task history, theme, API configurations, MCP servers, marketplace catalog, and workspace file paths. It synchronizes with the core extension through VSCode's message passing system and provides type-safe access to state through a custom hook (useExtensionState).
+- **Core extension**: anything inside the `src` folder, organized into modular components.
+- **Core extension state**: managed by the `Controller` class in `src/core/controller/index.ts`, the single source of truth for extension state. It manages multiple kinds of persistent storage (global state, workspace state, secrets), distributes state to both the core extension and webview, and coordinates state across multiple extension instances. This covers API configurations, task history, settings, and MCP configurations.
+- **Webview**: anything inside `webview-ui` — the React views and interaction components the user sees.
+- **Webview state**: managed by `ExtensionStateContext` in `webview-ui/src/context/ExtensionStateContext.tsx`, which gives React components access to extension state through a context provider. It holds local state for UI components, handles real-time updates through message events, manages partial message updates, and exposes state-modification methods. The context carries extension version, messages, task history, theme, API configurations, MCP servers, marketplace catalog, and workspace file paths. It syncs with the core extension through VS Code's message passing and provides type-safe access via the `useExtensionState` hook.
 
-### Core Extension Architecture
+### Core extension architecture
 
-The core extension follows a clear hierarchical structure:
+The core extension follows a clear hierarchy:
 
-1. **WebviewProvider** (src/core/webview/index.ts): Manages the webview lifecycle and communication
-2. **Controller** (src/core/controller/index.ts): Handles webview messages and task management
-3. **Task** (src/core/task/index.ts): Executes API requests and tool operations
+1. **WebviewProvider** (`src/core/webview/index.ts`) — manages the webview lifecycle and communication.
+2. **Controller** (`src/core/controller/index.ts`) — handles webview messages and task management.
+3. **Task** (`src/core/task/index.ts`) — executes API requests and tool operations.
 
-This architecture provides clear separation of concerns:
-- WebviewProvider focuses on VSCode webview integration
-- Controller manages state and coordinates tasks
-- Task handles the execution of AI requests and tool operations
+This gives a clean separation of concerns:
+- WebviewProvider focuses on VS Code webview integration.
+- Controller manages state and coordinates tasks.
+- Task executes AI requests and tool operations.
 
-### WebviewProvider Implementation
+### WebviewProvider implementation
 
-The WebviewProvider class in `src/core/webview/index.ts` is responsible for:
+The `WebviewProvider` class in `src/core/webview/index.ts` is responsible for:
 
 - Managing multiple active instances through a static set (`activeInstances`)
 - Handling webview lifecycle events (creation, visibility changes, disposal)
-- Implementing HTML content generation with proper CSP headers
-- Supporting Hot Module Replacement (HMR) for development
+- Generating HTML content with proper CSP headers
+- Supporting Hot Module Replacement (HMR) in development
 - Setting up message listeners between the webview and extension
 
-The WebviewProvider maintains a reference to the Controller and delegates message handling to it. It also handles the creation of both sidebar and tab panel webviews, allowing Trembo to be used in different contexts within VSCode.
+The WebviewProvider holds a reference to the Controller and delegates message handling to it. It also creates both sidebar and tab-panel webviews, so Trembo can be used in different contexts within VS Code.
 
-### Core Extension State
+### Core extension state
 
-The `Controller` class manages multiple types of persistent storage:
+The `Controller` class manages multiple kinds of persistent storage:
 
-- **Global State:** Stored across all VSCode instances. Used for settings and data that should persist globally.
-- **Workspace State:** Specific to the current workspace. Used for task-specific data and settings.
-- **Secrets:** Secure storage for sensitive information like API keys.
+- **Global state**: stored across all VS Code instances. Used for settings and data that should persist globally.
+- **Workspace state**: specific to the current workspace. Used for task-specific data and settings.
+- **Secrets**: secure storage for sensitive information like API keys.
 
-The `Controller` handles the distribution of state to both the core extension and webview components. It also coordinates state across multiple extension instances, ensuring consistency.
+The `Controller` distributes state to both the core extension and webview components, and coordinates state across extension instances for consistency.
 
 State synchronization between instances is handled through:
 - File-based storage for task history and conversation data
-- VSCode's global state API for settings and configuration
+- VS Code's global state API for settings and configuration
 - Secrets storage for sensitive information
 - Event listeners for file changes and configuration updates
 
@@ -125,9 +125,9 @@ The Controller implements methods for:
 - Coordinating MCP server connections
 - Managing task history and checkpoints
 
-### Webview State
+### Webview state
 
-The `ExtensionStateContext` in `webview-ui/src/context/ExtensionStateContext.tsx` provides React components with access to the extension's state. It uses a context provider pattern and maintains local state for UI components. The context includes:
+The `ExtensionStateContext` in `webview-ui/src/context/ExtensionStateContext.tsx` gives React components access to extension state via a context provider pattern, holding local state for UI components. The context includes:
 
 - Extension version
 - Messages
@@ -138,42 +138,42 @@ The `ExtensionStateContext` in `webview-ui/src/context/ExtensionStateContext.tsx
 - Marketplace catalog
 - Workspace file paths
 
-It synchronizes with the core extension through VSCode's message passing system and provides type-safe access to the state via a custom hook (`useExtensionState`).
+It syncs with the core extension through VS Code's message passing and provides type-safe access to state via the `useExtensionState` hook.
 
-The ExtensionStateContext handles:
+The `ExtensionStateContext` handles:
 - Real-time updates through message events
 - Partial message updates for streaming content
 - State modifications through setter methods
 - Type-safe access to state through a custom hook
 
-## API Provider System
+## API provider system
 
-Trembo supports multiple AI providers through a modular API provider system. Each provider is implemented as a separate module in the `src/api/providers/` directory and follows a common interface.
+Trembo supports multiple AI providers through a modular API provider system. Each provider is a separate module in `src/api/providers/` and follows a common interface.
 
-### API Provider Architecture
+### API provider architecture
 
 The API system consists of:
 
-1. **API Handlers**: Provider-specific implementations in `src/api/providers/`
-2. **API Transformers**: Stream transformation utilities in `src/api/transform/`
-3. **API Configuration**: User settings for API keys and endpoints
-4. **API Factory**: Builder function to create the appropriate handler
+1. **API handlers** — provider-specific implementations in `src/api/providers/`
+2. **API transformers** — stream transformation utilities in `src/api/transform/`
+3. **API configuration** — user settings for API keys and endpoints
+4. **API factory** — a builder function that creates the appropriate handler
 
 Key providers include:
-- **Anthropic**: Direct integration with Claude models
-- **OpenRouter**: Meta-provider supporting multiple model providers
-- **AWS Bedrock**: Integration with Amazon's AI services
-- **Gemini**: Google's AI models
-- **Cerebras**: High-performance inference with Llama, Qwen, and DeepSeek models
-- **Ollama**: Local model hosting
-- **LM Studio**: Local model hosting
-- **VSCode LM**: VSCode's built-in language models
+- **Anthropic** — direct integration with Claude models
+- **OpenRouter** — meta-provider supporting multiple model providers
+- **AWS Bedrock** — integration with Amazon's AI services
+- **Gemini** — Google's AI models
+- **Cerebras** — high-performance inference with Llama, Qwen, and DeepSeek models
+- **Ollama** — local model hosting
+- **LM Studio** — local model hosting
+- **VSCode LM** — VS Code's built-in language models
 
-### API Configuration Management
+### API configuration management
 
 API configurations are stored securely:
-- API keys are stored in VSCode's secrets storage
-- Model selections and non-sensitive settings are stored in global state
+- API keys live in VS Code's secrets storage
+- Model selections and non-sensitive settings live in global state
 - The Controller manages switching between providers and updating configurations
 
 The system supports:
@@ -183,18 +183,18 @@ The system supports:
 - Token usage tracking and cost calculation
 - Context window management
 
-### Plan/Act Mode API Configuration
+### Plan/Act mode API configuration
 
 Trembo supports separate model configurations for Plan and Act modes:
 - Different models can be used for planning vs. execution
 - The system preserves model selections when switching modes
 - The Controller handles the transition between modes and updates the API configuration accordingly
 
-## Task Execution System
+## Task execution system
 
-The Task class is responsible for executing AI requests and tool operations. Each task runs in its own instance of the Task class, ensuring isolation and proper state management.
+The `Task` class executes AI requests and tool operations. Each task runs in its own `Task` instance, ensuring isolation and proper state management.
 
-### Task Execution Loop
+### Task execution loop
 
 The core task execution loop follows this pattern:
 
@@ -229,7 +229,7 @@ class Task {
 }
 ```
 
-### Message Streaming System
+### Message streaming system
 
 The streaming system handles real-time updates and partial content:
 
@@ -264,7 +264,7 @@ class Task {
 }
 ```
 
-### Tool Execution Flow
+### Tool execution flow
 
 Tools follow a strict execution pattern:
 
@@ -296,7 +296,7 @@ class Task {
 }
 ```
 
-### Error Handling & Recovery
+### Error handling and recovery
 
 The system includes robust error handling:
 
@@ -322,9 +322,9 @@ class Task {
 }
 ```
 
-### API Request & Token Management
+### API request and token management
 
-The Task class handles API requests with built-in retry, streaming, and token management:
+The `Task` class handles API requests with built-in retry, streaming, and token management:
 
 ```typescript
 class Task {
@@ -383,49 +383,49 @@ class Task {
 
 Key features:
 
-1. **Context Window Management**
+1. **Context window management**
    - Tracks token usage across requests
    - Automatically truncates conversation when needed
    - Preserves important context while freeing space
    - Handles different model context sizes
 
-2. **Streaming Architecture**
+2. **Streaming architecture**
    - Real-time chunk processing
    - Partial content handling
    - Race condition prevention
    - Error recovery during streaming
 
-3. **Error Handling**
+3. **Error handling**
    - Automatic retry for transient failures
    - User-prompted retry for persistent issues
    - Detailed error reporting
    - State cleanup on failure
 
-4. **Token Tracking**
+4. **Token tracking**
    - Per-request token counting
    - Cumulative usage tracking
    - Cost calculation
    - Cache hit monitoring
 
-### Context Management System
+### Context management system
 
-The Context Management System handles conversation history truncation to prevent context window overflow errors. Implemented in the `ContextManager` class, it ensures long-running conversations remain within model context limits while preserving critical context.
+The context management system handles conversation history truncation to prevent context window overflow. Implemented in the `ContextManager` class, it keeps long-running conversations within model context limits while preserving critical context.
 
 Key features:
 
-1. **Model-Aware Sizing**: Dynamically adjusts based on different model context windows (64K for DeepSeek, 128K for most models, 200K for Claude).
+1. **Model-aware sizing**: dynamically adjusts to different model context windows (64K for DeepSeek, 128K for most models, 200K for Claude).
 
-2. **Proactive Truncation**: Monitors token usage and preemptively truncates conversations when approaching limits, maintaining buffers of 27K-40K tokens depending on the model.
+2. **Proactive truncation**: monitors token usage and pre-emptively truncates conversations approaching limits, maintaining buffers of 27K–40K tokens depending on the model.
 
-3. **Intelligent Preservation**: Always preserves the original task message and maintains the user-assistant conversation structure when truncating.
+3. **Intelligent preservation**: always preserves the original task message and maintains the user-assistant conversation structure when truncating.
 
-4. **Adaptive Strategies**: Uses different truncation strategies based on context pressure - removing half of the conversation for moderate pressure or three-quarters for severe pressure.
+4. **Adaptive strategies**: uses different truncation strategies based on context pressure — removing half the conversation for moderate pressure or three-quarters for severe pressure.
 
-5. **Error Recovery**: Includes specialized detection for context window errors from different providers with automatic retry and more aggressive truncation when needed.
+5. **Error recovery**: includes specialized detection for context window errors from different providers, with automatic retry and more aggressive truncation when needed.
 
-### Task State & Resumption
+### Task state and resumption
 
-The Task class provides robust task state management and resumption capabilities:
+The `Task` class provides robust task state management and resumption:
 
 ```typescript
 class Task {
@@ -481,44 +481,44 @@ class Task {
 
 Key aspects of task state management:
 
-1. **Task Persistence**
+1. **Task persistence**
    - Each task has a unique ID and dedicated storage directory
    - Conversation history is saved after each message
-   - File changes are tracked through Git-based checkpoints
+   - File changes are tracked through git-based checkpoints
    - Terminal output and browser state are preserved
 
-2. **State Recovery**
+2. **State recovery**
    - Tasks can be resumed from any point
    - Interrupted tool executions are handled gracefully
    - File changes can be restored from checkpoints
-   - Context is preserved across VSCode sessions
+   - Context is preserved across VS Code sessions
 
-3. **Workspace Synchronization**
-   - File changes are tracked through Git
+3. **Workspace synchronization**
+   - File changes are tracked through git
    - Checkpoints are created after tool executions
    - State can be restored to any checkpoint
    - Changes can be compared between checkpoints
 
-4. **Error Recovery**
+4. **Error recovery**
    - Failed API requests can be retried
    - Interrupted tool executions are marked
    - Resources are cleaned up properly
-   - User is notified of state changes
+   - The user is notified of state changes
 
-## Plan/Act Mode System
+## Plan/Act mode system
 
 Trembo implements a dual-mode system that separates planning from execution:
 
-### Mode Architecture
+### Mode architecture
 
 The Plan/Act mode system consists of:
 
-1. **Mode State**: Stored in `chatSettings.mode` in the Controller's state
-2. **Mode Switching**: Handled by `togglePlanActModeWithChatSettings` in the Controller
-3. **Mode-specific Models**: Optional configuration to use different models for each mode
-4. **Mode-specific Prompting**: Different system prompts for planning vs. execution
+1. **Mode state** — stored in `chatSettings.mode` in the Controller's state
+2. **Mode switching** — handled by `togglePlanActModeWithChatSettings` in the Controller
+3. **Mode-specific models** — optional configuration to use different models for each mode
+4. **Mode-specific prompting** — different system prompts for planning vs. execution
 
-### Mode Switching Process
+### Mode switching process
 
 When switching between modes:
 
@@ -528,7 +528,7 @@ When switching between modes:
 4. The webview is notified of the mode change
 5. Telemetry events are captured for analytics
 
-### Plan Mode
+### Plan mode
 
 Plan mode is designed for:
 - Information gathering and context building
@@ -538,7 +538,7 @@ Plan mode is designed for:
 
 In Plan mode, the AI uses the `plan_mode_respond` tool to engage in conversational planning without executing actions.
 
-### Act Mode
+### Act mode
 
 Act mode is designed for:
 - Executing the planned actions
@@ -548,20 +548,20 @@ Act mode is designed for:
 
 In Act mode, the AI has access to all tools except `plan_mode_respond` and focuses on implementation rather than discussion.
 
-## Data Flow & State Management
+## Data flow and state management
 
-### Core Extension Role
+### Core extension role
 
 The Controller acts as the single source of truth for all persistent state. It:
-- Manages VSCode global state and secrets storage
+- Manages VS Code global state and secrets storage
 - Coordinates state updates between components
 - Ensures state consistency across webview reloads
 - Handles task-specific state persistence
 - Manages checkpoint creation and restoration
 
-### Terminal Management
+### Terminal management
 
-The Task class manages terminal instances and command execution:
+The `Task` class manages terminal instances and command execution:
 
 ```typescript
 class Task {
@@ -606,21 +606,21 @@ class Task {
 ```
 
 Key features:
-1. **Terminal Instance Management**
+1. **Terminal instance management**
    - Multiple terminal support
    - Terminal state tracking (busy/inactive)
    - Process cooldown monitoring
    - Output history per terminal
 
-2. **Command Execution**
+2. **Command execution**
    - Real-time output streaming
    - User feedback handling
    - Process state monitoring
    - Error recovery
 
-### Browser Session Management
+### Browser session management
 
-The Task class handles browser automation through Puppeteer:
+The `Task` class handles browser automation through Puppeteer:
 
 ```typescript
 class Task {
@@ -648,29 +648,29 @@ class Task {
 ```
 
 Key aspects:
-1. **Browser Control**
+1. **Browser control**
    - Fixed 900x600 resolution window
    - Single instance per task lifecycle
    - Automatic cleanup on task completion
    - Console log capture
 
-2. **Interaction Handling**
+2. **Interaction handling**
    - Coordinate-based clicking
    - Keyboard input simulation
    - Screenshot capture
    - Error recovery
 
-## MCP (Model Context Protocol) Integration
+## MCP (Model Context Protocol) integration
 
-### MCP Architecture
+### MCP architecture
 
 The MCP system consists of:
 
-1. **McpHub Class**: Central manager in `src/services/mcp/McpHub.ts`
-2. **MCP Connections**: Manages connections to external MCP servers
-3. **MCP Settings**: Configuration stored in a JSON file
-4. **MCP Marketplace**: Online catalog of available MCP servers
-5. **MCP Tools & Resources**: Capabilities exposed by connected servers
+1. **McpHub class** — central manager in `src/services/mcp/McpHub.ts`
+2. **MCP connections** — manages connections to external MCP servers
+3. **MCP settings** — configuration stored in a JSON file
+4. **MCP marketplace** — catalog of available MCP servers
+5. **MCP tools and resources** — capabilities exposed by connected servers
 
 The McpHub class:
 - Manages the lifecycle of MCP server connections
@@ -679,13 +679,13 @@ The McpHub class:
 - Implements auto-approval settings for MCP tools
 - Monitors server health and handles reconnection
 
-### MCP Server Types
+### MCP server types
 
 Trembo supports two types of MCP server connections:
-- **Stdio**: Command-line based servers that communicate via standard I/O
+- **Stdio**: command-line based servers that communicate via standard I/O
 - **SSE**: HTTP-based servers that communicate via Server-Sent Events
 
-### MCP Server Management
+### MCP server management
 
 The McpHub class provides methods for:
 - Discovering and connecting to MCP servers
@@ -694,23 +694,23 @@ The McpHub class provides methods for:
 - Managing server configurations
 - Setting timeouts and auto-approval rules
 
-### MCP Tool Integration
+### MCP tool integration
 
-MCP tools are integrated into the Task execution system:
+MCP tools are integrated into the task execution system:
 - Tools are discovered and registered at connection time
 - The Task class can call MCP tools through the McpHub
 - Tool results are streamed back to the AI
 - Auto-approval settings can be configured per tool
 
-### MCP Marketplace
+### MCP marketplace
 
-The MCP Marketplace provides:
+The MCP marketplace provides:
 - A catalog of available MCP servers
 - One-click installation
 - README previews
 - Server status monitoring
 
-The Controller class manages MCP servers through the McpHub service:
+The Controller class manages MCP servers through the McpHub service. The example below shows the marketplace download plumbing; the endpoint URL is an illustrative placeholder for whatever marketplace backend a deployment uses:
 
 ```typescript
 class Controller {
@@ -721,7 +721,7 @@ class Controller {
   }
 
   async downloadMcp(mcpId: string) {
-    // Fetch server details from marketplace
+    // Fetch server details from the marketplace
     const response = await axios.post<McpDownloadResponse>(
       "http://0.0.0.0:0/v1/mcp/download",
       { mcpId },
@@ -742,23 +742,21 @@ class Controller {
 
 ## Conclusion
 
-This guide provides a comprehensive overview of the Trembo extension architecture, with special focus on state management, data persistence, and code organization. Following these patterns ensures robust feature implementation with proper state handling across the extension's components.
+This guide is a comprehensive overview of the Trembo extension architecture, with special focus on state management, data persistence, and code organization. Following these patterns ensures robust feature implementation with proper state handling across the extension's components.
 
 Remember:
 - Always persist important state in the extension
-- The core extension follows a WebviewProvider -> Controller -> Task flow
+- The core extension follows a WebviewProvider → Controller → Task flow
 - Use proper typing for all state and messages
 - Handle errors and edge cases
 - Test state persistence across webview reloads
 - Follow the established patterns for consistency
 - Place new code in appropriate directories
 - Maintain clear separation of concerns
-- Install dependencies in correct package.json
+- Install dependencies in the correct package.json
 
 ## Contributing
 
-Contributions to the Trembo extension are welcome! Please follow these guidelines:
+Contributions to Trembo are welcome. When adding new tools or API providers, follow the existing patterns in the `src/integrations/` and `src/api/providers/` directories respectively. Ensure your code is well-documented and includes appropriate error handling.
 
-When adding new tools or API providers, follow the existing patterns in the `src/integrations/` and `src/api/providers/` directories, respectively. Ensure that your code is well-documented and includes appropriate error handling.
-
-The `.tremboignore` file allows users to specify files and directories that Trembo should not access. When implementing new features, respect the `.tremboignore` rules and ensure that your code does not attempt to read or modify ignored files.
+The `.tremboignore` file lets users specify files and directories that Trembo should not access. When implementing new features, respect `.tremboignore` rules and ensure your code does not attempt to read or modify ignored files.

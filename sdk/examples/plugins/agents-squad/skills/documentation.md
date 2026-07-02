@@ -5,29 +5,31 @@ description: Write clear technical documentation — READMEs, API docs, architec
 
 # Documentation Skill
 
-When writing or improving documentation, follow these principles:
+When writing or improving documentation, work through these principles.
 
-## 1. Know Your Audience
+## 1. Know your audience
 
-- **README**: New developers evaluating or onboarding to the project.
-- **API docs**: Developers integrating with the API.
-- **Architecture docs**: Team members understanding system design.
-- **Inline comments**: Future maintainers (including yourself in 6 months).
+- **README** — new developers evaluating or onboarding to the project.
+- **API docs** — developers integrating with the API.
+- **Architecture docs** — team members understanding the system design.
+- **Inline comments** — future maintainers, including yourself in six months.
 
-## 2. README Structure
+## 2. README structure
 
 A good README answers these questions in order:
 
 1. **What is this?** One paragraph. What problem does it solve?
-2. **Quick start**: The fastest path from zero to working. Copy-pasteable commands.
-3. **Installation**: Prerequisites, install steps, configuration.
-4. **Usage**: Common use cases with code examples.
-5. **API reference**: If small enough; otherwise link to generated docs.
-6. **Configuration**: All options with defaults and descriptions.
-7. **Contributing**: How to set up dev environment, run tests, submit changes.
-8. **License**: One line.
+2. **Quick start** — the fastest path from zero to working, with copy-pasteable
+   commands.
+3. **Installation** — prerequisites, install steps, configuration.
+4. **Usage** — common cases with code examples.
+5. **API reference** — if small enough; otherwise link to generated docs.
+6. **Configuration** — every option, with defaults and descriptions.
+7. **Contributing** — how to set up the dev environment, run tests, submit
+   changes.
+8. **License** — one line.
 
-## 3. API Documentation
+## 3. API documentation
 
 For each endpoint, function, or method:
 
@@ -53,31 +55,33 @@ const result = await functionName("input", 5);
 ```
 ```
 
-## 4. Architecture Documentation
+## 4. Architecture documentation
 
-- Start with a high-level diagram (Mermaid, ASCII, or image).
+- Start with a high-level diagram (Mermaid, ASCII, or an image).
 - Describe each component's responsibility in one sentence.
 - Document data flow for the most important operations.
-- List key design decisions and their rationale.
+- List the key design decisions and their rationale.
 - Note known limitations and planned improvements.
 
-## 5. Inline Comments
+## 5. Inline comments
 
 Write comments that explain **why**, not **what**:
 
-- ✅ `// Retry 3 times because the upstream API has transient 503s during deploys`
-- ❌ `// Retry 3 times`
-- ✅ `// Sort descending so the most recent entry is first for the dashboard`
-- ❌ `// Sort the array`
+- Good: `// Retry 3 times because the upstream API has transient 503s during deploys`
+- Bad: `// Retry 3 times`
+- Good: `// Sort descending so the most recent entry is first for the dashboard`
+- Bad: `// Sort the array`
 
-Never comment obvious code. If code needs a comment to explain what it does, refactor the code to be self-explanatory first.
+Never comment obvious code. If code needs a comment to explain what it does,
+refactor the code to be self-explanatory first.
 
-## 6. Quality Checklist
+## 6. Quality checklist
 
-Before finalizing documentation:
+Before you call the docs done:
+
 - [ ] All code examples compile and run.
 - [ ] No broken links.
 - [ ] Consistent formatting and terminology.
-- [ ] No outdated information from previous versions.
+- [ ] No stale information from previous versions.
 - [ ] Spelling and grammar checked.
-- [ ] Table of contents for documents longer than 3 sections.
+- [ ] Table of contents for documents longer than three sections.

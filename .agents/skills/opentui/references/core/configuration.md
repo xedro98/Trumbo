@@ -1,4 +1,4 @@
-# Core Configuration
+# Core configuration
 
 ## Renderer Configuration
 

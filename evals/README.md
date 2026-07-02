@@ -1,6 +1,16 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Trembo Evaluation Framework
 
-A layered testing system for measuring Trembo's performance at different levels.
+A layered testing system for measuring Trembo's performance at different levels of granularity.
 
 > Note: Smoke tests (Layer 2) are partially disabled while the eval framework is repointed at the new SDK CLI. The scenarios under `evals/smoke-tests/` are preserved and `npm run eval:smoke:run` still works against whatever `trembo` is on `$PATH` (install with `npm i -g trembo`). The old build-and-link helpers and the auto-running `trembo-evals-regression.yml` workflow are off until someone wires the build step at the new SDK CLI.
 
@@ -36,6 +46,7 @@ evals/
 Location: `src/core/api/transform/__tests__/`
 
 Tests API transform logic without LLM calls:
+
 - Thinking trace preservation
 - Tool call parsing (XML, native formats)
 - Provider format conversions
@@ -49,6 +60,7 @@ npm run test:unit -- --grep "Thinking\|Tool Call"
 Location: `evals/smoke-tests/`
 
 Quick validation across providers with real LLM calls:
+
 - 5 curated scenarios
 - 3 trials per test for pass@k metrics
 - Runs the `trembo` CLI with `--config`, `-y`, `-t`, and `-m`
@@ -72,6 +84,7 @@ npm run eval:smoke:run -- --model anthropic/claude-sonnet-4.5
 Location: `evals/e2e/` + `evals/trembo-bench/`
 
 Full agent tests on production-grade tasks:
+
 - 12 real-world coding problems
 - Docker/Daytona execution via Harbor
 - Nightly CI runs
@@ -98,6 +111,7 @@ The framework calculates:
 | **Flakiness** | Entropy of pass rate | Consistency |
 
 With 3 trials:
+
 - All pass → `pass` (reliable)
 - All fail → `fail` (broken)
 - Mixed → `flaky` (needs investigation)
@@ -126,7 +140,7 @@ npm run eval:e2e
 ### Smoke Test Scenario
 
 1. Create `evals/smoke-tests/scenarios/<name>/config.json`
-2. Add optional `template/` directory with starting files
+2. Add an optional `template/` directory with starting files
 3. Run to verify: `npm run eval:smoke:run -- --scenario <name>`
 
 ### Contract Test
@@ -136,12 +150,12 @@ npm run eval:e2e
 
 ### E2E Task
 
-Contribute to [trembo/trembo-bench](https://github.com/trembo/trembo-bench)
+Contributions for trembo-bench tasks are welcome — open a discussion at [https://github.com/xedro98/trembo/discussions](https://github.com/xedro98/trembo/discussions).
 
 ## Resources
 
-- [trembo-bench tasks](evals/trembo-bench/README.md)
-- [Smoke test scenarios](evals/smoke-tests/README.md)
+- [trembo-bench tasks](trembo-bench/README.md)
+- [Smoke test scenarios](smoke-tests/README.md)
 
 ## TODO
 

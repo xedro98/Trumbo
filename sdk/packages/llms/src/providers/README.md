@@ -1,19 +1,22 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Provider Request Capture
 
-This directory contains the SDK provider gateway and AI SDK provider adapter.
-`provider-request-capture.ts` adds an opt-in local capture path for debugging
-the exact prompt/request sent to a model provider.
+This directory contains the SDK provider gateway and the AI SDK provider adapter. `provider-request-capture.ts` adds an opt-in local capture path for debugging the exact prompt/request sent to a model provider.
 
-The capture layer is provider-agnostic. It does not import Weave, W&B, OTel, or
-plugin code. A plugin or external tool can correlate records by stamping
-`request.options.metadata` before the request reaches `sdk/packages/llms`.
+The capture layer is provider-agnostic. It does not import Weave, W&B, OTel, or plugin code. A plugin or external tool can correlate records by stamping `request.options.metadata` before the request reaches `sdk/packages/llms`.
 
 ## Why This Exists
 
-Plugin hooks can observe Trembo's conversation state, but they run before Core's
-final provider-message preparation. That final pass can repair missing tool
-results, truncate tool outputs, rewrite stale file content, apply prompt-cache
-provider options, and format messages for the provider.
+Plugin hooks can observe Trembo's conversation state, but they run before Core's final provider-message preparation. That final pass can repair missing tool results, truncate tool outputs, rewrite stale file content, apply prompt-cache provider options, and format messages for the provider.
 
 For token investigations, compare these layers:
 
@@ -36,10 +39,7 @@ Provider client fetch(...)
 Provider receives request
 ```
 
-If token growth appears only in `wire_request`, the issue is provider
-serialization. If it appears in `ai_sdk_prompt` but not `pre_build_for_api`, the
-issue is in Trembo's final provider formatting/build step. If it is already in
-`pre_build_for_api`, the issue is upstream of the final build step.
+If token growth appears only in `wire_request`, the issue is provider serialization. If it appears in `ai_sdk_prompt` but not `pre_build_for_api`, the issue is in Trembo's final provider formatting/build step. If it is already in `pre_build_for_api`, the issue is upstream of the final build step.
 
 ## Environment Variables
 
@@ -52,9 +52,7 @@ issue is in Trembo's final provider formatting/build step. If it is already in
 | `TREMBO_CAPTURE_MAX_PREVIEW_BYTES` | positive integer | `65536` | Full-mode payload preview byte cap. |
 | `TREMBO_DATA_DIR` | filesystem path | unset | Fallback base directory. Captures write to `TREMBO_DATA_DIR/provider-request-captures`. |
 
-If neither `TREMBO_CAPTURE_DIR` nor `TREMBO_DATA_DIR` is set, capture no-ops. This
-prevents prompt content from being written into a repository working tree by
-accident.
+If neither `TREMBO_CAPTURE_DIR` nor `TREMBO_DATA_DIR` is set, capture no-ops. This prevents prompt content from being written into a repository working tree by accident.
 
 ## Output
 
@@ -70,16 +68,9 @@ or, when only `TREMBO_DATA_DIR` is set:
 ${TREMBO_DATA_DIR}/provider-request-captures/<captureId>.<captureStage>.<attempt>.provider-request.json
 ```
 
-Files are written atomically through a temporary file and same-directory rename,
-so consumers should ignore `*.tmp`. `captureId` comes from
-`GatewayStreamRequest.metadata.captureId` when present; otherwise the SDK derives
-a stable ID from request correlation metadata. `attempt` increments when the same
-stage is captured more than once for a request, such as provider retries.
+Files are written atomically through a temporary file and same-directory rename, so consumers should ignore `*.tmp`. `captureId` comes from `GatewayStreamRequest.metadata.captureId` when present; otherwise the SDK derives a stable ID from request correlation metadata. `attempt` increments when the same stage is captured more than once for a request, such as provider retries.
 
-When `TREMBO_CAPTURE_CLEANUP` is on, the SDK opportunistically prunes capture
-files older than 24 hours. Consumers may also delete files after processing them.
-Set `TREMBO_CAPTURE_CLEANUP=off` when you need to keep local capture files for
-manual inspection.
+When `TREMBO_CAPTURE_CLEANUP` is on, the SDK opportunistically prunes capture files older than 24 hours. Consumers may also delete files after processing them. Set `TREMBO_CAPTURE_CLEANUP=off` when you need to keep local capture files for manual inspection.
 
 Each record includes:
 
@@ -91,8 +82,7 @@ Each record includes:
 - `summary`: byte counts, estimated tokens, hashes, role counts, largest messages, reasoning/tool-result counts
 - `payload`: only in `full` mode, truncated to `TREMBO_CAPTURE_MAX_PREVIEW_BYTES`
 
-Wire capture intentionally records URL, method, and body only. It does not record
-headers, so authorization values are not written to capture files.
+Wire capture intentionally records URL, method, and body only. It does not record headers, so authorization values are not written to capture files.
 
 ## Example
 
@@ -119,8 +109,7 @@ export TREMBO_CAPTURE_MAX_PREVIEW_BYTES=1000000
 
 ## Correlation
 
-The capture module reads `GatewayStreamRequest.metadata` and copies it into each
-record. A plugin can stamp this metadata from a `beforeModel` hook:
+The capture module reads `GatewayStreamRequest.metadata` and copies it into each record. A plugin can stamp this metadata from a `beforeModel` hook:
 
 ```text
 beforeModel hook
@@ -136,12 +125,8 @@ GatewayStreamRequest.metadata
 provider-request-capture.ts writes per-stage files keyed by captureId
 ```
 
-The Weave tracing plugin uses this path to join local provider captures onto the
-matching model span, but the SDK capture files are useful without Weave too.
+The Weave tracing plugin uses this path to join local provider captures onto the matching model span, but the SDK capture files are useful without Weave too.
 
 ## Coverage
 
-This capture path is currently wired into the AI SDK provider adapter in
-`ai-sdk.ts`. Providers that bypass `createAiSdkProvider(...)` will not emit
-`ai_sdk_prompt` or `wire_request` records until they get equivalent
-instrumentation.
+This capture path is currently wired into the AI SDK provider adapter in `ai-sdk.ts`. Providers that bypass `createAiSdkProvider(...)` will not emit `ai_sdk_prompt` or `wire_request` records until they get equivalent instrumentation.

@@ -16,5 +16,6 @@ tags:
 metadata:
   source: examples/plugins/automation-events.ts
 ---
-Summarize the local plugin event and report the event subject, topic, and
-message payload.
+A plugin-emitted event has arrived. Read it from the run context and report the
+event subject, topic, and message payload so the operator can confirm the plugin
+event path is working end to end.

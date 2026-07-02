@@ -20,9 +20,11 @@ metadata:
   targetFile: apps/cli/CHANGELOG.md
   trackDirectory: apps/cli
 ---
-Review recent commits in the `apps/cli` directory since the last CHANGELOG entry.
-Generate a summary of significant changes (new features, bug fixes, breaking changes).
-Update `apps/cli/CHANGELOG.md` with a new version entry at the top following this format:
+Look at the commits landed in `apps/cli` since the last entry in `CHANGELOG.md`.
+Group them into user-facing changes: new features, fixes, and breaking changes.
+Skip internal refactors that a user would never notice.
+
+Prepend a new entry at the top of `apps/cli/CHANGELOG.md` using this shape:
 
 ## [VERSION] (YYYY-MM-DD)
 
@@ -30,8 +32,10 @@ Update `apps/cli/CHANGELOG.md` with a new version entry at the top following thi
 - Fix: [description]
 - Breaking: [description]
 
-Do NOT bump the version number in package.json.
-Do NOT override existing entries.
-Focus on user-facing changes, not internal refactors.
+Rules:
 
-Follow the existing changelog style and format from previous entries.
+- Do not bump the version in `package.json`. The release process owns that.
+- Do not overwrite or rewrite existing entries.
+- Match the tone and formatting of the entries already in the file.
+- If a commit is ambiguous, describe what it changed for users, not the
+  implementation detail.

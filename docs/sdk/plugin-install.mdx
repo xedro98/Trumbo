@@ -3,8 +3,18 @@ title: "Installing Plugins"
 sidebarTitle: "Installing Plugins"
 description: "Install plugins from file URLs, npm, git, or local sources using the CLI or programmatically."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-The Trembo CLI provides a `plugin install` command to install plugins from various sources. You can also load plugins programmatically via session config.
+
+The Trembo CLI ships a `plugin install` command that installs plugins from a variety of sources. You can also load plugins programmatically through session config.
 
 ## CLI Installation
 
@@ -19,8 +29,8 @@ The shorthand `trembo plugin i` works as well.
 ### Install from a File URL
 
 ```sh
-trembo plugin install https://github.com/trembo/trembo/blob/main/sdk/examples/plugins/weather-metrics.ts
-trembo plugin install https://raw.githubusercontent.com/trembo/trembo/main/sdk/examples/plugins/weather-metrics.ts
+trembo plugin install https://github.com/xedro98/trembo/blob/main/sdk/examples/plugins/weather-metrics.ts
+trembo plugin install https://raw.githubusercontent.com/xedro98/trembo/main/sdk/examples/plugins/weather-metrics.ts
 ```
 
 Installs a single `.ts` or `.js` plugin file from an HTTPS URL. GitHub `blob` URLs are normalized to raw file downloads automatically.
@@ -68,7 +78,7 @@ Supports both files and directories. Local installs copy the source, filter out 
 trembo plugin install ./my-custom-plugin
 
 # Install a single plugin file from GitHub
-trembo plugin install https://github.com/trembo/trembo/blob/main/sdk/examples/plugins/weather-metrics.ts
+trembo plugin install https://github.com/xedro98/trembo/blob/main/sdk/examples/plugins/weather-metrics.ts
 
 # Install an npm package as a plugin
 trembo plugin install --npm @trembo/plugin-sql

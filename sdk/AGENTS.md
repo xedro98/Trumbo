@@ -3,25 +3,35 @@ description: Development reference for the Trembo SDK workspace.
 globs: "*.ts,*.tsx,*.js,*.jsx,*.json,*.md"
 alwaysApply: true
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 # Trembo SDK — Development Reference
 
-Quick-reference for active development. For onboarding, workspace setup, publishing, and detailed workflow see [CONTRIBUTING.md](./CONTRIBUTING.md). For architecture and runtime flows see [ARCHITECTURE.md](./ARCHITECTURE.md). For API details see [DOC.md](./DOC.md).
+A quick-reference for active development. For onboarding, workspace setup, publishing, and detailed workflow, see [CONTRIBUTING.md](./CONTRIBUTING.md). For architecture and runtime flows, see [ARCHITECTURE.md](./ARCHITECTURE.md). For API details, see [DOC.md](./DOC.md).
 
 ## Repository Scope
 
-This file applies to the SDK workspace rooted at this directory (`sdk/`). In this repo, "root" means the SDK workspace root unless explicitly stated otherwise. Ignore the legacy repository root for SDK development except for Git operations or repo-wide searches that are explicitly needed.
+This file applies to the SDK workspace rooted at this directory (`sdk/`). Throughout this repo, "root" means the SDK workspace root unless explicitly stated otherwise. Ignore the legacy repository root for SDK work, except for Git operations or repo-wide searches that are explicitly needed.
 
-Run SDK commands from `sdk/`, not from the legacy repository root. Do not run direct root-level commands such as `bun test sdk/...`; they bypass the SDK workspace setup and can fail to resolve `workspace:*` packages correctly.
+Run SDK commands from `sdk/`, not from the legacy repository root. Avoid direct root-level invocations such as `bun test sdk/...`; they bypass SDK workspace setup and can fail to resolve `workspace:*` packages correctly.
 
 ## Package Boundaries
 
 ### Published SDK Packages
 
-- `@trembo/shared`: shared contracts, schemas, path helpers, hook engine, extension registry, low-level utilities
-- `@trembo/llms`: provider settings/config, model catalogs, provider manifests, gateway contracts, handler creation
-- `@trembo/agents`: stateless agent loop, tool orchestration, hook/extension runtime, event streaming
-- `@trembo/core`: stateful orchestration, session lifecycle, storage, config watching, plugin loading, default tools, telemetry. Exposes `@trembo/core/hub` for discovery, the detached daemon entry, WebSocket clients, and session/UI client adapters, plus `@trembo/core/hub/daemon-entry` for launching the shared daemon
+- `@trembo/shared`: shared contracts, schemas, path helpers, hook engine, extension registry, and low-level utilities
+- `@trembo/llms`: provider settings/config, model catalogs, provider manifests, gateway contracts, and handler creation
+- `@trembo/agents`: stateless agent loop, tool orchestration, hook/extension runtime, and event streaming
+- `@trembo/core`: stateful orchestration, session lifecycle, storage, config watching, plugin loading, default tools, and telemetry. Exposes `@trembo/core/hub` for discovery, the detached daemon entry, WebSocket clients, and session/UI client adapters, plus `@trembo/core/hub/daemon-entry` for launching the shared daemon
 
 ### Dependency Direction
 
@@ -34,19 +44,20 @@ flowchart TD
 ```
 
 Rules:
+
 - `shared` stays low-level and reusable
-- `agents` stays stateless — no session/storage/config concerns
+- `agents` stays stateless — no session, storage, or config concerns
 - `core` owns stateful orchestration, including the shared-hub daemon, server, and client adapters under `src/hub/`
 
 ## Change Routing
 
-Route changes to the package that owns the concern:
+Route every change to the package that owns the concern:
 
 - model/provider schemas or handler behavior: `@trembo/llms`
 - stateless loop, tool orchestration, streaming, hook/extension runtime: `@trembo/agents`
 - session lifecycle, storage, config watching, default tools, plugin loading, telemetry, hub runtime services, hub discovery, hub daemon spawn, and session-oriented client helpers (`HubSessionClient`, `HubUIClient`, `connectToHub`): `@trembo/core` (hub pieces live under `src/hub/`)
 - remote-config schemas, managed instruction materialization, blob upload metadata, and OpenTelemetry config normalization: `@trembo/shared/src/remote-config`
-- host-specific UX or shell behavior: app package
+- host-specific UX or shell behavior: the app package
 
 ## Verifying Changes
 
@@ -81,17 +92,17 @@ bun -F @trembo/core test:unit
 bun -F @trembo/cli test:unit
 ```
 
-If a focused test command fails with a missing `@trembo/*` export or missing `dist/` file, build the relevant dependency package or run `bun run build:sdk`, then rerun the same test command. Treat that as a workspace setup issue, not as evidence of a source-code bug.
+If a focused test command fails with a missing `@trembo/*` export or missing `dist/` file, build the relevant dependency package or run `bun run build:sdk`, then rerun the same test command. Treat that as a workspace setup issue, not evidence of a source-code bug.
 
-If you touch hub/bootstrap/session flows, please update `ARCHITECTURE.md`.
+If you touch hub/bootstrap/session flows, update `ARCHITECTURE.md` to match.
 
 ## Practical Guidance
 
 ### Keep Boundaries Clean
 
-- Don't move stateful logic down into `agents`
-- For `@trembo/llms` provider/model routing rules, follow [packages/llms/AGENTS.md](./packages/llms/AGENTS.md).
-- Don't put app-specific behavior into `core` unless it is truly shared host behavior
+- Do not push stateful logic down into `agents`
+- For `@trembo/llms` provider/model routing rules, follow [packages/llms/AGENTS.md](./packages/llms/AGENTS.md)
+- Do not put app-specific behavior into `core` unless it is genuinely shared host behavior
 - Keep remote-config primitives generic in `shared`; host-facing session integration belongs in `core`
 
 ### Refactor Standard
@@ -104,6 +115,6 @@ If you touch hub/bootstrap/session flows, please update `ARCHITECTURE.md`.
 
 - `README.md`: visitor-facing overview. Update when the repo story or package inventory changes.
 - `CONTRIBUTING.md`: onboarding, workflow, publishing. Update when contributor setup or release process changes.
-- `AGENTS.md` (this file): development reference. Update when package boundaries, dependency rules, or change routing changes.
+- `AGENTS.md` (this file): development reference. Update when package boundaries, dependency rules, or change routing change.
 - `ARCHITECTURE.md`: design, boundaries, runtime flows. Update when system design or architectural constraints change.
 - `DOC.md`: API and behavior reference. Update when exported surfaces, lifecycle semantics, or runtime behavior changes.

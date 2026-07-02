@@ -1,18 +1,34 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # TypeScript LSP Plugin
 
-A plugin that gives the agent a `goto_definition` tool powered by the TypeScript Language Service API. Instead of grep or text search, it resolves symbols through imports, re-exports, type aliases, and declaration merging -- the same way your IDE does.
+A plugin that gives the agent a `goto_definition` tool backed by the TypeScript
+Language Service API. Instead of grep or text search, it resolves symbols the
+way your IDE does — through imports, re-exports, type aliases, and declaration
+merging.
 
 Code entrypoint: [index.ts](./index.ts)
 
 ## What it does
 
-The agent gets a single tool: `goto_definition(file, line)`. It finds all identifiers on that line and resolves where they're actually defined. For example, given an import line like:
+The agent gets a single tool: `goto_definition(file, line)`. It finds every
+identifier on that line and resolves where each one is actually defined. Given
+an import line like:
 
 ```ts
 import { disposeAll, initVcr } from "@trembo/shared"
 ```
 
-It resolves both symbols through the workspace package alias to their source files:
+it resolves both symbols through the workspace package alias to their source
+files:
 
 ```
 disposeAll -> packages/shared/src/dispose.ts:19
@@ -21,18 +37,26 @@ initVcr    -> packages/shared/src/vcr.ts:699
 
 ## Why this matters
 
-This is a good example of the kind of plugin that makes agents dramatically more effective at navigating large codebases. Text search can find symbol names but can't distinguish between definitions, references, re-exports, and shadowed variables. The TypeScript Language Service handles all of that.
+This is the kind of plugin that makes agents dramatically better at navigating
+large codebases. Text search can find a symbol name, but it can't tell
+definitions from references, re-exports, or shadowed variables. The TypeScript
+Language Service handles all of that for you.
 
-The same pattern applies for enterprise use cases: you can build plugins that wrap internal APIs, deployment systems, feature flags, incident management, CI pipelines, or anything else your team works with. A plugin is just a TypeScript file -- no MCP server to host and maintain.
+The same pattern extends to anything your team works with: wrap internal APIs,
+deployment systems, feature flags, incident management, CI pipelines, or any
+other internal surface behind a plugin. A Trembo plugin is just a TypeScript
+file — no MCP server to host and maintain.
 
 ## Use it with the CLI
 
 ```bash
-trembo plugin install https://github.com/trembo/trembo/blob/main/sdk/examples/plugins/typescript-lsp/index.ts
+trembo plugin install https://github.com/xedro98/trembo/blob/main/sdk/examples/plugins/typescript-lsp/index.ts
 trembo -i "Find where createTool is defined"
 ```
 
-The plugin resolves `typescript` from the target project's own `node_modules` at runtime, so it uses the same TS version the project compiles with. No extra dependencies needed.
+The plugin resolves `typescript` from the target project's own `node_modules` at
+runtime, so it uses the same TS version the project compiles with. No extra
+dependencies needed.
 
 ## Run the demo directly
 
@@ -79,12 +103,17 @@ const plugin: AgentPlugin = {
 
 Under the hood:
 
-1. `findTsConfig()` walks up parent directories from the target file to find the nearest `tsconfig.json`
-2. `loadTypeScript()` uses `createRequire()` to resolve `typescript` from the project's own `node_modules`
-3. `createLanguageService()` sets up a full TypeScript Language Service with the project's compiler options
-4. The service is cached so subsequent calls in the same session reuse it
-5. `getIdentifierOffsetsOnLine()` scans the AST to find all identifiers on the requested line
-6. Each identifier is resolved via `service.getDefinitionAtPosition()`, which follows through imports, re-exports, type aliases, etc.
+1. `findTsConfig()` walks up parent directories from the target file to the
+   nearest `tsconfig.json`.
+2. `loadTypeScript()` uses `createRequire()` to resolve `typescript` from the
+   project's own `node_modules`.
+3. `createLanguageService()` stands up a full TypeScript Language Service with
+   the project's compiler options.
+4. The service is cached, so later calls in the same session reuse it.
+5. `getIdentifierOffsetsOnLine()` scans the AST for every identifier on the
+   requested line.
+6. Each identifier is resolved via `service.getDefinitionAtPosition()`, which
+   follows imports, re-exports, type aliases, and the rest.
 
 Then pass it to the SDK:
 

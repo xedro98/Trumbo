@@ -1,10 +1,10 @@
-# OpenTUI Components
+# OpenTUI components
 
-Reference for all OpenTUI components, organized by category. Components are available in all three frameworks (Core, React, Solid) with slight API differences.
+Reference for every OpenTUI component, organized by category. Components are available in all three frameworks (Core, React, Solid) with slight API differences.
 
-## When to Use
+## When to use
 
-Use this reference when you need to find the right component category or compare naming across Core, React, and Solid.
+Use this reference to find the right component category or compare naming across Core, React, and Solid.
 
 ## Component Categories
 

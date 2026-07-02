@@ -1,6 +1,6 @@
 # Plugins
 
-A Trembo plugin is a TypeScript module that extends any agent built on the Trembo SDK. The same plugin runs in the Trembo CLI, VS Code and JetBrains extensions, and any custom app built on `@trembo/core`.
+A Trembo plugin is a TypeScript module that extends any agent built on the Trembo SDK. The same plugin runs in the Trembo CLI, the VS Code and JetBrains extensions, and any custom app built on `@trembo/core`.
 
 A plugin can:
 

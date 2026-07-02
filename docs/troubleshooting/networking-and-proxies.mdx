@@ -3,21 +3,28 @@ title: "Networking and Proxies"
 sidebarTitle: "Networking & Proxies"
 description: "Configure Trembo to work behind firewalls and proxies"
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-If you're working behind a corporate proxy or firewall, you'll need to configure
-proxy settings for Trembo to connect to AI providers. The configuration varies
-depending on which version of Trembo you're using.
+
+If you sit behind a corporate proxy or firewall, you'll need to point Trembo at your proxy settings so it can reach AI providers. The exact steps depend on which Trembo surface you're using.
 
 ## VSCode Extension
 
-The VSCode extension automatically uses VSCode's built-in proxy settings. See
+The VSCode extension inherits VSCode's built-in proxy settings. See
 [Network Connections in Visual Studio Code, Proxy server support](https://code.visualstudio.com/docs/setup/network#_proxy-server-support)
-for instructions on how to set up proxies in VSCode. No additional configuration
-is needed for Trembo itself.
+for how to configure proxies in VSCode. No extra Trembo-specific setup is required.
 
 ## CLI
 
-The Trembo CLI uses standard HTTP proxy environment variables. Configure these before running `trembo` commands.
+The Trembo CLI honors the standard HTTP proxy environment variables. Set them before running `trembo` commands.
 
 ### Basic Configuration
 
@@ -44,7 +51,7 @@ trembo start
 
 ### Proxy with Authentication
 
-If your proxy requires authentication, include credentials in the URL:
+If your proxy requires auth, include credentials in the URL:
 
 ```bash
 export https_proxy=http://username:password@proxy.company.com:8080
@@ -57,7 +64,7 @@ Storing credentials in environment variables can be a security risk.
 
 ### Bypass Proxy for Localhost
 
-To prevent localhost traffic from going through the proxy, set the `no_proxy` environment variable:
+To keep localhost traffic off the proxy, set the `no_proxy` environment variable:
 
 **Windows**
 ```cmd
@@ -105,8 +112,8 @@ export NODE_EXTRA_CA_CERTS=/path/to/ca-certificate.pem
 
 ### Known Limitations
 
-Trembo CLI only supports HTTP proxies. It does not support SOCKS proxies,
-proxy autoconfiguration (PAC) scripts, or HTTP proxies which require
+The Trembo CLI supports HTTP proxies only. It does not support SOCKS proxies,
+proxy autoconfiguration (PAC) scripts, or HTTP proxies that require
 authentication beyond a basic username and password.
 
 ## JetBrains IDEs
@@ -142,11 +149,11 @@ The JetBrains plugin uses the IDE's HTTP proxy settings.
 
 ### Test Connection
 
-After configuring the proxy, test that Trembo can connect to your AI provider:
+After configuring the proxy, confirm Trembo can reach your AI provider:
 
 1. Open the Trembo panel
 2. Try sending a simple message
-3. If connection fails, check the IDE's Event Log for error messages
+3. If the connection fails, check the IDE's Event Log for error messages
 
 ### Custom Certificate Authority
 
@@ -159,36 +166,36 @@ If your proxy uses a custom CA:
 
 ### Known Limitations
 
-Trembo in JetBrains only supports HTTP proxies. It does not support SOCKS
-proxies, proxy autoconfiguration (PAC) scripts, or HTTP proxies which require
+Trembo in JetBrains supports HTTP proxies only. It does not support SOCKS
+proxies, proxy autoconfiguration (PAC) scripts, or HTTP proxies that require
 authentication beyond a basic username and password.
 
 Trembo does not pick up changed proxy settings dynamically. After changing proxy
-settings, restart the IDE for Trembo to use the new settings.
+settings, restart the IDE so Trembo picks them up.
 
 ## Troubleshooting
 
 ### Connection Timeouts
 
-If you're experiencing connection timeouts:
+If you're hitting connection timeouts:
 
 1. Verify your proxy address and port are correct
-2. Check if the proxy requires authentication
-3. Ensure the AI provider's API endpoints aren't blocked by your firewall
+2. Check whether the proxy requires authentication
+3. Make sure the AI provider's API endpoints aren't blocked by your firewall
 
 ### SSL/TLS Certificate Errors
 
 If you see certificate-related errors:
 
 1. Check that `NODE_EXTRA_CA_CERTS` points to the correct certificate file
-2. Ensure the certificate file is in PEM format
+2. Make sure the certificate file is in PEM format
 3. Use curl to verify the certificate works, for example, `curl -x proxy.corp.example:8080 --cacert /path/to/ca-cert.pem -o - -vv http://0.0.0.0:0/`
 4. Consider disabling `http.proxyStrictSSL` in VSCode (not recommended for production)
 
 ### Testing Proxy Configuration
 
-If you encounter problems with Trembo networking, first verify your proxy
-configuration works using curl:
+If you run into Trembo networking problems, first confirm your proxy
+configuration works with curl:
 
 ```bash
 # Linux/macOS
@@ -202,8 +209,8 @@ curl.exe -vv https://api.anthropic.com
 
 Use `--cacert $NODE_EXTRA_CA_CERTS` to specify a certificate if necessary.
 
-Next, check ~/.trembo/trembo-core-service.log (CLI, JetBrains) for log messages
-confirming your proxy configuration and any network-related errors.
+Next, check `~/.trembo/trembo-core-service.log` (CLI, JetBrains) for log messages
+that confirm your proxy configuration and any network-related errors.
 
 ## Common Proxy Patterns
 

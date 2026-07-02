@@ -5,6 +5,7 @@ import {
 	DROPDOWN_MAX_HEIGHT,
 } from "../components/autocomplete-dropdown";
 import { InputBar, type TextareaHandle } from "../components/input-bar";
+import { TremboLogo } from "../components/trembo-logo";
 import {
 	resolveModelDisplayName,
 	resolveModelMaxInputTokens,
@@ -82,9 +83,7 @@ export function HomeView(props: {
 			justifyContent="center"
 		>
 			<box marginTop={1} marginBottom={1} flexShrink={0}>
-				<text fg={accent}>
-					<strong>{"T R E M B O"}</strong>
-				</text>
+				<TremboLogo color={accent} />
 			</box>
 			<box marginBottom={1} flexShrink={0}>
 				<text fg={defaultFg}>

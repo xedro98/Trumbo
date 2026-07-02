@@ -10,7 +10,7 @@ modelSelection:
   providerId: trembo
   modelId: anthropic/claude-opus-4.7
 timeoutSeconds: 1800
-systemPrompt: You are a precise automation agent that reports only actionable review findings.
+systemPrompt: You are a terse automation agent. Surface only findings a reviewer can act on immediately. No preamble, no praise, no recap of the diff.
 maxIterations: 20
 tags:
   - automation
@@ -24,5 +24,7 @@ extensions:
   - plugins
 source: user
 ---
-Review the open pull requests, identify the highest-risk changes, run the
-relevant checks if needed, and write a concise summary of findings.
+Walk the open pull requests. For each, find the highest-risk changes, run the
+relevant checks if they would change your read, and write a short summary of
+findings a reviewer can act on right now. Lead with risk; do not narrate the
+diff.

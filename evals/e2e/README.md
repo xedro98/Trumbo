@@ -1,3 +1,13 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # E2E Agent Tests
 
 Full end-to-end tests using real-world tasks from trembo-bench.
@@ -5,6 +15,7 @@ Full end-to-end tests using real-world tasks from trembo-bench.
 ## Overview
 
 These tests run Trembo against production-grade coding problems derived from actual user sessions. Each task:
+
 - Starts with a broken codebase in Docker
 - Gives Trembo the task description
 - Verifies the fix with pytest
@@ -87,6 +98,7 @@ Current tasks from trembo-bench (12 total):
 ## CI Integration
 
 These tests run nightly (not on every PR) due to:
+
 - Long execution time (20-30 min per task)
 - API costs (~$1-5 per run depending on model)
 - Docker/Daytona infrastructure requirements
@@ -95,7 +107,7 @@ See `.github/workflows/nightly-evals.yml` for CI configuration.
 
 ## Results
 
-Results are written to `evals/trembo-bench/jobs/` directory by Harbor:
+Results are written to `evals/trembo-bench/jobs/` by Harbor:
 
 ```
 jobs/

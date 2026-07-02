@@ -1,4 +1,4 @@
-# TremboCore Gotchas
+# TremboCore gotchas
 
 ## Always Call dispose()
 

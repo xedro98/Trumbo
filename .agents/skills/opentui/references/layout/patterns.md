@@ -1,8 +1,8 @@
-# Layout Patterns
+# Layout patterns
 
 Common layout recipes for terminal user interfaces.
 
-## Full-Screen App
+## Full-screen app
 
 Fill the entire terminal:
 

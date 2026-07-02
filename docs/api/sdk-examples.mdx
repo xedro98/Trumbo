@@ -3,8 +3,18 @@ title: "Code Examples"
 sidebarTitle: "Code Examples"
 description: "Use the Trembo API from Python, Node.js, curl, the Trembo CLI, and the VS Code extension."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-The Trembo API is OpenAI-compatible, so any library or tool that works with OpenAI also works with the Trembo API. Just change the base URL and API key.
+
+The Trembo API is OpenAI-compatible, so anything that already talks to OpenAI can talk to Trembo. Point the client at the Trembo base URL and supply a Trembo API key, and you're done.
 
 ## curl
 
@@ -38,7 +48,7 @@ curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
 
 ### OpenAI SDK
 
-The [OpenAI Python SDK](https://github.com/openai/openai-python) works with the Trembo API by setting `base_url`:
+The [OpenAI Python SDK](https://github.com/openai/openai-python) works with the Trembo API once you set `base_url`:
 
 ```python
 from openai import OpenAI
@@ -123,7 +133,7 @@ if choice.message.tool_calls:
 
 ### Using requests
 
-If you prefer not to use the OpenAI SDK:
+If you'd rather skip the OpenAI SDK:
 
 ```python
 import requests
@@ -149,7 +159,7 @@ print(data["choices"][0]["message"]["content"])
 
 ### OpenAI SDK
 
-The [OpenAI Node.js SDK](https://github.com/openai/openai-node) works with the Trembo API by setting `baseURL`:
+The [OpenAI Node.js SDK](https://github.com/openai/openai-node) works with the Trembo API once you set `baseURL`:
 
 ```typescript
 import OpenAI from "openai"
@@ -214,7 +224,7 @@ console.log(data.choices[0].message.content)
 
 ## Trembo CLI
 
-The [Trembo CLI](/cli/cli-reference) is the fastest way to use the Trembo API from your terminal. It handles authentication, streaming, and tool execution for you.
+The [Trembo CLI](/cli/cli-reference) is the fastest path from the terminal. It handles authentication, streaming, and tool execution for you.
 
 ### Setup
 
@@ -242,20 +252,20 @@ trembo -m google/gemini-2.5-pro "Analyze this codebase."
 trembo -y "Run tests and fix failures."
 ```
 
-See the [CLI Reference](/cli/cli-reference) for all commands and options.
+See the [CLI Reference](/cli/cli-reference) for the full command catalog.
 
 ## VS Code / JetBrains
 
-The Trembo extension handles the API integration for you:
+The Trembo extension manages the API integration end to end:
 
 1. Open the Trembo panel in your editor
 2. Select **Trembo** as the provider in the model picker
 3. Sign in with your Trembo account
-4. Start chatting or give Trembo a task
+4. Start chatting or hand Trembo a task
 
-Your API key is managed automatically. No manual configuration needed.
+Your API key is handled for you, so there's nothing to configure by hand.
 
-For setup instructions, see [Installing Trembo](/getting-started/installing-trembo) and [Authorizing with Trembo](/getting-started/authorizing-with-trembo).
+For setup steps, see [Installing Trembo](/getting-started/installing-trembo) and [Authorizing with Trembo](/getting-started/authorizing-with-trembo).
 
 ## Related
 

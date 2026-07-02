@@ -18,18 +18,20 @@ tags:
 metadata:
   owner: platform
 ---
-Run a comprehensive dependency health check:
+Run a weekly health check on the dependency tree.
 
-1. Check for outdated packages: `npm outdated` (or yarn/pnpm equivalent)
-2. Check for security vulnerabilities: `npm audit` 
-3. List packages with available major version upgrades
-4. Identify unused dependencies (if possible)
-5. Check for dependency conflicts or duplicate packages
+1. Outdated packages: `npm outdated` (or the yarn/pnpm equivalent).
+2. Vulnerabilities: `npm audit`.
+3. Packages with a major version upgrade available.
+4. Dependencies that appear unused, if you can determine it safely.
+5. Conflicts or duplicate versions of the same package.
 
-Provide a summary report covering:
-- Critical security vulnerabilities (if any)
-- Count of outdated packages by severity (minor, patch, major)
-- Recommended immediate actions
-- Packages safe to update to latest versions
+Summarize for the team:
 
-Focus on actionable insights. Ignore known false positives and dev-only dependencies.
+- Critical security advisories, if any — these go first.
+- Outdated counts broken down by minor/patch/major.
+- Packages that are safe to bump to latest today.
+- Recommended actions, ordered by urgency.
+
+Keep it actionable. Ignore known false positives and dev-only dependencies that
+don't ship.

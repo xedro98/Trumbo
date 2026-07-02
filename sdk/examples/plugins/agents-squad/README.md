@@ -1,6 +1,8 @@
 # Agent Squad Plugin
 
-Spin up background subagents from any Trembo SDK agent. Each subagent runs as its own session with its own provider, model, and system prompt — useful for parallel recon, planning, implementation, and review.
+Spin up background subagents from any Trembo SDK agent. Each subagent runs as
+its own session with its own provider, model, and system prompt — useful for
+parallel recon, planning, implementation, and review.
 
 ## Quick start
 
@@ -23,7 +25,8 @@ await trembo.start({
 });
 ```
 
-Pass the plugin **directory** as the path. The loader reads `package.json` and discovers entry points from the `trembo.plugins` field.
+Pass the plugin **directory** as the path. The loader reads `package.json` and
+discovers entry points from the `trembo.plugins` field.
 
 ## Tools
 
@@ -36,7 +39,8 @@ Pass the plugin **directory** as the path. The loader reads `package.json` and d
 | `list_skills` / `get_skill` | Discover and load loadable skill instructions. |
 | `save_handoff` / `read_handoff` | Share text between subagents in the same conversation. |
 
-`start_subagent` accepts `preset` and/or `instructions`. When `preset` is omitted it defaults to `phantom` (configurable via `TREMBO_SUBAGENT_DEFAULT_PRESET`).
+`start_subagent` accepts `preset` and/or `instructions`. When `preset` is
+omitted it defaults to `phantom` (override with `TREMBO_SUBAGENT_DEFAULT_PRESET`).
 
 ## Bundled agents
 
@@ -60,7 +64,8 @@ parent → start_subagent(preset: "phantom", task: "Map the auth module")
 
 ## Custom agents and skills
 
-Drop a Markdown file with YAML frontmatter into one of these directories. Project overrides global, global overrides bundled (by `name`).
+Drop a Markdown file with YAML frontmatter into one of these directories.
+Project overrides global, global overrides bundled (matched by `name`).
 
 | Kind | Bundled | Global | Project |
 |---|---|---|---|
@@ -93,16 +98,20 @@ description: What this skill teaches
 When performing this task, follow these steps...
 ```
 
-Skills are reusable instructions any agent can pull in at runtime via `get_skill`. Bundled skills include `code-review`, `test-generation`, `refactoring`, `debugging`, `api-design`, `migration`, and `documentation`.
+Skills are reusable instructions any agent can pull in at runtime via
+`get_skill`. Bundled skills include `code-review`, `test-generation`,
+`refactoring`, `debugging`, `api-design`, `migration`, and `documentation`.
 
 ## Handoff store
 
-Subagents in the same conversation share a small file store, scoped to the conversation ID:
+Subagents in the same conversation share a small file store, scoped to the
+conversation ID:
 
-- `save_handoff({ path, content })` — writes a file
-- `read_handoff({ path })` — reads it back
+- `save_handoff({ path, content })` — writes a file.
+- `read_handoff({ path })` — reads it back.
 
-Files live under `~/.trembo/data/plugins/subagents/handoffs/<conversationId>/`. Paths are validated to prevent traversal.
+Files live under `~/.trembo/data/plugins/subagents/handoffs/<conversationId>/`.
+Paths are validated to prevent traversal.
 
 ## Configuration
 
@@ -119,4 +128,10 @@ All optional. Environment variables override defaults:
 
 ## How it works
 
-Each subagent is a full Trembo SDK session created via `TremboCore.create(...)`. `start_subagent` resolves the preset, merges any overrides, starts a non-interactive session, and returns the session ID immediately. The first turn runs in the background; when it finishes (or fails) the result is stored and — unless `notifyParent: false` — pushed back to the parent session as a steer message. The parent can also poll with `get_subagent`.
+Each subagent is a full Trembo SDK session created via
+`TremboCore.create(...)`. `start_subagent` resolves the preset, merges any
+overrides, starts a non-interactive session, and returns the session ID
+immediately. The first turn runs in the background; when it finishes (or fails)
+the result is stored and — unless `notifyParent: false` — pushed back to the
+parent session as a steer message. The parent can also poll with
+`get_subagent`.

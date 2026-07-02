@@ -4,17 +4,17 @@ Prepare and publish a release directly from `main`.
 
 ## Overview
 
-This workflow helps you:
-1. Select/confirm the target version
-2. Curate `CHANGELOG.md` entries manually for end users
-3. Ensure `package.json` version matches the changelog
-4. Create and push a release commit + tag
-5. Trigger publish workflow
-6. Update GitHub release notes and share a summary
+This workflow walks you through:
+1. Selecting and confirming the target version
+2. Curating `CHANGELOG.md` entries manually for end users
+3. Ensuring `package.json` version matches the changelog
+4. Creating and pushing a release commit + tag
+5. Triggering the publish workflow
+6. Updating GitHub release notes and sharing a summary
 
 ## Process
 
-### 1) Sync and determine version
+### 1) Sync and determine the version
 
 ```bash
 git checkout main
@@ -40,10 +40,10 @@ git tag v<version>
 git push origin v<version>
 ```
 
-### 4) Trigger publish workflow
+### 4) Trigger the publish workflow
 
 Tell the maintainer to run:
-https://github.com/trembo/trembo/actions/workflows/ext-vscode-publish-stable.yml
+https://github.com/xedro98/trembo/actions/workflows/ext-vscode-publish-stable.yml
 
 Use `v<version>` as the release tag.
 
@@ -60,5 +60,5 @@ gh release edit v<version> --notes "<final curated release notes>"
 
 Provide:
 - Released version/tag
-- Link to release page
+- Link to the release page
 - Summary of top end-user changes

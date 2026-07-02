@@ -1,4 +1,4 @@
-# React Patterns
+# React patterns
 
 ## State Management
 

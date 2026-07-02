@@ -1,28 +1,38 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Storybook Documentation
 
 ## What is Storybook?
 
-Storybook is a frontend workshop for building UI components and pages in isolation. It allows developers to:
+Storybook is a frontend workshop for building UI components and pages in isolation. It lets you:
 
-- **Develop components independently** from the main application
-- **Test different states and props** without complex setup
-- **Document component APIs** with interactive examples
-- **Catch UI bugs** through visual testing
-- **Share components** with team members and stakeholders
+- **Develop components independently** of the main application
+- **Exercise different states and props** without spinning up the whole extension
+- **Document component APIs** with live, interactive examples
+- **Catch UI regressions** through visual review
+- **Share components** with teammates and stakeholders
 
-In Trembo's webview, Storybook helps us develop and test React components that make up the chat interface, settings panels, and other UI elements in isolation from the VSCode extension environment.
+Inside Trembo's webview, Storybook is how we develop and verify the React components that make up the chat surface, settings panels, and the rest of the UI — all decoupled from the live VS Code extension host.
 
 ## Getting Started
 
 ### Starting Storybook
 
-To launch the Storybook development server:
+Launch the Storybook dev server with:
 
 ```bash
 bun run storybook
 ```
 
-This will start Storybook on `http://localhost:6006` where you can browse all available stories and interact with components.
+Storybook comes up on `http://localhost:6006`, where you can browse every story and interact with the components directly.
 
 ### Project Structure
 
@@ -38,27 +48,27 @@ webview-ui/.storybook/
 
 ### Main Configuration (`main.ts`)
 
-- **Stories Location**: Automatically discovers `*.stories.*` files in `../src/`
-- **Framework**: Uses `@storybook/react-vite` for React + Vite integration
-- **Environment Variables**: Sets development flags (`IS_DEV`, `IS_TEST`, `TEMP_PROFILE`)
-- **TypeScript**: Enables type checking and automatic prop documentation
+- **Stories location**: auto-discovers `*.stories.*` files under `../src/`
+- **Framework**: `@storybook/react-vite` for the React + Vite pipeline
+- **Environment variables**: sets development flags (`IS_DEV`, `IS_TEST`, `TEMP_PROFILE`)
+- **TypeScript**: enables type checking and automatic prop documentation
 
 ### Preview Configuration (`preview.ts`)
 
-- **Viewport**: Configured for "Editor Sidebar" (700x800px) to match VSCode's sidebar
-- **Themes**: VSCode Dark/Light theme switcher in toolbar
-- **Global Decorator**: `StorybookWebview` provides VSCode-like environment
-- **Documentation**: Dark theme styling to match VSCode
+- **Viewport**: an "Editor Sidebar" viewport (700x800px) that mirrors VS Code's sidebar
+- **Themes**: a toolbar switcher between VS Code Dark and Light themes
+- **Global decorator**: `StorybookWebview` provides a VS Code-like rendering environment
+- **Documentation**: dark theme styling to match VS Code
 
 ### Theme System (`themes.ts`)
 
-Provides mock VSCode CSS variables for both dark and light themes, ensuring components render correctly outside the VSCode environment.
+Mocks the VS Code CSS variables for both dark and light themes so components render correctly outside the real extension host.
 
 ## Creating Stories
 
 ### Basic Story Structure
 
-Create a `*.stories.tsx` file alongside your component:
+Add a `*.stories.tsx` file next to your component:
 
 ```typescript
 import type { Meta, StoryObj } from "@storybook/react-vite"
@@ -96,7 +106,7 @@ export const WithDifferentState: Story = {
 
 ### Advanced Story Patterns
 
-For complex components requiring context or state, use decorators:
+For components that depend on context or shared state, use decorators:
 
 ```typescript
 import { ExtensionStateContext } from "@/context/ExtensionStateContext"
@@ -111,8 +121,8 @@ const createMockState = (overrides = {}) => ({
 export const WithMockState: Story = {
   decorators: [
     (Story) => {
-      const mockState = createMockState({ 
-        tremboMessages: mockMessages 
+      const mockState = createMockState({
+        tremboMessages: mockMessages
       })
       return (
         <ExtensionStateContext.Provider value={mockState}>
@@ -126,16 +136,16 @@ export const WithMockState: Story = {
 
 ### Story Organization
 
-- **Title**: Use hierarchical naming like `"Views/Chat"` or `"Components/Button"`
-- **Parameters**: Add descriptions and documentation
-- **Args**: Define default props for interactive controls
-- **Multiple Stories**: Show different states, props, or use cases
+- **Title**: use hierarchical names like `"Views/Chat"` or `"Components/Button"`
+- **Parameters**: add descriptions and documentation
+- **Args**: define default props for the interactive controls
+- **Multiple stories**: cover different states, props, and use cases
 
 ## Writing UI Tests
 
 ### Interactive Testing with `play` Functions
 
-Storybook supports automated interaction testing using the `play` function:
+Storybook supports automated interaction tests via the `play` function:
 
 ```typescript
 import { expect, userEvent, within } from "storybook/test"
@@ -146,15 +156,15 @@ export const InteractiveTest: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    
+
     // Find elements
     const button = canvas.getByText("Click me")
     const input = canvas.getByPlaceholderText("Enter text")
-    
+
     // Perform interactions
     await userEvent.type(input, "Hello world")
     await userEvent.click(button)
-    
+
     // Assert results
     await expect(canvas.getByText("Hello world")).toBeInTheDocument()
   }
@@ -163,29 +173,29 @@ export const InteractiveTest: Story = {
 
 ### Testing Patterns
 
-1. **User Interactions**: Click buttons, type in inputs, navigate
-2. **State Changes**: Verify component updates after interactions
-3. **Accessibility**: Test keyboard navigation and screen reader support
-4. **Error States**: Test error handling and edge cases
+1. **User interactions**: click buttons, type into inputs, navigate
+2. **State changes**: verify the component updates after interactions
+3. **Accessibility**: test keyboard navigation and screen reader support
+4. **Error states**: cover error handling and edge cases
 
 ### Example from App.stories.tsx
 
-The `WelcomeScreen` story demonstrates comprehensive testing:
+The `WelcomeScreen` story shows a full interaction test:
 
 ```typescript
 export const WelcomeScreen: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    
+
     // Test initial state
     const getStartedButton = canvas.getByText("Get Started for Free")
     const byokButton = canvas.getByText("Use your own API key")
     await expect(getStartedButton).toBeInTheDocument()
     await expect(byokButton).toBeInTheDocument()
-    
+
     // Test interaction
     await userEvent.click(byokButton)
-    
+
     // Test state change
     await expect(getStartedButton).toBeInTheDocument()
     await expect(byokButton).not.toBeInTheDocument()
@@ -197,54 +207,54 @@ export const WelcomeScreen: Story = {
 
 ### Story Development
 
-1. **Start Simple**: Create basic stories first, then add complexity
-2. **Cover Edge Cases**: Include error states, loading states, empty states
-3. **Use Real Data**: Mock realistic data for better testing
-4. **Document Behavior**: Add descriptions explaining component purpose
+1. **Start simple**: get a basic story rendering first, then layer in complexity
+2. **Cover edge cases**: include error, loading, and empty states
+3. **Use realistic data**: mock plausible data so tests reflect real usage
+4. **Document behavior**: add descriptions explaining what the component does
 
 ### Testing Guidelines
 
-1. **Test User Flows**: Focus on how users interact with components
-2. **Verify Accessibility**: Ensure components work with keyboard and screen readers
-3. **Test Responsive Behavior**: Use different viewport sizes
-4. **Mock External Dependencies**: Use mocks for API calls, file operations
+1. **Test user flows**: focus on how people actually interact with the component
+2. **Verify accessibility**: ensure keyboard and screen reader paths work
+3. **Test responsive behavior**: switch between viewport sizes
+4. **Mock external dependencies**: stub API calls and file operations
 
 ### Performance Tips
 
-1. **Lazy Load Stories**: Use dynamic imports for large story files
-2. **Optimize Mock Data**: Keep mock data minimal but realistic
-3. **Reuse Decorators**: Create shared decorators for common patterns
-4. **Clean Up**: Dispose of resources in story cleanup
+1. **Lazy-load stories**: use dynamic imports for large story files
+2. **Keep mock data lean**: minimal but realistic
+3. **Reuse decorators**: factor shared decorators into common helpers
+4. **Clean up**: dispose of resources during story teardown
 
-## VSCode Integration
+## VS Code Integration
 
 ### Theme Switching
 
-Use the theme switcher in Storybook's toolbar to test components in both VSCode Dark and Light themes.
+Use the toolbar theme switcher to validate components under both VS Code Dark and Light themes.
 
 ### Viewport Testing
 
-The default "Editor Sidebar" viewport (700x800px) matches VSCode's sidebar dimensions, ensuring components render correctly in the actual extension environment.
+The default "Editor Sidebar" viewport (700x800px) matches VS Code's sidebar dimensions, so what you see in Storybook lines up with how components render inside the real extension.
 
 ### Extension Context
 
-The `StorybookWebview` decorator provides a VSCode-like environment with proper CSS variables and context providers, making stories behave similarly to the real extension.
+The `StorybookWebview` decorator supplies a VS Code-like environment with the right CSS variables and context providers, so stories behave close to how they do in the extension.
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Missing CSS Variables**: Ensure `StorybookWebview` decorator is applied
-2. **Context Errors**: Wrap stories with appropriate context providers
-3. **Import Errors**: Check that all dependencies are available in Storybook environment
-4. **Theme Issues**: Verify theme CSS variables are properly applied
+1. **Missing CSS variables**: make sure the `StorybookWebview` decorator is applied
+2. **Context errors**: wrap stories in the appropriate context providers
+3. **Import errors**: confirm every dependency is available in the Storybook environment
+4. **Theme issues**: verify theme CSS variables are being applied
 
 ### Debugging Tips
 
-1. **Use Browser DevTools**: Inspect elements and check console for errors
-2. **Check Story Args**: Verify component props are passed correctly
-3. **Test in Isolation**: Create minimal stories to isolate issues
-4. **Review Configuration**: Check `main.ts` and `preview.ts` for configuration issues
+1. **Use browser DevTools**: inspect elements and check the console for errors
+2. **Check story args**: confirm props are reaching the component
+3. **Test in isolation**: build a minimal story to narrow down the issue
+4. **Review configuration**: check `main.ts` and `preview.ts` for misconfigurations
 
 ## Resources
 

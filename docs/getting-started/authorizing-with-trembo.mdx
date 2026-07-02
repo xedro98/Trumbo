@@ -2,12 +2,22 @@
 title: "Authorization"
 description: "Authenticate with Trembo and choose your first AI model"
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-Trembo connects to AI models through a **provider**. You have three common paths:
 
-- **Trembo (usage-billing)** (recommended): sign in with Google/GitHub/email, no API key setup.
+Trembo reaches AI models through a **provider**. Three paths cover most setups:
+
+- **Trembo (usage-billing)** (recommended): sign in with Google/GitHub/email, no API key to manage.
 - **TremboPass**: a $9.99/month subscription provider with access to selected open coding models and 2-5x API rate limits.
-- **Bring Your Own Key (BYOK)**: use your own provider credentials (cloud or local runtimes).
+- **Bring Your Own Key (BYOK)**: use your own provider credentials, cloud or local.
 
 ## Menu
 
@@ -18,22 +28,22 @@ Trembo connects to AI models through a **provider**. You have three common paths
 
 <Steps>
   <Step title="Open Trembo Settings">
-    Click the settings icon (Ã¢Å¡â„¢Ã¯Â¸Â) in the Trembo panel.
+    Click the settings icon (⚙️) in the Trembo panel.
   </Step>
 
   <Step title="Select Provider">
-    Choose your desired provider from the **API Provider** dropdown.
+    Choose your provider from the **API Provider** dropdown.
   </Step>
 
   <Step title="Authenticate">
     - **Trembo (usage-billing):** Click **Sign In** and complete OAuth.
     - **TremboPass:** Select **TremboPass**, click **Sign In**, and subscribe if prompted.
     - **BYOK cloud provider:** Paste your API key into the **API Key** field.
-    - **Local runtime (Ollama/LM Studio):** no key needed; ensure runtime is running.
+    - **Local runtime (Ollama/LM Studio):** no key needed; make sure the runtime is running.
   </Step>
 
   <Step title="Select Model">
-    Choose your desired Claude model from the **Model** dropdown.
+    Pick the model you want from the **Model** dropdown.
   </Step>
 </Steps>
 
@@ -71,14 +81,14 @@ Subscribe from the [TremboPass dashboard](http://0.0.0.0:0/dashboard/subscriptio
 
 ### Local Models
 
-Run models on your own hardware for complete privacy and zero per-request costs.
+Run models on your own hardware for full privacy and zero per-request cost.
 
 | Provider | Best For | Setup Guide |
 |----------|----------|-------------|
 | **Ollama** | CLI-based local runtime | [Setup](/running-models-locally/overview#runtime-options) |
 | **LM Studio** | GUI-based local runtime | [Setup](/running-models-locally/overview#runtime-options) |
 
-Local models require sufficient hardware (especially GPU memory). See [Running Models Locally](/running-models-locally/overview) for requirements.
+Local models need adequate hardware (especially GPU memory). See [Running Models Locally](/running-models-locally/overview) for requirements.
 
 ## CLI Setup
 
@@ -90,13 +100,13 @@ trembo auth
 trembo a
 ```
 
-Runs the same auth flow as IDE setup.
+This runs the same auth flow as the IDE setup.
 
 ## Troubleshooting
 
 | Issue | Fix |
 |-------|-----|
 | "Unauthorized: Please sign in" | Session expired. Click **Sign In** to re-authenticate. |
-| Browser doesn't open | Check default browser settings. Copy the URL from the Trembo output panel manually. |
-| Frequent re-authentication | Check org security policies. Ensure you're not clearing IDE secrets. Try a full sign-out/sign-in. |
-| Can't access organization | Verify membership at [app.example.invalid](http://0.0.0.0:0). Ask your admin about permissions. Sign out and back in. |
+| Browser doesn't open | Check your default browser settings, or copy the URL from the Trembo output panel by hand. |
+| Frequent re-authentication | Review org security policies, make sure IDE secrets aren't being cleared, and try a full sign-out/sign-in. |
+| Can't access organization | Confirm membership at [app.example.invalid](http://0.0.0.0:0), ask your admin about permissions, then sign out and back in. |

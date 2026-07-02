@@ -1,4 +1,4 @@
-# TremboCore API Reference
+# TremboCore API reference
 
 ## Creating TremboCore
 

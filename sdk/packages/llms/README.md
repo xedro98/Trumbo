@@ -1,8 +1,16 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # [experimental] @trembo/llms
 
-`@trembo/llms` is the model and provider layer for the Trembo SDK. It gives
-you typed provider settings, model catalogs, shared gateway contracts, and
-AI SDK-backed handler creation for supported LLM backends.
+`@trembo/llms` is the model and provider layer for the Trembo SDK. It gives you typed provider settings, model catalogs, shared gateway contracts, and AI SDK-backed handler creation for supported LLM backends.
 
 ## What You Get
 
@@ -61,17 +69,13 @@ Use `@trembo/llms/providers` for:
 - `ProviderConfig`
 - `Message` and `ApiStreamChunk`
 
-Built-in providers are routed through the internal gateway registry and backed by
-AI SDK provider implementations. Shared gateway contracts are exported from both
-`@trembo/llms` and `@trembo/shared`.
+Built-in providers are routed through the internal gateway registry and backed by AI SDK provider implementations. Shared gateway contracts are exported from both `@trembo/llms` and `@trembo/shared`.
 
 ### Models
 
-Use `@trembo/llms/models` when you need generated provider/model metadata for
-selection UIs, defaults, or validation.
+Use `@trembo/llms/models` when you need generated provider/model metadata for selection UIs, defaults, or validation.
 
-For generated catalog field semantics and token-limit behavior, see
-[`src/catalog/README.md`](./src/catalog/README.md).
+For generated catalog field semantics and token-limit behavior, see [`src/catalog/README.md`](./src/catalog/README.md).
 
 ## Entry Points
 
@@ -89,8 +93,8 @@ For generated catalog field semantics and token-limit behavior, see
 
 ## More Examples
 
-- Workspace overview: [README.md](https://github.com/trembo/trembo/blob/main/README.md)
-- API and architecture references: [DOC.md](https://github.com/trembo/trembo/blob/main/DOC.md), [ARCHITECTURE.md](https://github.com/trembo/trembo/blob/main/ARCHITECTURE.md)
+- Workspace overview: [README.md](https://github.com/xedro98/trembo/blob/main/sdk/README.md)
+- Architecture reference: [ARCHITECTURE.md](https://github.com/xedro98/trembo/blob/main/sdk/ARCHITECTURE.md)
 
 ## Live Provider Smoke Test
 

@@ -2,15 +2,25 @@
 title: "GitHub Issue RCA Sample"
 description: "Automated GitHub issue analysis using Trembo CLI to identify root causes."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-Automated GitHub issue analysis using Trembo CLI. This script uses Trembo's autonomous AI capabilities to fetch, analyze, and identify root causes of GitHub issues, outputting clean, parseable results that can be easily integrated into your development workflows.
+
+Automated GitHub issue analysis with Trembo CLI. This script uses Trembo's autonomous AI capabilities to fetch, analyze, and identify root causes of GitHub issues, outputting clean, parseable results that you can wire into your development workflows.
 
 <Note>
 **New to Trembo CLI?** This sample assumes you have already completed the [Installation Guide](https://github.com/xedro98/trembo/getting-started/installing-trembo) and authenticated with `trembo auth`. If you haven't set up Trembo CLI yet, please start there first.
 </Note>
 
 <Frame>
-  <img src="https://storage.googleapis.com/trembo_public_images/cli-rca.gif" alt="CLI Root Cause Analysis Demo" width="600" />
+  <img src="/assets/cli-rca.gif" alt="CLI Root Cause Analysis Demo" width="600" />
 </Frame>
 
 ## Prerequisites
@@ -68,7 +78,7 @@ gh auth login
 
 **Option 1: Download directly with curl**
 ```bash
-curl -O https://raw.githubusercontent.com/trembo/trembo/main/src/samples/cli/github-issue-rca/analyze-issue.sh
+curl -O https://raw.githubusercontent.com/xedro98/trembo/main/src/samples/cli/github-issue-rca/analyze-issue.sh
 ```
 
 **Option 2: Copy the full script**
@@ -335,6 +345,6 @@ This pattern can be adapted for many other automation scenarios, from pull reque
 
 ## Related Resources
 
-- [CLI Installation Guide](https://github.com/xedro98/trembo/getting-started/installing-trembo)
-- [CLI Reference Documentation](https://github.com/xedro98/trembo/cli/cli-reference)
-- [Headless Mode](https://github.com/xedro98/trembo/usage/cli-overview#headless-mode)
+- [CLI Installation Guide](/getting-started/installing-trembo)
+- [CLI Reference Documentation](/cli/cli-reference)
+- [Headless Mode](/usage/cli-overview#headless-mode)

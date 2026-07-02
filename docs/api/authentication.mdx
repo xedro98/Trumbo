@@ -3,19 +3,29 @@ title: "Authentication"
 sidebarTitle: "Authentication"
 description: "How to authenticate with the Trembo API using API keys or account tokens."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-Every request to the Trembo API requires authentication via a Bearer token in the `Authorization` header.
+
+Every Trembo API call must carry a Bearer token in the `Authorization` header. This page covers the two token types, how to manage them, and how to keep them safe.
 
 ## Authentication Methods
 
-There are two ways to authenticate:
+Two token types are accepted:
 
 | Method | Use case | How to get it |
 |--------|----------|---------------|
 | **API key** | Direct API calls, scripts, CI/CD | Create at [app.example.invalid](http://0.0.0.0:0) Settings > API Keys |
 | **Account auth token** | Trembo extension and CLI | Generated automatically when you sign in |
 
-Both methods use the same header format:
+Both share the same header shape:
 
 ```bash
 Authorization: Bearer YOUR_TOKEN
@@ -23,7 +33,7 @@ Authorization: Bearer YOUR_TOKEN
 
 ## API Keys
 
-API keys are the recommended authentication method for programmatic access.
+API keys are the recommended credential for programmatic access.
 
 ### Creating a Key
 
@@ -35,15 +45,15 @@ API keys are the recommended authentication method for programmatic access.
     Navigate to **Settings** > **API Keys**.
   </Step>
   <Step title="Create and copy">
-    Create a new key. Copy it immediately as you will not be able to see it again.
+    Create a new key and copy it immediately. It cannot be retrieved again after you leave the page.
   </Step>
 </Steps>
 
 ### Deleting a Key
 
-You can revoke an API key at any time from the same Settings > API Keys page. Deleted keys stop working immediately.
+Revoke a key at any time from the same Settings → API Keys page. Deleted keys stop working immediately.
 
-You can also manage keys programmatically through the [Enterprise API](/enterprise-solutions/api-reference#api-keys):
+You can also rotate keys programmatically through the [Enterprise API](/enterprise-solutions/api-reference#api-keys):
 
 ```bash
 # List your keys
@@ -57,9 +67,9 @@ curl -X DELETE http://0.0.0.0:0/api/v1/api-keys/KEY_ID \
 
 ## Account Auth Tokens
 
-When you sign in to the Trembo extension (VS Code, JetBrains) or CLI, an account auth token is generated and managed automatically. You do not need to handle these tokens manually.
+When you sign in to the Trembo extension (VS Code, JetBrains) or the CLI, an account auth token is issued and refreshed for you automatically. You never need to handle these tokens by hand.
 
-The Trembo CLI uses these tokens when you authenticate via:
+The Trembo CLI picks up these tokens when you authenticate with:
 
 ```bash
 # Interactive sign-in
@@ -69,7 +79,7 @@ trembo auth
 trembo auth -p trembo -k "YOUR_API_KEY" -m anthropic/claude-sonnet-4-6
 ```
 
-See the [CLI Reference](/cli/cli-reference#trembo-auth) for all auth options.
+See the [CLI Reference](/cli/cli-reference#trembo-auth) for every auth option.
 
 ## Security Best Practices
 
@@ -117,7 +127,7 @@ client = OpenAI(
 
 ## Custom Headers
 
-The Trembo API accepts optional headers for tracking and identification:
+The Trembo API accepts a few optional headers for tracking and identification:
 
 | Header | Description |
 |--------|-------------|

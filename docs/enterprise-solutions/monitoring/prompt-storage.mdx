@@ -2,6 +2,16 @@
 title: "Prompt Storage"
 description: "Backup conversation history to S3 or Cloudflare R2 for compliance, audit, and analysis"
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 Prompt Storage allows enterprises to automatically back up Trembo conversation history to cloud storage (AWS S3 or Cloudflare R2). This provides a centralized repository for compliance, audit trails, and usage analysis while maintaining local storage as the primary source of truth.
 
@@ -58,9 +68,9 @@ Prompt storage uploads the following files from each task:
 
 Prompt storage **does not** include:
 
-- Ã¢ÂÅ’ Workspace files not accessed by Trembo
-- Ã¢ÂÅ’ API keys or secrets  
-- Ã¢ÂÅ’ User credentials or authentication tokens
+- ❌ Workspace files not accessed by Trembo
+- ❌ API keys or secrets  
+- ❌ User credentials or authentication tokens
 
 <Warning>
 Conversation history includes **all tool inputs and outputs**. This means code written via `write_to_file`, file contents read via `read_file`, and command outputs are included in the uploaded data. Review your compliance and data classification requirements before enabling.
@@ -225,7 +235,7 @@ Prompt storage is configured through Remote Configuration in the `enterpriseTele
       <Step title="Configure in Trembo Dashboard">
         In the Trembo admin console at [app.example.invalid](http://0.0.0.0:0):
         
-        1. Navigate to **Settings** Ã¢â€ â€™ **Enterprise Telemetry**
+        1. Navigate to **Settings** → **Enterprise Telemetry**
         2. Enable **Prompt Uploading**
         3. Select **S3** as the storage type
         4. Enter your bucket name, access key ID, secret key, and region
@@ -310,7 +320,7 @@ Prompt storage is configured through Remote Configuration in the `enterpriseTele
       <Step title="Configure in Trembo Dashboard">
         In the Trembo admin console at [app.example.invalid](http://0.0.0.0:0):
         
-        1. Navigate to **Settings** Ã¢â€ â€™ **Enterprise Telemetry**
+        1. Navigate to **Settings** → **Enterprise Telemetry**
         2. Enable **Prompt Uploading**
         3. Select **R2** as the storage type
         4. Enter:
@@ -368,7 +378,7 @@ When `backfillEnabled` is set to `true`:
 - On first startup, scans all existing tasks in `~/.trembo/data/tasks/`
 - Queues conversation files that haven't been uploaded
 - Useful for enabling prompt storage on an existing Trembo deployment
-- Can generate significant upload volume Ã¢â‚¬â€ monitor queue size
+- Can generate significant upload volume — monitor queue size
 
 <Warning>
 Enable backfill carefully on large deployments. Consider starting with `backfillEnabled: false` and monitoring the steady-state queue before enabling backfill.
@@ -553,7 +563,7 @@ Implement retention policies based on your compliance requirements:
 
 Enable debug logging to diagnose sync issues:
 
-1. Check extension developer console (Help Ã¢â€ â€™ Toggle Developer Tools)
+1. Check extension developer console (Help → Toggle Developer Tools)
 2. Look for `[TremboBlobStorage]` and `[SyncWorker]` log entries
 3. Failed uploads log error messages with details
 

@@ -3,6 +3,16 @@ title: "Configure Google Vertex AI Provider (Admin)"
 sidebarTitle: "Configure Google Vertex (Admin)"
 description: "This guide explains how administrators configure Google Vertex AI as the organization-wide LLM provider for Trembo."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 
 As an administrator, you can add Google Vertex AI as the organization-wide LLM provider for all Trembo users through the hosted admin console. This centralized approach ensures consistent access to Google's Gemini models while maintaining your organization's project boundaries and regional settings.
@@ -12,7 +22,7 @@ As an administrator, you can add Google Vertex AI as the organization-wide LLM p
 To get started with setting up Google Vertex AI as your organization's LLM provider, you'll need a few items in place.
 
 **Administrator access to the Trembo Admin console**  
-You need admin privileges to enforce provider settings across your organization. If you can navigate to **Settings Ã¢â€ â€™ Trembo Settings** in the admin console at [app.example.invalid](http://0.0.0.0:0), you have the right access level.
+You need administrator privileges to enforce provider settings across your organization. Sign in to the admin console at [app.example.invalid](http://0.0.0.0:0) to confirm your access level.
 
 
 **Google Cloud Project with Vertex AI enabled**  
@@ -33,7 +43,7 @@ Service accounts should have the minimum IAM permissions needed for Vertex AI ac
 
 <Steps>
 <Step title="Access Trembo Settings">
-Navigate to [app.example.invalid](http://0.0.0.0:0) and sign in with your administrator account. Go to **Settings Ã¢â€ â€™ Trembo Settings**.
+Navigate to [app.example.invalid](http://0.0.0.0:0) and sign in with your administrator account. Go to **Settings → Trembo Settings**.
 
 <Info>
 You should see the provider configuration options if you have the correct admin access level.

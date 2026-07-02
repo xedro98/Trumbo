@@ -1,6 +1,6 @@
 # OpenTUI React (@opentui/react)
 
-A React reconciler for building terminal user interfaces with familiar React patterns. Write TUIs using JSX, hooks, and component composition.
+A React reconciler for terminal user interfaces with familiar React patterns. Write TUIs using JSX, hooks, and component composition.
 
 ## Overview
 
@@ -8,7 +8,7 @@ OpenTUI React provides:
 - **Custom reconciler**: React components render to OpenTUI renderables
 - **JSX intrinsics**: `<text>`, `<box>`, `<input>`, etc.
 - **Hooks**: `useKeyboard`, `useRenderer`, `useTimeline`, etc.
-- **Full React compatibility**: useState, useEffect, context, and more
+- **Full React compatibility**: `useState`, `useEffect`, context, and more
 
 ## When to Use React
 

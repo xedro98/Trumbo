@@ -1,4 +1,4 @@
-# Model Providers
+# Model providers
 
 The Trembo SDK supports every major LLM provider out of the box via `@trembo/llms`.
 

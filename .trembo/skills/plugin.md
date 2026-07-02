@@ -3,25 +3,25 @@ name: trembo-plugin
 description: Self-contained guide to designing, building, packaging, and distributing a plugin for any Trembo-based agent (CLI, VS Code, Kanban, JetBrains, custom SDK hosts). Covers both single-file plugins and full plugin packages.
 ---
 
-# Authoring a Trembo Agent Plugin
+# Authoring a Trembo agent plugin
 
-A **Trembo plugin** is a TypeScript module that extends any agent built on the Trembo Core SDK. The same plugin runs in the Trembo CLI, the VS Code and JetBrains extensions, the Kanban host, and any custom app built on `@trembo/core` — write it once, every host gets the new behavior.
+A **Trembo plugin** is a TypeScript module that extends any agent built on the Trembo Core SDK. The same plugin runs in the Trembo CLI, the VS Code and JetBrains extensions, the Kanban host, and any custom app built on `@trembo/core` — write it once and every host gets the new behavior.
 
 A plugin can:
 
 - **Register tools** the model can call (the most common use).
 - **Hook into the agent loop** before/after runs, model calls, and tool calls.
-- **Rewrite provider messages** before they hit the model (custom compaction, redaction, context shaping).
+- **Rewrite provider messages** before they reach the model (custom compaction, redaction, context shaping).
 - **Register slash commands**, **prompt rules**, **providers**, and **automation event types**.
 
 A plugin ships in one of two shapes:
 
-1. **Single-file plugin** — one `.ts` file that exports a default plugin object. Drop it in a discovery folder and it's loaded.
+1. **Single-file plugin** — one `.ts` file that exports a default plugin object. Drop it in a discovery folder and it loads.
 2. **Plugin package** — a directory with `package.json`, npm dependencies, and (optionally) bundled assets like markdown templates. Installable via `trembo plugin install`.
 
 Both shapes use the same plugin API. The package form just adds dependency management and asset bundling.
 
-This guide is self-contained. By the end of it, you'll be able to build either kind from scratch.
+This guide is self-contained. By the end of it, you can build either kind from scratch.
 
 ---
 

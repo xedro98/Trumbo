@@ -1,12 +1,23 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # VS Code Language Model provider (`vscode-lm`)
 
 Routes Trembo inference through the [VS Code Language Model API](https://code.visualstudio.com/api/extension-guides/language-model)
-(`vscode.lm`), letting Trembo use models contributed by any extension that
+(`vscode.lm`), so Trembo can use any model contributed by an extension that
 registers a language model chat provider (a `vendor`) with VS Code. GitHub
-Copilot is the most common such vendor, but the implementation is
-vendor-agnostic — it selects models via `vscode.lm.selectChatModels` and has no
-Copilot-specific logic. VS Code only — the `vscode.lm` API does not exist on
-other hosts (e.g. JetBrains), so the provider is gated on the API being present.
+Copilot is the most common such vendor, but the implementation is deliberately
+vendor-agnostic — it selects models via `vscode.lm.selectChatModels` and
+contains no Copilot-specific logic. This provider is VS Code only: the
+`vscode.lm` API does not exist on other hosts (e.g. JetBrains), so the provider
+is gated on the API being present.
 
 ## Files
 
@@ -14,14 +25,14 @@ other hosts (e.g. JetBrains), so the provider is gated on the API being present.
   (`@trembo/llms`) backed by `vscode.lm`. Selects a chat model, streams the
   response, forwards tool definitions, and surfaces tool calls and usage.
 - **`vscode-lm-format.ts`** — converts SDK `Message`s to
-  `vscode.LanguageModelChatMessage`s and back-converts tool results.
+  `vscode.LanguageModelChatMessage`s and converts tool results back.
 - **`register-vscode-lm.ts`** — registers the handler with the SDK handler
   registry and exposes the `vscode.lm` availability check used for gating.
 
 ## How it plugs into the SDK
 
 The SDK's `@trembo/llms` handler registry (`registerHandler`) exists for providers
-that need host-only dependencies — here, `vscode.lm` — which cannot live in the
+that depend on host-only APIs — here, `vscode.lm` — which can't live in the
 host-agnostic SDK package. `registerVsCodeLmHandler()` (called during extension
 activation) registers the factory for the `vscode-lm` provider id when the API is
 available. The SDK then resolves `vscode-lm` to this handler for both the main
@@ -31,8 +42,8 @@ task loop and standalone utility calls.
 
 `ProviderConfig` has no field for a VS Code LM selector, so the selected model
 travels as a `vendor/family[/version/id]` string in `ProviderConfig.modelId` —
-the model-id channel the rest of the SDK adapter uses. The webview stores the
-structured `LanguageModelChatSelector` in
+the same model-id channel the rest of the SDK adapter uses. The webview stores
+the structured `LanguageModelChatSelector` in
 `plan/actModeVsCodeLmModelSelector`; the session factory stringifies it into
 `modelId`, and `parseVsCodeLmSelector` reads it back into a selector here.
 
@@ -40,7 +51,7 @@ structured `LanguageModelChatSelector` in
 
 Tool definitions are passed to `sendRequest` via `LanguageModelChatRequestOptions.tools`
 (with `toolMode: Auto`). Tool invocations arrive as `LanguageModelToolCallPart`
-and are forwarded as tool-call chunks the SDK runtime executes.
+and are forwarded as tool-call chunks that the SDK runtime executes.
 
 Tool results round-trip as `LanguageModelToolResultPart`. Two details the VS Code
 LM API requires:

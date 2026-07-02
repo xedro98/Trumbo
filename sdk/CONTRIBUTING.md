@@ -1,8 +1,18 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Contributing to the Trembo SDK
 
 This document covers onboarding, development workflow, and publishing. For package boundaries and change routing during development, see [AGENTS.md](./AGENTS.md). For architecture and runtime flows, see [ARCHITECTURE.md](./ARCHITECTURE.md).
 
-This repo is a WIP framework for building and orchestrating AI agents. Full refactors are acceptable when they improve the architecture and all call sites are updated.
+This repo is a work-in-progress framework for building and orchestrating AI agents. Full refactors are acceptable when they improve the architecture and every call site is updated to match.
 
 ## Workspace Overview
 
@@ -21,7 +31,7 @@ This repo is a WIP framework for building and orchestrating AI agents. Full refa
 - `apps/examples/desktop-app`: Tauri + Next.js desktop app example
 - `apps/examples/vscode`: VS Code extension example
 - `apps/examples/menubar`: hub notification menubar example
-- `examples`: plugin, hook, and cron automation examples (customizations upon Trembo SDK)
+- `examples`: plugin, hook, and cron automation examples built on top of the Trembo SDK
 
 ## Development Workflow
 
@@ -47,7 +57,7 @@ bun -F @trembo/agents build|test|typecheck
 
 ### Rebuilding
 
-Changes to published SDK packages require `bun run build:sdk`. Direct CLI runs pick up rebuilt packages immediately. Use `dev:*` scripts for automatic rebuilding during development.
+Changes to published SDK packages require `bun run build:sdk`. Direct CLI runs pick up rebuilt packages immediately. Use the `dev:*` scripts for automatic rebuilding during development.
 
 The CLI build (`bun -F @trembo/cli build`) bundles packages from their compiled `dist/`, not their TypeScript source. If you edit a package and then build the CLI without rebuilding the package first, the CLI binary will silently include the old package code. Always run `bun run build:sdk` (or the relevant `bun -F @trembo/<pkg> build`) before building the CLI when testing changes end-to-end.
 

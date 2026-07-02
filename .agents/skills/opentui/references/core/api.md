@@ -1,4 +1,4 @@
-# Core API Reference
+# Core API reference
 
 ## Renderer
 
@@ -393,7 +393,7 @@ const form = delegate(
   Box(
     {},
     Text({ content: "Email:" }),
-    Input({ id: "email-input", placeholder: "you@example.com" }),
+    Input({ id: "email-input", placeholder: "you@example.invalid" }),
   ),
 )
 form.focus()  // Focuses the input, not the box

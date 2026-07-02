@@ -2,4 +2,4 @@
 "trembo": patch
 ---
 
-fix: use correct base URL for Vertex AI global endpoint with Claude models
+Fix the base URL used for the Vertex AI global endpoint when running Claude models.

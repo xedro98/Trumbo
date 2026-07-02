@@ -1,4 +1,4 @@
-# Keyboard Input Handling
+# Keyboard input handling
 
 How to handle keyboard input in OpenTUI applications.
 
@@ -9,9 +9,9 @@ OpenTUI provides keyboard input handling through:
 - **React**: `useKeyboard()` hook
 - **Solid**: `useKeyboard()` hook
 
-## When to Use
+## When to use
 
-Use this reference when you need keyboard shortcuts, focus-aware input handling, or custom keybindings.
+Use this reference for keyboard shortcuts, focus-aware input handling, or custom keybindings.
 
 ## KeyEvent Object
 

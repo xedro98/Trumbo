@@ -1,142 +1,71 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Trembo
-<div align="center">
-<table>
-<tbody>
-<td align="center">
-<a href="https://github.com/trembo/trembo/tree/main/apps/vscode" target="_blank"><strong>Source on GitHub</strong></a>
-</td>
-<td align="center">
-<a href="https://discord.gg/trembo" target="_blank"><strong>Discord</strong></a>
-</td>
-<td align="center">
-<a href="https://www.reddit.com/r/trembo/" target="_blank"><strong>r/trembo</strong></a>
-</td>
-<td align="center">
-<a href="https://github.com/trembo/trembo/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>Feature Requests</strong></a>
-</td>
-<td align="center">
-<a href="https://github.com/xedro98/trembo/getting-started/installing-trembo" target="_blank"><strong>Getting Started</strong></a>
-</td>
-</tbody>
-</table>
-</div>
 
-Meet Trembo, an AI assistant that can use your **CLI** a**N**d **E**ditor.
+[Source on GitHub](https://github.com/xedro98/trembo/tree/main/apps/vscode) • [Docs](https://github.com/xedro98/trembo) • [Issues](https://github.com/xedro98/trembo/issues)
 
-Thanks toÂ [Claude Sonnet's agentic coding capabilities](https://www.anthropic.com/claude/sonnet),Â Trembo can handle complex software development tasks step-by-step. With tools that let him create & edit files, explore large projects, use the browser, and execute terminal commands (after you grant permission), he can assist you in ways that go beyond code completion or tech support. Trembo can even use the Model Context Protocol (MCP) to create new tools and extend his own capabilities. While autonomous AI scripts traditionally run in sandboxed environments, this extension provides a human-in-the-loop GUI to approve every file change and terminal command, providing a safe and accessible way to explore the potential of agentic AI.
+Trembo is an open-source, self-hostable AI coding agent that works in your **CLI** and your **editor**. It handles complex software-development tasks step by step: creating and editing files, exploring large projects, using the browser, and executing terminal commands — all with you in the loop. Bring your own model and keys; there's no hosted backend and no telemetry.
 
-1. Enter your task and add images to convert mockups into functional apps or fix bugs with screenshots.
-2. Trembo starts by analyzing your file structure & source code ASTs, running regex searches, and reading relevant files to get up to speed in existing projects. By carefully managing what information is added to context, Trembo can provide valuable assistance even for large, complex projects without overwhelming the context window.
-3. Once Trembo has the information he needs, he can:
-    - Create and edit files + monitor linter/compiler errors along the way, letting him proactively fix issues like missing imports and syntax errors on his own.
-    - Execute commands directly in your terminal and monitor their output as he works, letting him e.g., react to dev server issues after editing a file.
-    - For web development tasks, Trembo can launch the site in a headless browser, click, type, scroll, and capture screenshots + console logs, allowing him to fix runtime errors and visual bugs.
-4. When a task is completed, Trembo will present the result to you with a terminal command likeÂ `open -a "Google Chrome" index.html`, which you run with a click of a button.
+1. Enter your task (add images to turn mockups into working apps or fix bugs from screenshots).
+2. Trembo analyzes your file structure and source-code ASTs, runs regex searches, and reads the files it needs — carefully managing context so it can help in large projects without blowing the context window.
+3. Once it has what it needs, Trembo can:
+    - Create and edit files, watching linter/compiler errors and fixing missing imports and syntax issues as it goes.
+    - Run commands in your terminal and react to their output (e.g. dev-server errors after an edit).
+    - For web work, launch a headless browser, click, type, scroll, and capture screenshots + console logs to fix runtime and visual bugs.
+4. When the task is done, Trembo presents the result with a one-click command to open or run it.
 
 > [!TIP]
-> Follow [this guide](https://github.com/xedro98/trembo/features/customization/opening-trembo-in-sidebar) to open Trembo on the right side of your editor. This lets you use Trembo side-by-side with your file explorer, and see how he changes your workspace more clearly.
+> Open Trembo in the sidebar to use it side-by-side with your file explorer and watch how it changes your workspace.
 
 ---
 
-<img align="right" width="340" src="https://github.com/user-attachments/assets/3cf21e04-7ce9-4d22-a7b9-ba2c595e88a4">
+### Use any API and model
 
-### Use any API and Model
+Trembo supports OpenRouter, Anthropic, OpenAI, Google Gemini, AWS Bedrock, Azure, GCP Vertex, Cerebras, and Groq. You can configure any OpenAI-compatible API, or run a local model through LM Studio or Ollama. With OpenRouter, the extension fetches the latest model list so new models are available as soon as they ship. Token usage and API cost are tracked for the whole task loop and per request.
 
-Trembo supports API providers like OpenRouter, Anthropic, OpenAI, Google Gemini, AWS Bedrock, Azure, GCP Vertex, Cerebras and Groq. You can also configure any OpenAI compatible API, or use a local model through LM Studio/Ollama. If you're using OpenRouter, the extension fetches their latest model list, allowing you to use the newest models as soon as they're available.
+### Run commands in your terminal
 
-The extension also keeps track of total tokens and API usage cost for the entire task loop and individual requests, keeping you informed of spend every step of the way.
+Thanks to [VS Code's shell integration API](https://code.visualstudio.com/updates/v1_93#_terminal-shell-integration-api), Trembo runs commands directly in your terminal and reads the output — installing packages, running builds, executing tests, deploying, managing databases. For long-running processes like dev servers, use **Proceed While Running** to let Trembo keep working while the command runs in the background; it gets notified of new output and reacts to issues as they appear.
 
-<!-- Transparent pixel to create line break after floating image -->
+### Create and edit files
 
-<img width="2000" height="0" src="https://github.com/user-attachments/assets/ee14e6f7-20b8-4391-9091-8e8e25561929"><br>
+Trembo edits files directly in your editor and shows every change as a diff. Edit or revert its changes right in the diff view, or give feedback in chat until it's right. It also watches linter/compiler errors so it can fix issues on its own. All changes are recorded in the file's Timeline for easy tracking and rollback.
 
-<img align="left" width="370" src="https://github.com/user-attachments/assets/81be79a8-1fdb-4028-9129-5fe055e01e76">
+### Use the browser
 
-### Run Commands in Terminal
-
-Thanks to the new [shell integration updates in VSCode v1.93](https://code.visualstudio.com/updates/v1_93#_terminal-shell-integration-api), Trembo can execute commands directly in your terminal and receive the output. This allows him to perform a wide range of tasks, from installing packages and running build scripts to deploying applications, managing databases, and executing tests, all while adapting to your dev environment & toolchain to get the job done right.
-
-For long running processes like dev servers, use the "Proceed While Running" button to let Trembo continue in the task while the command runs in the background. As Trembo works heâ€™ll be notified of any new terminal output along the way, letting him react to issues that may come up, such as compile-time errors when editing files.
-
-<!-- Transparent pixel to create line break after floating image -->
-
-<img width="2000" height="0" src="https://github.com/user-attachments/assets/ee14e6f7-20b8-4391-9091-8e8e25561929"><br>
-
-<img align="right" width="400" src="https://github.com/user-attachments/assets/c5977833-d9b8-491e-90f9-05f9cd38c588">
-
-### Create and Edit Files
-
-Trembo can create and edit files directly in your editor, presenting you a diff view of the changes. You can edit or revert Trembo's changes directly in the diff view editor, or provide feedback in chat until you're satisfied with the result. Trembo also monitors linter/compiler errors (missing imports, syntax errors, etc.) so he can fix issues that come up along the way on his own.
-
-All changes made by Trembo are recorded in your file's Timeline, providing an easy way to track and revert modifications if needed.
-
-<!-- Transparent pixel to create line break after floating image -->
-
-<img width="2000" height="0" src="https://github.com/user-attachments/assets/ee14e6f7-20b8-4391-9091-8e8e25561929"><br>
-
-<img align="left" width="370" src="https://github.com/user-attachments/assets/bc2e85ba-dfeb-4fe6-9942-7cfc4703cbe5">
-
-### Use the Browser
-
-With Claude Sonnet's new [Computer Use](https://www.anthropic.com/news/3-5-models-and-computer-use) capability, Trembo can launch a browser, click elements, type text, and scroll, capturing screenshots and console logs at each step. This allows for interactive debugging, end-to-end testing, and even general web use! This gives him autonomy to fixing visual bugs and runtime issues without you needing to handhold and copy-pasting error logs yourself.
-
-Try asking Trembo to "test the app", and watch as he runs a command like `npm run dev`, launches your locally running dev server in a browser, and performs a series of tests to confirm that everything works. [See a demo here.](https://x.com/sdrzn/status/1850880547825823989)
-
-<!-- Transparent pixel to create line break after floating image -->
-
-<img width="2000" height="0" src="https://github.com/user-attachments/assets/ee14e6f7-20b8-4391-9091-8e8e25561929"><br>
-
-<img align="right" width="350" src="https://github.com/user-attachments/assets/ac0efa14-5c1f-4c26-a42d-9d7c56f5fadd">
+Trembo can launch a browser, click elements, type text, and scroll, capturing screenshots and console logs at each step — for interactive debugging, end-to-end testing, and general web use. Ask it to "test the app": it runs `npm run dev`, opens your local dev server in a browser, and runs through a series of checks.
 
 ### "add a tool that..."
 
-Thanks to the [Model Context Protocol](https://github.com/modelcontextprotocol), Trembo can extend his capabilities through custom tools. While you can use [community-made servers](https://github.com/modelcontextprotocol/servers), Trembo can instead create and install tools tailored to your specific workflow. Just ask Trembo to "add a tool" and he will handle everything, from creating a new MCP server to installing it into the extension. These custom tools then become part of Trembo's toolkit, ready to use in future tasks.
+Through the [Model Context Protocol](https://modelcontextprotocol.io), Trembo extends itself with custom tools. Use [community-made servers](https://github.com/modelcontextprotocol/servers) or ask Trembo to "add a tool" and it will build and install a new MCP server tailored to your workflow, which then becomes part of its toolkit for future tasks.
 
--   "add a tool that fetches Jira tickets": Retrieve ticket ACs and put Trembo to work
--   "add a tool that manages AWS EC2s": Check server metrics and scale instances up or down
--   "add a tool that pulls the latest PagerDuty incidents": Fetch details and ask Trembo to fix bugs
+- "add a tool that fetches Jira tickets" — pull ticket acceptance criteria and put Trembo to work
+- "add a tool that manages AWS EC2 instances" — check metrics and scale up or down
+- "add a tool that pulls the latest PagerDuty incidents" — fetch details and ask Trembo to fix bugs
 
-<!-- Transparent pixel to create line break after floating image -->
+### Add context
 
-<img width="2000" height="0" src="https://github.com/user-attachments/assets/ee14e6f7-20b8-4391-9091-8e8e25561929"><br>
+- **`@url`** — fetch a URL and convert it to markdown (handy for fresh docs)
+- **`@problems`** — add workspace errors and warnings from the Problems panel
+- **`@file`** — add a file's contents without spending a request on a read (type to search)
+- **`@folder`** — add a whole folder's files at once
 
-<img align="left" width="360" src="https://github.com/user-attachments/assets/7fdf41e6-281a-4b4b-ac19-020b838b6970">
+### Checkpoints: compare and restore
 
-### Add Context
-
-**`@url`:**Â Paste in a URL for the extension to fetch and convert to markdown, useful when you want to give Trembo the latest docs
-
-**`@problems`:**Â Add workspace errors and warnings ('Problems' panel) for Trembo to fix
-
-**`@file`:**Â Adds a file's contents so you don't have to waste API requests approving read file (+ type to search files)
-
-**`@folder`:**Â Adds folder's files all at once to speed up your workflow even more
-
-<!-- Transparent pixel to create line break after floating image -->
-
-<img width="2000" height="0" src="https://github.com/user-attachments/assets/ee14e6f7-20b8-4391-9091-8e8e25561929"><br>
-
-<img align="right" width="350" src="https://github.com/user-attachments/assets/140c8606-d3bf-41b9-9a1f-4dbf0d4c90cb">
-
-### Checkpoints: Compare and Restore
-
-As Trembo works through a task, the extension takes a snapshot of your workspace at each step. You can use the 'Compare' button to see a diff between the snapshot and your current workspace, and the 'Restore' button to roll back to that point.
-
-For example, when working with a local web server, you can use 'Restore Workspace Only' to quickly test different versions of your app, then use 'Restore Task and Workspace' when you find the version you want to continue building from. This lets you safely explore different approaches without losing progress.
-
-<!-- Transparent pixel to create line break after floating image -->
-
-<img width="2000" height="0" src="https://github.com/user-attachments/assets/ee14e6f7-20b8-4391-9091-8e8e25561929"><br>
+As Trembo works, the extension snapshots your workspace at each step. Use **Compare** to diff a snapshot against your current workspace, and **Restore** to roll back. For a local web server, use **Restore Workspace Only** to quickly try different versions, then **Restore Task and Workspace** when you find the one to keep building from.
 
 ## Contributing
 
-To contribute to the project, start with our [Contributing Guide](CONTRIBUTING.md) to learn the basics. You can also join our [Discord](https://discord.gg/trembo) to chat with other contributors in the `#contributors` channel. If you're looking for full-time work, check out our open positions on our [careers page](https://github.com/xedro98/trembo/join-us)!
-
-## Enterprise
-
-Get the same Trembo experience with enterprise-grade controls: SSO (SAML/OIDC), global policies and configuration, observability with audit trails, private networking (VPC/private link), and self-hosted or on-prem deployments, and enterprise support. Learn more at our [enterprise page](https://github.com/xedro98/trembo/enterprise) or [talk to us](https://github.com/xedro98/trembo/contact-sales).
-
+Start with the [Contributing Guide](https://github.com/xedro98/trembo/blob/main/CONTRIBUTING.md), and use [Discussions](https://github.com/xedro98/trembo/discussions) to talk with other contributors.
 
 ## License
 
-[Apache 2.0 Â© 2026 Trembo Bot Inc.](./LICENSE)
+[Apache 2.0 © 2026 Trembo Bot Inc.](https://github.com/xedro98/trembo/blob/main/LICENSE)

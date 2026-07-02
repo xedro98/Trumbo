@@ -5,11 +5,11 @@ metadata:
    references: core, react, solid
 ---
 
-# OpenTUI Platform Skill
+# OpenTUI platform skill
 
-Consolidated skill for building terminal user interfaces with OpenTUI. Use decision trees below to find the right framework and components, then load detailed references.
+Consolidated skill for building terminal user interfaces with OpenTUI. Use the decision trees below to find the right framework and components, then load the detailed references.
 
-## Critical Rules
+## Critical rules
 
 **Follow these rules in all OpenTUI code:**
 

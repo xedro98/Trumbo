@@ -1,4 +1,4 @@
-# Core Gotchas
+# Core gotchas
 
 ## Runtime Environment
 

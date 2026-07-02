@@ -1,4 +1,4 @@
-# Core Patterns
+# Core patterns
 
 ## Composition Patterns
 
@@ -121,7 +121,7 @@ const form = delegate(
   Box(
     { border: true, padding: 1 },
     Text({ content: "Email:" }),
-    Input({ id: "email-input", placeholder: "you@example.com" }),
+    Input({ id: "email-input", placeholder: "you@example.invalid" }),
   ),
 )
 

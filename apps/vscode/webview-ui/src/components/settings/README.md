@@ -1,6 +1,16 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # API Options Component Architecture
 
-This directory contains the refactored API Options components for the Trembo extension. The refactoring aims to improve maintainability, code organization, and reduce complexity by separating provider-specific code into modular components.
+This directory holds the API Options component tree for the Trembo extension. The split is deliberate: shared UI lives in `common/`, every provider gets its own file under `providers/`, and cross-cutting helpers sit in `utils/`. The result is a settings surface that's easier to reason about, easier to extend, and far less tangled than a single mega-component.
 
 ## Directory Structure
 
@@ -44,10 +54,10 @@ ApiOptions
 
 ### Data Flow
 
-1. `ApiOptions` receives the current API configuration from the extension state
-2. When a provider is selected, it renders the corresponding provider component
-3. Provider-specific components receive `apiConfiguration` and `handleInputChange` to manage their state
-4. Changes are propagated back to the extension via the `handleInputChange` callback
+1. `ApiOptions` reads the current API configuration from extension state.
+2. When a provider is selected, it renders that provider's component.
+3. Each provider component receives `apiConfiguration` and `handleInputChange` and manages its own fields.
+4. Edits flow back to the extension through the `handleInputChange` callback.
 
 ## Adding a New Provider
 
@@ -149,12 +159,12 @@ import { MyNewProvider } from "./providers/MyNewProvider"
 
 ## Best Practices
 
-1. **Reuse Common Components**: Use the common components for consistent UI and behavior
-2. **Provider-Specific Logic**: Keep provider-specific logic within the provider component
-3. **Type Safety**: Ensure all props and state are properly typed
-4. **Error Handling**: Handle edge cases gracefully, such as missing configurations
-5. **Documentation**: Document any provider-specific behaviors or requirements
+1. **Reuse common components**: lean on `common/` for consistent UI and behavior
+2. **Keep provider logic local**: provider-specific code stays inside its provider component
+3. **Stay typed**: make sure all props and state are properly typed
+4. **Handle edge cases gracefully**: account for missing or partial configurations
+5. **Document quirks**: call out any provider-specific behaviors or requirements
 
 ## Testing
 
-Each provider component should be tested in isolation to ensure it renders correctly and handles user input properly.
+Each provider component should be tested in isolation to confirm it renders correctly and handles user input the way it should.

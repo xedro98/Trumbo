@@ -23,44 +23,42 @@ metadata:
     - typeDefinitions
     - modules
 ---
-Audit documentation coverage across the codebase:
+Audit how well the codebase is documented. Stay in `plan` mode — recommend
+changes, do not edit files.
 
-1. Check public API documentation:
-   - Functions exported from public modules
-   - Classes and interfaces
-   - Type definitions and generics
-   - Decorators and annotations
+1. Public API surface:
+   - Functions exported from public modules.
+   - Classes and interfaces.
+   - Type definitions, including generics.
+   - Decorators and annotations.
 
-2. Identify missing documentation:
-   - Public functions without JSDoc comments
-   - Complex functions without explanation
-   - Public types without descriptions
-   - Exported modules without README or header comments
+2. Missing docs:
+   - Public functions with no JSDoc.
+   - Complex functions with no explanation of what they do or why.
+   - Public types with no description.
+   - Modules with no README or header comment.
 
-3. Evaluate existing documentation quality:
-   - JSDoc comments without @param or @return tags
-   - Comments that are outdated or misleading
-   - Code samples in docs that may be broken
-   - Links in documentation that point to removed code
+3. Quality of existing docs:
+   - JSDoc missing `@param`/`@return` where it should have them.
+   - Comments that are stale or contradict the code.
+   - Code samples in docs that no longer compile or run.
+   - Links pointing at code that has been moved or deleted.
 
-4. Analyze documentation structure:
-   - Main README quality and completeness
-   - Architecture documentation
-   - Contributing guide existence
-   - API reference documentation
-   - Changelog maintenance
+4. Documentation structure:
+   - Main README quality and completeness.
+   - Architecture documentation.
+   - Contributing guide.
+   - API reference.
+   - Changelog maintenance.
 
-Generate report with sections:
-- Documentation coverage percentage by module
-- Top 10 undocumented public APIs
-- Types with missing descriptions
-- Files with complex logic needing explanation
-- Outdated documentation instances
+Report:
 
-Recommendations:
-- High-priority items (public APIs without docs)
-- Documentation style improvements
-- Template suggestions for JSDoc
-- Links that need updating
+- Documentation coverage percentage per module.
+- Top 10 undocumented public APIs.
+- Types missing descriptions.
+- Files with complex logic that need a written explanation.
+- Stale or broken doc instances.
 
-Use plan mode to suggest improvements without applying changes.
+Recommendations, in priority order: high-priority gaps (public APIs with no
+docs), style improvements, JSDoc templates to adopt, and links that need
+updating.

@@ -1,4 +1,4 @@
-# TremboCore Patterns
+# TremboCore patterns
 
 ## Basic Session with Built-in Tools
 

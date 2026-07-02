@@ -3,6 +3,16 @@ title: "Configure OpenAI Compatible Provider (Admin)"
 sidebarTitle: "Configure OpenAI Compatible (Admin)"
 description: "This guide explains how administrators configure an OpenAI-compatible endpoint as the organization-wide LLM provider for Trembo."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 
 As an administrator, you can add an OpenAI-compatible endpoint as the organization-wide LLM provider for all Trembo users through the hosted admin console. This covers any provider that exposes an OpenAI-compatible API, including Azure Foundry (Azure OpenAI), self-hosted inference engines (vLLM, TGI), and other compatible services.
@@ -12,7 +22,7 @@ As an administrator, you can add an OpenAI-compatible endpoint as the organizati
 To get started with setting up an OpenAI-compatible provider for your organization, you'll need a few items in place.
 
 **Administrator access to the Trembo Admin console**  
-You need admin privileges to enforce provider settings across your organization. If you can navigate to **Settings Ã¢â€ â€™ Trembo Settings** in the admin console at [app.example.invalid](http://0.0.0.0:0), you have the right access level.
+You need administrator privileges to enforce provider settings across your organization. Sign in to the admin console at [app.example.invalid](http://0.0.0.0:0) to confirm your access level.
 
 **An OpenAI-compatible API endpoint**  
 You need a running endpoint that implements the OpenAI chat completions API. This could be:
@@ -31,7 +41,7 @@ You'll need the base URL of your endpoint and any required authentication header
 
 <Steps>
 <Step title="Access Trembo Settings">
-Navigate to [app.example.invalid](http://0.0.0.0:0) and sign in with your administrator account. Go to **Settings Ã¢â€ â€™ Trembo Settings**.
+Navigate to [app.example.invalid](http://0.0.0.0:0) and sign in with your administrator account. Go to **Settings → Trembo Settings**.
 
 <Info>
 You should see the provider configuration options if you have the correct admin access level.
@@ -72,7 +82,7 @@ Add custom HTTP headers that will be included with every API request. This is us
 Headers are configured as key-value pairs.
 </Accordion>
 
-<Accordion title="Azure API Version (optional Ã¢â‚¬â€ Azure Foundry only)">
+<Accordion title="Azure API Version (optional — Azure Foundry only)">
 If you're using Azure Foundry (Azure OpenAI), specify the API version string. For example: `2024-02-15-preview` or `2024-06-01`.
 
 This field is only needed for Azure OpenAI deployments. Leave it empty for non-Azure endpoints.
@@ -82,7 +92,7 @@ Check the [Azure OpenAI API version documentation](https://learn.microsoft.com/e
 </Note>
 </Accordion>
 
-<Accordion title="Azure Identity Authentication (optional Ã¢â‚¬â€ Azure Foundry only)">
+<Accordion title="Azure Identity Authentication (optional — Azure Foundry only)">
 Enable this to use Azure Active Directory (Entra ID) token-based authentication instead of API keys. When enabled, members authenticate using their Azure AD credentials rather than a static API key.
 
 This field is only relevant for Azure Foundry deployments.

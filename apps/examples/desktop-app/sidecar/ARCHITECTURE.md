@@ -1,12 +1,20 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Sidecar Architecture — @trembo/code
 
 ## Overview
 
-The sidecar is a single Bun process that handles the desktop backend runtime directly.
+The sidecar is a single Bun process that owns the desktop backend runtime directly. It imports `@trembo/core` in-process and serves the Next.js frontend over HTTP plus a WebSocket.
 
-It imports `@trembo/core` directly and serves the Next.js frontend over HTTP + WebSocket.
-
-## Directory Structure
+## Directory structure
 
 ```
 sidecar/
@@ -21,7 +29,7 @@ sidecar/
 └── ARCHITECTURE.md       # This file
 ```
 
-## Transport Protocol (unchanged)
+## Transport protocol (unchanged)
 
 ```
 Request:  { "type": "command", "id": string, "command": string, "args"?: object }
@@ -29,11 +37,11 @@ Response: { "type": "response", "id": string, "ok": boolean, "result"?: unknown,
 Event:    { "type": "event", "event": { "name": string, "payload": unknown } }
 ```
 
-## Key Design Decisions
+## Key design decisions
 
-### 1. Chat Sessions — In-Process via LocalRuntimeHost
+### 1. Chat sessions — in-process via LocalRuntimeHost
 
-Instead of spawning a separate runtime bridge process, we use `LocalRuntimeHost` directly:
+Rather than spawning a separate runtime bridge process, the sidecar uses `LocalRuntimeHost` directly:
 
 ```typescript
 import { LocalRuntimeHost } from "@trembo/core";
@@ -66,9 +74,9 @@ sessionManager.subscribe((event) => {
 });
 ```
 
-### 2. Tool Approval — In-Memory Promise Resolution
+### 2. Tool approval — in-memory promise resolution
 
-No more file-system watchers. Tool approvals use in-memory promise maps:
+Tool approvals no longer touch the filesystem. They use an in-memory promise map:
 
 ```typescript
 const pendingApprovals = new Map<string, {
@@ -80,23 +88,23 @@ const pendingApprovals = new Map<string, {
 // When frontend responds → resolve promise
 ```
 
-### 3. Provider Management — Direct ProviderSettingsManager
+### 3. Provider management — direct ProviderSettingsManager
 
 ```typescript
 import { ProviderSettingsManager, listLocalProviders, ... } from "@trembo/core";
 const manager = new ProviderSettingsManager();
 ```
 
-### 4. Session Storage — Direct SqliteSessionStore
+### 4. Session storage — direct SqliteSessionStore
 
 ```typescript
 import { SqliteSessionStore, resolveSessionBackend } from "@trembo/core";
 const store = new SqliteSessionStore();
 ```
 
-### 5. Routine Schedules — Direct Hub Commands
+### 5. Routine schedules — direct hub commands
 
-Routine operations now ensure the local hub server in-process and issue hub schedule commands directly. They are still called in-process, not via child script:
+Routine operations ensure the local hub server in-process and then issue hub schedule commands directly. They still run in-process, not via a child script:
 
 ```typescript
 import { ensureHubServer, sendHubCommand } from "@trembo/core";
@@ -104,19 +112,20 @@ await ensureHubServer({ runtimeHandlers: createLocalHubScheduleRuntimeHandlers()
 await sendHubCommand({}, { command: "schedule.list", payload: { limit: 200 } });
 ```
 
-### 6. Native Commands
+### 6. Native commands
 
-- `pick_workspace_directory` — Uses macOS `osascript` / Linux `zenity` for directory picker
-- `open_mcp_settings_file` — Uses `open` / `xdg-open` to open files
+- `pick_workspace_directory` — uses macOS `osascript` or Linux `zenity` for a directory picker.
+- `open_mcp_settings_file` — uses `open` or `xdg-open` to reveal a file.
 
-### 7. Frontend Connection
+### 7. Frontend connection
 
 The frontend `desktop-client.ts` connects directly to the sidecar WebSocket:
-- Discovers endpoint from `window.__SIDECAR_WS_ENDPOINT__` or defaults to `ws://127.0.0.1:3126/transport`
-- No Tauri dependency needed
-- Same `invoke()` / `subscribe()` API
 
-## Command Map
+- Discovers the endpoint from `window.__SIDECAR_WS_ENDPOINT__` or defaults to `ws://127.0.0.1:3126/transport`.
+- No Tauri dependency needed.
+- Same `invoke()` / `subscribe()` API surface.
+
+## Command map
 
 Supported commands:
 
@@ -144,12 +153,12 @@ Supported commands:
 | `get_process_context` | In-memory context |
 | `poll_tool_approvals` | In-memory pending map |
 | `respond_tool_approval` | In-memory promise resolution |
-| `list_routine_schedules` | local hub schedule commands |
+| `list_routine_schedules` | Local hub schedule commands |
 | `list_user_instruction_configs` | Direct core API |
 | `pick_workspace_directory` | OS native dialog |
 | `open_mcp_settings_file` | OS `open` command |
 
-## Dev Workflow
+## Dev workflow
 
 ```bash
 bun run dev:sidecar   # Start sidecar on port 3126

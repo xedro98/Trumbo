@@ -1,25 +1,39 @@
+<div align="center">
+<pre>
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+</pre>
+</div>
+
 # Security Policy
 
-## Supported Versions
+## Supported versions
 
-We actively patch only the most recent minor release of Trembo. Older versions receive fixes at our discretion.
+Only the most recent minor release of Trembo is actively patched. Older versions may receive fixes at the maintainers' discretion.
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-We appreciate your efforts to responsibly disclose your findings and will make every effort to acknowledge your contributions.
+Please report security issues **privately** — do not open a public issue.
 
-To report a security issue, please submit your report through our [Bugcrowd Vulnerability Disclosure Program](https://bugcrowd.com/engagements/trembobot-vdp-ess). Bugcrowd will manage communication and triage on our behalf.
+Open a [GitHub Security Advisory](https://github.com/xedro98/trembo/security/advisories/new) on the repository. Include:
 
-When reporting, please include:
-
-- A short summary of the issue
+- A short summary of the issue and its impact
 - Steps to reproduce or a proof of concept
-- Any logs, stack traces, or screenshots that might help us understand the problem
+- Any logs, stack traces, or screenshots that help us understand it
 
-Please keep the details private until a resolution has been reached.
+Please keep the details private until a fix is released.
 
 ## Escalation
 
-If you are unable to submit through Bugcrowd, you may send an email to security@example.invalid.
+If you can't use GitHub Security Advisories, email **security@example.invalid** with the details above.
 
-Thank you for helping us keep Trembo users safe.
+## What to expect
+
+We'll acknowledge your report as soon as we can, triage it, and work with you on a coordinated disclosure once a fix is available.
+
+Thank you for helping keep Trembo and its users safe.

@@ -1,14 +1,14 @@
 # OpenTUI Core (@opentui/core)
 
-The foundational library for building terminal user interfaces. Provides an imperative API with all primitives, giving you maximum control over rendering, state, and behavior.
+The foundational library for terminal user interfaces. It exposes an imperative API with every primitive, giving you full control over rendering, state, and behavior.
 
 ## Overview
 
 OpenTUI Core runs on Bun with native Zig bindings for performance-critical operations:
-- **Renderer**: Manages terminal output, input events, and the rendering loop
-- **Renderables**: Hierarchical UI building blocks with Yoga layout
-- **Constructs**: Declarative wrappers for composing Renderables
-- **FrameBuffer**: Low-level 2D rendering surface for custom graphics
+- **Renderer**: manages terminal output, input events, and the rendering loop
+- **Renderables**: hierarchical UI building blocks with Yoga layout
+- **Constructs**: declarative wrappers for composing Renderables
+- **FrameBuffer**: low-level 2D rendering surface for custom graphics
 
 ## When to Use Core
 

@@ -3,6 +3,16 @@ title: "Enterprise Provider Configuration"
 sidebarTitle: "Overview"
 description: "Configure inference providers through the Trembo hosted admin console for centralized organization management"
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 
 Remote Provider Configuration allows administrators to centrally configure inference providers for their entire organization through the Trembo hosted admin console. This approach ensures consistent provider access, security policies, and cost management across all team members without requiring individual developer setup or infrastructure deployment.
@@ -35,7 +45,7 @@ Trembo supports remote configuration for the following inference providers:
 
 | Provider | Use Case | Configuration | Member Setup |
 |----------|----------|---------------|--------------|
-| **Trembo** | Organizations using Trembo's native provider with centralized API key management | API provider selection, model access | No individual API keys needed Ã¢â‚¬â€ fully managed by organization |
+| **Trembo** | Organizations using Trembo's native provider with centralized API key management | API provider selection, model access | No individual API keys needed — fully managed by organization |
 | **Amazon Bedrock** | Organizations using AWS infrastructure | Region selection, VPC endpoints, cross-region inference, global inference, prompt caching | AWS credential configuration (API key, CLI profile, or credential chain) |
 | **Google Vertex AI** | Organizations using Google Cloud Platform | Project ID, region selection, model access | Google Cloud credential configuration (service account, SDK, or ADC) |
 | **Azure Foundry** | Organizations using Azure OpenAI or Azure AI services | Base URL, Azure API version, Azure identity authentication, custom headers | API key configuration in the extension |

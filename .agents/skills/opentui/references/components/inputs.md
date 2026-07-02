@@ -1,10 +1,10 @@
-# Input Components
+# Input components
 
 Components for user input in OpenTUI.
 
-## Input Component
+## Input component
 
-Single-line text input field.
+A single-line text input field.
 
 ### Basic Usage
 

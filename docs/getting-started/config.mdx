@@ -3,15 +3,25 @@ title: "Config"
 sidebarTitle: "Config"
 description: "Understand where Trembo stores configuration and how global and project config work together."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 Trembo configuration lives in two scopes:
 
-- **Global configuration** in `~/.trembo/` (applies globally across all Trembo applications, including IDE, CLI, and SDK)
+- **Global configuration** in `~/.trembo/` (applies to every Trembo application: IDE, CLI, and SDK)
 - **Project configuration** in `.trembo/` (applies only to the current workspace)
 
 ## Configuration Directory Layout
 
-Trembo stores shared configuration across a few well-known locations. The primary root is `~/.trembo/`, with structured app state under `~/.trembo/data/`:
+Trembo keeps shared configuration in a few well-known locations. The root is `~/.trembo/`, with structured app state under `~/.trembo/data/`:
 
 ```text
 ~/.trembo/
@@ -63,20 +73,20 @@ Notes:
 
 ## What Goes Where?
 
-- Use **global (`~/.trembo/`)** for defaults shared across all Trembo applications (IDE, CLI, SDK) on your machine.
+- Use **global (`~/.trembo/`)** for defaults shared across every Trembo application (IDE, CLI, SDK) on your machine.
 - Use **project (`.trembo/`)** for team-shared behavior that should travel with the repo.
 
-Commit `.trembo/` files you want to share with your team. Keep secrets out of the repo.
+Commit the `.trembo/` files you want to share with your team, and keep secrets out of the repo.
 
 ## Configure Through the CLI
 
-Use the interactive config UI:
+Open the interactive config UI:
 
 ```bash
 trembo config
 ```
 
-From there, you can view/edit:
+From there you can view and edit:
 
 - Settings (global + workspace)
 - Rules
@@ -91,14 +101,14 @@ Use a custom configuration directory:
 trembo --config /path/to/custom/config "your task"
 ```
 
-Or via environment variable:
+Or set it with an environment variable:
 
 ```bash
 export TREMBO_DATA_DIR=/custom/path/to/trembo
 trembo "your task"
 ```
 
-View CLI logs when troubleshooting:
+View CLI logs while troubleshooting:
 
 ```bash
 trembo dev log
@@ -149,7 +159,7 @@ Rules:
 
 ## Related Docs
 
-- [CLI Configuration](/cli/configuration)
+- [CLI overview](/usage/cli-overview)
 - [Rules](/customization/trembo-rules)
 - [Skills](/customization/skills)
 - [Hooks](/customization/hooks)

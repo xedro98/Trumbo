@@ -3,10 +3,20 @@ title: "Trembo SDK"
 sidebarTitle: "Overview"
 description: "TypeScript packages for embedding Trembo's agent runtime in your own applications."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-The Trembo SDK is an open source framework for building agentic applications, and is the same harness used in the Trembo IDE extensions and CLI. It uses a plugin architecture that makes it easy to customize and comes with all the features you expect from agents like checkpoints, web fetch, MCPs, cron jobs, subagents, and more.
 
-Use the Trembo SDK to run agents from CI/CD pipelines, create automations for end-to-end workflows, or embed agents directly inside your products.
+The Trembo SDK is an open-source framework for building agentic applications — the same harness that powers the Trembo IDE extensions and CLI. It uses a plugin architecture that makes customization straightforward and ships with the features you'd expect from an agent runtime: checkpoints, web fetch, MCPs, cron jobs, subagents, and more.
+
+Use it to run agents from CI/CD pipelines, build automations for end-to-end workflows, or embed agents directly inside your products.
 
 ## Install
 
@@ -20,7 +30,7 @@ Requires Node.js 22 or later.
 
 ## SDK Skill
 
-If you use a coding agent (Claude Code, Codex, Trembo, etc.), install the [Trembo SDK skill](https://github.com/trembo/sdk-skill) to give your agent context on the SDK's APIs and best practices to help you build with the Trembo SDK.
+If you use a coding agent (Claude Code, Codex, Trembo, etc.), install the [Trembo SDK skill](https://github.com/xedro98/trembo) to give your agent context on the SDK's APIs and best practices while you build.
 
 ```bash
 npx skills add trembo/sdk-skill
@@ -50,7 +60,7 @@ const result = await agent.run("Explain what an SDK is in two sentences.")
 ```
 
 <Note>
-  Here is a complete [quickstart example](https://github.com/trembo/trembo/tree/main/apps/examples/quickstart). Clone it and run `bun dev` to try it.
+  Here is a complete [quickstart example](https://github.com/xedro98/trembo/tree/main/apps/examples/quickstart). Clone it and run `bun dev` to try it.
 </Note>
 
 ## Packages

@@ -1,19 +1,30 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Trembo SDK Examples
 
-Learn how to build with the Trembo SDK through working examples, ordered from simple to complex.
+Working, runnable projects that teach you the Trembo SDK from the ground up. Each example is a self-contained app you can clone, install, and run in a few minutes. They are ordered by difficulty, so start at the top if you are new and work your way down.
 
-## SDK Skill
-If you use a coding agent (Claude Code, Codex, Trembo, etc.), install the [Trembo SDK skill](https://github.com/trembo/sdk-skill) to give your agent context on the SDK's APIs and best practices to help you build with the Trembo SDK.
+## SDK Skill for coding agents
+
+If you drive a coding agent (Claude Code, Codex, Trembo itself, anything that supports the `skills` format), give it first-class context on the Trembo SDK by installing the Trembo SDK skill:
 
 ```bash
 npx skills add trembo/sdk-skill
 ```
 
-Prompt it to scaffold agents, create custom tools, wire up plugins, configure providers, and more.
+With the skill loaded, you can ask your agent to scaffold agents, build custom tools, wire up plugins, configure providers, and so on. The skill ships the SDK's APIs and conventions so the agent does not have to guess. See the Trembo repository for details: <https://github.com/xedro98/trembo>.
 
 ## Getting started
 
-All examples live in this directory. Each is a standalone project with its own `package.json` and README. To run any example:
+Every example lives in its own directory under `apps/examples/` and ships its own `package.json` and README. To run any of them:
 
 ```bash
 cd apps/examples/<example-name>
@@ -23,7 +34,7 @@ export TREMBO_API_KEY="trembo_..."
 bun dev
 ```
 
-Requires Node.js 22+.
+Trembo is bring-your-own-key with no hosted backend, so set `TREMBO_API_KEY` to a key issued by whichever model provider you want to use. You need Node.js 22 or newer.
 
 ## Examples
 
@@ -52,17 +63,17 @@ Requires Node.js 22+.
 
 ## SDK packages
 
-When building your own app, install the public SDK package:
+When you build your own app, install the public SDK package:
 
 ```bash
 npm add @trembo/sdk
 ```
 
-`@trembo/sdk` re-exports everything from `@trembo/core`. You only need `@trembo/agents` or `@trembo/llms` if you want lower-level control over the agent runtime or model gateway directly.
+`@trembo/sdk` re-exports everything from `@trembo/core`. Reach for `@trembo/agents` or `@trembo/llms` only when you need lower-level control over the agent runtime or the model gateway directly.
 
 ## Learn more
 
 - [SDK package docs](../../sdk/packages/README.md)
 - [Architecture guide](../../ARCHITECTURE.md)
-- [Plugin examples](../../examples/plugins) - extend the Trembo SDK and CLI with custom tools and event hooks
-- [Hook examples](../../examples/hooks) - lifecycle hooks for logging, blocking, and injection for Trembo SDK and CLI
+- [Plugin examples](../../examples/plugins) — extend the Trembo SDK and CLI with custom tools and event hooks
+- [Hook examples](../../examples/hooks) — lifecycle hooks for logging, blocking, and injection for Trembo SDK and CLI

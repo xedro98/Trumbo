@@ -1,6 +1,6 @@
-# Going to Production
+# Going to production
 
-Guidelines for deploying Trembo SDK agents in production environments.
+Guidelines for deploying Trembo SDK agents in production.
 
 ## Error Handling
 

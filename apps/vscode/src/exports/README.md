@@ -1,10 +1,20 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Trembo API
 
-The Trembo extension exposes an API that can be used by other extensions. To use this API in your extension:
+The Trembo extension exposes an API that other extensions can call. To use it from your extension:
 
-1. Copy `src/extension-api/trembo.d.ts` to your extension's source directory.
+1. Copy `src/extension-api/trembo.d.ts` into your extension's source directory.
 2. Include `trembo.d.ts` in your extension's compilation.
-3. Get access to the API with the following code:
+3. Access the API with the following code:
 
     ```ts
     const tremboExtension = vscode.extensions.getExtension<TremboAPI>("trembo-bot.trembo")
@@ -37,7 +47,7 @@ The Trembo extension exposes an API that can be used by other extensions. To use
     }
     ```
 
-    **Note:** To ensure that the `trembo-bot.trembo` extension is activated before your extension, add it to the `extensionDependencies` in your `package.json`:
+    **Note:** To ensure the `trembo-bot.trembo` extension is activated before your extension, add it to `extensionDependencies` in your `package.json`:
 
     ```json
     "extensionDependencies": [
@@ -45,4 +55,4 @@ The Trembo extension exposes an API that can be used by other extensions. To use
     ]
     ```
 
-For detailed information on the available methods and their usage, refer to the `trembo.d.ts` file.
+For the full list of available methods and how to use them, refer to the `trembo.d.ts` file.

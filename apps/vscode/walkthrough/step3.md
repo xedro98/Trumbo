@@ -1,7 +1,17 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Always Use the Best Models
 
-**Connect your keys for Anthropic (Claude), Google (Gemini), OpenAI (GPT), and other leading LLMs.**
+**Bring your own keys for Anthropic (Claude), Google (Gemini), OpenAI (GPT), and other leading LLMs.**
 
-Trembo puts you at the forefront of AI. Bring your own API keys for leading models like Anthropic (Claude), Google (Gemini), and OpenAI (GPT). Always leverage the most powerful State-of-the-Art (SOTA) capabilities, ensuring you control both cost and cutting-edge performance.
+Trembo is provider-agnostic. Plug in API keys for the models you already trust — Anthropic, Google, OpenAI, and the rest — and swap them as the state of the art moves. You decide what runs, what it costs, and when to upgrade, with no vendor lock-in and no hosted middleman.
 
-![Trembo Models Demo](https://storage.googleapis.com/trembo_public_images/docs/assets/trembos-models-hifi-3_compress.webp)
+Trembo is fully open source and self-hostable — bring your own API keys, run it anywhere, and keep full control of your workflow.

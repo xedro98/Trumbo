@@ -19,29 +19,30 @@ metadata:
   owner: development
   reportFormat: markdown
 ---
-Run comprehensive code style and linting checks:
+Run the project's style and lint tooling and summarize what it finds.
 
-1. Run ESLint: `npm run lint` or `eslint .`
-2. Run Prettier check: `prettier --check .` or equivalent
-3. Check for common issues:
-   - Unused variables or imports
-   - Dead code
-   - TODO/FIXME comments left in main branch
-   - Console.log statements in production code
-   - Magic numbers without explanation
+1. Lint: `npm run lint` (or `eslint .` if no script exists).
+2. Format check: `prettier --check .` or the project's equivalent.
+3. Scan for common smells that linters miss:
+   - Unused variables and imports.
+   - Dead code paths.
+   - `TODO`/`FIXME` left on the main branch.
+   - `console.log` (and similar) in production code.
+   - Magic numbers with no explaining comment.
 
-Generate a report showing:
-- Linting violations by rule (top 10)
-- Files with most violations
-- Formatting inconsistencies
-- Pattern analysis (e.g., common TODO reasons, unused import patterns)
+Produce a report with:
 
-Provide statistics:
-- Total violations found
-- Fixable vs non-fixable violations
-- Trend compared to previous week (if data exists)
+- Top 10 violations by rule.
+- Files with the most violations.
+- Formatting drift.
+- Pattern notes — e.g. recurring TODO reasons, common unused-import sources.
 
-Recommendations:
-- Quick wins: violations that can be auto-fixed
-- Standards improvements: patterns to establish
-- Review-needed: complex issues requiring human judgment
+Then give the numbers:
+
+- Total violations.
+- Auto-fixable vs. needs-human-judgment.
+- Week-over-week trend if a previous report is available.
+
+Finish with three buckets of next steps: quick wins (auto-fixable), standards to
+lock in (patterns to enforce), and review-needed (complex issues you can't
+safely auto-resolve).

@@ -1,6 +1,16 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Hook Test Fixtures
 
-This directory contains pre-written hook scripts for testing the Trembo hooks system.
+This directory ships ready-made hook scripts for exercising the Trembo hooks system. Each fixture targets a single, well-defined scenario so tests stay small and predictable.
 
 ## Directory Structure
 
@@ -23,27 +33,27 @@ fixtures/
 
 ### With loadFixture()
 
-The `loadFixture()` helper function copies a fixture to your test environment:
+The `loadFixture()` helper copies a fixture into your test environment:
 
 ```typescript
 import { loadFixture } from '../test-utils'
 
 it("should work with real hook", async () => {
   const { getEnv } = setupHookTests()
-  
+
   await loadFixture("hooks/pretooluse/success", getEnv().tempDir)
-  
+
   const factory = new HookFactory()
   const runner = await factory.create("PreToolUse")
   const result = await runner.run(buildPreToolUseInput({ toolName: "test_tool" }))
-  
+
   result.cancel.should.be.false()
 })
 ```
 
 ### Direct File Copy
 
-For more control, you can also manually copy fixture files.
+If you need finer control, you can also copy the fixture files by hand.
 
 ## Available Fixtures
 
@@ -51,93 +61,93 @@ For more control, you can also manually copy fixture files.
 
 #### `hooks/pretooluse/success`
 - **Returns**: `{ cancel: false, contextModification: "PreToolUse hook executed successfully", errorMessage: "" }`
-- **Use for**: Testing happy path scenarios
+- **Use for**: happy-path scenarios
 
 #### `hooks/pretooluse/blocking`
 - **Returns**: `{ cancel: true, contextModification: "", errorMessage: "Tool execution blocked by hook" }`
-- **Use for**: Testing tool execution blocking
+- **Use for**: verifying that tool execution can be blocked
 
 #### `hooks/pretooluse/context-injection`
 - **Returns**: `{ cancel: false, contextModification: "WORKSPACE_RULES: Tool [toolName] requires review", errorMessage: "" }`
-- **Use for**: Testing context injection with type prefixes
-- **Note**: Dynamically includes tool name from input
+- **Use for**: context injection with type prefixes
+- **Note**: dynamically includes the tool name from the input
 
 #### `hooks/pretooluse/error`
-- **Behavior**: Prints error to stderr and exits with code 1
-- **Use for**: Testing error handling
+- **Behavior**: prints an error to stderr and exits with code 1
+- **Use for**: error-handling paths
 
 ### PostToolUse Hooks
 
 #### `hooks/posttooluse/success`
 - **Returns**: `{ cancel: false, contextModification: "PostToolUse hook executed successfully", errorMessage: "" }`
-- **Use for**: Testing PostToolUse execution
+- **Use for**: confirming PostToolUse runs
 
 #### `hooks/posttooluse/error`
-- **Behavior**: Prints error to stderr and exits with code 1
-- **Use for**: Testing error handling in PostToolUse
+- **Behavior**: prints an error to stderr and exits with code 1
+- **Use for**: error handling in PostToolUse
 
 ### UserPromptSubmit Hooks
 
 #### `hooks/userpromptsubmit/success`
 - **Returns**: `{ cancel: false, contextModification: "Prompt approved", errorMessage: "" }`
-- **Use for**: Testing successful prompt submission
+- **Use for**: successful prompt submission
 
 #### `hooks/userpromptsubmit/blocking`
 - **Returns**: `{ cancel: true, contextModification: "", errorMessage: "Prompt violates policy" }`
-- **Use for**: Testing prompt submission blocking
+- **Use for**: blocking a prompt submission
 
 #### `hooks/userpromptsubmit/context-injection`
 - **Returns**: `{ cancel: false, contextModification: "CONTEXT_INJECTION: User is in plan mode", errorMessage: "" }`
-- **Use for**: Testing context injection into task request
+- **Use for**: injecting context into the task request
 
 #### `hooks/userpromptsubmit/multiline`
 - **Returns**: `{ cancel: false, contextModification: "Line count: N", errorMessage: "" }`
-- **Use for**: Testing multiline prompt handling
-- **Note**: Dynamically counts newlines in the prompt
+- **Use for**: multiline prompt handling
+- **Note**: dynamically counts newlines in the prompt
 
 #### `hooks/userpromptsubmit/large-prompt`
 - **Returns**: `{ cancel: false, contextModification: "Prompt size: N", errorMessage: "" }`
-- **Use for**: Testing large prompt handling
-- **Note**: Dynamically reports prompt character count
+- **Use for**: large prompt handling
+- **Note**: dynamically reports the prompt's character count
 
 #### `hooks/userpromptsubmit/special-chars`
 - **Returns**: `{ cancel: false, contextModification: "Special chars preserved" | "Missing special chars", errorMessage: "" }`
-- **Use for**: Testing special character preservation
-- **Note**: Checks for @, #, and $ characters
+- **Use for**: special character preservation
+- **Note**: checks for `@`, `#`, and `$`
 
 #### `hooks/userpromptsubmit/empty-prompt`
 - **Returns**: `{ cancel: false, contextModification: "Prompt length: 0", errorMessage: "" }`
-- **Use for**: Testing empty prompt handling
-- **Note**: Safely handles undefined or empty prompts
+- **Use for**: empty prompt handling
+- **Note**: safely handles undefined or empty prompts
 
 #### `hooks/userpromptsubmit/malformed-json`
-- **Behavior**: Outputs invalid JSON ("not valid json")
-- **Use for**: Testing malformed JSON error handling
+- **Behavior**: outputs invalid JSON (`"not valid json"`)
+- **Use for**: malformed JSON error handling
 
 #### `hooks/userpromptsubmit/error`
-- **Behavior**: Prints error to stderr and exits with code 1
-- **Use for**: Testing error handling in UserPromptSubmit
+- **Behavior**: prints an error to stderr and exits with code 1
+- **Use for**: error handling in UserPromptSubmit
 
 ### TaskStart Hooks
 
 #### `hooks/taskstart/success`
 - **Returns**: `{ cancel: false, contextModification: "TaskStart hook executed successfully", errorMessage: "" }`
-- **Use for**: Testing TaskStart hook success path, allowing task to proceed
+- **Use for**: the TaskStart success path, letting the task proceed
 
 #### `hooks/taskstart/blocking`
 - **Returns**: `{ cancel: true, contextModification: "", errorMessage: "Task execution blocked by hook" }`
-- **Use for**: Testing task blocking at start (e.g., policy enforcement)
+- **Use for**: blocking a task at start (e.g. policy enforcement)
 
 #### `hooks/taskstart/error`
-- **Behavior**: Prints error to stderr and exits with code 1
-- **Use for**: Testing error handling in TaskStart hooks
+- **Behavior**: prints an error to stderr and exits with code 1
+- **Use for**: error handling in TaskStart hooks
 
 ## Platform Considerations
 
-Hooks run cross-platform, but runtime differs by OS:
+Hooks run cross-platform, but the runtime differs by OS:
 
-- **Linux/macOS**: executable hook files run directly (shebang/executable bit)
-- **Windows**: hooks execute through PowerShell; tests may use a small PowerShell bridge script that pipes stdin to a Node companion file
+- **Linux/macOS**: executable hook files run directly via shebang and the executable bit
+- **Windows**: hooks execute through PowerShell; tests may use a small PowerShell bridge script that pipes stdin into a Node companion file
 
 ### Creating New Fixtures
 
@@ -169,7 +179,7 @@ chmod +x src/core/hooks/__tests__/fixtures/hooks/pretooluse/my-new-scenario/PreT
 
 ## Maintenance
 
-- Keep fixtures simple and focused on one scenario
+- Keep fixtures simple and focused on a single scenario
 - Fixtures are Node.js scripts that work across platforms
-- Update this README when adding new fixtures
-- Remove obsolete fixtures and update references
+- Update this README whenever you add a new fixture
+- Remove obsolete fixtures and update any references to them

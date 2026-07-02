@@ -1,9 +1,20 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # MCP OAuth Test Server
 
-A self-contained, **zero-dependency** (Node `http` only) server for exercising
+A self-contained, **zero-dependency** server (Node `http` only) for exercising
 and debugging Trembo's MCP OAuth flow locally.
 
-It plays both roles that a real remote MCP server + its OAuth provider play:
+It plays both roles that a real remote MCP server plus its OAuth provider would
+play:
 
 1. **OAuth 2.0 Authorization Server** (RFC 8414 / RFC 7591 DCR / RFC 7636 PKCE):
    - `GET /.well-known/oauth-protected-resource`
@@ -20,7 +31,8 @@ The endpoint shapes match what `@modelcontextprotocol/sdk` v1.25.x discovers.
 
 ## Why
 
-Exercises MCP OAuth failure modes without a real remote server:
+This server lets you reproduce MCP OAuth failure modes without standing up a
+real remote server:
 
 - **State expiry** — Trembo's `McpOAuthManager` enforces a state lifetime
   (`MCP_OAUTH_STATE_EXPIRY_MS`). If the callback returns after the window, it's
@@ -38,8 +50,8 @@ bun src/dev/mcp-oauth-test-server/server.ts --verbose
 ```
 
 On startup the server prints a **paste-ready `mcpServers` JSON fragment** (in
-the nested `transport` shape used by `trembo_mcp_settings.json`) in addition to
-the banner — merge it under `mcpServers` in
+the nested `transport` shape used by `trembo_mcp_settings.json`) alongside the
+banner — merge it under `mcpServers` in
 `~/.trembo/data/settings/trembo_mcp_settings.json`. Or add an MCP server
 (StreamableHTTP) in Trembo by hand, pointing at:
 
@@ -68,7 +80,7 @@ can click **Approve** or **Deny**.
 
 Each instance binds its own random port and prints its `/mcp` endpoint. Add
 each one to Trembo as a separate StreamableHTTP server to exercise concurrent
-OAuth flows / multiple authenticated servers:
+OAuth flows or multiple authenticated servers at the same time:
 
 ```bash
 bun src/dev/mcp-oauth-test-server/server.ts --instances 3 --verbose

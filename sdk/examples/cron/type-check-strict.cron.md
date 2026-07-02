@@ -19,26 +19,25 @@ metadata:
   owner: development
   strictLevel: strict
 ---
-Run TypeScript type checking with strict compiler options:
+Run TypeScript with strict compiler options and report what falls out. Stay in
+`plan` mode — propose fixes, do not apply them.
 
-1. Run `tsc --noEmit` with strict mode settings
-2. Collect all type errors and warnings
-3. Categorize errors:
-   - Missing type annotations
-   - Implicit any types
-   - Null/undefined safety issues
-   - Generic type issues
-   - Import/export mismatches
+1. Run `tsc --noEmit` with strict settings.
+2. Collect every error and warning.
+3. Bucket the errors:
+   - Missing type annotations.
+   - Implicit `any`.
+   - Null/undefined safety holes.
+   - Generic type issues.
+   - Import/export mismatches.
 
-Generate a detailed report showing:
-- Total type errors
-- Errors by category with counts
-- Top 10 files with most type errors
-- Specific recommendations for each category
+Report:
 
-Suggest improvements:
-- Files that would benefit from JSDoc
-- Places where explicit types would improve clarity
-- Breaking changes if we made types more strict
+- Total type errors.
+- Error counts per category.
+- Top 10 files by error count.
+- A specific suggestion per category.
 
-Use plan mode to suggest fixes without applying them automatically.
+Then call out where tightening types would pay off: files that would benefit
+from JSDoc, places where an explicit type would make the code clearer, and
+anything that would become a breaking change if types were made stricter.

@@ -1,6 +1,6 @@
 # Telegram Connector
 
-The Telegram connector bridges a Telegram Bot API bot into Trembo CLI sessions. It is a polling connector, so it does not need a public webhook URL. The connector process must stay running while Telegram access is active.
+The Telegram connector wires a Telegram Bot API bot into Trembo CLI sessions. It's a polling connector, so it doesn't need a public webhook URL — but the connector process has to stay running while Telegram access is active.
 
 ## Setup
 
@@ -16,7 +16,7 @@ Start the connector:
 trembo connect telegram -k "$TELEGRAM_BOT_TOKEN"
 ```
 
-The connector discovers the bot username from the token. Use `--bot-username`
+The connector derives the bot username from the token. Use `--bot-username`
 only if you need to override it.
 
 Useful variants:
@@ -43,38 +43,38 @@ After the connector starts, send `/help` or `/start` to the bot in Telegram.
 ## What It Does
 
 - Starts or reuses a Trembo RPC-backed session for each Telegram thread.
-- Keeps chat history and working-directory state separately per Telegram thread.
-- Lets Telegram users ask questions, assign coding tasks, and, when tools are enabled, inspect files, edit files, run commands, and prepare PRs.
+- Keeps chat history and working-directory state separate per Telegram thread.
+- Lets Telegram users ask questions, assign coding tasks, and — when tools are enabled — inspect files, edit files, run commands, and prepare PRs.
 - Supports required tool approvals from Telegram with `Y` and `N` replies.
-- Can deliver scheduled run results back to a Telegram thread when the connector is running.
+- Can deliver scheduled run results back to a Telegram thread while the connector is running.
 
 ## Chat Commands
 
 The Telegram connector uses the shared connector command parser:
 
-- `/help` or `/start` - show connector help
-- `/new` or `/clear` - start a fresh session for the current thread
-- `/whereami` - show thread, cwd, tools, and yolo state
-- `/tools [on|off|toggle]` - allow or block repo/file/shell tools
-- `/yolo [on|off|toggle]` - auto-approve tool use
-- `/cwd <path>` - change working directory
-- `/schedule create/list/trigger/delete` - manage scheduled workflows
-- `/abort` - stop the current task
-- `/exit` - stop the connector
+- `/help` or `/start` — show connector help
+- `/new` or `/clear` — start a fresh session for the current thread
+- `/whereami` — show thread, cwd, tools, and yolo state
+- `/tools [on|off|toggle]` — allow or block repo/file/shell tools
+- `/yolo [on|off|toggle]` — auto-approve tool use
+- `/cwd <path>` — change working directory
+- `/schedule create/list/trigger/delete` — manage scheduled workflows
+- `/abort` — stop the current task
+- `/exit` — stop the connector
 
-In Telegram groups, bot-addressed commands such as `/help@my_bot` are normalized only when the suffix matches the configured bot username. Commands addressed to another bot are left unmatched.
+In Telegram groups, bot-addressed commands like `/help@my_bot` are normalized only when the suffix matches the configured bot username. Commands addressed to a different bot are left unmatched.
 
 ## Tools And Access
 
-Tools are enabled by default for Telegram sessions. That means anyone who can successfully message the bot may be able to ask it to inspect or change the configured workspace.
+Tools are enabled by default for Telegram sessions. That means anyone who can message the bot may be able to ask it to inspect or change the configured workspace.
 
-Use `--no-tools` when the Telegram surface is not trusted:
+Use `--no-tools` when the Telegram surface isn't trusted:
 
 ```bash
 trembo connect telegram -k "$TELEGRAM_BOT_TOKEN" --no-tools
 ```
 
-When the connector starts with `--no-tools`, chat commands such as `/tools on` and `/yolo on` cannot re-enable tools for that connector run.
+When the connector starts with `--no-tools`, chat commands like `/tools on` and `/yolo on` can't re-enable tools for that connector run.
 
 For participant restrictions, run the interactive connector wizard with `trembo connect`. The Telegram wizard asks whether to restrict access, points you to `@userinfobot`, and configures your numeric Telegram user ID.
 
@@ -90,13 +90,13 @@ You can also pass a manual `--hook-command` that returns `{"action":"deny"}` for
 
 Telegram final assistant replies are sent directly through Telegram `sendMessage` payloads with message entities. This avoids Telegram markdown parse failures for raw model text. If entity sending fails, the connector falls back to raw text.
 
-Long final assistant replies are split across Telegram messages. Tool/status updates and scheduled delivery messages use the adapter's raw thread posting path.
+Long final assistant replies are split across Telegram messages. Tool and status updates, plus scheduled delivery messages, use the adapter's raw thread posting path.
 
 Telegram final assistant replies are sent after the runtime turn completes. Google Chat and WhatsApp use the shared connector runtime streaming path for incremental assistant text.
 
 ## Scheduled Delivery
 
-To deliver a scheduled run result back to Telegram, create the schedule from the Telegram chat when possible:
+To deliver a scheduled run result back to Telegram, create the schedule from the Telegram chat when you can:
 
 1. Start the Telegram connector.
 2. Send a schedule command in Telegram:
@@ -107,7 +107,7 @@ To deliver a scheduled run result back to Telegram, create the schedule from the
 
 Schedules created this way automatically target the current Telegram thread for delivery. You can also use `/schedule list`, `/schedule trigger <schedule-id>`, and `/schedule delete <schedule-id>` from Telegram.
 
-If you are creating the schedule outside Telegram, first send `/whereami` in Telegram to get the thread id, then pass the delivery metadata to the CLI:
+If you're creating the schedule outside Telegram, first send `/whereami` in Telegram to get the thread id, then pass the delivery metadata to the CLI:
 
 ```bash
 trembo schedule create "Daily summary" \
@@ -122,12 +122,12 @@ trembo schedule create "Daily summary" \
 `--delivery-bot` is still supported after token-only connector setup. Use
 the Telegram bot username shown by `/whereami` as `deliveryUserName` when you
 need to target one specific Telegram connector, or omit the flag when the
-schedule does not need to be restricted to a specific bot.
+schedule doesn't need to be restricted to a specific bot.
 
-The connector must be running when the scheduled result is delivered, and the target thread must have an existing thread binding.
+The connector must be running when the scheduled result is delivered, and the target thread must already have a thread binding.
 
 ## Limitations
 
-- The connector is not hosted by Telegram. It is a local CLI process polling Telegram, so it stops working if the machine or connector process is offline.
-- The current documented surface is text prompts and command replies. Media-specific Telegram workflows are not part of this connector contract.
+- The connector isn't hosted by Telegram. It's a local CLI process polling Telegram, so it stops working if the machine or the connector process goes offline.
+- The documented surface is text prompts and command replies. Media-specific Telegram workflows aren't part of this connector contract.
 - Telegram group message delivery still depends on Telegram bot settings and which events the Bot API delivers to the adapter.

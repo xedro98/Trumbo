@@ -1,135 +1,135 @@
-# Trembo Hooks Documentation
+# Trembo hooks
 
 ## Overview
 
-Trembo hooks allow you to execute custom scripts at specific points in the agentic workflow. Hooks can be placed in either:
+Trembo hooks let you run custom scripts at specific points in the agentic workflow. Hooks can live in either:
 - **Global hooks directory**: `~/Documents/Trembo/Hooks/` (applies to all workspaces)
-- **Workspace hooks directory**: `.tremborules/hooks/` (applies to the workspace the repo is part of)
+- **Workspace hooks directory**: `.tremborules/hooks/` (applies to the workspace the repo belongs to)
 
 Hooks run automatically when enabled.
 
-## Enabling Hooks
+## Enabling hooks
 
-1. Open Trembo settings in VSCode
-2. Navigate to the Feature Settings section
-3. Check the "Enable Hooks" checkbox
-4. Hooks must be executable files (on Unix/Linux/macOS use `chmod +x hookname`)
+1. Open Trembo settings in VS Code
+2. Go to the Feature Settings section
+3. Check "Enable Hooks"
+4. Hook files must be executable (on Unix/Linux/macOS: `chmod +x hookname`)
 
-## Available Hooks
+## Available hooks
 
-### TaskStart Hook
-- **When**: Runs when a NEW task is started (not when resuming)
-- **Purpose**: Initialize task context, validate task requirements, set up environment
-- **Global Location**: `~/Documents/Trembo/Hooks/TaskStart`
-- **Workspace Location**: `.tremborules/hooks/TaskStart`
+### TaskStart
+- **When**: a NEW task is started (not when resuming)
+- **Purpose**: initialize task context, validate task requirements, set up the environment
+- **Global location**: `~/Documents/Trembo/Hooks/TaskStart`
+- **Workspace location**: `.tremborules/hooks/TaskStart`
 
-### TaskResume Hook
-- **When**: Runs when an EXISTING task is resumed (after user clicks resume button)
-- **Purpose**: Validate resumed task state, restore context, check for changes since last run
-- **Global Location**: `~/Documents/Trembo/Hooks/TaskResume`
-- **Workspace Location**: `.tremborules/hooks/TaskResume`
+### TaskResume
+- **When**: an EXISTING task is resumed (after the user clicks resume)
+- **Purpose**: validate resumed task state, restore context, check for changes since the last run
+- **Global location**: `~/Documents/Trembo/Hooks/TaskResume`
+- **Workspace location**: `.tremborules/hooks/TaskResume`
 
-### TaskCancel Hook
-- **When**: Runs when a task is cancelled or a hook is aborted by the user (only if there's actual active work or work was started)
-- **Purpose**: Clean up resources, log cancellation, save state
-- **Global Location**: `~/Documents/Trembo/Hooks/TaskCancel`
-- **Workspace Location**: `.tremborules/hooks/TaskCancel`
-- **Note**: This hook is NOT cancellable
+### TaskCancel
+- **When**: a task is cancelled or a hook is aborted by the user (only when there is active work or work was started)
+- **Purpose**: clean up resources, log cancellation, save state
+- **Global location**: `~/Documents/Trembo/Hooks/TaskCancel`
+- **Workspace location**: `.tremborules/hooks/TaskCancel`
+- **Note**: this hook is NOT cancellable
 
-### TaskComplete Hook (coming soon!)
-- **When**: Runs when a task is marked as complete
-- **Purpose**: Log completion status, perform final cleanup, generate reports
-- **Global Location**: `~/Documents/Trembo/Hooks/TaskComplete`
-- **Workspace Location**: `.tremborules/hooks/TaskComplete`
+### TaskComplete (coming soon)
+- **When**: a task is marked as complete
+- **Purpose**: log completion status, perform final cleanup, generate reports
+- **Global location**: `~/Documents/Trembo/Hooks/TaskComplete`
+- **Workspace location**: `.tremborules/hooks/TaskComplete`
 
-### UserPromptSubmit Hook
-- **When**: Runs when the user submits a prompt/message (initial task, resume, or feedback)
-- **Purpose**: Validate user input, preprocess prompts, add context to user messages
-- **Global Location**: `~/Documents/Trembo/Hooks/UserPromptSubmit`
-- **Workspace Location**: `.tremborules/hooks/UserPromptSubmit`
+### UserPromptSubmit
+- **When**: the user submits a prompt/message (initial task, resume, or feedback)
+- **Purpose**: validate user input, preprocess prompts, add context to user messages
+- **Global location**: `~/Documents/Trembo/Hooks/UserPromptSubmit`
+- **Workspace location**: `.tremborules/hooks/UserPromptSubmit`
 
-### PreToolUse Hook
-- **When**: Runs BEFORE a tool is executed
-- **Purpose**: Validate parameters, block execution, or add context
-- **Global Location**: `~/Documents/Trembo/Hooks/PreToolUse`
-- **Workspace Location**: `.tremborules/hooks/PreToolUse`
+### PreToolUse
+- **When**: BEFORE a tool executes
+- **Purpose**: validate parameters, block execution, or add context
+- **Global location**: `~/Documents/Trembo/Hooks/PreToolUse`
+- **Workspace location**: `.tremborules/hooks/PreToolUse`
 
-### PostToolUse Hook
-- **When**: Runs AFTER a tool completes
-- **Purpose**: Observe results, track patterns, or add context
-- **Global Location**: `~/Documents/Trembo/Hooks/PostToolUse`
-- **Workspace Location**: `.tremborules/hooks/PostToolUse`
+### PostToolUse
+- **When**: AFTER a tool completes
+- **Purpose**: observe results, track patterns, or add context
+- **Global location**: `~/Documents/Trembo/Hooks/PostToolUse`
+- **Workspace location**: `.tremborules/hooks/PostToolUse`
 
-### PreCompact Hook (coming soon!)
-- **When**: Runs BEFORE the conversation context is compacted/truncated
-- **Purpose**: Observe compaction events, log context management, track token usage
-- **Global Location**: `~/Documents/Trembo/Hooks/PreCompact`
-- **Workspace Location**: `.tremborules/hooks/PreCompact`
+### PreCompact (coming soon)
+- **When**: BEFORE the conversation context is compacted/truncated
+- **Purpose**: observe compaction events, log context management, track token usage
+- **Global location**: `~/Documents/Trembo/Hooks/PreCompact`
+- **Workspace location**: `.tremborules/hooks/PreCompact`
 
-## Cross-Platform Hook Format
+## Cross-platform hook format
 
-Trembo uses a git-style approach for hooks that works consistently across all platforms:
+Trembo uses a git-style approach for hooks that works consistently across platforms:
 
-### Hook Files (All Platforms)
-- **No file extensions**: Hooks are named exactly `PreToolUse` or `PostToolUse` (no `.bat`, `.cmd`, `.sh` etc.)
-- **Shebang required**: First line must be a shebang (e.g., `#!/usr/bin/env bash` or `#!/usr/bin/env node`)
-- **Executable on Unix**: On Unix/Linux/macOS, hooks must be executable: `chmod +x PreToolUse`
-- **Windows**: Not currently supported.
+### Hook files (all platforms)
+- **No file extensions**: hooks are named exactly `PreToolUse` or `PostToolUse` (no `.bat`, `.cmd`, `.sh`, etc.)
+- **Shebang required**: the first line must be a shebang (e.g. `#!/usr/bin/env bash` or `#!/usr/bin/env node`)
+- **Executable on Unix**: on Unix/Linux/macOS, hooks must be executable: `chmod +x PreToolUse`
+- **Windows**: not currently supported
 
-### How It Works
+### How it works
 
 Like git hooks, Trembo executes hook files through a shell that interprets the shebang line:
-- On Unix/Linux/macOS: Native shell execution with shebang support
+- On Unix/Linux/macOS: native shell execution with shebang support
 
 This means:
-- ✅ Same hook script works on all platforms
-- ✅ Write once, run anywhere
-- ✅ Use any scripting language (bash, node, python, etc.)
+- The same hook script works on every supported platform
+- Write once, run anywhere
+- Use any scripting language (bash, node, python, etc.)
 
-### Creating Hooks
+### Creating hooks
 
 **On Unix/Linux/macOS:**
 ```bash
-# Create hook file
+# Create the hook file
 nano ~/Documents/Trembo/Hooks/PreToolUse
 
-# Make executable
+# Make it executable
 chmod +x ~/Documents/Trembo/Hooks/PreToolUse
 ```
 
-## Context Injection Timing
+## Context injection timing
 
-**IMPORTANT**: Context injected by hooks affects **FUTURE AI decisions**, not the current tool execution.
+**Important**: context injected by hooks affects **future AI decisions**, not the current tool execution.
 
-### Why This Matters
+### Why this matters
 
 When a hook runs:
-1. The AI has already decided what tool to use and with what parameters
+1. The AI has already decided which tool to use and with what parameters
 2. The hook cannot modify those parameters
 3. Context from the hook is added to the conversation
-4. The AI sees this context in the **NEXT API request** and can adjust future decisions
+4. The AI sees this context in the **next API request** and can adjust future decisions
 
-### PreToolUse Hook Flow
+### PreToolUse hook flow
 ```
 1. AI decides: "I'll use write_to_file with these parameters"
 2. PreToolUse hook runs → can block or add context
-3. If allowed, tool executes with original parameters
-4. Context is added to conversation
-5. Next API request includes this context
-6. AI adjusts future decisions based on context
+3. If allowed, the tool executes with the original parameters
+4. Context is added to the conversation
+5. The next API request includes this context
+6. AI adjusts future decisions based on the context
 ```
 
-### PostToolUse Hook Flow
+### PostToolUse hook flow
 ```
-1. Tool completes execution
-2. PostToolUse hook runs → observes results
-3. Hook adds context about the outcome
-4. Context is added to conversation
-5. Next API request includes this context
+1. The tool completes execution
+2. PostToolUse hook runs → observes the results
+3. The hook adds context about the outcome
+4. Context is added to the conversation
+5. The next API request includes this context
 6. AI can learn from the results
 ```
 
-## Hook Input/Output
+## Hook input / output
 
 ### Input (via stdin as JSON)
 
@@ -202,24 +202,24 @@ All hooks must return:
 ```json
 {
   "cancel": boolean,                   // Required: false to continue, true to block execution
-  "contextModification": "string",     // Optional: Context for future AI decisions
-  "errorMessage": "string"             // Optional: Error details if blocking
+  "contextModification": "string",     // Optional: context for future AI decisions
+  "errorMessage": "string"             // Optional: error details if blocking
 }
 ```
 
-**Note**: The `cancel` field works as follows:
-- `false` (or omitted): Allow execution to continue
-- `true`: Block execution and show error message to user
+**Note**: the `cancel` field works as follows:
+- `false` (or omitted): allow execution to continue
+- `true`: block execution and show the error message to the user
 
-## Hook Execution Limits
+## Hook execution limits
 
-- **Timeout**: Hooks must complete within 30 seconds (configurable via `HOOK_EXECUTION_TIMEOUT_MS`)
-- **Context Size**: Context modifications are limited to 50KB (configurable via `MAX_CONTEXT_MODIFICATION_SIZE`)
-- **Error Handling**: Expected errors (file not found, permission denied, not a directory) are handled silently; unexpected file system errors are propagated
+- **Timeout**: hooks must complete within 30 seconds (configurable via `HOOK_EXECUTION_TIMEOUT_MS`)
+- **Context size**: context modifications are capped at 50KB (configurable via `MAX_CONTEXT_MODIFICATION_SIZE`)
+- **Error handling**: expected errors (file not found, permission denied, not a directory) are handled silently; unexpected filesystem errors are propagated
 
-## Common Use Cases
+## Common use cases
 
-### 1. Validation - Block Invalid Operations
+### 1. Validation — block invalid operations
 
 ```bash
 #!/usr/bin/env bash
@@ -241,7 +241,7 @@ fi
 echo '{"cancel": false}'
 ```
 
-### 2. Context Building - Learn from Operations
+### 2. Context building — learn from operations
 
 ```bash
 #!/usr/bin/env bash
@@ -262,7 +262,7 @@ else
 fi
 ```
 
-### 3. Performance Monitoring
+### 3. Performance monitoring
 
 ```bash
 #!/usr/bin/env bash
@@ -282,7 +282,7 @@ else
 fi
 ```
 
-### 4. Logging and Telemetry
+### 4. Logging and telemetry
 
 ```bash
 #!/usr/bin/env bash
@@ -295,38 +295,38 @@ echo "$input" >> ~/.trembo/hook-logs/tool-usage.jsonl
 echo '{"cancel": false}'
 ```
 
-## Global vs Workspace Hooks
+## Global vs workspace hooks
 
 Trembo supports two levels of hooks:
 
-### Global Hooks
+### Global hooks
 - **Location**: `~/Documents/Trembo/Hooks/` (macOS/Linux)
-- **Scope**: Apply to ALL workspaces and projects
-- **Use Case**: Organization-wide policies, personal preferences, universal validations
-- **Priority**: Order not guaranteed when combined with workspace hooks
+- **Scope**: all workspaces and projects
+- **Use case**: organization-wide policies, personal preferences, universal validations
+- **Priority**: order not guaranteed when combined with workspace hooks
 
-### Workspace Hooks
+### Workspace hooks
 - **Location**: `.tremborules/hooks/` in each workspace root
-- **Scope**: Apply only to the specific workspace
-- **Use Case**: Project-specific rules, team conventions, repository requirements
-- **Priority**: Order not guaranteed when combined with global hooks
+- **Scope**: only the specific workspace
+- **Use case**: project-specific rules, team conventions, repository requirements
+- **Priority**: order not guaranteed when combined with global hooks
 
-### Hook Execution
+### Hook execution
 
 When multiple hooks exist (global and/or workspace):
-- All hooks for a given step are executed **concurrently** using `Promise.all`
-- **Execution order is not guaranteed** - hooks run in parallel
+- All hooks for a given step run **concurrently** using `Promise.all`
+- **Execution order is not guaranteed** — hooks run in parallel
 - If ALL hooks allow execution (`cancel: false`), the tool proceeds
 - If ANY hook blocks (`cancel: true`), execution is blocked
 
-**Result Combination:**
-- `cancel`: If ANY hook returns `true`, execution is blocked
-- `contextModification`: All context strings are concatenated with double newlines (`\n\n`)
-- `errorMessage`: All error messages are concatenated with single newlines (`\n`)
+**Result combination:**
+- `cancel`: if ANY hook returns `true`, execution is blocked
+- `contextModification`: all context strings are concatenated with double newlines (`\n\n`)
+- `errorMessage`: all error messages are concatenated with single newlines (`\n`)
 
-### Setting Up Global Hooks
+### Setting up global hooks
 
-1. The global hooks directory is automatically created at:
+1. The global hooks directory is created automatically at:
    - macOS/Linux: `~/Documents/Trembo/Hooks/`
 
 2. Add your hook script:
@@ -336,15 +336,15 @@ When multiple hooks exist (global and/or workspace):
    chmod +x ~/Documents/Trembo/Hooks/PreToolUse
    ```
 
-3. Enable hooks in Trembo settings
+3. Enable hooks in Trembo settings.
 
-### Example: Global + Workspace Hooks
+### Example: global + workspace hooks
 
-**Global Hook** (applies to all projects):
+**Global hook** (applies to all projects):
 ```bash
 #!/usr/bin/env bash
 # ~/Documents/Trembo/Hooks/PreToolUse
-# Universal rule: Never delete package.json
+# Universal rule: never delete package.json
 input=$(cat)
 tool_name=$(echo "$input" | jq -r '.preToolUse.toolName')
 path=$(echo "$input" | jq -r '.preToolUse.parameters.path // ""')
@@ -357,11 +357,11 @@ fi
 echo '{"cancel": false}'
 ```
 
-**Workspace Hook** (applies to specific project):
+**Workspace hook** (applies to a specific project):
 ```bash
 #!/usr/bin/env bash
 # .tremborules/hooks/PreToolUse
-# Project rule: Only TypeScript files
+# Project rule: TypeScript files only
 input=$(cat)
 tool_name=$(echo "$input" | jq -r '.preToolUse.toolName')
 path=$(echo "$input" | jq -r '.preToolUse.parameters.path // ""')
@@ -376,48 +376,48 @@ echo '{"cancel": false}'
 
 **All hooks must allow execution for the tool to proceed.** Hooks may execute concurrently.
 
-## Multi-Root Workspaces
+## Multi-root workspaces
 
-If you have multiple workspace roots, you can place hooks in each root's `.tremborules/hooks/` directory. All hooks (global and workspace) may execute concurrently. Their results will be combined:
+With multiple workspace roots, you can place hooks in each root's `.tremborules/hooks/` directory. All hooks (global and workspace) may execute concurrently. Their results are combined:
 
-- **cancel**: If ANY hook returns `true`, execution is blocked
-- **contextModification**: All context modifications are concatenated
-- **errorMessage**: All error messages are concatenated
+- **cancel**: if ANY hook returns `true`, execution is blocked
+- **contextModification**: all context modifications are concatenated
+- **errorMessage**: all error messages are concatenated
 
-**Note:** No execution order is guaranteed between hooks from different directories.
+**Note:** no execution order is guaranteed between hooks from different directories.
 
 ## Troubleshooting
 
-### Hook Not Running
-- Ensure the "Enable Hooks" setting is checked
+### Hook not running
+- Ensure "Enable Hooks" is checked in settings
 - Verify the hook file is executable (`chmod +x hookname`)
-- Check the hook file has no syntax errors
-- Look for errors in VSCode's Output panel (Trembo channel)
+- Check the hook file for syntax errors
+- Look for errors in VS Code's Output panel (Trembo channel)
 
-### Hook Timing Out
-- Reduce complexity of the hook script
-- Avoid expensive operations (network calls, heavy computations)
-- Consider moving complex logic to a background process
+### Hook timing out
+- Reduce the complexity of the hook script
+- Avoid expensive operations (network calls, heavy computation)
+- Move complex logic to a background process
 
-### Context Not Affecting Behavior
+### Context not affecting behavior
 - Remember: context affects FUTURE decisions, not the current tool
-- Ensure context modifications are clear and actionable
+- Make context modifications clear and actionable
 - Check that context isn't being truncated (50KB limit)
 
-## Security Considerations
+## Security considerations
 
-- Hooks run with the same permissions as VSCode
+- Hooks run with the same permissions as VS Code
 - Be cautious with hooks from untrusted sources
 - Review hook scripts before enabling them
-- Consider using `.gitignore` to avoid committing sensitive hook logic
+- Consider `.gitignore` to avoid committing sensitive hook logic
 - Hooks can access all workspace files and environment variables
 
-## Best Practices
+## Best practices
 
-1. **Keep hooks fast** - Aim for <100ms execution time
-2. **Make context actionable** - Be specific about what the AI should do
-3. **Use structured prefixes** - Help the AI categorize context
-4. **Handle errors gracefully** - Always return valid JSON
-5. **Log for debugging** - Keep logs of hook executions for troubleshooting
-6. **Test incrementally** - Start with simple hooks and add complexity
-7. **Document your hooks** - Add comments explaining the purpose and logic
+1. **Keep hooks fast** — aim for <100ms execution time
+2. **Make context actionable** — be specific about what the AI should do
+3. **Use structured prefixes** — help the AI categorize context
+4. **Handle errors gracefully** — always return valid JSON
+5. **Log for debugging** — keep logs of hook executions for troubleshooting
+6. **Test incrementally** — start with simple hooks and add complexity
+7. **Document your hooks** — add comments explaining the purpose and logic

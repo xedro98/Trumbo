@@ -1,12 +1,21 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # How To Test Rich MCP Responses
 
-Use the `echo` MCP server to read back one of the test cases below into an MCP response.
-https://github.com/Garoth/echo-mcp
+The workflow is simple: point an `echo` MCP server at one of the test cases below and have it read that payload back as an MCP response. A handy echo server lives at https://github.com/Garoth/echo-mcp.
 
-Manually check the embeds, images, and whatever other enhancements for proper rendering.
-Remember that toggling Rich MCP off should cancel pending fetches. If the toggle was
-set to Plain, then the image/link previews should never be fetched until it's enabled.
-Remember that rich display mode will only load the first n URLs, currently set to 50
+Then eyeball the result. Check that embeds, images, and any other Rich MCP enhancements render the way they should. A few things to keep in mind while you test:
+
+- Toggling Rich MCP off must cancel any in-flight fetches. If the toggle is set to Plain, image and link previews must never be fetched until Rich MCP is enabled again.
+- Rich display mode only loads the first *n* URLs in a response — currently capped at 50.
 
 ## Main Test Case
 

@@ -1,4 +1,4 @@
-# Solid Patterns
+# Solid patterns
 
 ## Reactive State
 

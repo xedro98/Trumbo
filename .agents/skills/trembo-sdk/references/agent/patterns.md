@@ -1,4 +1,4 @@
-# Agent Patterns
+# Agent patterns
 
 ## Interactive CLI Agent
 

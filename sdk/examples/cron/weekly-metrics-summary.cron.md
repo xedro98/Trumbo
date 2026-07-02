@@ -19,49 +19,46 @@ metadata:
   owner: leadership
   reportFormat: markdown
 ---
-Generate a fun and insightful weekly metrics summary for the team:
+Put together a weekly metrics summary the team will actually read. Pull the last
+seven days and turn it into a short, upbeat, data-backed report.
 
-Collect metrics from the past 7 days:
+1. **Code activity**
+   - Commits this week.
+   - Lines added and deleted.
+   - Most active contributors.
+   - Most-modified files.
 
-1. **Code Activity:**
-   - Total commits this week
-   - Lines added/deleted
-   - Most active contributors
-   - Most modified files
+2. **Quality**
+   - Test pass rate.
+   - Coverage trend (up or down, by how much).
+   - Issues introduced versus fixed.
+   - Type-check error trend.
 
-2. **Quality Metrics:**
-   - Test pass rate
-   - Test coverage trend (up/down %)
-   - New issues introduced vs. fixed
-   - Type check errors (trend)
+3. **Performance**
+   - Build time trend.
+   - Bundle size change.
+   - Any regressions detected.
 
-3. **Performance:**
-   - Build time trend
-   - Bundle size changes
-   - Performance regressions detected
+4. **Pull requests**
+   - Opened versus closed.
+   - Average review time.
+   - PRs per author.
+   - Most-reviewed files.
 
-4. **Pull Requests:**
-   - PRs opened vs. closed
-   - Average review time
-   - PRs by author
-   - Most reviewed files
+5. **Velocity**
+   - Story points completed, if the team uses them.
+   - Bugs fixed versus features added.
+   - On-schedule versus blocked work.
 
-5. **Development Velocity:**
-   - Story points completed (if using)
-   - Bugs fixed vs. features added
-   - On-schedule vs. blocked tasks
+Write it as a markdown report with a celebratory but honest tone:
 
-Create a fun markdown report with:
-- 🏆 Top contributor of the week (most commits/reviews)
-- 📈 Metrics trending up/down with arrows
-- 🎯 Week's accomplishments summary
-- ⚠️  Metrics needing attention
-- 💡 Insights (e.g., "Performance improved 5% this week!")
-- 🔥 "Hot spots" (most frequently modified files)
+- 🏆 Top contributor of the week.
+- 📈 Metrics trending up or down, with arrows.
+- 🎯 The week's accomplishments.
+- ⚠️ Metrics that need attention.
+- 💡 One or two insights ("Build time dropped 6% this week").
+- 🔥 Hot spots — the files touched most often.
 
-Include emoji indicators and fun facts:
-- 🚀 Most commits in a single day
-- 👀 Most reviewed PR
-- 🐛 Most bug fixes by individual
-
-Make it celebratory but data-driven. Perfect for team morale on Friday!
+Sprinkle in a few fun facts: most commits in a single day, the most-reviewed PR,
+most bug fixes by one person. Keep it light but grounded in the numbers —
+perfect for a Friday standup or team channel.

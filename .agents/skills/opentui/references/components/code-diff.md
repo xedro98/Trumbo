@@ -1,8 +1,8 @@
-# Code & Diff Components
+# Code and diff components
 
 Components for displaying code with syntax highlighting and diffs in OpenTUI.
 
-## Code Component
+## Code component
 
 Display syntax-highlighted code blocks.
 

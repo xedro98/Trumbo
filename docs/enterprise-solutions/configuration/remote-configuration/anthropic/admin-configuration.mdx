@@ -3,6 +3,16 @@ title: "Configure Anthropic Provider (Admin)"
 sidebarTitle: "Configure Anthropic (Admin)"
 description: "This guide explains how administrators configure Anthropic as the organization-wide LLM provider for Trembo."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 
 As an administrator, you can add Anthropic as the organization-wide LLM provider for all Trembo users through the hosted admin console. This centralized approach provides direct access to Anthropic's Claude models, with an optional custom base URL for organizations that route traffic through a proxy.
@@ -12,7 +22,7 @@ As an administrator, you can add Anthropic as the organization-wide LLM provider
 To get started with setting up Anthropic as your organization's LLM provider, you'll need a few items in place.
 
 **Administrator access to the Trembo Admin console**  
-You need admin privileges to enforce provider settings across your organization. If you can navigate to **Settings Ã¢â€ â€™ Trembo Settings** in the admin console at [app.example.invalid](http://0.0.0.0:0), you have the right access level.
+You need administrator privileges to enforce provider settings across your organization. Sign in to the admin console at [app.example.invalid](http://0.0.0.0:0) to confirm your access level.
 
 **Anthropic API access**  
 Your organization needs an Anthropic account with API access to Claude models. Members will need individual API keys to authenticate.
@@ -25,7 +35,7 @@ If your organization requires routing API traffic through a proxy or custom endp
 
 <Steps>
 <Step title="Access Trembo Settings">
-Navigate to [app.example.invalid](http://0.0.0.0:0) and sign in with your administrator account. Go to **Settings Ã¢â€ â€™ Trembo Settings**.
+Navigate to [app.example.invalid](http://0.0.0.0:0) and sign in with your administrator account. Go to **Settings → Trembo Settings**.
 
 <Info>
 You should see the provider configuration options if you have the correct admin access level.

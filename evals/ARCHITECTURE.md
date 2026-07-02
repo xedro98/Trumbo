@@ -1,3 +1,13 @@
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 # Trembo Evals Architecture
 
 > Note: Smoke tests (Layer 2) are partially disabled while the eval framework is repointed at the new SDK CLI. The scenarios under `evals/smoke-tests/` are preserved and `npm run eval:smoke:run` still works against whatever `trembo` is on `$PATH` (install with `npm i -g trembo`). The old build-and-link helpers and the auto-running `trembo-evals-regression.yml` workflow are off until someone wires the build step at the new SDK CLI.
@@ -257,6 +267,7 @@ tool-parsing.test.ts
 ```
 
 Run with:
+
 ```bash
 npm run test:unit -- --grep "Thinking Trace"  # 9 tests
 npm run test:unit -- --grep "Tool Call"       # 11 tests

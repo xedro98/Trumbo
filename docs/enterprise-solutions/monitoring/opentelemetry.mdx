@@ -3,6 +3,16 @@ title: "OpenTelemetry Integration"
 sidebarTitle: "OpenTelemetry"
 description: "Export Trembo telemetry to your observability platform using OpenTelemetry Protocol (OTLP)"
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 
 Trembo includes opt-in OpenTelemetry support for exporting metrics and logs to your own observability infrastructure using the OpenTelemetry Protocol (OTLP).
 
@@ -120,11 +130,11 @@ To test your configuration, log in to your account, perform some actions in a ta
 
 ## Troubleshooting
 
-If you arenâ€™t getting any data in your collector, the easiest way to verify your integration is to enable the developer tools in your editor.
+If you aren't getting any data in your collector, the easiest way to verify your integration is to enable the developer tools in your editor.
 
 To do this, open the [webview developer tools](https://code.visualstudio.com/api/extension-guides/webview#inspecting-and-debugging-webviews).
 
-Once youâ€™ve done so, if you perform some actions that trigger metrics and/or logs (such as doing a task with Trembo), 
+Once you've done so, if you perform some actions that trigger metrics and/or logs (such as doing a task with Trembo), 
 you will see error logs if any error occurs when sending the data to your collector.
 
 If you don't see any logs, enable [debug mode](#debug-mode).
@@ -177,12 +187,12 @@ Exported data is already anonymous and doesn't include code content, file paths,
 ## Limitations
 
 Current OpenTelemetry support in Trembo:
-- âœ… OTLP metrics export (gRPC, HTTP)
-- âœ… OTLP logs export (gRPC, HTTP)
-- âœ… Basic configuration via [Remote Configuration](/enterprise-solutions/configuration/remote-configuration/overview#how-remote-configuration-works)
-- âŒ Distributed tracing (not yet implemented)
-- âŒ Custom instrumentation API (not yet exposed)
-- âŒ Sampling configuration (uses defaults)
+- ✅ OTLP metrics export (gRPC, HTTP)
+- ✅ OTLP logs export (gRPC, HTTP)
+- ✅ Basic configuration via [Remote Configuration](/enterprise-solutions/configuration/remote-configuration/overview#how-remote-configuration-works)
+- ❌ Distributed tracing (not yet implemented)
+- ❌ Custom instrumentation API (not yet exposed)
+- ❌ Sampling configuration (uses defaults)
 
 ## Best Practices
 

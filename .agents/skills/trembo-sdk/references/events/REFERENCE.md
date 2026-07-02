@@ -1,6 +1,6 @@
 # Events
 
-The Trembo SDK has three event layers. Which one you use depends on whether you're working with the standalone `Agent` class or `TremboCore`.
+The Trembo SDK has three event layers. Which one you use depends on whether you work with the standalone `Agent` class or `TremboCore`.
 
 ## Which Events Do I Get?
 

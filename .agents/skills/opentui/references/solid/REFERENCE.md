@@ -1,6 +1,6 @@
 # OpenTUI Solid (@opentui/solid)
 
-A SolidJS reconciler for building terminal user interfaces with fine-grained reactivity. Get optimal performance with Solid's signal-based approach.
+A SolidJS reconciler for terminal user interfaces with fine-grained reactivity. Get optimal performance from Solid's signal-based approach.
 
 ## Overview
 
@@ -8,8 +8,8 @@ OpenTUI Solid provides:
 - **Custom reconciler**: Solid components render to OpenTUI renderables
 - **JSX intrinsics**: `<text>`, `<box>`, `<input>`, etc.
 - **Hooks**: `useKeyboard`, `useRenderer`, `useTimeline`, etc.
-- **Fine-grained reactivity**: Only what changes re-renders
-- **Portal & Dynamic**: Advanced composition primitives
+- **Fine-grained reactivity**: only what changes re-renders
+- **Portal & Dynamic**: advanced composition primitives
 
 ## When to Use Solid
 

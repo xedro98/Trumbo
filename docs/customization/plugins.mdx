@@ -3,11 +3,21 @@ title: "Plugins"
 sidebarTitle: "Plugins"
 description: "Install and manage plugins that extend Trembo with custom tools, hooks, and capabilities."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
+
 <Warning>
   This feature currently only applies to Trembo SDK, CLI, and Kanban. This feature is not applicable on VSCode and JetBrains Extension for now.
 </Warning>
 
-Plugins extend Trembo with custom tools, lifecycle hooks, slash commands, and more. They can be installed globally (available in all sessions) or per-project.
+Plugins extend Trembo with custom tools, lifecycle hooks, slash commands, and more. You can install them globally (available in all sessions) or per-project.
 
 ## Installing Plugins via CLI
 
@@ -66,12 +76,12 @@ After installation, confirm the plugin is loaded by running `trembo config` and 
 
 ### Example: TypeScript Navigation Plugin
 
-The [typescript-lsp-plugin](https://github.com/trembo/typescript-lsp-plugin) is a good reference for how plugins work. It adds a `goto_definition` tool that uses the TypeScript Language Service API to resolve symbol definitions through imports, re-exports, and type aliases.
+The [typescript-lsp-plugin](https://github.com/xedro98/trembo) is a good reference for how plugins work. It adds a `goto_definition` tool that uses the TypeScript Language Service API to resolve symbol definitions through imports, re-exports, and type aliases.
 
 Install it with:
 
 ```bash
-trembo plugin install https://github.com/trembo/typescript-lsp-plugin.git
+trembo plugin install https://github.com/xedro98/trembo.git
 ```
 
 Once installed, Trembo can call `goto_definition` with a file path and line number to find where symbols are defined, which is much more precise than text search.

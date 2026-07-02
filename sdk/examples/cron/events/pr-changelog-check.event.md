@@ -20,23 +20,29 @@ tags:
 metadata:
   owner: development
 ---
-Automatically check if a PR that modifies code also updates the CHANGELOG:
+A pull request just opened against `main`. Check whether it deserves a
+changelog entry and leave a comment on the PR.
 
-1. Detect if the PR modifies source files (src/, lib/, etc.)
-2. Check if the PR also includes changes to CHANGELOG.md or relevant changelogs
-3. If significant code changes but no changelog update:
-   - Extract a summary of the changes
-   - Suggest what should be added to CHANGELOG
-   - Request the author to add an entry
+1. Did the PR touch source files (`src/`, `lib/`, and similar)?
+2. Did it also update `CHANGELOG.md` (or the relevant per-package changelog)?
 
-4. If CHANGELOG is updated:
-   - Verify the format matches the project style
-   - Check that entry is concise and user-facing
-   - Ensure version number is appropriate
+If there are meaningful code changes but no changelog edit:
 
-Provide feedback as a comment on the PR:
-- ✅ CHANGELOG properly updated
-- ⚠️  No CHANGELOG changes detected - please add an entry
-- 🤔 CHANGELOG entry format seems off - consider [example]
+- Summarize what changed.
+- Suggest the entry the author should add.
+- Ask them to add it before merge.
 
-This helps maintain an up-to-date CHANGELOG without manual reminders.
+If the changelog was updated:
+
+- Check the entry matches the project's existing format.
+- Check it's concise and user-facing.
+- Check the version label is sensible.
+
+Post a single PR comment using one of these verdicts:
+
+- ✅ CHANGELOG updated correctly.
+- ⚠️ No CHANGELOG changes detected — please add an entry.
+- 🤔 CHANGELOG entry format looks off — consider [example].
+
+The goal is an up-to-date changelog without anyone having to nag authors
+manually.

@@ -3,10 +3,20 @@ title: "TremboCore"
 sidebarTitle: "TremboCore"
 description: "The full Trembo harness: built-in tools, sessions, approvals, scheduling, and hub support."
 ---
+```text
+ _________  ________  _______   _____ ______   ________  ________
+|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
+\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
+     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
+      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
+       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
+        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+```
 
-`TremboCore` is the full Trembo harness as a programmable runtime. It gives you everything Trembo ships out of the box: built-in tools for files, shell, search, and web; session persistence and message history; tool approval callbacks; local, hub, and remote backends; scheduling and automation APIs; and plugin support.
 
-Under the hood, `TremboCore` uses the `Agent` class from `@trembo/agents`. You can use `Agent` directly if you want to skip the harness and wire everything yourself: your own tools, your own persistence, your own lifecycle.
+`TremboCore` is the full Trembo harness, exposed as a programmable runtime. It gives you everything Trembo ships out of the box: built-in tools for files, shell, search, and web; session persistence and message history; tool approval callbacks; local, hub, and remote backends; scheduling and automation APIs; and plugin support.
+
+Under the hood, `TremboCore` uses the `Agent` class from `@trembo/agents`. Use `Agent` directly if you'd rather skip the harness and wire everything yourself — your own tools, your own persistence, your own lifecycle.
 
 ## When to use which
 

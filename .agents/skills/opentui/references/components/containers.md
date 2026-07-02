@@ -1,10 +1,10 @@
-# Container Components
+# Container components
 
 Components for grouping and organizing content in OpenTUI.
 
-## Box Component
+## Box component
 
-The primary container component with borders, backgrounds, and layout capabilities.
+The primary container component, with borders, backgrounds, and layout capabilities.
 
 ### Basic Usage
 
