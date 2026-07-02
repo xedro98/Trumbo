@@ -12,7 +12,7 @@ const ask = (question) => new Promise((resolve) => rl.question(`\n${question}`, 
 const getTremboVersion = () => {
 	try {
 		const extensions = execSync("code --list-extensions --show-versions").toString()
-		const tremboMatch = extensions.match(/claude-dev@(\d+\.\d+\.\d+)/)
+		const tremboMatch = extensions.match(/trembo-bot\.trembo@(\d+\.\d+\.\d+)/)
 		return tremboMatch ? tremboMatch[1] : "Not installed"
 	} catch (_err) {
 		return "Error getting version"

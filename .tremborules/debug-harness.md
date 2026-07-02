@@ -47,7 +47,7 @@ For **MCP/Provider OAuth** (vscode:// URI): The redirect goes to a vscode:// URI
 `oauth.simulate_callback` only *builds* the URI — it does not deliver it, and the ESM
 extension host can't `require()` the handler. To actually deliver the callback, call the
 debug-only hook via `ext.evaluate` (with `awaitPromise: true`):
-`globalThis.__tremboHandleUri("vscode://saoudrizwan.claude-dev/...?code=...&state=...")`.
+`globalThis.__tremboHandleUri("vscode://trembo-bot.trembo/...?code=...&state=...")`.
 It runs the same `SharedUriHandler.handleUri` as VSCode's real URI handler and exists only
 when `TREMBO_CAPTURE_BROWSER` is set (the harness always sets it; never ships in prod).
 For end-to-end MCP OAuth, get a real `code` from the local MCP OAuth test server

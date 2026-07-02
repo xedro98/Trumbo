@@ -33,7 +33,7 @@ interface ModelSelectorProps {
 }
 
 /*
-OG Saoud Note:
+OG Trembo Note:
 
 	VSCodeDropdown has an open bug where dynamically rendered options don't auto select the provided value prop. You can see this for yourself by comparing  it with normal select/option elements, which work as expected.
 	https://github.com/microsoft/vscode-webview-ui-toolkit/issues/433

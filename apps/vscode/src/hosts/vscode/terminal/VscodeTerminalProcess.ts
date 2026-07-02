@@ -94,7 +94,7 @@ export class VscodeTerminalProcess extends EventEmitter<TerminalProcessEvents> i
 					- OSC 633 ; E ; <commandline> [; <nonce>] ST - Explicitly set command line with optional nonce
 					*/
 					// if you print this data you might see something like "eecho hello worldo hello world;5ba85d14-e92a-40c4-b2fd-71525581eeb0]633;C" but this is actually just a bunch of escape sequences, ignore up to the first ;C
-					/* ddateb15026-6a64-40db-b21f-2a621a9830f0]633;CTue Sep 17 06:37:04 EDT 2024 % ]633;D;0]633;P;Cwd=/Users/saoud/Repositories/test */
+					/* ddateb15026-6a64-40db-b21f-2a621a9830f0]633;CTue Sep 17 06:37:04 EDT 2024 % ]633;D;0]633;P;Cwd=/Users/trembo/Repositories/test */
 					// Gets output between ]633;C (command start) and ]633;D (command end)
 					const outputBetweenSequences = this.removeLastLineArtifacts(
 						data.match(/\]633;C([\s\S]*?)\]633;D/)?.[1] || "",
