@@ -9,9 +9,9 @@ The SDK uses OpenTelemetry (OTEL) as its sole telemetry transport. Events flow t
 ```
 core-events.ts (event catalog + typed helpers)
        ↓
-ITelemetryService (sdk/packages/shared)             ← interface contract
+ITelemetryService (engine/packages/shared)             ← interface contract
        ↓
-TelemetryService (sdk/packages/core)                ← multi-adapter fan-out
+TelemetryService (engine/packages/core)                ← multi-adapter fan-out
        ↓
 OpenTelemetryAdapter → OpenTelemetryProvider    ← OTLP transport
        ↓
@@ -22,7 +22,7 @@ The SDK telemetry stack is self-contained within this repository. This `.greptil
 
 ## The single source of truth
 
-`sdk/packages/core/src/services/telemetry/core-events.ts` is the single source of truth for all event names. It exports:
+`engine/packages/core/src/services/telemetry/core-events.ts` is the single source of truth for all event names. It exports:
 
 - `CORE_TELEMETRY_EVENTS` — a frozen const object grouped by family (`CLIENT`, `SESSION`, `USER`, `TASK`, `HOOKS`, `WORKSPACE`)
 - A typed `capture*()` helper for every event family (`captureExtensionActivated`, `captureTaskCreated`, `captureToolUsage`, etc.)
@@ -52,7 +52,7 @@ Emission ownership:
 - `user.extension_activated`: emitted **once per host process** by host-specific helpers (`captureCliExtensionActivated` for the CLI, `captureExtensionActivated` for VS Code).
 - `workspace.initialized` / `workspace.init_error`: emitted by a per-process de-duplicated emitter in `prepareLocalRuntimeBootstrap`. Hosts must NOT re-emit these.
 - `workspace.path_resolved`: emitted from default tool executors **only when** `WorkspaceManager` exposes more than one root.
-- `task.*`: emitted by core session lifecycle code in `sdk/packages/core/src/trembo-core/` and `sdk/packages/core/src/runtime/`. Hosts must not duplicate this emission.
+- `task.*`: emitted by core session lifecycle code in `engine/packages/core/src/trumbo-core/` and `engine/packages/core/src/runtime/`. Hosts must not duplicate this emission.
 
 ## `task.completed` semantics
 
@@ -62,29 +62,29 @@ Each session is guaranteed at most one `task.completed` emission. The `source` f
 
 ## CLI directory-ordering rule
 
-The CLI accepts `--config <dir>`. The CLI **must** apply `setTremboDir(...)` and `setHomeDir(...)` from `@trembo/shared/storage` **before** calling `captureCliExtensionActivated()`. Otherwise the telemetry singleton's persisted distinct-id and any other on-disk telemetry state lands under `~/.trembo` instead of the user's chosen config dir.
+The CLI accepts `--config <dir>`. The CLI **must** apply `setTrumboDir(...)` and `setHomeDir(...)` from `@trumbo/shared/storage` **before** calling `captureCliExtensionActivated()`. Otherwise the telemetry singleton's persisted distinct-id and any other on-disk telemetry state lands under `~/.trumbo` instead of the user's chosen config dir.
 
-The canonical pattern is in `apps/cli/src/main.ts`:
+The canonical pattern is in `projects/console/src/main.ts`:
 
 ```ts
-if (configDir) setTremboDir(configDir);
+if (configDir) setTrumboDir(configDir);
 setHomeDir(homedir());
 captureCliExtensionActivated();   // <-- after dir overrides
 ```
 
 ## Hub daemon metadata forwarding
 
-Hosts that spawn a detached `@trembo/core/hub/daemon-entry` process must forward telemetry metadata into the daemon argv so the daemon can reconstruct an equivalent `ITelemetryService`. The expected payload is base64-encoded JSON with snake_case keys:
+Hosts that spawn a detached `@trumbo/core/hub/daemon-entry` process must forward telemetry metadata into the daemon argv so the daemon can reconstruct an equivalent `ITelemetryService`. The expected payload is base64-encoded JSON with snake_case keys:
 
 ```
-{ extension_version, trembo_type, platform, platform_version, os_type, os_version, is_remote_workspace }
+{ extension_version, trumbo_type, platform, platform_version, os_type, os_version, is_remote_workspace }
 ```
 
-The reference implementation is `apps/vscode/src/hub-daemon.ts`. Without this forwarding, hub-backed sessions silently drop their lifecycle telemetry.
+The reference implementation is `projects/vscode/src/hub-daemon.ts`. Without this forwarding, hub-backed sessions silently drop their lifecycle telemetry.
 
 ## Auth lifecycle completeness
 
-Every authentication provider in `sdk/packages/core/src/auth/` must emit all four auth lifecycle events using the typed helpers:
+Every authentication provider in `engine/packages/core/src/auth/` must emit all four auth lifecycle events using the typed helpers:
 
 | Phase | Helper | Where it fires |
 |---|---|---|
@@ -93,18 +93,18 @@ Every authentication provider in `sdk/packages/core/src/auth/` must emit all fou
 | Token error | `captureAuthFailed(provider, errorMessage)` | In the catch block |
 | Token invalidation | `captureAuthLoggedOut(provider, reason)` | On invalid_grant or explicit logout |
 
-Cross-reference `sdk/packages/core/src/auth/trembo.ts` and `sdk/packages/core/src/auth/codex.ts` as canonical examples of all four phases.
+Cross-reference `engine/packages/core/src/auth/trumbo.ts` and `engine/packages/core/src/auth/codex.ts` as canonical examples of all four phases.
 
 ## Single telemetry service per host
 
-On VS Code, the telemetry handle is built **once** in `activate()` (`apps/vscode/src/telemetry.ts`) and the same instance is passed into the sidebar, panel command, and daemon spawn payload. Do not let individual controllers construct their own `ITelemetryService` — that fragments distinct-id state, opt-out tracking, and flush ownership.
+On VS Code, the telemetry handle is built **once** in `activate()` (`projects/vscode/src/telemetry.ts`) and the same instance is passed into the sidebar, panel command, and daemon spawn payload. Do not let individual controllers construct their own `ITelemetryService` — that fragments distinct-id state, opt-out tracking, and flush ownership.
 
-The CLI follows the same pattern via the `getCliTelemetryService()` singleton in `apps/cli/src/utils/telemetry.ts`, which is memoized by the activation gate in `telemetry.activation-gate.ts`.
+The CLI follows the same pattern via the `getCliTelemetryService()` singleton in `projects/console/src/utils/telemetry.ts`, which is memoized by the activation gate in `telemetry.activation-gate.ts`.
 
 ## Common false-positive adjustments
 
 If Greptile flags one of the following, the rule is **not** violated:
 
 - A telemetry call wrapped in a host-specific helper (e.g. `captureCliExtensionActivated` wrapping `captureExtensionActivated`) — the inner helper is the typed call.
-- `enterprise.*` events emitted from `apps/cli/src/utils/enterprise.ts` — these are enterprise-side events not yet in `CORE_TELEMETRY_EVENTS`; they are tracked separately.
+- `enterprise.*` events emitted from `projects/console/src/utils/enterprise.ts` — these are enterprise-side events not yet in `CORE_TELEMETRY_EVENTS`; they are tracked separately.
 - A new test file that uses raw event name strings inside `expect(...)` assertions — tests may reference event names as strings to assert what was emitted.

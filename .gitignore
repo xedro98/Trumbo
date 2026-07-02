@@ -12,16 +12,16 @@ tmp
 
 pnpm-lock.yaml
 
-.tremboignore
-.trembo/enterprise
-.trembo/remote-config
-**/.trembo/remote-config
+.trumboignore
+.trumbo/enterprise
+.trumbo/remote-config
+**/.trumbo/remote-config
 .venv
 .actrc
 CLAUDE.local.md
 
-apps/vscode/webview-ui/src/**/*.js
-apps/vscode/webview-ui/src/**/*.js.map
+projects/vscode/webview-ui/src/**/*.js
+projects/vscode/webview-ui/src/**/*.js.map
 
 # Ignore coverage directories and files
 coverage
@@ -38,9 +38,9 @@ coverage-unit
 .worktrees
 
 ## Generated files ##
-apps/vscode/src/generated/
-apps/vscode/src/shared/proto/
-apps/vscode/webview-ui/src/services/grpc-client.ts
+projects/vscode/src/generated/
+projects/vscode/src/shared/proto/
+projects/vscode/webview-ui/src/services/grpc-client.ts
 *.tsbuildinfo
 
 # E2E Tests
@@ -53,7 +53,7 @@ test-results
 *.tsbuildinfo
 
 # Smoke test results (generated)
-evals/smoke-tests/results/
+bench/smoke-tests/results/
 
 .tui-test
 secrets.json
@@ -65,23 +65,23 @@ tests/**/cache
 .README.github.bak
 
 # Tauri generated code
-apps/*/src-tauri/gen
-apps/*/src-tauri/bin
-apps/examples/*/src-tauri/gen
-apps/examples/*/src-tauri/bin
+projects/*/src-tauri/gen
+projects/*/src-tauri/bin
+projects/samples/*/src-tauri/gen
+projects/samples/*/src-tauri/bin
 # Tauri UI test snapshots
-apps/*/src/tests/.tui-test
-apps/*/src/tests/tui-traces
-apps/vscode/webview-ui/src/**/*.js
-apps/vscode/webview-ui/src/**/*.js.map
+projects/*/src/tests/.tui-test
+projects/*/src/tests/tui-traces
+projects/vscode/webview-ui/src/**/*.js
+projects/vscode/webview-ui/src/**/*.js.map
 
 
 # SDK Session files / User data
-.trembo/data
-.trembo/tmp
+.trumbo/data
+.trumbo/tmp
 *.db
 *.db-shm
 *.db-wal
-.trembo/**/managed.json
-.trembo/**/bundle.json
-apps/vscode/tsconfig.test.generated.json
+.trumbo/**/managed.json
+.trumbo/**/bundle.json
+projects/vscode/tsconfig.test.generated.json

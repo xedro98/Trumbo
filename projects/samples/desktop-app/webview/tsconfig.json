@@ -1,0 +1,30 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"paths": {
+			"@/*": ["./*"],
+			"@trumbo/agents": ["../../../../engine/packages/agents/src/index.ts"],
+			"@trumbo/core": ["../../../../engine/packages/core/src/index.ts"],
+			"@trumbo/llms": ["../../../../engine/packages/llms/src/index.ts"],
+			"@trumbo/shared": ["../../../../engine/packages/shared/src/index.ts"],
+			"@trumbo/shared/storage": [
+				"../../../../engine/packages/shared/src/storage/index.ts"
+			],
+			"@trumbo/shared/db": [
+				"../../../../engine/packages/shared/src/db/index.ts"
+			],
+			"@trumbo/shared/*": [
+				"../../../../engine/packages/shared/src/*",
+				"../../../../engine/packages/shared/src/*/index.ts"
+			]
+		}
+	},
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts",
+		".next/dev/types/**/*.ts"
+	],
+	"exclude": ["node_modules"]
+}

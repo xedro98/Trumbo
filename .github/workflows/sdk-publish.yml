@@ -41,7 +41,7 @@ jobs:
       contents: write
       id-token: write
     if: |
-      github.repository == 'trembo/trembo' &&
+      github.repository == 'trumbo/trumbo' &&
       github.ref == 'refs/heads/main' &&
       (
         github.event_name != 'workflow_dispatch' ||
@@ -148,7 +148,7 @@ jobs:
         env:
           CHANNEL: ${{ steps.channel.outputs.channel }}
         run: |
-          BASE_VERSION=$(node -p "require('./sdk/packages/llms/package.json').version")
+          BASE_VERSION=$(node -p "require('./engine/packages/llms/package.json').version")
 
           if [ "$CHANNEL" = "nightly" ]; then
             TIMESTAMP=$(date +%s)
@@ -166,11 +166,11 @@ jobs:
         if: steps.check_commits.outputs.skip != 'true'
         env:
           VERSION: ${{ steps.version.outputs.version }}
-        run: bun sdk/scripts/version.ts "$VERSION"
+        run: bun engine/scripts/version.ts "$VERSION"
 
       - name: Verify publishability
         if: steps.check_commits.outputs.skip != 'true'
-        run: bun sdk/scripts/check-publish.ts
+        run: bun engine/scripts/check-publish.ts
 
       - name: Prepare package tarball directory
         if: steps.check_commits.outputs.skip != 'true'
@@ -179,63 +179,63 @@ jobs:
       # Pack with Bun so workspace/catalog protocols are resolved in the tarball,
       # then publish that tarball with npm so npm trusted publishing can use GitHub OIDC.
       # Publish sequentially in dependency order: shared → llms → agents → core → sdk
-      - name: Publish @trembo/shared
+      - name: Publish @trumbo/shared
         if: steps.check_commits.outputs.skip != 'true'
         env:
           NPM_CONFIG_PROVENANCE: "true"
           CHANNEL: ${{ steps.channel.outputs.channel }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "Publishing @trembo/shared@${VERSION} with tag '${CHANNEL}'..."
-          cd sdk/packages/shared
+          echo "Publishing @trumbo/shared@${VERSION} with tag '${CHANNEL}'..."
+          cd engine/packages/shared
           TARBALL=$(bun pm pack --destination "$RUNNER_TEMP/sdk-npm-packs" --quiet)
           npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --tag "$CHANNEL" --access public
 
-      - name: Publish @trembo/llms
+      - name: Publish @trumbo/llms
         if: steps.check_commits.outputs.skip != 'true'
         env:
           NPM_CONFIG_PROVENANCE: "true"
           CHANNEL: ${{ steps.channel.outputs.channel }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "Publishing @trembo/llms@${VERSION} with tag '${CHANNEL}'..."
-          cd sdk/packages/llms
+          echo "Publishing @trumbo/llms@${VERSION} with tag '${CHANNEL}'..."
+          cd engine/packages/llms
           TARBALL=$(bun pm pack --destination "$RUNNER_TEMP/sdk-npm-packs" --quiet)
           npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --tag "$CHANNEL" --access public
 
-      - name: Publish @trembo/agents
+      - name: Publish @trumbo/agents
         if: steps.check_commits.outputs.skip != 'true'
         env:
           NPM_CONFIG_PROVENANCE: "true"
           CHANNEL: ${{ steps.channel.outputs.channel }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "Publishing @trembo/agents@${VERSION} with tag '${CHANNEL}'..."
-          cd sdk/packages/agents
+          echo "Publishing @trumbo/agents@${VERSION} with tag '${CHANNEL}'..."
+          cd engine/packages/agents
           TARBALL=$(bun pm pack --destination "$RUNNER_TEMP/sdk-npm-packs" --quiet)
           npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --tag "$CHANNEL" --access public
 
-      - name: Publish @trembo/core
+      - name: Publish @trumbo/core
         if: steps.check_commits.outputs.skip != 'true'
         env:
           NPM_CONFIG_PROVENANCE: "true"
           CHANNEL: ${{ steps.channel.outputs.channel }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "Publishing @trembo/core@${VERSION} with tag '${CHANNEL}'..."
-          cd sdk/packages/core
+          echo "Publishing @trumbo/core@${VERSION} with tag '${CHANNEL}'..."
+          cd engine/packages/core
           TARBALL=$(bun pm pack --destination "$RUNNER_TEMP/sdk-npm-packs" --quiet)
           npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --tag "$CHANNEL" --access public
 
-      - name: Publish @trembo/sdk
+      - name: Publish @trumbo/sdk
         if: steps.check_commits.outputs.skip != 'true'
         env:
           NPM_CONFIG_PROVENANCE: "true"
           CHANNEL: ${{ steps.channel.outputs.channel }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "Publishing @trembo/sdk@${VERSION} with tag '${CHANNEL}'..."
-          cd sdk/packages/sdk
+          echo "Publishing @trumbo/sdk@${VERSION} with tag '${CHANNEL}'..."
+          cd engine/packages/sdk
           TARBALL=$(bun pm pack --destination "$RUNNER_TEMP/sdk-npm-packs" --quiet)
           npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --tag "$CHANNEL" --access public
 
@@ -248,11 +248,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           for PKG in shared llms agents core sdk; do
-            TAG="sdk/${PKG}/v${VERSION}"
+            TAG="engine/${PKG}/v${VERSION}"
             if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
               echo "Tag already exists locally: ${TAG}"
             else
-              git tag -a "${TAG}" -m "@trembo/${PKG}@${VERSION}"
+              git tag -a "${TAG}" -m "@trumbo/${PKG}@${VERSION}"
               echo "Created tag: ${TAG}"
             fi
 
@@ -267,16 +267,16 @@ jobs:
           CHANNEL: ${{ steps.channel.outputs.channel }}
         run: |
           echo "Published SDK packages with tag '${CHANNEL}':"
-          echo "  - @trembo/shared@${VERSION}"
-          echo "  - @trembo/llms@${VERSION}"
-          echo "  - @trembo/agents@${VERSION}"
-          echo "  - @trembo/core@${VERSION}"
-          echo "  - @trembo/sdk@${VERSION}"
+          echo "  - @trumbo/shared@${VERSION}"
+          echo "  - @trumbo/llms@${VERSION}"
+          echo "  - @trumbo/agents@${VERSION}"
+          echo "  - @trumbo/core@${VERSION}"
+          echo "  - @trumbo/sdk@${VERSION}"
           if [ "$CHANNEL" = "latest" ]; then
             echo "Created git tags:"
-            echo "  - sdk/shared/v${VERSION}"
-            echo "  - sdk/llms/v${VERSION}"
-            echo "  - sdk/agents/v${VERSION}"
-            echo "  - sdk/core/v${VERSION}"
-            echo "  - sdk/sdk/v${VERSION}"
+            echo "  - engine/shared/v${VERSION}"
+            echo "  - engine/llms/v${VERSION}"
+            echo "  - engine/agents/v${VERSION}"
+            echo "  - engine/core/v${VERSION}"
+            echo "  - engine/engine/v${VERSION}"
           fi

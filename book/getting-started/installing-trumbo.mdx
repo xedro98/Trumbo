@@ -1,0 +1,76 @@
+---
+title: "Installing Trumbo"
+description: "Choose your installation path: CLI or SDK"
+---
+```text
+████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
+   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
+   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
+   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
+```
+
+
+## Choose Your Install Path
+
+- [CLI](#cli) — terminal workflows
+- [SDK](#sdk) — build with `@trumbo/sdk`
+
+## CLI
+
+Pick this if you want Trumbo in terminal workflows, both interactive and automated.
+
+<Steps>
+  <Step title="Install Node.js">
+    Install Node.js 20+ (22 recommended).
+  </Step>
+  <Step title="Install CLI">
+    ```bash
+    npm install -g trumbo
+    ```
+  </Step>
+  <Step title="Authenticate">
+    ```bash
+    trumbo auth
+    ```
+  </Step>
+  <Step title="Run Trumbo">
+    ```bash
+    trumbo
+    # or
+    trumbo "your task"
+    ```
+  </Step>
+</Steps>
+
+More details: [CLI Installation & Setup](/usage/cli-overview)
+
+## SDK
+
+Pick this if you're building your own app or agent on top of Trumbo.
+
+<Steps>
+  <Step title="Create project">
+    ```bash
+    mkdir my-agent && cd my-agent
+    npm init -y
+    ```
+  </Step>
+  <Step title="Install SDK">
+    ```bash
+    npm install @trumbo/sdk
+    ```
+  </Step>
+  <Step title="Build and run">
+    Browse the SDK examples to run your first agent.
+  </Step>
+</Steps>
+
+Start here: [SDK Examples](/engine/examples)
+
+
+## Need Help?
+
+- [Troubleshooting](/troubleshooting/networking-and-proxies)
+- [GitHub Discussions](https://github.com/xedro98/trembo/discussions)

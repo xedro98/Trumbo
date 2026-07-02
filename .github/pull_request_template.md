@@ -1,5 +1,5 @@
 <!--
-Thank you for contributing to Trembo!
+Thank you for contributing to Trumbo!
 
 Before submitting this PR, please ensure you have:
 - For feature requests: opened a discussion on the Feature Requests board at https://github.com/xedro98/trembo/discussions and received approval from core maintainers before implementation.
@@ -9,7 +9,7 @@ Limited exceptions:
 Small bug fixes, typo corrections, minor wording improvements, or simple type fixes that don't change functionality may be submitted directly without prior discussion.
 
 Why this requirement?
-All community contributions are essential to Trembo's success. To make the best use of everyone's time and keep the project focused, we use the Feature Requests board to gauge community interest and validate ideas before implementation begins. This keeps development effort directed at features that benefit the most users.
+All community contributions are essential to Trumbo's success. To make the best use of everyone's time and keep the project focused, we use the Feature Requests board to gauge community interest and validate ideas before implementation begins. This keeps development effort directed at features that benefit the most users.
 -->
 
 ### Related Issue

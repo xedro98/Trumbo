@@ -37,12 +37,12 @@ defaults:
 
 jobs:
   publish-main:
-    name: Publish trembo
+    name: Publish trumbo
     permissions:
       contents: write
       id-token: write
     if: |
-      github.repository == 'trembo/trembo' &&
+      github.repository == 'trumbo/trumbo' &&
       github.ref == 'refs/heads/main' &&
       github.event_name == 'workflow_dispatch' &&
       github.event.inputs.publish_target == 'main' &&
@@ -102,15 +102,15 @@ jobs:
           fi
 
           VERSION="${TAG#cli-v}"
-          PACKAGE_VERSION=$(node -p "require('./apps/cli/package.json').version")
+          PACKAGE_VERSION=$(node -p "require('./projects/console/package.json').version")
 
           if [ "$PACKAGE_VERSION" != "$VERSION" ]; then
-            echo "apps/cli/package.json version ${PACKAGE_VERSION} does not match ${TAG}"
+            echo "projects/console/package.json version ${PACKAGE_VERSION} does not match ${TAG}"
             exit 1
           fi
 
           if ! printf "%s\n" "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'; then
-            echo "apps/cli/package.json has invalid version: ${VERSION}"
+            echo "projects/console/package.json has invalid version: ${VERSION}"
             exit 1
           fi
 
@@ -147,7 +147,7 @@ jobs:
 
       - name: Build platform binaries
         run: bun script/build.ts --install-native-variants --skip-sdk-build
-        working-directory: apps/cli
+        working-directory: projects/console
         env:
           TELEMETRY_SERVICE_API_KEY: ${{ secrets.TELEMETRY_SERVICE_API_KEY }}
           ERROR_SERVICE_API_KEY: ${{ secrets.ERROR_SERVICE_API_KEY }}
@@ -163,16 +163,16 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           EXPECTED=(
-            "@trembo/cli-darwin-arm64"
-            "@trembo/cli-darwin-x64"
-            "@trembo/cli-linux-arm64"
-            "@trembo/cli-linux-x64"
-            "@trembo/cli-windows-arm64"
-            "@trembo/cli-windows-x64"
+            "@trumbo/cli-darwin-arm64"
+            "@trumbo/cli-darwin-x64"
+            "@trumbo/cli-linux-arm64"
+            "@trumbo/cli-linux-x64"
+            "@trumbo/cli-windows-arm64"
+            "@trumbo/cli-windows-x64"
           )
 
           for package_name in "${EXPECTED[@]}"; do
-            dir="apps/cli/dist/${package_name#@trembo/}"
+            dir="projects/console/dist/${package_name#@trumbo/}"
             if [ ! -f "$dir/package.json" ]; then
               echo "Missing package manifest: $dir/package.json"
               exit 1
@@ -194,7 +194,7 @@ jobs:
         env:
           NPM_CONFIG_PROVENANCE: "true"
         run: bun script/publish-npm.ts --tag latest
-        working-directory: apps/cli
+        working-directory: projects/console
 
       - name: Get Previous CLI Tag
         id: prev_tag
@@ -207,8 +207,8 @@ jobs:
       - name: Get Changelog Entry
         id: changelog
         run: |
-          # Grab content between the first "## " header and the next one in apps/cli/CHANGELOG.md
-          CONTENT=$(awk '/^## [0-9]/{if(found) exit; found=1; next} found{print}' apps/cli/CHANGELOG.md)
+          # Grab content between the first "## " header and the next one in projects/console/CHANGELOG.md
+          CONTENT=$(awk '/^## [0-9]/{if(found) exit; found=1; next} found{print}' projects/console/CHANGELOG.md)
           echo "content<<EOF" >> $GITHUB_OUTPUT
           echo "$CONTENT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -229,8 +229,8 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "Published trembo@${VERSION} to npm with dist-tag 'latest'"
-          echo "Install with: npm install -g trembo"
+          echo "Published trumbo@${VERSION} to npm with dist-tag 'latest'"
+          echo "Install with: npm install -g trumbo"
 
       - name: Post release to Slack
         uses: slackapi/slack-github-action@v3.0.1
@@ -239,12 +239,12 @@ jobs:
           token: ${{ secrets.SLACK_RELEASE_BOT_TOKEN }}
           payload: |
             channel: "C0APVKGGZFC"
-            text: "Trembo CLI v${{ steps.version.outputs.version }}"
+            text: "Trumbo CLI v${{ steps.version.outputs.version }}"
             blocks:
               - type: "section"
                 text:
                   type: "mrkdwn"
-                  text: "Trembo CLI v${{ steps.version.outputs.version }}"
+                  text: "Trumbo CLI v${{ steps.version.outputs.version }}"
               - type: "section"
                 text:
                   type: "mrkdwn"
@@ -252,15 +252,15 @@ jobs:
               - type: "context"
                 elements:
                   - type: "mrkdwn"
-                    text: "<https://www.npmjs.com/package/trembo/v/${{ steps.version.outputs.version }}|View on npm>${{ steps.prev_tag.outputs.prev_tag != '' && format(' | Full Changelog: https://github.com/{0}/compare/{1}...{2}', github.repository, steps.prev_tag.outputs.prev_tag, steps.version.outputs.tag) || '' }}"
+                    text: "<https://www.npmjs.com/package/trumbo/v/${{ steps.version.outputs.version }}|View on npm>${{ steps.prev_tag.outputs.prev_tag != '' && format(' | Full Changelog: https://github.com/{0}/compare/{1}...{2}', github.repository, steps.prev_tag.outputs.prev_tag, steps.version.outputs.tag) || '' }}"
 
   publish-nightly:
-    name: Publish trembo nightly
+    name: Publish trumbo nightly
     permissions:
       contents: read
       id-token: write
     if: |
-      github.repository == 'trembo/trembo' &&
+      github.repository == 'trumbo/trumbo' &&
       github.ref == 'refs/heads/main' &&
       (
         github.event_name == 'schedule' ||
@@ -349,7 +349,7 @@ jobs:
         if: steps.check_commits.outputs.skip != 'true'
         id: version
         run: |
-          BASE_VERSION=$(node -p "require('./apps/cli/package.json').version")
+          BASE_VERSION=$(node -p "require('./projects/console/package.json').version")
           TIMESTAMP=$(date +%s)
           VERSION="${BASE_VERSION}-nightly.${TIMESTAMP}"
 
@@ -365,17 +365,17 @@ jobs:
         run: |
           node -e '
             const fs = require("node:fs");
-            const path = "apps/cli/package.json";
+            const path = "projects/console/package.json";
             const pkg = JSON.parse(fs.readFileSync(path, "utf8"));
             pkg.version = process.env.VERSION;
             fs.writeFileSync(path, `${JSON.stringify(pkg, null, "\t")}\n`);
           '
-          cat apps/cli/package.json | grep '"version"'
+          cat projects/console/package.json | grep '"version"'
 
       - name: Build platform binaries
         if: steps.check_commits.outputs.skip != 'true'
         run: bun script/build.ts --install-native-variants --skip-sdk-build
-        working-directory: apps/cli
+        working-directory: projects/console
         env:
           TELEMETRY_SERVICE_API_KEY: ${{ secrets.TELEMETRY_SERVICE_API_KEY }}
           ERROR_SERVICE_API_KEY: ${{ secrets.ERROR_SERVICE_API_KEY }}
@@ -392,16 +392,16 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           EXPECTED=(
-            "@trembo/cli-darwin-arm64"
-            "@trembo/cli-darwin-x64"
-            "@trembo/cli-linux-arm64"
-            "@trembo/cli-linux-x64"
-            "@trembo/cli-windows-arm64"
-            "@trembo/cli-windows-x64"
+            "@trumbo/cli-darwin-arm64"
+            "@trumbo/cli-darwin-x64"
+            "@trumbo/cli-linux-arm64"
+            "@trumbo/cli-linux-x64"
+            "@trumbo/cli-windows-arm64"
+            "@trumbo/cli-windows-x64"
           )
 
           for package_name in "${EXPECTED[@]}"; do
-            dir="apps/cli/dist/${package_name#@trembo/}"
+            dir="projects/console/dist/${package_name#@trumbo/}"
             if [ ! -f "$dir/package.json" ]; then
               echo "Missing package manifest: $dir/package.json"
               exit 1
@@ -424,12 +424,12 @@ jobs:
         env:
           NPM_CONFIG_PROVENANCE: "true"
         run: bun script/publish-npm.ts --tag nightly
-        working-directory: apps/cli
+        working-directory: projects/console
 
       - name: Summary
         if: steps.check_commits.outputs.skip != 'true'
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "Published trembo@${VERSION} to npm with dist-tag 'nightly'"
-          echo "Install with: npm install -g trembo@nightly"
+          echo "Published trumbo@${VERSION} to npm with dist-tag 'nightly'"
+          echo "Install with: npm install -g trumbo@nightly"

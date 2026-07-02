@@ -29,9 +29,9 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ vars.TREMBO_JETBRAINS_APP_ID }}
-          private-key: ${{ secrets.TREMBO_JETBRAINS_APP_KEY }}
-          owner: trembo
+          app-id: ${{ vars.TRUMBO_JETBRAINS_APP_ID }}
+          private-key: ${{ secrets.TRUMBO_JETBRAINS_APP_KEY }}
+          owner: trumbo
           repositories: intellij-plugin
 
       - name: Get PR details (for issue_comment trigger)
@@ -71,12 +71,12 @@ jobs:
           curl -X POST \
             -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            -H "User-Agent: trembo-pr-trigger" \
+            -H "User-Agent: trumbo-pr-trigger" \
             -H "Content-Type: application/json" \
-            https://api.github.com/repos/trembo/intellij-plugin/dispatches \
+            https://api.github.com/repos/trumbo/intellij-plugin/dispatches \
             -d @- <<EOF
           {
-            "event_type": "trembo-pr-check",
+            "event_type": "trumbo-pr-check",
             "client_payload": {
               "pr_number": "$PR_NUMBER",
               "branch_name": $BRANCH_NAME,

@@ -1,0 +1,12 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"rootDir": "..",
+		"paths": {
+			"@trumbo/agents": ["../agents/src/index.ts"],
+			"@trumbo/shared": ["../shared/src/index.ts"],
+			"@trumbo/shared/*": ["../shared/src/*", "../shared/src/*/index.ts"]
+		}
+	}
+}

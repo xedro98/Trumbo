@@ -1,0 +1,68 @@
+---
+title: "OpenAI Compatible"
+description: "Learn how to configure Trumbo with various AI model providers that offer OpenAI-compatible APIs."
+---
+```text
+████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
+   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
+   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
+   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
+```
+
+
+Trumbo supports a wide range of AI model providers that expose an OpenAI-compatible API. That means you can use models from providers _other than_ OpenAI while still working with a familiar API surface, including:
+
+-   **Local models** running through tools like Ollama and LM Studio (covered in their respective sections).
+-   **Cloud providers** like Perplexity, Together AI, Anyscale, and many others.
+-   **Any other provider** that offers an OpenAI-compatible API endpoint.
+
+This page covers providers _other than_ the official OpenAI API, which has its own [dedicated configuration page](/provider-config/openai).
+
+### General Configuration
+
+The key to using an OpenAI-compatible provider with Trumbo is configuring these main settings:
+
+1.  **Base URL:** The API endpoint specific to the provider. It will _not_ be `https://api.openai.com/v1` (that URL is for the official OpenAI API).
+2.  **API Key:** The secret key you obtain from your chosen provider. (or **Use Azure Identity Authentication**)
+3.  **Model ID:** The specific name or identifier for the model you want to use.
+
+You'll find these settings in the Trumbo settings panel (click the ⚙️ icon):
+
+-   **API Provider:** Select "OpenAI Compatible".
+-   **Base URL:** Enter the base URL provided by your chosen provider. **This is a crucial step.**
+-   **API Key:** Enter your API key from the provider.
+-   **Model:** Choose or enter the model ID.
+-   **Use Azure Identity Authentication:** Check the box to authenticate with your Azure managed identity. This won't trigger authentication itself; it uses the existing one (e.g., from `az login`).
+-   **Model Configuration:** This section lets you customize advanced parameters for the model, such as:
+    -   Max Output Tokens
+    -   Context Window size
+    -   Image Support capabilities
+    -   Computer Use (e.g., for models with tool/function calling)
+    -   Input Price (per token/million tokens)
+    -   Output Price (per token/million tokens)
+
+**Note:** If you use a different OpenAI-compatible provider (such as Together AI, Anyscale, etc.), the available model IDs will differ. Always refer to your specific provider's documentation for supported model names and any unique configuration details.
+
+### v0 (Vercel SDK) in Trumbo
+
+-   For developers working with v0, the [Vercel AI SDK documentation](https://vercel.com/book/ai-sdk) provides valuable insights and examples for integrating various models, many of which are OpenAI-compatible. It's a helpful resource for understanding how to structure calls and manage configurations when using Trumbo with services deployed on or integrated with Vercel.
+
+-   v0 can be used in Trumbo with the OpenAI Compatible provider.
+
+### Quickstart
+
+1. With the OpenAI Compatible provider selected, set the Base URL to `https://api.v0.dev/v1`.
+2. Paste in your v0 API Key.
+3. Set the Model ID: `v0-1.0-md`.
+4. Click Verify to confirm the connection.
+
+### Troubleshooting
+
+-   **"Invalid API Key":** Double-check that you've entered the API key correctly and that it's for the correct provider.
+-   **"Model Not Found":** Make sure you're using a valid model ID for your chosen provider and that it's available at the specified Base URL.
+-   **Connection Errors:** Verify the Base URL is correct, that your provider's API is reachable from your machine, and that there are no firewall or network issues.
+-   **Unexpected Results:** If you're getting unexpected outputs, try a different model or double-check all configuration parameters.
+
+Using an OpenAI-compatible provider lets you leverage Trumbo's flexibility with a wider array of AI models. Always consult your provider's documentation for the most accurate and up-to-date information.

@@ -1,0 +1,171 @@
+---
+title: "CLI Overview"
+sidebarTitle: "CLI Overview"
+description: "Use Trumbo CLI for interactive terminal sessions and automated headless workflows."
+---
+```text
+████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
+   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
+   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
+   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
+```
+
+
+## Prerequisites
+
+- Trumbo CLI installed (install via `npm i -g trumbo`)
+- A provider authenticated (`trumbo auth`) — use the Trumbo Provider, TrumboPass, or your own provider key ([Authorization Guide](/getting-started/authorizing-with-trumbo#cli-setup))
+
+## Quick Start
+
+```bash
+# Interactive session
+trumbo
+
+# Run one task immediately
+trumbo "refactor this module to use async/await"
+
+# Structured output for scripts
+trumbo --json "list TODO comments"
+```
+
+## Headless mode
+
+Use headless mode for scripts and automation where you want processable output.
+
+Headless kicks in when you pass flags like `--json`, when stdin is piped, or when output is redirected.
+
+#### When headless activates
+
+| Invocation | Reason |
+|---|---|
+| `trumbo --json "task"` | JSON output mode |
+| `cat file \| trumbo "task"` | stdin is piped |
+| `trumbo "task" > output.txt` | stdout is redirected |
+
+```bash
+# CI/script style execution
+git diff | trumbo "review these changes"
+
+# JSON for parsing
+trumbo --json "summarize this changelog" | jq -r '.text'
+```
+
+See: [Headless Mode](#headless-mode)
+
+### Autonomous execution
+
+For fully unattended runs, turn on auto-approval:
+
+```bash
+trumbo --auto-approve true "run tests and fix failures"
+```
+
+Mode selection works in headless runs too:
+
+```bash
+# plan-first
+trumbo -p "design migration plan"
+
+# act immediately (default)
+trumbo "apply migration"
+```
+
+<Warning>
+Autonomous execution can modify files and run commands without further prompts. Run it on a clean branch and review the results.
+</Warning>
+
+## High-Value Commands
+
+```bash
+trumbo --help
+trumbo <command> --help
+```
+
+| Command | Purpose |
+|---|---|
+| `trumbo` | Start interactive mode or run a prompt |
+| `trumbo auth` | Authenticate and set provider/model |
+| `trumbo config` | Open the interactive config view |
+| `trumbo mcp` | Manage MCP servers |
+| `trumbo doctor` | Diagnose/fix configuration issues |
+| `trumbo history` | Show and manage task history |
+| `trumbo schedule` | Manage scheduled tasks |
+| `trumbo hub` | Manage local hub daemon |
+
+## Most-Used Global Flags
+
+Source of truth: [CLI Reference](/cli/cli-reference)
+
+| Flag | Purpose |
+|---|---|
+| `-p, --plan` | Start in Plan mode |
+| `--auto-approve <boolean>` | Global tool auto-approval (`true`/`false`, default `true`) |
+| `-m, --model <model>` | Override model for this run |
+| `-P, --provider <id>` | Override provider for this run |
+| `-c, --cwd <path>` | Set working directory |
+| `--config <dir>` | Use config directory |
+| `--data-dir <dir>` | Use isolated local state |
+| `--json` | Output newline-delimited JSON messages |
+| `--thinking <level>` | Set reasoning effort: `none\|low\|medium\|high\|xhigh` (default `medium`) |
+| `-t, --timeout <seconds>` | Set task timeout |
+
+## Automation Patterns
+
+### Pipe context in
+
+```bash
+cat README.md | trumbo "summarize key setup steps"
+git diff | trumbo "review for potential regressions"
+```
+
+### Chain tasks
+
+```bash
+git diff | trumbo "explain these changes" | trumbo "write a commit message"
+```
+
+### Restrict command execution
+
+```bash
+export TRUMBO_COMMAND_PERMISSIONS='{"allow": ["npm *", "git *"], "deny": ["rm -rf *", "sudo *"]}'
+```
+
+### Include images in tasks
+
+```bash
+trumbo -i "fix the layout issue shown in @./screenshot.png"
+
+# or reference inline
+trumbo "fix the UI shown in @./design-mockup.png"
+```
+
+### Set execution timeout
+
+```bash
+trumbo --timeout 600 "run full test suite"
+```
+
+## JSON Output Schema
+
+With `--json`, each line is a JSON message object.
+
+```json
+{"type":"say","text":"I'll create the file now.","ts":1760501486669,"say":"text"}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `type` | `"ask"` or `"say"` | Message category |
+| `text` | `string` | Message content |
+| `ts` | `number` | Unix timestamp in milliseconds |
+| `say` | `string` | Subtype when `type` is `"say"` |
+| `ask` | `string` | Subtype when `type` is `"ask"` |
+| `reasoning` | `string` | Optional model reasoning |
+| `partial` | `boolean` | Streaming flag |
+
+## Next Steps
+
+- [CLI Reference](/cli/cli-reference)

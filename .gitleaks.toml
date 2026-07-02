@@ -1,4 +1,4 @@
-title = "Trembo SDK secret scanning"
+title = "Trumbo SDK secret scanning"
 
 [extend]
 useDefault = true

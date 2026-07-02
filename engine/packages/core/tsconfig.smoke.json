@@ -1,0 +1,18 @@
+{
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"rootDir": "..",
+		"noEmit": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"paths": {
+			"@trumbo/agents": ["../agents/src/index.ts"],
+			"@trumbo/agents/*": ["../agents/src/*", "../agents/src/*/index.ts"],
+			"@trumbo/llms": ["../llms/src/index.ts"],
+			"@trumbo/shared": ["../shared/src/index.ts"],
+			"@trumbo/shared/*": ["../shared/src/*", "../shared/src/*/index.ts"]
+		}
+	},
+	"include": ["scripts/**/*", "src/**/*"]
+}

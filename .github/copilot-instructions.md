@@ -1,6 +1,6 @@
-# Copilot instructions for Trembo
+# Copilot instructions for Trumbo
 
-This is a VS Code extension. Read `.tremborules/general.md` for tribal knowledge and nuanced patterns.
+This is a VS Code extension. Read `.trumborules/general.md` for tribal knowledge and nuanced patterns.
 
 ## Architecture
 - **Core** (`src/`): `extension.ts` → `WebviewProvider` → `Controller` (single source of truth) → `Task` (agent loop).
@@ -15,15 +15,15 @@ This is a VS Code extension. Read `.tremborules/general.md` for tribal knowledge
 - **Tests**: `bun run test:unit`. After prompt/tool changes: `UPDATE_SNAPSHOTS=true bun run test:unit`.
 
 ## Protobuf RPC workflow (4 steps)
-1. **Define** in `proto/trembo/*.proto`. Naming: `PascalCaseService`, `camelCase` RPCs, `PascalCase` messages. Use `common.proto` shared types for simple data.
+1. **Define** in `proto/trumbo/*.proto`. Naming: `PascalCaseService`, `camelCase` RPCs, `PascalCase` messages. Use `common.proto` shared types for simple data.
 2. **Generate**: `bun run protos`.
 3. **Backend handler**: `src/core/controller/<domain>/`.
 4. **Frontend call**: `UiServiceClient.myMethod(Request.create({...}))`.
-- Adding enums (e.g. `TremboSay`) → also update `src/shared/proto-conversions/trembo-message.ts`.
+- Adding enums (e.g. `TrumboSay`) → also update `src/shared/proto-conversions/trumbo-message.ts`.
 
 ## Adding API providers (silent-failure risk)
 Three proto-conversion updates are **required**, or the provider silently resets to Anthropic:
-1. `proto/trembo/models.proto` — add to the `ApiProvider` enum.
+1. `proto/trumbo/models.proto` — add to the `ApiProvider` enum.
 2. `convertApiProviderToProto()` in `src/shared/proto-conversions/models/api-configuration-conversion.ts`.
 3. `convertProtoToApiProvider()` in the same file.
 
@@ -32,12 +32,12 @@ Also update: `src/shared/api.ts`, `src/shared/providers/providers.json`, `src/co
 For Responses API providers: add to `isNextGenModelProvider()` in `src/utils/model-utils.ts` and set `apiFormat: ApiFormat.OPENAI_RESPONSES` on models.
 
 ## Adding tools to the system prompt (5+ file chain)
-1. Add an enum to `TremboDefaultTool` in `src/shared/tools.ts`.
+1. Add an enum to `TrumboDefaultTool` in `src/shared/tools.ts`.
 2. Create a definition in `src/core/prompts/system-prompt/tools/` (export `[GENERIC]` minimum).
 3. Register in `src/core/prompts/system-prompt/tools/init.ts`.
 4. Whitelist in `src/core/prompts/system-prompt/variants/*/config.ts` for each model family.
 5. Handler in `src/core/task/tools/handlers/`, wired in `ToolExecutor.ts`.
-6. If the tool has UI: add a `TremboSay` enum in proto → `ExtensionMessage.ts` → `trembo-message.ts` → `ChatRow.tsx`.
+6. If the tool has UI: add a `TrumboSay` enum in proto → `ExtensionMessage.ts` → `trumbo-message.ts` → `ChatRow.tsx`.
 7. Regenerate snapshots: `UPDATE_SNAPSHOTS=true bun run test:unit`.
 
 ## Modifying the system prompt

@@ -16,9 +16,7 @@
 	"typescript.preferences.quoteStyle": "double",
 	// Protobuf settings
 	"protoc": {
-		"options": [
-			"--proto_path=apps/vscode/proto"
-		]
+		"options": ["--proto_path=projects/vscode/proto"]
 	},
 	// Enable Lint and format using Biome
 	"biome.enabled": true,

@@ -1,0 +1,55 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"lib": ["ES2022"],
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"paths": {
+			"@trumbo/agents": ["./packages/agents/src/index.ts"],
+			"@trumbo/agents/*": [
+				"./packages/agents/src/*",
+				"./packages/agents/src/*/index.ts"
+			],
+			"@trumbo/hub": ["../projects/hub/src/server.ts"],
+			"@trumbo/core": ["./packages/core/src/index.ts"],
+			"@trumbo/core/hub": ["./packages/core/src/hub/index.ts"],
+			"@trumbo/core/hub/daemon-entry": [
+				"./packages/core/src/hub/daemon/entry.ts"
+			],
+			"@trumbo/core/telemetry": [
+				"./packages/core/src/services/telemetry/index.ts"
+			],
+			"@trumbo/core/*": [
+				"./packages/core/src/*",
+				"./packages/core/src/*/index.ts"
+			],
+			"@trumbo/llms": ["./packages/llms/src/index.ts"],
+			"@trumbo/llms/browser": ["./packages/llms/src/index.browser.ts"],
+			"@trumbo/sdk": ["./packages/sdk/src/index.ts"],
+			"@trumbo/shared": ["./packages/shared/src/index.ts"],
+			"@trumbo/shared/automation": [
+				"./packages/shared/src/automation/index.ts"
+			],
+			"@trumbo/shared/browser": ["./packages/shared/src/index.browser.ts"],
+			"@trumbo/shared/db": ["./packages/shared/src/db/index.ts"],
+			"@trumbo/shared/storage": ["./packages/shared/src/storage/index.ts"],
+			"@trumbo/shared/types": ["./packages/shared/src/types/index.ts"],
+			"@trumbo/shared/*": [
+				"./packages/shared/src/*",
+				"./packages/shared/src/*/index.ts"
+			]
+		}
+	},
+	"include": ["**/*.ts", "**/*.tsx", "**/bun.mts", "../vitest.config.ts"],
+	"exclude": [
+		"node_modules",
+		"**/dist/**",
+		"**/.next/**",
+		"packages/gateway/**"
+	]
+}

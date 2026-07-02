@@ -1,0 +1,61 @@
+---
+title: "Kanban"
+sidebarTitle: "Overview"
+description: "Use Trumbo Kanban to run multiple coding agents in parallel with isolated git worktrees."
+---
+```text
+████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
+   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
+   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
+   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
+```
+
+
+*This page covers the archived VS Code extension / removed Kanban board and is not part of the current CLI + SDK distribution.*
+
+<Warning>
+Kanban is a **research preview**. Some features described here rely on experimental capabilities. Expect changes.
+</Warning>
+
+## Prerequisites
+
+- Node.js 18+
+- A git repository (run from the repo root)
+- Kanban launcher available (`npx kanban`)
+
+## Quick Start
+
+```bash
+cd /path/to/your/repo
+npx kanban
+```
+
+This starts a local server and opens the board in your browser.
+
+## Core Workflow
+
+1. **Create tasks** on the board (manually or from the sidebar chat).
+2. **Start tasks** with play — each card gets an isolated git worktree + terminal.
+3. **Monitor progress** from card status and the latest agent output.
+4. **Review diffs** in the card detail view and leave inline comments.
+5. **Ship changes** via Commit or Open PR.
+6. **Clean up** by moving cards to trash (worktrees are removed).
+
+## Key Capabilities
+
+- **Parallel execution:** each task runs in a separate worktree to avoid conflicts.
+- **Task linking:** dependency chains can auto-start the next task.
+- **Inline review loop:** comment directly on diff lines to steer agent work.
+- **Auto-commit / Auto-PR:** optional automation from settings.
+- **Sidebar chat orchestration:** ask an agent to break work into cards and start flows.
+
+## Agent Compatibility
+
+Kanban is built for CLI-style coding agents and currently works with Trumbo CLI, Claude Code, Codex, OpenCode, and related runtimes available in settings.
+
+## Next Steps
+
+- [Kanban Core Workflow](/kanban/core-workflow)
+- [Kanban Remote Access](/kanban/remote-access)

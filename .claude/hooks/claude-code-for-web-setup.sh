@@ -26,9 +26,9 @@ if [ -n "${GITHUB_TOKEN:-}" ]; then
   echo "GITHUB_TOKEN is configured - gh CLI is ready to use"
   echo ""
   echo "You can use gh commands directly, for example:"
-  echo "  gh issue list --repo trembo/trembo --limit 5"
-  echo "  gh pr list --repo trembo/trembo --state open"
-  echo "  gh issue view 123 --repo trembo/trembo"
+  echo "  gh issue list --repo trumbo/trumbo --limit 5"
+  echo "  gh pr list --repo trumbo/trumbo --state open"
+  echo "  gh issue view 123 --repo trumbo/trumbo"
   echo ""
 else
   echo "GITHUB_TOKEN is not set - gh CLI will have limited functionality"

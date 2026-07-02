@@ -1,0 +1,69 @@
+out
+dist
+dist-standalone
+node_modules
+tmp
+.vscode-test/
+*.vsix
+
+.DS_Store
+.idea
+.husky/_/
+
+pnpm-lock.yaml
+
+.trumboignore
+.venv
+.actrc
+CLAUDE.local.md
+
+# Ignore coverage directories and files
+coverage
+coverage-unit
+.nyc_output
+# But don't ignore the coverage scripts in .github/scripts/
+!.github/scripts/coverage/
+
+*evals.env
+.env
+.secrets
+.github/act/.secrets
+
+.worktrees
+
+## Generated files ##
+projects/vscode/src/generated/
+projects/vscode/src/shared/proto/
+projects/vscode/webview-ui/src/services/grpc-client.ts
+*.tsbuildinfo
+
+# E2E Tests
+test-results
+
+/.github/act
+/pkg
+.secrets
+
+*.tsbuildinfo
+
+# Smoke test results (generated)
+bench/smoke-tests/results/
+
+.tui-test
+secrets.json
+tui-traces
+tests/**/cache
+
+# Backup created by scripts/marketplace-readme.mjs while publishing.
+# Should never be committed: only exists if a publish aborts mid-swap.
+.README.github.bak
+
+
+# SDK Session files / User data
+.trumbo/data
+.trumbo/tmp
+*.db
+*.db-shm
+*.db-wal
+.trumbo/**/managed.json
+.trumbo/**/bundle.json

@@ -1,0 +1,83 @@
+---
+title: "Trumbo Overview"
+sidebarTitle: "Trumbo Overview"
+description: "Your AI-powered coding agent for complex work. Read files, write code, run commands, all with your approval."
+---
+```text
+████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
+   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
+   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
+   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
+```
+
+
+Welcome to the Trumbo documentation. Whether you're setting up for the first time or pushing into advanced capabilities, everything you need is here.
+
+## What is Trumbo?
+
+Trumbo is an AI coding agent that lives in your terminal. It reads and writes files, runs terminal commands, drives a browser, and helps you build features through natural conversation. Every action waits for your explicit approval, so you stay in control the whole way through.
+
+## Model access
+
+Pick the model access path that fits how you work:
+
+<CardGroup cols={3}>
+  <Card title="Trumbo (usage-billing)" icon="bolt" href="/getting-started/trumbo-provider">
+    Fastest setup path with one sign-in, built-in billing, and free model options.
+  </Card>
+  <Card title="TrumboPass" icon="credit-card" href="/getting-started/trumbopass">
+    Flat $9.99/month subscription for selected open coding models with 2-5x API rate limits.
+  </Card>
+  <Card title="Bring Your Own Key" icon="key" href="/getting-started/authorizing-with-trumbo#byok-cloud--local">
+    Use your own provider credentials for cloud providers or local runtimes.
+  </Card>
+</CardGroup>
+
+## Applications
+
+The end-user app built on top of Trumbo's agent core:
+
+<CardGroup cols={1}>
+  <Card title="CLI" icon="terminal" href="/usage/cli-overview">
+    Run Trumbo in your terminal with interactive chat or fully headless automation for CI/CD and scripting.
+
+    `npm i -g trumbo`
+  </Card>
+</CardGroup>
+
+
+## Agent Core (SDK)
+
+The SDK is Trumbo's agent core — use it to build your own applications, automations, and integrations. See the SDK section for the full functionality and architecture of the Trumbo Agent.
+
+<CardGroup cols={1}>
+  <Card title="SDK" icon="cube" href="/engine/overview">
+    Build AI agents and integrations powered by the same core engine behind the CLI.
+
+    `npm install @trumbo/sdk`
+  </Card>
+</CardGroup>
+
+## Editor integration
+
+The Trumbo CLI also integrates with ACP-capable editors (such as **Zed** and **Neovim**) via `trumbo --acp`.
+
+
+## Enterprise Solutions
+
+<CardGroup cols={2}>
+  <Card title="Security & Governance" icon="shield-halved" href="/enterprise-solutions/overview">
+    SSO, role-based access control, model and tool controls per team, and remote configuration.
+  </Card>
+  <Card title="Observability" icon="chart-line" href="/enterprise-solutions/monitoring/overview">
+    OpenTelemetry, Datadog, Grafana, Splunk integrations with real-time analytics.
+  </Card>
+  <Card title="Team Management" icon="users-gear" href="/enterprise-solutions/team-management/managing-members">
+    Manage members, roles, and permissions across your organization.
+  </Card>
+  <Card title="API Reference" icon="code" href="/enterprise-solutions/api-reference">
+    Programmatic access to Trumbo's enterprise features.
+  </Card>
+</CardGroup>

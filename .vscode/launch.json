@@ -10,24 +10,22 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}/apps/vscode",
+				"--extensionDevelopmentPath=${workspaceFolder}/projects/vscode",
 				"--disable-workspace-trust",
 				"--disable-extension",
-				"trembo-bot.trembo", // Avoid conflicts with installed Trembo
+				"trumbo-bot.trumbo", // Avoid conflicts with installed Trumbo
 				"--disable-extension",
-				"trembo-bot.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
-				"${workspaceFolder}/apps/vscode",
+				"trumbo-bot.trumbo-nightly", // Avoid conflicts with installed Trumbo Nightly
+				"${workspaceFolder}/projects/vscode",
 				"--disable-extensions"
 			],
-			"outFiles": [
-				"${workspaceFolder}/apps/vscode/dist/**/*.js"
-			],
+			"outFiles": ["${workspaceFolder}/projects/vscode/dist/**/*.js"],
 			"preLaunchTask": "${defaultBuildTask}",
-			"envFile": "${workspaceFolder}/apps/vscode/.env",
+			"envFile": "${workspaceFolder}/projects/vscode/.env",
 			"env": {
 				"IS_DEV": "true",
-				"DEV_WORKSPACE_FOLDER": "${workspaceFolder}/apps/vscode",
-				"TREMBO_ENVIRONMENT": "production"
+				"DEV_WORKSPACE_FOLDER": "${workspaceFolder}/projects/vscode",
+				"TRUMBO_ENVIRONMENT": "production"
 			}
 		},
 		{
@@ -35,23 +33,21 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}/apps/vscode",
+				"--extensionDevelopmentPath=${workspaceFolder}/projects/vscode",
 				"--disable-workspace-trust",
 				"--disable-extension",
-				"trembo-bot.trembo", // Avoid conflicts with installed Trembo
+				"trumbo-bot.trumbo", // Avoid conflicts with installed Trumbo
 				"--disable-extension",
-				"trembo-bot.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
-				"${workspaceFolder}/apps/vscode"
+				"trumbo-bot.trumbo-nightly", // Avoid conflicts with installed Trumbo Nightly
+				"${workspaceFolder}/projects/vscode"
 			],
-			"outFiles": [
-				"${workspaceFolder}/apps/vscode/dist/**/*.js"
-			],
+			"outFiles": ["${workspaceFolder}/projects/vscode/dist/**/*.js"],
 			"preLaunchTask": "${defaultBuildTask}",
-			"envFile": "${workspaceFolder}/apps/vscode/.env",
+			"envFile": "${workspaceFolder}/projects/vscode/.env",
 			"env": {
 				"IS_DEV": "true",
-				"DEV_WORKSPACE_FOLDER": "${workspaceFolder}/apps/vscode",
-				"TREMBO_ENVIRONMENT": "staging"
+				"DEV_WORKSPACE_FOLDER": "${workspaceFolder}/projects/vscode",
+				"TRUMBO_ENVIRONMENT": "staging"
 			}
 		},
 		{
@@ -59,23 +55,21 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}/apps/vscode",
+				"--extensionDevelopmentPath=${workspaceFolder}/projects/vscode",
 				"--disable-workspace-trust",
 				"--disable-extension",
-				"trembo-bot.trembo", // Avoid conflicts with installed Trembo
+				"trumbo-bot.trumbo", // Avoid conflicts with installed Trumbo
 				"--disable-extension",
-				"trembo-bot.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
-				"${workspaceFolder}/apps/vscode"
+				"trumbo-bot.trumbo-nightly", // Avoid conflicts with installed Trumbo Nightly
+				"${workspaceFolder}/projects/vscode"
 			],
-			"outFiles": [
-				"${workspaceFolder}/apps/vscode/dist/**/*.js"
-			],
+			"outFiles": ["${workspaceFolder}/projects/vscode/dist/**/*.js"],
 			"preLaunchTask": "${defaultBuildTask}",
-			"envFile": "${workspaceFolder}/apps/vscode/.env",
+			"envFile": "${workspaceFolder}/projects/vscode/.env",
 			"env": {
 				"IS_DEV": "true",
-				"DEV_WORKSPACE_FOLDER": "${workspaceFolder}/apps/vscode",
-				"TREMBO_ENVIRONMENT": "local"
+				"DEV_WORKSPACE_FOLDER": "${workspaceFolder}/projects/vscode",
+				"TRUMBO_ENVIRONMENT": "local"
 			}
 		},
 		{
@@ -84,57 +78,53 @@
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-				"--user-data-dir=${workspaceFolder}/apps/vscode/dist/tmp/user",
+				"--user-data-dir=${workspaceFolder}/projects/vscode/dist/tmp/user",
 				"--profile-temp",
 				"--sync=off",
 				"--disable-extension",
-				"trembo-bot.trembo", // Avoid conflicts with installed Trembo
+				"trumbo-bot.trumbo", // Avoid conflicts with installed Trumbo
 				"--disable-extension",
-				"trembo-bot.trembo-nightly", // Avoid conflicts with installed Trembo Nightly
-				"--extensionDevelopmentPath=${workspaceFolder}/apps/vscode",
-				"${workspaceFolder}/apps/vscode"
+				"trumbo-bot.trumbo-nightly", // Avoid conflicts with installed Trumbo Nightly
+				"--extensionDevelopmentPath=${workspaceFolder}/projects/vscode",
+				"${workspaceFolder}/projects/vscode"
 			],
-			"outFiles": [
-				"${workspaceFolder}/apps/vscode/dist/**/*.js"
-			],
+			"outFiles": ["${workspaceFolder}/projects/vscode/dist/**/*.js"],
 			"preLaunchTask": "clean-tmp-user",
 			"internalConsoleOptions": "openOnSessionStart",
 			"postDebugTask": "stop",
-			"envFile": "${workspaceFolder}/apps/vscode/.env",
+			"envFile": "${workspaceFolder}/projects/vscode/.env",
 			"env": {
 				"IS_DEV": "true",
 				"TEMP_PROFILE": "true",
-				"DEV_WORKSPACE_FOLDER": "${workspaceFolder}/apps/vscode",
-				"TREMBO_ENVIRONMENT": "production"
+				"DEV_WORKSPACE_FOLDER": "${workspaceFolder}/projects/vscode",
+				"TRUMBO_ENVIRONMENT": "production"
 			}
 		},
 		{
 			"type": "node",
 			"request": "launch",
 			"name": "Debug Test Standalone Core Api Server (test:sca-server)",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
+			"skipFiles": ["<node_internals>/**"],
 			"sourceMaps": true,
 			"resolveSourceMapLocations": [
-				"${workspaceFolder}/apps/vscode/**",
+				"${workspaceFolder}/projects/vscode/**",
 				"!**/node_modules/**"
 			],
-			"cwd": "${workspaceFolder}/apps/vscode",
+			"cwd": "${workspaceFolder}/projects/vscode",
 			"outFiles": [
-				"${workspaceFolder}/apps/vscode/dist/**/*.js",
-				"${workspaceFolder}/apps/vscode/dist-standalone/**/*.js"
+				"${workspaceFolder}/projects/vscode/dist/**/*.js",
+				"${workspaceFolder}/projects/vscode/dist-standalone/**/*.js"
 			],
 			"preLaunchTask": "compile-standalone",
 			"runtimeExecutable": "bun",
 			"program": "scripts/test-standalone-core-api-server.ts",
-			"envFile": "${workspaceFolder}/apps/vscode/.env",
+			"envFile": "${workspaceFolder}/projects/vscode/.env",
 			"env": {
 				"PROTOBUS_PORT": "26040",
 				"HOSTBRIDGE_PORT": "26041",
-				"WORKSPACE_DIR": "${workspaceFolder}/apps/vscode",
+				"WORKSPACE_DIR": "${workspaceFolder}/projects/vscode",
 				"E2E_TEST": "true",
-				"TREMBO_ENVIRONMENT": "local"
+				"TRUMBO_ENVIRONMENT": "local"
 			},
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen"
@@ -143,19 +133,15 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Debug Current Test File",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
+			"skipFiles": ["<node_internals>/**"],
 			"sourceMaps": true,
 			"resolveSourceMapLocations": [
-				"${workspaceFolder}/apps/vscode/**",
+				"${workspaceFolder}/projects/vscode/**",
 				"!**/node_modules/**"
 			],
-			"cwd": "${workspaceFolder}/apps/vscode",
+			"cwd": "${workspaceFolder}/projects/vscode",
 			"runtimeExecutable": "npx",
-			"runtimeArgs": [
-				"mocha"
-			],
+			"runtimeArgs": ["mocha"],
 			"args": [
 				"--require",
 				"ts-node/register",
@@ -166,12 +152,12 @@
 				"--exit",
 				"${file}"
 			],
-			"envFile": "${workspaceFolder}/apps/vscode/.env",
+			"envFile": "${workspaceFolder}/projects/vscode/.env",
 			"env": {
 				"TS_NODE_PROJECT": "./tsconfig.unit-test.json",
 				"NODE_ENV": "test",
 				"IS_DEV": "true",
-				"TREMBO_ENVIRONMENT": "local"
+				"TRUMBO_ENVIRONMENT": "local"
 			},
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "openOnSessionStart"
@@ -181,11 +167,8 @@
 			"type": "node",
 			"request": "launch",
 			"runtimeExecutable": "bun",
-			"runtimeArgs": [
-				"run",
-				"storybook"
-			],
-			"cwd": "${workspaceFolder}/apps/vscode/webview-ui",
+			"runtimeArgs": ["run", "storybook"],
+			"cwd": "${workspaceFolder}/projects/vscode/webview-ui",
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen",
 			"serverReadyAction": {
@@ -201,17 +184,13 @@
 			"name": "Launch Bun CLI (Prompt)",
 			"type": "bun",
 			"request": "launch",
-			"cwd": "${workspaceFolder}/sdk/apps/cli",
+			"cwd": "${workspaceFolder}/engine/projects/console",
 			"runtime": "bun",
-			"runtimeArgs": [
-				"--conditions=development"
-			],
-			"program": "${workspaceFolder}/sdk/apps/cli/src/index.ts",
-			"args": [
-				"${input:cliPrompt}"
-			],
+			"runtimeArgs": ["--conditions=development"],
+			"program": "${workspaceFolder}/engine/projects/console/src/index.ts",
+			"args": ["${input:cliPrompt}"],
 			"env": {
-				"TREMBO_BUILD_ENV": "development"
+				"TRUMBO_BUILD_ENV": "development"
 			},
 			"presentation": {
 				"hidden": true
@@ -221,19 +200,14 @@
 			"name": "Launch RPC Server",
 			"type": "bun",
 			"request": "launch",
-			"cwd": "${workspaceFolder}/sdk/apps/cli",
+			"cwd": "${workspaceFolder}/engine/projects/console",
 			"runtime": "bun",
-			"runtimeArgs": [
-				"--conditions=development"
-			],
-			"program": "${workspaceFolder}/sdk/apps/cli/src/index.ts",
-			"args": [
-				"rpc",
-				"start"
-			],
+			"runtimeArgs": ["--conditions=development"],
+			"program": "${workspaceFolder}/engine/projects/console/src/index.ts",
+			"args": ["rpc", "start"],
 			"env": {
-				"TREMBO_BUILD_ENV": "development",
-				"TREMBO_DEBUG_PORT_BASE": "9230"
+				"TRUMBO_BUILD_ENV": "development",
+				"TRUMBO_DEBUG_PORT_BASE": "9230"
 			},
 			"presentation": {
 				"hidden": true
@@ -287,10 +261,7 @@
 	"compounds": [
 		{
 			"name": "Launch RPC Server Debugger",
-			"configurations": [
-				"Launch RPC Server",
-				"Attach RPC Runtime (9230)"
-			]
+			"configurations": ["Launch RPC Server", "Attach RPC Runtime (9230)"]
 		},
 		{
 			"name": "Launch CLI Debugger",

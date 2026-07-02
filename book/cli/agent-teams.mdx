@@ -1,0 +1,66 @@
+---
+title: "Agent Teams"
+sidebarTitle: "Agent Teams"
+description: "Coordinate multiple agents working together on complex tasks from the CLI."
+---
+```text
+████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
+   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
+   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
+   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
+```
+
+<Warning>
+  This feature currently applies to the Trumbo SDK and CLI.
+</Warning>
+
+
+Agent teams let you split complex work across several agents that coordinate through a shared task board. One agent acts as the coordinator, delegating subtasks to specialist agents.
+
+## Starting a Team
+
+```bash
+trumbo --team-name auth-sprint "Plan and implement user authentication with tests"
+```
+
+The `--team-name` flag enables team mode. The coordinator agent gets additional tools for spawning teammates and delegating tasks.
+
+## Resuming Team Work
+
+Team state persists across sessions. Resume where you left off:
+
+```bash
+trumbo --team-name auth-sprint "Continue with incomplete tasks"
+```
+
+## Interactive Mode
+
+In interactive mode, use the `/team` slash command:
+
+```
+/team Plan and implement a REST API with tests
+```
+
+## Team State
+
+Team state is stored at `~/.trumbo/data/teams/[team-name]/` and includes:
+
+- Task board with current tasks and status
+- Inter-agent mailbox
+- Mission log with activity history
+
+## Disabling Teams
+
+Teams are enabled by default. Disable them with:
+
+```bash
+trumbo --no-teams "your prompt"
+```
+
+## Sub-Agents
+
+For simpler delegation within a single session (no persistent state), use [sub-agents](/features/subagents). Sub-agents run in parallel for read-only research and return focused reports to the main agent.
+
+See the [SDK Multi-Agent Teams guide](/engine/guides/multi-agent-teams) for the programmatic API.

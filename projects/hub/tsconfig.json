@@ -1,0 +1,21 @@
+{
+	"extends": "../../engine/packages/tsconfig.base.json",
+	"compilerOptions": {
+		"noEmit": true,
+		"types": ["bun", "node"],
+		"paths": {
+			"@trumbo/core": ["../../engine/packages/core/src/index.ts"],
+			"@trumbo/core/*": [
+				"../../engine/packages/core/src/*",
+				"../../engine/packages/core/src/*/index.ts"
+			],
+			"@trumbo/shared": ["../../engine/packages/shared/src/index.ts"],
+			"@trumbo/shared/*": [
+				"../../engine/packages/shared/src/*",
+				"../../engine/packages/shared/src/*/index.ts"
+			]
+		}
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["src/webview/**"]
+}

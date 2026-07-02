@@ -1,0 +1,284 @@
+---
+title: "Code Examples"
+sidebarTitle: "Code Examples"
+description: "Use the Trumbo API from Python, Node.js, curl, the Trumbo CLI, and the VS Code extension."
+---
+```text
+████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
+   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
+   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
+   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
+```
+
+
+The Trumbo API is OpenAI-compatible, so anything that already talks to OpenAI can talk to Trumbo. Point the client at the Trumbo base URL and supply a Trumbo API key, and you're done.
+
+## curl
+
+### Non-Streaming
+
+```bash
+curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
+  -H "Authorization: Bearer $TRUMBO_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "anthropic/claude-sonnet-4-6",
+    "messages": [{"role": "user", "content": "What is 2+2?"}],
+    "stream": false
+  }'
+```
+
+### Streaming
+
+```bash
+curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
+  -H "Authorization: Bearer $TRUMBO_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "anthropic/claude-sonnet-4-6",
+    "messages": [{"role": "user", "content": "Write a short poem about code."}],
+    "stream": true
+  }'
+```
+
+## Python
+
+### OpenAI SDK
+
+The [OpenAI Python SDK](https://github.com/openai/openai-python) works with the Trumbo API once you set `base_url`:
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://0.0.0.0:0/api/v1",
+    api_key="YOUR_API_KEY",
+)
+
+# Non-streaming
+response = client.chat.completions.create(
+    model="anthropic/claude-sonnet-4-6",
+    messages=[{"role": "user", "content": "Explain recursion in one sentence."}],
+)
+print(response.choices[0].message.content)
+```
+
+### Streaming in Python
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://0.0.0.0:0/api/v1",
+    api_key="YOUR_API_KEY",
+)
+
+stream = client.chat.completions.create(
+    model="anthropic/claude-sonnet-4-6",
+    messages=[{"role": "user", "content": "Write a function to reverse a string in Python."}],
+    stream=True,
+)
+
+for chunk in stream:
+    content = chunk.choices[0].delta.content
+    if content:
+        print(content, end="", flush=True)
+print()
+```
+
+### Tool Calling in Python
+
+```python
+from openai import OpenAI
+import json
+
+client = OpenAI(
+    base_url="http://0.0.0.0:0/api/v1",
+    api_key="YOUR_API_KEY",
+)
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get weather for a location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string", "description": "City name"}
+                },
+                "required": ["location"],
+            },
+        },
+    }
+]
+
+response = client.chat.completions.create(
+    model="anthropic/claude-sonnet-4-6",
+    messages=[{"role": "user", "content": "What's the weather in Tokyo?"}],
+    tools=tools,
+)
+
+# Check if the model wants to call a tool
+choice = response.choices[0]
+if choice.message.tool_calls:
+    tool_call = choice.message.tool_calls[0]
+    print(f"Tool: {tool_call.function.name}")
+    print(f"Args: {tool_call.function.arguments}")
+```
+
+### Using requests
+
+If you'd rather skip the OpenAI SDK:
+
+```python
+import requests
+
+response = requests.post(
+    "http://0.0.0.0:0/api/v1/chat/completions",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "anthropic/claude-sonnet-4-6",
+        "messages": [{"role": "user", "content": "Hello!"}],
+        "stream": False,
+    },
+)
+
+data = response.json()
+print(data["choices"][0]["message"]["content"])
+```
+
+## Node.js / TypeScript
+
+### OpenAI SDK
+
+The [OpenAI Node.js SDK](https://github.com/openai/openai-node) works with the Trumbo API once you set `baseURL`:
+
+```typescript
+import OpenAI from "openai"
+
+const client = new OpenAI({
+  baseURL: "http://0.0.0.0:0/api/v1",
+  apiKey: "YOUR_API_KEY",
+})
+
+// Non-streaming
+const response = await client.chat.completions.create({
+  model: "anthropic/claude-sonnet-4-6",
+  messages: [{ role: "user", content: "Explain async/await in one sentence." }],
+})
+console.log(response.choices[0].message.content)
+```
+
+### Streaming in Node.js
+
+```typescript
+import OpenAI from "openai"
+
+const client = new OpenAI({
+  baseURL: "http://0.0.0.0:0/api/v1",
+  apiKey: "YOUR_API_KEY",
+})
+
+const stream = await client.chat.completions.create({
+  model: "anthropic/claude-sonnet-4-6",
+  messages: [{ role: "user", content: "Write a haiku about TypeScript." }],
+  stream: true,
+})
+
+for await (const chunk of stream) {
+  const content = chunk.choices[0]?.delta?.content
+  if (content) {
+    process.stdout.write(content)
+  }
+}
+console.log()
+```
+
+### Using fetch
+
+```typescript
+const response = await fetch("http://0.0.0.0:0/api/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    Authorization: "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    model: "anthropic/claude-sonnet-4-6",
+    messages: [{ role: "user", content: "Hello!" }],
+    stream: false,
+  }),
+})
+
+const data = await response.json()
+console.log(data.choices[0].message.content)
+```
+
+## Trumbo CLI
+
+The [Trumbo CLI](/cli/cli-reference) is the fastest path from the terminal. It handles authentication, streaming, and tool execution for you.
+
+### Setup
+
+```bash
+# Install
+npm install -g @anthropic-ai/trumbo
+
+# Authenticate with a Trumbo API key
+trumbo auth -p trumbo -k "YOUR_API_KEY" -m anthropic/claude-sonnet-4-6
+```
+
+### Run Tasks
+
+```bash
+# Simple prompt
+trumbo "Explain what a REST API is."
+
+# Pipe input
+cat README.md | trumbo "Summarize this document."
+
+# Use a specific model
+trumbo -m google/gemini-2.5-pro "Analyze this codebase."
+
+# YOLO mode for automation
+trumbo -y "Run tests and fix failures."
+```
+
+See the [CLI Reference](/cli/cli-reference) for the full command catalog.
+
+## VS Code / JetBrains
+
+The Trumbo extension manages the API integration end to end:
+
+1. Open the Trumbo panel in your editor
+2. Select **Trumbo** as the provider in the model picker
+3. Sign in with your Trumbo account
+4. Start chatting or hand Trumbo a task
+
+Your API key is handled for you, so there's nothing to configure by hand.
+
+For setup steps, see [Installing Trumbo](/getting-started/installing-trumbo) and [Authorizing with Trumbo](/getting-started/authorizing-with-trumbo).
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Chat Completions" icon="message" href="/api/chat-completions">
+    Full endpoint reference with all parameters.
+  </Card>
+  <Card title="Authentication" icon="key" href="/api/authentication">
+    API key management and security practices.
+  </Card>
+  <Card title="Models" icon="brain" href="/api/models">
+    Browse available models.
+  </Card>
+  <Card title="CLI Reference" icon="terminal" href="/cli/cli-reference">
+    Complete Trumbo CLI command reference.
+  </Card>
+</CardGroup>

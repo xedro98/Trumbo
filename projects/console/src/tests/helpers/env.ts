@@ -1,0 +1,132 @@
+// ---------------------------------------------------------------------------
+// Environment helpers for test setup.
+//
+// Usage:
+//   test.use({ env: trumboEnv("default") });
+//   test.use({ env: trumboEnv("claude-sonnet-4.6") });
+//   test.use({ env: trumboEnv("/absolute/path/to/config") });
+// ---------------------------------------------------------------------------
+
+import { cpSync, mkdirSync, mkdtempSync } from "node:fs";
+import os from "node:os";
+import path from "node:path";
+
+export const TEST_SUITE_ROOT = new URL("../", import.meta.url).pathname;
+
+let envCounter = 0;
+
+function createIsolatedTrumboDir(sourceDir: string): string {
+	const tempRoot = mkdtempSync(path.join(os.tmpdir(), "trumbo-tui-test-"));
+	const targetDir = path.join(tempRoot, "trumbo");
+	cpSync(sourceDir, targetDir, {
+		recursive: true,
+		errorOnExist: false,
+		force: true,
+	});
+	mkdirSync(path.join(targetDir, "home"), { recursive: true });
+	return targetDir;
+}
+
+function nextHubPort(): string {
+	envCounter += 1;
+	const basePort = 30_000 + (process.pid % 10_000);
+	return String(basePort + (envCounter % 10_000));
+}
+
+/**
+ * Build the process environment for a trumbo test.
+ *
+ * @param configDir - Named config under `configs/`, or an absolute path.
+ * @param extra     - Additional env vars to merge in (override defaults).
+ */
+export function trumboEnv(
+	configDir: string,
+	extra: NodeJS.ProcessEnv = {},
+): NodeJS.ProcessEnv {
+	const trumboPath = path.isAbsolute(configDir)
+		? configDir
+		: path.join(TEST_SUITE_ROOT, "configs", configDir);
+	const isolatedTrumboPath = createIsolatedTrumboDir(trumboPath);
+	const dataDir = path.join(isolatedTrumboPath, "data");
+
+	// Determine effective VCR mode: extra overrides > parent env > default "playback"
+	const effectiveVcrMode =
+		extra.TRUMBO_VCR ?? process.env.TRUMBO_VCR ?? "playback";
+
+	// During recording, authenticated configs read real OAuth credentials from
+	// ~/.trumbo/data/settings/providers.json while keeping all other settings
+	// (model, provider, global state) from the mock config directory.
+	const isRecording = effectiveVcrMode === "record";
+	const isAuthenticated = configDir !== "unauthenticated";
+	const realProvidersFile =
+		isRecording && isAuthenticated
+			? path.join(os.homedir(), ".trumbo", "data", "settings", "providers.json")
+			: undefined;
+
+	// Remove CI so terminal renderers treat the spawned process as interactive.
+	// Remove VITEST so the spawned CLI binary doesn't skip initVcr().
+	// console/src/index.ts guards `initVcr` behind `process.env.VITEST !== "true"`,
+	// so if the parent vitest process's VITEST=true leaks into the child, VCR
+	// recording/playback is silently skipped.
+	const { CI: _ci, VITEST: _vitest, ...cleanEnv } = process.env;
+	if (!isAuthenticated) {
+		delete cleanEnv.TRUMBO_API_KEY;
+	}
+
+	// Only enable VCR when a cassette path is provided (via extra or parent env),
+	// otherwise tests without cassettes would trigger a spurious
+	// "[VCR] No TRUMBO_VCR_CASSETTE" warning on every run.
+	const hasCassette = !!(
+		extra.TRUMBO_VCR_CASSETTE ?? process.env.TRUMBO_VCR_CASSETTE
+	);
+	const vcrDefaults = hasCassette
+		? { TRUMBO_VCR: "playback", TRUMBO_VCR_FILTER: "" }
+		: {};
+
+	// the order of these env vars matter; later ones override earlier ones
+	return {
+		...vcrDefaults,
+		...cleanEnv,
+		...(realProvidersFile
+			? { TRUMBO_PROVIDER_SETTINGS_PATH: realProvidersFile }
+			: {}),
+		TRUMBO_TELEMETRY_DISABLED: "1",
+		HOME: path.join(isolatedTrumboPath, "home"),
+		TRUMBO_DIR: isolatedTrumboPath,
+		TRUMBO_DATA_DIR: dataDir,
+		TRUMBO_DB_DATA_DIR: path.join(dataDir, "db"),
+		TRUMBO_GLOBAL_SETTINGS_PATH: path.join(
+			dataDir,
+			"settings",
+			"global-settings.json",
+		),
+		TRUMBO_HOOKS_LOG_PATH: path.join(dataDir, "logs", "hooks.jsonl"),
+		TRUMBO_HUB_DISCOVERY_PATH: path.join(
+			dataDir,
+			"locks",
+			"hub",
+			"discovery.json",
+		),
+		TRUMBO_HUB_PORT: nextHubPort(),
+		TRUMBO_MCP_SETTINGS_PATH: path.join(
+			dataDir,
+			"settings",
+			"trumbo_mcp_settings.json",
+		),
+		...(realProvidersFile
+			? {}
+			: {
+					TRUMBO_PROVIDER_SETTINGS_PATH: path.join(
+						dataDir,
+						"settings",
+						"providers.json",
+					),
+				}),
+		TRUMBO_SESSION_DATA_DIR: path.join(dataDir, "sessions"),
+		TRUMBO_TEAM_DATA_DIR: path.join(dataDir, "teams"),
+		TRUMBO_DISABLE_TRUMBO_PASS_NOTICE: "1",
+		NO_UPDATE_NOTIFIER: "1",
+		TRUMBO_NO_AUTO_UPDATE: "1",
+		...extra,
+	};
+}

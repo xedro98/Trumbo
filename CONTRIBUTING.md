@@ -1,18 +1,17 @@
 <div align="center">
 <pre>
- _________  ________  _______   _____ ______   ________  ________
-|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
-\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
-     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
-      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
-       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
-        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
+   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
+   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
+   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
 </pre>
 </div>
 
-# Contributing to Trembo
+# Contributing to Trumbo
 
-Thanks for your interest in Trembo. This guide covers how to report issues, set up the project, and submit pull requests. By participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+Thanks for your interest in Trumbo. This guide covers how to report issues, set up the project, and submit pull requests. By participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Reporting bugs
 
@@ -33,7 +32,7 @@ PRs that change behavior without an approved issue may be closed.
 
 ## Finding something to work on
 
-Look for issues labeled [`good first issue`](https://github.com/xedro98/trembo/labels/good%20first%20issue) or [`help wanted`](https://github.com/xedro98/trembo/labels/help%20wanted). Docs improvements are always welcome — browse [`docs/`](./docs) and send a PR.
+Look for issues labeled [`good first issue`](https://github.com/xedro98/trembo/labels/good%20first%20issue) or [`help wanted`](https://github.com/xedro98/trembo/labels/help%20wanted). Docs improvements are always welcome — browse [`book/`](./docs) and send a PR.
 
 ## Development setup
 
@@ -47,7 +46,7 @@ Look for issues labeled [`good first issue`](https://github.com/xedro98/trembo/l
 
 ```bash
 git clone https://github.com/xedro98/trembo.git
-cd trembo
+cd trumbo
 bun install
 ```
 
@@ -60,7 +59,7 @@ cd sdk && bun run build && cd ..
 ### Run the CLI
 
 ```bash
-bun --conditions=development --cwd apps/cli dev
+bun --conditions=development --cwd projects/console dev
 ```
 
 ## Submitting a pull request

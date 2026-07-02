@@ -1,12 +1,11 @@
 <div align="center">
 <pre>
- _________  ________  _______   _____ ______   ________  ________
-|\___   ___\\   __  \|\  ___ \ |\   _ \  _   \|\   __  \|\   __  \
-\|___ \  \_\ \  \|\  \ \   __/|\ \  \\\__\ \  \ \  \|\ /\ \  \|\  \
-     \ \  \ \ \   _  _\ \  \_|/_\ \  \\|__| \  \ \   __  \ \  \\\  \
-      \ \  \ \ \  \\  \\ \  \_|\ \ \  \    \ \  \ \  \|\  \ \  \\\  \
-       \ \__\ \ \__\\ _\\ \_______\ \__\    \ \__\ \_______\ \_______\
-        \|__|  \|__|\|__|\|_______|\|__|     \|__|\|_______|\|_______|
+████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
+   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
+   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
+   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
 </pre>
 </div>
 
@@ -14,7 +13,7 @@
 
 ## Supported versions
 
-Only the most recent minor release of Trembo is actively patched. Older versions may receive fixes at the maintainers' discretion.
+Only the most recent minor release of Trumbo is actively patched. Older versions may receive fixes at the maintainers' discretion.
 
 ## Reporting a vulnerability
 
@@ -36,4 +35,4 @@ If you can't use GitHub Security Advisories, email **security@example.invalid** 
 
 We'll acknowledge your report as soon as we can, triage it, and work with you on a coordinated disclosure once a fix is available.
 
-Thank you for helping keep Trembo and its users safe.
+Thank you for helping keep Trumbo and its users safe.

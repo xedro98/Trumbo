@@ -1,0 +1,58 @@
+{
+	"extends": "../../projects/tsconfig.apps.json",
+	"compilerOptions": {
+		// Environment setup & latest features
+		"lib": ["ESNext"],
+		"types": ["bun"],
+		"target": "ESNext",
+		"module": "Preserve",
+		"moduleDetection": "force",
+		"jsx": "react-jsx",
+		"allowJs": true,
+
+		// Bundler mode
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"noEmit": true,
+
+		// Best practices
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": false,
+		"noImplicitOverride": true,
+
+		// Some stricter flags (disabled by default)
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noPropertyAccessFromIndexSignature": false,
+		"paths": {
+			"@trumbo/agents": ["../packages/agents/src/index.ts"],
+			"@trumbo/agents/*": [
+				"../packages/agents/src/*",
+				"../packages/agents/src/*/index.ts"
+			],
+			"@trumbo/hub": ["../../projects/hub/src/server.ts"],
+			"@trumbo/core": ["../packages/core/src/index.ts"],
+			"@trumbo/core/hub/daemon-entry": [
+				"../packages/core/src/hub/daemon/entry.ts"
+			],
+			"@trumbo/core/*": [
+				"../packages/core/src/*",
+				"../packages/core/src/*/index.ts"
+			],
+			"@trumbo/core/telemetry": [
+				"../packages/core/src/services/telemetry/index.ts"
+			],
+			"@trumbo/llms": ["../packages/llms/src/index.ts"],
+			"@trumbo/shared": ["../packages/shared/src/index.ts"],
+			"@trumbo/shared/storage": ["../packages/shared/src/storage/index.ts"],
+			"@trumbo/shared/db": ["../packages/shared/src/db/index.ts"],
+			"@trumbo/shared/*": [
+				"../packages/shared/src/*",
+				"../packages/shared/src/*/index.ts"
+			]
+		}
+	}
+}

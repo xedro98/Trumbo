@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
     - name: ✨ Feature Request
-      url: https://github.com/trembo/trembo/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop
-      about: Share and vote on feature requests for Trembo
-    - name: 👋 Trembo Discord
-      url: https://discord.gg/trembo
+      url: https://github.com/xedro98/trembo/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop
+      about: Share and vote on feature requests for Trumbo
+    - name: 👋 Trumbo Discord
+      url: https://discord.gg/trumbo
       about: Join our Discord community for discussions and support

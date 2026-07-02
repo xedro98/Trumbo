@@ -5,12 +5,12 @@ body:
   - type: markdown
     attributes:
       value: |
-        **Important:** All bug reports must be reproducible using Claude Sonnet 4.5. Trembo uses complex prompts so less capable models may not work as expected.
+        **Important:** All bug reports must be reproducible using Claude Sonnet 4.5. Trumbo uses complex prompts so less capable models may not work as expected.
   - type: dropdown
-    id: trembo-surface
+    id: trumbo-surface
     attributes:
-      label: Trembo Surface
-      description: Which Trembo surface are you reporting a bug for?
+      label: Trumbo Surface
+      description: Which Trumbo surface are you reporting a bug for?
       options:
         - VSCode Extension
         - JetBrains Plugin
@@ -19,10 +19,10 @@ body:
     validations:
       required: true
   - type: input
-    id: trembo-version
+    id: trumbo-version
     attributes:
-      label: Trembo Version
-      description: What version of Trembo are you using? (You can find this at the bottom of the Settings view)
+      label: Trumbo Version
+      description: What version of Trumbo are you using? (You can find this at the bottom of the Settings view)
       placeholder: 'e.g., 1.2.3'
     validations:
       required: true
@@ -31,7 +31,7 @@ body:
     attributes:
       label: Beta version
       options:
-        - label: I am using a beta version of Trembo
+        - label: I am using a beta version of Trumbo
   - type: textarea
     id: what-happened
     attributes:
@@ -56,7 +56,7 @@ body:
     attributes:
       label: Provider/Model
       description: What provider and model were you using when the issue occurred?
-      placeholder: 'e.g., trembo:anthropic/claude-sonnet-4.5, gemini:gemini-2.5-pro-exp-03-25'
+      placeholder: 'e.g., trumbo:anthropic/claude-sonnet-4.5, gemini:gemini-2.5-pro-exp-03-25'
     validations:
       required: false
   - type: textarea
@@ -64,11 +64,11 @@ body:
     attributes:
       label: IDE / CLI Diagnostics
       description: |
-        Paste the "About" diagnostics for your Trembo surface. This captures the IDE build, runtime, and host details we need.
+        Paste the "About" diagnostics for your Trumbo surface. This captures the IDE build, runtime, and host details we need.
         - VSCode Extension: open `Help → About` (Windows/Linux) or `Code → About Visual Studio Code` (macOS), then copy the info.
         - JetBrains Plugin: open `Help → About` (Windows/Linux) or `<IDE name> → About` (macOS), then click `Copy` to grab build, runtime, OS, memory, and cores.
-        - CLI: there is no About dialog. Run `trembo --version` and paste the output.
-      placeholder: Paste the copied About info or `trembo --version` output here.
+        - CLI: there is no About dialog. Run `trumbo --version` and paste the output.
+      placeholder: Paste the copied About info or `trumbo --version` output here.
     validations:
       required: false
   - type: textarea
