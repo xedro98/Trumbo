@@ -1,0 +1,24 @@
+{
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"sourceMap": false,
+		"emitDeclarationOnly": true,
+		"paths": {
+			"@trembo/agents": ["../agents/src/index.ts"],
+			"@trembo/agents/*": ["../agents/src/*", "../agents/src/*/index.ts"],
+			"@trembo/llms": ["../llms/src/index.ts"],
+			"@trembo/llms/browser": ["../llms/src/index.browser.ts"],
+			"@trembo/shared": ["../shared/src/index.ts"],
+			"@trembo/shared/automation": ["../shared/src/automation/index.ts"],
+			"@trembo/shared/browser": ["../shared/src/index.browser.ts"],
+			"@trembo/shared/db": ["../shared/src/db/index.ts"],
+			"@trembo/shared/storage": ["../shared/src/storage/index.ts"],
+			"@trembo/shared/types": ["../shared/src/types/index.ts"],
+			"@trembo/shared/*": ["../shared/src/*", "../shared/src/*/index.ts"]
+		}
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist", "fixtures"]
+}

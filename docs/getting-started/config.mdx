@@ -1,0 +1,165 @@
+---
+title: "Config"
+sidebarTitle: "Config"
+description: "Understand where Trembo stores configuration and how global and project config work together."
+---
+
+Trembo configuration lives in two scopes:
+
+- **Global configuration** in `~/.trembo/` (applies globally across all Trembo applications, including IDE, CLI, and SDK)
+- **Project configuration** in `.trembo/` (applies only to the current workspace)
+
+## Configuration Directory Layout
+
+Trembo stores shared configuration across a few well-known locations. The primary root is `~/.trembo/`, with structured app state under `~/.trembo/data/`:
+
+```text
+~/.trembo/
+  data/
+    settings/
+      providers.json           # API keys and provider configuration
+      global-settings.json     # Global settings
+      trembo_mcp_settings.json  # MCP settings
+    teams/                     # Team state
+    sessions/                  # Session data
+    db/                        # SQLite databases (for example cron.db)
+    workflows/                 # Global workflows
+  rules/                       # Global rules
+  hooks/                       # Global hooks
+  skills/                      # Global skills
+  agents/                      # Global agent definitions
+  plugins/                     # Global plugins (.js, .ts)
+  cron/                        # Global cron specs
+```
+
+Additional global search paths supported by the code:
+
+```text
+~/Documents/Trembo/
+  Rules/                       # Additional global rules
+  Hooks/                       # Additional global hooks
+  Plugins/                     # Additional global plugins
+  Workflows/                   # Additional global workflows
+```
+
+Project-level configuration lives in `.trembo/` at your repository root:
+
+```text
+.trembo/
+  rules/                       # Project rules
+  skills/                      # Project skills
+  hooks/                       # Lifecycle hooks
+  agents/                      # Project agent definitions
+  plugins/                     # Project plugins
+  cron/                        # Workspace cron specs
+```
+
+Notes:
+
+- Global provider settings, global settings, and MCP settings are stored under `~/.trembo/data/settings/`.
+- Global workflows resolve from `~/.trembo/data/workflows/`.
+- Global rules, hooks, skills, agents, plugins, and cron specs resolve directly under `~/.trembo/`.
+- Rules, hooks, plugins, and workflows may also be discovered from `~/Documents/Trembo/` for compatibility.
+
+## What Goes Where?
+
+- Use **global (`~/.trembo/`)** for defaults shared across all Trembo applications (IDE, CLI, SDK) on your machine.
+- Use **project (`.trembo/`)** for team-shared behavior that should travel with the repo.
+
+Commit `.trembo/` files you want to share with your team. Keep secrets out of the repo.
+
+## Configure Through the CLI
+
+Use the interactive config UI:
+
+```bash
+trembo config
+```
+
+From there, you can view/edit:
+
+- Settings (global + workspace)
+- Rules
+- Skills
+- Hooks
+
+## Useful Configuration Commands
+
+Use a custom configuration directory:
+
+```bash
+trembo --config /path/to/custom/config "your task"
+```
+
+Or via environment variable:
+
+```bash
+export TREMBO_DATA_DIR=/custom/path/to/trembo
+trembo "your task"
+```
+
+View CLI logs when troubleshooting:
+
+```bash
+trembo dev log
+```
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `TREMBO_DATA_DIR` | Custom data directory (replaces `~/.trembo/data/`) |
+| `TREMBO_HUB_ADDRESS` | Override hub address (default: `127.0.0.1:25463`) |
+| `TREMBO_SESSION_BACKEND_MODE` | Force backend mode (`local`, `hub`, `remote`, `auto`) |
+| `TREMBO_SANDBOX` | Enable sandbox mode |
+| `TREMBO_SANDBOX_DATA_DIR` | Sandbox session storage directory |
+| `TREMBO_HOOKS_DIR` | Additional hooks directory |
+| `TREMBO_COMMAND_PERMISSIONS` | JSON policy restricting shell commands |
+
+### TREMBO_DATA_DIR
+
+```bash
+export TREMBO_DATA_DIR=/custom/path/to/trembo
+trembo "your task"
+```
+
+### TREMBO_COMMAND_PERMISSIONS
+
+Restrict which shell commands Trembo can execute:
+
+```bash
+export TREMBO_COMMAND_PERMISSIONS='{"allow": ["npm *", "git *"], "deny": ["rm -rf *"]}'
+```
+
+Format:
+
+```json
+{
+  "allow": ["pattern1", "pattern2"],
+  "deny": ["pattern3"],
+  "allowRedirects": true
+}
+```
+
+Rules:
+
+- `deny` overrides `allow`
+- If `allow` is set, commands not matching `allow` are denied
+- `allowRedirects` controls shell redirects (`>`, `>>`, `<`), default `false`
+
+## Related Docs
+
+- [CLI Configuration](/cli/configuration)
+- [Rules](/customization/trembo-rules)
+- [Skills](/customization/skills)
+- [Hooks](/customization/hooks)
+- [Plugins](/customization/plugins)
+- [.tremboignore](/customization/tremboignore)
+
+## Security Notes
+
+<Warning>
+Only use rules, hooks, skills, and plugins from sources you trust.
+</Warning>
+
+Hooks and plugins can execute code. Review them like any other executable artifact before adding them globally or to a project.

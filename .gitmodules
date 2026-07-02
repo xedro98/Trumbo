@@ -1,0 +1,3 @@
+[submodule "evals/trembo-bench"]
+	path = evals/trembo-bench
+	url = https://github.com/trembo/trembo-bench.git
