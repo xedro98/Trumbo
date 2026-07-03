@@ -49,6 +49,8 @@ jobs:
       github.event.inputs.confirm_publish == 'publish' &&
       !endsWith(github.actor, '[bot]')
     runs-on: ubuntu-latest
+    env:
+      SLACK_RELEASE_BOT_TOKEN: ${{ secrets.SLACK_RELEASE_BOT_TOKEN }}
 
     steps:
       - name: Checkout code
@@ -228,7 +230,7 @@ jobs:
           echo "Install with: npm install -g @trumbodev/cli"
 
       - name: Post release to Slack
-        if: ${{ secrets.SLACK_RELEASE_BOT_TOKEN != '' }}
+        if: ${{ env.SLACK_RELEASE_BOT_TOKEN != '' }}
         uses: slackapi/slack-github-action@v3.0.1
         with:
           method: chat.postMessage
