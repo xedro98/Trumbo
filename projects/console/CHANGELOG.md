@@ -9,6 +9,10 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.40
+
+- Re-enabled CLI startup auto-update for npm/pnpm/yarn/bun global installs. On launch, Trumbo checks the npm registry for a newer `@trumbodev/cli` and installs it in the background when available. Respects `TRUMBO_NO_AUTO_UPDATE=1` and the global `autoUpdateEnabled` setting; manual `trumbo update` is unchanged.
+
 ## 3.0.39
 
 - Fixed CLI startup from Windows drive roots (e.g. `D:\`) where `path.basename` is empty and workspace manifest validation failed with a silent TUI exit or a Zod `hint` error. Drive roots now get a fallback hint like `D:`.

@@ -2,6 +2,7 @@ import { type ChildProcess, spawn } from "node:child_process";
 import { realpathSync } from "node:fs";
 import {
 	clearHubDiscovery,
+	isAutoUpdateEnabledGlobally,
 	probeHubServer,
 	readHubDiscovery,
 	resolveProductionHubOwnerContext,
@@ -351,8 +352,39 @@ async function restartHubServerIfRunning(): Promise<void> {
  * Skipped for npx, dev, unknown installs. Disable with TRUMBO_NO_AUTO_UPDATE=1.
  */
 export function autoUpdateOnStartup(): void {
-	// Auto-update disabled — no external connections.
-	return;
+	if (process.env.IS_DEV === "true") return;
+	if (process.env.TRUMBO_NO_AUTO_UPDATE === "1") return;
+	if (!isAutoUpdateEnabledGlobally()) return;
+
+	const { packageName, packageManager, updateCommand } =
+		getInstallationInfo(version);
+	if (!updateCommand) return;
+
+	void (async () => {
+		try {
+			const latest = await getLatestVersion(packageName, version);
+			if (!latest || compareVersions(version, latest) >= 0) return;
+			const autoUpdateCommand = withMinimumReleaseAgeBypass(
+				updateCommand,
+				packageManager,
+			);
+			const child = spawn(autoUpdateCommand.command, {
+				shell: true,
+				detached: true,
+				stdio: "ignore",
+				env: autoUpdateCommand.env
+					? { ...process.env, ...autoUpdateCommand.env }
+					: process.env,
+				windowsHide: true,
+			});
+			const exitCode = await waitForProcessExit(child);
+			if (exitCode === 0) {
+				await restartHubServerIfRunning();
+			}
+		} catch {
+			// Best-effort, silently ignore
+		}
+	})();
 }
 
 export interface CheckForUpdatesOptions {
