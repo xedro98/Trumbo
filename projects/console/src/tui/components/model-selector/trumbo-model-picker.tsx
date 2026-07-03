@@ -1,7 +1,9 @@
 // @jsxImportSource @opentui/react
 
 import {
+	buildTrumboRecommendedModelsFromKnownModels,
 	fetchTrumboRecommendedModels,
+	ProviderSettingsManager,
 	type TrumboRecommendedModel,
 	type TrumboRecommendedModelsData,
 } from "@trumbo/core";
@@ -53,7 +55,8 @@ export function useTrumboRecommendedModels() {
 
 	useEffect(() => {
 		let cancelled = false;
-		fetchTrumboRecommendedModels()
+		const manager = new ProviderSettingsManager();
+		fetchTrumboRecommendedModels({ providerSettingsManager: manager })
 			.then((result) => {
 				if (!cancelled) setData(result);
 			})
@@ -80,6 +83,18 @@ export function buildTrumboModelEntries(
 	}
 	entries.push({ kind: "browse" });
 	return entries;
+}
+
+export function buildTrumboModelEntriesFromKnownModels(
+	knownModels:
+		| Record<string, { name?: string; description?: string }>
+		| undefined,
+): TrumboModelPickerEntry[] | null {
+	const data = buildTrumboRecommendedModelsFromKnownModels(knownModels);
+	if (!data) {
+		return null;
+	}
+	return buildTrumboModelEntries(data);
 }
 
 export function TrumboModelPicker(props: {

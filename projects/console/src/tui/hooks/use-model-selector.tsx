@@ -35,7 +35,10 @@ import {
 	type ThinkingLevel,
 	ThinkingLevelContent,
 } from "../components/model-selector/model-selector";
-import { buildTrumboModelEntries } from "../components/model-selector/trumbo-model-picker";
+import {
+	buildTrumboModelEntries,
+	buildTrumboModelEntriesFromKnownModels,
+} from "../components/model-selector/trumbo-model-picker";
 import {
 	BROWSE_ALL_ACTION,
 	TrumboModelSelectorDialogContent,
@@ -350,9 +353,20 @@ export function useModelSelector(opts: {
 								currentModel={config.modelId}
 								currentProviderName={providerDisplayName}
 								knownModels={config.knownModels as Record<string, unknown>}
-								loadEntries={async () =>
-									buildTrumboModelEntries(await fetchTrumboRecommendedModels())
-								}
+								loadEntries={async () => {
+									const fromKnown = buildTrumboModelEntriesFromKnownModels(
+										config.knownModels as Record<string, Llms.ModelInfo>,
+									);
+									if (fromKnown) {
+										return fromKnown;
+									}
+									const manager = new ProviderSettingsManager();
+									return buildTrumboModelEntries(
+										await fetchTrumboRecommendedModels({
+											providerSettingsManager: manager,
+										}),
+									);
+								}}
 							/>
 						),
 					});

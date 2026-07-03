@@ -1,9 +1,38 @@
+import {
+	isUnconfiguredTrumboUrl,
+	resolveTrumboProviderBaseUrl,
+} from "@trumbo/shared";
 import type {
 	ModelCollection,
 	ModelInfo,
 	ProviderInfo,
 } from "../catalog/types";
 import { BUILTIN_PROVIDER_COLLECTION_LIST } from "./builtins";
+
+const TRUMBO_PROVIDER_IDS = new Set(["trumbo", "trumbo-pass"]);
+
+function withDynamicTrumboBaseUrl(
+	collection: ModelCollection | undefined,
+	providerId: string,
+): ModelCollection | undefined {
+	if (!collection || !TRUMBO_PROVIDER_IDS.has(collection.provider.id)) {
+		return collection;
+	}
+	const isCustomProvider = CUSTOM_PROVIDERS.has(providerId);
+	const settingsBaseUrl =
+		isCustomProvider &&
+		collection.provider.baseUrl &&
+		!isUnconfiguredTrumboUrl(collection.provider.baseUrl)
+			? collection.provider.baseUrl
+			: undefined;
+	return {
+		...collection,
+		provider: {
+			...collection.provider,
+			baseUrl: resolveTrumboProviderBaseUrl(settingsBaseUrl),
+		},
+	};
+}
 
 function buildInitialRegistry(): Map<string, ModelCollection> {
 	const map = new Map<string, ModelCollection>();
@@ -26,7 +55,9 @@ const CUSTOM_MODELS: Map<string, Map<string, ModelInfo>> = new Map();
 const CUSTOM_PROVIDERS: Map<string, ModelCollection> = new Map();
 
 function getProviderFromCache(providerId: string): ModelCollection | undefined {
-	return CUSTOM_PROVIDERS.get(providerId) ?? PROVIDER_CACHE.get(providerId);
+	const collection =
+		CUSTOM_PROVIDERS.get(providerId) ?? PROVIDER_CACHE.get(providerId);
+	return withDynamicTrumboBaseUrl(collection, providerId);
 }
 
 export function getProviderIds(): string[] {

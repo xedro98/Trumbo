@@ -1,4 +1,8 @@
 import { basename } from "node:path";
+import {
+	TRUMBO_ENVIRONMENT_ENV,
+	TRUMBO_ENVIRONMENT_OVERRIDE_ENV,
+} from "./trumbo-environment";
 
 export const TRUMBO_BUILD_ENV_ENV = "TRUMBO_BUILD_ENV";
 export const TRUMBO_DEBUG_HOST_ENV = "TRUMBO_DEBUG_HOST";
@@ -133,20 +137,41 @@ export function resolveTrumboBuildEnv(
 	return hasDevelopmentCondition(execArgv) ? "development" : "production";
 }
 
+function hasExplicitTrumboEnvironment(env: NodeJS.ProcessEnv): boolean {
+	const override = env[TRUMBO_ENVIRONMENT_OVERRIDE_ENV]?.trim().toLowerCase();
+	if (
+		override === "production" ||
+		override === "staging" ||
+		override === "local"
+	) {
+		return true;
+	}
+	const value = env[TRUMBO_ENVIRONMENT_ENV]?.trim().toLowerCase();
+	return value === "production" || value === "staging" || value === "local";
+}
+
 export function withResolvedTrumboBuildEnv(
 	env: NodeJS.ProcessEnv = process.env,
 	options: Omit<ResolveTrumboBuildEnvOptions, "env"> = {},
 ): NodeJS.ProcessEnv {
-	if (normalizeBuildEnv(env[TRUMBO_BUILD_ENV_ENV])) {
-		return env;
-	}
-	return {
-		...env,
-		[TRUMBO_BUILD_ENV_ENV]: resolveTrumboBuildEnv({
+	const buildEnv =
+		normalizeBuildEnv(env[TRUMBO_BUILD_ENV_ENV]) ??
+		resolveTrumboBuildEnv({
 			env,
 			execArgv: options.execArgv,
-		}),
-	};
+		});
+	const resolved: NodeJS.ProcessEnv = normalizeBuildEnv(
+		env[TRUMBO_BUILD_ENV_ENV],
+	)
+		? { ...env }
+		: {
+				...env,
+				[TRUMBO_BUILD_ENV_ENV]: buildEnv,
+			};
+	if (buildEnv === "development" && !hasExplicitTrumboEnvironment(resolved)) {
+		resolved[TRUMBO_ENVIRONMENT_ENV] = "local";
+	}
+	return resolved;
 }
 
 export function augmentNodeCommandForDebug(

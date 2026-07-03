@@ -42,7 +42,7 @@ jobs:
       contents: write
       id-token: write
     if: |
-      github.repository == 'trumbo/trumbo' &&
+      github.repository == 'xedro98/Trumbo' &&
       github.ref == 'refs/heads/main' &&
       github.event_name == 'workflow_dispatch' &&
       github.event.inputs.publish_target == 'main' &&
@@ -260,7 +260,7 @@ jobs:
       contents: read
       id-token: write
     if: |
-      github.repository == 'trumbo/trumbo' &&
+      github.repository == 'xedro98/Trumbo' &&
       github.ref == 'refs/heads/main' &&
       (
         github.event_name == 'schedule' ||

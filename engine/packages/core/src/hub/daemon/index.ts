@@ -190,12 +190,17 @@ function resolveLaunchCommand(
 				...(useDevelopmentConditions ? ["--conditions=development"] : []),
 				daemonEntryPath,
 			];
+	const resolvedEnv = withResolvedTrumboBuildEnv(process.env, {
+		execArgv: useDevelopmentConditions
+			? ["--conditions=development", ...process.execArgv]
+			: process.execArgv,
+	});
 	return {
 		launcher: execPath,
 		args: [...entryArgs, "--cwd", workspaceRoot, ...endpointArgs(endpoint)],
 		cwd: workspaceRoot,
 		env: {
-			...withResolvedTrumboBuildEnv(process.env),
+			...resolvedEnv,
 			TRUMBO_NO_INTERACTIVE: "1",
 			[TRUMBO_RUN_AS_HUB_DAEMON_ENV]: "1",
 		},

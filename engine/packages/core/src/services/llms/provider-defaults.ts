@@ -189,6 +189,21 @@ async function mergeKnownModels(
 			...userKnownModels,
 		});
 	}
+	if (providerId === "trumbo" && Object.keys(liveModels).length > 0) {
+		// When the Trumbo backend serves a curated model list (e.g. Fireworks
+		// proxy), prefer it over the static OpenRouter catalog.
+		return Llms.sortModelsByReleaseDate({
+			...liveModels,
+			...userKnownModels,
+		});
+	}
+	if (providerId === "trumbo") {
+		// Self-hosted Trumbo has no bundled OpenRouter catalog — only live
+		// Fireworks models from the web app (or explicit user overrides).
+		return Llms.sortModelsByReleaseDate({
+			...userKnownModels,
+		});
+	}
 	const knownModelsWithoutUserOverrides = Llms.sortModelsByReleaseDate({
 		...generated,
 		...defaultKnownModels,
@@ -196,18 +211,6 @@ async function mergeKnownModels(
 		...privateModels,
 		...publicModels,
 	});
-
-	if (providerId === "trumbo") {
-		// Trumbo recommendations can use Vercel-style ids while the broader
-		// catalog includes OpenRouter aliases for the same models.
-		return Llms.sortModelsByReleaseDate({
-			...Llms.preferCanonicalModelIds(
-				knownModelsWithoutUserOverrides,
-				Llms.VERCEL_OPENROUTER_MODEL_ID_ALIAS_RULES,
-			),
-			...userKnownModels,
-		});
-	}
 
 	return Llms.sortModelsByReleaseDate({
 		...knownModelsWithoutUserOverrides,
@@ -219,9 +222,12 @@ function resolveCatalogModels(
 	providerId: string,
 	modelsByProviderId: Record<string, Record<string, ModelInfo>>,
 ): Record<string, ModelInfo> {
-	// Runtime provider ids do not always match catalog keys. For example,
-	// Trumbo uses OpenRouter-backed catalog models, so live catalog lookups must
-	// apply the same key mapping as generated catalog lookups.
+	// Self-hosted Trumbo serves Fireworks models from the web app catalog only.
+	// Do not merge the models.dev OpenRouter catalog (Laguna, etc.).
+	if (providerId === "trumbo") {
+		return modelsByProviderId.trumbo ?? {};
+	}
+
 	const catalogKeys = Llms.resolveProviderModelCatalogKeys(providerId);
 	return Object.assign(
 		{},

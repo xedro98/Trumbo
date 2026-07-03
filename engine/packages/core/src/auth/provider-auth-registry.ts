@@ -1,6 +1,7 @@
 import {
-	getTrumboEnvironmentConfig,
 	type ITelemetryService,
+	resolveTrumboApiBaseUrl,
+	resolveTrumboProviderBaseUrl,
 } from "@trumbo/shared";
 import type { ProviderSettingsManager } from "../services/storage/provider-settings-manager";
 import type { ProviderSettings } from "../types/provider-settings";
@@ -201,16 +202,14 @@ function createTrumboAuthHandler(input: {
 	providerId: string;
 	storageProviderId?: string;
 }): ProviderAuthHandler {
-	return createOAuthHandler({
+	const baseHandler = createOAuthHandler({
 		providerId: input.providerId,
 		storageProviderId: input.storageProviderId,
 		formatAccessToken: formatTrumboApiKey,
 		normalizeStoredAccessToken: stripTrumboApiKeyPrefix,
 		login: ({ settings, callbacks, telemetry }) =>
 			loginTrumboOAuth({
-				apiBaseUrl:
-					settings?.baseUrl?.trim() || getTrumboEnvironmentConfig().apiBaseUrl,
-				useWorkOSDeviceAuth: true,
+				apiBaseUrl: resolveTrumboApiBaseUrl(settings?.baseUrl),
 				callbacks,
 				telemetry,
 			}),
@@ -218,13 +217,27 @@ function createTrumboAuthHandler(input: {
 			getValidTrumboCredentials(
 				credentials as TrumboOAuthCredentials,
 				{
-					apiBaseUrl:
-						settings.baseUrl?.trim() || getTrumboEnvironmentConfig().apiBaseUrl,
+					apiBaseUrl: resolveTrumboApiBaseUrl(settings.baseUrl),
 					telemetry,
 				},
 				{ forceRefresh },
 			),
 	});
+	return {
+		...baseHandler,
+		saveCredentials(saveInput) {
+			return baseHandler.saveCredentials({
+				...saveInput,
+				settings: {
+					...(saveInput.settings ?? {
+						provider: (input.storageProviderId ??
+							input.providerId) as ProviderSettings["provider"],
+					}),
+					baseUrl: resolveTrumboProviderBaseUrl(saveInput.settings?.baseUrl),
+				},
+			});
+		},
+	};
 }
 
 const providerAuthHandlers = [

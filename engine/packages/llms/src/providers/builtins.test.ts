@@ -13,9 +13,14 @@ function findTrumboSpec() {
 
 describe("trumbo builtin spec defaults.baseUrl", () => {
 	const originalEnvironment = process.env[TRUMBO_ENVIRONMENT_ENV];
+	const originalExecArgv = process.execArgv;
 
 	beforeEach(() => {
 		delete process.env[TRUMBO_ENVIRONMENT_ENV];
+		Object.defineProperty(process, "execArgv", {
+			configurable: true,
+			value: [],
+		});
 	});
 
 	afterEach(() => {
@@ -24,6 +29,10 @@ describe("trumbo builtin spec defaults.baseUrl", () => {
 		} else {
 			process.env[TRUMBO_ENVIRONMENT_ENV] = originalEnvironment;
 		}
+		Object.defineProperty(process, "execArgv", {
+			configurable: true,
+			value: originalExecArgv,
+		});
 	});
 
 	it("re-resolves baseUrl when TRUMBO_ENVIRONMENT changes between reads", () => {
@@ -51,23 +60,65 @@ describe("trumbo builtin spec defaults.baseUrl", () => {
 });
 
 describe("trumbo builtin models", () => {
-	it("prefers Vercel-style Z.ai model ids over equivalent OpenRouter ids", async () => {
+	it("does not bundle the OpenRouter catalog (Fireworks list is loaded live)", async () => {
 		const models = await getModelsForProvider("trumbo");
-
-		expect(models["zai/glm-5.2"]).toMatchObject({
-			id: "zai/glm-5.2",
-			name: "GLM 5.2",
-			contextWindow: 1_000_000,
-			maxInputTokens: 1_000_000,
-		});
-		expect(models["zai/glm-5.1"]).toMatchObject({
-			id: "zai/glm-5.1",
-		});
-		expect(models["z-ai/glm-5.2"]).toBeUndefined();
+		expect(models["poolside/laguna-xs.2"]).toBeUndefined();
+		expect(models["anthropic/claude-sonnet-4.6"]).toBeUndefined();
 	});
 });
 
 describe("trumbo-pass builtin spec", () => {
+	const originalExecArgv = process.execArgv;
+	const originalEnvironment = process.env[TRUMBO_ENVIRONMENT_ENV];
+	const originalBuildEnv = process.env.TRUMBO_BUILD_ENV;
+	const originalApiBaseUrl = process.env.TRUMBO_API_BASE_URL;
+	const originalAppUrl = process.env.TRUMBO_APP_URL;
+	const originalEnvironmentOverride = process.env.TRUMBO_ENVIRONMENT_OVERRIDE;
+
+	beforeEach(() => {
+		delete process.env.TRUMBO_BUILD_ENV;
+		delete process.env.TRUMBO_API_BASE_URL;
+		delete process.env.TRUMBO_APP_URL;
+		delete process.env.TRUMBO_ENVIRONMENT_OVERRIDE;
+		process.env[TRUMBO_ENVIRONMENT_ENV] = "production";
+		Object.defineProperty(process, "execArgv", {
+			configurable: true,
+			value: [],
+		});
+	});
+
+	afterEach(() => {
+		if (originalEnvironment === undefined) {
+			delete process.env[TRUMBO_ENVIRONMENT_ENV];
+		} else {
+			process.env[TRUMBO_ENVIRONMENT_ENV] = originalEnvironment;
+		}
+		if (originalBuildEnv === undefined) {
+			delete process.env.TRUMBO_BUILD_ENV;
+		} else {
+			process.env.TRUMBO_BUILD_ENV = originalBuildEnv;
+		}
+		if (originalApiBaseUrl === undefined) {
+			delete process.env.TRUMBO_API_BASE_URL;
+		} else {
+			process.env.TRUMBO_API_BASE_URL = originalApiBaseUrl;
+		}
+		if (originalAppUrl === undefined) {
+			delete process.env.TRUMBO_APP_URL;
+		} else {
+			process.env.TRUMBO_APP_URL = originalAppUrl;
+		}
+		if (originalEnvironmentOverride === undefined) {
+			delete process.env.TRUMBO_ENVIRONMENT_OVERRIDE;
+		} else {
+			process.env.TRUMBO_ENVIRONMENT_OVERRIDE = originalEnvironmentOverride;
+		}
+		Object.defineProperty(process, "execArgv", {
+			configurable: true,
+			value: originalExecArgv,
+		});
+	});
+
 	it("registers a distinct Trumbo-compatible provider with a custom model list", async () => {
 		const models = await getModelsForProvider("trumbo-pass");
 		const provider = await getProvider("trumbo-pass");

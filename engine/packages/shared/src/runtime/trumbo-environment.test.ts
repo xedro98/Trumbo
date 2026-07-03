@@ -1,8 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { TRUMBO_BUILD_ENV_ENV } from "./build-env";
 import {
 	DEFAULT_TRUMBO_ENVIRONMENT,
 	getTrumboEnvironmentConfig,
+	resolveTrumboApiBaseUrl,
 	resolveTrumboEnvironment,
+	resolveTrumboProviderBaseUrl,
 	TRUMBO_ENVIRONMENT_ENV,
 	TRUMBO_ENVIRONMENT_OVERRIDE_ENV,
 	TRUMBO_ENVIRONMENTS,
@@ -11,18 +14,24 @@ import {
 const ENV_KEYS = [
 	TRUMBO_ENVIRONMENT_ENV,
 	TRUMBO_ENVIRONMENT_OVERRIDE_ENV,
+	TRUMBO_BUILD_ENV_ENV,
 	"TRUMBO_API_BASE_URL",
 ] as const;
 
 const originalEnvValues = Object.fromEntries(
 	ENV_KEYS.map((key) => [key, process.env[key]]),
 );
+const originalExecArgv = process.execArgv;
 
 beforeEach(() => {
 	vi.unstubAllGlobals();
 	for (const key of ENV_KEYS) {
 		delete process.env[key];
 	}
+	Object.defineProperty(process, "execArgv", {
+		configurable: true,
+		value: [],
+	});
 });
 
 afterEach(() => {
@@ -35,9 +44,34 @@ afterEach(() => {
 			delete process.env[key];
 		}
 	}
+	Object.defineProperty(process, "execArgv", {
+		configurable: true,
+		value: originalExecArgv,
+	});
 });
 
 describe("resolveTrumboEnvironment", () => {
+	it("defaults to local in development builds when TRUMBO_ENVIRONMENT is unset", () => {
+		process.env[TRUMBO_BUILD_ENV_ENV] = "development";
+		expect(resolveTrumboEnvironment()).toBe("local");
+	});
+
+	it("defaults to local when launched with --conditions=development", () => {
+		const originalExecArgv = process.execArgv;
+		Object.defineProperty(process, "execArgv", {
+			configurable: true,
+			value: ["--conditions=development"],
+		});
+		try {
+			expect(resolveTrumboEnvironment()).toBe("local");
+		} finally {
+			Object.defineProperty(process, "execArgv", {
+				configurable: true,
+				value: originalExecArgv,
+			});
+		}
+	});
+
 	it("defaults to production when no env var is set", () => {
 		expect(resolveTrumboEnvironment()).toBe(DEFAULT_TRUMBO_ENVIRONMENT);
 	});
@@ -80,6 +114,30 @@ describe("resolveTrumboEnvironment", () => {
 	});
 });
 
+describe("resolveTrumboApiBaseUrl", () => {
+	it("ignores persisted placeholder URLs and uses the active environment", () => {
+		process.env[TRUMBO_BUILD_ENV_ENV] = "development";
+		expect(resolveTrumboApiBaseUrl("http://0.0.0.0:0/api/v1")).toBe(
+			"http://localhost:8787",
+		);
+	});
+
+	it("uses a valid persisted provider base URL", () => {
+		expect(resolveTrumboApiBaseUrl("http://127.0.0.1:9000/api/v1")).toBe(
+			"http://127.0.0.1:9000",
+		);
+	});
+});
+
+describe("resolveTrumboProviderBaseUrl", () => {
+	it("returns the OpenAI-compatible chat endpoint for local dev", () => {
+		process.env[TRUMBO_BUILD_ENV_ENV] = "development";
+		expect(resolveTrumboProviderBaseUrl("http://0.0.0.0:0/api/v1")).toBe(
+			"http://localhost:8787/api/v1",
+		);
+	});
+});
+
 describe("getTrumboEnvironmentConfig", () => {
 	it("returns the config for an explicit environment", () => {
 		expect(getTrumboEnvironmentConfig("staging")).toBe(
@@ -109,7 +167,7 @@ describe("getTrumboEnvironmentConfig", () => {
 			apiBaseUrl: "http://127.0.0.1:3000",
 			mcpBaseUrl: "http://127.0.0.1:3000/v1/mcp",
 		});
-		expect(TRUMBO_ENVIRONMENTS.local.apiBaseUrl).toBe("http://localhost:7777");
+		expect(TRUMBO_ENVIRONMENTS.local.apiBaseUrl).toBe("http://localhost:8787");
 	});
 
 	it("defaults to production when process is unavailable", () => {

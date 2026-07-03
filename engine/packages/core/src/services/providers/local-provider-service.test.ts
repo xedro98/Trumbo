@@ -274,7 +274,7 @@ describe("addLocalProvider â€“ model ID parsing via modelsSourceUrl", () =>
 		]);
 		expect(models[0]).toMatchObject({
 			id: "trumbo-pass/live-pass-model",
-			name: "Live Pass Model",
+			name: "vendor/live-pass-model",
 			supportsReasoning: true,
 		});
 	});
@@ -802,7 +802,7 @@ describe("models.json model overlays", () => {
 			expect(provider).toMatchObject({
 				id: "trumbo",
 				baseUrl: "http://0.0.0.0:0/api/v1",
-				defaultModelId: "anthropic/claude-sonnet-4.6",
+				defaultModelId: "accounts/fireworks/models/glm-5p2",
 			});
 
 			const { models } = await getLocalProviderModels("trumbo");
@@ -1311,13 +1311,13 @@ describe("listLocalProviders", () => {
 		).toBe(false);
 	});
 
-	it("uses Trumbo-specific Z.ai aliases in the built-in model list", async () => {
+	it("does not bundle OpenRouter models in the Trumbo built-in model list", async () => {
 		manager.saveProviderSettings(
 			{
 				provider: "trumbo",
 				apiKey: "test-key",
 				baseUrl: "http://0.0.0.0:0/api/v1",
-				model: "anthropic/claude-sonnet-4.6",
+				model: "accounts/fireworks/models/glm-5p2",
 			},
 			{ setLastUsed: false },
 		);
@@ -1334,9 +1334,8 @@ describe("listLocalProviders", () => {
 			openrouter?.modelList?.map((model) => model.id) ?? [],
 		);
 
-		expect(trumbo?.modelList?.length).toBeGreaterThan(0);
-		expect(trumboModelIds).toContain("zai/glm-5.2");
-		expect(trumboModelIds).not.toContain("z-ai/glm-5.2");
+		expect(trumboModelIds).toEqual(new Set(["glm-5p2"]));
+		expect(trumboModelIds).not.toContain("poolside/laguna-xs.2");
 		expect(openrouterModelIds).toContain("z-ai/glm-5.2");
 	});
 

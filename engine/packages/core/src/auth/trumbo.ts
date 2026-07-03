@@ -460,8 +460,31 @@ export async function loginTrumboOAuth(
 
 	try {
 		let credentials: TrumboOAuthCredentials;
-		if (useWorkOSDeviceAuth) {
-			const clientId = getTrumboEnvironmentConfig().workOsClientId;
+		const env = getTrumboEnvironmentConfig();
+		// Self-hosted device auth (Trumbo web app) when no WorkOS client id is
+		// configured. `auth trumbo` enters via loginTrumboOAuth, not only via
+		// startTrumboDeviceAuth — both paths must branch the same way.
+		if (!env.workOsClientId) {
+			const deviceAuthorization = await requestSelfHostedDeviceAuthorization({
+				apiBaseUrl: options.apiBaseUrl,
+				requestTimeoutMs: options.requestTimeoutMs,
+			});
+			options.callbacks.onAuth({
+				url:
+					deviceAuthorization.verificationUriComplete ??
+					deviceAuthorization.verificationUri,
+				instructions: `Enter this code in your browser: ${deviceAuthorization.userCode}`,
+			});
+			const tokenData = await pollSelfHostedDeviceTokens({
+				apiBaseUrl: options.apiBaseUrl,
+				deviceCode: deviceAuthorization.deviceCode,
+				expiresInSeconds: deviceAuthorization.expiresInSeconds,
+				initialPollIntervalSeconds: deviceAuthorization.pollIntervalSeconds,
+				requestTimeoutMs: options.requestTimeoutMs ?? DEFAULT_HTTP_TIMEOUT_MS,
+			});
+			credentials = toTrumboCredentials(tokenData, options.provider);
+		} else if (useWorkOSDeviceAuth) {
+			const clientId = env.workOsClientId;
 			const deviceAuthorization = await requestWorkOSDeviceAuthorization(
 				clientId,
 				options,
@@ -553,6 +576,137 @@ export async function loginTrumboOAuth(
 	}
 }
 
+/**
+ * Self-hosted device-authorization request. Used when `workOsClientId` is empty
+ * (the default once the Trumbo web app is the identity backend). The web app's
+ * `POST /api/v1/auth/device` returns the same field shape as WorkOS's device
+ * authorization response, so parsing mirrors `requestWorkOSDeviceAuthorization`.
+ */
+async function requestSelfHostedDeviceAuthorization(options: {
+	apiBaseUrl: string;
+	requestTimeoutMs?: number;
+}): Promise<{
+	deviceCode: string;
+	userCode: string;
+	verificationUri: string;
+	verificationUriComplete?: string;
+	expiresInSeconds: number;
+	pollIntervalSeconds: number;
+}> {
+	const response = await fetch(
+		resolveUrl(options.apiBaseUrl, "/api/v1/auth/device"),
+		{
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({}),
+			signal: AbortSignal.timeout(
+				options.requestTimeoutMs ?? DEFAULT_HTTP_TIMEOUT_MS,
+			),
+		},
+	);
+	const json = (await response
+		.json()
+		.catch(() => ({}))) as WorkOSDeviceAuthorizationResponse;
+	if (!response.ok) {
+		throw new TrumboOAuthTokenError(
+			`Device authorization failed: ${response.status}${json.error_description ? ` - ${json.error_description}` : ""}`,
+			{ status: response.status, errorCode: json.error },
+		);
+	}
+	if (!json.device_code || !json.user_code || !json.verification_uri) {
+		throw new Error("Invalid device authorization response");
+	}
+	return {
+		deviceCode: json.device_code,
+		userCode: json.user_code,
+		verificationUri: json.verification_uri,
+		verificationUriComplete: json.verification_uri_complete,
+		expiresInSeconds: toSeconds(
+			json.expires_in,
+			DEFAULT_DEVICE_AUTH_EXPIRES_IN_SECONDS,
+		),
+		pollIntervalSeconds: toSeconds(
+			json.interval,
+			DEFAULT_DEVICE_AUTH_INTERVAL_SECONDS,
+		),
+	};
+}
+
+/**
+ * Self-hosted device-code token poll. Polls the web app's
+ * `POST /api/v1/auth/token` with the device-code grant; once approved it
+ * returns the Trumbo token envelope directly (no separate register step).
+ * pending / slow_down / expired / denied handling mirrors `pollWorkOSTokens`.
+ */
+async function pollSelfHostedDeviceTokens(options: {
+	apiBaseUrl: string;
+	deviceCode: string;
+	expiresInSeconds: number;
+	initialPollIntervalSeconds: number;
+	requestTimeoutMs: number;
+}): Promise<TrumboAuthResponseData> {
+	const deadline = Date.now() + options.expiresInSeconds * 1000;
+	let intervalSeconds = Math.max(1, options.initialPollIntervalSeconds);
+
+	while (Date.now() <= deadline) {
+		const response = await fetch(
+			resolveUrl(options.apiBaseUrl, DEFAULT_AUTH_ENDPOINTS.token),
+			{
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					grant_type: "urn:ietf:params:oauth:grant-type:device_code",
+					device_code: options.deviceCode,
+				}),
+				signal: AbortSignal.timeout(options.requestTimeoutMs),
+			},
+		);
+		const payload = (await response.json().catch(() => ({}))) as Record<
+			string,
+			unknown
+		>;
+		if (response.ok) {
+			return requireTrumboTokenResponse(
+				payload as unknown as TrumboTokenResponse,
+				"Invalid token response",
+			);
+		}
+		const errorCode =
+			typeof payload.error === "string" ? payload.error : undefined;
+		const errorDescription =
+			typeof payload.error_description === "string"
+				? payload.error_description
+				: undefined;
+		switch (errorCode) {
+			case "authorization_pending": {
+				await sleep(intervalSeconds * 1000);
+				break;
+			}
+			case "slow_down": {
+				intervalSeconds += 1;
+				await sleep(intervalSeconds * 1000);
+				break;
+			}
+			case "access_denied":
+			case "expired_token":
+			case "invalid_grant": {
+				throw new TrumboOAuthTokenError(
+					errorDescription || "Device authorization failed",
+					{ status: response.status, errorCode: errorCode },
+				);
+			}
+			default: {
+				throw new TrumboOAuthTokenError(
+					`Token polling failed: ${response.status}${errorDescription ? ` - ${errorDescription}` : ""}`,
+					{ status: response.status, errorCode: errorCode },
+				);
+			}
+		}
+	}
+
+	throw new Error("Device authorization timed out");
+}
+
 export async function startTrumboDeviceAuth(options?: {
 	requestTimeoutMs?: number;
 }): Promise<{
@@ -563,10 +717,16 @@ export async function startTrumboDeviceAuth(options?: {
 	expiresInSeconds: number;
 	pollIntervalSeconds: number;
 }> {
-	return await requestWorkOSDeviceAuthorization(
-		getTrumboEnvironmentConfig().workOsClientId,
-		options,
-	);
+	const env = getTrumboEnvironmentConfig();
+	// WorkOS device auth when a client id is configured; otherwise talk to the
+	// self-hosted Trumbo web app's /api/v1/auth/device endpoint directly.
+	if (env.workOsClientId) {
+		return await requestWorkOSDeviceAuthorization(env.workOsClientId, options);
+	}
+	return await requestSelfHostedDeviceAuthorization({
+		apiBaseUrl: env.apiBaseUrl,
+		requestTimeoutMs: options?.requestTimeoutMs,
+	});
 }
 
 export async function completeTrumboDeviceAuth(options: {
@@ -582,24 +742,37 @@ export async function completeTrumboDeviceAuth(options: {
 	const providerName = options.provider ?? "trumbo";
 	captureAuthStarted(options.telemetry, providerName);
 	try {
-		const workosTokens = await pollWorkOSTokens({
-			clientId: getTrumboEnvironmentConfig().workOsClientId,
-			deviceCode: options.deviceCode,
-			expiresInSeconds: options.expiresInSeconds,
-			initialPollIntervalSeconds: options.pollIntervalSeconds,
-			requestTimeoutMs: options.requestTimeoutMs ?? DEFAULT_HTTP_TIMEOUT_MS,
-			workosApiBaseUrl: DEFAULT_WORKOS_API_BASE_URL,
-		});
-		const credentials = await registerWorkOSTokens(
-			workosTokens,
-			{
+		const env = getTrumboEnvironmentConfig();
+		let credentials: TrumboOAuthCredentials;
+		if (env.workOsClientId) {
+			const workosTokens = await pollWorkOSTokens({
+				clientId: env.workOsClientId,
+				deviceCode: options.deviceCode,
+				expiresInSeconds: options.expiresInSeconds,
+				initialPollIntervalSeconds: options.pollIntervalSeconds,
+				requestTimeoutMs: options.requestTimeoutMs ?? DEFAULT_HTTP_TIMEOUT_MS,
+				workosApiBaseUrl: DEFAULT_WORKOS_API_BASE_URL,
+			});
+			credentials = await registerWorkOSTokens(
+				workosTokens,
+				{
+					apiBaseUrl: options.apiBaseUrl,
+					headers: options.headers,
+					requestTimeoutMs: options.requestTimeoutMs,
+					provider: options.provider,
+				},
+				options.provider,
+			);
+		} else {
+			const tokenData = await pollSelfHostedDeviceTokens({
 				apiBaseUrl: options.apiBaseUrl,
-				headers: options.headers,
-				requestTimeoutMs: options.requestTimeoutMs,
-				provider: options.provider,
-			},
-			options.provider,
-		);
+				deviceCode: options.deviceCode,
+				expiresInSeconds: options.expiresInSeconds,
+				initialPollIntervalSeconds: options.pollIntervalSeconds,
+				requestTimeoutMs: options.requestTimeoutMs ?? DEFAULT_HTTP_TIMEOUT_MS,
+			});
+			credentials = toTrumboCredentials(tokenData, providerName);
+		}
 		captureAuthSucceeded(options.telemetry, providerName);
 		identifyAccount(options.telemetry, {
 			id: credentials.accountId,

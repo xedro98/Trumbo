@@ -84,6 +84,40 @@ trumbo "prompt"     # single-prompt mode
 trumbo auth         # authenticate a provider
 ```
 
+## curl / PowerShell Installers
+
+For users who don't want to (or can't) use a JavaScript package manager, two standalone installers download the same platform binary straight from the npm registry and drop it on the local PATH. No Node, Bun, or npm is required at install time or runtime.
+
+| Installer | Platform | Command |
+|---|---|---|
+| `script/install.sh` | macOS, Linux, Windows (Git Bash / MSYS2) | `curl -fsSL https://raw.githubusercontent.com/xedro98/trembo/main/projects/console/script/install.sh \| sh` |
+| `script/install.ps1` | Windows (PowerShell) | `irm https://raw.githubusercontent.com/xedro98/trembo/main/projects/console/script/install.ps1 \| iex` |
+
+How they work:
+
+1. Detect OS and architecture (`darwin`/`linux`/`windows` × `x64`/`arm64`).
+2. Resolve the matching `@trumbo/cli-{os}-{arch}` package version from the npm registry (`/latest` by default; override with `--version` / `-Version` or `TRUMBO_VERSION`).
+3. Read `dist.tarball` from the registry response and download it with `curl` / `Invoke-WebRequest`.
+4. Extract `package/bin/trumbo` (or `package/bin/trumbo.exe`) from the tarball.
+5. Install to `~/.trumbo/bin/trumbo` (or `%USERPROFILE%\.trumbo\bin\trumbo.exe`). Override with `--install-dir` / `-InstallDir` or `TRUMBO_INSTALL_DIR`.
+6. Print PATH guidance (PowerShell also writes the user `Path` environment variable).
+
+Both scripts are idempotent: re-running replaces the existing binary. They support `--dry-run` / `-DryRun` to preview without writing files, and `--help` (`install.sh` only) for usage.
+
+The installers live in the repo and are served via `raw.githubusercontent.com`, so they are always in sync with `main`. They only depend on the published npm packages existing — no GitHub Release assets are required.
+
+### Smoke testing the installers locally
+
+```bash
+# POSIX (from projects/console)
+sh script/install.sh --dry-run
+sh script/install.sh --install-dir /tmp/trumbo-test
+
+# PowerShell (from projects/console)
+pwsh script/install.ps1 -DryRun
+pwsh script/install.ps1 -InstallDir "$env:TEMP\trumbo-test"
+```
+
 ## How to Publish
 
 Every release starts by preparing one release commit from the code you want to publish:
@@ -184,7 +218,9 @@ projects/console/
   script/
     build.ts                # Cross-compile for all platforms
     publish-npm.ts          # npm publish orchestration
-    postinstall.mjs         # Post-install binary caching
+    postinstall.mjs         # Post-install binary caching (npm lifecycle)
+    install.sh              # Standalone curl installer (macOS / Linux)
+    install.ps1             # Standalone PowerShell installer (Windows)
 ```
 
 ## Scripts Reference

@@ -21,17 +21,14 @@ Trumbo is an AI coding agent that lives in your terminal. It reads and writes fi
 
 ## Model access
 
-Pick the model access path that fits how you work:
+Connect the models you want to use — cloud providers or local runtimes — with your own credentials:
 
-<CardGroup cols={3}>
-  <Card title="Trumbo (usage-billing)" icon="bolt" href="/getting-started/trumbo-provider">
-    Fastest setup path with one sign-in, built-in billing, and free model options.
-  </Card>
-  <Card title="TrumboPass" icon="credit-card" href="/getting-started/trumbopass">
-    Flat $9.99/month subscription for selected open coding models with 2-5x API rate limits.
-  </Card>
+<CardGroup cols={2}>
   <Card title="Bring Your Own Key" icon="key" href="/getting-started/authorizing-with-trumbo#byok-cloud--local">
     Use your own provider credentials for cloud providers or local runtimes.
+  </Card>
+  <Card title="Run models locally" icon="server" href="/running-models-locally/overview">
+    Ollama, LM Studio, and other local inference runtimes on your machine.
   </Card>
 </CardGroup>
 
@@ -63,21 +60,3 @@ The SDK is Trumbo's agent core — use it to build your own applications, automa
 ## Editor integration
 
 The Trumbo CLI also integrates with ACP-capable editors (such as **Zed** and **Neovim**) via `trumbo --acp`.
-
-
-## Enterprise Solutions
-
-<CardGroup cols={2}>
-  <Card title="Security & Governance" icon="shield-halved" href="/enterprise-solutions/overview">
-    SSO, role-based access control, model and tool controls per team, and remote configuration.
-  </Card>
-  <Card title="Observability" icon="chart-line" href="/enterprise-solutions/monitoring/overview">
-    OpenTelemetry, Datadog, Grafana, Splunk integrations with real-time analytics.
-  </Card>
-  <Card title="Team Management" icon="users-gear" href="/enterprise-solutions/team-management/managing-members">
-    Manage members, roles, and permissions across your organization.
-  </Card>
-  <Card title="API Reference" icon="code" href="/enterprise-solutions/api-reference">
-    Programmatic access to Trumbo's enterprise features.
-  </Card>
-</CardGroup>

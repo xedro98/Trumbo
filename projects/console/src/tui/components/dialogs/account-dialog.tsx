@@ -70,14 +70,14 @@ const UNAUTHENTICATED_ACTIONS: AccountAction[] = [
 	{
 		id: "login",
 		label: "Sign in or create account",
-		description: "Use Trumbo OAuth (disabled)",
-		enabled: false,
+		description: "Sign in to Trumbo via the web app",
+		enabled: true,
 	},
 	{
 		id: "learn-more",
-		label: "Learn more",
-		description: "Trumbo docs (disabled)",
-		enabled: false,
+		label: "Open Trumbo web app",
+		description: "Open the Trumbo dashboard in your browser",
+		enabled: true,
 	},
 ];
 

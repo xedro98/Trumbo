@@ -866,9 +866,11 @@ export type {
 	RegisterProviderInput,
 } from "./services/llms/runtime-types";
 export {
+	buildTrumboRecommendedModelsFromKnownModels,
 	FALLBACK_TRUMBO_RECOMMENDED_MODELS,
 	type FetchTrumboRecommendedModelsOptions,
 	fetchTrumboRecommendedModels,
+	SELF_HOSTED_TRUMBO_RECOMMENDED_MODELS,
 	type TrumboRecommendedModel,
 	type TrumboRecommendedModelsData,
 } from "./services/llms/trumbo-recommended-models";

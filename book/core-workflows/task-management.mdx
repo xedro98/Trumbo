@@ -61,7 +61,7 @@ This is why task scoping matters: a focused task keeps relevant information in t
 If your starting context seems high even for simple prompts, add a [`.trumboignore`](/customization/trumboignore) file to exclude dependencies, build artifacts, and other files Trumbo doesn't need. This can dramatically reduce your baseline token usage.
 
 <Tip>
-For long-running tasks, enable [Auto-Compact](/features/auto-compact) to intelligently manage context as you work.
+For long-running tasks, keep prompts focused and use [checkpoints](/core-workflows/checkpoints) so you can recover cleanly if context gets compressed.
 </Tip>
 
 ### New Task vs. Continue
@@ -100,19 +100,16 @@ You pay for AI usage when using cloud providers like Anthropic, OpenAI, OpenRout
 
 | Provider Type | Billing Model |
 |--------------|---------------|
-| **Trumbo Provider** | Pay-per-use with credits you purchase |
-| **TrumboPass** | Flat monthly subscription for selected open coding models, with usage measured against your TrumboPass quota |
 | **Direct API keys** | Billed by your provider (Anthropic, OpenAI, etc.) |
 | **OpenRouter/Requesty** | Aggregated billing across multiple models |
 | **Local models** | Free (you provide the hardware) |
 
-If you want predictable monthly spend instead of per-request charges, [TrumboPass](/getting-started/trumbopass) provides selected open coding models for $9.99/month. If you're using your own API keys, check your provider's pricing page for current rates. Prices change frequently and vary by model.
+If you're using your own API keys, check your provider's pricing page for current rates. Prices change frequently and vary by model.
 
 ### Free Options
 
-Not ready to pay? Trumbo offers several free paths:
+Not ready to pay? Trumbo supports free paths:
 
-- **Free models**: Search "free" in the model selector when using the Trumbo Provider. These models display a **FREE** tag and work well for learning and experimentation.
 - **Free tiers**: Some providers offer limited free usage when you use your own API key.
 - **Local models**: Run models on your own hardware with zero per-request costs.
 

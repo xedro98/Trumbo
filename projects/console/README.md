@@ -15,11 +15,46 @@ Run Trumbo in your terminal — an interactive chat for paired sessions, or a fu
 
 ## Install
 
+Trumbo ships as a self-contained compiled binary — no Node, Bun, or npm runtime is required to run it. Pick whichever method you prefer.
+
+### npm / pnpm / bun
+
 ```sh
-npm install -g trumbo
+npm install -g trumbo      # npm
+pnpm add -g trumbo         # pnpm
+bun add -g trumbo          # bun
+yarn global add trumbo     # yarn
 ```
 
-Platform binaries are published for macOS, Linux, and Windows on `arm64` and `x64`. The `trumbo` package resolves the correct binary for your platform via optional dependencies, so no Node or Bun runtime is required at install time.
+The `trumbo` package resolves the correct binary for your platform via `optionalDependencies`, so only your platform's variant is downloaded. Platform binaries are published for macOS, Linux, and Windows on `arm64` and `x64`.
+
+### curl (macOS / Linux)
+
+No package manager required — downloads the binary straight from the npm registry:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/xedro98/trembo/main/projects/console/script/install.sh | sh
+```
+
+Installs to `~/.trumbo/bin/trumbo` and prints PATH instructions. Override the destination or version:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/xedro98/trembo/main/projects/console/script/install.sh | sh -s -- --install-dir /usr/local/bin --version 3.0.34
+```
+
+### PowerShell (Windows)
+
+```powershell
+irm https://raw.githubusercontent.com/xedro98/trembo/main/projects/console/script/install.ps1 | iex
+```
+
+Installs to `%USERPROFILE%\.trumbo\bin\trumbo.exe` and adds it to your user PATH. Open a new terminal afterwards.
+
+### Verify
+
+```sh
+trumbo --version
+```
 
 ## Quick start
 

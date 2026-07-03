@@ -1,5 +1,6 @@
 import type { ChoiceContext } from "@opentui-ui/dialog";
 import type { DialogActions } from "@opentui-ui/dialog/react";
+import { getTrumboEnvironmentConfig } from "@trumbo/shared";
 import open from "open";
 import { useCallback } from "react";
 import {
@@ -55,7 +56,12 @@ export function useAccountDialog(opts: {
 			return;
 		}
 		if (action === "learn-more") {
-			await open("http://0.0.0.0:0", { wait: false }).catch(() => {});
+			const appUrl = getTrumboEnvironmentConfig().appBaseUrl;
+			// Only open when a real app URL is configured (skips the dead
+			// 0.0.0.0:0 placeholder used until the web app is deployed).
+			if (appUrl && !appUrl.startsWith("http://0.0.0.0")) {
+				await open(appUrl, { wait: false }).catch(() => {});
+			}
 			refocusTextarea();
 			return;
 		}

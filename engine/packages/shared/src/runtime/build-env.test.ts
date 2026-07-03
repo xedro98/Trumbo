@@ -7,6 +7,7 @@ import {
 	TRUMBO_DEBUG_PORT_BASE_ENV,
 	withResolvedTrumboBuildEnv,
 } from "./build-env";
+import { TRUMBO_ENVIRONMENT_ENV } from "./trumbo-environment";
 
 describe("build env helpers", () => {
 	it("prefers explicit TRUMBO_BUILD_ENV", () => {
@@ -54,6 +55,18 @@ describe("build env helpers", () => {
 				TRUMBO_BUILD_ENV_ENV
 			],
 		).toBe("development");
+	});
+
+	it("sets TRUMBO_ENVIRONMENT=local for development builds", () => {
+		expect(
+			withResolvedTrumboBuildEnv(
+				{},
+				{ execArgv: ["--conditions=development"] },
+			),
+		).toMatchObject({
+			[TRUMBO_BUILD_ENV_ENV]: "development",
+			[TRUMBO_ENVIRONMENT_ENV]: "local",
+		});
 	});
 
 	it("adds dynamic inspect and source maps for node commands in development", () => {

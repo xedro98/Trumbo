@@ -85,3 +85,6 @@ projects/vscode/webview-ui/src/**/*.js.map
 .trumbo/**/managed.json
 .trumbo/**/bundle.json
 projects/vscode/tsconfig.test.generated.json
+
+# Commercial Trumbo web app (private — not open source; keep local only)
+projects/web/

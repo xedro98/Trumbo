@@ -221,6 +221,93 @@ export async function runCli(): Promise<void> {
 			});
 		});
 
+	const teamCmd = program
+		.command("team")
+		.description("List and switch Trumbo teams for this account");
+
+	const teamListCmd = teamCmd
+		.command("list")
+		.description("List teams you can use with the CLI")
+		.option("--config <dir>", "configuration directory")
+		.option(
+			"--data-dir <dir>",
+			"Use isolated local state at <dir> instead of ~/.trumbo (enables sandbox mode)",
+		)
+		.action(async () => {
+			const opts = teamListCmd.opts<{ config?: string; dataDir?: string }>();
+			if (opts.config?.trim()) {
+				const { setTrumboDir } = await import("@trumbo/shared/storage");
+				setTrumboDir(opts.config.trim());
+			}
+			configureSandboxEnvironment({
+				enabled: !!opts.dataDir || process.env.TRUMBO_SANDBOX?.trim() === "1",
+				cwd: process.cwd(),
+				explicitDir: opts.dataDir,
+			});
+			const { runTeamListCommand } = await import("./commands/team");
+			const providerSettingsManager = await createProviderSettingsManager();
+			ctx.exitCode = await runTeamListCommand({
+				providerSettingsManager,
+				io,
+			});
+		});
+
+	const teamCurrentCmd = teamCmd
+		.command("current")
+		.description("Show the active team for CLI requests")
+		.option("--config <dir>", "configuration directory")
+		.option(
+			"--data-dir <dir>",
+			"Use isolated local state at <dir> instead of ~/.trumbo (enables sandbox mode)",
+		)
+		.action(async () => {
+			const opts = teamCurrentCmd.opts<{ config?: string; dataDir?: string }>();
+			if (opts.config?.trim()) {
+				const { setTrumboDir } = await import("@trumbo/shared/storage");
+				setTrumboDir(opts.config.trim());
+			}
+			configureSandboxEnvironment({
+				enabled: !!opts.dataDir || process.env.TRUMBO_SANDBOX?.trim() === "1",
+				cwd: process.cwd(),
+				explicitDir: opts.dataDir,
+			});
+			const { runTeamCurrentCommand } = await import("./commands/team");
+			const providerSettingsManager = await createProviderSettingsManager();
+			ctx.exitCode = await runTeamCurrentCommand({
+				providerSettingsManager,
+				io,
+			});
+		});
+
+	const teamSwitchCmd = teamCmd
+		.command("switch")
+		.description("Switch the active team for CLI requests")
+		.argument("<team>", "Team id, name, or personal")
+		.option("--config <dir>", "configuration directory")
+		.option(
+			"--data-dir <dir>",
+			"Use isolated local state at <dir> instead of ~/.trumbo (enables sandbox mode)",
+		)
+		.action(async (team: string) => {
+			const opts = teamSwitchCmd.opts<{ config?: string; dataDir?: string }>();
+			if (opts.config?.trim()) {
+				const { setTrumboDir } = await import("@trumbo/shared/storage");
+				setTrumboDir(opts.config.trim());
+			}
+			configureSandboxEnvironment({
+				enabled: !!opts.dataDir || process.env.TRUMBO_SANDBOX?.trim() === "1",
+				cwd: process.cwd(),
+				explicitDir: opts.dataDir,
+			});
+			const { runTeamSwitchCommand } = await import("./commands/team");
+			const providerSettingsManager = await createProviderSettingsManager();
+			ctx.exitCode = await runTeamSwitchCommand({
+				providerSettingsManager,
+				target: team,
+				io,
+			});
+		});
+
 	const createConfigRuntimeCommand = async () => {
 		const { createConfigCommand } = await import("./commands/config");
 		let configCmd: Command;

@@ -1,4 +1,9 @@
 import * as Llms from "@trumbo/llms";
+import {
+	formatUnconfiguredTrumboUrlError,
+	isUnconfiguredTrumboUrl,
+	resolveTrumboProviderBaseUrl,
+} from "@trumbo/shared";
 import { z } from "zod";
 import {
 	DEFAULT_EXTERNAL_OCA_BASE_URL,
@@ -59,6 +64,7 @@ export const AuthSettingsSchema = z.object({
 	refreshToken: z.string().optional(),
 	expiresAt: z.number().int().positive().optional(),
 	accountId: z.string().optional(),
+	organizationId: z.string().optional(),
 });
 
 export type AuthSettings = z.infer<typeof AuthSettingsSchema>;
@@ -196,6 +202,19 @@ function shouldRouteThroughOpenAIResponses(
 	);
 }
 
+function mergeTrumboOrgHeaders(
+	settings: ProviderSettings,
+): Record<string, string> | undefined {
+	const headers = { ...(settings.headers ?? {}) };
+	const organizationId = settings.auth?.organizationId?.trim();
+	if (organizationId) {
+		headers["X-Org-Id"] = organizationId;
+	} else {
+		delete headers["X-Org-Id"];
+	}
+	return Object.keys(headers).length > 0 ? headers : undefined;
+}
+
 export function toProviderConfig(
 	settings: ProviderSettings,
 	options: ToProviderConfigOptions = {},
@@ -217,13 +236,22 @@ export function toProviderConfig(
 	const generatedDefaultModelId = Object.keys(generatedKnownModels)[0];
 
 	const apiKey = getPersistedProviderApiKey(normalizedProviderId, settings);
-	const resolvedBaseUrl =
+	let resolvedBaseUrl =
 		settings.baseUrl ??
 		(normalizedProviderId === "oca"
 			? settings.oca?.mode === "internal"
 				? DEFAULT_INTERNAL_OCA_BASE_URL
 				: DEFAULT_EXTERNAL_OCA_BASE_URL
 			: providerDefaults?.baseUrl);
+	if (
+		normalizedProviderId === "trumbo" ||
+		normalizedProviderId === "trumbo-pass"
+	) {
+		resolvedBaseUrl = resolveTrumboProviderBaseUrl(settings.baseUrl);
+		if (isUnconfiguredTrumboUrl(resolvedBaseUrl.replace(/\/api\/v1\/?$/, ""))) {
+			throw new Error(formatUnconfiguredTrumboUrlError());
+		}
+	}
 	const routingProviderId =
 		settings.routingProviderId ??
 		(shouldRouteThroughOpenAIResponses(settings) &&
@@ -253,7 +281,7 @@ export function toProviderConfig(
 		refreshToken: settings.auth?.refreshToken,
 		accountId: settings.auth?.accountId,
 		baseUrl: resolvedBaseUrl,
-		headers: settings.headers,
+		headers: mergeTrumboOrgHeaders(settings),
 		timeoutMs: settings.timeout,
 		maxOutputTokens: settings.maxTokens,
 		maxInputTokens: settings.contextWindow,

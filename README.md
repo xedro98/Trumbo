@@ -38,11 +38,24 @@ Everything is bring-your-own-key: plug in Anthropic, OpenAI, Google, OpenRouter,
 
 ## Quick start
 
-```bash
-# Install the CLI
-npm i -g trumbo
+Install the CLI — pick any method. The published binary is self-contained, so no Node, Bun, or npm runtime is needed to run it.
 
-# Run it in your project
+```bash
+# npm / pnpm / bun
+npm i -g trumbo
+pnpm add -g trumbo
+bun add -g trumbo
+
+# curl (macOS / Linux) — no package manager required
+curl -fsSL https://raw.githubusercontent.com/xedro98/trembo/main/projects/console/script/install.sh | sh
+
+# PowerShell (Windows)
+irm https://raw.githubusercontent.com/xedro98/trembo/main/projects/console/script/install.ps1 | iex
+```
+
+Then run it in your project:
+
+```bash
 cd my-project
 trumbo
 ```

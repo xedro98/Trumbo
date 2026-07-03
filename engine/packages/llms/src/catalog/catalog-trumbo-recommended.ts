@@ -1,4 +1,4 @@
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+import { resolveTrumboApiBaseUrl } from "@trumbo/shared";
 import type { ModelInfo } from "./types";
 
 export interface TrumboRecommendedModelEntry {
@@ -8,6 +8,8 @@ export interface TrumboRecommendedModelEntry {
 }
 
 export interface TrumboRecommendedModelsPayload {
+	/** Fireworks-backed models for the `trumbo` provider (auth-only, no user API key). */
+	trumbo?: TrumboRecommendedModelEntry[];
 	trumboPass?: TrumboRecommendedModelEntry[];
 }
 
@@ -17,6 +19,7 @@ type ModelCapabilities = Pick<
 >;
 
 const TRUMBO_PASS_PROVIDER_ID = "trumbo-pass";
+const TRUMBO_PROVIDER_ID = "trumbo";
 
 const TRUMBO_PASS_MODEL_DEFAULTS = {
 	contextWindow: 128_000,
@@ -30,19 +33,6 @@ const TRUMBO_PASS_MODEL_DEFAULTS = {
 		cacheWrite: 0,
 	},
 } as const satisfies ModelCapabilities;
-
-function findORModelCapabilities(
-	entry: TrumboRecommendedModelEntry,
-	openRouterModels: Record<string, ModelInfo>,
-): ModelCapabilities {
-	if (!openRouterModels) {
-		return TRUMBO_PASS_MODEL_DEFAULTS;
-	}
-
-	const modelSlug = entry.id.split("/").at(-1) ?? entry.id;
-
-	return openRouterModels[modelSlug] || TRUMBO_PASS_MODEL_DEFAULTS;
-}
 
 // Trumbo-Pass models have only the model name (and not the lab),
 // so we need to look-up using glm-5.1 instead of trumbo-pass/glm-5.1
@@ -60,41 +50,77 @@ function buildModelsNameMap(
 	return nameMap;
 }
 
-export function normalizeTrumboRecommendedProviderModels(
-	payload: TrumboRecommendedModelsPayload,
+function capabilityDefaultsFromCatalog(
+	entry: TrumboRecommendedModelEntry,
 	openRouterModels: Record<string, ModelInfo>,
-): Record<string, Record<string, ModelInfo>> {
-	const trumboPass = payload.trumboPass ?? [];
-	if (trumboPass.length === 0) {
-		return {};
+): ModelCapabilities {
+	const modelSlug = entry.id.split("/").at(-1) ?? entry.id;
+	const match = openRouterModels[modelSlug];
+	if (!match) {
+		return TRUMBO_PASS_MODEL_DEFAULTS;
 	}
+	return {
+		contextWindow: match.contextWindow,
+		maxInputTokens: match.maxInputTokens,
+		maxTokens: match.maxTokens,
+		capabilities: match.capabilities,
+		pricing: match.pricing,
+	};
+}
 
+function buildProviderModelsFromEntries(
+	entries: TrumboRecommendedModelEntry[],
+	openRouterModels: Record<string, ModelInfo>,
+): Record<string, ModelInfo> {
 	const models: Record<string, ModelInfo> = {};
 	const openRouterModelsByName = buildModelsNameMap(openRouterModels);
 
-	trumboPass.forEach((entry) => {
-		const capabilities = findORModelCapabilities(entry, openRouterModelsByName);
-
+	entries.forEach((entry) => {
+		const defaults = capabilityDefaultsFromCatalog(
+			entry,
+			openRouterModelsByName,
+		);
 		models[entry.id] = {
-			// We should use the OR name, unless there is not one (like when using defaults)
-			name: entry.name,
-			...capabilities,
+			...defaults,
 			id: entry.id,
+			name: entry.name?.trim() || entry.id.split("/").pop() || entry.id,
 			description: entry.description,
 		};
 	});
 
-	if (Object.keys(models).length === 0) {
-		return {};
+	return models;
+}
+
+export function normalizeTrumboRecommendedProviderModels(
+	payload: TrumboRecommendedModelsPayload,
+	openRouterModels: Record<string, ModelInfo>,
+): Record<string, Record<string, ModelInfo>> {
+	const out: Record<string, Record<string, ModelInfo>> = {};
+
+	const trumbo = payload.trumbo ?? [];
+	if (trumbo.length > 0) {
+		const models = buildProviderModelsFromEntries(trumbo, openRouterModels);
+		if (Object.keys(models).length > 0) {
+			out[TRUMBO_PROVIDER_ID] = models;
+		}
 	}
 
-	return { [TRUMBO_PASS_PROVIDER_ID]: models };
+	const trumboPass = payload.trumboPass ?? [];
+	if (trumboPass.length > 0) {
+		const models = buildProviderModelsFromEntries(trumboPass, openRouterModels);
+		if (Object.keys(models).length > 0) {
+			out[TRUMBO_PASS_PROVIDER_ID] = models;
+		}
+	}
+
+	return out;
 }
 
 export async function fetchTrumboRecommendedModelsPayload(
 	fetcher: typeof fetch = fetch,
+	apiBaseUrl?: string,
 ): Promise<TrumboRecommendedModelsPayload> {
-	const url = `${getTrumboEnvironmentConfig().apiBaseUrl}/api/v1/ai/trumbo/recommended-models`;
+	const url = `${resolveTrumboApiBaseUrl(apiBaseUrl)}/api/v1/ai/trumbo/recommended-models`;
 	const response = await fetcher(url);
 	if (!response.ok) {
 		throw new Error(

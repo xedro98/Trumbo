@@ -439,6 +439,7 @@ export async function runInteractive(
 				config,
 				organizationId,
 				trumboApiBaseUrl: options?.trumboApiBaseUrl,
+				providerSettingsManager,
 			}),
 		loadConfigData: configDataLoader.loadConfigData,
 		onToggleConfigItem,

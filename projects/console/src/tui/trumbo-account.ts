@@ -14,13 +14,16 @@ import {
 	type TrumboSubscriptionPlan,
 	type UserCurrentPlan,
 } from "@trumbo/core";
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+import {
+	isUnconfiguredTrumboUrl,
+	resolveTrumboApiBaseUrl,
+	UNCONFIGURED_TRUMBO_APP_URL,
+} from "@trumbo/shared";
 import { formatCreditBalance, normalizeCreditBalance } from "../utils/output";
 import { identifyTelemetryAccount } from "../utils/telemetry";
 import type { Config } from "../utils/types";
 
-export const TRUMBO_CREDITS_DASHBOARD_URL =
-	"http://0.0.0.0:0/dashboard/account?tab=credits";
+export const TRUMBO_CREDITS_DASHBOARD_URL = `${UNCONFIGURED_TRUMBO_APP_URL}/dashboard/account?tab=credits`;
 
 type TrumboAccountConfig = Pick<Config, "apiKey" | "logger" | "providerId">;
 
@@ -49,6 +52,27 @@ export function isTrumboAccountAuthErrorMessage(message: string): boolean {
 	);
 }
 
+export function formatTrumboAccountConnectionError(
+	error: unknown,
+	apiBaseUrl: string,
+): string {
+	if (isUnconfiguredTrumboUrl(apiBaseUrl)) {
+		return (
+			"Trumbo web app URL is not configured. For local dev set TRUMBO_ENVIRONMENT=local " +
+			"(http://localhost:8787) or set TRUMBO_API_BASE_URL to your deployment."
+		);
+	}
+
+	const message = error instanceof Error ? error.message : String(error);
+	if (message.includes("Was there a typo in the url or port")) {
+		return (
+			`Cannot reach the Trumbo web app at ${apiBaseUrl}. ` +
+			"Start it with `bun run dev:api` in projects/web, or check TRUMBO_ENVIRONMENT / TRUMBO_API_BASE_URL."
+		);
+	}
+	return message;
+}
+
 export function isTrumboAccountCreditsErrorMessage(message: string): boolean {
 	const normalized = message.trim().toLowerCase();
 	return (
@@ -61,15 +85,13 @@ function resolveAccountApiBaseUrl(input: {
 	trumboApiBaseUrl?: string;
 	trumboProviderSettings?: ProviderSettings;
 }): string {
-	const settingsBaseUrl = input.trumboProviderSettings?.baseUrl?.trim();
-	if (settingsBaseUrl) {
-		return settingsBaseUrl;
+	const apiBaseUrl = resolveTrumboApiBaseUrl(
+		input.trumboProviderSettings?.baseUrl ?? input.trumboApiBaseUrl,
+	);
+	if (isUnconfiguredTrumboUrl(apiBaseUrl)) {
+		throw new Error(formatTrumboAccountConnectionError(null, apiBaseUrl));
 	}
-	const configuredBaseUrl = input.trumboApiBaseUrl?.trim();
-	if (configuredBaseUrl) {
-		return configuredBaseUrl;
-	}
-	return getTrumboEnvironmentConfig().apiBaseUrl;
+	return apiBaseUrl;
 }
 
 function resolveTrumboAccountAuthToken(input: {
@@ -151,6 +173,10 @@ export async function createTrumboAccountService(input: {
 	return new TrumboAccountService({
 		apiBaseUrl,
 		getAuthToken: async () => authToken,
+		getHeaders: async () => {
+			const organizationId = settings?.auth?.organizationId?.trim();
+			return organizationId ? { "X-Org-Id": organizationId } : {};
+		},
 	});
 }
 
@@ -159,42 +185,63 @@ export async function loadTrumboAccountSnapshot(input: {
 	trumboApiBaseUrl?: string;
 	trumboProviderSettings?: ProviderSettings;
 }): Promise<TrumboAccountSnapshot> {
-	const service = await createTrumboAccountService(input);
+	const apiBaseUrl = resolveAccountApiBaseUrl({
+		trumboApiBaseUrl: input.trumboApiBaseUrl,
+		trumboProviderSettings: input.trumboProviderSettings,
+	});
+	let service: TrumboAccountService | undefined;
+	try {
+		service = await createTrumboAccountService(input);
+	} catch (error) {
+		throw new Error(formatTrumboAccountConnectionError(error, apiBaseUrl));
+	}
 	if (!service) {
 		throw new Error("No Trumbo account auth token found");
 	}
 
-	const user = await service.fetchMe();
-	const organizations = user.organizations ?? [];
-	const activeOrganization =
-		organizations.find((organization) => organization.active) ?? null;
-	const [balance, organizationBalance] = await Promise.all([
-		service.fetchBalance(user.id),
-		activeOrganization
-			? service.fetchOrganizationBalance(activeOrganization.organizationId)
-			: Promise.resolve(null),
-	]);
-	const displayedBalance = activeOrganization
-		? (organizationBalance?.balance ?? balance.balance)
-		: balance.balance;
-	const accountContext = {
-		id: user.id,
-		email: user.email,
-		provider: "trumbo",
-		organizationId: activeOrganization?.organizationId,
-		organizationName: activeOrganization?.name,
-		memberId: activeOrganization?.memberId,
-	};
-	identifyTelemetryAccount(accountContext, input.config.logger);
+	try {
+		const user = await service.fetchMe();
+		const organizations = user.organizations ?? [];
+		const normalizedOrganizations = organizations.map((org) => ({
+			...org,
+			organizationId:
+				org.organizationId ??
+				(org as TrumboAccountOrganization & { id?: string }).id ??
+				"",
+		}));
+		const activeOrganization =
+			normalizedOrganizations.find((organization) => organization.active) ??
+			null;
+		const [balance, organizationBalance] = await Promise.all([
+			service.fetchBalance(user.id),
+			activeOrganization
+				? service.fetchOrganizationBalance(activeOrganization.organizationId)
+				: Promise.resolve(null),
+		]);
+		const displayedBalance = activeOrganization
+			? (organizationBalance?.balance ?? balance.balance)
+			: balance.balance;
+		const accountContext = {
+			id: user.id,
+			email: user.email,
+			provider: "trumbo",
+			organizationId: activeOrganization?.organizationId,
+			organizationName: activeOrganization?.name,
+			memberId: activeOrganization?.memberId,
+		};
+		identifyTelemetryAccount(accountContext, input.config.logger);
 
-	return {
-		user,
-		balance,
-		organizationBalance,
-		organizations,
-		activeOrganization,
-		displayedBalance,
-	};
+		return {
+			user,
+			balance,
+			organizationBalance,
+			organizations: normalizedOrganizations,
+			activeOrganization,
+			displayedBalance,
+		};
+	} catch (error) {
+		throw new Error(formatTrumboAccountConnectionError(error, apiBaseUrl));
+	}
 }
 
 export async function switchTrumboAccount(input: {
@@ -202,12 +249,31 @@ export async function switchTrumboAccount(input: {
 	organizationId?: string | null;
 	trumboApiBaseUrl?: string;
 	trumboProviderSettings?: ProviderSettings;
+	providerSettingsManager?: ProviderSettingsManager;
 }): Promise<void> {
-	const service = await createTrumboAccountService(input);
+	const manager =
+		input.providerSettingsManager ?? new ProviderSettingsManager();
+	const service = await createTrumboAccountService({
+		...input,
+		providerSettingsManager: manager,
+	});
 	if (!service) {
 		throw new Error("No Trumbo account auth token found");
 	}
 	await service.switchAccount(input.organizationId);
+
+	const current = manager.getProviderSettings("trumbo");
+	if (!current) {
+		return;
+	}
+	const nextOrganizationId = input.organizationId?.trim() || undefined;
+	manager.saveProviderSettings({
+		...current,
+		auth: {
+			...current.auth,
+			organizationId: nextOrganizationId,
+		},
+	});
 }
 
 export async function loadIndividualSubscriptionPlans(input: {

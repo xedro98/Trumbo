@@ -12,82 +12,12 @@ description: "Authenticate with Trumbo and choose your first AI model"
 ```
 
 
-Trumbo reaches AI models through a **provider**. Three paths cover most setups:
-
-- **Trumbo (usage-billing)** (recommended): sign in with Google/GitHub/email, no API key to manage.
-- **TrumboPass**: a $9.99/month subscription provider with access to selected open coding models and 2-5x API rate limits.
-- **Bring Your Own Key (BYOK)**: use your own provider credentials, cloud or local.
+Trumbo reaches AI models through a **provider**. Most setups use **Bring Your Own Key (BYOK)** — your own cloud provider credentials or a local runtime.
 
 ## Menu
 
-- [IDE Setup](#ide-setup)
 - [CLI Setup](#cli-setup)
-
-## IDE Setup
-
-<Steps>
-  <Step title="Open Trumbo Settings">
-    Click the settings icon (⚙️) in the Trumbo panel.
-  </Step>
-
-  <Step title="Select Provider">
-    Choose your provider from the **API Provider** dropdown.
-  </Step>
-
-  <Step title="Authenticate">
-    - **Trumbo (usage-billing):** Click **Sign In** and complete OAuth.
-    - **TrumboPass:** Select **TrumboPass**, click **Sign In**, and subscribe if prompted.
-    - **BYOK cloud provider:** Paste your API key into the **API Key** field.
-    - **Local runtime (Ollama/LM Studio):** no key needed; make sure the runtime is running.
-  </Step>
-
-  <Step title="Select Model">
-    Pick the model you want from the **Model** dropdown.
-  </Step>
-</Steps>
-
-## Provider Options
-
-### Trumbo (usage-billing)
-
-- One sign-in, no key management
-- Built-in billing and free model options
-- Access to multiple providers from one account
-
-Add credits in Trumbo settings or at [app.example.invalid/dashboard](http://0.0.0.0:0/dashboard).
-
-### TrumboPass
-
-- Flat **$9.99/month** subscription
-- 2-5x API rate limits for longer agent sessions
-- Curated open coding models including GLM, Kimi, DeepSeek, and MiMo
-
-Subscribe from the [TrumboPass dashboard](http://0.0.0.0:0/dashboard/subscription?personal=true), then select **TrumboPass** as your provider in Trumbo. See the [TrumboPass guide](/getting-started/trumbopass) for included models and reference pricing.
-
-### BYOK (cloud + local)
-
-### Cloud Providers
-
-| Provider | Best For | Setup Guide |
-|----------|----------|-------------|
-| **OpenRouter** | Multiple models, competitive pricing | [Setup](/provider-config/openrouter) |
-| **Anthropic** | Direct Claude access | [Setup](/provider-config/anthropic) |
-| **Claude Code** | Claude Max/Pro subscription | [Setup](/provider-config/anthropic) |
-| **OpenAI** | GPT models | [Setup](/provider-config/openai) |
-| **Google Gemini** | Gemini models | [Setup](/provider-config/google-gemini) |
-| **AWS Bedrock** | Enterprise | [Setup](/provider-config/aws-bedrock/api-key) |
-| **DeepSeek** | Great value | [Setup](/provider-config/deepseek) |
-
-### Local Models
-
-Run models on your own hardware for full privacy and zero per-request cost.
-
-| Provider | Best For | Setup Guide |
-|----------|----------|-------------|
-| **Ollama** | CLI-based local runtime | [Setup](/running-models-locally/overview#runtime-options) |
-| **LM Studio** | GUI-based local runtime | [Setup](/running-models-locally/overview#runtime-options) |
-
-Local models need adequate hardware (especially GPU memory). See [Running Models Locally](/running-models-locally/overview) for requirements.
+- [Provider Options](#provider-options)
 
 ## CLI Setup
 
@@ -99,13 +29,39 @@ trumbo auth
 trumbo a
 ```
 
-This runs the same auth flow as the IDE setup.
+Follow the prompts to pick a provider, paste an API key when needed, or point Trumbo at a local runtime.
+
+## Provider Options
+
+### BYOK (cloud + local)
+
+#### Cloud Providers
+
+| Provider | Best For | Setup Guide |
+|----------|----------|-------------|
+| **OpenRouter** | Multiple models, competitive pricing | [Setup](/provider-config/openrouter) |
+| **Anthropic** | Direct Claude access | [Setup](/provider-config/anthropic) |
+| **Claude Code** | Claude Max/Pro subscription | [Setup](/provider-config/anthropic) |
+| **OpenAI** | GPT models | [Setup](/provider-config/openai) |
+| **Google Gemini** | Gemini models | [Setup](/provider-config/google-gemini) |
+| **AWS Bedrock** | Enterprise | [Setup](/provider-config/aws-bedrock/api-key) |
+| **DeepSeek** | Great value | [Setup](/provider-config/deepseek) |
+
+#### Local Models
+
+Run models on your own hardware for full privacy and zero per-request cost.
+
+| Provider | Best For | Setup Guide |
+|----------|----------|-------------|
+| **Ollama** | CLI-based local runtime | [Setup](/running-models-locally/overview#runtime-options) |
+| **LM Studio** | GUI-based local runtime | [Setup](/running-models-locally/overview#runtime-options) |
+
+Local models need adequate hardware (especially GPU memory). See [Running Models Locally](/running-models-locally/overview) for requirements.
 
 ## Troubleshooting
 
 | Issue | Fix |
 |-------|-----|
-| "Unauthorized: Please sign in" | Session expired. Click **Sign In** to re-authenticate. |
-| Browser doesn't open | Check your default browser settings, or copy the URL from the Trumbo output panel by hand. |
-| Frequent re-authentication | Review org security policies, make sure IDE secrets aren't being cleared, and try a full sign-out/sign-in. |
-| Can't access organization | Confirm membership at [app.example.invalid](http://0.0.0.0:0), ask your admin about permissions, then sign out and back in. |
+| Auth flow fails | Confirm your API key is valid and has access to the model you selected. |
+| Local model unreachable | Make sure Ollama or LM Studio is running and listening on the expected port. |
+| Wrong model selected | Run `trumbo auth` again or update provider settings with `/settings` in the CLI. |

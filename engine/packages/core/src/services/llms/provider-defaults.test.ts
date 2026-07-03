@@ -24,7 +24,7 @@ describe("resolveProviderConfig", () => {
 		expect(Object.keys(resolved?.knownModels ?? {}).length).toBeGreaterThan(0);
 	});
 
-	it("uses catalog aliases when loading live models", async () => {
+	it("does not alias models.dev OpenRouter models onto Trumbo", async () => {
 		vi.stubGlobal(
 			"fetch",
 			vi.fn(async () => {
@@ -53,7 +53,14 @@ describe("resolveProviderConfig", () => {
 			cacheTtlMs: 0,
 		});
 
-		expect(resolved?.knownModels?.["vendor/live-only-model"]?.name).toBe(
+		expect(resolved?.knownModels?.["vendor/live-only-model"]).toBeUndefined();
+
+		const openrouter = await resolveProviderConfig("openrouter", {
+			loadLatestOnInit: true,
+			failOnError: false,
+			cacheTtlMs: 0,
+		});
+		expect(openrouter?.knownModels?.["vendor/live-only-model"]?.name).toBe(
 			"Live Only Model",
 		);
 	});
@@ -110,7 +117,7 @@ describe("resolveProviderConfig", () => {
 			resolved?.knownModels?.["trumbo-pass/live-pass-model"],
 		).toMatchObject({
 			id: "trumbo-pass/live-pass-model",
-			name: "Live Pass Model",
+			name: "vendor/live-pass-model",
 			contextWindow: 256_000,
 			maxInputTokens: 200_000,
 			maxTokens: 32_000,
@@ -164,25 +171,129 @@ describe("resolveProviderConfig", () => {
 		).toBeUndefined();
 	});
 
-	it("prefers Vercel-style Z.ai ids in Trumbo known models", async () => {
-		const resolved = await resolveProviderConfig("trumbo");
+	it("does not merge models.dev OpenRouter models into Trumbo live catalog", async () => {
+		const fetchMock = vi.fn(async (url: string) => {
+			if (url === "https://models.test/api.json") {
+				return new Response(
+					JSON.stringify({
+						openrouter: {
+							models: {
+								"poolside/laguna-xs.2": {
+									name: "Poolside: Laguna XS.2",
+									tool_call: true,
+								},
+							},
+						},
+					}),
+					{
+						status: 200,
+						headers: { "content-type": "application/json" },
+					},
+				);
+			}
 
-		expect(resolved?.knownModels?.["zai/glm-5.2"]).toMatchObject({
-			id: "zai/glm-5.2",
-			name: "GLM 5.2",
-			contextWindow: 1_000_000,
-			maxInputTokens: 1_000_000,
+			return new Response(
+				JSON.stringify({
+					trumbo: [
+						{
+							id: "glm-5p2",
+							name: "GLM 5.2",
+						},
+					],
+				}),
+				{
+					status: 200,
+					headers: { "content-type": "application/json" },
+				},
+			);
 		});
-		expect(resolved?.knownModels?.["z-ai/glm-5.2"]).toBeUndefined();
+		vi.stubGlobal("fetch", fetchMock);
+
+		const resolved = await resolveProviderConfig("trumbo", {
+			loadLatestOnInit: true,
+			failOnError: false,
+			cacheTtlMs: 0,
+			url: "https://models.test/api.json",
+		});
+
+		expect(resolved?.knownModels?.["glm-5p2"]).toBeDefined();
+		expect(resolved?.knownModels?.["poolside/laguna-xs.2"]).toBeUndefined();
 	});
 
-	it("preserves explicit Trumbo known model overrides for alias ids", async () => {
+	it("uses only live Trumbo catalog models when the web app catalog is available", async () => {
+		const fetchMock = vi.fn(async (url: string) => {
+			if (url === "https://models.test/api.json") {
+				return new Response(JSON.stringify({}), {
+					status: 200,
+					headers: { "content-type": "application/json" },
+				});
+			}
+
+			return new Response(
+				JSON.stringify({
+					trumbo: [
+						{
+							id: "glm-5p2",
+							name: "GLM 5.2",
+							description: "Featured Trumbo model",
+						},
+						{
+							id: "kimi-k2p7-code",
+							name: "Kimi K2.7 Code",
+						},
+					],
+				}),
+				{
+					status: 200,
+					headers: { "content-type": "application/json" },
+				},
+			);
+		});
+		vi.stubGlobal("fetch", fetchMock);
+
+		const resolved = await resolveProviderConfig("trumbo", {
+			loadLatestOnInit: true,
+			failOnError: false,
+			cacheTtlMs: 0,
+			url: "https://models.test/api.json",
+		});
+
+		expect(resolved?.knownModels?.["glm-5p2"]).toMatchObject({
+			id: "glm-5p2",
+			name: "GLM 5.2",
+		});
+		expect(resolved?.knownModels?.["poolside/laguna-xs.2"]).toBeUndefined();
+		expect(resolved?.knownModels?.["zai/glm-5.2"]).toBeUndefined();
+	});
+
+	it("does not fall back to bundled OpenRouter models for Trumbo", async () => {
+		vi.stubGlobal(
+			"fetch",
+			vi.fn(async () => {
+				return new Response(JSON.stringify({ trumbo: [] }), {
+					status: 200,
+					headers: { "content-type": "application/json" },
+				});
+			}),
+		);
+
+		const resolved = await resolveProviderConfig("trumbo", {
+			loadLatestOnInit: true,
+			failOnError: false,
+			cacheTtlMs: 0,
+		});
+
+		expect(resolved?.knownModels?.["poolside/laguna-xs.2"]).toBeUndefined();
+		expect(Object.keys(resolved?.knownModels ?? {})).toEqual([]);
+	});
+
+	it("preserves explicit Trumbo known model overrides", async () => {
 		const resolved = await resolveProviderConfig("trumbo", undefined, {
 			providerId: "trumbo",
-			modelId: "z-ai/glm-5.2",
+			modelId: "glm-5p2",
 			knownModels: {
-				"z-ai/glm-5.2": {
-					id: "z-ai/glm-5.2",
+				"glm-5p2": {
+					id: "glm-5p2",
 					name: "Custom GLM 5.2",
 					contextWindow: 123_456,
 					maxInputTokens: 123_456,
@@ -190,16 +301,11 @@ describe("resolveProviderConfig", () => {
 			},
 		});
 
-		expect(resolved?.knownModels?.["z-ai/glm-5.2"]).toMatchObject({
-			id: "z-ai/glm-5.2",
+		expect(resolved?.knownModels?.["glm-5p2"]).toMatchObject({
+			id: "glm-5p2",
 			name: "Custom GLM 5.2",
 			contextWindow: 123_456,
 			maxInputTokens: 123_456,
-		});
-		expect(resolved?.knownModels?.["zai/glm-5.2"]).toMatchObject({
-			id: "zai/glm-5.2",
-			contextWindow: 1_000_000,
-			maxInputTokens: 1_000_000,
 		});
 	});
 

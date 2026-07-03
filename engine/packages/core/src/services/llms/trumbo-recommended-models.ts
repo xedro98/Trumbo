@@ -1,4 +1,8 @@
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+import {
+	isUnconfiguredTrumboUrl,
+	resolveTrumboApiBaseUrl,
+	resolveTrumboEnvironment,
+} from "@trumbo/shared";
 import { ProviderSettingsManager } from "../storage/provider-settings-manager";
 
 export interface TrumboRecommendedModel {
@@ -25,7 +29,10 @@ export interface FetchTrumboRecommendedModelsOptions {
 }
 
 const DEFAULT_REQUEST_TIMEOUT_MS = 5_000;
+/** Featured picker shows a small set; full library is under "Browse all models". */
+const MAX_FEATURED_TRUMBO_MODELS = 8;
 
+/** Bundled OpenRouter-style list for hosted TrumboPass when the cloud API is down. */
 export const FALLBACK_TRUMBO_RECOMMENDED_MODELS: TrumboRecommendedModelsData = {
 	recommended: [
 		{
@@ -70,6 +77,39 @@ export const FALLBACK_TRUMBO_RECOMMENDED_MODELS: TrumboRecommendedModelsData = {
 	trumboPass: [],
 };
 
+/** Self-hosted Trumbo web app catalog when the live fetch is unavailable. */
+export const SELF_HOSTED_TRUMBO_RECOMMENDED_MODELS: TrumboRecommendedModelsData =
+	{
+		recommended: [
+			{
+				id: "glm-5p2",
+				name: "GLM 5.2",
+				description: "Strong general coding model.",
+				tags: ["BEST"],
+			},
+			{
+				id: "kimi-k2p7-code",
+				name: "Kimi K2.7 Code",
+				description: "Code-focused model.",
+				tags: [],
+			},
+			{
+				id: "minimax-m3",
+				name: "MiniMax M3",
+				description: "Fast coding assistant.",
+				tags: [],
+			},
+			{
+				id: "qwen3p7-plus",
+				name: "Qwen 3.7 Plus",
+				description: "Qwen 3.7 Plus.",
+				tags: [],
+			},
+		],
+		free: [],
+		trumboPass: [],
+	};
+
 function cloneRecommendedModels(
 	data: TrumboRecommendedModelsData,
 ): TrumboRecommendedModelsData {
@@ -90,17 +130,24 @@ function normalizeModel(raw: unknown): TrumboRecommendedModel | null {
 	if (!raw || typeof raw !== "object") return null;
 	const data = raw as Record<string, unknown>;
 	if (typeof data.id !== "string" || data.id.length === 0) return null;
+	const id = publicTrumboModelId(data.id);
 	return {
-		id: data.id,
+		id,
 		name:
-			typeof data.name === "string" && data.name.length > 0
-				? data.name
-				: data.id,
+			typeof data.name === "string" && data.name.length > 0 ? data.name : id,
 		description: typeof data.description === "string" ? data.description : "",
 		tags: Array.isArray(data.tags)
 			? data.tags.filter((tag): tag is string => typeof tag === "string")
 			: [],
 	};
+}
+
+function publicTrumboModelId(modelId: string): string {
+	if (modelId.includes("fireworks") || modelId.startsWith("accounts/")) {
+		const leaf = modelId.split("/").filter(Boolean).pop();
+		return leaf && leaf.length > 0 ? leaf : modelId;
+	}
+	return modelId;
 }
 
 function normalizeResponse(raw: unknown): TrumboRecommendedModelsData | null {
@@ -110,8 +157,9 @@ function normalizeResponse(raw: unknown): TrumboRecommendedModelsData | null {
 		? data.recommended
 		: [];
 	const freeRaw = Array.isArray(data.free) ? data.free : [];
+	const trumboRaw = Array.isArray(data.trumbo) ? data.trumbo : [];
 	const trumboPassRaw = Array.isArray(data.trumboPass) ? data.trumboPass : [];
-	const recommended = recommendedRaw
+	let recommended = recommendedRaw
 		.map(normalizeModel)
 		.filter((model): model is TrumboRecommendedModel => model !== null);
 	const free = freeRaw
@@ -120,6 +168,15 @@ function normalizeResponse(raw: unknown): TrumboRecommendedModelsData | null {
 	const trumboPass = trumboPassRaw
 		.map(normalizeModel)
 		.filter((model): model is TrumboRecommendedModel => model !== null);
+
+	// Self-hosted web app returns { trumbo: [...] }.
+	if (recommended.length === 0 && free.length === 0 && trumboRaw.length > 0) {
+		const trumboModels = trumboRaw
+			.map(normalizeModel)
+			.filter((model): model is TrumboRecommendedModel => model !== null);
+		recommended = trumboModels.slice(0, MAX_FEATURED_TRUMBO_MODELS);
+	}
+
 	if (
 		recommended.length === 0 &&
 		free.length === 0 &&
@@ -134,18 +191,37 @@ function normalizeResponse(raw: unknown): TrumboRecommendedModelsData | null {
 function getConfiguredApiBaseUrl(
 	options: FetchTrumboRecommendedModelsOptions,
 ): string {
-	const explicitBaseUrl = options.baseUrl?.trim();
-	if (explicitBaseUrl) return explicitBaseUrl;
-
-	const fallbackBaseUrl = getTrumboEnvironmentConfig().apiBaseUrl;
+	if (options.baseUrl?.trim()) {
+		return resolveTrumboApiBaseUrl(options.baseUrl);
+	}
 	try {
 		const manager =
 			options.providerSettingsManager ?? new ProviderSettingsManager();
 		const settings = manager.getProviderSettings("trumbo");
-		return settings?.baseUrl?.trim() || fallbackBaseUrl;
+		return resolveTrumboApiBaseUrl(settings?.baseUrl);
 	} catch {
-		return fallbackBaseUrl;
+		return resolveTrumboApiBaseUrl();
 	}
+}
+
+function usesSelfHostedFallback(apiBaseUrl: string): boolean {
+	if (resolveTrumboEnvironment() === "local") {
+		return true;
+	}
+	if (isUnconfiguredTrumboUrl(apiBaseUrl)) {
+		return true;
+	}
+	const lower = apiBaseUrl.toLowerCase();
+	return lower.includes("localhost") || lower.includes("127.0.0.1");
+}
+
+function resolveFallbackModels(
+	apiBaseUrl: string,
+): TrumboRecommendedModelsData {
+	if (usesSelfHostedFallback(apiBaseUrl)) {
+		return cloneRecommendedModels(SELF_HOSTED_TRUMBO_RECOMMENDED_MODELS);
+	}
+	return cloneRecommendedModels(FALLBACK_TRUMBO_RECOMMENDED_MODELS);
 }
 
 async function fetchWithTimeout(
@@ -162,15 +238,40 @@ async function fetchWithTimeout(
 	}
 }
 
+export function buildTrumboRecommendedModelsFromKnownModels(
+	knownModels:
+		| Record<string, { name?: string; description?: string }>
+		| undefined,
+): TrumboRecommendedModelsData | null {
+	const entries = Object.entries(knownModels ?? {}).filter(
+		([id]) => id.trim().length > 0,
+	);
+	if (entries.length === 0) {
+		return null;
+	}
+	return {
+		recommended: entries
+			.slice(0, MAX_FEATURED_TRUMBO_MODELS)
+			.map(([id, info]) => ({
+				id: publicTrumboModelId(id),
+				name: info.name?.trim() || publicTrumboModelId(id),
+				description: info.description?.trim() ?? "",
+				tags: [],
+			})),
+		free: [],
+		trumboPass: [],
+	};
+}
+
 export async function fetchTrumboRecommendedModels(
 	options: FetchTrumboRecommendedModelsOptions = {},
 ): Promise<TrumboRecommendedModelsData> {
+	const apiBaseUrl = getConfiguredApiBaseUrl(options);
 	try {
-		const base = getConfiguredApiBaseUrl(options);
 		const fetchImpl = options.fetchImpl ?? fetch;
 		const resp = await fetchWithTimeout(
 			fetchImpl,
-			`${base}/api/v1/ai/trumbo/recommended-models`,
+			`${apiBaseUrl}/api/v1/ai/trumbo/recommended-models`,
 			options.timeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS,
 		);
 		if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
@@ -178,8 +279,8 @@ export async function fetchTrumboRecommendedModels(
 		const data = normalizeResponse(json);
 		if (data) return data;
 	} catch {
-		// Fall back to the bundled list when the remote source is unavailable.
+		// Fall back when the remote source is unavailable.
 	}
 
-	return cloneRecommendedModels(FALLBACK_TRUMBO_RECOMMENDED_MODELS);
+	return resolveFallbackModels(apiBaseUrl);
 }

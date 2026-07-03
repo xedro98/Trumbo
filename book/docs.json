@@ -65,8 +65,6 @@
 						"pages": [
 							"trumbo-overview",
 							"getting-started/installing-trumbo",
-							"getting-started/trumbo-provider",
-							"getting-started/trumbopass",
 							{
 								"group": "Other Models & Providers",
 								"pages": [
@@ -153,14 +151,6 @@
 						"pages": ["best-practices/memory-bank"]
 					},
 					{
-						"group": "IDE Specific Features",
-						"pages": [
-							"features/auto-approve",
-							"features/jupyter-notebooks",
-							"features/multiroot-workspace"
-						]
-					},
-					{
 						"group": "Troubleshooting",
 						"pages": ["troubleshooting/networking-and-proxies"]
 					}
@@ -224,103 +214,6 @@
 						]
 					}
 				]
-			},
-			{
-				"tab": "Enterprise",
-				"icon": "building",
-				"groups": [
-					{
-						"group": "Enterprise Solutions",
-						"pages": [
-							"enterprise-solutions/overview",
-							"enterprise-solutions/onboarding",
-							"enterprise-solutions/sso-setup",
-							"enterprise-solutions/team-management/managing-members",
-							{
-								"group": "Remote Provider Configuration",
-								"pages": [
-									"enterprise-solutions/configuration/remote-configuration/overview",
-									{
-										"group": "AWS Bedrock",
-										"pages": [
-											"enterprise-solutions/configuration/remote-configuration/aws-bedrock/admin-configuration",
-											"enterprise-solutions/configuration/remote-configuration/aws-bedrock/member-configuration"
-										]
-									},
-									{
-										"group": "Google Vertex AI",
-										"pages": [
-											"enterprise-solutions/configuration/remote-configuration/google-vertex/admin-configuration",
-											"enterprise-solutions/configuration/remote-configuration/google-vertex/member-configuration"
-										]
-									},
-									{
-										"group": "OpenAI Compatible",
-										"pages": [
-											"enterprise-solutions/configuration/remote-configuration/openai-compatible/admin-configuration",
-											"enterprise-solutions/configuration/remote-configuration/openai-compatible/member-configuration"
-										]
-									},
-									{
-										"group": "Anthropic",
-										"pages": [
-											"enterprise-solutions/configuration/remote-configuration/anthropic/admin-configuration",
-											"enterprise-solutions/configuration/remote-configuration/anthropic/member-configuration"
-										]
-									},
-									{
-										"group": "LiteLLM",
-										"pages": [
-											"enterprise-solutions/configuration/remote-configuration/litellm/admin-configuration",
-											"enterprise-solutions/configuration/remote-configuration/litellm/member-configuration"
-										]
-									}
-								]
-							},
-							{
-								"group": "Control Other Trumbo Features",
-								"pages": [
-									"enterprise-solutions/configuration/infrastructure-configuration/control-other-trumbo-features/yolo-mode",
-									"enterprise-solutions/configuration/infrastructure-configuration/control-other-trumbo-features/mcp-server-controls"
-								]
-							},
-							{
-								"group": "Monitoring",
-								"pages": [
-									"enterprise-solutions/monitoring/overview",
-									"enterprise-solutions/monitoring/telemetry",
-									"enterprise-solutions/monitoring/prompt-storage",
-									"enterprise-solutions/monitoring/opentelemetry",
-									"enterprise-solutions/monitoring/opentelemetry-events",
-									"enterprise-solutions/monitoring/opentelemetry_override"
-								]
-							},
-							"enterprise-solutions/api-reference"
-						]
-					}
-				]
-			},
-			{
-				"tab": "API",
-				"icon": "code",
-				"groups": [
-					{
-						"group": "Trumbo API",
-						"pages": [
-							"api/overview",
-							"api/getting-started",
-							"api/authentication"
-						]
-					},
-					{
-						"group": "Endpoints",
-						"pages": ["api/chat-completions"]
-					},
-					{
-						"group": "Reference",
-						"pages": ["api/models", "api/errors", "api/sdk-examples"]
-					}
-				]
 			}
 		]
 	},
@@ -340,7 +233,7 @@
 	"redirects": [
 		{
 			"source": "/enterprise-solutions/configuration/infrastructure-configuration/control-other-trumbo-features/mcp-marketplace",
-			"destination": "/enterprise-solutions/configuration/infrastructure-configuration/control-other-trumbo-features/mcp-server-controls"
+			"destination": "/trumbo-overview"
 		},
 		{
 			"source": "/usage/cli",
@@ -360,7 +253,7 @@
 		},
 		{
 			"source": "/getting-started/your-first-project",
-			"destination": "/usage/ide"
+			"destination": "/usage/cli-overview"
 		},
 		{
 			"source": "/introduction",
@@ -376,7 +269,7 @@
 		},
 		{
 			"source": "/getting-started/model-selection-guide",
-			"destination": "/getting-started/trumbo-provider"
+			"destination": "/getting-started/authorizing-with-trumbo"
 		},
 		{
 			"source": "/provider-config/ollama",
@@ -396,23 +289,23 @@
 		},
 		{
 			"source": "/getting-started/understanding-context-management",
-			"destination": "/getting-started/trumbo-provider"
+			"destination": "/getting-started/authorizing-with-trumbo"
 		},
 		{
 			"source": "/best-practices/understanding-context-management",
-			"destination": "/getting-started/trumbo-provider"
+			"destination": "/getting-started/authorizing-with-trumbo"
 		},
 		{
 			"source": "/prompting/understanding-context-management",
-			"destination": "/getting-started/trumbo-provider"
+			"destination": "/getting-started/authorizing-with-trumbo"
 		},
 		{
 			"source": "/model-config/context-windows",
-			"destination": "/getting-started/trumbo-provider"
+			"destination": "/getting-started/authorizing-with-trumbo"
 		},
 		{
 			"source": "/core-features/model-selection-guide",
-			"destination": "/getting-started/trumbo-provider"
+			"destination": "/getting-started/authorizing-with-trumbo"
 		},
 		{
 			"source": "/prompting/prompt-engineering-guide",
@@ -440,7 +333,7 @@
 		},
 		{
 			"source": "/customization/auto-approve",
-			"destination": "/features/auto-approve"
+			"destination": "/core-workflows/plan-and-act"
 		},
 		{
 			"source": "/customization/auto-compact",
@@ -448,7 +341,7 @@
 		},
 		{
 			"source": "/getting-started/your-first-task",
-			"destination": "/usage/ide"
+			"destination": "/usage/cli-overview"
 		},
 		{
 			"source": "/features/hooks/real-world-examples",
@@ -516,7 +409,7 @@
 		},
 		{
 			"source": "/features/yolo-mode",
-			"destination": "/features/auto-approve"
+			"destination": "/core-workflows/plan-and-act"
 		},
 		{
 			"source": "/features/trumbo-rules",
@@ -576,31 +469,31 @@
 		},
 		{
 			"source": "/more-info/telemetry",
-			"destination": "/enterprise-solutions/monitoring/telemetry"
+			"destination": "/trumbo-overview"
 		},
 		{
 			"source": "/enterprise-solutions/configure-AWS-Bedrock-Admin",
-			"destination": "/enterprise-solutions/configuration/remote-configuration/aws-bedrock/admin-configuration"
+			"destination": "/trumbo-overview"
 		},
 		{
 			"source": "/enterprise-solutions/configure-AWS-Bedrock-Member",
-			"destination": "/enterprise-solutions/configuration/remote-configuration/aws-bedrock/member-configuration"
+			"destination": "/trumbo-overview"
 		},
 		{
 			"source": "/enterprise-solutions/configure-workOS-authkit",
-			"destination": "/enterprise-solutions/onboarding"
+			"destination": "/trumbo-overview"
 		},
 		{
 			"source": "/enterprise-solutions/Onboarding your Organization",
-			"destination": "/enterprise-solutions/onboarding"
+			"destination": "/trumbo-overview"
 		},
 		{
 			"source": "/enterprise-solutions/team-management/overview",
-			"destination": "/enterprise-solutions/team-management/managing-members"
+			"destination": "/trumbo-overview"
 		},
 		{
 			"source": "/enterprise-solutions/team-management/roles-and-permissions",
-			"destination": "/enterprise-solutions/team-management/managing-members"
+			"destination": "/trumbo-overview"
 		},
 		{
 			"source": "/features/customization/opening-trumbo-in-sidebar",
@@ -616,7 +509,7 @@
 		},
 		{
 			"source": "/model-config/model-comparison",
-			"destination": "/getting-started/trumbo-provider"
+			"destination": "/getting-started/authorizing-with-trumbo"
 		},
 		{
 			"source": "/troubleshooting/terminal-integration-guide",
@@ -648,7 +541,7 @@
 		},
 		{
 			"source": "/api/reference",
-			"destination": "/api/overview"
+			"destination": "/trumbo-overview"
 		},
 		{
 			"source": "/cli/overview",
@@ -656,11 +549,11 @@
 		},
 		{
 			"source": "/features/background-edit",
-			"destination": "/features/auto-approve"
+			"destination": "/core-workflows/plan-and-act"
 		},
 		{
 			"source": "/features/worktrees",
-			"destination": "/usage/ide"
+			"destination": "/usage/cli-overview"
 		},
 		{
 			"source": "/cli/getting-started",

@@ -14,6 +14,11 @@
 - Fixed the TrumboPass upgrade notice appearing immediately after completing onboarding.
 - Improved the wording of the TrumboPass onboarding step.
 - Streamlined the Trumbo provider picker by merging the subscription and usage/billing options into one and removing the credits link.
+- Added standalone curl (POSIX `install.sh`) and PowerShell (`install.ps1`) installers that download the platform binary from the npm registry — no Node, Bun, or npm required.
+- Documented npm/pnpm/bun/yarn/curl/PowerShell install methods in the README and DISTRIBUTION guide.
+- Fixed the `cli-publish` and `sdk-publish` workflow repo guard so releases run on `xedro98/Trumbo`.
+- Decoupled the `trumbo` wrapper package from the SDK packages: the published CLI is a self-contained compiled binary, so global installs no longer pull unused `@trumbo/*` packages and CLI publishing no longer requires the SDK to be published first.
+- Corrected the package `repository`/`homepage`/`bugs` URLs to `xedro98/Trumbo`.
 
 ## 3.0.33
 

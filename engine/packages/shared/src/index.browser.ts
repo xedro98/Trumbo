@@ -349,10 +349,14 @@ export type {
 export {
 	DEFAULT_TRUMBO_ENVIRONMENT,
 	getTrumboEnvironmentConfig,
+	isUnconfiguredTrumboUrl,
+	resolveTrumboApiBaseUrl,
 	resolveTrumboEnvironment,
+	resolveTrumboProviderBaseUrl,
 	TRUMBO_ENVIRONMENT_ENV,
 	TRUMBO_ENVIRONMENT_OVERRIDE_ENV,
 	TRUMBO_ENVIRONMENTS,
+	UNCONFIGURED_TRUMBO_APP_URL,
 } from "./runtime/trumbo-environment";
 export type {
 	CaptureAgentUnexpectedReasoningTokensInput,

@@ -4,17 +4,12 @@ import {
 	type GatewayProviderManifest,
 	type GatewayProviderMetadata,
 	type GatewayProviderSettings,
-	getTrumboEnvironmentConfig,
 	type JsonValue,
 	type ProviderCapability,
 	type ProviderConfigField,
+	resolveTrumboProviderBaseUrl,
 } from "@trumbo/shared";
 import { getGeneratedModelsForProvider } from "../catalog/catalog.generated-access";
-import {
-	isCanonicalModelIdForAliasRules,
-	preferCanonicalModelIds,
-	VERCEL_OPENROUTER_MODEL_ID_ALIAS_RULES,
-} from "../catalog/model-id-aliases";
 import type {
 	ModelCollection,
 	ModelInfo,
@@ -40,7 +35,7 @@ export const DEFAULT_INTERNAL_OCA_BASE_URL =
 	"https://code-internal.aiservice.us-chicago-1.oci.oraclecloud.com/20250206/app/litellm";
 export const DEFAULT_EXTERNAL_OCA_BASE_URL =
 	"https://code.aiservice.us-chicago-1.oci.oraclecloud.com/20250206/app/litellm";
-const TRUMBO_DEFAULT_MODEL_ID = "anthropic/claude-sonnet-4.6";
+const TRUMBO_DEFAULT_MODEL_ID = "glm-5p2";
 const TRUMBO_PASS_PROVIDER_ID = "trumbo-pass";
 const OPENAI_CODEX_DEFAULT_MODEL_ID = "gpt-5.4";
 const OPENROUTER_STICKY_SESSION_METADATA: GatewayProviderMetadata = {
@@ -343,24 +338,9 @@ function buildOpenAICodexModels(): Record<string, ModelInfo> {
 }
 
 function buildTrumboModels(): Record<string, ModelInfo> {
-	// Trumbo is OpenRouter-backed generally, but its recommended-model endpoint
-	// can return Vercel-style ids. Include those exact ids so runtime metadata
-	// resolves without adding duplicate OpenRouter aliases to the picker.
-	const vercelAliasModels = Object.fromEntries(
-		Object.entries(generatedModels("vercel-ai-gateway")).filter(([modelId]) =>
-			isCanonicalModelIdForAliasRules(
-				modelId,
-				VERCEL_OPENROUTER_MODEL_ID_ALIAS_RULES,
-			),
-		),
-	);
-	return preferCanonicalModelIds(
-		{
-			...generatedModels("openrouter"),
-			...vercelAliasModels,
-		},
-		VERCEL_OPENROUTER_MODEL_ID_ALIAS_RULES,
-	);
+	// Self-hosted Trumbo loads models from the web app's Fireworks catalog
+	// (`/api/v1/ai/trumbo/recommended-models`). No bundled OpenRouter list.
+	return {};
 }
 
 function fallbackModelInfo(id: string, spec?: BuiltinSpec): ModelInfo {
@@ -505,7 +485,7 @@ function createTrumboLikeSpec(
 		apiKeyEnv: ["TRUMBO_API_KEY"],
 		defaults: {
 			get baseUrl(): string {
-				return `${getTrumboEnvironmentConfig().apiBaseUrl}/api/v1`;
+				return resolveTrumboProviderBaseUrl();
 			},
 			...input.defaults,
 		},

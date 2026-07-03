@@ -9,6 +9,8 @@ import type { TrumboModelPickerEntry } from "./trumbo-model-picker";
 
 export const BROWSE_ALL_ACTION = "__browse_all__";
 
+const MAX_VISIBLE_ENTRIES = 10;
+
 type TrumboModelEntriesState =
 	| { status: "loading"; message: string }
 	| { status: "loaded"; entries: TrumboModelPickerEntry[] }
@@ -37,6 +39,77 @@ function resolveDisplayName(
 		: modelId;
 }
 
+function computeEntryWindow(selected: number, total: number) {
+	if (total <= MAX_VISIBLE_ENTRIES) {
+		return { start: 0, end: total, aboveCount: 0, belowCount: 0 };
+	}
+	const halfWindow = Math.floor(MAX_VISIBLE_ENTRIES / 2);
+	let start = Math.max(0, selected - halfWindow);
+	if (start + MAX_VISIBLE_ENTRIES > total) {
+		start = total - MAX_VISIBLE_ENTRIES;
+	}
+	const end = start + MAX_VISIBLE_ENTRIES;
+	return {
+		start,
+		end,
+		aboveCount: start,
+		belowCount: total - end,
+	};
+}
+
+function TrumboModelSelectorLoadingContent(
+	props: ChoiceContext<string> & {
+		currentProviderName: string;
+		message: string;
+	},
+) {
+	const { dismiss, dialogId, currentProviderName, message } = props;
+
+	useDialogKeyboard((key) => {
+		if (key.name === "escape") {
+			dismiss();
+		}
+	}, dialogId);
+
+	return (
+		<box flexDirection="column" gap={1}>
+			<text fg="green">Choose a model</text>
+			<ProviderRow providerName={currentProviderName} focused={false} />
+			<text fg="gray">{message}</text>
+			<text fg="gray">Esc to go back</text>
+		</box>
+	);
+}
+
+function TrumboModelSelectorErrorContent(
+	props: ChoiceContext<string> & {
+		currentProviderName: string;
+		message: string;
+		onRetry: () => void;
+	},
+) {
+	const { dismiss, dialogId, currentProviderName, message, onRetry } = props;
+
+	useDialogKeyboard((key) => {
+		if (key.name === "escape") {
+			dismiss();
+			return;
+		}
+		if (key.name === "r") {
+			onRetry();
+		}
+	}, dialogId);
+
+	return (
+		<box flexDirection="column" gap={1}>
+			<text fg="green">Choose a model</text>
+			<ProviderRow providerName={currentProviderName} focused={false} />
+			<text fg="red">{message}</text>
+			<text fg="gray">R to retry, Esc to go back</text>
+		</box>
+	);
+}
+
 export function TrumboModelSelectorContent(
 	props: ChoiceContext<string> & {
 		currentModel: string;
@@ -54,27 +127,49 @@ export function TrumboModelSelectorContent(
 		knownModels,
 		entries,
 	} = props;
-	const [selected, setSelected] = useState(0);
+	const [selected, setSelected] = useState(() => {
+		const idx = entries.findIndex(
+			(entry) => entry.kind === "model" && entry.model.id === currentModel,
+		);
+		return idx >= 0 ? idx : 0;
+	});
 	const [onProvider, setOnProvider] = useState(false);
 
-	const displayRows = useMemo(() => {
+	const windowRange = useMemo(
+		() => computeEntryWindow(selected, entries.length),
+		[selected, entries.length],
+	);
+
+	const visibleRows = useMemo(() => {
 		const rows: {
 			key: string;
-			kind: "header" | "model" | "browse";
+			kind: "header" | "model" | "browse" | "scroll";
 			label: string;
 			tags: string[];
 			isCurrent: boolean;
 			entryIndex: number;
 		}[] = [];
+
+		if (windowRange.aboveCount > 0) {
+			rows.push({
+				key: "scroll-above",
+				kind: "scroll",
+				label: `\u25b2 ${windowRange.aboveCount} more`,
+				tags: [],
+				isCurrent: false,
+				entryIndex: -1,
+			});
+		}
+
 		let lastTier: string | null = null;
-		for (let i = 0; i < entries.length; i++) {
+		for (let i = windowRange.start; i < windowRange.end; i += 1) {
 			const entry = entries[i];
 			if (!entry) continue;
 			if (entry.kind === "model") {
 				if (entry.tier !== lastTier) {
 					lastTier = entry.tier;
 					rows.push({
-						key: `tier-${entry.tier}`,
+						key: `tier-${entry.tier}-${i}`,
 						kind: "header",
 						label: entry.tier === "recommended" ? "Recommended" : "Free",
 						tags: [],
@@ -101,8 +196,20 @@ export function TrumboModelSelectorContent(
 				});
 			}
 		}
+
+		if (windowRange.belowCount > 0) {
+			rows.push({
+				key: "scroll-below",
+				kind: "scroll",
+				label: `\u25bc ${windowRange.belowCount} more`,
+				tags: [],
+				isCurrent: false,
+				entryIndex: -1,
+			});
+		}
+
 		return rows;
-	}, [entries, knownModels, currentModel]);
+	}, [entries, knownModels, currentModel, windowRange]);
 
 	useDialogKeyboard((key) => {
 		if (key.name === "escape") {
@@ -152,11 +259,18 @@ export function TrumboModelSelectorContent(
 			<ProviderRow providerName={currentProviderName} focused={onProvider} />
 
 			<box flexDirection="column">
-				{displayRows.map((row, idx) => {
+				{visibleRows.map((row, idx) => {
 					if (row.kind === "header") {
 						const isFirst = idx === 0;
 						return (
 							<box key={row.key} paddingX={1} marginTop={isFirst ? 0 : 1}>
+								<text fg="gray">{row.label}</text>
+							</box>
+						);
+					}
+					if (row.kind === "scroll") {
+						return (
+							<box key={row.key} paddingX={1} justifyContent="center">
 								<text fg="gray">{row.label}</text>
 							</box>
 						);
@@ -222,7 +336,7 @@ export function TrumboModelSelectorDialogContent(
 		loadEntries: () => Promise<TrumboModelPickerEntry[]>;
 	},
 ) {
-	const { dismiss, dialogId, loadEntries } = props;
+	const { loadEntries } = props;
 	const [state, setState] = useState<TrumboModelEntriesState>({
 		status: "loading",
 		message: "Loading Trumbo models...",
@@ -252,40 +366,23 @@ export function TrumboModelSelectorDialogContent(
 		void reload();
 	}, [reload]);
 
-	useDialogKeyboard((key) => {
-		if (state.status === "loaded") {
-			return;
-		}
-		if (key.name === "escape") {
-			dismiss();
-			return;
-		}
-		if (state.status === "error" && key.name === "r") {
-			void reload();
-		}
-	}, dialogId);
-
 	if (state.status === "loaded") {
 		return <TrumboModelSelectorContent {...props} entries={state.entries} />;
 	}
 
 	if (state.status === "error") {
 		return (
-			<box flexDirection="column" gap={1}>
-				<text fg="green">Choose a model</text>
-				<ProviderRow providerName={props.currentProviderName} focused={false} />
-				<text fg="red">{state.message}</text>
-				<text fg="gray">R to retry, Esc to go back</text>
-			</box>
+			<TrumboModelSelectorErrorContent
+				{...props}
+				message={state.message}
+				onRetry={() => {
+					void reload();
+				}}
+			/>
 		);
 	}
 
 	return (
-		<box flexDirection="column" gap={1}>
-			<text fg="green">Choose a model</text>
-			<ProviderRow providerName={props.currentProviderName} focused={false} />
-			<text fg="gray">{state.message}</text>
-			<text fg="gray">Esc to go back</text>
-		</box>
+		<TrumboModelSelectorLoadingContent {...props} message={state.message} />
 	);
 }
