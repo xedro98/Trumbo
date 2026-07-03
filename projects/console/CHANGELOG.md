@@ -9,6 +9,13 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.39
+
+- Fixed CLI startup from Windows drive roots (e.g. `D:\`) where `path.basename` is empty and workspace manifest validation failed with a silent TUI exit or a Zod `hint` error. Drive roots now get a fallback hint like `D:`.
+- Fixed Windows npm global installs launching the compiled binary via async `spawn` (instead of `spawnSync`) so interactive mode keeps a real console TTY for OpenTUI.
+- Added `bin/trumbo.cmd` in the published wrapper package as a direct platform-binary launcher on Windows.
+- Made the CI Slack release notification step optional when `SLACK_RELEASE_BOT_TOKEN` is not configured.
+
 ## 3.0.38
 
 - Renamed the published wrapper package from `trumbo` to `@trumbodev/cli`. npm blocks the unscoped name `trumbo` as too similar to the existing `turbo` package, so the install package is now `@trumbodev/cli`. The `trumbo` **command** is unchanged (it is set by the `bin` field, independent of the package name). Install with `npm install -g @trumbodev/cli`. Updated the self-update command, the binary launcher's reinstall hint, the publish script, and all install docs accordingly. Platform packages (`@trumbodev/cli-*`) are unaffected. Supersedes the unpublished 3.0.37 tag, whose wrapper publish failed with `E403 ... Package name too similar to existing package turbo`.

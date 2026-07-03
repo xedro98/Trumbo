@@ -1,4 +1,4 @@
-import { basename, resolve } from "node:path";
+import { basename, parse, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import type { WorkspaceInfo } from "@trumbo/shared";
 import { processWorkspaceInfo } from "@trumbo/shared";
@@ -20,6 +20,19 @@ export interface BuiltWorkspaceMetadata {
 
 export function normalizeWorkspacePath(workspacePath: string): string {
 	return resolve(workspacePath);
+}
+
+/** basename("D:\\") is empty on Windows; workspace manifests require hint.length >= 1. */
+export function workspaceHintForPath(rootPath: string): string {
+	const base = basename(rootPath);
+	if (base.length > 0) {
+		return base;
+	}
+	const { root } = parse(rootPath);
+	if (root.length > 0) {
+		return root.replace(/[\\/]+$/, "") || root;
+	}
+	return rootPath;
 }
 
 export async function generateWorkspaceInfo(
@@ -47,7 +60,7 @@ export async function generateWorkspaceInfoWithDiagnostics(
 	const rootPath = normalizeWorkspacePath(workspacePath);
 	const info: WorkspaceInfo = {
 		rootPath,
-		hint: basename(rootPath),
+		hint: workspaceHintForPath(rootPath),
 	};
 	let firstError: { errorType: string; message: string } | undefined;
 

@@ -228,6 +228,7 @@ jobs:
           echo "Install with: npm install -g @trumbodev/cli"
 
       - name: Post release to Slack
+        if: ${{ secrets.SLACK_RELEASE_BOT_TOKEN != '' }}
         uses: slackapi/slack-github-action@v3.0.1
         with:
           method: chat.postMessage
@@ -247,7 +248,7 @@ jobs:
               - type: "context"
                 elements:
                   - type: "mrkdwn"
-                    text: "<https://www.npmjs.com/package/trumbo/v/${{ steps.version.outputs.version }}|View on npm>${{ steps.prev_tag.outputs.prev_tag != '' && format(' | Full Changelog: https://github.com/{0}/compare/{1}...{2}', github.repository, steps.prev_tag.outputs.prev_tag, steps.version.outputs.tag) || '' }}"
+                    text: "<https://www.npmjs.com/package/@trumbodev/cli/v/${{ steps.version.outputs.version }}|View on npm>${{ steps.prev_tag.outputs.prev_tag != '' && format(' | Full Changelog: https://github.com/{0}/compare/{1}...{2}', github.repository, steps.prev_tag.outputs.prev_tag, steps.version.outputs.tag) || '' }}"
 
   publish-nightly:
     name: Publish trumbo nightly

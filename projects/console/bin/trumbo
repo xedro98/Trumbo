@@ -24,10 +24,31 @@ const childEnv = {
 };
 
 function run(target) {
-	const result = childProcess.spawnSync(target, process.argv.slice(2), {
+	const args = process.argv.slice(2);
+	const spawnOptions = {
 		stdio: "inherit",
 		env: childEnv,
-	});
+		windowsHide: false,
+	};
+
+	// On Windows, spawnSync can detach the compiled binary from the interactive
+	// console; async spawn keeps stdin/stdout as real TTYs for OpenTUI.
+	if (process.platform === "win32") {
+		const child = childProcess.spawn(target, args, spawnOptions);
+		child.on("error", function (err) {
+			console.error(err.message);
+			process.exit(1);
+		});
+		child.on("exit", function (code, signal) {
+			if (signal) {
+				process.kill(process.pid, signal);
+			}
+			process.exit(code === null ? 1 : code);
+		});
+		return;
+	}
+
+	const result = childProcess.spawnSync(target, args, spawnOptions);
 	if (result.error) {
 		console.error(result.error.message);
 		process.exit(1);
