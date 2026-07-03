@@ -31,7 +31,7 @@ function main() {
 	};
 	const platform = platformMap[os.platform()] || os.platform();
 	const arch = os.arch();
-	const packageName = `@trumbo/cli-${platform}-${arch}`;
+	const packageName = `@trumbodev/cli-${platform}-${arch}`;
 	const binaryName = "trumbo";
 
 	let binaryPath;

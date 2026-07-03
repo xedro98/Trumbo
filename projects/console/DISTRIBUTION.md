@@ -27,19 +27,19 @@ Publishing the CLI publishes 7 packages to npm:
 
 | Package | Description |
 |---|---|
-| `@trumbo/cli-darwin-arm64` | macOS Apple Silicon binary |
-| `@trumbo/cli-darwin-x64` | macOS Intel binary |
-| `@trumbo/cli-linux-arm64` | Linux ARM binary |
-| `@trumbo/cli-linux-x64` | Linux x64 binary |
-| `@trumbo/cli-windows-x64` | Windows x64 binary |
-| `@trumbo/cli-windows-arm64` | Windows ARM binary |
+| `@trumbodev/cli-darwin-arm64` | macOS Apple Silicon binary |
+| `@trumbodev/cli-darwin-x64` | macOS Intel binary |
+| `@trumbodev/cli-linux-arm64` | Linux ARM binary |
+| `@trumbodev/cli-linux-x64` | Linux x64 binary |
+| `@trumbodev/cli-windows-x64` | Windows x64 binary |
+| `@trumbodev/cli-windows-arm64` | Windows ARM binary |
 | `trumbo` | Wrapper package (pulls the right binary via `optionalDependencies`) |
 
 Each platform package contains a compiled binary and a minimal `package.json` with `os` and `cpu` fields:
 
 ```json
 {
-  "name": "@trumbo/cli-darwin-arm64",
+  "name": "@trumbodev/cli-darwin-arm64",
   "version": "0.1.0",
   "os": ["darwin"],
   "cpu": ["arm64"],
@@ -64,12 +64,12 @@ The `trumbo` wrapper package contains no binary -- just the resolver script, pos
     "postinstall": "node ./postinstall.mjs || true"
   },
   "optionalDependencies": {
-    "@trumbo/cli-darwin-arm64": "0.1.0",
-    "@trumbo/cli-darwin-x64": "0.1.0",
-    "@trumbo/cli-linux-arm64": "0.1.0",
-    "@trumbo/cli-linux-x64": "0.1.0",
-    "@trumbo/cli-windows-x64": "0.1.0",
-    "@trumbo/cli-windows-arm64": "0.1.0"
+    "@trumbodev/cli-darwin-arm64": "0.1.0",
+    "@trumbodev/cli-darwin-x64": "0.1.0",
+    "@trumbodev/cli-linux-arm64": "0.1.0",
+    "@trumbodev/cli-linux-x64": "0.1.0",
+    "@trumbodev/cli-windows-x64": "0.1.0",
+    "@trumbodev/cli-windows-arm64": "0.1.0"
   }
 }
 ```
@@ -96,7 +96,7 @@ For users who don't want to (or can't) use a JavaScript package manager, two sta
 How they work:
 
 1. Detect OS and architecture (`darwin`/`linux`/`windows` × `x64`/`arm64`).
-2. Resolve the matching `@trumbo/cli-{os}-{arch}` package version from the npm registry (`/latest` by default; override with `--version` / `-Version` or `TRUMBO_VERSION`).
+2. Resolve the matching `@trumbodev/cli-{os}-{arch}` package version from the npm registry (`/latest` by default; override with `--version` / `-Version` or `TRUMBO_VERSION`).
 3. Read `dist.tarball` from the registry response and download it with `curl` / `Invoke-WebRequest`.
 4. Extract `package/bin/trumbo` (or `package/bin/trumbo.exe`) from the tarball.
 5. Install to `~/.trumbo/bin/trumbo` (or `%USERPROFILE%\.trumbo\bin\trumbo.exe`). Override with `--install-dir` / `-InstallDir` or `TRUMBO_INSTALL_DIR`.
@@ -185,12 +185,12 @@ User runs: npm i -g trumbo
   v
 npm installs trumbo (wrapper package)
   + optionalDependencies (only the matching platform gets installed):
-    - @trumbo/cli-darwin-arm64
-    - @trumbo/cli-darwin-x64
-    - @trumbo/cli-linux-arm64
-    - @trumbo/cli-linux-x64
-    - @trumbo/cli-windows-x64
-    - @trumbo/cli-windows-arm64
+    - @trumbodev/cli-darwin-arm64
+    - @trumbodev/cli-darwin-x64
+    - @trumbodev/cli-linux-arm64
+    - @trumbodev/cli-linux-x64
+    - @trumbodev/cli-windows-x64
+    - @trumbodev/cli-windows-arm64
   |
   v
 postinstall script runs:
@@ -258,7 +258,7 @@ Flags:
 Orchestrates publishing all packages to npm:
 
 1. Reads built packages from `dist/`
-2. Publishes all 6 platform packages in parallel (`@trumbo/cli-darwin-arm64`, etc.)
+2. Publishes all 6 platform packages in parallel (`@trumbodev/cli-darwin-arm64`, etc.)
 3. Generates a clean main package (`trumbo`) with:
    - `bin.trumbo` pointing to the resolver script
    - `postinstall` running the binary caching script

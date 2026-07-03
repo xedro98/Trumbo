@@ -74,7 +74,7 @@ if (!arch) {
 	arch = os.arch();
 }
 
-const base = "@trumbo/cli-" + platform + "-" + arch;
+const base = "@trumbodev/cli-" + platform + "-" + arch;
 const binary = platform === "windows" ? "trumbo.exe" : "trumbo";
 
 // Build fallback chain of package names to try
@@ -86,8 +86,8 @@ function findBinary(startDir) {
 		const modules = path.join(current, "node_modules");
 		if (fs.existsSync(modules)) {
 			for (const name of names) {
-				// Scoped package: @trumbo/cli-darwin-arm64 lives at
-				// node_modules/@trumbo/cli-darwin-arm64
+				// Scoped package: @trumbodev/cli-darwin-arm64 lives at
+				// node_modules/@trumbodev/cli-darwin-arm64
 				const candidate = path.join(modules, name, "bin", binary);
 				if (fs.existsSync(candidate)) return candidate;
 			}

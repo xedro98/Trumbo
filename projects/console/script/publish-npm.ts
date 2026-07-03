@@ -33,12 +33,12 @@ const npmTag = values.tag ?? "latest";
 const wrapperPackageName = "trumbo";
 
 const expectedPlatformPackages = [
-	"@trumbo/cli-darwin-arm64",
-	"@trumbo/cli-darwin-x64",
-	"@trumbo/cli-linux-arm64",
-	"@trumbo/cli-linux-x64",
-	"@trumbo/cli-windows-arm64",
-	"@trumbo/cli-windows-x64",
+	"@trumbodev/cli-darwin-arm64",
+	"@trumbodev/cli-darwin-x64",
+	"@trumbodev/cli-linux-arm64",
+	"@trumbodev/cli-linux-x64",
+	"@trumbodev/cli-windows-arm64",
+	"@trumbodev/cli-windows-x64",
 ] as const;
 
 interface PlatformPackageManifest {

@@ -425,7 +425,7 @@ Then attach VS Code or Chrome DevTools to `ws://127.0.0.1:6499`.
 
 ## Publishing
 
-The CLI is published as the `trumbo` wrapper package on npm with platform-specific binaries under `@trumbo/cli-*`. The release flow lives in the `publish-cli` skill (`.trumbo/skills/publish-cli/SKILL.md` at the repo root).
+The CLI is published as the `trumbo` wrapper package on npm with platform-specific binaries under `@trumbodev/cli-*`. The release flow lives in the `publish-cli` skill (`.trumbo/skills/publish-cli/SKILL.md` at the repo root).
 
 From the `projects/console` workspace:
 

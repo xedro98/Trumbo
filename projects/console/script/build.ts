@@ -225,7 +225,7 @@ async function buildCompiledBinary(input: {
 for (const item of targets) {
 	// npm treats "win32" specially in os field, but for package naming use "windows"
 	const displayOs = item.os === "win32" ? "windows" : item.os;
-	const name = `@trumbo/cli-${displayOs}-${item.arch}`;
+	const name = `@trumbodev/cli-${displayOs}-${item.arch}`;
 	const dirName = `cli-${displayOs}-${item.arch}`;
 	const binaryName = item.os === "win32" ? "trumbo.exe" : "trumbo";
 	const bunTarget = getBunTarget(item);

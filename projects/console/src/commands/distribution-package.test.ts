@@ -58,7 +58,7 @@ describe("CLI distribution package shape", () => {
 							postinstall: "node ./postinstall.mjs || true",
 						},
 						optionalDependencies: {
-							"@trumbo/cli-linux-x64": "1.2.3",
+							"@trumbodev/cli-linux-x64": "1.2.3",
 						},
 					},
 					null,

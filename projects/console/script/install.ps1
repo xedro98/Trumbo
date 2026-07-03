@@ -58,7 +58,7 @@ if (-not $InstallDir) {
 }
 
 # --- Resolve version + tarball URL ----------------------------------------
-$pkg = "@trumbo/cli-windows-$arch"
+$pkg = "@trumbodev/cli-windows-$arch"
 # npm registry requires the scope slash to be URL-encoded in the path.
 $encodedPkg = $pkg -replace "/", "%2f"
 

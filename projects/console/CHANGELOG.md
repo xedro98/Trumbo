@@ -9,6 +9,11 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.35
+
+- Published under the `@trumbodev` npm scope: platform binaries are now `@trumbodev/cli-*` (the `@trumbo` scope was unavailable on npm). The `trumbo` wrapper package name is unaffected.
+- Includes all 3.0.34 changes: curl/PowerShell installers, self-contained publish pipeline (no SDK coupling), CI workflow fixes, and metadata corrections.
+
 ## 3.0.34
 
 - Fixed the TrumboPass upgrade notice appearing immediately after completing onboarding.

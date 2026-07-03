@@ -128,7 +128,7 @@ if [ -z "$INSTALL_DIR" ]; then
 fi
 
 # --- Resolve version + tarball URL ----------------------------------------
-pkg="@trumbo/cli-${os}-${arch}"
+pkg="@trumbodev/cli-${os}-${arch}"
 # npm registry requires the scope slash to be URL-encoded in the path.
 encoded_pkg=$(printf '%s' "$pkg" | sed 's|/|%2f|g')
 
