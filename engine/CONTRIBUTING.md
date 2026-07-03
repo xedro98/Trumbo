@@ -125,8 +125,20 @@ Use this for normal releases. Merge the release commit to `main`, create and pus
 
 ```sh
 git tag -a cli-vX.Y.Z -m "CLI vX.Y.Z"
+git push origin main
 git push origin refs/tags/cli-vX.Y.Z
+```
+
+Pushing the tag triggers `cli-publish` automatically. Manual dispatch is still available:
+
+```bash
 gh workflow run cli-publish.yml -f publish_target=main -f git_tag=cli-vX.Y.Z -f confirm_publish=publish
+```
+
+Or use the release prep helper:
+
+```bash
+bun release:cli --push
 ```
 
 The workflow checks out the provided `cli-vX.Y.Z` tag, verifies it matches `projects/console/package.json`, builds the platform packages, publishes to npm with the `latest` dist-tag, creates the GitHub release, and posts to Slack.

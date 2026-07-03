@@ -135,13 +135,31 @@ Then publish that release commit with one of these paths.
 
 Use this path for normal releases.
 
+**Automated (recommended):** push a `cli-vX.Y.Z` tag and CI publishes automatically.
+
 ```bash
-git tag -a cli-vX.Y.Z -m "CLI vX.Y.Z"
-git push origin refs/tags/cli-vX.Y.Z
-gh workflow run cli-publish.yml -f publish_target=main -f git_tag=cli-vX.Y.Z -f confirm_publish=publish
+# One command: bump version, update CHANGELOG, commit, tag, push, and trigger CI
+bun release:cli --push
+
+# Or with an explicit version and release notes
+bun release:cli 3.0.41 --push --notes "- Fixed foo"
 ```
 
-This path requires the release commit to be on `main` and the matching `cli-vX.Y.Z` tag to exist before the workflow runs. The workflow checks out the tag, publishes to npm with the `latest` dist-tag, creates the GitHub release, and posts to Slack.
+**Manual steps** (equivalent):
+
+```bash
+git tag -a cli-vX.Y.Z -m "CLI vX.Y.Z"
+git push origin main
+git push origin refs/tags/cli-vX.Y.Z
+```
+
+The workflow triggers on `cli-v*` tag push. It checks out the tag, publishes to npm with the `latest` dist-tag, creates the GitHub release, and posts to Slack when configured.
+
+You can still dispatch manually if needed:
+
+```bash
+gh workflow run cli-publish.yml -f publish_target=main -f git_tag=cli-vX.Y.Z -f confirm_publish=publish
+```
 
 ### Publish Locally
 
@@ -170,8 +188,8 @@ bun release cli --tag next
 
 The GitHub workflow at `.github/workflows/cli-publish.yml` automates publishing:
 
-- Main releases are manual. Select `publish_target=main` and set `confirm_publish=publish`.
-- Main releases require `git_tag=cli-vX.Y.Z`, check out that tag, verify it matches `projects/console/package.json`, run tests, build all platform packages, publish to npm with the `latest` dist-tag using trusted publishing, create a GitHub release, and post to Slack.
+- Main releases trigger automatically when a `cli-vX.Y.Z` tag is pushed, or manually via workflow dispatch with `confirm_publish=publish`.
+- Main releases check out the tag, verify it matches `projects/console/package.json`, run tests, build all platform packages, publish to npm with the `latest` dist-tag using trusted publishing, create a GitHub release, and post to Slack when configured.
 - Nightly releases run on a schedule or manually with `publish_target=nightly`.
 - Nightly releases publish `X.Y.Z-nightly.TIMESTAMP` to npm with the `nightly` dist-tag and skip if there were no commits in the last 24 hours unless forced.
 

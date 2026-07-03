@@ -24,7 +24,7 @@ The skill guides the user through one release-preparation flow, then offers the 
   - GitHub workflow: `.github/workflows/cli-publish.yml`.
   - Local publish helper: `bun release cli`.
 - npm dist-tags and git tags are separate. `--tag latest` and `--tag nightly` are npm registry channels. `cli-vX.Y.Z` is a git tag for source history and GitHub releases.
-- The GitHub main release workflow runs from `main`, requires an existing `cli-vX.Y.Z` tag, checks out that tag, and publishes from it.
+- The GitHub main release workflow runs when a `cli-vX.Y.Z` tag is pushed (or via manual dispatch). It checks out that tag and publishes from it.
 - The GitHub nightly workflow publishes to npm with the `nightly` dist-tag and does not create a tag.
 - The local release helper requires a clean checkout and `cli-vX.Y.Z` to point at `HEAD` locally and on `origin` before publishing.
 - Local GitHub release creation requires `gh` to be authenticated with release permissions for the repo.
@@ -214,6 +214,13 @@ Ask the user which path to use:
 For GitHub main release:
 
 ```sh
+# Automated: prepare + push (CI publishes on tag push)
+bun release:cli --push
+
+# Or push an existing tag manually
+git push origin refs/tags/cli-vX.Y.Z
+
+# Optional manual dispatch fallback
 gh workflow run cli-publish.yml -f publish_target=main -f git_tag=cli-vX.Y.Z -f confirm_publish=publish
 gh run list --workflow=cli-publish.yml --limit=1 --json url,status,conclusion,createdAt --jq '.[0]'
 ```

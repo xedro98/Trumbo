@@ -3,6 +3,9 @@ name: cli-publish
 on:
   schedule:
     - cron: "0 12 * * *"
+  push:
+    tags:
+      - "cli-v*"
   workflow_dispatch:
     inputs:
       publish_target:
@@ -31,6 +34,10 @@ permissions:
   contents: read
   id-token: write
 
+concurrency:
+  group: cli-publish-${{ github.event_name == 'push' && github.ref_name || github.event.inputs.git_tag || format('manual-{0}', github.run_id) }}
+  cancel-in-progress: false
+
 defaults:
   run:
     working-directory: .
@@ -43,11 +50,19 @@ jobs:
       id-token: write
     if: |
       github.repository == 'xedro98/Trumbo' &&
-      github.ref == 'refs/heads/main' &&
-      github.event_name == 'workflow_dispatch' &&
-      github.event.inputs.publish_target == 'main' &&
-      github.event.inputs.confirm_publish == 'publish' &&
-      !endsWith(github.actor, '[bot]')
+      !endsWith(github.actor, '[bot]') &&
+      (
+        (
+          github.event_name == 'push' &&
+          startsWith(github.ref, 'refs/tags/cli-v')
+        ) ||
+        (
+          github.ref == 'refs/heads/main' &&
+          github.event_name == 'workflow_dispatch' &&
+          github.event.inputs.publish_target == 'main' &&
+          github.event.inputs.confirm_publish == 'publish'
+        )
+      )
     runs-on: ubuntu-latest
     env:
       SLACK_RELEASE_BOT_TOKEN: ${{ secrets.SLACK_RELEASE_BOT_TOKEN }}
@@ -56,7 +71,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.git_tag }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.git_tag || github.ref }}
           fetch-depth: 0
           fetch-tags: true
 
@@ -82,10 +97,10 @@ jobs:
       - name: Validate release tag
         id: version
         env:
-          TAG: ${{ github.event.inputs.git_tag }}
+          TAG: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.git_tag || github.ref_name }}
         run: |
           if [ -z "$TAG" ]; then
-            echo "git_tag is required when publish_target=main"
+            echo "Release tag is required"
             exit 1
           fi
 
