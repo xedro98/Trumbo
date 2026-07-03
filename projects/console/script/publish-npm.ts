@@ -30,7 +30,7 @@ const { values } = parseArgs({
 
 const dryRun = values["dry-run"] ?? false;
 const npmTag = values.tag ?? "latest";
-const wrapperPackageName = "trumbo";
+const wrapperPackageName = "@trumbodev/cli";
 
 const expectedPlatformPackages = [
 	"@trumbodev/cli-darwin-arm64",

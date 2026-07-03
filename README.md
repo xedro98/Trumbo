@@ -42,9 +42,9 @@ Install the CLI — pick any method. The published binary is self-contained, so 
 
 ```bash
 # npm / pnpm / bun
-npm i -g trumbo
-pnpm add -g trumbo
-bun add -g trumbo
+npm i -g @trumbodev/cli
+pnpm add -g @trumbodev/cli
+bun add -g @trumbodev/cli
 
 # curl (macOS / Linux) — no package manager required
 curl -fsSL https://raw.githubusercontent.com/xedro98/trembo/main/projects/console/script/install.sh | sh

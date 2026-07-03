@@ -224,8 +224,8 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "Published trumbo@${VERSION} to npm with dist-tag 'latest'"
-          echo "Install with: npm install -g trumbo"
+          echo "Published @trumbodev/cli@${VERSION} to npm with dist-tag 'latest'"
+          echo "Install with: npm install -g @trumbodev/cli"
 
       - name: Post release to Slack
         uses: slackapi/slack-github-action@v3.0.1
@@ -411,5 +411,5 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "Published trumbo@${VERSION} to npm with dist-tag 'nightly'"
-          echo "Install with: npm install -g trumbo@nightly"
+          echo "Published @trumbodev/cli@${VERSION} to npm with dist-tag 'nightly'"
+          echo "Install with: npm install -g @trumbodev/cli@nightly"

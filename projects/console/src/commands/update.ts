@@ -19,7 +19,7 @@ import {
 	spawnKanbanInstallProcess,
 } from "./kanban";
 
-const DEFAULT_PACKAGE_NAME = "trumbo";
+const DEFAULT_PACKAGE_NAME = "@trumbodev/cli";
 
 type CliPackageName = typeof DEFAULT_PACKAGE_NAME;
 

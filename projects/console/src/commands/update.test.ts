@@ -78,26 +78,30 @@ describe("getInstallationInfo", () => {
 	});
 
 	it("detects npm installs from the wrapper path passed to the compiled binary", () => {
-		const wrapperPath = createTempFile("lib/node_modules/trumbo/bin/trumbo");
+		const wrapperPath = createTempFile(
+			"lib/node_modules/@trumbodev/cli/bin/trumbo",
+		);
 		process.env.TRUMBO_WRAPPER_PATH = wrapperPath;
 		process.argv = ["bun", "/$bunfs/root/trumbo", "update", "--verbose"];
 
 		expect(getInstallationInfo("1.2.3")).toEqual({
 			packageManager: PackageManager.NPM,
-			packageName: "trumbo",
-			updateCommand: "npm update -g trumbo --tag latest",
+			packageName: "@trumbodev/cli",
+			updateCommand: "npm update -g @trumbodev/cli --tag latest",
 		});
 	});
 
 	it("uses the nightly tag when the current CLI version is nightly", () => {
-		const wrapperPath = createTempFile("lib/node_modules/trumbo/bin/trumbo");
+		const wrapperPath = createTempFile(
+			"lib/node_modules/@trumbodev/cli/bin/trumbo",
+		);
 		process.env.TRUMBO_WRAPPER_PATH = wrapperPath;
 		process.argv = ["bun", "/$bunfs/root/trumbo", "update", "--verbose"];
 
 		expect(getInstallationInfo("1.2.3-nightly.456")).toEqual({
 			packageManager: PackageManager.NPM,
-			packageName: "trumbo",
-			updateCommand: "npm update -g trumbo --tag nightly",
+			packageName: "@trumbodev/cli",
+			updateCommand: "npm update -g @trumbodev/cli --tag nightly",
 		});
 	});
 
@@ -107,7 +111,7 @@ describe("getInstallationInfo", () => {
 
 		expect(getInstallationInfo("1.2.3")).toEqual({
 			packageManager: PackageManager.UNKNOWN,
-			packageName: "trumbo",
+			packageName: "@trumbodev/cli",
 		});
 	});
 });
@@ -241,32 +245,32 @@ describe("withMinimumReleaseAgeBypass", () => {
 	it("adds the package-manager-specific cooldown bypass", () => {
 		expect(
 			withMinimumReleaseAgeBypass(
-				"npm update -g trumbo --tag latest",
+				"npm update -g @trumbodev/cli --tag latest",
 				PackageManager.NPM,
 			).command,
-		).toBe("npm update -g trumbo --tag latest --min-release-age=0");
+		).toBe("npm update -g @trumbodev/cli --tag latest --min-release-age=0");
 		expect(
 			withMinimumReleaseAgeBypass(
-				"bun add -g trumbo@latest",
+				"bun add -g @trumbodev/cli@latest",
 				PackageManager.BUN,
 			).command,
-		).toBe("bun add -g trumbo@latest --minimum-release-age=0");
+		).toBe("bun add -g @trumbodev/cli@latest --minimum-release-age=0");
 		expect(
 			withMinimumReleaseAgeBypass(
-				"yarn global add trumbo@latest",
+				"yarn global add @trumbodev/cli@latest",
 				PackageManager.YARN,
 			).command,
-		).toBe("yarn global add trumbo@latest");
+		).toBe("yarn global add @trumbodev/cli@latest");
 		expect(
 			withMinimumReleaseAgeBypass(
-				"yarn global add trumbo@latest",
+				"yarn global add @trumbodev/cli@latest",
 				PackageManager.YARN,
 			).env?.YARN_NPM_MINIMAL_AGE_GATE,
 		).toBe("0");
 
 		expect(
 			withMinimumReleaseAgeBypass(
-				"pnpm add -g trumbo@latest",
+				"pnpm add -g @trumbodev/cli@latest",
 				PackageManager.PNPM,
 			).env?.pnpm_config_minimum_release_age,
 		).toBe("0");

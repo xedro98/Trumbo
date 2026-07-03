@@ -9,7 +9,7 @@
 
 # Trumbo Evals Architecture
 
-> Note: Smoke tests (Layer 2) are partially disabled while the eval framework is repointed at the new SDK CLI. The scenarios under `bench/smoke-tests/` are preserved and `npm run eval:smoke:run` still works against whatever `trumbo` is on `$PATH` (install with `npm i -g trumbo`). The old build-and-link helpers and the auto-running `trumbo-evals-regression.yml` workflow are off until someone wires the build step at the new SDK CLI.
+> Note: Smoke tests (Layer 2) are partially disabled while the eval framework is repointed at the new SDK CLI. The scenarios under `bench/smoke-tests/` are preserved and `npm run eval:smoke:run` still works against whatever `trumbo` is on `$PATH` (install with `npm i -g @trumbodev/cli`). The old build-and-link helpers and the auto-running `trumbo-evals-regression.yml` workflow are off until someone wires the build step at the new SDK CLI.
 
 ## Overview
 

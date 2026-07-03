@@ -20,13 +20,13 @@ Trumbo ships as a self-contained compiled binary — no Node, Bun, or npm runtim
 ### npm / pnpm / bun
 
 ```sh
-npm install -g trumbo      # npm
-pnpm add -g trumbo         # pnpm
-bun add -g trumbo          # bun
-yarn global add trumbo     # yarn
+npm install -g @trumbodev/cli      # npm
+pnpm add -g @trumbodev/cli         # pnpm
+bun add -g @trumbodev/cli          # bun
+yarn global add @trumbodev/cli     # yarn
 ```
 
-The `trumbo` package resolves the correct binary for your platform via `optionalDependencies`, so only your platform's variant is downloaded. Platform binaries are published for macOS, Linux, and Windows on `arm64` and `x64`.
+The `@trumbodev/cli` package resolves the correct binary for your platform via `optionalDependencies`, so only your platform's variant is downloaded. Platform binaries are published for macOS, Linux, and Windows on `arm64` and `x64`.
 
 ### curl (macOS / Linux)
 

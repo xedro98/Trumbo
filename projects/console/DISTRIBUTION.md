@@ -9,7 +9,7 @@
 
 # CLI Distribution
 
-The Trumbo CLI (`trumbo`) is distributed as compiled binaries via npm. Users run `npm i -g trumbo` and get a working `trumbo` command without needing Bun, Zig, or any other runtime installed.
+The Trumbo CLI (`trumbo`) is distributed as compiled binaries via npm. Users run `npm i -g @trumbodev/cli` and get a working `trumbo` command without needing Bun, Zig, or any other runtime installed.
 
 ## Why Compiled Binaries?
 
@@ -33,7 +33,7 @@ Publishing the CLI publishes 7 packages to npm:
 | `@trumbodev/cli-linux-x64` | Linux x64 binary |
 | `@trumbodev/cli-windows-x64` | Windows x64 binary |
 | `@trumbodev/cli-windows-arm64` | Windows ARM binary |
-| `trumbo` | Wrapper package (pulls the right binary via `optionalDependencies`) |
+| `@trumbodev/cli` | Wrapper package (pulls the right binary via `optionalDependencies`) |
 
 Each platform package contains a compiled binary and a minimal `package.json` with `os` and `cpu` fields:
 
@@ -51,11 +51,11 @@ Each platform package contains a compiled binary and a minimal `package.json` wi
 
 The `os` and `cpu` fields tell npm to skip this package on non-matching platforms. A macOS ARM user gets ~30-60MB, not ~200MB of binaries for every platform.
 
-The `trumbo` wrapper package contains no binary -- just the resolver script, postinstall script, and `optionalDependencies` pointing to all platform packages:
+The `@trumbodev/cli` wrapper package contains no binary -- just the resolver script, postinstall script, and `optionalDependencies` pointing to all platform packages:
 
 ```json
 {
-  "name": "trumbo",
+  "name": "@trumbodev/cli",
   "version": "0.1.0",
   "bin": {
     "trumbo": "./bin/trumbo"
@@ -77,7 +77,7 @@ The `trumbo` wrapper package contains no binary -- just the resolver script, pos
 After installing, users run `trumbo`:
 
 ```bash
-npm i -g trumbo
+npm i -g @trumbodev/cli
 
 trumbo              # interactive mode
 trumbo "prompt"     # single-prompt mode
@@ -123,7 +123,7 @@ pwsh script/install.ps1 -InstallDir "$env:TEMP\trumbo-test"
 Every release starts by preparing one release commit from the code you want to publish:
 
 1. Draft user-facing release notes from the commits since the last `cli-vX.Y.Z` tag.
-2. Choose the release version. Because this publishes over the existing `trumbo` package, the version must be greater than the current published `trumbo` version. The handoff release is `3.0.0`.
+2. Choose the release version. Because this publishes over the existing `@trumbodev/cli` package, the version must be greater than the current published `@trumbodev/cli` version. The handoff release is `3.0.0`.
 3. Update `projects/console/package.json`.
 4. Add the approved notes to `projects/console/CHANGELOG.md`.
 5. Run checks.
@@ -158,9 +158,9 @@ bun release cli
 gh release create cli-vX.Y.Z --verify-tag --title "CLI vX.Y.Z" --notes "Paste the approved release notes here."
 ```
 
-The release helper checks the working tree, verifies the tag points at `HEAD` locally and on `origin`, runs tests, builds all platform packages, and publishes the platform packages plus the generated `trumbo` wrapper package to npm. The package version and tag must match.
+The release helper checks the working tree, verifies the tag points at `HEAD` locally and on `origin`, runs tests, builds all platform packages, and publishes the platform packages plus the generated `@trumbodev/cli` wrapper package to npm. The package version and tag must match.
 
-By default, `bun release cli` publishes with the npm dist-tag `latest` (what users get with `npm i -g trumbo`). To publish under a different dist-tag like `next`, pass `--tag`:
+By default, `bun release cli` publishes with the npm dist-tag `latest` (what users get with `npm i -g @trumbodev/cli`). To publish under a different dist-tag like `next`, pass `--tag`:
 
 ```bash
 bun release cli --tag next
@@ -175,15 +175,15 @@ The GitHub workflow at `.github/workflows/cli-publish.yml` automates publishing:
 - Nightly releases run on a schedule or manually with `publish_target=nightly`.
 - Nightly releases publish `X.Y.Z-nightly.TIMESTAMP` to npm with the `nightly` dist-tag and skip if there were no commits in the last 24 hours unless forced.
 
-CI publishing uses npm trusted publishing. Configure npm trusted publishers for the `trumbo` wrapper package and every platform package before relying on the workflow.
+CI publishing uses npm trusted publishing. Configure npm trusted publishers for the `@trumbodev/cli` wrapper package and every platform package before relying on the workflow.
 
 ## How It Works Under the Hood
 
 ```
-User runs: npm i -g trumbo
+User runs: npm i -g @trumbodev/cli
   |
   v
-npm installs trumbo (wrapper package)
+npm installs @trumbodev/cli (wrapper package)
   + optionalDependencies (only the matching platform gets installed):
     - @trumbodev/cli-darwin-arm64
     - @trumbodev/cli-darwin-x64
@@ -259,15 +259,15 @@ Orchestrates publishing all packages to npm:
 
 1. Reads built packages from `dist/`
 2. Publishes all 6 platform packages in parallel (`@trumbodev/cli-darwin-arm64`, etc.)
-3. Generates a clean main package (`trumbo`) with:
+3. Generates a clean main package (`@trumbodev/cli`) with:
    - `bin.trumbo` pointing to the resolver script
    - `postinstall` running the binary caching script
    - `optionalDependencies` listing all platform packages
-4. Publishes the generated `trumbo` wrapper package
+4. Publishes the generated `@trumbodev/cli` wrapper package
 
-Platform packages must be published before the generated `trumbo` wrapper package because npm validates that `optionalDependencies` exist.
+Platform packages must be published before the generated `@trumbodev/cli` wrapper package because npm validates that `optionalDependencies` exist.
 
-The publish script generates a separate `package.json` for the published `trumbo` wrapper package. The development `package.json` (with `bin` pointing to `src/index.ts` for `bun link`) is never published directly.
+The publish script generates a separate `package.json` for the published `@trumbodev/cli` wrapper package. The development `package.json` (with `bin` pointing to `src/index.ts` for `bun link`) is never published directly.
 
 ## Binary Resolver (`bin/trumbo`)
 
@@ -282,7 +282,7 @@ Resolution chain:
 
 ## Postinstall (`script/postinstall.mjs`)
 
-Runs after `npm install trumbo`. Creates a hard link from the platform binary to `bin/.trumbo` for fast startup on subsequent runs. Falls back to file copy if hard linking fails (NFS, cross-device, network-mounted filesystems).
+Runs after `npm install @trumbodev/cli`. Creates a hard link from the platform binary to `bin/.trumbo` for fast startup on subsequent runs. Falls back to file copy if hard linking fails (NFS, cross-device, network-mounted filesystems).
 
 The postinstall is defensive: it wraps everything in try/catch and always exits 0 (the `|| true` in the npm script). If postinstall fails, the resolver script has its own fallback logic to find the binary at runtime, so the cached binary is just an optimization.
 
@@ -296,7 +296,7 @@ During development, `bin` in package.json points to `src/index.ts` for `bun link
 |---|---|---|---|
 | `bun run dev` | src/index.ts | Bun (source) | Yes |
 | `bun link` + `trumbo` | src/index.ts | Bun (source) | Yes |
-| `npm i -g trumbo` | bin/trumbo resolver | Compiled binary | No |
+| `npm i -g @trumbodev/cli` | bin/trumbo resolver | Compiled binary | No |
 
 ## Gotchas
 
@@ -307,7 +307,7 @@ When building for a different platform (e.g., compiling for Linux on a Mac), Bun
 All 7 packages (6 platform + 1 wrapper) must have the same version. The build script reads the version from `projects/console/package.json`. The publish script verifies that the built package versions match each other and `projects/console/package.json`.
 
 ### Package naming and scoping
-Platform packages are published under the `@trumbo` scope. The generated wrapper package is published as `trumbo`, so npm trusted publishing must be configured for all 7 package names.
+Platform packages are published under the `@trumbodev` scope. The generated wrapper package is published as `@trumbodev/cli`, so npm trusted publishing must be configured for all 7 package names.
 
 ### postinstall reliability
 The postinstall script runs in diverse environments (CI, Docker, restricted permissions, network-mounted filesystems where hard links fail). It always wraps operations in try/catch and exits 0. The resolver script is the ultimate fallback.

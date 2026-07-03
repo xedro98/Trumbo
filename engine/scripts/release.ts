@@ -48,7 +48,9 @@ if (!target || !["sdk", "cli"].includes(target)) {
 	console.error("");
 	console.error("Targets:");
 	console.error("  sdk   Publish @trumbo/{shared,llms,agents,core,sdk} to npm");
-	console.error("  cli   Publish trumbo from an existing cli-vX.Y.Z git tag");
+	console.error(
+		"  cli   Publish @trumbodev/cli from an existing cli-vX.Y.Z git tag",
+	);
 	console.error("");
 	console.error("Options:");
 	console.error(
@@ -526,7 +528,7 @@ async function releaseCLI(version: string): Promise<number> {
 		console.log(`  CLI v${version} published to npm.`);
 		console.log("");
 		console.log("  Install via npm:");
-		console.log("    npm install -g trumbo");
+		console.log("    npm install -g @trumbodev/cli");
 	}
 	console.log(`${"═".repeat(60)}\n`);
 

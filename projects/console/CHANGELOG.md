@@ -9,6 +9,10 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.38
+
+- Renamed the published wrapper package from `trumbo` to `@trumbodev/cli`. npm blocks the unscoped name `trumbo` as too similar to the existing `turbo` package, so the install package is now `@trumbodev/cli`. The `trumbo` **command** is unchanged (it is set by the `bin` field, independent of the package name). Install with `npm install -g @trumbodev/cli`. Updated the self-update command, the binary launcher's reinstall hint, the publish script, and all install docs accordingly. Platform packages (`@trumbodev/cli-*`) are unaffected. Supersedes the unpublished 3.0.37 tag, whose wrapper publish failed with `E403 ... Package name too similar to existing package turbo`.
+
 ## 3.0.37
 
 - Switched npm publishing from a long-lived `NPM_TOKEN` to **Trusted Publishing** (GitHub OIDC): the publish step now runs `npm publish --provenance` with `id-token: write` and no token. Requires a trusted publisher configured per package on npm (repo `xedro98/Trumbo`, workflow `.github/workflows/cli-publish.yml`). Supersedes the unpublished 3.0.36 tag, whose publish failed with a 2FA-required 403 because the supplied token was not an Automation/2FA-bypass token.
