@@ -115,7 +115,9 @@ async function publishPackage(input: {
 	console.log(`  Publishing ${input.name}@${input.version}...`);
 	removePackedTarballs(input.dir);
 	await $`bun pm pack`.cwd(input.dir);
-	await $`npm publish *.tgz --access public --tag ${input.tag}`.cwd(input.dir);
+	await $`npm publish *.tgz --provenance --access public --tag ${input.tag}`.cwd(
+		input.dir,
+	);
 	console.log(`  Published ${input.name}@${input.version}`);
 }
 

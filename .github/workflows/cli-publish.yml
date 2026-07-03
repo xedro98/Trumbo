@@ -182,8 +182,9 @@ jobs:
           done
 
       - name: Publish to NPM with latest tag
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        # Trusted Publishing: auth via GitHub OIDC (--provenance in publish-npm.ts).
+        # Requires id-token: write (set on the job) and a trusted publisher configured
+        # per package on npm for xedro98/Trumbo + .github/workflows/cli-publish.yml.
         run: bun script/publish-npm.ts --tag latest
         working-directory: projects/console
 
@@ -399,8 +400,6 @@ jobs:
 
       - name: Publish to NPM with nightly tag
         if: steps.check_commits.outputs.skip != 'true'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: bun script/publish-npm.ts --tag nightly
         working-directory: projects/console
 

@@ -9,6 +9,10 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.37
+
+- Switched npm publishing from a long-lived `NPM_TOKEN` to **Trusted Publishing** (GitHub OIDC): the publish step now runs `npm publish --provenance` with `id-token: write` and no token. Requires a trusted publisher configured per package on npm (repo `xedro98/Trumbo`, workflow `.github/workflows/cli-publish.yml`). Supersedes the unpublished 3.0.36 tag, whose publish failed with a 2FA-required 403 because the supplied token was not an Automation/2FA-bypass token.
+
 ## 3.0.36
 
 - Fixed the npm publish path and the CI "Verify build output" step to strip the new `@trumbodev/` scope when locating built platform packages in `dist/` (the previous `@trumbo/` strip left the path scoped, so the verify step could not find the `dist/cli-*` manifests and the publish step targeted the wrong directory). Supersedes the unpublished 3.0.35 tag.
