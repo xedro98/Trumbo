@@ -189,7 +189,7 @@ console.log("\nPublishing platform packages...");
 const platformTasks = Object.keys(binaries)
 	.sort()
 	.map(async (name) => {
-		const dirName = name.replace("@trumbo/", "");
+		const dirName = name.replace(/^@[^/]+\//, "");
 		const pkgDir = join(cliDir, "dist", dirName);
 
 		await publishPackage({

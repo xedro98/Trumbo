@@ -163,7 +163,7 @@ jobs:
           )
 
           for package_name in "${EXPECTED[@]}"; do
-            dir="projects/console/dist/${package_name#@trumbo/}"
+            dir="projects/console/dist/${package_name#@*/}"
             if [ ! -f "$dir/package.json" ]; then
               echo "Missing package manifest: $dir/package.json"
               exit 1
@@ -379,7 +379,7 @@ jobs:
           )
 
           for package_name in "${EXPECTED[@]}"; do
-            dir="projects/console/dist/${package_name#@trumbo/}"
+            dir="projects/console/dist/${package_name#@*/}"
             if [ ! -f "$dir/package.json" ]; then
               echo "Missing package manifest: $dir/package.json"
               exit 1

@@ -9,6 +9,10 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.36
+
+- Fixed the npm publish path and the CI "Verify build output" step to strip the new `@trumbodev/` scope when locating built platform packages in `dist/` (the previous `@trumbo/` strip left the path scoped, so the verify step could not find the `dist/cli-*` manifests and the publish step targeted the wrong directory). Supersedes the unpublished 3.0.35 tag.
+
 ## 3.0.35
 
 - Published under the `@trumbodev` npm scope: platform binaries are now `@trumbodev/cli-*` (the `@trumbo` scope was unavailable on npm). The `trumbo` wrapper package name is unaffected.
