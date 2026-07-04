@@ -1,3 +1,4 @@
+import { getTrumboEnvironmentConfig } from "@trumbo/shared";
 import { describe, expect, it } from "vitest";
 import {
 	formatCliErrorMessage,
@@ -26,8 +27,9 @@ describe("trumbo-pass-errors", () => {
 	});
 
 	it("formats the TrumboPass subscription URL", () => {
+		const appBaseUrl = getTrumboEnvironmentConfig().appBaseUrl;
 		expect(getCliSubscriptionUrl()).toBe(
-			"http://0.0.0.0:0/promo?code=CLI-8OFF&personal=true",
+			`${appBaseUrl}/promo?code=CLI-8OFF&personal=true`,
 		);
 	});
 

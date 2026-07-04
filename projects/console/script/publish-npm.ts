@@ -115,7 +115,12 @@ async function publishPackage(input: {
 	console.log(`  Publishing ${input.name}@${input.version}...`);
 	removePackedTarballs(input.dir);
 	await $`bun pm pack`.cwd(input.dir);
-	await $`npm publish *.tgz --provenance --access public --tag ${input.tag}`.cwd(
+	// `--provenance` requires GitHub Actions OIDC; only use it in CI so local
+	// publishes succeed. CI is detected via the standard GITHUB_ACTIONS env var
+	// set by GitHub Actions runners.
+	const inCi = process.env.GITHUB_ACTIONS === "true";
+	const provenanceFlag = inCi ? ["--provenance"] : [];
+	await $`npm publish *.tgz ${provenanceFlag} --access public --tag ${input.tag}`.cwd(
 		input.dir,
 	);
 	console.log(`  Published ${input.name}@${input.version}`);

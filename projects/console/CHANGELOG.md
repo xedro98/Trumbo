@@ -9,6 +9,13 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.41
+
+- The CLI now connects to the deployed Trumbo web app by default. The production environment points at `https://platform.trumbo.dev` (was an unconfigured placeholder), so auth, account, billing, plan, and chat-completion endpoints hit the live backend out of the box. Override with `TRUMBO_API_BASE_URL` / `TRUMBO_APP_URL`, or run against `wrangler dev` with `TRUMBO_ENVIRONMENT=local`.
+- Billing/subscription + rate-limit UX in the CLI: the welcome line, status bar, and account dialog now show your plan and 5h/daily/weekly rate-limit usage instead of credits. 429 rate-limit errors render a friendly upgrade prompt linking to the billing page. The Trumbo provider is rebranded to "Trumbo" (was "Trumbo Usage-Billing").
+- Web-facing URLs (billing page, credits dashboard, TrumboPass subscription/promo links) now resolve from the active environment instead of a hardcoded placeholder, so they always match the deployed app.
+- npm publish script: `--provenance` is now applied only inside GitHub Actions (Trusted Publishing), so local dry-runs don't fail on the provenance requirement. CI behavior is unchanged.
+
 ## 3.0.40
 
 - Re-enabled CLI startup auto-update for npm/pnpm/yarn/bun global installs. On launch, Trumbo checks the npm registry for a newer `@trumbodev/cli` and installs it in the background when available. Respects `TRUMBO_NO_AUTO_UPDATE=1` and the global `autoUpdateEnabled` setting; manual `trumbo update` is unchanged.

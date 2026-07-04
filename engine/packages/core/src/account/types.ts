@@ -97,6 +97,12 @@ export interface TrumboSubscriptionPlan {
 	[key: string]: unknown;
 }
 
+export interface PlanRateLimitWindow {
+	used: number;
+	limit: number;
+	resetsAtSec: number;
+}
+
 export interface UserCurrentPlan {
 	cancelAt?: string;
 	canceledAt?: string;
@@ -104,6 +110,12 @@ export interface UserCurrentPlan {
 	currentPeriodStart?: string;
 	plan?: TrumboSubscriptionPlan | null;
 	planHistoryId?: string;
+	planTier?: string;
+	rateLimits?: {
+		fiveHour: PlanRateLimitWindow;
+		daily: PlanRateLimitWindow;
+		weekly: PlanRateLimitWindow;
+	};
 	subscriptionId?: string;
 	userId?: string;
 	[key: string]: unknown;

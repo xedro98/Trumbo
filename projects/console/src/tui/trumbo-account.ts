@@ -15,15 +15,22 @@ import {
 	type UserCurrentPlan,
 } from "@trumbo/core";
 import {
+	getTrumboEnvironmentConfig,
 	isUnconfiguredTrumboUrl,
 	resolveTrumboApiBaseUrl,
-	UNCONFIGURED_TRUMBO_APP_URL,
 } from "@trumbo/shared";
 import { formatCreditBalance, normalizeCreditBalance } from "../utils/output";
 import { identifyTelemetryAccount } from "../utils/telemetry";
 import type { Config } from "../utils/types";
 
-export const TRUMBO_CREDITS_DASHBOARD_URL = `${UNCONFIGURED_TRUMBO_APP_URL}/dashboard/account?tab=credits`;
+/**
+ * Web app URLs shown in the CLI (billing page, credits dashboard). Resolved
+ * from the active Trumbo environment so they track the deployed web app
+ * (production = https://platform.trumbo.dev) and honor TRUMBO_APP_URL overrides.
+ */
+const RESOLVED_TRUMBO_APP_URL = getTrumboEnvironmentConfig().appBaseUrl;
+export const TRUMBO_CREDITS_DASHBOARD_URL = `${RESOLVED_TRUMBO_APP_URL}/dashboard/account?tab=credits`;
+export const TRUMBO_BILLING_URL = `${RESOLVED_TRUMBO_APP_URL}/billing`;
 
 type TrumboAccountConfig = Pick<Config, "apiKey" | "logger" | "providerId">;
 
@@ -36,6 +43,7 @@ export interface TrumboAccountSnapshot {
 	organizations: TrumboAccountOrganization[];
 	activeOrganization: TrumboAccountOrganization | null;
 	displayedBalance: number;
+	currentPlan?: UserCurrentPlan | null;
 }
 
 export function formatTrumboCredits(value: number): string {
@@ -173,7 +181,7 @@ export async function createTrumboAccountService(input: {
 	return new TrumboAccountService({
 		apiBaseUrl,
 		getAuthToken: async () => authToken,
-		getHeaders: async () => {
+		getHeaders: async (): Promise<Record<string, string>> => {
 			const organizationId = settings?.auth?.organizationId?.trim();
 			return organizationId ? { "X-Org-Id": organizationId } : {};
 		},
@@ -212,11 +220,12 @@ export async function loadTrumboAccountSnapshot(input: {
 		const activeOrganization =
 			normalizedOrganizations.find((organization) => organization.active) ??
 			null;
-		const [balance, organizationBalance] = await Promise.all([
+		const [balance, organizationBalance, currentPlan] = await Promise.all([
 			service.fetchBalance(user.id),
 			activeOrganization
 				? service.fetchOrganizationBalance(activeOrganization.organizationId)
 				: Promise.resolve(null),
+			service.fetchCurrentUserPlan().catch(() => null),
 		]);
 		const displayedBalance = activeOrganization
 			? (organizationBalance?.balance ?? balance.balance)
@@ -238,6 +247,7 @@ export async function loadTrumboAccountSnapshot(input: {
 			organizations: normalizedOrganizations,
 			activeOrganization,
 			displayedBalance,
+			currentPlan: currentPlan ?? null,
 		};
 	} catch (error) {
 		throw new Error(formatTrumboAccountConnectionError(error, apiBaseUrl));

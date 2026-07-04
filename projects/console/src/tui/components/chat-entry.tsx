@@ -20,6 +20,7 @@ import {
 } from "../palette";
 import {
 	isTrumboAccountCreditsErrorMessage,
+	TRUMBO_BILLING_URL,
 	TRUMBO_CREDITS_DASHBOARD_URL,
 } from "../trumbo-account";
 import type { ChatEntry } from "../types";
@@ -84,6 +85,7 @@ function ReasoningBlock(props: { text: string; streaming: boolean }) {
 	if (expanded) {
 		const lines = content.split("\n");
 		return (
+			// biome-ignore lint/a11y/noStaticElementInteractions: OpenTUI boxes handle terminal mouse input.
 			<box flexDirection="column" onMouseDown={() => setExpanded(false)}>
 				<text fg="gray">
 					{"\u25bc"} <em>Thinking:</em>
@@ -109,6 +111,7 @@ function ReasoningBlock(props: { text: string; streaming: boolean }) {
 			: `...${flat.slice(flat.length - available)}`;
 
 	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: OpenTUI boxes handle terminal mouse input.
 		<box onMouseDown={() => setExpanded(true)}>
 			<text fg="gray" selectable>
 				{"\u25b6"} <em>Thinking: {tail}</em>
@@ -318,6 +321,41 @@ function TrumboCreditsErrorView(props: { defaultFg?: string }) {
 	return <TrumboCreditsTrumboPassErrorView defaultFg={props.defaultFg} />;
 }
 
+function RateLimitErrorView(props: { defaultFg?: string; text: string }) {
+	// Try to extract the "Resets in Xh Ym" portion from the error message
+	const resetMatch = props.text.match(/Resets in ([^.]+)/i);
+	const resetDuration = resetMatch?.[1]?.trim();
+	const windowMatch = props.text.match(/(\w+)\s+window/i);
+	const windowName = windowMatch?.[1]?.trim();
+
+	return (
+		<box flexDirection="column" paddingX={1} gap={0}>
+			<text fg="yellow">Rate limit reached</text>
+			<text fg={props.defaultFg}>
+				{windowName
+					? `You've hit the ${windowName} request limit for your plan.`
+					: "You've hit a request limit for your plan."}
+			</text>
+			{resetDuration && (
+				<text fg="gray">Resets in {resetDuration}. Please try again then.</text>
+			)}
+			<text fg="gray">
+				Upgrade your plan at {TRUMBO_BILLING_URL} for higher limits.
+			</text>
+		</box>
+	);
+}
+
+function isRateLimitErrorMessage(message: string): boolean {
+	const normalized = message.trim().toLowerCase();
+	return (
+		normalized.includes("rate limit") &&
+		(normalized.includes("rate_limit_error") ||
+			normalized.includes("rate limit exceeded") ||
+			normalized.includes("resets in"))
+	);
+}
+
 function TrumboPassSubscriptionErrorView(props: {
 	defaultFg?: string;
 	loadIndividualSubscriptionPlans?: () => Promise<TrumboSubscriptionPlan[]>;
@@ -515,6 +553,9 @@ export function ChatEntryView(props: {
 			);
 
 		case "error":
+			if (isRateLimitErrorMessage(entry.text)) {
+				return <RateLimitErrorView defaultFg={defaultFg} text={entry.text} />;
+			}
 			if (isTrumboAccountCreditsErrorMessage(entry.text)) {
 				return <TrumboCreditsErrorView defaultFg={defaultFg} />;
 			}

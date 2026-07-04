@@ -6,7 +6,6 @@ import type { TrumboAccountOrganization } from "@trumbo/core";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { palette } from "../../palette";
 import {
-	formatTrumboCredits,
 	isTrumboAccountAuthErrorMessage,
 	type TrumboAccountSnapshot,
 } from "../../trumbo-account";
@@ -124,6 +123,7 @@ function AccountActionRow(props: {
 }) {
 	const fg = props.selected ? palette.textOnSelection : undefined;
 	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: OpenTUI boxes handle terminal mouse input.
 		<box
 			flexDirection="row"
 			gap={1}
@@ -163,6 +163,7 @@ function OrganizationRow(props: {
 	onSelect: () => void;
 }) {
 	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: OpenTUI boxes handle terminal mouse input.
 		<box
 			flexDirection="row"
 			gap={1}
@@ -531,13 +532,25 @@ export function AccountDialogContent(
 			<box flexDirection="column" border borderColor="gray" paddingX={1}>
 				<AccountField label="Active account" value={activeAccount} />
 				<AccountField
-					label="Credits"
-					value={formatTrumboCredits(loaded.displayedBalance)}
+					label="Plan"
+					value={loaded.currentPlan?.plan?.displayName ?? "Free"}
 				/>
-				{loaded.activeOrganization && (
+				{loaded.currentPlan?.rateLimits?.fiveHour && (
 					<AccountField
-						label="Personal"
-						value={formatTrumboCredits(loaded.balance.balance)}
+						label="5h usage"
+						value={`${loaded.currentPlan.rateLimits.fiveHour.used}/${loaded.currentPlan.rateLimits.fiveHour.limit}`}
+					/>
+				)}
+				{loaded.currentPlan?.rateLimits?.daily && (
+					<AccountField
+						label="Daily usage"
+						value={`${loaded.currentPlan.rateLimits.daily.used}/${loaded.currentPlan.rateLimits.daily.limit}`}
+					/>
+				)}
+				{loaded.currentPlan?.rateLimits?.weekly && (
+					<AccountField
+						label="Weekly usage"
+						value={`${loaded.currentPlan.rateLimits.weekly.used}/${loaded.currentPlan.rateLimits.weekly.limit}`}
 					/>
 				)}
 				<AccountField

@@ -48,6 +48,25 @@ function formatTrumboAccountRequestFailure(
 	return `Trumbo account request failed with status ${status}`;
 }
 
+function formatNonJsonAccountResponse(
+	requestUrl: string,
+	bodyText: string,
+): string {
+	const trimmed = bodyText.trim();
+	if (/^<!doctype html|^<html[\s>]/i.test(trimmed)) {
+		return (
+			`Trumbo account API at ${requestUrl} returned a web page instead of JSON. ` +
+			"Point TRUMBO_API_BASE_URL (or the Trumbo provider baseUrl) at the Trumbo web app " +
+			"Worker — e.g. http://localhost:8787 for local dev — not the Vite dev server."
+		);
+	}
+	const preview =
+		trimmed.length > 120 ? `${trimmed.slice(0, 120)}...` : trimmed;
+	return preview
+		? `Trumbo account response was not valid JSON: ${preview}`
+		: "Trumbo account response was not valid JSON";
+}
+
 export interface TrumboAccountServiceOptions {
 	apiBaseUrl: string;
 	getAuthToken: () => Promise<string | undefined | null>;
@@ -284,20 +303,18 @@ export class TrumboAccountService {
 		const timeout = setTimeout(() => controller.abort(), this.requestTimeoutMs);
 
 		try {
-			const response = await this.fetchImpl(
-				new URL(endpoint, this.apiBaseUrl),
-				{
-					method: input?.method ?? "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"Content-Type": "application/json",
-						...(extraHeaders ?? {}),
-					},
-					body:
-						input?.body !== undefined ? JSON.stringify(input.body) : undefined,
-					signal: controller.signal,
+			const requestUrl = new URL(endpoint, this.apiBaseUrl).toString();
+			const response = await this.fetchImpl(requestUrl, {
+				method: input?.method ?? "GET",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+					...(extraHeaders ?? {}),
 				},
-			);
+				body:
+					input?.body !== undefined ? JSON.stringify(input.body) : undefined,
+				signal: controller.signal,
+			});
 
 			if (response.status === 204 || input?.expectNoContent) {
 				if (!response.ok) {
@@ -323,7 +340,7 @@ export class TrumboAccountService {
 							),
 						);
 					}
-					throw new Error("Trumbo account response was not valid JSON");
+					throw new Error(formatNonJsonAccountResponse(requestUrl, text));
 				}
 			}
 

@@ -143,7 +143,7 @@
     },
     "projects/console": {
       "name": "@trumbo/cli",
-      "version": "3.0.34",
+      "version": "3.0.41",
       "bin": {
         "trumbo": "src/index.ts",
       },
@@ -472,6 +472,8 @@
       "name": "@trumbo/web",
       "version": "0.0.0",
       "dependencies": {
+        "@dicebear/core": "^10.3.0",
+        "@dicebear/styles": "^10.2.0",
         "@noble/hashes": "^1.6.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
@@ -721,6 +723,10 @@
     "@dabh/diagnostics": ["@dabh/diagnostics@2.0.8", "", { "dependencies": { "@so-ric/colorspace": "^1.1.6", "enabled": "2.0.x", "kuler": "^2.0.0" } }, "sha512-R4MSXTVnuMzGD7bzHdW2ZhhdPC/igELENcq5IjEverBvq5hn1SXCWcsi6eSsdWP0/Ur+SItRRjAktmdoX/8R/Q=="],
 
     "@date-fns/tz": ["@date-fns/tz@1.5.0", "", {}, "sha512-lwYN/vDPeNRULcepoE/LO2Pgx+7/RV+S9ARfbc9lr2DtGkOD7pAiruHvbR1RX3Qyf6ja47EWJDMsNK5vK08DJg=="],
+
+    "@dicebear/core": ["@dicebear/core@10.3.0", "", {}, "sha512-HbzHvYY/E0m3B7BfBjs8SO7JyqJnORJgQhM2YM7VoN/EQzrqJ3Z0j4+op+WfEWXWzZj75tQqBU5SZpUssi5m/Q=="],
+
+    "@dicebear/styles": ["@dicebear/styles@10.2.0", "", {}, "sha512-o4rw0+7Q7sSAyr9YxYrUe3jCxlOAzEcBvbQvl4hQKQ+9WNmBK4p7wGYvsmGeJbxFh8y/Ux6ltrCPyXBIDV6qYA=="],
 
     "@dimforge/rapier2d-simd-compat": ["@dimforge/rapier2d-simd-compat@0.17.3", "", {}, "sha512-bijvwWz6NHsNj5e5i1vtd3dU2pDhthSaTUZSh14DUGGKJfw8eMnlWZsxwHBxB/a3AXVNDjL9abuHw1k9FGR+jg=="],
 

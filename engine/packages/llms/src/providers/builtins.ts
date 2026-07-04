@@ -520,7 +520,7 @@ async function handleTrumboResponseError(
 
 const trumbo = createTrumboLikeSpec({
 	id: "trumbo",
-	name: "Trumbo Usage-Billing",
+	name: "Trumbo",
 	popular: 1,
 	modelsFactory: buildTrumboModels,
 	defaultModelId: TRUMBO_DEFAULT_MODEL_ID,

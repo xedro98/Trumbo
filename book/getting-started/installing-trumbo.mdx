@@ -21,18 +21,38 @@ description: "Choose your installation path: CLI or SDK"
 
 Pick this if you want Trumbo in terminal workflows, both interactive and automated.
 
+Trumbo ships as a self-contained binary. The global `trumbo` command is the same regardless of install method.
+
+### Package managers (Node.js required)
+
+```bash
+npm install -g @trumbodev/cli      # npm
+pnpm add -g @trumbodev/cli         # pnpm
+bun add -g @trumbodev/cli          # bun
+```
+
+npm global installs auto-update on startup when a newer version is published.
+
+### curl (macOS / Linux / Git Bash)
+
+No Node.js required. Installs to `~/.trumbo/bin`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/xedro98/Trumbo/main/projects/console/script/install.sh | sh
+```
+
+### PowerShell (Windows)
+
+No Node.js required. Installs to `%USERPROFILE%\.trumbo\bin`:
+
+```powershell
+irm https://raw.githubusercontent.com/xedro98/Trumbo/main/projects/console/script/install.ps1 | iex
+```
+
 <Steps>
-  <Step title="Install Node.js">
-    Install Node.js 20+ (22 recommended).
-  </Step>
-  <Step title="Install CLI">
-    ```bash
-    npm install -g @trumbodev/cli
-    ```
-  </Step>
   <Step title="Authenticate">
     ```bash
-    trumbo auth
+    trumbo auth trumbo
     ```
   </Step>
   <Step title="Run Trumbo">

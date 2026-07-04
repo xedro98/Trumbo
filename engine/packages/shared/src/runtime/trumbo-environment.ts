@@ -16,16 +16,16 @@ export const TRUMBO_ENVIRONMENTS: Readonly<
 > = {
 	production: {
 		environment: "production",
-		// External Trumbo backend endpoints. The Trumbo web app (@trumbo/web,
-		// deployed to Cloudflare Workers) hosts these. Point at your deployment
-		// via `TRUMBO_API_BASE_URL` (and `TRUMBO_APP_URL`), or run locally with
-		// `TRUMBO_ENVIRONMENT=local` against `wrangler dev` on :8787. An empty
-		// `workOsClientId` selects the self-hosted device-code auth flow; set a
-		// non-empty client id to use WorkOS instead. BYO-key providers are
-		// unaffected.
-		appBaseUrl: "http://0.0.0.0:0",
-		apiBaseUrl: "http://0.0.0.0:0",
-		mcpBaseUrl: "http://0.0.0.0:0/v1/mcp",
+		// Production Trumbo backend = the Trumbo web app deployed to Cloudflare
+		// Workers at platform.trumbo.dev. The Worker hosts the SPA + the
+		// /api/v1 auth, account, billing, and chat-completion endpoints. The
+		// device-code verification URI is returned by the server (built from
+		// TRUMBO_APP_URL on the Worker), so the CLI prints the right link
+		// automatically. Override locally with TRUMBO_API_BASE_URL /
+		// TRUMBO_APP_URL, or run against `wrangler dev` with TRUMBO_ENVIRONMENT=local.
+		appBaseUrl: "https://platform.trumbo.dev",
+		apiBaseUrl: "https://platform.trumbo.dev",
+		mcpBaseUrl: "https://platform.trumbo.dev/v1/mcp",
 		workOsClientId: "",
 	},
 	staging: {

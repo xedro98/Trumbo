@@ -210,6 +210,9 @@ describe("loadTrumboAccountSnapshot", () => {
 		coreMocks.fetchOrganizationBalance.mockReset();
 		coreMocks.fetchAvailableSubscriptionPlans.mockReset();
 		coreMocks.fetchCurrentUserPlan.mockReset();
+		// loadTrumboAccountSnapshot calls service.fetchCurrentUserPlan().catch(),
+		// so every test needs a Promise back (default to "no plan" / null).
+		coreMocks.fetchCurrentUserPlan.mockResolvedValue(null);
 		coreMocks.serviceOptions.length = 0;
 		telemetryMocks.identifyTelemetryAccount.mockReset();
 	});

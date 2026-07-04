@@ -85,8 +85,8 @@ export function HomeView(props: {
 			alignItems="center"
 			justifyContent="center"
 		>
-			<box marginTop={1} marginBottom={1} flexShrink={0}>
-				<TrumboLogo color={brand} />
+			<box marginBottom={1} flexShrink={0}>
+				<TrumboLogo color={brand} reservedHeight={18} />
 			</box>
 			<box marginBottom={0} flexShrink={0}>
 				<text fg={defaultFg}>

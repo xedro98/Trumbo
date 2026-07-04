@@ -261,7 +261,7 @@ describe("TrumboAccountService", () => {
 		});
 
 		await expect(service.fetchMe()).rejects.toThrow(
-			"Trumbo account response was not valid JSON",
+			/Trumbo account response was not valid JSON/,
 		);
 	});
 

@@ -61,12 +61,18 @@ if (shouldBuildHubWebview()) {
 	await $`bun -F @trumbo/hub build:webview`.cwd(repoRoot);
 }
 
+console.log("Syncing Trumbo CLI logo...");
+await $`bun scripts/generate-trumbo-logo.ts`.cwd(rootDir);
+
 const result = await Bun.build({
 	entrypoints: ["./src/index.ts"],
 	outdir: "./dist",
 	target: "node",
 	format: "esm",
 	sourcemap,
+	loader: {
+		".txt": "text",
+	},
 	packages: "bundle", // Keep private workspace packages bundled so npm consumers do not need @trumbo/* at runtime.
 	external: [
 		// OpenTUI resolves a platform-specific native package at runtime.

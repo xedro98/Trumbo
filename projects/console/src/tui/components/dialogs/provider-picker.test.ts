@@ -1,10 +1,12 @@
+import { getTrumboEnvironmentConfig } from "@trumbo/shared";
 import { describe, expect, it } from "vitest";
 import { buildTrumboPassSubscriptionPageUrl } from "./provider-picker-helpers";
 
 describe("buildTrumboPassSubscriptionPageUrl", () => {
-	it("opens the personal subscription page on production by default", () => {
+	it("opens the personal subscription page using the resolved app base URL by default", () => {
+		const appBaseUrl = getTrumboEnvironmentConfig().appBaseUrl;
 		expect(buildTrumboPassSubscriptionPageUrl(undefined)).toBe(
-			"http://0.0.0.0:0/dashboard/subscription?personal=true&code=CLI-8OFF",
+			`${appBaseUrl}/dashboard/subscription?personal=true&code=CLI-8OFF`,
 		);
 	});
 

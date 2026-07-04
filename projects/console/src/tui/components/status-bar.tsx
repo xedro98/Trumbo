@@ -147,6 +147,9 @@ export interface StatusBarProps {
 	} | null;
 	onToggleMode?: () => void;
 	variant?: "home" | "chat";
+	planTier?: string;
+	fiveHourUsed?: number;
+	fiveHourLimit?: number;
 }
 
 export function StatusBar(props: StatusBarProps) {
@@ -161,6 +164,9 @@ export function StatusBar(props: StatusBarProps) {
 		gitBranch,
 		gitDiffStats,
 		onToggleMode,
+		planTier,
+		fiveHourUsed,
+		fiveHourLimit,
 	} = props;
 
 	const { width } = useTerminalDimensions();
@@ -179,6 +185,21 @@ export function StatusBar(props: StatusBarProps) {
 		? createContextBar(totalTokens, maxInputTokens)
 		: undefined;
 
+	const planIndicator =
+		planTier && planTier !== "free"
+			? `${planTier.charAt(0).toUpperCase() + planTier.slice(1)}`
+			: undefined;
+	const quotaIndicator =
+		typeof fiveHourUsed === "number" && typeof fiveHourLimit === "number"
+			? `${fiveHourUsed}/${fiveHourLimit}`
+			: undefined;
+	const planPrefix =
+		planIndicator && quotaIndicator
+			? `${planIndicator} · 5h: ${quotaIndicator} | `
+			: planIndicator
+				? `${planIndicator} | `
+				: "";
+
 	// Available content width after accounting for padding.
 	// Home view: parent box is capped at 60 wide, status bar adds paddingX=1 (-2).
 	// Chat view: status bar adds paddingX=1 (-2).
@@ -187,7 +208,7 @@ export function StatusBar(props: StatusBarProps) {
 			? Math.min(width, HOME_VIEW_MAX_WIDTH) - 2
 			: width - 2;
 
-	// Row 1 layout: [model + context info] .... [Plan/Act toggle]
+	// Row 1 layout: [plan · model + context info] .... [Plan/Act toggle]
 	// When the full row doesn't fit, context info drops to its own row 2.
 	// Model ID truncates with "..." before wrapping; toggle stays right-aligned.
 	const toggleWidth = 20;
@@ -199,8 +220,9 @@ export function StatusBar(props: StatusBarProps) {
 	const contextText = bar
 		? ` ${bar.filled}${bar.empty} ${usageText}`
 		: ` ${usageText}`;
+	const fullModelText = planPrefix + modelId;
 	const firstRowFits =
-		modelId.length + contextText.length + toggleWidth + 1 <= avail;
+		fullModelText.length + contextText.length + toggleWidth + 1 <= avail;
 	const renderContextText = (withLeadingSpace: boolean) => (
 		<>
 			{withLeadingSpace && " "}
@@ -216,7 +238,11 @@ export function StatusBar(props: StatusBarProps) {
 
 	const modelMaxLen = Math.max(
 		10,
-		avail - toggleWidth - (firstRowFits ? contextText.length : 0) - 1,
+		avail -
+			toggleWidth -
+			(firstRowFits ? contextText.length : 0) -
+			1 -
+			planPrefix.length,
 	);
 	const truncatedModel =
 		modelId.length > modelMaxLen
@@ -239,9 +265,11 @@ export function StatusBar(props: StatusBarProps) {
 		<box flexDirection="column" paddingX={1}>
 			<box flexDirection="row" justifyContent="space-between">
 				<text fg={palette.muted}>
+					{planPrefix && <span fg={successColor}>{planPrefix}</span>}
 					{truncatedModel}
 					{firstRowFits && renderContextText(true)}
 				</text>
+				{/* biome-ignore lint/a11y/noStaticElementInteractions: OpenTUI boxes handle terminal mouse input. */}
 				<box
 					flexDirection="row"
 					gap={1}

@@ -5,10 +5,7 @@ import {
 } from "@trumbo/core";
 import { byLengthAsc, Fzf, type FzfResultItem } from "fzf";
 import type { Config } from "../utils/types";
-import {
-	formatTrumboCredits,
-	loadTrumboAccountSnapshot,
-} from "./trumbo-account";
+import { loadTrumboAccountSnapshot } from "./trumbo-account";
 
 export interface InteractiveSlashCommand {
 	name: string;
@@ -180,9 +177,12 @@ export async function resolveTrumboWelcomeLine(input: {
 	}
 	try {
 		const snapshot = await loadTrumboAccountSnapshot(input);
+		const planName = snapshot.currentPlan?.plan?.displayName ?? "Free";
+		const fiveHour = snapshot.currentPlan?.rateLimits?.fiveHour;
 		const parts = [
 			snapshot.user.email,
-			`Credits: ${formatTrumboCredits(snapshot.displayedBalance)}`,
+			`Plan: ${planName}` +
+				(fiveHour ? ` · 5h: ${fiveHour.used}/${fiveHour.limit}` : ""),
 		];
 		if (snapshot.activeOrganization?.name.trim()) {
 			parts.push(snapshot.activeOrganization.name);
