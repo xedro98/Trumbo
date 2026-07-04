@@ -9,6 +9,10 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.49
+
+- **Critical fix (Windows):** characters were being dropped while typing in the TUI. The root cause was the Node.js wrapper (`bin/trumbo`) using async `spawn` to launch the compiled Bun binary — Node.js's libuv stdin handle on the shared ConPTY console was intercepting input events. Fixed by using `spawnSync` with a temporary `.cmd` intermediary, which completely blocks Node.js during the TUI session (no event loop, no stdin polling) and lets `cmd.exe` properly pass console handles to the binary. This mimics running the binary via a direct `.cmd` launcher, which works correctly.
+
 ## 3.0.48
 
 - **Critical fix:** characters were being dropped while typing (e.g. "Hi there" showed as "hre"). The per-keystroke `sanitizeTerminalInputText` + `setText()` call in `emitContentChange` was overwriting the textarea's internal state mid-typing. Removed it — with mouse disabled on Windows, the key-level filter (`shouldBlockTerminalInputKey`) is sufficient, and pastes are already sanitized separately.

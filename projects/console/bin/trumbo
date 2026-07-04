@@ -32,21 +32,55 @@ function run(target) {
 		windowsHide: false,
 	};
 
-	// On Windows, spawnSync can detach the compiled binary from the interactive
-	// console; async spawn keeps stdin/stdout as real TTYs for OpenTUI.
+	// On Windows, use spawnSync with a temporary .cmd wrapper to run the
+	// binary. This is critical for TUI input:
+	//
+	// 1. spawnSync completely blocks the Node.js event loop — Node.js can't
+	//    poll libuv handles or touch the ConPTY console while the child runs.
+	//    (Async spawn keeps Node.js alive, and its stdin handle steals console
+	//    input events, causing characters to be dropped in the TUI.)
+	// 2. The .cmd intermediary (cmd.exe) is a native Windows console app that
+	//    properly inherits and passes through console handles. Directly
+	//    spawning a Bun-compiled binary with spawnSync can detach it from the
+	//    interactive console; cmd.exe as an intermediary avoids this.
+	//
+	// This mimics running the binary via a .cmd launcher, which works correctly.
 	if (process.platform === "win32") {
-		const child = childProcess.spawn(target, args, spawnOptions);
-		child.on("error", function (err) {
-			console.error(err.message);
+		const tmpCmd = path.join(
+			os.tmpdir(),
+			"trumbo-run-" + process.pid + ".cmd",
+		);
+		var quotedArgs = args
+			.map(function (a) {
+				return '"' + String(a).replace(/"/g, '""') + '"';
+			})
+			.join(" ");
+		fs.writeFileSync(tmpCmd, '@"' + target + '" ' + quotedArgs + "\r\n");
+
+		var result = childProcess.spawnSync(
+			process.env.ComSpec || "cmd.exe",
+			["/c", tmpCmd],
+			spawnOptions,
+		);
+
+		try {
+			fs.unlinkSync(tmpCmd);
+		} catch (_e) {
+			// Best-effort cleanup.
+		}
+
+		if (result.error) {
+			console.error(result.error.message);
 			process.exit(1);
-		});
-		child.on("exit", function (code, signal) {
-			if (signal) {
-				process.kill(process.pid, signal);
-			}
-			process.exit(code === null ? 1 : code);
-		});
-		return;
+		}
+		if (typeof result.status === "number") {
+			process.exit(result.status);
+		}
+		if (result.signal) {
+			process.kill(process.pid, result.signal);
+			process.exit(128);
+		}
+		process.exit(1);
 	}
 
 	const result = childProcess.spawnSync(target, args, spawnOptions);
