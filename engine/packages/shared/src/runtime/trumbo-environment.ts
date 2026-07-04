@@ -154,12 +154,21 @@ function hasDevelopmentBuildCondition(execArgv: string[]): boolean {
 	return false;
 }
 
+interface BunRuntime {
+	main?: string;
+}
+
+function readBunRuntime(): BunRuntime | undefined {
+	return (globalThis as typeof globalThis & { Bun?: BunRuntime }).Bun;
+}
+
 /** True when the CLI is run from source via Bun (`bun run dev`, `bun link`). */
 function isBunSourceCliDev(): boolean {
-	if (typeof Bun === "undefined") {
+	const bun = readBunRuntime();
+	if (!bun) {
 		return false;
 	}
-	const main = String(Bun.main ?? "").replace(/\\/g, "/");
+	const main = String(bun.main ?? "").replace(/\\/g, "/");
 	return (
 		main.includes("/projects/console/src/index.ts") ||
 		main.endsWith("/console/src/index.ts")
@@ -174,7 +183,7 @@ function isPublishedCliBinary(): boolean {
 	const argv0 = (process.argv[0] ?? "").replace(/\\/g, "/");
 	return (
 		argv0.includes("@trumbodev/cli-") ||
-		(/\/bin\/trumbo(\.exe)?$/i.test(argv0) && typeof Bun === "undefined")
+		(/\/bin\/trumbo(\.exe)?$/i.test(argv0) && readBunRuntime() === undefined)
 	);
 }
 
