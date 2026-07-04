@@ -9,6 +9,10 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.45
+
+- Fixed Windows PowerShell injecting garbage into the prompt when clicking anywhere in the terminal. Mouse reporting is now fully disabled on Windows (not just movement), and mangled SGR click sequences are stripped from input as a fallback.
+
 ## 3.0.44
 
 - Fixed Windows npm install/update failures caused by locked `trumbo.exe` inside `node_modules`. Postinstall now copies the platform binary to a stable cache outside `node_modules` (`%LOCALAPPDATA%\\Trumbo\\bin` on Windows), and the `trumbo` launcher prefers that cache on every run.

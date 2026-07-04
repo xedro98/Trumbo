@@ -14,7 +14,7 @@ import open from "open";
 import React from "react";
 import {
 	disableOpenTuiGraphicsProbe,
-	resolveOpenTuiMouseMovement,
+	resolveOpenTuiInputConfig,
 } from "../tui/opentui-env";
 import {
 	getPersistedProviderApiKey,
@@ -335,10 +335,12 @@ async function runInteractiveAuthTui(input: AuthCommandInput): Promise<number> {
 	}
 	const { createCliRenderer, createRoot, OnboardingView } =
 		await loadAuthTuiRuntime();
+	const openTuiInput = resolveOpenTuiInputConfig();
 	const renderer = await createCliRenderer({
 		exitOnCtrlC: false,
 		autoFocus: false,
-		enableMouseMovement: resolveOpenTuiMouseMovement(),
+		useMouse: openTuiInput.useMouse,
+		enableMouseMovement: openTuiInput.enableMouseMovement,
 	});
 
 	return await new Promise<number>((resolve, reject) => {

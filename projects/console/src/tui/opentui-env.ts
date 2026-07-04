@@ -4,19 +4,36 @@
  * Gi=31337, s=1, v=1, a=q, t=d, f=24; AAAA
  *
  * Disable only the Kitty graphics capability probe that produces the leaked
- * response. Mouse click handling stays enabled; see
- * `resolveOpenTuiMouseMovement()` for Windows movement-reporting behavior.
+ * response. See `resolveOpenTuiInputConfig()` for Windows mouse handling.
  */
 export function disableOpenTuiGraphicsProbe(): void {
 	process.env.OPENTUI_GRAPHICS = "0";
 }
 
+export type OpenTuiInputConfig = {
+	useMouse: boolean;
+	enableMouseMovement: boolean;
+};
+
 /**
- * Windows ConPTY can echo SGR mouse-movement sequences back into stdin. OpenTUI
- * then treats those CSI strings as printable text in focused inputs.
- *
- * Keep movement reporting on other platforms for onboarding robot tracking.
+ * Windows ConPTY echoes SGR mouse click/move sequences back into stdin. OpenTUI
+ * then treats those CSI strings as printable text in focused inputs. Disable all
+ * mouse reporting on Windows; macOS/Linux keep clicks + movement for TUI UX.
  */
+export function resolveOpenTuiInputConfig(): OpenTuiInputConfig {
+	if (process.platform === "win32") {
+		return {
+			useMouse: false,
+			enableMouseMovement: false,
+		};
+	}
+	return {
+		useMouse: true,
+		enableMouseMovement: true,
+	};
+}
+
+/** @deprecated Use resolveOpenTuiInputConfig().enableMouseMovement */
 export function resolveOpenTuiMouseMovement(): boolean {
-	return process.platform !== "win32";
+	return resolveOpenTuiInputConfig().enableMouseMovement;
 }

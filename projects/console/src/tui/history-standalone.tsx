@@ -3,7 +3,7 @@ import { createRoot } from "@opentui/react";
 import type { SessionHistoryRecord } from "@trumbo/core";
 import React from "react";
 import { deleteSession } from "../session/session";
-import { resolveOpenTuiMouseMovement } from "./opentui-env";
+import { resolveOpenTuiInputConfig } from "./opentui-env";
 import { HistoryStandaloneContent } from "./views/history-view";
 
 export async function renderHistoryStandalone(input: {
@@ -11,10 +11,12 @@ export async function renderHistoryStandalone(input: {
 	onExport: (sessionId: string) => Promise<string | undefined>;
 	refreshRows?: () => Promise<SessionHistoryRecord[]>;
 }): Promise<number | string> {
+	const openTuiInput = resolveOpenTuiInputConfig();
 	const renderer = await createCliRenderer({
 		exitOnCtrlC: true,
 		autoFocus: false,
-		enableMouseMovement: resolveOpenTuiMouseMovement(),
+		useMouse: openTuiInput.useMouse,
+		enableMouseMovement: openTuiInput.enableMouseMovement,
 	});
 
 	return new Promise((resolve) => {

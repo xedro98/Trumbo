@@ -33,10 +33,14 @@ describe("sanitize-terminal-input", () => {
 		).toBe(false);
 	});
 
-	it("strips leaked fragments from prompt text", () => {
-		expect(sanitizeTerminalInputText("fix bug[555;56;25m now")).toBe(
-			"fix bug now",
-		);
-		expect(sanitizeTerminalInputText("\x1b[38;2;55;56;25mtyped")).toBe("typed");
+	it("strips mangled Windows click leaks from prompt text", () => {
+		const leaked = "i0;68;19m;19M32;26;18M;28;18M32;33;36;19M<32;50;200M";
+		expect(sanitizeTerminalInputText(`fix ${leaked} bug`)).toBe("fix  bug");
+		expect(
+			shouldBlockTerminalInputKey({
+				sequence: "<32;50;20M",
+				name: "<32;50;20M",
+			}),
+		).toBe(true);
 	});
 });
