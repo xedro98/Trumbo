@@ -66,7 +66,7 @@ export async function buildConnectorStartRequest(input: {
 	const providerSettingsManager = new ProviderSettingsManager();
 	const lastUsedProviderSettings =
 		providerSettingsManager.getLastUsedProviderSettings({
-			isTrumboPassEnabled: true,
+			isTrumboPassEnabled: false,
 		});
 	const provider = normalizeProviderId(
 		input.options.provider?.trim() ||

@@ -1,7 +1,7 @@
 {
 	"name": "@trumbo/cli",
 	"displayName": "Trumbo",
-	"version": "3.0.41",
+	"version": "3.0.42",
 	"description": "Autonomous coding agent CLI - capable of creating/editing files, running commands, using the browser, and more",
 	"type": "module",
 	"publishConfig": {
@@ -56,7 +56,7 @@
 		"prepublishOnly": "bun script/guard-direct-publish.ts",
 		"publish:npm": "bun script/publish-npm.ts",
 		"publish:npm:dry": "bun script/publish-npm.ts --dry-run",
-		"dev": "bun --conditions=development ./src/index.ts",
+		"dev": "bun --conditions=development ./script/dev-entry.ts",
 		"generate:logo": "bun scripts/generate-trumbo-logo.ts",
 		"typecheck": "tsc --noEmit",
 		"test": "bun run test:unit",

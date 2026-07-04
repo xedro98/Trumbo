@@ -649,22 +649,30 @@ async function pollSelfHostedDeviceTokens(options: {
 	let intervalSeconds = Math.max(1, options.initialPollIntervalSeconds);
 
 	while (Date.now() <= deadline) {
-		const response = await fetch(
-			resolveUrl(options.apiBaseUrl, DEFAULT_AUTH_ENDPOINTS.token),
-			{
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					grant_type: "urn:ietf:params:oauth:grant-type:device_code",
-					device_code: options.deviceCode,
-				}),
-				signal: AbortSignal.timeout(options.requestTimeoutMs),
-			},
-		);
-		const payload = (await response.json().catch(() => ({}))) as Record<
-			string,
-			unknown
-		>;
+		let response: Response;
+		let payload: Record<string, unknown>;
+		try {
+			response = await fetch(
+				resolveUrl(options.apiBaseUrl, DEFAULT_AUTH_ENDPOINTS.token),
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						grant_type: "urn:ietf:params:oauth:grant-type:device_code",
+						device_code: options.deviceCode,
+					}),
+					signal: AbortSignal.timeout(options.requestTimeoutMs),
+				},
+			);
+			payload = (await response.json().catch(() => ({}))) as Record<
+				string,
+				unknown
+			>;
+		} catch {
+			// Transient network errors (e.g. socket closed) during long poll — retry.
+			await sleep(intervalSeconds * 1000);
+			continue;
+		}
 		if (response.ok) {
 			return requireTrumboTokenResponse(
 				payload as unknown as TrumboTokenResponse,

@@ -127,6 +127,23 @@ describe("resolveTrumboApiBaseUrl", () => {
 			"http://127.0.0.1:9000",
 		);
 	});
+
+	it("ignores persisted production URLs in local dev builds", () => {
+		process.env[TRUMBO_BUILD_ENV_ENV] = "development";
+		expect(resolveTrumboApiBaseUrl("https://platform.trumbo.dev/api/v1")).toBe(
+			"http://localhost:8787",
+		);
+		expect(
+			resolveTrumboProviderBaseUrl("https://platform.trumbo.dev/api/v1"),
+		).toBe("http://localhost:8787/api/v1");
+	});
+
+	it("uses localhost:5173 for the local app UI and :8787 for the API", () => {
+		expect(TRUMBO_ENVIRONMENTS.local).toMatchObject({
+			appBaseUrl: "http://localhost:5173",
+			apiBaseUrl: "http://localhost:8787",
+		});
+	});
 });
 
 describe("resolveTrumboProviderBaseUrl", () => {

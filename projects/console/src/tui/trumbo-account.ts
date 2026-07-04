@@ -66,8 +66,8 @@ export function formatTrumboAccountConnectionError(
 ): string {
 	if (isUnconfiguredTrumboUrl(apiBaseUrl)) {
 		return (
-			"Trumbo web app URL is not configured. For local dev set TRUMBO_ENVIRONMENT=local " +
-			"(http://localhost:8787) or set TRUMBO_API_BASE_URL to your deployment."
+			"Trumbo web app URL is not configured. For local dev run `bun run dev` in projects/console " +
+			"(http://localhost:8787 API, http://localhost:5173 UI) or set TRUMBO_API_BASE_URL."
 		);
 	}
 

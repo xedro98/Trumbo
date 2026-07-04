@@ -80,7 +80,6 @@ export function ProviderPickerContent(
 					isOAuth: isOAuthProvider(p.id),
 					isLocalAuth: isOpenAICodexCliProvider(p.id),
 					capabilities: p.capabilities,
-					disabled: p.id === "trumbo-pass",
 				}));
 				setProviders(providerItems);
 				const idx = providerItems.findIndex((p) => p.id === currentProviderId);

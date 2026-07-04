@@ -37,9 +37,8 @@ export const TRUMBO_ENVIRONMENTS: Readonly<
 	},
 	local: {
 		environment: "local",
-		// The Trumbo web app served by `wrangler dev` (projects/web). The same
-		// Worker hosts the SPA and the /api/v1 auth + account endpoints.
-		appBaseUrl: "http://localhost:8787",
+		// API = wrangler dev (:8787). Browser links (device approval, billing) = Vite (:5173).
+		appBaseUrl: "http://localhost:5173",
 		apiBaseUrl: "http://localhost:8787",
 		mcpBaseUrl: "http://localhost:8787/v1/mcp",
 		workOsClientId: "",
@@ -69,6 +68,10 @@ function stripApiV1Suffix(url: string): string {
 
 /** Trumbo web app host root (no `/api/v1` suffix). */
 export function resolveTrumboApiBaseUrl(settingsBaseUrl?: string): string {
+	if (resolveTrumboEnvironment() === "local") {
+		return getTrumboEnvironmentConfig("local").apiBaseUrl;
+	}
+
 	const fromSettings = settingsBaseUrl?.trim();
 	if (fromSettings && !isUnconfiguredTrumboUrl(fromSettings)) {
 		return stripApiV1Suffix(fromSettings);
@@ -79,6 +82,10 @@ export function resolveTrumboApiBaseUrl(settingsBaseUrl?: string): string {
 
 /** OpenAI-compatible chat endpoint for the Trumbo provider (`…/api/v1`). */
 export function resolveTrumboProviderBaseUrl(settingsBaseUrl?: string): string {
+	if (resolveTrumboEnvironment() === "local") {
+		return `${getTrumboEnvironmentConfig("local").apiBaseUrl}/api/v1`;
+	}
+
 	const fromSettings = settingsBaseUrl?.trim();
 	if (fromSettings && !isUnconfiguredTrumboUrl(fromSettings)) {
 		return fromSettings.replace(/\/$/, "");
@@ -88,8 +95,8 @@ export function resolveTrumboProviderBaseUrl(settingsBaseUrl?: string): string {
 
 export function formatUnconfiguredTrumboUrlError(): string {
 	return (
-		"Trumbo web app URL is not configured. For local dev set TRUMBO_ENVIRONMENT=local " +
-		"(http://localhost:8787) or set TRUMBO_API_BASE_URL to your deployment."
+		"Trumbo web app URL is not configured. For local dev run `bun run dev` in projects/console " +
+		"(http://localhost:8787 API, http://localhost:5173 UI) or set TRUMBO_API_BASE_URL."
 	);
 }
 
@@ -147,6 +154,30 @@ function hasDevelopmentBuildCondition(execArgv: string[]): boolean {
 	return false;
 }
 
+/** True when the CLI is run from source via Bun (`bun run dev`, `bun link`). */
+function isBunSourceCliDev(): boolean {
+	if (typeof Bun === "undefined") {
+		return false;
+	}
+	const main = String(Bun.main ?? "").replace(/\\/g, "/");
+	return (
+		main.includes("/projects/console/src/index.ts") ||
+		main.endsWith("/console/src/index.ts")
+	);
+}
+
+/** True when running the published native CLI binary (npm `@trumbodev/cli`). */
+function isPublishedCliBinary(): boolean {
+	if (typeof process === "undefined") {
+		return false;
+	}
+	const argv0 = (process.argv[0] ?? "").replace(/\\/g, "/");
+	return (
+		argv0.includes("@trumbodev/cli-") ||
+		(/\/bin\/trumbo(\.exe)?$/i.test(argv0) && typeof Bun === "undefined")
+	);
+}
+
 export function resolveTrumboEnvironment(): TrumboEnvironment {
 	const env = readProcessEnv();
 	const explicit =
@@ -155,7 +186,11 @@ export function resolveTrumboEnvironment(): TrumboEnvironment {
 	if (explicit) {
 		return explicit;
 	}
-	// Dev CLI launches use --conditions=development and/or TRUMBO_BUILD_ENV.
+	// Published npm binary → production unless explicitly overridden above.
+	if (isPublishedCliBinary()) {
+		return DEFAULT_TRUMBO_ENVIRONMENT;
+	}
+	// Dev CLI: `bun run dev`, `--conditions=development`, or Bun running src/index.ts.
 	if (env.TRUMBO_BUILD_ENV?.trim().toLowerCase() === "development") {
 		return "local";
 	}
@@ -163,6 +198,9 @@ export function resolveTrumboEnvironment(): TrumboEnvironment {
 		typeof process !== "undefined" &&
 		hasDevelopmentBuildCondition(process.execArgv ?? [])
 	) {
+		return "local";
+	}
+	if (isBunSourceCliDev()) {
 		return "local";
 	}
 	return DEFAULT_TRUMBO_ENVIRONMENT;

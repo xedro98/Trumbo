@@ -13,14 +13,14 @@ vi.mock("@trumbo/core", async (importOriginal) => {
 });
 
 describe("listLocalProviders", () => {
-	it("enables TrumboPass when listing the SDK provider list", async () => {
+	it("keeps TrumboPass disabled when listing the SDK provider list", async () => {
 		const { listLocalProviders } = await import("./provider-catalog");
 		const manager = {} as never;
 
 		await listLocalProviders(manager);
 
 		expect(mocks.listLocalProviders).toHaveBeenCalledWith(manager, {
-			isTrumboPassEnabled: true,
+			isTrumboPassEnabled: false,
 		});
 	});
 });
