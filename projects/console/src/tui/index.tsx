@@ -1,6 +1,9 @@
 import { createCliRenderer } from "@opentui/core";
 import { createRoot } from "@opentui/react";
-import { resolveOpenTuiInputConfig } from "./opentui-env";
+import {
+	resetTerminalMouseMode,
+	resolveOpenTuiInputConfig,
+} from "./opentui-env";
 import { Root } from "./root";
 import { installTuiStdioCapture } from "./stdio-capture";
 import type { TuiProps } from "./types";
@@ -11,6 +14,9 @@ export async function renderOpenTui(
 	props: TuiProps,
 ): Promise<{ destroy: () => void; waitUntilExit: () => Promise<void> }> {
 	const openTuiInput = resolveOpenTuiInputConfig();
+	if (!openTuiInput.useMouse) {
+		resetTerminalMouseMode();
+	}
 	const renderer = await createCliRenderer({
 		exitOnCtrlC: false,
 		autoFocus: false,

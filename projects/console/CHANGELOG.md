@@ -9,6 +9,11 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.47
+
+- **Critical fix:** keyboard input was broken — the input filter was too aggressive and blocked arrow keys, function keys, Delete, Home, End, and any key whose raw sequence contained an escape character. The filter now only blocks actual mouse/SGR fragments.
+- Added a terminal mouse-mode reset on startup to clear stale mouse reporting from a previously crashed trumbo process.
+
 ## 3.0.46
 
 - Fixed `trumbo update` launching duplicate parallel installs (startup auto-update no longer runs for the update command).

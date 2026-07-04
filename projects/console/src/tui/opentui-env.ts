@@ -37,3 +37,21 @@ export function resolveOpenTuiInputConfig(): OpenTuiInputConfig {
 export function resolveOpenTuiMouseMovement(): boolean {
 	return resolveOpenTuiInputConfig().enableMouseMovement;
 }
+
+/**
+ * Sends terminal escape sequences to disable all mouse reporting modes.
+ * Use on startup when useMouse is false, in case a previous trumbo process
+ * crashed without disabling mouse mode (leaving the terminal sending SGR
+ * mouse sequences on every click).
+ */
+export function resetTerminalMouseMode(): void {
+	try {
+		// Disable: SGR mouse (1006), mouse motion (1003), button event (1002),
+		// X10 mouse (1000), and all-mouse tracking (any-event).
+		const disableSeq =
+			"\x1b[?1006l\x1b[?1003l\x1b[?1002l\x1b[?1000l\x1b[?1005l";
+		process.stdout.write(disableSeq);
+	} catch {
+		// Best-effort — if stdout isn't writable, the renderer will handle it.
+	}
+}
