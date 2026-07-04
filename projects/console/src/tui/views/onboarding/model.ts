@@ -57,13 +57,6 @@ export const MAIN_MENU: MenuOption[] = [
 		icon: "\u2726",
 	},
 	{
-		label: "Sign in with TrumboPass",
-		value: "trumbo-pass",
-		detail: "Low cost subscription for everyone (disabled)",
-		icon: "\u2726",
-		disabled: true,
-	},
-	{
 		label: "Sign in with ChatGPT",
 		value: "openai-codex",
 		detail: "Use your ChatGPT Plus subscription",
@@ -77,12 +70,10 @@ export const MAIN_MENU: MenuOption[] = [
 	},
 ];
 
-export function getMainMenuOptions(options?: {
+export function getMainMenuOptions(_options?: {
 	isTrumboPassEnabled?: boolean;
 }): MenuOption[] {
-	return MAIN_MENU.filter(
-		(option) => option.value !== "trumbo-pass" || options?.isTrumboPassEnabled,
-	);
+	return MAIN_MENU;
 }
 
 export const TRUMBO_PASS_SUBSCRIPTION_OPTIONS: TrumboPassSubscriptionOption[] =

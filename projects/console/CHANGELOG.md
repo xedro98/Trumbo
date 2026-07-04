@@ -9,6 +9,10 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.52
+
+- Removed the disabled "Sign in with TrumboPass" menu entry — it was redundant with "Sign in with Trumbo" which already covers both free and TrumboPass accounts. The onboarding menu is now: Sign in with Trumbo, Sign in with ChatGPT, Bring your own provider.
+
 ## 3.0.51
 
 - **New feature:** "Sign in with Trumbo" is now the first option on the first-start onboarding menu (alongside "Sign in with ChatGPT" and "Bring your own provider"). Uses the existing Trumbo device-code OAuth flow against `platform.trumbo.dev` — no new auth backend needed. After sign-in, routes to the featured Trumbo model picker.

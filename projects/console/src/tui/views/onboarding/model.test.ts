@@ -9,20 +9,18 @@ import {
 } from "./model";
 
 describe("onboarding model helpers", () => {
-	it("hides TrumboPass from the main menu unless its feature flag is enabled", () => {
+	it("shows Sign in with Trumbo and never shows TrumboPass in the main menu", () => {
+		expect(
+			getMainMenuOptions().some((option) => option.value === "trumbo"),
+		).toBe(true);
 		expect(
 			getMainMenuOptions().some((option) => option.value === "trumbo-pass"),
-		).toBe(false);
-		expect(
-			getMainMenuOptions({ isTrumboPassEnabled: false }).some(
-				(option) => option.value === "trumbo-pass",
-			),
 		).toBe(false);
 		expect(
 			getMainMenuOptions({ isTrumboPassEnabled: true }).some(
 				(option) => option.value === "trumbo-pass",
 			),
-		).toBe(true);
+		).toBe(false);
 	});
 
 	it("maps provider catalog entries into onboarding provider entries", () => {
