@@ -10,7 +10,10 @@ import {
 	commanderToParsedArgs,
 	createProgram,
 } from "./commands/program";
-import { autoUpdateOnStartup } from "./commands/update";
+import {
+	autoUpdateOnStartup,
+	shouldSkipAutoUpdateOnStartup,
+} from "./commands/update";
 import { CLI_DEFAULT_CHECKPOINT_CONFIG } from "./runtime/defaults";
 import {
 	buildCliCompactionConfig,
@@ -128,9 +131,12 @@ function writePromptArgError(args: string[]): void {
 
 export async function runCli(): Promise<void> {
 	installStreamErrorGuards();
-	autoUpdateOnStartup();
 
 	const cliArgs = process.argv.slice(2);
+	if (!shouldSkipAutoUpdateOnStartup(cliArgs)) {
+		autoUpdateOnStartup();
+	}
+
 	const configDir = resolveConfigDirArg(cliArgs);
 	const { setTrumboDir, setHomeDir } = await import("@trumbo/shared/storage");
 	if (configDir) {

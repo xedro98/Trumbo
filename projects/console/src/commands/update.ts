@@ -88,7 +88,43 @@ function compareVersions(v1: string, v2: string): number {
 	return 0;
 }
 
-export function getInstallationInfo(currentVersion: string): InstallationInfo {
+export function shouldSkipAutoUpdateOnStartup(argv: string[]): boolean {
+	if (process.env.TRUMBO_NO_AUTO_UPDATE === "1") return true;
+	if (process.env.TRUMBO_UPDATE_IN_PROGRESS === "1") return true;
+	if (argv.includes("--update")) return true;
+	const subcommand = argv.find((arg) => !arg.startsWith("-"));
+	return subcommand === "update" || subcommand === "version";
+}
+
+export function buildCliInstallCommand(input: {
+	packageManager: PackageManager;
+	packageName: CliPackageName;
+	tag: string;
+	version?: string;
+}): string {
+	const target = input.version ?? input.tag;
+	const spec = `${input.packageName}@${target}`;
+	switch (input.packageManager) {
+		case PackageManager.NPM: {
+			const allowScripts = `--allow-scripts=${input.packageName}`;
+			const forceFlag = process.platform === "win32" ? " --force" : "";
+			return `npm install -g ${spec} ${allowScripts}${forceFlag}`.trim();
+		}
+		case PackageManager.PNPM:
+			return `pnpm add -g ${spec}`;
+		case PackageManager.YARN:
+			return `yarn global add ${spec}`;
+		case PackageManager.BUN:
+			return `bun add -g ${spec}`;
+		default:
+			return "";
+	}
+}
+
+export function getInstallationInfo(
+	currentVersion: string,
+	installVersion?: string,
+): InstallationInfo {
 	const tag = getNpmTag(currentVersion);
 	try {
 		const scriptPath = realpathSync(
@@ -108,28 +144,48 @@ export function getInstallationInfo(currentVersion: string): InstallationInfo {
 			return {
 				packageManager: PackageManager.PNPM,
 				packageName: DEFAULT_PACKAGE_NAME,
-				updateCommand: `pnpm add -g ${DEFAULT_PACKAGE_NAME}@${tag}`,
+				updateCommand: buildCliInstallCommand({
+					packageManager: PackageManager.PNPM,
+					packageName: DEFAULT_PACKAGE_NAME,
+					tag,
+					version: installVersion,
+				}),
 			};
 		}
 		if (scriptPath.includes("/.yarn/") || scriptPath.includes("/yarn/global")) {
 			return {
 				packageManager: PackageManager.YARN,
 				packageName: DEFAULT_PACKAGE_NAME,
-				updateCommand: `yarn global add ${DEFAULT_PACKAGE_NAME}@${tag}`,
+				updateCommand: buildCliInstallCommand({
+					packageManager: PackageManager.YARN,
+					packageName: DEFAULT_PACKAGE_NAME,
+					tag,
+					version: installVersion,
+				}),
 			};
 		}
 		if (scriptPath.includes("/.bun/bin")) {
 			return {
 				packageManager: PackageManager.BUN,
 				packageName: DEFAULT_PACKAGE_NAME,
-				updateCommand: `bun add -g ${DEFAULT_PACKAGE_NAME}@${tag}`,
+				updateCommand: buildCliInstallCommand({
+					packageManager: PackageManager.BUN,
+					packageName: DEFAULT_PACKAGE_NAME,
+					tag,
+					version: installVersion,
+				}),
 			};
 		}
 		if (scriptPath.includes("/node_modules/")) {
 			return {
 				packageManager: PackageManager.NPM,
 				packageName: DEFAULT_PACKAGE_NAME,
-				updateCommand: `npm update -g ${DEFAULT_PACKAGE_NAME} --tag ${tag}`,
+				updateCommand: buildCliInstallCommand({
+					packageManager: PackageManager.NPM,
+					packageName: DEFAULT_PACKAGE_NAME,
+					tag,
+					version: installVersion,
+				}),
 			};
 		}
 	} catch {
@@ -169,6 +225,20 @@ export function withMinimumReleaseAgeBypass(
 	}
 }
 
+const UPDATE_CHILD_ENV: Readonly<Record<string, string>> = {
+	TRUMBO_NO_AUTO_UPDATE: "1",
+	TRUMBO_UPDATE_IN_PROGRESS: "1",
+};
+
+function mergeUpdateChildEnv(
+	env?: Readonly<Record<string, string>>,
+): NodeJS.ProcessEnv {
+	return {
+		...process.env,
+		...UPDATE_CHILD_ENV,
+		...env,
+	};
+}
 async function getLatestVersion(
 	packageName: CliPackageName,
 	currentVersion: string,
@@ -210,9 +280,7 @@ async function runCliUpdate(
 	const updateProcess = spawn(updateCommand.command, {
 		stdio: "inherit",
 		shell: true,
-		env: updateCommand.env
-			? { ...process.env, ...updateCommand.env }
-			: process.env,
+		env: mergeUpdateChildEnv(updateCommand.env),
 		windowsHide: true,
 	});
 	return waitForProcessExit(updateProcess);
@@ -372,9 +440,7 @@ export function autoUpdateOnStartup(): void {
 				shell: true,
 				detached: true,
 				stdio: "ignore",
-				env: autoUpdateCommand.env
-					? { ...process.env, ...autoUpdateCommand.env }
-					: process.env,
+				env: mergeUpdateChildEnv(autoUpdateCommand.env),
 				windowsHide: true,
 			});
 			const exitCode = await waitForProcessExit(child);
@@ -403,11 +469,19 @@ export async function checkForUpdates(
 	const includeKanban = options.includeKanban ?? false;
 	writeln(`${c.green}Checking for Trumbo CLI updates…${c.reset}`);
 
-	const { packageName, updateCommand, packageManager } =
-		getInstallationInfo(currentVersion);
+	const { packageName, packageManager } = getInstallationInfo(currentVersion);
 
 	try {
 		const latestVersion = await getLatestVersion(packageName, currentVersion);
+		const updateCommand =
+			latestVersion !== null
+				? buildCliInstallCommand({
+						packageManager,
+						packageName,
+						tag: getNpmTag(currentVersion),
+						version: latestVersion,
+					})
+				: undefined;
 		const kanbanInstallCommand = includeKanban
 			? resolveKanbanInstallCommand(
 					process.env,

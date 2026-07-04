@@ -9,6 +9,11 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.46
+
+- Fixed `trumbo update` launching duplicate parallel installs (startup auto-update no longer runs for the update command).
+- Windows updates now use `npm install -g @trumbodev/cli@<version>` with postinstall scripts enabled instead of `npm update`, which was hanging or fighting over locked binaries.
+
 ## 3.0.45
 
 - Fixed Windows PowerShell injecting garbage into the prompt when clicking anywhere in the terminal. Mouse reporting is now fully disabled on Windows (not just movement), and mangled SGR click sequences are stripped from input as a fallback.

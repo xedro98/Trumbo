@@ -4,10 +4,12 @@ import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
 	autoUpdateOnStartup,
+	buildCliInstallCommand,
 	checkForUpdates,
 	getInstallationInfo,
 	PackageManager,
 	resolveCliHubOwnerContext,
+	shouldSkipAutoUpdateOnStartup,
 	withMinimumReleaseAgeBypass,
 } from "./update";
 
@@ -87,7 +89,11 @@ describe("getInstallationInfo", () => {
 		expect(getInstallationInfo("1.2.3")).toEqual({
 			packageManager: PackageManager.NPM,
 			packageName: "@trumbodev/cli",
-			updateCommand: "npm update -g @trumbodev/cli --tag latest",
+			updateCommand: buildCliInstallCommand({
+				packageManager: PackageManager.NPM,
+				packageName: "@trumbodev/cli",
+				tag: "latest",
+			}),
 		});
 	});
 
@@ -101,7 +107,11 @@ describe("getInstallationInfo", () => {
 		expect(getInstallationInfo("1.2.3-nightly.456")).toEqual({
 			packageManager: PackageManager.NPM,
 			packageName: "@trumbodev/cli",
-			updateCommand: "npm update -g @trumbodev/cli --tag nightly",
+			updateCommand: buildCliInstallCommand({
+				packageManager: PackageManager.NPM,
+				packageName: "@trumbodev/cli",
+				tag: "nightly",
+			}),
 		});
 	});
 
@@ -241,14 +251,26 @@ describe("hub restart owner selection", () => {
 	});
 });
 
+describe("shouldSkipAutoUpdateOnStartup", () => {
+	it("skips update and version invocations", () => {
+		expect(shouldSkipAutoUpdateOnStartup(["update"])).toBe(true);
+		expect(shouldSkipAutoUpdateOnStartup(["--verbose", "update"])).toBe(true);
+		expect(shouldSkipAutoUpdateOnStartup(["version"])).toBe(true);
+		expect(shouldSkipAutoUpdateOnStartup(["--update"])).toBe(true);
+		expect(shouldSkipAutoUpdateOnStartup(["chat"])).toBe(false);
+	});
+});
+
 describe("withMinimumReleaseAgeBypass", () => {
 	it("adds the package-manager-specific cooldown bypass", () => {
 		expect(
 			withMinimumReleaseAgeBypass(
-				"npm update -g @trumbodev/cli --tag latest",
+				"npm install -g @trumbodev/cli@latest --allow-scripts=@trumbodev/cli",
 				PackageManager.NPM,
 			).command,
-		).toBe("npm update -g @trumbodev/cli --tag latest --min-release-age=0");
+		).toBe(
+			"npm install -g @trumbodev/cli@latest --allow-scripts=@trumbodev/cli --min-release-age=0",
+		);
 		expect(
 			withMinimumReleaseAgeBypass(
 				"bun add -g @trumbodev/cli@latest",
