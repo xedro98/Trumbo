@@ -51,6 +51,12 @@ export interface TrumboPassSubscriptionOption {
 
 export const MAIN_MENU: MenuOption[] = [
 	{
+		label: "Sign in with Trumbo",
+		value: "trumbo",
+		detail: "Use your Trumbo account (free or TrumboPass)",
+		icon: "\u2726",
+	},
+	{
 		label: "Sign in with TrumboPass",
 		value: "trumbo-pass",
 		detail: "Low cost subscription for everyone (disabled)",

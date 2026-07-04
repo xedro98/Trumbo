@@ -9,6 +9,10 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.51
+
+- **New feature:** "Sign in with Trumbo" is now the first option on the first-start onboarding menu (alongside "Sign in with ChatGPT" and "Bring your own provider"). Uses the existing Trumbo device-code OAuth flow against `platform.trumbo.dev` — no new auth backend needed. After sign-in, routes to the featured Trumbo model picker.
+
 ## 3.0.50
 
 - **Hotfix:** v3.0.49 had a SyntaxError (`Identifier 'result' has already been declared`) because `var result` inside the Windows block conflicted with `const result` at the end of the function due to hoisting. Renamed to `winResult`.
