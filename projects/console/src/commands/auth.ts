@@ -12,7 +12,10 @@ import {
 import { Command } from "commander";
 import open from "open";
 import React from "react";
-import { disableOpenTuiGraphicsProbe } from "../tui/opentui-env";
+import {
+	disableOpenTuiGraphicsProbe,
+	resolveOpenTuiMouseMovement,
+} from "../tui/opentui-env";
 import {
 	getPersistedProviderApiKey,
 	isOAuthProvider,
@@ -335,7 +338,7 @@ async function runInteractiveAuthTui(input: AuthCommandInput): Promise<number> {
 	const renderer = await createCliRenderer({
 		exitOnCtrlC: false,
 		autoFocus: false,
-		enableMouseMovement: true,
+		enableMouseMovement: resolveOpenTuiMouseMovement(),
 	});
 
 	return await new Promise<number>((resolve, reject) => {

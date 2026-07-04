@@ -8,8 +8,9 @@
 //
 // Resolution order:
 // 1. TRUMBO_BIN_PATH env var override
-// 2. Cached binary at bin/.trumbo (created by postinstall)
-// 3. Walk up node_modules to find the platform-specific package
+// 2. Stable local cache outside node_modules (Windows: %LOCALAPPDATA%\Trumbo\bin)
+// 3. Cached binary at bin/.trumbo beside this wrapper
+// 4. require.resolve + walk up node_modules to find the platform package
 
 const childProcess = require("child_process");
 const fs = require("fs");
@@ -63,19 +64,58 @@ function run(target) {
 	process.exit(1);
 }
 
+function localRuntimeBinaryPath() {
+	if (process.platform === "win32") {
+		const base =
+			process.env.LOCALAPPDATA || path.join(os.homedir(), "AppData", "Local");
+		return path.join(base, "Trumbo", "bin", "trumbo.exe");
+	}
+	return path.join(os.homedir(), ".trumbo", "bin", "trumbo");
+}
+
+function readLocalRuntimeBinaryPath() {
+	const target = localRuntimeBinaryPath();
+	if (fs.existsSync(target)) {
+		return target;
+	}
+	if (process.platform !== "win32") {
+		return undefined;
+	}
+	const pointer = path.join(path.dirname(target), "current.txt");
+	if (!fs.existsSync(pointer)) {
+		return undefined;
+	}
+	const fileName = fs.readFileSync(pointer, "utf8").trim();
+	if (!fileName) {
+		return undefined;
+	}
+	const resolved = path.join(path.dirname(target), fileName);
+	return fs.existsSync(resolved) ? resolved : undefined;
+}
+
 // 1. Check env var override
 const envPath = process.env.TRUMBO_BIN_PATH;
 if (envPath) {
 	run(envPath);
 }
 
-// 2. Check cached binary
-const cached = path.join(scriptDir, ".trumbo");
-if (fs.existsSync(cached)) {
-	run(cached);
+// 2. Stable cache outside node_modules (survives npm EBUSY on Windows)
+const localRuntime = readLocalRuntimeBinaryPath();
+if (localRuntime) {
+	run(localRuntime);
 }
 
-// 3. Detect platform and architecture
+// 3. Cached binary beside wrapper
+const cachedNames =
+	process.platform === "win32" ? [".trumbo.exe", ".trumbo"] : [".trumbo"];
+for (const cachedName of cachedNames) {
+	const cached = path.join(scriptDir, cachedName);
+	if (fs.existsSync(cached)) {
+		run(cached);
+	}
+}
+
+// 4. Detect platform and architecture
 const platformMap = {
 	darwin: "darwin",
 	linux: "linux",
@@ -101,7 +141,28 @@ const binary = platform === "windows" ? "trumbo.exe" : "trumbo";
 // Build fallback chain of package names to try
 const names = [base];
 
+function resolveViaRequire(packageName) {
+	try {
+		const requireFn = require("module").createRequire(scriptPath);
+		const packageJsonPath = requireFn.resolve(packageName + "/package.json");
+		const candidate = path.join(path.dirname(packageJsonPath), "bin", binary);
+		if (fs.existsSync(candidate)) {
+			return candidate;
+		}
+	} catch (_error) {
+		// Package not installed — fall through to node_modules walk.
+	}
+	return undefined;
+}
+
 function findBinary(startDir) {
+	for (const name of names) {
+		const viaRequire = resolveViaRequire(name);
+		if (viaRequire) {
+			return viaRequire;
+		}
+	}
+
 	let current = startDir;
 	for (;;) {
 		const modules = path.join(current, "node_modules");
@@ -121,6 +182,41 @@ function findBinary(startDir) {
 	}
 }
 
+function wrapperVersion() {
+	try {
+		const requireFn = require("module").createRequire(scriptPath);
+		return requireFn("../package.json").version || "latest";
+	} catch (_error) {
+		return "latest";
+	}
+}
+
+function installHelp() {
+	const lines = [
+		"Try reinstalling:",
+		"  npm install -g @trumbodev/cli",
+	];
+	if (process.platform === "win32") {
+		const local = readLocalRuntimeBinaryPath();
+		lines.push(
+			"",
+			"On Windows, close any running Trumbo processes first, then run:",
+			"  npm install -g --force @trumbodev/cli --allow-scripts=@trumbodev/cli",
+			"",
+			"If npm reports EBUSY/EPERM, stop Trumbo and delete stale folders:",
+			'  Get-Process trumbo -ErrorAction SilentlyContinue | Stop-Process -Force',
+			'  Remove-Item -Recurse -Force "$env:APPDATA\\npm\\node_modules\\@trumbodev\\.cli-*" -ErrorAction SilentlyContinue',
+			"",
+			"If that still fails, install the platform package directly:",
+			"  npm install -g " + base + "@" + wrapperVersion(),
+		);
+		if (local) {
+			lines.push("", "Cached binary found at:", "  " + local);
+		}
+	}
+	return lines.join("\n");
+}
+
 const resolved = findBinary(scriptDir);
 if (!resolved) {
 	console.error(
@@ -135,7 +231,7 @@ if (!resolved) {
 				return '"' + n + '"';
 			}).join(" or ") +
 			"\n\n" +
-			"Try reinstalling: npm install -g @trumbodev/cli",
+			installHelp(),
 	);
 	process.exit(1);
 }

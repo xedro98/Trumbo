@@ -9,6 +9,11 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.44
+
+- Fixed Windows npm install/update failures caused by locked `trumbo.exe` inside `node_modules`. Postinstall now copies the platform binary to a stable cache outside `node_modules` (`%LOCALAPPDATA%\\Trumbo\\bin` on Windows), and the `trumbo` launcher prefers that cache on every run.
+- Fixed the TUI input box filling with random escape codes on Windows (e.g. `[555;56;25m`). Mouse-movement reporting is disabled on Windows, and leaked terminal control sequences are filtered before they reach the prompt.
+
 ## 3.0.41
 
 - The CLI now connects to the deployed Trumbo web app by default. The production environment points at `https://platform.trumbo.dev` (was an unconfigured placeholder), so auth, account, billing, plan, and chat-completion endpoints hit the live backend out of the box. Override with `TRUMBO_API_BASE_URL` / `TRUMBO_APP_URL`, or run against `wrangler dev` with `TRUMBO_ENVIRONMENT=local`.

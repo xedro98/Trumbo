@@ -2,88 +2,115 @@
 
 // Post-install script for Trumbo CLI.
 //
-// Creates a hard link (or copy fallback) from the platform-specific binary
-// to bin/.trumbo for fast startup on subsequent runs.
-//
-// This script must use only Node.js APIs (no Bun) since it runs via
-// "node script/postinstall.mjs" in the npm lifecycle.
+// Copies the platform binary to a stable location outside node_modules so
+// Windows npm upgrades/uninstalls do not break on locked trumbo.exe files.
 
 import fs from "node:fs";
 import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+	copyBinaryToLocalCache,
+	platformBinaryFileName,
+	platformPackageName,
+	readLocalRuntimeBinaryPath,
+} from "./local-binary-cache.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 
-function main() {
-	if (os.platform() === "win32") {
-		// On Windows, npm creates .cmd shims from the bin field.
-		// The resolver script handles binary lookup at runtime.
-		console.log("Windows detected: skipping binary cache setup");
-		return;
+function resolvePlatformBinary(packageName) {
+	const binaryName = platformBinaryFileName();
+	const packageJsonPath = require.resolve(`${packageName}/package.json`);
+	const packageDir = path.dirname(packageJsonPath);
+	const binaryPath = path.join(packageDir, "bin", binaryName);
+	if (!fs.existsSync(binaryPath)) {
+		throw new Error(`Binary not found at ${binaryPath}`);
 	}
+	return binaryPath;
+}
 
-	const platformMap = {
-		darwin: "darwin",
-		linux: "linux",
-	};
-	const platform = platformMap[os.platform()] || os.platform();
-	const arch = os.arch();
-	const packageName = `@trumbodev/cli-${platform}-${arch}`;
-	const binaryName = "trumbo";
+function binDirectory() {
+	return path.basename(__dirname) === "script"
+		? path.join(__dirname, "..", "bin")
+		: path.join(__dirname, "bin");
+}
 
-	let binaryPath;
-	try {
-		const packageJsonPath = require.resolve(`${packageName}/package.json`);
-		const packageDir = path.dirname(packageJsonPath);
-		binaryPath = path.join(packageDir, "bin", binaryName);
+function cacheBinaryBesideWrapper(binaryPath) {
+	const binDir = binDirectory();
+	const targetName = os.platform() === "win32" ? ".trumbo.exe" : ".trumbo";
+	const target = path.join(binDir, targetName);
 
-		if (!fs.existsSync(binaryPath)) {
-			throw new Error(`Binary not found at ${binaryPath}`);
-		}
-	} catch (_error) {
-		// Platform package not available. The resolver script will find
-		// it at runtime by walking node_modules. This is expected on
-		// platforms we don't ship binaries for.
-		console.log(`Note: ${packageName} not found, skipping binary cache`);
-		return;
-	}
-
-	const binDir =
-		path.basename(__dirname) === "script"
-			? path.join(__dirname, "..", "bin")
-			: path.join(__dirname, "bin");
-	const target = path.join(binDir, ".trumbo");
-
-	// Ensure bin directory exists
 	if (!fs.existsSync(binDir)) {
 		fs.mkdirSync(binDir, { recursive: true });
 	}
 
-	// Remove existing cached binary
 	if (fs.existsSync(target)) {
-		fs.unlinkSync(target);
+		try {
+			fs.unlinkSync(target);
+		} catch {
+			return;
+		}
 	}
 
-	// Hard link preferred (shares disk space), copy as fallback
-	// (hard links fail on some filesystems like NFS or cross-device)
 	try {
 		fs.linkSync(binaryPath, target);
 	} catch {
-		fs.copyFileSync(binaryPath, target);
+		try {
+			fs.copyFileSync(binaryPath, target);
+		} catch {
+			// Wrapper-local cache is optional on Windows.
+		}
 	}
 
-	fs.chmodSync(target, 0o755);
-	console.log(`Cached trumbo binary at ${target}`);
+	if (os.platform() !== "win32") {
+		fs.chmodSync(target, 0o755);
+	}
+}
+
+function windowsInstallHelp(packageName) {
+	const cached = readLocalRuntimeBinaryPath();
+	if (cached) {
+		console.log(`Using cached Trumbo binary at ${cached}`);
+		return;
+	}
+
+	console.error(
+		[
+			"",
+			`${packageName} was not installed.`,
+			"Close any running Trumbo processes, then reinstall with:",
+			"  npm install -g --force @trumbodev/cli --allow-scripts=@trumbodev/cli",
+			"",
+			"Or install the platform package directly:",
+			`  npm install -g ${packageName}`,
+		].join("\n"),
+	);
+}
+
+function main() {
+	const packageName = platformPackageName();
+
+	let binaryPath;
+	try {
+		binaryPath = resolvePlatformBinary(packageName);
+	} catch (_error) {
+		console.log(`Note: ${packageName} not found, skipping binary cache`);
+		if (os.platform() === "win32") {
+			windowsInstallHelp(packageName);
+		}
+		return;
+	}
+
+	const cached = copyBinaryToLocalCache(binaryPath);
+	console.log(`Cached Trumbo binary at ${cached}`);
+	cacheBinaryBesideWrapper(binaryPath);
 }
 
 try {
 	main();
 } catch (error) {
-	// postinstall failures should never block npm install.
-	// The resolver script will find the binary at runtime.
 	console.error(`postinstall: ${error.message}`);
 	process.exit(0);
 }

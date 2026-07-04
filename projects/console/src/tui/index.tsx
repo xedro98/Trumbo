@@ -1,5 +1,6 @@
 import { createCliRenderer } from "@opentui/core";
 import { createRoot } from "@opentui/react";
+import { resolveOpenTuiMouseMovement } from "./opentui-env";
 import { Root } from "./root";
 import { installTuiStdioCapture } from "./stdio-capture";
 import type { TuiProps } from "./types";
@@ -12,7 +13,7 @@ export async function renderOpenTui(
 	const renderer = await createCliRenderer({
 		exitOnCtrlC: false,
 		autoFocus: false,
-		enableMouseMovement: true,
+		enableMouseMovement: resolveOpenTuiMouseMovement(),
 	});
 	const restoreStdio = installTuiStdioCapture();
 

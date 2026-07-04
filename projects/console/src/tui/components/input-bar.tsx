@@ -12,6 +12,10 @@ import {
 	readImmediateImagePasteAttachment,
 } from "../utils/image-paste";
 import { shouldCompactPastedText } from "../utils/pasted-snippets";
+import {
+	sanitizeTerminalInputText,
+	shouldBlockTerminalInputKey,
+} from "../utils/sanitize-terminal-input";
 
 export type TextareaHandle = Pick<
 	TextareaRenderable,
@@ -180,6 +184,11 @@ export function InputBar(props: InputBarProps) {
 
 	const handleKeyDown = useCallback(
 		(event: KeyEvent) => {
+			if (shouldBlockTerminalInputKey(event)) {
+				event.preventDefault();
+				return;
+			}
+
 			if (!event.ctrl || event.name !== "v" || !onImagePasteRef.current) {
 				return;
 			}
@@ -193,7 +202,19 @@ export function InputBar(props: InputBarProps) {
 		[insertImageAttachment],
 	);
 
+	const emitContentChange = useCallback(() => {
+		let text = inputRef.current?.plainText ?? "";
+		const cleaned = sanitizeTerminalInputText(text);
+		if (cleaned !== text) {
+			inputRef.current?.setText(cleaned);
+			text = cleaned;
+		}
+		onContentChangeRef.current(text);
+		emitVisualCursorChange();
+	}, [emitVisualCursorChange, inputRef]);
+
 	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: OpenTUI boxes handle terminal mouse input.
 		<box
 			flexDirection="row"
 			alignItems="flex-start"
@@ -215,9 +236,7 @@ export function InputBar(props: InputBarProps) {
 					initialValue={initialValue}
 					onContentChange={() => {
 						queueMicrotask(() => {
-							const text = inputRef.current?.plainText ?? "";
-							onContentChangeRef.current(text);
-							emitVisualCursorChange();
+							emitContentChange();
 						});
 					}}
 					onPaste={handlePaste}

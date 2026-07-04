@@ -217,6 +217,7 @@ await $`rm -rf ${mainPkgDir}`;
 await $`mkdir -p ${mainPkgDir}`;
 await $`cp -r ${join(cliDir, "bin")} ${join(mainPkgDir, "bin")}`;
 await $`cp ${join(cliDir, "script/postinstall.mjs")} ${join(mainPkgDir, "postinstall.mjs")}`;
+await $`cp ${join(cliDir, "script/local-binary-cache.mjs")} ${join(mainPkgDir, "local-binary-cache.mjs")}`;
 
 // Copy LICENSE from repo root if it exists
 const licenseFrom = join(cliDir, "../../LICENSE");
