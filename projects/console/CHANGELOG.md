@@ -9,6 +9,10 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.50
+
+- **Hotfix:** v3.0.49 had a SyntaxError (`Identifier 'result' has already been declared`) because `var result` inside the Windows block conflicted with `const result` at the end of the function due to hoisting. Renamed to `winResult`.
+
 ## 3.0.49
 
 - **Critical fix (Windows):** characters were being dropped while typing in the TUI. The root cause was the Node.js wrapper (`bin/trumbo`) using async `spawn` to launch the compiled Bun binary — Node.js's libuv stdin handle on the shared ConPTY console was intercepting input events. Fixed by using `spawnSync` with a temporary `.cmd` intermediary, which completely blocks Node.js during the TUI session (no event loop, no stdin polling) and lets `cmd.exe` properly pass console handles to the binary. This mimics running the binary via a direct `.cmd` launcher, which works correctly.

@@ -50,14 +50,14 @@ function run(target) {
 			os.tmpdir(),
 			"trumbo-run-" + process.pid + ".cmd",
 		);
-		var quotedArgs = args
+		const quotedArgs = args
 			.map(function (a) {
 				return '"' + String(a).replace(/"/g, '""') + '"';
 			})
 			.join(" ");
 		fs.writeFileSync(tmpCmd, '@"' + target + '" ' + quotedArgs + "\r\n");
 
-		var result = childProcess.spawnSync(
+		const winResult = childProcess.spawnSync(
 			process.env.ComSpec || "cmd.exe",
 			["/c", tmpCmd],
 			spawnOptions,
@@ -69,15 +69,15 @@ function run(target) {
 			// Best-effort cleanup.
 		}
 
-		if (result.error) {
-			console.error(result.error.message);
+		if (winResult.error) {
+			console.error(winResult.error.message);
 			process.exit(1);
 		}
-		if (typeof result.status === "number") {
-			process.exit(result.status);
+		if (typeof winResult.status === "number") {
+			process.exit(winResult.status);
 		}
-		if (result.signal) {
-			process.kill(process.pid, result.signal);
+		if (winResult.signal) {
+			process.kill(process.pid, winResult.signal);
 			process.exit(128);
 		}
 		process.exit(1);
