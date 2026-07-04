@@ -12,10 +12,7 @@ import {
 	readImmediateImagePasteAttachment,
 } from "../utils/image-paste";
 import { shouldCompactPastedText } from "../utils/pasted-snippets";
-import {
-	sanitizeTerminalInputText,
-	shouldBlockTerminalInputKey,
-} from "../utils/sanitize-terminal-input";
+import { shouldBlockTerminalInputKey } from "../utils/sanitize-terminal-input";
 
 export type TextareaHandle = Pick<
 	TextareaRenderable,
@@ -203,12 +200,7 @@ export function InputBar(props: InputBarProps) {
 	);
 
 	const emitContentChange = useCallback(() => {
-		let text = inputRef.current?.plainText ?? "";
-		const cleaned = sanitizeTerminalInputText(text);
-		if (cleaned !== text) {
-			inputRef.current?.setText(cleaned);
-			text = cleaned;
-		}
+		const text = inputRef.current?.plainText ?? "";
 		onContentChangeRef.current(text);
 		emitVisualCursorChange();
 	}, [emitVisualCursorChange, inputRef]);

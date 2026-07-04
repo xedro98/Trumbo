@@ -9,6 +9,10 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.48
+
+- **Critical fix:** characters were being dropped while typing (e.g. "Hi there" showed as "hre"). The per-keystroke `sanitizeTerminalInputText` + `setText()` call in `emitContentChange` was overwriting the textarea's internal state mid-typing. Removed it — with mouse disabled on Windows, the key-level filter (`shouldBlockTerminalInputKey`) is sufficient, and pastes are already sanitized separately.
+
 ## 3.0.47
 
 - **Critical fix:** keyboard input was broken — the input filter was too aggressive and blocked arrow keys, function keys, Delete, Home, End, and any key whose raw sequence contained an escape character. The filter now only blocks actual mouse/SGR fragments.
