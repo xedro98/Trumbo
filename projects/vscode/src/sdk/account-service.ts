@@ -11,6 +11,8 @@ import { TRUMBO_API_ENDPOINT } from "@/shared/trumbo/api"
 import { getAxiosSettings } from "@/shared/net"
 import { Logger } from "@/shared/services/Logger"
 import { AuthService } from "./auth-service"
+import { getProviderSettingsManager } from "./provider-migration"
+import { syncPlatformKnowledgeMcpFromAuthService } from "./platform-knowledge-mcp"
 
 /**
  * Live rate-limit usage for a single window (5h / daily / weekly).
@@ -203,15 +205,37 @@ export class TrumboAccountService {
 					organizationId: organizationId || null,
 				},
 			})
-			const activeOrgId = this._authService.getActiveOrganizationId()
-			if (activeOrgId !== organizationId) {
-				// Force a refresh of the auth info after switching
-				await this._authService.restoreRefreshTokenAndRetrieveAuthInfo()
-			}
+			this.persistActiveOrganizationId(organizationId ?? null)
+			await this._authService.restoreRefreshTokenAndRetrieveAuthInfo()
+			await syncPlatformKnowledgeMcpFromAuthService(this._authService)
 		} catch (error) {
 			Logger.error("Error switching account:", error)
 			await this._authService.restoreRefreshTokenAndRetrieveAuthInfo()
 			throw error
+		}
+	}
+
+	private persistActiveOrganizationId(organizationId: string | null): void {
+		try {
+			const manager = getProviderSettingsManager()
+			const existing = manager.getProviderSettings("trumbo")
+			if (!existing) {
+				return
+			}
+			manager.saveProviderSettings({
+				...existing,
+				provider: "trumbo",
+				auth: {
+					...existing.auth,
+					organizationId: organizationId?.trim() || undefined,
+				},
+			})
+		} catch (error) {
+			Logger.warn(
+				`[TrumboAccountService] Failed to persist active organization id: ${
+					error instanceof Error ? error.message : String(error)
+				}`,
+			)
 		}
 	}
 

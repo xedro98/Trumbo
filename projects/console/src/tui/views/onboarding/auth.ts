@@ -10,6 +10,7 @@ import {
 import { getTrumboEnvironmentConfig } from "@trumbo/shared";
 import open from "open";
 import { identifyFeatureFlagsAccount } from "../../../utils/feature-flags";
+import { syncTrumboPlatformKnowledgeMcp } from "../../trumbo-account";
 
 export type OnboardingOAuthProviderId = string;
 
@@ -65,6 +66,10 @@ export function runOAuthAuthFlow(input: {
 				void identifyFeatureFlagsAccount({
 					id: credentials.accountId,
 					email: credentials.email,
+				}).catch(() => {});
+				void syncTrumboPlatformKnowledgeMcp({
+					config: { apiKey: "", logger: undefined, providerId: "trumbo" },
+					providerSettingsManager: input.providerSettingsManager,
 				}).catch(() => {});
 			}
 			input.onComplete(input.providerId);
@@ -133,6 +138,10 @@ export function runDeviceCodeAuthFlow(input: {
 						void identifyFeatureFlagsAccount({
 							id: credentials.accountId,
 							email: credentials.email,
+						}).catch(() => {});
+						void syncTrumboPlatformKnowledgeMcp({
+							config: { apiKey: "", logger: undefined, providerId: "trumbo" },
+							providerSettingsManager: input.providerSettingsManager,
 						}).catch(() => {});
 					}
 					input.onComplete(input.providerId);

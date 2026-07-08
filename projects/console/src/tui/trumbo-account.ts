@@ -5,7 +5,10 @@ import {
 	getValidTrumboCredentials,
 	type ProviderSettings,
 	ProviderSettingsManager,
+	removePlatformKnowledgeMcpServer,
 	saveLocalProviderOAuthCredentials,
+	syncPlatformKnowledgeMcpServer,
+	resolveActiveOrganizationIdFromUser,
 	type TrumboAccountBalance,
 	type TrumboAccountOrganization,
 	type TrumboAccountOrganizationBalance,
@@ -141,6 +144,58 @@ async function resolveValidTrumboAccountAuthToken(input: {
 	});
 }
 
+export async function syncTrumboPlatformKnowledgeMcp(input: {
+	config: TrumboAccountConfig;
+	trumboApiBaseUrl?: string;
+	trumboProviderSettings?: ProviderSettings;
+	providerSettingsManager?: ProviderSettingsManager;
+}): Promise<void> {
+	const manager =
+		input.providerSettingsManager ?? new ProviderSettingsManager();
+	const settings =
+		manager.getProviderSettings("trumbo") ?? input.trumboProviderSettings;
+	const apiBaseUrl = resolveAccountApiBaseUrl({
+		trumboApiBaseUrl: input.trumboApiBaseUrl,
+		trumboProviderSettings: settings,
+	});
+	let authToken: string | undefined;
+	try {
+		authToken = await resolveValidTrumboAccountAuthToken({
+			config: input.config,
+			trumboProviderSettings: settings,
+			manager,
+			apiBaseUrl,
+		});
+	} catch {
+		authToken = undefined;
+	}
+	if (!authToken) {
+		await removePlatformKnowledgeMcpServer().catch(() => {});
+		return;
+	}
+	let orgId = settings?.auth?.organizationId?.trim() || undefined;
+	if (!orgId) {
+		try {
+			const service = await createTrumboAccountService({
+				config: input.config,
+				trumboApiBaseUrl: input.trumboApiBaseUrl,
+				trumboProviderSettings: settings,
+				providerSettingsManager: manager,
+			});
+			if (service) {
+				const user = await service.fetchMe();
+				orgId = resolveActiveOrganizationIdFromUser(user);
+			}
+		} catch {
+			orgId = undefined;
+		}
+	}
+	await syncPlatformKnowledgeMcpServer({
+		accessToken: authToken,
+		orgId,
+	});
+}
+
 export async function createTrumboAccountService(input: {
 	config: TrumboAccountConfig;
 	trumboApiBaseUrl?: string;
@@ -269,6 +324,18 @@ export async function switchTrumboAccount(input: {
 			...current.auth,
 			organizationId: nextOrganizationId,
 		},
+	});
+	await syncTrumboPlatformKnowledgeMcp({
+		config: input.config,
+		trumboApiBaseUrl: input.trumboApiBaseUrl,
+		trumboProviderSettings: {
+			...current,
+			auth: {
+				...current.auth,
+				organizationId: nextOrganizationId,
+			},
+		},
+		providerSettingsManager: manager,
 	});
 }
 

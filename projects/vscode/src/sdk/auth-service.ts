@@ -15,6 +15,7 @@ import {
 	loginTrumboOAuth,
 	loginOcaOAuth,
 	loginOpenAICodex,
+	removePlatformKnowledgeMcpServer,
 } from "@trumbo/core"
 import type { ApiProvider } from "@shared/api"
 import { AuthState, UserInfo } from "@shared/proto/trumbo/account"
@@ -35,6 +36,7 @@ import { fetch, getAxiosSettings } from "@/shared/net"
 import { Logger } from "@/shared/services/Logger"
 import { openExternal } from "@/utils/env"
 import { getProviderSettingsManager } from "./provider-migration"
+import { syncPlatformKnowledgeMcpFromAuthService } from "./platform-knowledge-mcp"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -349,6 +351,7 @@ export class AuthService {
 					this._trumboAuthInfo = null
 					this._authenticated = false
 					clearTrumboCredentials()
+					await removePlatformKnowledgeMcpServer().catch(() => {})
 					setImmediate(() => {
 						this.sendAuthStatusUpdate().catch(() => {})
 					})
@@ -381,7 +384,10 @@ export class AuthService {
 						expiresAt: newCredentials.expires,
 						accountId: this._trumboAuthInfo.userInfo.id,
 					})
+				}
+				void this.syncPlatformKnowledgeMcpSettings()
 
+				if (credentialsChanged) {
 					setImmediate(() => {
 						this.sendAuthStatusUpdate().catch((err) => {
 							Logger.error("[SdkAuthService] Error sending auth status update after refresh:", err)
@@ -400,6 +406,10 @@ export class AuthService {
 
 		const result = await this._refreshPromise
 		return result !== undefined
+	}
+
+	private async syncPlatformKnowledgeMcpSettings(): Promise<void> {
+		await syncPlatformKnowledgeMcpFromAuthService(this)
 	}
 
 	/**
@@ -511,6 +521,8 @@ export class AuthService {
 					accountId: authInfo.userInfo.id || credentials.accountId,
 				})
 
+				void this.syncPlatformKnowledgeMcpSettings()
+
 				// Push auth state update
 				await this.sendAuthStatusUpdate()
 
@@ -586,6 +598,8 @@ export class AuthService {
 			expiresAt: new Date(tokenData.expiresAt).getTime(),
 			accountId: this._trumboAuthInfo.userInfo.id,
 		})
+
+		void this.syncPlatformKnowledgeMcpSettings()
 
 		await this.sendAuthStatusUpdate()
 		Logger.log(`[SdkAuthService] E2E mock login completed as ${this._trumboAuthInfo.userInfo.email}`)
@@ -727,6 +741,7 @@ export class AuthService {
 			this._trumboAuthInfo = null
 			this._authenticated = false
 			clearTrumboCredentials()
+			await removePlatformKnowledgeMcpServer().catch(() => {})
 			await this.sendAuthStatusUpdate()
 
 			// Notify BannerService of auth change (mirrors classic AuthService)
@@ -807,6 +822,8 @@ export class AuthService {
 				accountId: authInfo.userInfo.id,
 			})
 
+			void this.syncPlatformKnowledgeMcpSettings()
+
 			await this.sendAuthStatusUpdate()
 		} catch (error) {
 			Logger.error("[SdkAuthService] Error handling auth callback:", error)
@@ -859,6 +876,7 @@ export class AuthService {
 				this._authenticated = false
 				this._trumboAuthInfo = null
 				clearTrumboCredentials()
+				await removePlatformKnowledgeMcpServer().catch(() => {})
 				await this.sendAuthStatusUpdate()
 				return
 			}
@@ -893,6 +911,8 @@ export class AuthService {
 					Logger.warn("[SdkAuthService] Could not fetch user info on restore — UI will show limited profile")
 				}
 			}
+
+			void this.syncPlatformKnowledgeMcpSettings()
 
 			await this.sendAuthStatusUpdate()
 

@@ -26,6 +26,7 @@ import {
 } from "../utils/provider-auth";
 import { listLocalProviders } from "../utils/provider-catalog";
 import { identifyTelemetryAccount } from "../utils/telemetry";
+import { syncTrumboPlatformKnowledgeMcp } from "../tui/trumbo-account";
 
 export {
 	getPersistedProviderApiKey,
@@ -449,6 +450,12 @@ export async function runAuthProviderCommand(
 			id: settings.auth?.accountId,
 			provider: providerId,
 		});
+		if (providerId === "trumbo" || providerId === "trumbo-pass") {
+			await syncTrumboPlatformKnowledgeMcp({
+				config: { apiKey: "", logger: undefined, providerId: "trumbo" },
+				providerSettingsManager,
+			}).catch(() => {});
+		}
 		io.writeln(
 			`${c.green}You are now logged in to ${c.green}${providerId}${c.reset}`,
 		);

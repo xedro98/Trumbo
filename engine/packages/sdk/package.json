@@ -1,7 +1,7 @@
 {
 	"name": "@trumbo/sdk",
 	"description": "Trumbo SDK - user-facing alias for @trumbo/core",
-	"version": "0.0.54",
+	"version": "0.0.55",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/xedro98/trembo",

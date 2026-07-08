@@ -9,6 +9,11 @@
 
 # Trumbo CLI Changelog
 
+## 3.0.53
+
+- Knowledge base search (`search_knowledge`) is now wired automatically when you sign in with Trumbo; no manual MCP server setup required
+- Platform MCP settings refresh on sign-in, org switch, token refresh, and logout so Knowledge stays scoped to your active org
+
 ## 3.0.52
 
 - Removed the disabled "Sign in with TrumboPass" menu entry — it was redundant with "Sign in with Trumbo" which already covers both free and TrumboPass accounts. The onboarding menu is now: Sign in with Trumbo, Sign in with ChatGPT, Bring your own provider.

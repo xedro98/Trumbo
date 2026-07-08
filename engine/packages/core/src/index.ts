@@ -131,6 +131,17 @@ export {
 	type UserCurrentPlan,
 	type UserRemoteConfigOrganization,
 	type UserRemoteConfigResponse,
+	isTrumboPlatformProvider,
+	normalizePlatformKnowledgeOrgId,
+	PLATFORM_KNOWLEDGE_MCP_SERVER_NAME,
+	removePlatformKnowledgeMcpServer,
+	resolveActiveOrganizationIdFromUser,
+	type SyncPlatformKnowledgeMcpAction,
+	type SyncPlatformKnowledgeMcpForSessionInput,
+	type SyncPlatformKnowledgeMcpServerOptions,
+	type SyncPlatformKnowledgeMcpServerResult,
+	syncPlatformKnowledgeMcpForSession,
+	syncPlatformKnowledgeMcpServer,
 } from "./account";
 export {
 	createOAuthClientCallbacks,

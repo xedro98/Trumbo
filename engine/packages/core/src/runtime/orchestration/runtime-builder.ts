@@ -38,6 +38,7 @@ import {
 	filterDisabledTools,
 	resolveDisabledToolNames,
 } from "../../services/global-settings";
+import { syncPlatformKnowledgeMcpForSession } from "../../account/platform-mcp";
 import { createLocalTeamStore } from "../../services/storage/team-store";
 import type { CoreAgentMode, CoreSessionConfig } from "../../types/config";
 import type {
@@ -451,6 +452,19 @@ export class DefaultRuntimeBuilder implements RuntimeBuilder {
 				),
 			);
 			if (!normalized.disableMcpSettingsTools) {
+				try {
+					await syncPlatformKnowledgeMcpForSession({
+						providerId: config.providerId,
+						apiKey: config.apiKey,
+						headers: config.headers,
+					});
+				} catch (error) {
+					const message =
+						error instanceof Error ? error.message : String(error);
+					config.logger?.log(
+						`[mcp] Failed to sync platform Knowledge MCP settings: ${message}`,
+					);
+				}
 				const mcpRuntime = await loadConfiguredMcpTools(config.logger);
 				tools.push(...mcpRuntime.tools);
 				mcpShutdown = mcpRuntime.shutdown;

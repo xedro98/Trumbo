@@ -9,6 +9,12 @@
 
 # Trumbo SDK Changelog
 
+## 0.0.55
+
+- Auto-register the platform Knowledge MCP server (`trumbo-platform`) so signed-in Trumbo users get the `search_knowledge` tool without manual MCP setup
+- Sync Knowledge MCP credentials and org scope before agent sessions when using the Trumbo or TrumboPass provider
+- Harden platform MCP settings updates with managed-server guards, org id validation, and safe MCP URL checks
+
 ## 0.0.54
 
 - Improve basic compaction token budgeting so context compaction is more accurate

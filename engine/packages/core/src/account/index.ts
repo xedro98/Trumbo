@@ -9,6 +9,19 @@ export {
 	TrumboAccountService,
 	type TrumboAccountServiceOptions,
 } from "./trumbo-account-service";
+export {
+	isTrumboPlatformProvider,
+	normalizePlatformKnowledgeOrgId,
+	PLATFORM_KNOWLEDGE_MCP_SERVER_NAME,
+	removePlatformKnowledgeMcpServer,
+	resolveActiveOrganizationIdFromUser,
+	type SyncPlatformKnowledgeMcpAction,
+	type SyncPlatformKnowledgeMcpForSessionInput,
+	type SyncPlatformKnowledgeMcpServerOptions,
+	type SyncPlatformKnowledgeMcpServerResult,
+	syncPlatformKnowledgeMcpForSession,
+	syncPlatformKnowledgeMcpServer,
+} from "./platform-mcp";
 export type {
 	FeaturebaseTokenResponse,
 	TrumboAccountBalance,

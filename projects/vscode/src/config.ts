@@ -318,14 +318,14 @@ class TrumboEndpoint {
 					environment: Environment.local,
 					appBaseUrl: "http://localhost:3000",
 					apiBaseUrl: "http://localhost:7777",
-					mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
+					mcpBaseUrl: "http://localhost:8787/v1/mcp",
 				}
 	default:
 		return {
 			environment: Environment.production,
 			appBaseUrl: "https://platform.trumbo.dev",
 			apiBaseUrl: "https://platform.trumbo.dev",
-			mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
+			mcpBaseUrl: "https://platform.trumbo.dev/v1/mcp",
 		}
 	}
 	}
