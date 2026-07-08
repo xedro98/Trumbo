@@ -9,7 +9,15 @@ export function resolveModelFamily(
 	context: GatewayProviderContext,
 ): string | undefined {
 	const family = context.model.metadata?.family;
-	return typeof family === "string" ? family : undefined;
+	if (typeof family === "string") {
+		return family;
+	}
+
+	if (isQwenModel({ modelId: context.model.id })) {
+		return "qwen";
+	}
+
+	return undefined;
 }
 
 export function normalizeRoutingValue(value: string | undefined) {

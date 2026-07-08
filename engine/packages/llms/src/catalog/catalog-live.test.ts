@@ -1,3 +1,4 @@
+import { TRUMBO_ENVIRONMENTS } from "@trumbo/shared";
 import { describe, expect, it, vi } from "vitest";
 import {
 	getGeneratedModelsForProvider,
@@ -47,15 +48,13 @@ describe("models-dev-catalog", () => {
 		expect(result["trumbo-pass"]).toEqual({
 			"base-model": {
 				id: "base-model",
-				name: "OpenRouter Base Model",
+				name: "TrumboPass Base Model",
 				description: "Included in TrumboPass",
 				contextWindow: 200_000,
 				maxInputTokens: 180_000,
 				maxTokens: 16_384,
 				capabilities: ["tools", "reasoning", "images"],
 				pricing: { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 3.75 },
-				releaseDate: "2026-01-01",
-				family: "base-family",
 			},
 			"custom-model": {
 				id: "custom-model",
@@ -97,7 +96,7 @@ describe("models-dev-catalog", () => {
 			result["trumbo-pass"]?.["trumbo-pass/trumbo-pass/glm-5.1"],
 		).toMatchObject({
 			id: "trumbo-pass/trumbo-pass/glm-5.1",
-			name: "GLM 5.1",
+			name: "zai/glm-5.1",
 			contextWindow: 256_000,
 			maxInputTokens: 200_000,
 			maxTokens: 32_000,
@@ -400,14 +399,14 @@ describe("models-dev-catalog", () => {
 
 		expect(fetcher).toHaveBeenCalledWith("https://models.dev/api.json");
 		expect(fetcher).toHaveBeenCalledWith(
-			"http://0.0.0.0:0/api/v1/ai/trumbo/recommended-models",
+			`${TRUMBO_ENVIRONMENTS.production.apiBaseUrl}/api/v1/ai/trumbo/recommended-models`,
 		);
 		expect(result.openrouter).toHaveProperty("vendor/live-base-model");
 		expect(
 			result["trumbo-pass"]?.["trumbo-pass/live-base-model"],
 		).toMatchObject({
 			id: "trumbo-pass/live-base-model",
-			name: "Live Base Model",
+			name: "vendor/live-base-model",
 			contextWindow: 256_000,
 			maxInputTokens: 200_000,
 			maxTokens: 32_000,

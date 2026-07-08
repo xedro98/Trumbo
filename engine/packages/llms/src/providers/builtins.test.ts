@@ -150,7 +150,7 @@ describe("trumbo-pass builtin spec", () => {
 describe("built-in provider metadata", () => {
 	it("marks popular providers with a provider capability and rank", async () => {
 		await expect(getProvider("trumbo")).resolves.toMatchObject({
-			name: "Trumbo Usage-Billing",
+			name: "Trumbo",
 			capabilities: expect.arrayContaining(["popular"]),
 			metadata: { popularRank: 1 },
 		});

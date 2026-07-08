@@ -9,6 +9,7 @@ import type {
 	GatewayResolvedModel,
 	GatewayResolvedProviderConfig,
 } from "@trumbo/shared";
+import { isQwenModel } from "./model-facts";
 
 interface ProviderRecord {
 	manifest: GatewayProviderManifest;
@@ -87,11 +88,18 @@ function createUnregisteredModel(
 	provider: GatewayProviderManifest,
 	modelId: string,
 ): GatewayModelDefinition {
-	return {
+	const model: GatewayModelDefinition = {
 		id: modelId,
 		name: modelId,
 		providerId: provider.id,
 	};
+
+	if (isQwenModel({ modelId })) {
+		model.metadata = { family: "qwen" };
+		model.capabilities = ["text", "prompt-cache"];
+	}
+
+	return model;
 }
 
 export class GatewayRegistry {
