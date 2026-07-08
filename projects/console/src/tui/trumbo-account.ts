@@ -233,6 +233,7 @@ export async function loadTrumboAccountSnapshot(input: {
 	config: TrumboAccountConfig;
 	trumboApiBaseUrl?: string;
 	trumboProviderSettings?: ProviderSettings;
+	providerSettingsManager?: ProviderSettingsManager;
 }): Promise<TrumboAccountSnapshot> {
 	const apiBaseUrl = resolveAccountApiBaseUrl({
 		trumboApiBaseUrl: input.trumboApiBaseUrl,
