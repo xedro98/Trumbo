@@ -57,7 +57,7 @@ export function createRestoredCheckpointMetadata(
 	const history = readSessionCheckpointHistory(session).filter(
 		(entry) => entry.runCount <= runCount,
 	);
-	const latest = history.at(-1);
+	const latest = findCheckpointForRun(history, runCount);
 	return latest ? { latest, history } : undefined;
 }
 

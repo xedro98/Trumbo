@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/grid-box";
 import { Button } from "@/components/ui/button";
 import { MARKETING_ASCII_MAGIC_BG, MARKETING_CLI_CARD_IMAGE, MARKETING_QUARTZ_CARD_IMAGE, TRUMBO_LOGO_MARK } from "@/lib/brand";
-import { platformLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 export function HeroSection() {
 	return (
@@ -57,7 +56,7 @@ const PRODUCTS = [
 	{
 		title: "Trumbo Quartz",
 		buttonLabel: "Trumbo Quartz",
-		href: platformLink("/docs"),
+		href: "/quartz",
 		image: MARKETING_QUARTZ_CARD_IMAGE,
 		paragraphs: [
 			"Trumbo's flagship reasoning model for software engineering, science, math, and autonomous execution. Built for work that rewards careful thought and precise tool use.",
@@ -122,8 +121,9 @@ export function ProductSection() {
 					descriptionClassName="mt-5 max-w-4xl text-lg leading-relaxed md:mt-6 md:text-xl lg:max-w-5xl"
 				/>
 				<p className="mt-4 max-w-4xl text-lg leading-relaxed text-muted-foreground md:mt-5 md:text-xl lg:max-w-5xl">
-					Use both with the same tools and permissions, and move between daily execution
-					and deeper reasoning without resetting your setup.
+					Use both with the same tools, permissions, and team context, and move freely
+					between daily execution and deeper reasoning as the work demands, without
+					resetting your setup.
 				</p>
 			</GridBoxCell>
 

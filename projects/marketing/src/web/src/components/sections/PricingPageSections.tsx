@@ -60,6 +60,7 @@ const ALL_FEATURES = [
 	"210+ open models",
 	"Session history and checkpoints",
 	"Permissions and .trumborules",
+	"Trumbo Knowledge (team docs + RAG)",
 	"Priority Quartz routing",
 	"Long-horizon reasoning sessions",
 	"Sub-agents and parallel workstreams",
@@ -77,7 +78,7 @@ const TIERS: Tier[] = [
 		tagline: "For individual developers",
 		description:
 			"The CLI, Quartz, hosted models, sessions, and checkpoints. Generous limits for solo work.",
-		features: ALL_FEATURES.map((label, i) => ({ label, included: i < 4 })),
+		features: ALL_FEATURES.map((label, i) => ({ label, included: i < 5 })),
 		limits: [
 			{ window: "5-hour", requests: "75" },
 			{ window: "Daily", requests: "300" },

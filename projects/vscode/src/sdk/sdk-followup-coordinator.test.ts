@@ -77,7 +77,16 @@ describe("SdkFollowupCoordinator", () => {
 
 		await coordinator.askResponse("queued")
 
-		expect(options.messages.appendAndEmit).not.toHaveBeenCalled()
+		expect(options.messages.appendAndEmit).toHaveBeenCalledWith(
+			[
+				expect.objectContaining({
+					type: "say",
+					say: "user_feedback",
+					text: "queued",
+				}),
+			],
+			{ type: "status", payload: { sessionId: "session-123", status: "running" } },
+		)
 		expect(options.resetMessageTranslator).not.toHaveBeenCalled()
 		expect(options.sessions.fireAndForgetSend).toHaveBeenCalledWith(
 			activeSession.sdkHost,
@@ -98,7 +107,16 @@ describe("SdkFollowupCoordinator", () => {
 
 		expect(options.waitForPendingModeRebuild).not.toHaveBeenCalled()
 		expect(options.sessions.startNewSession).not.toHaveBeenCalled()
-		expect(options.messages.appendAndEmit).not.toHaveBeenCalled()
+		expect(options.messages.appendAndEmit).toHaveBeenCalledWith(
+			[
+				expect.objectContaining({
+					type: "say",
+					say: "user_feedback",
+					text: "queued while streaming",
+				}),
+			],
+			{ type: "status", payload: { sessionId: "session-123", status: "running" } },
+		)
 		expect(options.resetMessageTranslator).not.toHaveBeenCalled()
 		expect(options.sessions.fireAndForgetSend).toHaveBeenCalledWith(
 			activeSession.sdkHost,
@@ -131,7 +149,16 @@ describe("SdkFollowupCoordinator", () => {
 			undefined,
 		)
 		expect(options.waitForPendingModeRebuild).not.toHaveBeenCalled()
-		expect(options.messages.appendAndEmit).not.toHaveBeenCalled()
+		expect(options.messages.appendAndEmit).toHaveBeenCalledWith(
+			[
+				expect.objectContaining({
+					type: "say",
+					say: "user_feedback",
+					text: "do the next thing after this",
+				}),
+			],
+			{ type: "status", payload: { sessionId: "session-123", status: "running" } },
+		)
 		expect(options.resetMessageTranslator).not.toHaveBeenCalled()
 		expect(options.sessions.fireAndForgetSend).toHaveBeenCalledWith(
 			activeSession.sdkHost,
@@ -217,7 +244,16 @@ describe("SdkFollowupCoordinator", () => {
 			undefined,
 			undefined,
 		)
-		expect(options.messages.appendAndEmit).not.toHaveBeenCalled()
+		expect(options.messages.appendAndEmit).toHaveBeenCalledWith(
+			[
+				expect.objectContaining({
+					type: "say",
+					say: "user_feedback",
+					text: "just give me an answer",
+				}),
+			],
+			{ type: "status", payload: { sessionId: "session-123", status: "running" } },
+		)
 		expect(options.sessions.fireAndForgetSend).toHaveBeenCalledWith(
 			activeSession.sdkHost,
 			"session-123",
@@ -354,6 +390,7 @@ function makeCoordinator(input: Partial<MakeCoordinatorInput> = {}) {
 		interactions: {
 			resolvePendingMistakeLimit: vi.fn(() => false),
 			resolvePendingToolApproval: vi.fn(() => false),
+			resolvePendingCommandOutput: vi.fn(() => false),
 			resolvePendingAskQuestion: vi.fn(() => false),
 		},
 		sessions: {
@@ -393,6 +430,7 @@ function makeCoordinator(input: Partial<MakeCoordinatorInput> = {}) {
 		interactions: SdkFollowupCoordinatorOptions["interactions"] & {
 			resolvePendingMistakeLimit: ReturnType<typeof vi.fn>
 			resolvePendingToolApproval: ReturnType<typeof vi.fn>
+			resolvePendingCommandOutput: ReturnType<typeof vi.fn>
 			resolvePendingAskQuestion: ReturnType<typeof vi.fn>
 		}
 		sessions: SdkFollowupCoordinatorOptions["sessions"] & {

@@ -1,6 +1,6 @@
-import type { ConsecutiveMistakeLimitContext, ConsecutiveMistakeLimitDecision } from "@trumbo/shared"
 import type { TrumboAskQuestion, TrumboMessage, TurnPhase } from "@shared/ExtensionMessage"
 import type { TrumboAskResponse } from "@shared/WebviewMessage"
+import type { ConsecutiveMistakeLimitContext, ConsecutiveMistakeLimitDecision } from "@trumbo/shared"
 import { Logger } from "@/shared/services/Logger"
 import { MessageIdMinter } from "./message-id-minter"
 import { buildToolApprovalAskMessage } from "./message-translator"
@@ -40,6 +40,9 @@ export interface SdkInteractionCoordinatorOptions {
 
 export class SdkInteractionCoordinator {
 	private pendingAskResolve: ((answer: string) => void) | undefined
+	private pendingCommandOutputResolve:
+		| ((response: { response: string; text?: string; images?: string[]; files?: string[] }) => void)
+		| undefined
 	private pendingToolApprovalResolve: ((result: { approved: boolean; reason?: string }) => void) | undefined
 	private pendingMistakeLimitResolve: ((decision: ConsecutiveMistakeLimitDecision) => void) | undefined
 	private pendingToolApprovalMessage:
@@ -185,6 +188,66 @@ export class SdkInteractionCoordinator {
 		return true
 	}
 
+	async askCommandInteraction(
+		type: string,
+		text?: string,
+		partial?: boolean,
+	): Promise<{
+		response: string
+		text?: string
+		images?: string[]
+		files?: string[]
+	}> {
+		const askMessage: TrumboMessage = {
+			ts: this.nextMessageTs(),
+			type: "ask",
+			ask: type as TrumboMessage["ask"],
+			text,
+			partial: partial ?? false,
+		}
+
+		this.options.messages.appendAndEmit([askMessage], {
+			type: "status",
+			payload: { sessionId: this.options.getSessionId(), status: "running" },
+		})
+		await this.options.postStateToWebview()
+
+		return new Promise((resolve) => {
+			this.pendingCommandOutputResolve = resolve
+		})
+	}
+
+	resolvePendingCommandOutputViaResponse(response: string): void {
+		if (!this.pendingCommandOutputResolve) {
+			return
+		}
+		const resolve = this.pendingCommandOutputResolve
+		this.pendingCommandOutputResolve = undefined
+		resolve({ response })
+	}
+
+	resolvePendingCommandOutput(
+		prompt: string | undefined,
+		responseType: TrumboAskResponse | undefined,
+		images?: string[],
+		files?: string[],
+	): boolean {
+		if (!this.pendingCommandOutputResolve) {
+			return false
+		}
+
+		const resolve = this.pendingCommandOutputResolve
+		this.pendingCommandOutputResolve = undefined
+		const response = responseType ?? "messageResponse"
+		resolve({
+			response,
+			text: prompt,
+			images,
+			files,
+		})
+		return true
+	}
+
 	resolvePendingAskQuestion(prompt: string | undefined): boolean {
 		if (!this.pendingAskResolve) {
 			return false
@@ -254,6 +317,7 @@ export class SdkInteractionCoordinator {
 
 	clearPending(reason: string): void {
 		this.pendingAskResolve = undefined
+		this.pendingCommandOutputResolve = undefined
 		if (this.pendingMistakeLimitResolve) {
 			this.pendingMistakeLimitResolve({ action: "stop", reason })
 			this.pendingMistakeLimitResolve = undefined

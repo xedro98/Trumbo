@@ -83,6 +83,27 @@ describe("applyCheckpointToWorktree", () => {
 		expect(metadata?.latest.runCount).toBe(2);
 		expect(metadata?.history.map((entry) => entry.runCount)).toEqual([1, 2]);
 	});
+
+	it("picks the highest run at or below the target when history is unsorted", () => {
+		const metadata = createRestoredCheckpointMetadata(
+			{
+				metadata: {
+					checkpoint: {
+						latest: { ref: "cccc", createdAt: 3, runCount: 3 },
+						history: [
+							{ ref: "aaaa", createdAt: 1, runCount: 1 },
+							{ ref: "cccc", createdAt: 3, runCount: 3 },
+							{ ref: "bbbb", createdAt: 2, runCount: 2 },
+						],
+					},
+				},
+			},
+			2,
+		);
+
+		expect(metadata?.latest.runCount).toBe(2);
+		expect(metadata?.history.map((entry) => entry.runCount)).toEqual([1, 2]);
+	});
 });
 
 describe("checkpoint message trimming", () => {

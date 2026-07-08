@@ -11,7 +11,7 @@ export function MarketingShell({ children }: { children: ReactNode }) {
 			<MarketingSectionProvider>
 				<div className="min-h-dvh bg-background">
 					<MarketingMobileNav />
-					<div className="mx-auto flex min-h-dvh w-full max-w-[88rem]">
+					<div className="mx-auto flex min-h-dvh w-full min-[1600px]:max-w-[var(--shell-max-width)]">
 						<MarketingNav />
 						<main className={marketingShellMainClass}>{children}</main>
 					</div>

@@ -9,15 +9,18 @@ export async function checkpointRestore(controller: Controller, request: Checkpo
 			restoreCheckpoint?: (input: { checkpointRunCount: number; restoreType: TrumboCheckpointRestore }) => Promise<void>
 		}
 	).restoreCheckpoint
-	if (sdkRestoreCheckpoint) {
-		if (request.number) {
-			await sdkRestoreCheckpoint.call(controller, {
-				checkpointRunCount: Number(request.number),
-				restoreType: request.restoreType as TrumboCheckpointRestore,
-			})
-		}
-		return Empty.create({})
+	if (!sdkRestoreCheckpoint) {
+		throw new Error("Checkpoint restore is unavailable")
 	}
 
+	const checkpointRunCount = Number(request.number)
+	if (!Number.isInteger(checkpointRunCount) || checkpointRunCount < 1) {
+		throw new Error("checkpointRunCount must be a positive integer")
+	}
+
+	await sdkRestoreCheckpoint.call(controller, {
+		checkpointRunCount,
+		restoreType: request.restoreType as TrumboCheckpointRestore,
+	})
 	return Empty.create({})
 }

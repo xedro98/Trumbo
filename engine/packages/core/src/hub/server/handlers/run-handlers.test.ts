@@ -161,7 +161,7 @@ describe("run handlers", () => {
 		await expect(promise).resolves.toMatchObject({ ok: true });
 	});
 
-	it("treats abort as applied when the runtime abort hook rejects", async () => {
+	it("returns an error when the runtime abort hook rejects", async () => {
 		const abort = vi.fn().mockRejectedValue(new Error("Run aborted"));
 		const ctx = createContext({ abort });
 
@@ -178,8 +178,10 @@ describe("run handlers", () => {
 		});
 
 		expect(reply).toMatchObject({
-			ok: true,
-			payload: { applied: true },
+			ok: false,
+			error: expect.objectContaining({
+				code: "run_abort_failed",
+			}),
 		});
 		expect(abort).toHaveBeenCalledWith("session-1", "user cancelled");
 	});

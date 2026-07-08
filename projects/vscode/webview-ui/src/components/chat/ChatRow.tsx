@@ -1,12 +1,12 @@
 import { COMMAND_OUTPUT_STRING } from "@shared/combineCommandSequences"
 import {
+	COMPLETION_RESULT_CHANGES_FLAG,
 	TrumboApiReqInfo,
 	TrumboAskQuestion,
 	TrumboAskUseMcpServer,
 	TrumboMessage,
 	TrumboPlanModeResponse,
 	TrumboSayTool,
-	COMPLETION_RESULT_CHANGES_FLAG,
 } from "@shared/ExtensionMessage"
 import { BooleanRequest, StringRequest } from "@shared/proto/trumbo/common"
 import { Mode } from "@shared/storage/types"
@@ -148,8 +148,16 @@ export const ChatRowContent = memo(
 		reasoningContent,
 		responseStarted,
 	}: ChatRowContentProps) => {
-		const { backgroundEditEnabled, mcpServers, vscodeTerminalExecutionMode, trumboMessages, showFeatureTips } =
-			useExtensionState()
+		const {
+			backgroundEditEnabled,
+			checkpointAvailableRunCounts,
+			checkpointSdkRunCountByMessageTs,
+			enableCheckpointsSetting,
+			mcpServers,
+			vscodeTerminalExecutionMode,
+			trumboMessages,
+			showFeatureTips,
+		} = useExtensionState()
 		const [quoteButtonState, setQuoteButtonState] = useState<QuoteButtonState>({
 			visible: false,
 			top: 0,
@@ -828,7 +836,6 @@ export const ChatRowContent = memo(
 							<RequestStartRow
 								apiReqStreamingFailedMessage={apiReqStreamingFailedMessage}
 								apiRequestFailedMessage={apiRequestFailedMessage}
-								trumboMessages={trumboMessages}
 								cost={cost}
 								handleToggle={handleToggle}
 								isExpanded={isExpanded}
@@ -836,6 +843,7 @@ export const ChatRowContent = memo(
 								mode={mode}
 								reasoningContent={reasoningContent}
 								responseStarted={responseStarted}
+								trumboMessages={trumboMessages}
 							/>
 						)
 					case "api_req_finished":
@@ -898,7 +906,15 @@ export const ChatRowContent = memo(
 					case "user_feedback":
 						return (
 							<UserMessage
-								canRestoreWorkspace={canRestoreWorkspaceFromMessage(trumboMessages, message.ts)}
+								canRestoreWorkspace={
+									(enableCheckpointsSetting ?? true) &&
+									canRestoreWorkspaceFromMessage(
+										trumboMessages,
+										message.ts,
+										checkpointAvailableRunCounts,
+										checkpointSdkRunCountByMessageTs,
+									)
+								}
 								files={message.files}
 								images={message.images}
 								messageTs={message.ts}

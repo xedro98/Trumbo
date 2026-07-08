@@ -694,7 +694,7 @@ describe("HubRuntimeHost", () => {
 
 		expect(unsubscribe).toHaveBeenCalledTimes(1);
 		expect(commandMock).toHaveBeenLastCalledWith(
-			"session.detach",
+			"session.stop",
 			{ sessionId: "sess-1" },
 			"sess-1",
 		);

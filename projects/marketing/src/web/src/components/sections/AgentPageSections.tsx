@@ -1,16 +1,20 @@
 import {
 	ArrowsLeftRight,
+	Books,
 	MagnifyingGlass,
 	PencilSimple,
 	PlugsConnected,
 	ShieldCheck,
 	Terminal,
+	UploadSimple,
 } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
 import { InstallCommandTabs } from "@/components/InstallCommandTabs";
 import { marketingGridCellClass, marketingGridListRowClass } from "@/components/grid-shell-context";
 import { GridBox, GridBoxCell } from "@/components/ui/grid-box";
+import { Button } from "@/components/ui/button";
 import { MARKETING_CLI_CARD_IMAGE } from "@/lib/brand";
+import { platformLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
 const GRID_ROWS = 4;
@@ -170,7 +174,7 @@ const AGENT_CAPABILITIES: {
 		icon: PlugsConnected,
 		title: "Call MCP tools",
 		description:
-			"Connect browsers, databases, and APIs through MCP tools you configure once per team. Reuse the same integrations across sessions without redefining your stack.",
+			"Connect browsers, databases, and APIs through MCP, plus the built-in search_knowledge tool for your team's docs. Configure once per team and reuse across every session.",
 	},
 	{
 		icon: ArrowsLeftRight,
@@ -689,8 +693,10 @@ export function AgentHeroSection() {
 				capable models, shared sessions, and infrastructure your team can grow into.
 			</p>
 			<p className="mb-6 max-w-5xl text-base leading-relaxed text-muted-foreground md:max-w-6xl md:text-lg lg:max-w-none lg:text-[1.25rem] lg:leading-[1.65]">
-				Plan before you act, rewind with checkpoints, resume sessions, and run headless in CI.
-				Same agent core in the TUI, your terminal, scheduled jobs, and Slack or Discord threads.
+				Plan before you act, rewind with checkpoints, resume past sessions, and run headless in
+				CI. Upload team docs once and the agent searches them through a built-in MCP tool on
+				every run. The same agent core powers the TUI, your terminal, scheduled jobs, and Slack
+				or Discord threads.
 			</p>
 			<InstallCommandTabs className="mt-1" />
 		</div>
@@ -718,8 +724,10 @@ function AgentBannerHeading() {
 				Everything you need to ship, with tools the agent can actually use.
 			</h2>
 			<p className="mt-5 max-w-5xl text-lg leading-relaxed text-muted-foreground md:max-w-6xl md:text-xl lg:max-w-none">
-				Six core tools in the agent loop. The sections below cover how you run them — modes,
-				sessions, teams, schedules, headless CI, and chat connectors.
+				Six core tools power the agent loop on every run. The Knowledge section below covers
+				per-team document search across your uploaded docs. The sections after that cover how
+				you run them day to day: modes, sessions, teams, schedules, headless CI, and chat
+				connectors.
 			</p>
 		</div>
 	);
@@ -798,6 +806,416 @@ export function AgentStatsSection() {
 						description={pillar.description}
 					/>
 				))}
+			</GridBoxCell>
+		</GridBox>
+	);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Knowledge — per-team RAG as a built-in agent tool                           */
+/* -------------------------------------------------------------------------- */
+
+const KNOWLEDGE_STEP_ICONS: Icon[] = [UploadSimple, Books, MagnifyingGlass];
+
+const KNOWLEDGE_STEPS: {
+	tag: string;
+	description: string;
+}[] = [
+	{
+		tag: "Upload",
+		description:
+			"Add runbooks, design docs, onboarding guides, and internal notes from the platform. Markdown, PDF, plain text, HTML, JSON, CSV, and YAML are supported today.",
+	},
+	{
+		tag: "Index",
+		description:
+			"Trumbo chunks, embeds, and indexes each document automatically. No vector database to provision and no retrieval pipeline to operate.",
+	},
+	{
+		tag: "Search",
+		description:
+			"When the agent needs internal context, it calls search_knowledge over MCP. Answers cite the documents they came from, with snippets you can verify before you ship.",
+	},
+];
+
+function AgentKnowledgeBannerHeading() {
+	return (
+		<div className="flex flex-col">
+			<p className="marketing-kicker mb-3">Trumbo Knowledge</p>
+			<h2 className="max-w-5xl font-heading text-[1.75rem] font-normal leading-[1.34] tracking-[-0.02em] text-foreground md:text-[2.125rem] lg:text-[2.375rem]">
+				Your agent knows what your team knows.
+			</h2>
+			<p className="mt-5 max-w-5xl text-lg leading-relaxed text-muted-foreground md:max-w-6xl md:text-xl lg:max-w-none">
+				Upload internal docs once and Trumbo Agent grounds its answers in them through a
+				built-in search tool. Scoped to your team, private by default, and included on every
+				paid plan.
+			</p>
+		</div>
+	);
+}
+
+function AgentKnowledgeBanner() {
+	return (
+		<>
+			<div className="hidden border-b border-b-dotted border-grid-line md:flex md:items-stretch">
+				<div className={cn(marketingGridCellClass, "flex flex-1 flex-col justify-center !py-8")}>
+					<AgentKnowledgeBannerHeading />
+				</div>
+				<AgentGridPanel className="border-l border-dotted" rows={GRID_ROWS} cols={GRID_COLS} />
+			</div>
+			<div className="border-b border-b-dotted border-grid-line md:hidden">
+				<div className={cn(marketingGridCellClass, "!py-5")}>
+					<AgentKnowledgeBannerHeading />
+				</div>
+			</div>
+		</>
+	);
+}
+
+function AgentKnowledgeStepCard({
+	index,
+	icon: Icon,
+	tag,
+	description,
+	className,
+}: {
+	index: number;
+	icon: Icon;
+	tag: string;
+	description: string;
+	className?: string;
+}) {
+	return (
+		<div className={cn(marketingGridCellClass, "flex flex-col gap-3 !py-5 md:!py-6", className)}>
+			<div className="flex items-center gap-3">
+				<span className="font-stat text-[0.6875rem] tabular-nums tracking-[0.06em] text-muted-foreground/70">
+					{String(index + 1).padStart(2, "0")}
+				</span>
+				<span className="inline-flex items-center gap-2 font-stat text-xs uppercase tracking-[0.1em] text-brand">
+					<Icon size={14} weight="duotone" aria-hidden="true" />
+					{tag}
+				</span>
+			</div>
+			<p className="text-sm leading-relaxed text-muted-foreground md:text-[0.9375rem]">{description}</p>
+		</div>
+	);
+}
+
+function AgentKnowledgeStepsGrid() {
+	return (
+		<div className="grid grid-cols-1 md:grid-cols-3">
+			{KNOWLEDGE_STEPS.map((step, index) => (
+				<AgentKnowledgeStepCard
+					key={step.tag}
+					index={index}
+					icon={KNOWLEDGE_STEP_ICONS[index] ?? MagnifyingGlass}
+					tag={step.tag}
+					description={step.description}
+					className={cn(
+						index < KNOWLEDGE_STEPS.length - 1 &&
+							"border-b border-b-dotted border-grid-line md:border-b-0",
+						index > 0 && "border-t border-t-dotted border-grid-line md:border-t-0",
+						index < KNOWLEDGE_STEPS.length - 1 &&
+							"md:border-r md:border-r-solid md:border-grid-line",
+					)}
+				/>
+			))}
+		</div>
+	);
+}
+
+function AgentKnowledgeMcpPipelineDiagram() {
+	const W = 112;
+	const H = 32;
+	const RX = 6;
+	const topY = 50;
+	const bottomY = 170;
+
+	const entryNode = { label: "User query", index: 0, x: 76, y: bottomY };
+
+	const topNodes = [
+		{ label: "Agent", index: 1, x: 76, y: topY },
+		{ label: "MCP server", index: 2, x: 204, y: topY },
+		{ label: "Tool call", index: 3, x: 332, y: topY, accent: true },
+		{ label: "Team index", index: 4, x: 460, y: topY },
+	];
+
+	const bottomNodes = [
+		{ label: "Retrieval", index: 5, x: 460, y: bottomY },
+		{ label: "Citations", index: 6, x: 332, y: bottomY },
+		{ label: "Grounded reply", index: 7, x: 204, y: bottomY, accent: true },
+	];
+
+	const allNodes = [entryNode, ...topNodes, ...bottomNodes];
+	const accentSet = new Set([3, 7]);
+
+	return (
+		<div className="border-t border-t-dotted border-grid-line bg-marketing-content px-5 py-10 md:px-8 md:py-12 lg:px-10 lg:py-14">
+			<svg viewBox="0 0 536 220" className="w-full text-foreground" fill="none" aria-hidden="true">
+				<defs>
+					<marker
+						id="kmcp-arrow"
+						markerWidth="7"
+						markerHeight="7"
+						refX="5"
+						refY="3.5"
+						orient="auto"
+						markerUnits="userSpaceOnUse"
+					>
+						<path d="M0,0.5 L6,3.5 L0,6.5 Z" fill="currentColor" opacity="0.55" />
+					</marker>
+					<marker
+						id="kmcp-arrow-brand"
+						markerWidth="7"
+						markerHeight="7"
+						refX="5"
+						refY="3.5"
+						orient="auto"
+						markerUnits="userSpaceOnUse"
+					>
+						<path d="M0,0.5 L6,3.5 L0,6.5 Z" fill="var(--brand)" />
+					</marker>
+				</defs>
+
+				<g stroke="currentColor" strokeWidth="1" opacity="0.5">
+					{/* User query → Agent (vertical, left column) */}
+					<path
+						d={`M ${entryNode.x} ${entryNode.y - H / 2} L ${topNodes[0].x} ${topY + H / 2}`}
+						markerEnd="url(#kmcp-arrow)"
+					/>
+				</g>
+
+				{topNodes.slice(0, -1).map((node, i) => {
+					const next = topNodes[i + 1];
+					const isAccent = next.index === 3;
+					return (
+						<path
+							key={`top-${i}`}
+							d={`M ${node.x + W / 2} ${node.y} L ${next.x - W / 2} ${next.y}`}
+							stroke={isAccent ? "var(--brand)" : "currentColor"}
+							strokeWidth={isAccent ? 1.5 : 1}
+							opacity={isAccent ? 0.9 : 0.5}
+							markerEnd={`url(#${isAccent ? "kmcp-arrow-brand" : "kmcp-arrow"})`}
+						/>
+					);
+				})}
+
+				<path
+					d={`M ${topNodes[3].x} ${topY + H / 2} C ${topNodes[3].x + 40} ${topY + H / 2}, ${topNodes[3].x + 40} ${bottomY - H / 2}, ${bottomNodes[0].x} ${bottomY - H / 2}`}
+					stroke="currentColor"
+					strokeWidth="1"
+					opacity="0.5"
+					markerEnd="url(#kmcp-arrow)"
+				/>
+
+				{bottomNodes.slice(0, -1).map((node, i) => {
+					const next = bottomNodes[i + 1];
+					const isAccent = next.index === 7;
+					return (
+						<path
+							key={`bottom-${i}`}
+							d={`M ${node.x - W / 2} ${node.y} L ${next.x + W / 2} ${next.y}`}
+							stroke={isAccent ? "var(--brand)" : "currentColor"}
+							strokeWidth={isAccent ? 1.25 : 1}
+							opacity={isAccent ? 0.85 : 0.5}
+							markerEnd={`url(#${isAccent ? "kmcp-arrow-brand" : "kmcp-arrow"})`}
+						/>
+					);
+				})}
+
+				<path
+					d={`M ${topNodes[2].x} ${topY + H / 2} C ${topNodes[2].x} ${topY + H / 2 + 24}, ${bottomNodes[2].x} ${bottomY - H / 2 - 24}, ${bottomNodes[2].x} ${bottomY - H / 2}`}
+					stroke="var(--brand)"
+					strokeWidth="1.25"
+					strokeDasharray="4 3"
+					opacity="0.65"
+					markerEnd="url(#kmcp-arrow-brand)"
+				/>
+
+				<text
+					x={332}
+					y={112}
+					textAnchor="middle"
+					fontSize="8"
+					fontFamily="var(--font-stat)"
+					letterSpacing="1.5"
+					fill="var(--color-muted-foreground)"
+					stroke="none"
+					opacity="0.5"
+				>
+					ORG-SCOPED MCP
+				</text>
+
+				{allNodes.map((node) => {
+					const isAccent = accentSet.has(node.index);
+					return (
+						<g key={`${node.label}-${node.index}`}>
+							<rect
+								x={node.x - W / 2}
+								y={node.y - H / 2}
+								width={W}
+								height={H}
+								rx={RX}
+								fill="var(--marketing-content)"
+								stroke={isAccent ? "var(--brand)" : "currentColor"}
+								strokeWidth={isAccent ? 1.25 : 1}
+								opacity={isAccent ? 1 : 0.85}
+							/>
+							<text
+								x={node.x}
+								y={node.y + 4}
+								textAnchor="middle"
+								fontSize="10"
+								fontFamily="var(--font-stat)"
+								fontWeight="500"
+								fill="currentColor"
+								stroke="none"
+							>
+								{String(node.index).padStart(2, "0")} {node.label}
+							</text>
+						</g>
+					);
+				})}
+			</svg>
+
+			<div className="mt-6 flex justify-center pt-5 font-stat text-[0.625rem] uppercase tracking-[0.12em] text-muted-foreground md:text-xs">
+				Fig. 02 — search_knowledge over org-scoped MCP
+			</div>
+
+			<div className="mt-8 border-t border-t-dotted border-grid-line pt-6">
+				<div className="grid grid-cols-1 gap-y-3 md:grid-cols-[7.5rem_minmax(0,1fr)] md:gap-x-6 md:gap-y-4">
+					<span className="font-stat text-[0.6875rem] uppercase tracking-[0.08em] text-muted-foreground md:text-xs">
+						Query
+					</span>
+					<p className="font-stat text-[0.8125rem] leading-relaxed text-foreground md:text-sm">
+						How do we roll back a production deploy?
+					</p>
+
+					<span className="font-stat text-[0.6875rem] uppercase tracking-[0.08em] text-muted-foreground md:text-xs">
+						Tool
+					</span>
+					<code className="font-mono text-[0.8125rem] text-foreground md:text-sm">
+						search_knowledge(query, limit?)
+					</code>
+
+					<span className="font-stat text-[0.6875rem] uppercase tracking-[0.08em] text-muted-foreground md:text-xs">
+						Answer
+					</span>
+					<p className="font-stat text-[0.8125rem] leading-relaxed text-foreground md:text-sm">
+						Run{" "}
+						<code className="font-mono text-[0.8125rem] text-foreground md:text-sm">
+							make rollback-sha=&lt;sha&gt;
+						</code>{" "}
+						from the deploy repo, then confirm the health check flips green before promoting.
+					</p>
+
+					<span className="font-stat text-[0.6875rem] uppercase tracking-[0.08em] text-muted-foreground md:text-xs">
+						Sources
+					</span>
+					<div className="space-y-2.5">
+						{KNOWLEDGE_SOURCE_ROWS.map((source) => (
+							<p
+								key={source.ref}
+								className="font-stat text-[0.75rem] leading-relaxed text-muted-foreground md:text-[0.8125rem]"
+							>
+								<span className="tabular-nums text-brand">{source.ref}</span>{" "}
+								<span className="font-mono text-foreground">{source.file}</span>
+								<span aria-hidden="true"> — </span>
+								&ldquo;{source.snippet}&rdquo;
+							</p>
+						))}
+					</div>
+				</div>
+			</div>
+
+			<div className="mt-6 flex items-center gap-3 pt-5">
+				<span className="font-stat text-[0.625rem] uppercase tracking-[0.1em] text-brand">
+					One endpoint
+				</span>
+				<div className="h-px flex-1 bg-grid-line" />
+				<span className="font-stat text-[0.625rem] tabular-nums tracking-[0.1em] text-muted-foreground">
+					platform.trumbo.dev/v1/mcp
+				</span>
+			</div>
+		</div>
+	);
+}
+
+const KNOWLEDGE_SOURCE_ROWS = [
+	{
+		ref: "[1]",
+		file: "runbook.md",
+		snippet: "Rollback promotes the previous image and waits for the readiness probe.",
+	},
+	{
+		ref: "[2]",
+		file: "deploy.md",
+		snippet: "Always verify the health check after a rollback before resuming traffic.",
+	},
+] as const;
+
+function AgentKnowledgeMcpDiagram() {
+	return (
+		<>
+			<div className={cn(marketingGridCellClass, "flex flex-col justify-center !py-6 md:!py-8")}>
+				<p className="marketing-kicker mb-3">MCP tool</p>
+				<h3 className="max-w-3xl font-heading text-[1.375rem] font-normal leading-[1.34] tracking-[-0.02em] text-foreground md:text-[1.625rem]">
+					<code className="font-mono text-[0.92em]">search_knowledge</code>
+				</h3>
+				<p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground md:text-[0.9375rem] lg:text-base">
+					One tool name on every surface. CLI, VS Code, and the platform all call the same
+					org-scoped endpoint at{" "}
+					<code className="font-mono text-foreground/90">platform.trumbo.dev/v1/mcp</code>.
+				</p>
+			</div>
+			<AgentKnowledgeMcpPipelineDiagram />
+		</>
+	);
+}
+
+function AgentKnowledgeFooter() {
+	return (
+		<div
+			className={cn(
+				marketingGridCellClass,
+				"flex flex-col gap-4 border-t border-t-dotted border-grid-line !py-5 md:flex-row md:items-center md:justify-between md:!py-6",
+			)}
+		>
+			<p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-[0.9375rem]">
+				Included on Pro, Max, and Ultra with per-tier document and search limits. Upload and
+				manage docs from the Knowledge page on your team workspace.
+			</p>
+			<div className="flex flex-wrap gap-3">
+				<Button
+					onClick={() => {
+						window.location.href = platformLink("/signup");
+					}}
+				>
+					Get started
+				</Button>
+				<Button
+					variant="outline"
+					onClick={() => {
+						window.location.href = "/pricing";
+					}}
+				>
+					See plan limits
+				</Button>
+			</div>
+		</div>
+	);
+}
+
+export function AgentKnowledgeSection() {
+	return (
+		<GridBox id="knowledge" className="scroll-mt-4 grid-cols-1 !border-t-0">
+			<GridBoxCell className="!p-0 md:!border-r-0">
+				<AgentKnowledgeBanner />
+				<AgentCapabilitiesGridFrame edge="top" />
+				<AgentKnowledgeStepsGrid />
+				<AgentKnowledgeMcpDiagram />
+				<AgentCapabilitiesGridFrame edge="bottom" />
+				<AgentKnowledgeFooter />
 			</GridBoxCell>
 		</GridBox>
 	);

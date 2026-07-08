@@ -41,11 +41,11 @@ describe("buildForkSessionMetadata", () => {
 			forkedFromSessionId: "sess_source",
 			forkedAt: "2026-04-29T16:00:00.000Z",
 			source: SessionSource.CLI,
-			checkpoints: {
-				latest: {
-					ref: "abc123",
-					runCount: 2,
-				},
+		});
+		expect(metadata.checkpoint).toEqual({
+			latest: {
+				ref: "abc123",
+				runCount: 2,
 			},
 		});
 	});

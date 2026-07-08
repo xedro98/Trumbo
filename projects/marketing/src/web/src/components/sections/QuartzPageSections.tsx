@@ -299,11 +299,11 @@ export function QuartzLineupSection() {
 					One architecture. Two depth profiles.
 				</h2>
 				<p className="mt-4 max-w-5xl text-lg leading-relaxed text-muted-foreground md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
-					Quartz Hyper and Quartz Lite share the full inference stack, from semantic
-					decomposition through verification. Hyper allocates a larger active parameter
-					budget and longer reflection cycles for frontier work. Lite keeps the same graph,
-					with a tighter depth cap so high-volume prompts and agent loops stay fast and
-					economical.
+					Quartz Hyper and Quartz Lite share the same full inference stack, from semantic
+					decomposition through verification on every request. Hyper allocates a larger active
+					parameter budget and longer reflection cycles for frontier reasoning and hard
+					problems. Lite keeps the same graph, with a tighter depth cap so high-volume
+					prompts and agent loops stay fast, responsive, and economical.
 				</p>
 			</GridBoxCell>
 

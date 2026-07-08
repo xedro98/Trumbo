@@ -177,9 +177,9 @@ describe("resolveTrumboProviderBaseUrl", () => {
 	});
 
 	it("still honors an explicit non-local override in production", () => {
-		expect(
-			resolveTrumboProviderBaseUrl("http://127.0.0.1:9000/api/v1"),
-		).toBe("http://127.0.0.1:9000/api/v1");
+		expect(resolveTrumboProviderBaseUrl("http://127.0.0.1:9000/api/v1")).toBe(
+			"http://127.0.0.1:9000/api/v1",
+		);
 	});
 });
 

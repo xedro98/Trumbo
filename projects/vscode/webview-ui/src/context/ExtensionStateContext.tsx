@@ -6,9 +6,9 @@ import type { UserInfo } from "@shared/proto/trumbo/account"
 import { EmptyRequest } from "@shared/proto/trumbo/common"
 import type { OpenRouterCompatibleModelInfo, ProviderModelsResponse } from "@shared/proto/trumbo/models"
 import { OnboardingModelGroup, type TerminalProfile } from "@shared/proto/trumbo/state"
-import { convertProtoToTrumboMessage } from "@shared/proto-conversions/trumbo-message"
 import { convertProtoMcpServersToMcpServers } from "@shared/proto-conversions/mcp/mcp-server-conversion"
 import { fromProtobufModels } from "@shared/proto-conversions/models/typeConversion"
+import { convertProtoToTrumboMessage } from "@shared/proto-conversions/trumbo-message"
 import type React from "react"
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react"
 import {
@@ -281,6 +281,8 @@ export const ExtensionStateContextProvider: React.FC<{
 		distinctId: "",
 		planActSeparateModelsSetting: true,
 		enableCheckpointsSetting: true,
+		checkpointAvailableRunCounts: [],
+		checkpointSdkRunCountByMessageTs: {},
 		mcpDisplayMode: DEFAULT_MCP_DISPLAY_MODE,
 		globalTrumboRulesToggles: {},
 		localTrumboRulesToggles: {},
@@ -909,6 +911,8 @@ export const ExtensionStateContextProvider: React.FC<{
 		remoteRulesToggles: state.remoteRulesToggles || {},
 		remoteWorkflowToggles: state.remoteWorkflowToggles || {},
 		enableCheckpointsSetting: state.enableCheckpointsSetting,
+		checkpointAvailableRunCounts: state.checkpointAvailableRunCounts ?? [],
+		checkpointSdkRunCountByMessageTs: state.checkpointSdkRunCountByMessageTs ?? {},
 
 		// Navigation functions
 		navigateToMarketplace,

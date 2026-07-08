@@ -17,12 +17,12 @@ export function HomePage() {
 					<GridBoxStackCell className="!p-0">
 						<HeroVisual />
 					</GridBoxStackCell>
-					<GridBoxStackCell id="product" className="scroll-mt-4 !p-0">
-						<ProductSection />
-					</GridBoxStackCell>
-					<GridBoxStackCell id="developers" className="scroll-mt-4 !p-0">
-						<DevelopersSection />
-					</GridBoxStackCell>
+				<GridBoxStackCell id="product" className="scroll-mt-4 !p-0">
+					<ProductSection />
+				</GridBoxStackCell>
+				<GridBoxStackCell id="developers" className="scroll-mt-4 !p-0">
+					<DevelopersSection />
+				</GridBoxStackCell>
 					<GridBoxStackCell className={cn("!p-0", "last:border-b-0")}>
 						<MarketingFooter />
 					</GridBoxStackCell>

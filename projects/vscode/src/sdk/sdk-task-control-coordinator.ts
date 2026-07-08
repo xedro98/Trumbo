@@ -136,6 +136,7 @@ export class SdkTaskControlCoordinator {
 			Logger.log(`[SdkController] Showing task: ${taskId}`)
 		} catch (error) {
 			Logger.error("[SdkController] Failed to show task:", error)
+			throw error
 		}
 	}
 

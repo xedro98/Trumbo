@@ -44,8 +44,9 @@
 	--chart-4: oklch(0.828 0.189 84.429);
 	--chart-5: oklch(0.769 0.188 70.08);
 	--radius: 0.5rem;
-	--nav-width: 10.5rem;
-	--nav-gutter: 2rem;
+	--nav-width: 13.5rem;
+	--nav-gutter: 2.5rem;
+	--shell-max-width: 92rem;
 }
 
 .marketing-dark {
@@ -84,7 +85,7 @@
 	:root,
 	.marketing-light,
 	.marketing-dark {
-		--nav-gutter: 3rem;
+		--nav-gutter: 3.25rem;
 	}
 }
 
@@ -92,7 +93,7 @@
 	:root,
 	.marketing-light,
 	.marketing-dark {
-		--nav-gutter: 3.5rem;
+		--nav-gutter: 4rem;
 	}
 }
 

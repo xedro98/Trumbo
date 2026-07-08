@@ -2,6 +2,8 @@ import {
 	type AgentEvent,
 	type AgentHooks,
 	type CheckpointEntry,
+	createRestoredCheckpointMetadata,
+	findCheckpointForRun,
 	isSessionNotFoundError,
 	type PendingPromptMutationResult,
 	type ProviderSettingsManager,
@@ -55,6 +57,9 @@ type CurrentMessagesRead =
 	| { messages: Message[]; status: "stale" };
 type MissingSessionRecovery = {
 	messages: Message[];
+	previousSessionId?: string;
+	newSessionId?: string;
+	recovered?: boolean;
 };
 type ToolPolicyResolver = (
 	toolName: string,
@@ -336,7 +341,23 @@ export function createInteractiveSessionRuntime(input: {
 			startupError = undefined;
 			clearActiveSession();
 			await startFreshSession(messages);
-			return { messages };
+			const newSessionId = activeSessionId;
+			if (newSessionId && newSessionId !== missingSessionId) {
+				input.config.logger?.log(
+					`Hub session ${missingSessionId} was not found; recovered into new session ${newSessionId}.`,
+					{
+						previousSessionId: missingSessionId,
+						newSessionId,
+						severity: "warn",
+					},
+				);
+			}
+			return {
+				messages,
+				previousSessionId: missingSessionId,
+				newSessionId,
+				recovered: true,
+			};
 		})().finally(() => {
 			missingSessionRecoveryPromise = undefined;
 		});
@@ -512,7 +533,6 @@ export function createInteractiveSessionRuntime(input: {
 		if (messages.length === 0) {
 			throw new Error("Cannot fork an empty session.");
 		}
-		await manager.stop(forkedFromSessionId);
 		const forkMetadata = buildForkSessionMetadata({
 			forkedFromSessionId,
 			forkedAt: new Date().toISOString(),
@@ -520,6 +540,15 @@ export function createInteractiveSessionRuntime(input: {
 			messages,
 		});
 		await startFreshSession(messages, forkMetadata);
+		try {
+			await manager.stop(forkedFromSessionId);
+		} catch (error) {
+			input.config.logger?.log("Failed to stop source session after fork", {
+				sessionId: forkedFromSessionId,
+				error,
+				severity: "warn",
+			});
+		}
 		return { forkedFromSessionId, newSessionId: activeSessionId };
 	};
 
@@ -533,6 +562,10 @@ export function createInteractiveSessionRuntime(input: {
 		if (!messages || messages.length === 0) {
 			throw new Error(`Session ${sessionId} has no messages to resume.`);
 		}
+		sessionStartGeneration += 1;
+		pendingResumeSessionId = undefined;
+		startupPromise = undefined;
+		startupError = undefined;
 		await stopCurrentSession();
 		await startResumedSession(sessionId, messages);
 		return messages;
@@ -570,7 +603,30 @@ export function createInteractiveSessionRuntime(input: {
 				compacted: false,
 			};
 		}
-		await restartWithMessages(result.messages);
+		const sessionRecord = await sessionManager.get(activeSessionId);
+		const seededRunCount = result.messages.reduce((count, message) => {
+			if (message.role !== "user") {
+				return count;
+			}
+			const metadata =
+				"metadata" in message &&
+				message.metadata &&
+				typeof message.metadata === "object" &&
+				!Array.isArray(message.metadata)
+					? (message.metadata as Record<string, unknown>)
+					: undefined;
+			return metadata?.kind === "recovery_notice" ? count : count + 1;
+		}, 0);
+		const restoredCheckpointMetadata =
+			seededRunCount > 0
+				? createRestoredCheckpointMetadata(sessionRecord, seededRunCount)
+				: undefined;
+		await restartWithMessages(
+			result.messages,
+			restoredCheckpointMetadata
+				? { checkpoint: restoredCheckpointMetadata }
+				: undefined,
+		);
 		return {
 			messagesBefore,
 			messagesAfter: result.messages.length,
@@ -609,6 +665,19 @@ export function createInteractiveSessionRuntime(input: {
 			return undefined;
 		}
 		const sourceSessionId = activeSessionId;
+		if (restoreWorkspace) {
+			const sessionRecord = await manager.get(sourceSessionId);
+			if (
+				!findCheckpointForRun(
+					readSessionCheckpointHistory(sessionRecord),
+					runCount,
+				)
+			) {
+				throw new Error(
+					"No workspace checkpoint is available for this run. Checkpoints require a git repository and must be enabled.",
+				);
+			}
+		}
 		const restored = await manager.restore({
 			sessionId: sourceSessionId,
 			checkpointRunCount: runCount,
@@ -657,15 +726,26 @@ export function createInteractiveSessionRuntime(input: {
 		abortRequested = false;
 	};
 
+	let abortPromise: Promise<void> | undefined;
 	const abortAll = (): boolean => {
 		if (abortRequested || !sessionManager || !activeSessionId) {
 			return false;
 		}
 		abortRequested = true;
 		markAbortInProgress();
-		sessionManager
-			.abort(activeSessionId, new Error("Interactive runtime abort requested"))
-			.catch(() => {});
+		const sessionId = activeSessionId;
+		abortPromise = sessionManager
+			.abort(sessionId, new Error("Interactive runtime abort requested"))
+			.catch((error) => {
+				abortRequested = false;
+				input.config.logger?.log("Interactive runtime abort failed", {
+					sessionId,
+					error,
+					severity: "error",
+				});
+				throw error;
+			});
+		void abortPromise.catch(() => {});
 		return true;
 	};
 

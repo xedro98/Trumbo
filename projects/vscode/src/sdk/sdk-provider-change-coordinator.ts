@@ -23,6 +23,7 @@ export interface SdkProviderChangeCoordinatorOptions {
 	getWorkspaceRoot: () => Promise<string>
 	loadInitialMessages: (sdkHost: SdkSessionHost, sessionId: string) => Promise<InitialMessages>
 	buildStartSessionInput: (config: SessionConfig, input: { cwd: string; mode: Mode }) => StartInput
+	resetMessageTranslator?: () => void
 	postStateToWebview: () => Promise<void>
 }
 
@@ -167,6 +168,7 @@ export class SdkProviderChangeCoordinator {
 				task.taskId = startResult.sessionId
 			}
 
+			this.options.resetMessageTranslator?.()
 			await this.options.postStateToWebview()
 			Logger.log(`[SdkController] Session restarted for provider change: ${oldSessionId} -> ${startResult.sessionId}`)
 		} catch (error) {

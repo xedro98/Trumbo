@@ -114,8 +114,19 @@ export {
 	executeTrumboAccountAction,
 	type FeaturebaseTokenResponse,
 	isTrumboAccountActionRequest,
+	isTrumboPlatformProvider,
+	normalizePlatformKnowledgeOrgId,
+	PLATFORM_KNOWLEDGE_MCP_SERVER_NAME,
 	type ProviderActionExecutor,
 	RpcTrumboAccountService,
+	removePlatformKnowledgeMcpServer,
+	resolveActiveOrganizationIdFromUser,
+	type SyncPlatformKnowledgeMcpAction,
+	type SyncPlatformKnowledgeMcpForSessionInput,
+	type SyncPlatformKnowledgeMcpServerOptions,
+	type SyncPlatformKnowledgeMcpServerResult,
+	syncPlatformKnowledgeMcpForSession,
+	syncPlatformKnowledgeMcpServer,
 	type TrumboAccountBalance,
 	type TrumboAccountOperations,
 	type TrumboAccountOrganization,
@@ -131,17 +142,6 @@ export {
 	type UserCurrentPlan,
 	type UserRemoteConfigOrganization,
 	type UserRemoteConfigResponse,
-	isTrumboPlatformProvider,
-	normalizePlatformKnowledgeOrgId,
-	PLATFORM_KNOWLEDGE_MCP_SERVER_NAME,
-	removePlatformKnowledgeMcpServer,
-	resolveActiveOrganizationIdFromUser,
-	type SyncPlatformKnowledgeMcpAction,
-	type SyncPlatformKnowledgeMcpForSessionInput,
-	type SyncPlatformKnowledgeMcpServerOptions,
-	type SyncPlatformKnowledgeMcpServerResult,
-	syncPlatformKnowledgeMcpForSession,
-	syncPlatformKnowledgeMcpServer,
 } from "./account";
 export {
 	createOAuthClientCallbacks,
@@ -380,6 +380,7 @@ export type {
 	CheckpointEntry,
 	CheckpointMetadata,
 } from "./hooks/checkpoint-hooks";
+export { retainCheckpointRefs } from "./hooks/checkpoint-hooks";
 export * from "./hub";
 export { HubRuntimeHost } from "./hub/runtime-host/hub-runtime-host";
 export { RemoteRuntimeHost } from "./hub/runtime-host/remote-runtime-host";
@@ -676,6 +677,7 @@ export {
 	createCheckpointComparePlan,
 } from "./session/checkpoint-diff";
 export {
+	createRestoredCheckpointMetadata,
 	findCheckpointForRun,
 	readSessionCheckpointHistory,
 } from "./session/checkpoint-restore";

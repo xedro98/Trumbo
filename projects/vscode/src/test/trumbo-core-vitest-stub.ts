@@ -98,6 +98,17 @@ export function findCheckpointForRun(history: readonly CheckpointEntry[], runCou
 	}, undefined)
 }
 
+export function createRestoredCheckpointMetadata(
+	session: { metadata?: Record<string, unknown> } | undefined,
+	runCount: number,
+): { latest: CheckpointEntry; history: CheckpointEntry[] } | undefined {
+	const history = readSessionCheckpointHistory(session).filter((entry) => entry.runCount <= runCount)
+	const latest = findCheckpointForRun(history, runCount)
+	return latest ? { latest, history } : undefined
+}
+
+export async function retainCheckpointRefs(): Promise<void> {}
+
 export interface CheckpointContentDiff {
 	filePath: string
 	leftContent: string

@@ -379,6 +379,7 @@ export type HubCommandName =
 	| "session.create"
 	| "session.attach"
 	| "session.detach"
+	| "session.stop"
 	| "session.get"
 	| "session.messages"
 	| "session.restore"

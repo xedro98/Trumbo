@@ -8,6 +8,7 @@ import {
 	AgentCapabilitiesSection,
 	AgentHeroSection,
 	AgentHeroVisual,
+	AgentKnowledgeSection,
 	AgentStatsSection,
 	AgentWorkflowSection,
 } from "@/components/sections/AgentPageSections";
@@ -28,6 +29,9 @@ export function AgentPage() {
 					</GridBoxStackCell>
 					<GridBoxStackCell className="!p-0">
 						<AgentCapabilitiesSection />
+					</GridBoxStackCell>
+					<GridBoxStackCell className="!p-0">
+						<AgentKnowledgeSection />
 					</GridBoxStackCell>
 					<GridBoxStackCell className="!p-0">
 						<AgentStatsSection />

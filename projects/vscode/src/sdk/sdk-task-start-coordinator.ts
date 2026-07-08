@@ -1,10 +1,10 @@
-import { getProviderAuthStorageId } from "@trumbo/core"
-import { createSessionId } from "@trumbo/shared"
-import { TRUMBO_ACCOUNT_AUTH_ERROR_MESSAGE } from "@shared/TrumboAccount"
 import type { TrumboMessage } from "@shared/ExtensionMessage"
 import type { HistoryItem } from "@shared/HistoryItem"
 import type { Settings } from "@shared/storage/state-keys"
 import type { Mode } from "@shared/storage/types"
+import { TRUMBO_ACCOUNT_AUTH_ERROR_MESSAGE } from "@shared/TrumboAccount"
+import { getProviderAuthStorageId, retainCheckpointRefs } from "@trumbo/core"
+import { createSessionId } from "@trumbo/shared"
 import type { StateManager } from "@/core/storage/StateManager"
 import { Logger } from "@/shared/services/Logger"
 import { PROVIDER_FAILURE_ERROR_TYPE, PROVIDER_FAILURE_PHASE, type ProviderFailureTelemetry } from "./provider-failure-telemetry"
@@ -55,6 +55,9 @@ export interface SdkTaskStartCoordinatorOptions {
 	emitTrumboAuthError: (task?: string) => void
 	captureProviderApiError?: (event: ProviderFailureTelemetry) => void
 	postStateToWebview: () => Promise<void>
+	onInitFailed?: () => void
+	onReinitFailed?: () => void
+	onReinitSucceeded?: () => void
 }
 
 export class SdkTaskStartCoordinator {
@@ -172,32 +175,72 @@ export class SdkTaskStartCoordinator {
 			const historyItem = await this.options.taskHistory.findHistoryItem(taskId)
 			if (!historyItem) {
 				Logger.error(`[SdkController] Task not found in history: ${taskId}`)
+				this.options.onReinitFailed?.()
+				await this.options.postStateToWebview()
 				return
 			}
 
 			const cwd = historyItem.cwdOnTaskInitialization ?? (await this.options.getWorkspaceRoot())
 			const config = await this.options.sessionConfigBuilder.build({
 				cwd,
-				mode: "act",
+				mode: this.getCurrentMode(),
 			})
 
 			const tempManager = await this.options.createTempSessionHost()
-			const initialMessages = await this.options.loadInitialMessages(tempManager, taskId)
+			const [initialMessages, sessionRecord] = await Promise.all([
+				this.options.loadInitialMessages(tempManager, taskId),
+				tempManager.get(taskId).catch(() => undefined),
+			])
+			const cwdForRefs = sessionRecord?.cwd?.trim() || sessionRecord?.workspaceRoot?.trim() || cwd
+			const checkpointMetadata =
+				sessionRecord?.metadata &&
+				typeof sessionRecord.metadata === "object" &&
+				!Array.isArray(sessionRecord.metadata) &&
+				sessionRecord.metadata.checkpoint &&
+				typeof sessionRecord.metadata.checkpoint === "object"
+					? sessionRecord.metadata.checkpoint
+					: undefined
 			await tempManager.dispose("readMessages")
 
 			const { startResult } = await this.options.sessions.startNewSession({
 				config,
 				interactive: true,
 				...(initialMessages ? { initialMessages: initialMessages as InitialMessages } : {}),
-				sessionMetadata: historyItemToSessionMetadata(historyItem, config.modelId),
+				sessionMetadata: {
+					...historyItemToSessionMetadata(historyItem, config.modelId),
+					...(checkpointMetadata ? { checkpoint: checkpointMetadata } : {}),
+				},
 			})
 
+			if (
+				checkpointMetadata &&
+				typeof checkpointMetadata === "object" &&
+				Array.isArray((checkpointMetadata as { history?: unknown }).history) &&
+				startResult.sessionId !== taskId
+			) {
+				await retainCheckpointRefs(
+					cwdForRefs,
+					startResult.sessionId,
+					(checkpointMetadata as { history: Array<{ ref: string; createdAt: number; runCount: number }> }).history,
+				).catch((error) => {
+					Logger.warn(`[SdkController] Failed to retain checkpoint refs after task resume: ${taskId}`, error)
+				})
+			}
+
 			this.createAndSetTask(startResult.sessionId)
+			const rawMessages = await this.options.taskHistory.getTrumboMessages(startResult.sessionId)
+			const visibleMessages = this.options.messages.finalizeMessagesForSave(rawMessages)
+			if (visibleMessages.length > 0) {
+				this.options.messages.replaceMessages(visibleMessages)
+			}
+			this.options.onReinitSucceeded?.()
 			await this.options.postStateToWebview()
 
 			Logger.log(`[SdkController] Task resumed: ${taskId} → ${startResult.sessionId}`)
 		} catch (error) {
 			this.handleReinitError(taskId, error)
+			this.options.onReinitFailed?.()
+			await this.options.postStateToWebview().catch(() => {})
 		}
 	}
 
@@ -248,6 +291,7 @@ export class SdkTaskStartCoordinator {
 			],
 			{ type: "status", payload: { sessionId: sessionId ?? "", status: "error" } },
 		)
+		this.options.onInitFailed?.()
 	}
 
 	private handleReinitError(taskId: string, error: unknown): void {

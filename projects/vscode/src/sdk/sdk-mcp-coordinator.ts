@@ -20,6 +20,7 @@ export interface SdkMcpCoordinatorOptions {
 	getWorkspaceRoot: () => Promise<string>
 	loadInitialMessages: (sdkHost: SdkSessionHost, sessionId: string) => Promise<unknown[] | undefined>
 	buildStartSessionInput: (config: SessionConfig, input: { cwd: string; mode: Mode }) => StartInput
+	resetMessageTranslator?: () => void
 	postStateToWebview: () => Promise<void>
 }
 
@@ -115,6 +116,7 @@ export class SdkMcpCoordinator {
 				payload: { sessionId: startResult.sessionId, status: "idle" },
 			})
 
+			this.options.resetMessageTranslator?.()
 			await this.options.postStateToWebview()
 			Logger.log(`[SdkController] Session restarted for MCP tools: ${oldSessionId} -> ${startResult.sessionId}`)
 		} catch (error) {

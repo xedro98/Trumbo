@@ -29,7 +29,7 @@ export function CookieConsent() {
 		<div
 			className={cn(
 				"pointer-events-none fixed inset-x-0 bottom-0 z-50 p-4 sm:p-6",
-				"lg:left-[var(--nav-width)] lg:max-w-[calc(100%-var(--nav-width))]",
+				"lg:left-[calc(var(--nav-width)+var(--nav-gutter))] lg:max-w-[calc(100%-var(--nav-width)-var(--nav-gutter))]",
 			)}
 			role="region"
 			aria-label="Cookie notice"

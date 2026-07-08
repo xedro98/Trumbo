@@ -1,9 +1,10 @@
-import { TRUMBO_ACCOUNT_AUTH_ERROR_MESSAGE } from "@shared/TrumboAccount"
 import type { TrumboMessage, TurnPhase } from "@shared/ExtensionMessage"
 import type { Mode } from "@shared/storage/types"
+import { TRUMBO_ACCOUNT_AUTH_ERROR_MESSAGE } from "@shared/TrumboAccount"
 import type { TrumboAskResponse } from "@shared/WebviewMessage"
 import type { StateManager } from "@/core/storage/StateManager"
 import { Logger } from "@/shared/services/Logger"
+import type { MessageIdMinter } from "./message-id-minter"
 import type { SdkInteractionCoordinator } from "./sdk-interaction-coordinator"
 import type { SdkMessageCoordinator } from "./sdk-message-coordinator"
 import type { SdkSessionConfigBuilder } from "./sdk-session-config-builder"
@@ -42,6 +43,9 @@ export interface SdkFollowupCoordinatorOptions {
 	 * terminal phase or the footer stays stuck on Thinking/Cancel.
 	 */
 	onResumeFailed: () => void
+	/** Called when askResponse cannot proceed (no active session and no task to resume). */
+	onAskResponseFailed?: () => void
+	getMinter?: () => MessageIdMinter
 }
 
 export class SdkFollowupCoordinator {
@@ -59,6 +63,10 @@ export class SdkFollowupCoordinator {
 		}
 
 		if (this.options.interactions.resolvePendingToolApproval(prompt, askResponse, images, files)) {
+			return
+		}
+
+		if (this.options.interactions.resolvePendingCommandOutput(prompt, askResponse, images, files)) {
 			return
 		}
 
@@ -87,6 +95,7 @@ export class SdkFollowupCoordinator {
 
 		if (!activeSession) {
 			Logger.error("[SdkController] askResponse: No active session")
+			this.options.onAskResponseFailed?.()
 			return
 		}
 
@@ -96,6 +105,7 @@ export class SdkFollowupCoordinator {
 
 		if (shouldQueue) {
 			Logger.log(`[SdkController] Session is running - queuing follow-up message for session: ${sessionId}`)
+			this.emitUserFeedback(sessionId, prompt, images, files)
 		}
 
 		this.options.sessions.setRunning(true)
@@ -212,7 +222,7 @@ export class SdkFollowupCoordinator {
 		}
 
 		const userMessage: TrumboMessage = {
-			ts: Date.now(),
+			ts: this.options.getMinter?.().nextId() ?? Date.now(),
 			type: "say",
 			say: "user_feedback",
 			text: prompt ?? "",

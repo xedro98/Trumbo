@@ -88,6 +88,7 @@ async function runTurnWithRuntimeHealth(
 ): Promise<AgentResult | undefined> {
 	const startedAt = performance.now();
 	let settled = false;
+	let abandonedByTimeout = false;
 	const baseContext = {
 		command: envelope.command,
 		requestId: envelope.requestId,
@@ -117,7 +118,7 @@ async function runTurnWithRuntimeHealth(
 	const runPromise = ctx.sessionHost.runTurn(input);
 	runPromise.then(
 		(result) => {
-			if (!settled) return;
+			if (!abandonedByTimeout) return;
 			logHubMessage("warn", "run.late_end", {
 				...baseContext,
 				elapsedMs: Math.round(performance.now() - startedAt),
@@ -125,7 +126,7 @@ async function runTurnWithRuntimeHealth(
 			});
 		},
 		(error) => {
-			if (!settled) return;
+			if (!abandonedByTimeout) return;
 			logHubMessage("error", "run.late_error", {
 				...baseContext,
 				elapsedMs: Math.round(performance.now() - startedAt),
@@ -143,6 +144,7 @@ async function runTurnWithRuntimeHealth(
 			new Promise<never>((_, reject) => {
 				timeout = setTimeout(() => {
 					const reason = `Hub run ${envelope.command} timed out after ${timeoutMs}ms.`;
+					abandonedByTimeout = true;
 					settled = true;
 					clearInterval(heartbeat);
 					reject(new Error(reason));
@@ -300,9 +302,11 @@ export async function handleRunAbort(
 		(approval) => approval.sessionId === sessionId,
 		reason,
 	);
+	let applied = true;
 	try {
 		await ctx.sessionHost.abort(sessionId, envelope.payload?.reason);
 	} catch (error) {
+		applied = false;
 		logHubMessage("warn", "run.abort_failed", {
 			command: envelope.command,
 			requestId: envelope.requestId,
@@ -315,6 +319,13 @@ export async function handleRunAbort(
 			ctx,
 			(request) => request.sessionId === sessionId,
 			reason,
+		);
+	}
+	if (!applied) {
+		return errorReply(
+			envelope,
+			"run_abort_failed",
+			`Failed to abort session: ${sessionId}`,
 		);
 	}
 	return okReply(envelope, { applied: true });

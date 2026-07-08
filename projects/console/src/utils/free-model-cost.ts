@@ -72,7 +72,9 @@ function getTrumboFreeModelIds(baseUrl: string): Promise<readonly string[]> {
 
 export async function shouldZeroTrumboFreeModelCost(
 	config: Pick<Config, "providerId" | "modelId" | "baseUrl">,
+	options?: { authenticated?: boolean },
 ): Promise<boolean> {
+	if (options?.authenticated === false) return false;
 	if (config.providerId !== "trumbo") return false;
 	const modelId = normalizeModelId(config.modelId);
 	if (!modelId) return false;

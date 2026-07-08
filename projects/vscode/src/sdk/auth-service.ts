@@ -8,18 +8,18 @@
 // disk — it's fetched from the Trumbo API on startup and cached in memory.
 // This matches the CLI's pattern (see apps/cli/src/runtime/interactive-welcome.ts).
 
+import type { ApiProvider } from "@shared/api"
+import { AuthState, UserInfo } from "@shared/proto/trumbo/account"
+import type { EmptyRequest, String } from "@shared/proto/trumbo/common"
 import type { OAuthCredentials } from "@trumbo/core"
 import {
 	createOAuthClientCallbacks,
 	getValidTrumboCredentials,
-	loginTrumboOAuth,
 	loginOcaOAuth,
 	loginOpenAICodex,
+	loginTrumboOAuth,
 	removePlatformKnowledgeMcpServer,
 } from "@trumbo/core"
-import type { ApiProvider } from "@shared/api"
-import { AuthState, UserInfo } from "@shared/proto/trumbo/account"
-import type { EmptyRequest, String } from "@shared/proto/trumbo/common"
 import axios from "axios"
 import { TrumboEnv } from "@/config"
 import type { Controller } from "@/core/controller"
@@ -31,12 +31,12 @@ import { BannerService } from "@/services/banner/BannerService"
 import { buildBasicTrumboHeaders } from "@/services/EnvUtils"
 import { featureFlagsService } from "@/services/feature-flags"
 import { telemetryService } from "@/services/telemetry"
-import { TRUMBO_API_ENDPOINT } from "@/shared/trumbo/api"
 import { fetch, getAxiosSettings } from "@/shared/net"
 import { Logger } from "@/shared/services/Logger"
+import { TRUMBO_API_ENDPOINT } from "@/shared/trumbo/api"
 import { openExternal } from "@/utils/env"
-import { getProviderSettingsManager } from "./provider-migration"
 import { syncPlatformKnowledgeMcpFromAuthService } from "./platform-knowledge-mcp"
+import { getProviderSettingsManager } from "./provider-migration"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -352,9 +352,7 @@ export class AuthService {
 					this._authenticated = false
 					clearTrumboCredentials()
 					await removePlatformKnowledgeMcpServer().catch(() => {})
-					setImmediate(() => {
-						this.sendAuthStatusUpdate().catch(() => {})
-					})
+					await this.sendAuthStatusUpdate().catch(() => {})
 					return undefined
 				}
 
@@ -388,10 +386,8 @@ export class AuthService {
 				void this.syncPlatformKnowledgeMcpSettings()
 
 				if (credentialsChanged) {
-					setImmediate(() => {
-						this.sendAuthStatusUpdate().catch((err) => {
-							Logger.error("[SdkAuthService] Error sending auth status update after refresh:", err)
-						})
+					await this.sendAuthStatusUpdate().catch((err) => {
+						Logger.error("[SdkAuthService] Error sending auth status update after refresh:", err)
 					})
 				}
 

@@ -12,6 +12,24 @@ function createState(): PendingPromptQueueState {
 }
 
 describe("PendingPromptService", () => {
+	it("treats prompts with the same text but different attachments as distinct entries", () => {
+		const service = new PendingPromptService();
+		const state = createState();
+
+		service.enqueue(state, {
+			prompt: "same text",
+			delivery: "queue",
+			userImages: ["img-a"],
+		});
+		service.enqueue(state, {
+			prompt: "same text",
+			delivery: "queue",
+			userImages: ["img-b"],
+		});
+
+		expect(state.pendingPrompts).toHaveLength(2);
+	});
+
 	it("deduplicates prompts and prioritizes steer delivery", () => {
 		const service = new PendingPromptService();
 		const state = createState();

@@ -86,7 +86,9 @@ describe("UserMessage – IME composition handling", () => {
 
 	it("labels reset actions and preserves their restore behavior", async () => {
 		const user = userEvent.setup()
-		render(<UserMessage files={["src/app.ts"]} images={["image.png"]} messageTs={123} text="Update this" />)
+		render(
+			<UserMessage canRestoreWorkspace files={["src/app.ts"]} images={["image.png"]} messageTs={123} text="Update this" />,
+		)
 
 		await user.click(screen.getByText("Update this"))
 

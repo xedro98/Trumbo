@@ -10,9 +10,9 @@ import { StateManager } from "@/core/storage/StateManager"
 import { ITerminalManager } from "@/integrations/terminal"
 import { McpHub } from "@/services/mcp/McpHub"
 import { Logger } from "@/shared/services/Logger"
-import type { ActiveSession } from "./trumbo-session-factory"
 import { buildToolPolicies } from "./sdk-tool-policies"
 import type { SdkSessionHost } from "./session-host"
+import type { ActiveSession } from "./trumbo-session-factory"
 import { VscodeSessionHost } from "./vscode-session-host"
 
 type RequestToolApprovalHandler = NonNullable<Parameters<typeof VscodeSessionHost.create>[0]["requestToolApproval"]>
@@ -25,6 +25,8 @@ export interface SdkSessionLifecycleOptions {
 	onSessionEvent: (event: CoreSessionEvent) => void
 	/** Lazy factory for the VscodeTerminalManager (foreground terminal support). */
 	getTerminalManager?: () => ITerminalManager
+	getCommandExecutorCallbacks?: () => import("@/integrations/terminal/types").CommandExecutorCallbacks | undefined
+	onForegroundProcessStarted?: (process: import("@/integrations/terminal/types").TerminalProcessResultPromise) => void
 	/** Returns the latest prepared remote-config integration, if remote config is active. */
 	getRemoteConfigIntegration?: () => PreparedRemoteConfigCoreIntegration | undefined
 	/** Shared SDK telemetry service owned by SdkController. */
@@ -58,6 +60,17 @@ export class SdkSessionLifecycle {
 	setRunning(isRunning: boolean): void {
 		if (this.activeSession) {
 			this.activeSession.isRunning = isRunning
+		}
+	}
+
+	async waitForIdle(options?: { timeoutMs?: number }): Promise<void> {
+		const timeoutMs = options?.timeoutMs ?? 10_000
+		const started = Date.now()
+		while (Date.now() - started < timeoutMs) {
+			if (!this.activeSession?.isRunning) {
+				return
+			}
+			await new Promise((resolve) => setTimeout(resolve, 50))
 		}
 	}
 
@@ -299,6 +312,8 @@ export class SdkSessionLifecycle {
 				requestToolApproval: this.options.requestToolApproval,
 				askQuestion: this.options.askQuestion,
 				getTerminalManager: this.options.getTerminalManager,
+				getCommandExecutorCallbacks: this.options.getCommandExecutorCallbacks,
+				onForegroundProcessStarted: this.options.onForegroundProcessStarted,
 				getRemoteConfigIntegration: this.options.getRemoteConfigIntegration,
 				telemetry: this.options.telemetry,
 			})

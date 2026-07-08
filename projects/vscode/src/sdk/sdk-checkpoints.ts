@@ -1,4 +1,10 @@
 import type { TrumboMessage } from "@shared/ExtensionMessage"
+import {
+	countSdkCheckpointRunsUpToIndex,
+	findSdkUserMessageIndexByOrdinal,
+	getVisibleTrumboUserOrdinal,
+	type SdkUserMessage,
+} from "./sdk-user-message-mapping"
 
 export function isVisibleCheckpointUserMessage(message: TrumboMessage): boolean {
 	return message.type === "say" && (message.say === "task" || message.say === "user_feedback")
@@ -42,6 +48,78 @@ export function getCheckpointRunCountForMessage(messages: TrumboMessage[], targe
 		}
 	}
 	return runCount
+}
+
+export function findCheckpointRunCountAtOrBefore(
+	checkpointAvailableRunCounts: readonly number[],
+	runCount: number,
+): number | undefined {
+	return checkpointAvailableRunCounts.reduce<number | undefined>((best, candidate) => {
+		if (candidate > runCount) {
+			return best
+		}
+		if (best === undefined || candidate > best) {
+			return candidate
+		}
+		return best
+	}, undefined)
+}
+
+export function hasCheckpointForRunCounts(
+	checkpointAvailableRunCounts: readonly number[],
+	runCount: number | undefined,
+): boolean {
+	if (runCount === undefined || checkpointAvailableRunCounts.length === 0) {
+		return false
+	}
+	return findCheckpointRunCountAtOrBefore(checkpointAvailableRunCounts, runCount) !== undefined
+}
+
+export function getSdkCheckpointRunCountForTrumboUserIndex(
+	trumboMessages: TrumboMessage[],
+	targetIndex: number,
+	sdkMessages: SdkUserMessage[],
+): number | undefined {
+	const userOrdinal = getVisibleTrumboUserOrdinal(trumboMessages, targetIndex)
+	if (userOrdinal === undefined) {
+		return undefined
+	}
+	const sdkIndex = findSdkUserMessageIndexByOrdinal(sdkMessages, userOrdinal)
+	if (sdkIndex === -1) {
+		return undefined
+	}
+	const runCount = countSdkCheckpointRunsUpToIndex(sdkMessages, sdkIndex)
+	return runCount > 0 ? runCount : undefined
+}
+
+export function getSdkCheckpointRunCountForUiRun(
+	trumboMessages: TrumboMessage[],
+	uiRunCount: number,
+	sdkMessages: SdkUserMessage[],
+): number | undefined {
+	const target = findVisibleCheckpointUserMessageByRun(trumboMessages, uiRunCount)
+	if (!target) {
+		return undefined
+	}
+	return getSdkCheckpointRunCountForTrumboUserIndex(trumboMessages, target.index, sdkMessages)
+}
+
+export function buildCheckpointSdkRunCountByMessageTs(
+	trumboMessages: TrumboMessage[],
+	sdkMessages: SdkUserMessage[],
+): Record<number, number> {
+	const byTs: Record<number, number> = {}
+	for (let index = 0; index < trumboMessages.length; index += 1) {
+		if (!isCheckpointRunUserMessage(trumboMessages, index)) {
+			continue
+		}
+		const sdkRunCount = getSdkCheckpointRunCountForTrumboUserIndex(trumboMessages, index, sdkMessages)
+		const ts = trumboMessages[index]?.ts
+		if (sdkRunCount !== undefined && ts !== undefined) {
+			byTs[ts] = sdkRunCount
+		}
+	}
+	return byTs
 }
 
 export function findVisibleCheckpointUserMessageByRun(

@@ -25,14 +25,10 @@ export function buildForkSessionMetadata(input: {
 		}
 	}
 
-	const checkpointMetadata = sourceMetadata?.checkpoint;
 	forkMetadata.fork = {
 		forkedFromSessionId: input.forkedFromSessionId,
 		forkedAt: input.forkedAt,
 		source: input.sourceSession?.source ?? SessionSource.CLI,
-		...(checkpointMetadata !== undefined
-			? { checkpoints: checkpointMetadata }
-			: {}),
 	};
 	forkMetadata.title = deriveForkSessionTitle({
 		sourceTitle:

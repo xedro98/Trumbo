@@ -66,6 +66,7 @@ import {
 	handleSessionPendingPrompts,
 	handleSessionRemovePendingPrompt,
 	handleSessionRestore,
+	handleSessionStop,
 	handleSessionUpdate,
 	handleSessionUpdatePendingPrompt,
 } from "./handlers/session-handlers";
@@ -357,6 +358,8 @@ export class HubServerTransport implements NativeHubTransport {
 				return await handleSessionAttach(this.ctx, envelope);
 			case "session.detach":
 				return await handleSessionDetach(this.ctx, envelope);
+			case "session.stop":
+				return await handleSessionStop(this.ctx, envelope);
 			case "session.get":
 				return await handleSessionGet(this.ctx, envelope);
 			case "session.messages":
@@ -549,6 +552,12 @@ export class HubServerTransport implements NativeHubTransport {
 			state.participants.delete(clientId);
 			if (state.participants.size === 0) {
 				this.sessionState.delete(sessionId);
+				void this.ctx.sessionHost.stopSession(sessionId).catch((error) => {
+					logHubBoundaryError(
+						`failed to stop orphaned session ${sessionId} after client disconnect`,
+						error,
+					);
+				});
 			}
 		}
 		cancelPendingCapabilityRequests(

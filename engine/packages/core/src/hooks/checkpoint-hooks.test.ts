@@ -121,7 +121,7 @@ describe("createCheckpointHooks", () => {
 		}
 	});
 
-	it("does not append a checkpoint when the snapshot matches the latest checkpoint", async () => {
+	it("records a new run when the snapshot matches the latest checkpoint ref", async () => {
 		const cwd = await createGitRepo();
 		let metadata: Record<string, unknown> | undefined;
 		try {
@@ -143,8 +143,9 @@ describe("createCheckpointHooks", () => {
 			await runCheckpointHooks(hooks);
 
 			const checkpoint = metadata?.checkpoint as CheckpointMetadata;
-			expect(checkpoint.history).toHaveLength(1);
-			expect(checkpoint.latest.runCount).toBe(1);
+			expect(checkpoint.history).toHaveLength(2);
+			expect(checkpoint.latest.runCount).toBe(2);
+			expect(checkpoint.history[0]?.ref).toBe(checkpoint.history[1]?.ref);
 		} finally {
 			await rm(cwd, { recursive: true, force: true });
 		}
@@ -272,5 +273,47 @@ describe("createCheckpointHooks", () => {
 			ref: "new-three",
 			runCount: 3,
 		});
+	});
+
+	it("records a new run even when the git snapshot ref is unchanged", async () => {
+		let metadata: Record<string, unknown> | undefined = {
+			checkpoint: {
+				latest: {
+					ref: "same-ref",
+					createdAt: 1,
+					runCount: 1,
+					kind: "commit",
+				},
+				history: [
+					{
+						ref: "same-ref",
+						createdAt: 1,
+						runCount: 1,
+						kind: "commit",
+					},
+				],
+			},
+		};
+		const hooks = createCheckpointHooks({
+			cwd: "/tmp",
+			sessionId: "sess_same_ref",
+			createCheckpoint: ({ runCount }) => ({
+				ref: "same-ref",
+				createdAt: runCount,
+				runCount,
+				kind: "commit",
+			}),
+			readSessionMetadata: async () => metadata,
+			writeSessionMetadata: async (next) => {
+				metadata = next;
+			},
+		});
+
+		await runCheckpointHooks(hooks);
+		await runCheckpointHooks(hooks);
+
+		const checkpoint = metadata?.checkpoint as CheckpointMetadata;
+		expect(checkpoint.latest.runCount).toBe(2);
+		expect(checkpoint.history.map((entry) => entry.runCount)).toEqual([1, 2]);
 	});
 });

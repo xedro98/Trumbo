@@ -5,9 +5,6 @@
 // still provides its custom McpHub-backed runtime builder.
 
 import {
-	TrumboCore,
-	type TrumboCoreListHistoryOptions,
-	type TrumboCoreStartInput,
 	type CoreSessionEvent,
 	type HookEventPayload,
 	type ITelemetryService,
@@ -26,9 +23,12 @@ import {
 	type StartSessionInput,
 	type StartSessionResult,
 	type ToolExecutors,
+	TrumboCore,
+	type TrumboCoreListHistoryOptions,
+	type TrumboCoreStartInput,
 } from "@trumbo/core"
 import { type AgentToolContext, type ToolApprovalRequest, type ToolApprovalResult, type ToolPolicy } from "@trumbo/shared"
-import type { ITerminalManager } from "@/integrations/terminal/types"
+import type { CommandExecutorCallbacks, ITerminalManager, TerminalProcessResultPromise } from "@/integrations/terminal/types"
 import { getDistinctId } from "@/services/logging/distinctId"
 import type { McpHub } from "@/services/mcp/McpHub"
 import { Logger } from "@/shared/services/Logger"
@@ -60,6 +60,8 @@ export interface VscodeSessionHostOptions {
 	 * with a custom tool that supports foreground/background terminal execution.
 	 */
 	getTerminalManager?: () => ITerminalManager
+	getCommandExecutorCallbacks?: () => CommandExecutorCallbacks | undefined
+	onForegroundProcessStarted?: (process: TerminalProcessResultPromise) => void
 }
 
 export class VscodeSessionHost implements SdkSessionHost {
@@ -110,6 +112,8 @@ export class VscodeSessionHost implements SdkSessionHost {
 					const extraTools = await createVscodeExtraTools(options.mcpHub, {
 						cwd: inputWithRemoteConfig.config.cwd,
 						getTerminalManager: options.getTerminalManager,
+						getCommandExecutorCallbacks: options.getCommandExecutorCallbacks,
+						onForegroundProcessStarted: options.onForegroundProcessStarted,
 					})
 					return {
 						...inputWithRemoteConfig,

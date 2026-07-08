@@ -6,15 +6,15 @@ import type { Environment } from "../config"
 import { AutoApprovalSettings } from "./AutoApprovalSettings"
 import { ApiConfiguration } from "./api"
 import { BrowserSettings } from "./BrowserSettings"
-import { TrumboFeatureSetting } from "./TrumboFeatureSetting"
-import { BannerCardData } from "./trumbo/banner"
-import { TrumboRulesToggles } from "./trumbo-rules"
 import { HistoryItem } from "./HistoryItem"
 import { McpDisplayMode } from "./McpDisplayMode"
 import { TrumboMessageModelInfo } from "./messages"
 import { OnboardingModelGroup } from "./proto/trumbo/state"
 import { Mode } from "./storage/types"
 import { TelemetrySetting } from "./TelemetrySetting"
+import { TrumboFeatureSetting } from "./TrumboFeatureSetting"
+import { BannerCardData } from "./trumbo/banner"
+import { TrumboRulesToggles } from "./trumbo-rules"
 import { UserInfo } from "./UserInfo"
 // webview will hold state
 export interface ExtensionMessage {
@@ -81,6 +81,10 @@ export interface ExtensionState {
 	mcpDisplayMode: McpDisplayMode
 	planActSeparateModelsSetting: boolean
 	enableCheckpointsSetting?: boolean
+	/** Run counts that have a persisted workspace checkpoint in the active session. */
+	checkpointAvailableRunCounts?: number[]
+	/** Maps visible user-message timestamps to SDK checkpoint run counts. */
+	checkpointSdkRunCountByMessageTs?: Record<number, number>
 	platform: Platform
 	environment?: Environment
 	shouldShowAnnouncement: boolean

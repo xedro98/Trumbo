@@ -260,7 +260,13 @@ export async function runInteractive(
 	};
 	const handleSigterm = () => {
 		if (isRunning) {
-			sessionRuntime.abortAll();
+			if (sessionRuntime.abortAll()) {
+				return;
+			}
+			void cleanupRuntime().finally(() => {
+				process.exitCode = 0;
+				tuiApp?.destroy();
+			});
 			return;
 		}
 		tuiApp?.destroy();
@@ -510,7 +516,10 @@ export async function runInteractive(
 				}
 				input = chatCommandResult.input;
 				commandOutput = chatCommandResult.commandOutput;
-				zeroTurnCost = await shouldZeroTrumboFreeModelCost(config);
+				zeroTurnCost = await shouldZeroTrumboFreeModelCost(config, {
+					authenticated:
+						config.providerId !== "trumbo" || !!config.apiKey?.trim(),
+				});
 				zeroCurrentTurnCost = zeroTurnCost;
 				const {
 					prompt: userInput,
@@ -702,10 +711,16 @@ export async function runInteractive(
 			};
 		},
 		onCompact: async () => {
+			if (isRunning) {
+				throw new Error("Wait for the current run to finish before compacting");
+			}
 			await sessionRuntime.ensureReady();
 			return await sessionRuntime.compactCurrentSession();
 		},
 		onFork: async () => {
+			if (isRunning) {
+				throw new Error("Wait for the current run to finish before forking");
+			}
 			await sessionRuntime.ensureReady();
 			return await sessionRuntime.forkCurrentSession();
 		},
@@ -714,6 +729,9 @@ export async function runInteractive(
 			return await sessionRuntime.getCheckpointData();
 		},
 		onRestoreCheckpoint: async (runCount, restoreWorkspace) => {
+			if (isRunning) {
+				throw new Error("Wait for the current run to finish before restoring");
+			}
 			await sessionRuntime.ensureReady();
 			return await sessionRuntime.restoreCheckpoint(runCount, restoreWorkspace);
 		},

@@ -761,6 +761,11 @@ export class LocalRuntimeHost implements RuntimeHost {
 				result.finishReason === "error" ||
 				result.finishReason === "aborted"
 			) {
+				if (session.interactive && result.finishReason === "error") {
+					queueMicrotask(() => {
+						void this.pendingPromptsController.drain(input.sessionId);
+					});
+				}
 				return result;
 			}
 			queueMicrotask(() => {

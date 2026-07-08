@@ -14,15 +14,16 @@
 // which the SDK does not treat as a runtime command, so the model improvised a
 // fake "Conversation Summary" instead of compacting (TRUMBO-2503).
 
-import type { Message as SdkMessage } from "@trumbo/llms"
 import type { TrumboMessage } from "@shared/ExtensionMessage"
 import type { Mode } from "@shared/storage/types"
+import type { Message as SdkMessage } from "@trumbo/llms"
 import type { StateManager } from "@/core/storage/StateManager"
 import { Logger } from "@/shared/services/Logger"
 import { compactSessionMessages } from "./sdk-compaction"
 import type { SdkMessageCoordinator } from "./sdk-message-coordinator"
 import type { SdkSessionConfigBuilder } from "./sdk-session-config-builder"
 import type { SdkSessionLifecycle } from "./sdk-session-lifecycle"
+import type { SdkTaskHistory } from "./sdk-task-history"
 import type { SdkSessionHost } from "./session-host"
 import type { TaskProxy } from "./task-proxy"
 import type { VscodeSessionHost } from "./vscode-session-host"
@@ -36,6 +37,7 @@ export interface SdkCompactionCoordinatorOptions {
 	sessions: SdkSessionLifecycle
 	messages: SdkMessageCoordinator
 	sessionConfigBuilder: SdkSessionConfigBuilder
+	taskHistory: SdkTaskHistory
 	getTask: () => TaskProxy | undefined
 	getWorkspaceRoot: () => Promise<string>
 	buildStartSessionInput: (config: SessionConfig, input: { cwd: string; mode: Mode }) => StartInput
@@ -147,6 +149,8 @@ export class SdkCompactionCoordinator {
 		// session carry an older epoch and are dropped by the webview.
 		this.options.resetMessageTranslator()
 
+		await this.reloadTaskMessages(startResult.sessionId)
+
 		this.emitInfo(this.formatCompactionStatus(messagesBefore, result.messages.length))
 		await this.options.postStateToWebview()
 
@@ -166,6 +170,19 @@ export class SdkCompactionCoordinator {
 			return `Compacted context; message count stayed at ${messagesAfter}.`
 		}
 		return `Compacted ${messagesBefore} messages to ${messagesAfter}.`
+	}
+
+	private async reloadTaskMessages(sessionId: string): Promise<void> {
+		const rawMessages = await this.options.taskHistory.getTrumboMessages(sessionId)
+		const messages = this.options.messages.finalizeMessagesForSave(rawMessages)
+		if (messages.length === 0) {
+			return
+		}
+		this.options.messages.replaceMessages(messages)
+		const task = this.options.getTask()
+		if (task && task.taskId !== sessionId) {
+			task.taskId = sessionId
+		}
 	}
 
 	private emitInfo(text: string): void {

@@ -99,7 +99,38 @@ function isCheckpointAnswerMessage(messages: TrumboMessage[], index: number): bo
 	return false
 }
 
-export function canRestoreWorkspaceFromMessage(messages: TrumboMessage[], messageTs: number | undefined): boolean {
+function findCheckpointRunCountAtOrBefore(checkpointAvailableRunCounts: readonly number[], runCount: number): number | undefined {
+	return checkpointAvailableRunCounts.reduce<number | undefined>((best, candidate) => {
+		if (candidate > runCount) {
+			return best
+		}
+		if (best === undefined || candidate > best) {
+			return candidate
+		}
+		return best
+	}, undefined)
+}
+
+function getCheckpointRunCountForMessage(messages: TrumboMessage[], targetIndex: number): number | undefined {
+	if (!isVisibleCheckpointUserMessage(messages[targetIndex]) || isCheckpointAnswerMessage(messages, targetIndex)) {
+		return undefined
+	}
+
+	let runCount = 0
+	for (let index = 0; index <= targetIndex; index += 1) {
+		if (isVisibleCheckpointUserMessage(messages[index]) && !isCheckpointAnswerMessage(messages, index)) {
+			runCount += 1
+		}
+	}
+	return runCount
+}
+
+export function canRestoreWorkspaceFromMessage(
+	messages: TrumboMessage[],
+	messageTs: number | undefined,
+	checkpointAvailableRunCounts?: readonly number[],
+	checkpointSdkRunCountByMessageTs?: Readonly<Record<number, number>>,
+): boolean {
 	if (messageTs === undefined) {
 		return false
 	}
@@ -107,7 +138,17 @@ export function canRestoreWorkspaceFromMessage(messages: TrumboMessage[], messag
 	if (index === -1) {
 		return false
 	}
-	return isVisibleCheckpointUserMessage(messages[index]) && !isCheckpointAnswerMessage(messages, index)
+	if (!isVisibleCheckpointUserMessage(messages[index]) || isCheckpointAnswerMessage(messages, index)) {
+		return false
+	}
+	if (!checkpointAvailableRunCounts?.length) {
+		return false
+	}
+	const sdkRunCount = checkpointSdkRunCountByMessageTs?.[messageTs] ?? getCheckpointRunCountForMessage(messages, index)
+	if (sdkRunCount === undefined) {
+		return false
+	}
+	return findCheckpointRunCountAtOrBefore(checkpointAvailableRunCounts, sdkRunCount) !== undefined
 }
 
 /**
@@ -342,7 +383,10 @@ export function isTextMessagePendingToolCall(textTs: number, allMessages: Trumbo
  * - (Case A) Tools between a previous completed api_req and the current incomplete api_req
  * - (Case B) Tools after the most recent api_req overall (either because it's complete, or no loading state is active yet)
  */
-export function getToolsNotInCurrentActivities(toolGroupMessages: TrumboMessage[], allMessages: TrumboMessage[]): TrumboMessage[] {
+export function getToolsNotInCurrentActivities(
+	toolGroupMessages: TrumboMessage[],
+	allMessages: TrumboMessage[],
+): TrumboMessage[] {
 	// Build a Map of timestamp -> index for O(1) lookups instead of O(n) findIndex calls
 	const tsToIndex = new Map<number, number>()
 	for (let i = 0; i < allMessages.length; i++) {

@@ -21,7 +21,8 @@ import {
 } from "@trumbo/core"
 import type { AgentTool } from "@trumbo/shared"
 import { StateManager } from "@/core/storage/StateManager"
-import type { ITerminalManager } from "@/integrations/terminal/types"
+import { orchestrateCommandExecution } from "@/integrations/terminal/CommandOrchestrator"
+import type { CommandExecutorCallbacks, ITerminalManager, TerminalProcessResultPromise } from "@/integrations/terminal/types"
 import { Logger } from "@/shared/services/Logger"
 import { getShellForProfile } from "@/utils/shell"
 
@@ -37,6 +38,10 @@ export interface VscodeRunCommandsToolOptions {
 	cwd: string
 	/** Lazy factory for the VscodeTerminalManager. Called once on first foreground use. */
 	getTerminalManager: () => ITerminalManager
+	/** Callbacks for foreground command UI orchestration (Proceed While Running, etc.). */
+	getCommandExecutorCallbacks?: () => CommandExecutorCallbacks | undefined
+	/** Notified when a foreground terminal process starts so the host can cancel it later. */
+	onForegroundProcessStarted?: (process: TerminalProcessResultPromise) => void
 }
 
 // ---------------------------------------------------------------------------
@@ -69,21 +74,45 @@ async function executeForeground(
 	terminalManager: ITerminalManager,
 	maxOutputChars: number,
 	abortSignal?: AbortSignal,
+	options?: Pick<VscodeRunCommandsToolOptions, "getCommandExecutorCallbacks" | "onForegroundProcessStarted">,
 ): Promise<string> {
 	const terminalCommand = formatCommandForTerminal(command)
 	const terminalInfo = await terminalManager.getOrCreateTerminal(cwd)
 	terminalInfo.terminal.show()
 
 	const process = terminalManager.runCommand(terminalInfo, terminalCommand)
-	const outputLines: string[] = []
+	options?.onForegroundProcessStarted?.(process)
 
-	// Accumulate output lines to return the full output once the command completes.
-	// The chat shows command output at completion, not incrementally.
+	const callbacks = options?.getCommandExecutorCallbacks?.()
+	if (callbacks) {
+		if (abortSignal) {
+			const onAbort = () => {
+				callbacks.resolvePendingAsk?.("noButtonClicked")
+				process.continue()
+			}
+			const cleanupAbortListener = () => abortSignal.removeEventListener("abort", onAbort)
+			abortSignal.addEventListener("abort", onAbort, { once: true })
+			process.once("completed", cleanupAbortListener)
+			process.once("continue", cleanupAbortListener)
+		}
+
+		const result = await orchestrateCommandExecution(process, terminalManager, callbacks, {
+			command: terminalCommand,
+			terminalType: "vscode",
+		})
+		if (abortSignal?.aborted) {
+			throw new Error("Command execution aborted")
+		}
+		return truncateCommandOutput(String(result.result ?? ""), {
+			maxChars: maxOutputChars,
+		})
+	}
+
+	const outputLines: string[] = []
 	process.on("line", (line: string) => {
 		outputLines.push(line)
 	})
 
-	// Handle abort signal
 	if (abortSignal) {
 		const onAbort = () => {
 			process.continue()
@@ -94,7 +123,6 @@ async function executeForeground(
 		process.once("continue", cleanupAbortListener)
 	}
 
-	// Wait for completion
 	await process
 	if (abortSignal?.aborted) {
 		throw new Error("Command execution aborted")
@@ -126,32 +154,23 @@ export function createVscodeRunCommandsTool(options: VscodeRunCommandsToolOption
 function createVscodeShellExecutor(options: VscodeRunCommandsToolOptions): ShellExecutor {
 	const { cwd, getTerminalManager } = options
 
-	// Lazy-init background executor — recreated when the user's shell profile changes.
 	let bgExecutor: ShellExecutor | undefined
 	let bgExecutorShell: string | undefined
-
-	// Lazy-init terminal manager reference
 	let terminalManager: ITerminalManager | undefined
 
 	return async (command, commandCwd, context): Promise<string> => {
-		// Read current execution mode dynamically
 		const mode = StateManager.get().getGlobalStateKey("vscodeTerminalExecutionMode") ?? "vscodeTerminal"
 
 		Logger.log(`[VscodeRunCommands] Executing command in ${mode} mode`)
 
 		if (mode === "backgroundExec") {
-			// Background path — use SDK's createShellExecutor
-			// Resolve shell from the user's terminal profile setting
 			const profileId = (StateManager.get().getGlobalSettingsKey("defaultTerminalProfile") as string) || "default"
 			const shell = getShellForProfile(profileId)
 
-			// Recreate the executor if the shell has changed
 			if (!bgExecutor || bgExecutorShell !== shell) {
 				bgExecutorShell = shell
 				bgExecutor = createShellExecutor({
 					shell,
-					// Set SHELL env to match the shell we're spawning so child
-					// processes see the correct value instead of the inherited parent's.
 					env: { SHELL: shell },
 				})
 				Logger.log(`[VscodeRunCommands] Background executor using shell: ${shell}`)
@@ -159,10 +178,16 @@ function createVscodeShellExecutor(options: VscodeRunCommandsToolOptions): Shell
 			return await bgExecutor(command, commandCwd || cwd, context)
 		}
 
-		// Foreground path — use VscodeTerminalManager
 		if (!terminalManager) {
 			terminalManager = getTerminalManager()
 		}
-		return await executeForeground(command, commandCwd || cwd, terminalManager, MAX_COMMAND_OUTPUT_CHARS, context.signal)
+		return await executeForeground(
+			command,
+			commandCwd || cwd,
+			terminalManager,
+			MAX_COMMAND_OUTPUT_CHARS,
+			context.signal,
+			options,
+		)
 	}
 }

@@ -42,7 +42,7 @@ export const STATIC_PAGE_SEO: Record<string, PageSEOConfig> = {
 	"/agent": {
 		title: "Trumbo Agent",
 		description:
-			"Open source coding agent for daily work. Edit files, run shell commands, search your codebase, and call MCP tools from the terminal, platform, or your editor.",
+			"Open source coding agent for daily work. Edit files, run shell commands, search your codebase, call MCP tools, and ground answers in your team's docs with Trumbo Knowledge.",
 	},
 	"/quartz": {
 		title: "Trumbo Quartz",

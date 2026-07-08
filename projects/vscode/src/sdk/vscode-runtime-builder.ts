@@ -1,6 +1,6 @@
 import { createDefaultShellExecutor, createMcpTools } from "@trumbo/core"
 import { type AgentTool, type AgentToolContext, createTool } from "@trumbo/shared"
-import type { ITerminalManager } from "@/integrations/terminal/types"
+import type { CommandExecutorCallbacks, ITerminalManager, TerminalProcessResultPromise } from "@/integrations/terminal/types"
 import type { McpHub } from "@/services/mcp/McpHub"
 import { Logger } from "@/shared/services/Logger"
 import { createVscodeRunCommandsTool } from "./vscode-run-commands-tool"
@@ -122,6 +122,8 @@ export interface VscodeExtraToolsOptions {
 	 * built-in version with foreground/background terminal support.
 	 */
 	getTerminalManager?: () => ITerminalManager
+	getCommandExecutorCallbacks?: () => CommandExecutorCallbacks | undefined
+	onForegroundProcessStarted?: (process: TerminalProcessResultPromise) => void
 }
 
 export async function createVscodeExtraTools(mcpHub: McpHub, options?: VscodeExtraToolsOptions): Promise<AgentTool[]> {
@@ -154,6 +156,8 @@ export async function createVscodeExtraTools(mcpHub: McpHub, options?: VscodeExt
 			createVscodeRunCommandsTool({
 				cwd: options.cwd ?? process.cwd(),
 				getTerminalManager: options.getTerminalManager,
+				getCommandExecutorCallbacks: options.getCommandExecutorCallbacks,
+				onForegroundProcessStarted: options.onForegroundProcessStarted,
 			}),
 		)
 		Logger.log("[VscodeRuntimeTools] Added custom run_commands tool (foreground/background terminal)")

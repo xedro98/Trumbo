@@ -51,6 +51,26 @@ export interface PendingPromptConsumeResult {
 	prompts: SessionPendingPrompt[];
 }
 
+function pendingPromptAttachmentKey(
+	userImages?: string[],
+	userFiles?: string[],
+): string {
+	return `${userImages?.length ?? 0}:${userImages?.join("\u0000") ?? ""}|${
+		userFiles?.length ?? 0
+	}:${userFiles?.join("\u0000") ?? ""}`;
+}
+
+function pendingPromptsMatch(
+	left: PendingPromptEntry,
+	input: PendingPromptEnqueueInput,
+): boolean {
+	return (
+		left.prompt === input.prompt &&
+		pendingPromptAttachmentKey(left.userImages, left.userFiles) ===
+			pendingPromptAttachmentKey(input.userImages, input.userFiles)
+	);
+}
+
 export class PendingPromptService {
 	list(state: PendingPromptQueueState | undefined): SessionPendingPrompt[] {
 		return state ? snapshotPrompts(state) : [];
@@ -139,8 +159,8 @@ export class PendingPromptService {
 		input: PendingPromptEnqueueInput,
 	): SessionPendingPrompt[] {
 		const { prompt, mode, delivery, userImages, userFiles } = input;
-		const existingIndex = state.pendingPrompts.findIndex(
-			(queued) => queued.prompt === prompt,
+		const existingIndex = state.pendingPrompts.findIndex((queued) =>
+			pendingPromptsMatch(queued, input),
 		);
 		if (existingIndex >= 0) {
 			const [existing] = state.pendingPrompts.splice(existingIndex, 1);
@@ -319,6 +339,9 @@ export class PendingPromptsController {
 			continueDrain = false;
 			this.service.requeueFront(session, next);
 			this.emitPrompts(session);
+			queueMicrotask(() => {
+				void this.drain(sessionId);
+			});
 		} finally {
 			session.drainingPendingPrompts = false;
 			if (

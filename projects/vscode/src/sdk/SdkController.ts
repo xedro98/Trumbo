@@ -6,49 +6,53 @@
 // the webview's gRPC streams.
 import * as fs from "node:fs/promises"
 import * as path from "node:path"
-import {
-	createUserInstructionConfigService,
-	getProviderAuthStorageId,
-	type PreparedRemoteConfigCoreIntegration,
-	resolveDefaultMcpSettingsPath,
-	type SessionHistoryRecord,
-	setTelemetryOptOutGlobally,
-	type UserInstructionConfigService,
-} from "@trumbo/core"
-import { formatDisplayUserInput, type RemoteConfig, type RemoteConfigBundle } from "@trumbo/shared"
 import type { ApiConfiguration, ModelInfo } from "@shared/api"
 import type { ChatContent } from "@shared/ChatContent"
-import { TRUMBO_ACCOUNT_AUTH_ERROR_MESSAGE } from "@shared/TrumboAccount"
 import { mentionRegexGlobal } from "@shared/context-mentions"
-import type { TrumboApiReqInfo, TrumboMessage, ExtensionState } from "@shared/ExtensionMessage"
+import type { ExtensionState, TrumboApiReqInfo, TrumboMessage } from "@shared/ExtensionMessage"
 import type { HistoryItem } from "@shared/HistoryItem"
 import { DeleteAllTaskHistoryCount, type GetTaskHistoryRequest, TaskHistoryArray, TaskResponse } from "@shared/proto/trumbo/task"
 import type { Settings } from "@shared/storage/state-keys"
 import type { Mode } from "@shared/storage/types"
 import type { TelemetrySetting } from "@shared/TelemetrySetting"
+import { TRUMBO_ACCOUNT_AUTH_ERROR_MESSAGE } from "@shared/TrumboAccount"
 import type { TrumboCheckpointRestore } from "@shared/WebviewMessage"
+import {
+	createRestoredCheckpointMetadata,
+	createUserInstructionConfigService,
+	findCheckpointForRun,
+	getProviderAuthStorageId,
+	type PreparedRemoteConfigCoreIntegration,
+	readSessionCheckpointHistory,
+	resolveDefaultMcpSettingsPath,
+	retainCheckpointRefs,
+	type SessionHistoryRecord,
+	setTelemetryOptOutGlobally,
+	type UserInstructionConfigService,
+} from "@trumbo/core"
+import { formatDisplayUserInput, type RemoteConfig, type RemoteConfigBundle } from "@trumbo/shared"
 import { parseMentions } from "@/core/mentions"
 import { ensureMcpServersDirectoryExists } from "@/core/storage/disk"
 import { refreshSdkRemoteConfig } from "@/core/storage/remote-config/sdk-refresh"
 import { clearRemoteConfig } from "@/core/storage/remote-config/utils"
 import { StateManager } from "@/core/storage/StateManager"
 import type { WorkspaceRootManager } from "@/core/workspace/WorkspaceRootManager"
+import { WorkspaceRootManager as WorkspaceRootManagerImpl } from "@/core/workspace/WorkspaceRootManager"
 import { HostProvider } from "@/hosts/host-provider"
-import type { ITerminalManager } from "@/integrations/terminal/types"
+import type { CommandExecutorCallbacks, ITerminalManager, TerminalProcessResultPromise } from "@/integrations/terminal/types"
 import { ExtensionRegistryInfo } from "@/registry"
 import { OcaAuthService } from "@/services/auth/oca/OcaAuthService"
 import { UrlContentFetcher } from "@/services/browser/UrlContentFetcher"
 import { TrumboError } from "@/services/error/TrumboError"
 import { McpHub } from "@/services/mcp/McpHub"
 import { telemetryService } from "@/services/telemetry"
-import type { TrumboExtensionContext } from "@/shared/trumbo"
 import { ShowMessageRequest, ShowMessageType } from "@/shared/proto/host/window"
 import { Logger } from "@/shared/services/Logger"
+import type { TrumboExtensionContext } from "@/shared/trumbo"
 import { isTrumboProvider } from "@/shared/utils/trumbo"
 import { arePathsEqual, getDesktopDir } from "@/utils/path"
 import { TrumboAccountService } from "./account-service"
 import { AuthService, LogoutReason } from "./auth-service"
-import { buildStartSessionInput, createHistoryItemFromSession } from "./trumbo-session-factory"
 import { MessageTranslatorState, reshapeErrorForWebview } from "./message-translator"
 import { createProviderCatalog } from "./model-catalog/catalog"
 import type { Disposable, ProviderCatalog, ProviderConfigChange, ProviderConfigStore } from "./model-catalog/contracts"
@@ -61,8 +65,10 @@ import {
 	ProviderFailureTelemetryTurnGate,
 } from "./provider-failure-telemetry"
 import {
+	buildCheckpointSdkRunCountByMessageTs,
 	findVisibleCheckpointUserMessageByRun,
-	getCheckpointRunCountForMessage,
+	getSdkCheckpointRunCountForTrumboUserIndex,
+	getSdkCheckpointRunCountForUiRun,
 	isVisibleCheckpointUserMessage,
 } from "./sdk-checkpoints"
 import { SdkCompactionCoordinator } from "./sdk-compaction-coordinator"
@@ -82,6 +88,7 @@ import { SdkTaskStartCoordinator } from "./sdk-task-start-coordinator"
 import { createVscodeSdkTelemetryHandle, type VscodeSdkTelemetryHandle } from "./sdk-telemetry"
 import { isToolAutoApproved } from "./sdk-tool-policies"
 import {
+	countSdkCheckpointRuns,
 	extractSdkUserText,
 	findSdkUserMessageIndexByOrdinal,
 	isSyntheticSdkUserMessage,
@@ -89,6 +96,7 @@ import {
 } from "./sdk-user-message-mapping"
 import { createTaskProxy, type TaskProxy } from "./task-proxy"
 import { syncTelemetrySettingFromSharedGlobalSettings } from "./telemetry-settings-sync"
+import { buildStartSessionInput, createHistoryItemFromSession } from "./trumbo-session-factory"
 import { TurnStateTracker } from "./turn-state-tracker"
 import { VscodeSessionHost } from "./vscode-session-host"
 import { WebviewGrpcBridge } from "./webview-grpc-bridge"
@@ -190,6 +198,9 @@ export class Controller {
 	// StandaloneTerminalManager in trumbo-core / JetBrains).
 	// Created on first use; shared across all sessions in this Controller's lifetime.
 	private _terminalManager?: ITerminalManager
+	private _workspaceManager?: WorkspaceRootManager
+	private _workspaceManagerPromise?: Promise<WorkspaceRootManager | undefined>
+	private _activeCommandProcess?: TerminalProcessResultPromise
 
 	// Private state kept for stub compatibility
 	private backgroundCommandRunning = false
@@ -310,6 +321,10 @@ export class Controller {
 				}
 				return this._terminalManager
 			},
+			getCommandExecutorCallbacks: () => this.createCommandExecutorCallbacks(),
+			onForegroundProcessStarted: (process) => {
+				this._activeCommandProcess = process
+			},
 			onSendStart: () => {
 				this.beginProviderFailureTelemetryTurn()
 			},
@@ -423,6 +438,7 @@ export class Controller {
 				(await this.sessionHistory.loadInitialMessages(sdkHost, sessionId)) ?? [],
 			buildStartSessionInput,
 			postStateToWebview: () => this.postStateToWebview(),
+			resetMessageTranslator: () => this.resetMessageTranslatorAndFence(),
 		})
 		this.providerChanges = new SdkProviderChangeCoordinator({
 			stateManager: this.stateManager,
@@ -435,6 +451,7 @@ export class Controller {
 				(await this.sessionHistory.loadInitialMessages(sdkHost, sessionId)) ?? [],
 			buildStartSessionInput,
 			postStateToWebview: () => this.postStateToWebview(),
+			resetMessageTranslator: () => this.resetMessageTranslatorAndFence(),
 		})
 		this.followups = new SdkFollowupCoordinator({
 			stateManager: this.stateManager,
@@ -457,6 +474,10 @@ export class Controller {
 			onResumeFailed: () => {
 				this.turnStateTracker.set("error")
 			},
+			onAskResponseFailed: () => {
+				this.turnStateTracker.set("idle")
+			},
+			getMinter: () => this.messageTranslatorState.getMinter(),
 		})
 		this.taskControl = new SdkTaskControlCoordinator({
 			sessions: this.sessions,
@@ -503,12 +524,22 @@ export class Controller {
 			emitTrumboAuthError: (task) => this.emitTrumboAuthErrorWithTelemetry(task),
 			captureProviderApiError: (event) => this.captureProviderFailure(event),
 			postStateToWebview: () => this.postStateToWebview(),
+			onInitFailed: () => {
+				this.turnStateTracker.set("error")
+			},
+			onReinitFailed: () => {
+				this.turnStateTracker.set("error")
+			},
+			onReinitSucceeded: () => {
+				this.turnStateTracker.set("idle")
+			},
 		})
 		this.compaction = new SdkCompactionCoordinator({
 			stateManager: this.stateManager,
 			sessions: this.sessions,
 			messages: this.messages,
 			sessionConfigBuilder: this.sessionConfigBuilder,
+			taskHistory: this.taskHistory,
 			getTask: () => this.task,
 			getWorkspaceRoot: () => this.getWorkspaceRoot(),
 			buildStartSessionInput,
@@ -1091,7 +1122,6 @@ export class Controller {
 	}
 
 	async reinitExistingTaskFromId(taskId: string): Promise<void> {
-		this.turnStateTracker.set("streaming")
 		this.messageTranslatorState.clearTurnOutcome()
 		await this.taskStart.reinitExistingTaskFromId(taskId)
 	}
@@ -1105,7 +1135,13 @@ export class Controller {
 	}
 
 	async cancelBackgroundCommand(): Promise<void> {
-		stubWarn("cancelBackgroundCommand")
+		this.interactions.resolvePendingCommandOutputViaResponse("noButtonClicked")
+		if (this._activeCommandProcess) {
+			this._activeCommandProcess.continue()
+			this._activeCommandProcess = undefined
+		}
+		this.updateBackgroundCommandState(false)
+		await this.postStateToWebview()
 	}
 
 	async cancelQueuedPrompt(promptId: string): Promise<void> {
@@ -1216,7 +1252,6 @@ export class Controller {
 		const userOrdinal = trumboMessages
 			.slice(0, targetIndex + 1)
 			.filter((message) => message.type === "say" && (message.say === "task" || message.say === "user_feedback")).length
-		const checkpointRunCount = getCheckpointRunCountForMessage(trumboMessages, targetIndex)
 		const sourceSessionId = activeSession?.sessionId ?? currentTask.taskId
 		let sdkMessages: SdkUserMessage[]
 		let tempHost: VscodeSessionHost | undefined
@@ -1227,6 +1262,7 @@ export class Controller {
 			if (sdkTargetIndex === -1) {
 				throw new Error("Could not map edited message to persisted conversation history")
 			}
+			const sdkCheckpointRunCount = getSdkCheckpointRunCountForTrumboUserIndex(trumboMessages, targetIndex, sdkMessages)
 
 			const initialMessages = sdkMessages.slice(0, sdkTargetIndex) as Parameters<
 				VscodeSessionHost["start"]
@@ -1256,12 +1292,18 @@ export class Controller {
 			}
 
 			const resolvedPrompt = await this.resolveContextMentions(editedText)
+			const metadataRunCount = input.restoreWorkspace ? sdkCheckpointRunCount : countSdkCheckpointRuns(initialMessages)
+			const restoredCheckpointMetadata =
+				metadataRunCount && metadataRunCount > 0
+					? createRestoredCheckpointMetadata(sessionRecord, metadataRunCount)
+					: undefined
 			const startInput = {
 				...buildStartSessionInput(config, { prompt: historyTitle, cwd, mode }),
 				initialMessages,
 				sessionMetadata: {
 					title: historyTitle,
 					modelId: config.modelId,
+					...(restoredCheckpointMetadata ? { checkpoint: restoredCheckpointMetadata } : {}),
 				},
 			}
 
@@ -1269,12 +1311,17 @@ export class Controller {
 				if (activeSession?.isRunning) {
 					throw new Error("Wait for the current run to finish before restoring workspace changes")
 				}
-				if (checkpointRunCount === undefined) {
+				if (sdkCheckpointRunCount === undefined) {
 					throw new Error("Workspace restore is only available for messages that started an agent run")
+				}
+				if (!findCheckpointForRun(readSessionCheckpointHistory(sessionRecord), sdkCheckpointRunCount)) {
+					throw new Error(
+						"No workspace checkpoint is available for this message. Checkpoints require a git repository and must be enabled in settings.",
+					)
 				}
 				await sessionHost.restore({
 					sessionId: sourceSessionId,
-					checkpointRunCount,
+					checkpointRunCount: sdkCheckpointRunCount,
 					cwd,
 					restore: {
 						messages: false,
@@ -1285,6 +1332,11 @@ export class Controller {
 			}
 
 			const { startResult, sdkHost } = await this.sessions.startNewSession(startInput)
+			if (restoredCheckpointMetadata?.history.length) {
+				await retainCheckpointRefs(cwd, startResult.sessionId, restoredCheckpointMetadata.history).catch((error) => {
+					Logger.warn("[SdkController] Failed to retain checkpoint refs after message edit:", error)
+				})
+			}
 
 			this.turnStateTracker.set("streaming")
 			this.messageTranslatorState.clearTurnOutcome()
@@ -1301,20 +1353,20 @@ export class Controller {
 			await this.taskHistory.updateTaskHistoryItem(newHistoryItem)
 
 			const visibleMessages = trumboMessages.slice(0, targetIndex)
-			if (visibleMessages.length > 0) {
-				task.messageStateHandler.addMessages(visibleMessages)
+			const editedMessage: TrumboMessage = {
+				ts: this.messageTranslatorState.getMinter().nextId(),
+				type: "say",
+				say: userOrdinal === 1 ? "task" : "user_feedback",
+				text: editedText,
+				images: input.images,
+				files: input.files,
+				partial: false,
 			}
-			task.messageStateHandler.addMessages([
-				{
-					ts: Date.now(),
-					type: "say",
-					say: userOrdinal === 1 ? "task" : "user_feedback",
-					text: editedText,
-					images: input.images,
-					files: input.files,
-					partial: false,
-				},
-			])
+			this.messages.replaceMessages([...visibleMessages, editedMessage])
+			this.messages.emitSessionEvents([...visibleMessages, editedMessage], {
+				type: "status",
+				payload: { sessionId: startResult.sessionId, status: "running" },
+			})
 			await this.postStateToWebview()
 
 			this.sessions.fireAndForgetSend(sdkHost, startResult.sessionId, resolvedPrompt, input.images, input.files)
@@ -1338,6 +1390,7 @@ export class Controller {
 		}
 		if (activeSession.isRunning) {
 			await this.cancelTask()
+			await this.sessions.waitForIdle()
 		}
 
 		const currentMessages = currentTask.messageStateHandler.getTrumboMessages()
@@ -1346,7 +1399,20 @@ export class Controller {
 			throw new Error(`Could not find user message for checkpoint run ${checkpointRunCount}`)
 		}
 
+		const sdkMessages = (await activeSession.sdkHost.readMessages(activeSession.sessionId)) as SdkUserMessage[]
+		const sdkCheckpointRunCount = getSdkCheckpointRunCountForUiRun(currentMessages, checkpointRunCount, sdkMessages)
+		if (sdkCheckpointRunCount === undefined) {
+			throw new Error(`Could not map checkpoint run ${checkpointRunCount} to persisted conversation history`)
+		}
+
 		const cwd = await this.getWorkspaceRoot()
+		const sessionRecord = await activeSession.sdkHost.get(activeSession.sessionId).catch(() => undefined)
+		if (restoreWorkspace && !findCheckpointForRun(readSessionCheckpointHistory(sessionRecord), sdkCheckpointRunCount)) {
+			throw new Error(
+				"No workspace checkpoint is available for this run. Checkpoints require a git repository and must be enabled in settings.",
+			)
+		}
+
 		const mode = this.stateManager.getGlobalSettingsKey("mode") === "plan" ? "plan" : "act"
 		const firstUserMessage = currentMessages.find(isVisibleCheckpointUserMessage)
 		const restoredText = target?.message.text ?? ""
@@ -1369,7 +1435,7 @@ export class Controller {
 
 		const restored = await this.sessions.restoreActiveSession({
 			sessionId: activeSession.sessionId,
-			checkpointRunCount,
+			checkpointRunCount: sdkCheckpointRunCount,
 			cwd,
 			restore: {
 				messages: restoreMessages,
@@ -1730,8 +1796,7 @@ export class Controller {
 	async toggleTaskFavorite(taskId: string, isFavorited: boolean): Promise<void> {
 		const historyItem = await this.taskHistory.findHistoryItem(taskId)
 		if (!historyItem) {
-			Logger.log(`[toggleTaskFavorite] Task not found in history: ${taskId}`)
-			return
+			throw new Error(`Task not found in history: ${taskId}`)
 		}
 
 		await this.taskHistory.updateTaskHistory({
@@ -1781,6 +1846,7 @@ export class Controller {
 				mcpHub: this.mcpHub,
 				backgroundCommandRunning: this.backgroundCommandRunning,
 				backgroundCommandTaskId: this.backgroundCommandTaskId,
+				workspaceManager: await this.ensureWorkspaceManager(),
 			})
 			const sdkTaskHistory = (await this.taskHistory.listHistory({ limit: 100, hydrate: false }))
 				.map(sessionHistoryRecordToHistoryItem)
@@ -1788,11 +1854,14 @@ export class Controller {
 				.sort((a, b) => b.ts - a.ts)
 			const legacyTaskHistory = state.taskHistory ?? []
 			const mergedTaskHistoryById = new Map<string, HistoryItem>()
+			const sdkTaskIds = new Set(sdkTaskHistory.map((item) => item.id))
 
-			// Keep the SDK records authoritative for migrated/new tasks, but append
-			// legacy persisted history so pre-migration tasks still appear in the UI.
+			// Legacy StateManager history is only authoritative for tasks that never
+			// migrated into SDK storage. SDK records win for active/migrated tasks.
 			for (const item of legacyTaskHistory) {
-				mergedTaskHistoryById.set(item.id, item)
+				if (!sdkTaskIds.has(item.id)) {
+					mergedTaskHistoryById.set(item.id, item)
+				}
 			}
 			for (const item of sdkTaskHistory) {
 				mergedTaskHistoryById.set(item.id, item)
@@ -1829,11 +1898,26 @@ export class Controller {
 
 			let queuedPrompts: ExtensionState["queuedPrompts"] = []
 			const activeSession = this.sessions.getActiveSession()
+			let checkpointAvailableRunCounts: number[] = []
+			let checkpointSdkRunCountByMessageTs: Record<number, number> = {}
 			if (activeSession) {
 				try {
 					queuedPrompts = await activeSession.sdkHost.pendingPrompts("list", { sessionId: activeSession.sessionId })
 				} catch (error) {
 					Logger.error("[SdkController] Failed to list pending prompts for webview state:", error)
+				}
+				try {
+					const [sessionRecord, sdkMessages] = await Promise.all([
+						activeSession.sdkHost.get(activeSession.sessionId),
+						activeSession.sdkHost.readMessages(activeSession.sessionId),
+					])
+					checkpointAvailableRunCounts = readSessionCheckpointHistory(sessionRecord).map((entry) => entry.runCount)
+					checkpointSdkRunCountByMessageTs = buildCheckpointSdkRunCountByMessageTs(
+						state.trumboMessages ?? [],
+						sdkMessages as SdkUserMessage[],
+					)
+				} catch (error) {
+					Logger.error("[SdkController] Failed to read checkpoint history for webview state:", error)
 				}
 			}
 
@@ -1850,6 +1934,8 @@ export class Controller {
 				taskHistory: processedTaskHistory,
 				turnState: this.turnStateTracker.get(),
 				queuedPrompts,
+				checkpointAvailableRunCounts,
+				checkpointSdkRunCountByMessageTs,
 				stateVersion: minter.nextSeq(),
 				epoch: minter.epoch,
 			}
@@ -1899,7 +1985,84 @@ export class Controller {
 	// ---- Workspace (kept from classic) ----
 
 	async ensureWorkspaceManager(): Promise<WorkspaceRootManager | undefined> {
-		stubWarn("ensureWorkspaceManager")
-		return undefined
+		if (this._workspaceManager) {
+			return this._workspaceManager
+		}
+		if (!this._workspaceManagerPromise) {
+			this._workspaceManagerPromise = (async () => {
+				try {
+					const { paths } = await HostProvider.workspace.getWorkspacePaths({})
+					if (!paths.length) {
+						return undefined
+					}
+					const roots = await Promise.all(
+						paths.map(async (workspacePath) => {
+							const manager = await WorkspaceRootManagerImpl.fromLegacyCwd(workspacePath)
+							return manager.getRoots()[0]
+						}),
+					)
+					const filteredRoots = roots.filter((root): root is NonNullable<typeof root> => !!root)
+					if (!filteredRoots.length) {
+						return undefined
+					}
+					this._workspaceManager = new WorkspaceRootManagerImpl(filteredRoots, 0)
+					return this._workspaceManager
+				} catch (error) {
+					Logger.warn("[SdkController] Failed to initialize workspace manager:", error)
+					return undefined
+				} finally {
+					this._workspaceManagerPromise = undefined
+				}
+			})()
+		}
+		return this._workspaceManagerPromise
+	}
+
+	private createCommandExecutorCallbacks(): CommandExecutorCallbacks | undefined {
+		if (!this.task) {
+			return undefined
+		}
+		const sessionId = this.sessions.getActiveSession()?.sessionId ?? this.task.taskId
+		return {
+			say: async (type, text, images, files, partial) => {
+				const message: TrumboMessage = {
+					ts: this.messageTranslatorState.getMinter().nextId(),
+					type: "say",
+					say: type as TrumboMessage["say"],
+					text,
+					images,
+					files,
+					partial: partial ?? false,
+				}
+				this.messages.appendAndEmit([message], {
+					type: "status",
+					payload: { sessionId, status: "running" },
+				})
+				return message.ts
+			},
+			ask: (type, text, partial) => this.interactions.askCommandInteraction(type, text, partial),
+			resolvePendingAsk: (response) => {
+				this.interactions.resolvePendingCommandOutputViaResponse(response)
+			},
+			updateBackgroundCommandState: (running) => {
+				this.updateBackgroundCommandState(running, this.task?.taskId)
+				if (!running) {
+					this._activeCommandProcess = undefined
+				}
+			},
+			updateTrumboMessage: async (index, updates) => {
+				const messages = this.task?.messageStateHandler.getTrumboMessages() ?? []
+				const existing = messages[index]
+				if (!existing) {
+					return
+				}
+				const next = [...messages]
+				next[index] = { ...existing, ...updates }
+				this.messages.replaceMessages(next)
+				await this.postStateToWebview()
+			},
+			getTrumboMessages: () => this.task?.messageStateHandler.getTrumboMessages() ?? [],
+			addToUserMessageContent: () => {},
+		}
 	}
 }

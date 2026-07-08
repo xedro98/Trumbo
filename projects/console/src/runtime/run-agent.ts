@@ -189,7 +189,9 @@ export async function runAgent(
 	let reasoningChunkCount = 0;
 	let redactedReasoningChunkCount = 0;
 	const displayedErrorMessages = new Set<string>();
-	const shouldZeroCost = await shouldZeroTrumboFreeModelCost(config);
+	const shouldZeroCost = await shouldZeroTrumboFreeModelCost(config, {
+		authenticated: config.providerId !== "trumbo" || !!config.apiKey?.trim(),
+	});
 
 	const onAgentEvent = (rawEvent: AgentEvent): void => {
 		const event = zeroCliAgentEventCost(rawEvent, shouldZeroCost);

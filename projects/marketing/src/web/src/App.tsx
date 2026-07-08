@@ -34,9 +34,9 @@ export default function App() {
 			<ScrollToTop />
 			<Switch>
 			<Route path="/" component={HomePage} />
-			<Route path="/agent" component={AgentPage} />
-			<Route path="/quartz" component={QuartzPage} />
-			<Route path="/models" component={ModelLibraryPage} />
+		<Route path="/agent" component={AgentPage} />
+		<Route path="/quartz" component={QuartzPage} />
+		<Route path="/models" component={ModelLibraryPage} />
 			<Route path="/pricing" component={PricingPage} />
 			<Route path="/company" component={CompanyPage} />
 			<Route path="/blog" component={BlogIndexPage} />

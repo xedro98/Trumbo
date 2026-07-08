@@ -1,19 +1,20 @@
 import path from "node:path"
-import type { TrumboCoreListHistoryOptions, SessionHistoryRecord } from "@trumbo/core"
-import type { Message as SdkMessage } from "@trumbo/llms"
-import { type ContentBlock, formatDisplayUserInput, type MessageWithMetadata } from "@trumbo/shared"
 import type { TrumboMessage } from "@shared/ExtensionMessage"
 import type { HistoryItem } from "@shared/HistoryItem"
+import type { SessionHistoryRecord, TrumboCoreListHistoryOptions } from "@trumbo/core"
+import type { Message as SdkMessage } from "@trumbo/llms"
+import { type ContentBlock, formatDisplayUserInput, type MessageWithMetadata } from "@trumbo/shared"
 import getFolderSize from "get-folder-size"
+import { StateManager } from "@/core/storage/StateManager"
 import type { McpHub } from "@/services/mcp/McpHub"
 import type { TelemetryService } from "@/services/telemetry/TelemetryService"
 import { Logger } from "@/shared/services/Logger"
-import { buildSessionConfig } from "./trumbo-session-factory"
 import { sanitizeInitialMessagesForSessionStart } from "./initial-message-sanitizer"
 import { deleteLegacyTask, readApiConversationHistory, readTaskHistory } from "./legacy-state-reader"
 import type { MessageIdMinter } from "./message-id-minter"
 import { sdkMessagesToTrumboMessages } from "./message-translator"
 import type { SdkSessionLifecycle } from "./sdk-session-lifecycle"
+import { buildSessionConfig } from "./trumbo-session-factory"
 import type { VscodeSessionHost } from "./vscode-session-host"
 
 export interface TaskUsage {
@@ -614,6 +615,13 @@ export class SdkTaskHistory {
 		if (legacyTask) {
 			deleteLegacyTask(sessionId, legacyTask.dataDir)
 		}
+		const taskHistory = StateManager.get().getGlobalStateKey("taskHistory") ?? []
+		if (taskHistory.some((item) => item.id === sessionId)) {
+			StateManager.get().setGlobalState(
+				"taskHistory",
+				taskHistory.filter((item) => item.id !== sessionId),
+			)
+		}
 		this.invalidateMetadataHistoryCache()
 	}
 
@@ -655,16 +663,14 @@ export class SdkTaskHistory {
 			: history
 
 		let deletedCount = 0
-		await this.withHistoryHost(async (host) => {
-			for (const item of tasksToDelete) {
-				try {
-					await host.delete(item.sessionId)
-					deletedCount += 1
-				} catch (error) {
-					Logger.error(`[SdkTaskHistory] Failed to delete task history item: ${item.sessionId}`, error)
-				}
+		for (const item of tasksToDelete) {
+			try {
+				await this.deleteSession(item.sessionId)
+				deletedCount += 1
+			} catch (error) {
+				Logger.error(`[SdkTaskHistory] Failed to delete task history item: ${item.sessionId}`, error)
 			}
-		})
+		}
 
 		return deletedCount
 	}

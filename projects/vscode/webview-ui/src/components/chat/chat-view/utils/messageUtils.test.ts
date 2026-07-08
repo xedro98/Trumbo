@@ -103,10 +103,27 @@ describe("canRestoreWorkspaceFromMessage", () => {
 			createUserFeedbackMessage(5, "next task"),
 		]
 
-		expect(canRestoreWorkspaceFromMessage(messages, 1)).toBe(true)
-		expect(canRestoreWorkspaceFromMessage(messages, 4)).toBe(false)
-		expect(canRestoreWorkspaceFromMessage(messages, 5)).toBe(true)
-		expect(canRestoreWorkspaceFromMessage(messages, 999)).toBe(false)
+		expect(canRestoreWorkspaceFromMessage(messages, 1, [1, 2])).toBe(true)
+		expect(canRestoreWorkspaceFromMessage(messages, 4, [1, 2])).toBe(false)
+		expect(canRestoreWorkspaceFromMessage(messages, 5, [1, 2])).toBe(true)
+		expect(canRestoreWorkspaceFromMessage(messages, 999, [1, 2])).toBe(false)
+	})
+
+	it("hides workspace restore when no checkpoint history exists", () => {
+		const messages = [createTaskMessage(1, "start"), createUserFeedbackMessage(2, "next task")]
+
+		expect(canRestoreWorkspaceFromMessage(messages, 1)).toBe(false)
+		expect(canRestoreWorkspaceFromMessage(messages, 1, [])).toBe(false)
+		expect(canRestoreWorkspaceFromMessage(messages, 2, [1])).toBe(true)
+		expect(canRestoreWorkspaceFromMessage(messages, 2, [2])).toBe(true)
+	})
+
+	it("uses SDK run counts when mapping checkpoint availability", () => {
+		const messages = [createTaskMessage(1, "start"), createUserFeedbackMessage(2, "next task")]
+
+		expect(canRestoreWorkspaceFromMessage(messages, 2, [1, 3], { 2: 3 })).toBe(true)
+		expect(canRestoreWorkspaceFromMessage(messages, 2, [1], { 2: 3 })).toBe(true)
+		expect(canRestoreWorkspaceFromMessage(messages, 2, [4], { 2: 3 })).toBe(false)
 	})
 })
 

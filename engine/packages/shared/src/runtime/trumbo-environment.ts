@@ -101,7 +101,11 @@ export function resolveTrumboApiBaseUrl(settingsBaseUrl?: string): string {
 	}
 
 	const fromSettings = settingsBaseUrl?.trim();
-	if (fromSettings && !isUnconfiguredTrumboUrl(fromSettings) && !isStaleLocalEnvBaseUrl(fromSettings)) {
+	if (
+		fromSettings &&
+		!isUnconfiguredTrumboUrl(fromSettings) &&
+		!isStaleLocalEnvBaseUrl(fromSettings)
+	) {
 		return stripApiV1Suffix(fromSettings);
 	}
 
@@ -115,7 +119,11 @@ export function resolveTrumboProviderBaseUrl(settingsBaseUrl?: string): string {
 	}
 
 	const fromSettings = settingsBaseUrl?.trim();
-	if (fromSettings && !isUnconfiguredTrumboUrl(fromSettings) && !isStaleLocalEnvBaseUrl(fromSettings)) {
+	if (
+		fromSettings &&
+		!isUnconfiguredTrumboUrl(fromSettings) &&
+		!isStaleLocalEnvBaseUrl(fromSettings)
+	) {
 		return fromSettings.replace(/\/$/, "");
 	}
 	return `${resolveTrumboApiBaseUrl()}/api/v1`;

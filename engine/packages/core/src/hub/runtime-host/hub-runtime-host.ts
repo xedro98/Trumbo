@@ -1161,7 +1161,7 @@ export class HubRuntimeHost implements RuntimeHost {
 	async stopSession(sessionId: string): Promise<void> {
 		this.sessionCapabilities.delete(sessionId);
 		this.disposeSessionSubscription(sessionId);
-		await this.client.command("session.detach", { sessionId }, sessionId);
+		await this.client.command("session.stop", { sessionId }, sessionId);
 	}
 
 	async dispose(): Promise<void> {
@@ -1706,6 +1706,13 @@ export class HubRuntimeHost implements RuntimeHost {
 					snapshot?.interactive === true &&
 					isNonTerminalSessionStatus(snapshot.status)
 				) {
+					this.events.emit({
+						type: "status",
+						payload: {
+							sessionId,
+							status: snapshot.status ?? "idle",
+						},
+					});
 					return;
 				}
 				this.events.emit({

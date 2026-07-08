@@ -1,9 +1,11 @@
+import type { TrumboMessage } from "@shared/ExtensionMessage"
 import { normalizeUserInput } from "@trumbo/shared"
 import { ACT_MODE_CONTINUATION_PROMPT } from "./sdk-mode-coordinator"
 
 export type SdkUserMessage = {
 	role?: unknown
 	content?: unknown
+	metadata?: unknown
 }
 
 export function extractSdkUserText(message: SdkUserMessage): string {
@@ -97,4 +99,54 @@ export function findSdkUserMessageIndexByOrdinal(sdkMessages: SdkUserMessage[], 
 		seenUsers += 1
 		return seenUsers === userOrdinal
 	})
+}
+
+function readSdkUserMetadata(message: SdkUserMessage): Record<string, unknown> | undefined {
+	if (!message.metadata || typeof message.metadata !== "object" || Array.isArray(message.metadata)) {
+		return undefined
+	}
+	return message.metadata as Record<string, unknown>
+}
+
+function isRecoveryNoticeSdkUserMessage(message: SdkUserMessage): boolean {
+	return readSdkUserMetadata(message)?.kind === "recovery_notice"
+}
+
+/** Count SDK user turns using the same rules as core checkpoint restore. */
+export function countSdkCheckpointRunsUpToIndex(sdkMessages: SdkUserMessage[], index: number): number {
+	let count = 0
+	for (let i = 0; i <= index; i += 1) {
+		const message = sdkMessages[i]
+		if (message?.role !== "user" || isRecoveryNoticeSdkUserMessage(message)) {
+			continue
+		}
+		count += 1
+	}
+	return count
+}
+
+export function countSdkCheckpointRuns(sdkMessages: SdkUserMessage[]): number {
+	if (sdkMessages.length === 0) {
+		return 0
+	}
+	return countSdkCheckpointRunsUpToIndex(sdkMessages, sdkMessages.length - 1)
+}
+
+/** Ordinal over every visible task/user_feedback row, including followup answers. */
+export function getVisibleTrumboUserOrdinal(messages: TrumboMessage[], targetIndex: number): number | undefined {
+	if (targetIndex < 0 || targetIndex >= messages.length) {
+		return undefined
+	}
+	const message = messages[targetIndex]
+	if (message.type !== "say" || (message.say !== "task" && message.say !== "user_feedback")) {
+		return undefined
+	}
+	let ordinal = 0
+	for (let index = 0; index <= targetIndex; index += 1) {
+		const candidate = messages[index]
+		if (candidate.type === "say" && (candidate.say === "task" || candidate.say === "user_feedback")) {
+			ordinal += 1
+		}
+	}
+	return ordinal
 }

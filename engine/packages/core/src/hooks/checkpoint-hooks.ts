@@ -274,9 +274,6 @@ export function createCheckpointHooks(
 			}
 			const metadata = await options.readSessionMetadata();
 			const existing = readCheckpointMetadata(metadata);
-			if (existing?.latest.ref === entry.ref) {
-				return undefined;
-			}
 			const history = upsertCheckpointHistory(existing?.history ?? [], entry);
 			await options.writeSessionMetadata({
 				...(metadata ?? {}),

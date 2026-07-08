@@ -605,6 +605,39 @@ export async function handleSessionAttach(
 			);
 }
 
+async function stopOrphanedHubSession(
+	ctx: HubTransportContext,
+	sessionId: string,
+	reason: string,
+): Promise<void> {
+	try {
+		await ctx.sessionHost.stopSession(sessionId);
+	} catch (error) {
+		logHubMessage("warn", "session.stop_orphan_failed", {
+			sessionId,
+			reason,
+			error,
+		});
+	}
+}
+
+export async function handleSessionStop(
+	ctx: HubTransportContext,
+	envelope: HubCommandEnvelope,
+): Promise<HubReplyEnvelope> {
+	const sessionId = extractSessionId(envelope);
+	if (!sessionId) {
+		return errorReply(
+			envelope,
+			"invalid_session_stop",
+			"session.stop requires a session id",
+		);
+	}
+	await stopOrphanedHubSession(ctx, sessionId, "session.stop");
+	ctx.sessionState.delete(sessionId);
+	return okReply(envelope, { stopped: true });
+}
+
 export async function handleSessionDetach(
 	ctx: HubTransportContext,
 	envelope: HubCommandEnvelope,
@@ -633,6 +666,7 @@ export async function handleSessionDetach(
 		}
 		if (state.participants.size === 0) {
 			ctx.sessionState.delete(sessionId);
+			void stopOrphanedHubSession(ctx, sessionId, "session.detach");
 		}
 	}
 	cancelPendingCapabilityRequests(
