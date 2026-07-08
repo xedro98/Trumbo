@@ -2,3 +2,12 @@ title = "Trumbo SDK secret scanning"
 
 [extend]
 useDefault = true
+
+[[allowlists]]
+description = "Test fixture model IDs that trigger generic-api-key false positives"
+paths = [
+    '''projects/vscode/src/sdk/trumbo-session-factory\.test\.ts''',
+]
+regexes = [
+    '''anthropic--claude-[0-9.]+-sonnet''',
+]

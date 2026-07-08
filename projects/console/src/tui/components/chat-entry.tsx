@@ -18,11 +18,7 @@ import {
 	palette,
 	type TerminalTheme,
 } from "../palette";
-import {
-	isTrumboAccountCreditsErrorMessage,
-	TRUMBO_BILLING_URL,
-	TRUMBO_CREDITS_DASHBOARD_URL,
-} from "../trumbo-account";
+import { TRUMBO_BILLING_URL } from "../trumbo-account";
 import type { ChatEntry } from "../types";
 import { getSyntaxStyle } from "../utils/syntax-style";
 import { isWarningToolError } from "../utils/tool-errors";
@@ -272,55 +268,6 @@ function ToolCallView(props: {
 	);
 }
 
-function TrumboCreditsTrumboPassErrorView(props: { defaultFg?: string }) {
-	const subscriptionUrl = getCliSubscriptionUrl();
-	return (
-		<box flexDirection="row">
-			<text fg="red" content="~ " />
-			<box
-				flexDirection="column"
-				border
-				borderStyle="rounded"
-				borderColor="red"
-				paddingX={1}
-			>
-				<text fg="red">Trumbo Credits depleted</text>
-				<text
-					fg={props.defaultFg}
-					selectable
-					content={
-						"You have run out of Trumbo credits. Add credits in the dashboard or purchase and switch to TrumboPass to continue."
-					}
-				/>
-				<box flexDirection="row">
-					<text fg="gray">Purchase Credits: </text>
-					<text fg={palette.brand} selectable>
-						<a href={TRUMBO_CREDITS_DASHBOARD_URL}>
-							{TRUMBO_CREDITS_DASHBOARD_URL}
-						</a>
-					</text>
-				</box>
-				<box flexDirection="row">
-					<text fg="gray">Purchase TrumboPass: </text>
-					<text fg={palette.brand} selectable>
-						<a href={subscriptionUrl}>{subscriptionUrl}</a>
-					</text>
-				</box>
-				<box flexDirection="row">
-					<text fg="gray">Switch to TrumboPass: </text>
-					<text fg="gray">
-						type /settings in CLI and switch provider to TrumboPass
-					</text>
-				</box>
-			</box>
-		</box>
-	);
-}
-
-function TrumboCreditsErrorView(props: { defaultFg?: string }) {
-	return <TrumboCreditsTrumboPassErrorView defaultFg={props.defaultFg} />;
-}
-
 function RateLimitErrorView(props: { defaultFg?: string; text: string }) {
 	// Try to extract the "Resets in Xh Ym" portion from the error message
 	const resetMatch = props.text.match(/Resets in ([^.]+)/i);
@@ -555,9 +502,6 @@ export function ChatEntryView(props: {
 		case "error":
 			if (isRateLimitErrorMessage(entry.text)) {
 				return <RateLimitErrorView defaultFg={defaultFg} text={entry.text} />;
-			}
-			if (isTrumboAccountCreditsErrorMessage(entry.text)) {
-				return <TrumboCreditsErrorView defaultFg={defaultFg} />;
 			}
 			if (isTrumboOrgIndividualInferenceSubscriptionErrorMessage(entry.text)) {
 				return (

@@ -1576,19 +1576,38 @@ export class LocalRuntimeHost implements RuntimeHost {
 		run: () => Promise<AgentResult>,
 		baselineMessages: LlmsProviders.Message[],
 	): Promise<AgentResult> {
-		try {
-			return await run();
-		} catch (error) {
-			if (
-				!isOAuthProvider(session.config.providerId) ||
-				!isLikelyAuthError(error)
-			) {
-				throw error;
-			}
+		// Non-OAuth providers never get an automatic refresh+retry.
+		if (!isOAuthProvider(session.config.providerId)) {
+			return run();
+		}
+
+		const refreshAndRetry = async (): Promise<AgentResult> => {
 			await this.syncOAuthCredentials(session, { forceRefresh: true });
 			session.agent.restore(baselineMessages);
 			return run();
+		};
+
+		let result: AgentResult;
+		try {
+			result = await run();
+		} catch (error) {
+			if (!isLikelyAuthError(error)) {
+				throw error;
+			}
+			// Thrown auth error (e.g. refresh-endpoint invalid_grant surfaced as
+			// "requires re-authentication") — force-refresh once and retry.
+			return refreshAndRetry();
 		}
+
+		// Streaming model auth failures (e.g. an access token rejected mid-stream
+		// with `invalid_grant`) are swallowed by the agent runtime into a returned
+		// `finishReason:"error"` result instead of thrown, so they bypass the catch
+		// above. Detect auth errors in the result text and run the same single
+		// force-refresh + retry so the user doesn't see a raw auth error.
+		if (result.finishReason === "error" && isLikelyAuthError(result.text)) {
+			return refreshAndRetry();
+		}
+		return result;
 	}
 
 	private async syncOAuthCredentials(

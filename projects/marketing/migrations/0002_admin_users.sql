@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS admin_users (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	email TEXT NOT NULL UNIQUE COLLATE NOCASE,
+	password_hash TEXT NOT NULL,
+	created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+ALTER TABLE admin_sessions ADD COLUMN user_id INTEGER REFERENCES admin_users(id);

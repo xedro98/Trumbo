@@ -19,17 +19,15 @@ import {
 	isUnconfiguredTrumboUrl,
 	resolveTrumboApiBaseUrl,
 } from "@trumbo/shared";
-import { formatCreditBalance, normalizeCreditBalance } from "../utils/output";
 import { identifyTelemetryAccount } from "../utils/telemetry";
 import type { Config } from "../utils/types";
 
 /**
- * Web app URLs shown in the CLI (billing page, credits dashboard). Resolved
- * from the active Trumbo environment so they track the deployed web app
- * (production = https://platform.trumbo.dev) and honor TRUMBO_APP_URL overrides.
+ * Web app URL shown in the CLI (billing / subscription management). Resolved
+ * from the active Trumbo environment so it tracks the deployed web app
+ * (production = https://platform.trumbo.dev) and honors TRUMBO_APP_URL overrides.
  */
 const RESOLVED_TRUMBO_APP_URL = getTrumboEnvironmentConfig().appBaseUrl;
-export const TRUMBO_CREDITS_DASHBOARD_URL = `${RESOLVED_TRUMBO_APP_URL}/dashboard/account?tab=credits`;
 export const TRUMBO_BILLING_URL = `${RESOLVED_TRUMBO_APP_URL}/billing`;
 
 type TrumboAccountConfig = Pick<Config, "apiKey" | "logger" | "providerId">;
@@ -44,10 +42,6 @@ export interface TrumboAccountSnapshot {
 	activeOrganization: TrumboAccountOrganization | null;
 	displayedBalance: number;
 	currentPlan?: UserCurrentPlan | null;
-}
-
-export function formatTrumboCredits(value: number): string {
-	return formatCreditBalance(normalizeCreditBalance(value));
 }
 
 // FIXME: These message checks are temporary until structured error types are
@@ -79,14 +73,6 @@ export function formatTrumboAccountConnectionError(
 		);
 	}
 	return message;
-}
-
-export function isTrumboAccountCreditsErrorMessage(message: string): boolean {
-	const normalized = message.trim().toLowerCase();
-	return (
-		normalized.includes("insufficient balance") &&
-		normalized.includes("trumbo credits balance")
-	);
 }
 
 function resolveAccountApiBaseUrl(input: {

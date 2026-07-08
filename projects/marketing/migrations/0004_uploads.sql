@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS blog_uploads (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	key TEXT NOT NULL UNIQUE,
+	content_type TEXT NOT NULL,
+	data TEXT NOT NULL,
+	created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);

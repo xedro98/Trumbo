@@ -9,8 +9,12 @@ export const AUTH_ERROR_PATTERNS = [
 	"unauthorized",
 	"forbidden",
 	"invalid token",
+	"invalid_token",
+	"invalid_grant",
+	"invalid grant",
 	"expired token",
 	"authentication",
+	"re-auth",
 ] as const;
 
 /**

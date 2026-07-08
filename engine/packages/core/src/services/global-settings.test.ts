@@ -5,8 +5,10 @@ import type { ITelemetryService } from "@trumbo/shared";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
 	GlobalSettingsSchema,
+	readCompactionStrategyGlobally,
 	readGlobalSettings,
 	setAutoUpdateEnabledGlobally,
+	setCompactionStrategyGlobally,
 	setDisabledPlugin,
 	setDisabledTools,
 	setTelemetryOptOutGlobally,
@@ -194,12 +196,50 @@ describe("global-settings", () => {
 				disabledTools: ["editor"],
 				telemetryOptOut: true,
 			});
+	} finally {
+		await rm(root, { recursive: true, force: true });
+	}
+});
+
+describe("compaction strategy", () => {
+	it("defaults to 'basic' when unset and round-trips 'agentic'", async () => {
+		const root = await mkdtemp(join(tmpdir(), "core-global-settings-"));
+		try {
+			const settingsPath = join(root, "global-settings.json");
+			process.env.TRUMBO_GLOBAL_SETTINGS_PATH = settingsPath;
+
+			expect(readCompactionStrategyGlobally()).toBe("basic");
+
+			setCompactionStrategyGlobally("agentic");
+			expect(readCompactionStrategyGlobally()).toBe("agentic");
+			expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual({
+				autoUpdateEnabled: true,
+				compactionStrategy: "agentic",
+				telemetryOptOut: false,
+			});
+
+			setCompactionStrategyGlobally("basic");
+			expect(readCompactionStrategyGlobally()).toBe("basic");
 		} finally {
 			await rm(root, { recursive: true, force: true });
 		}
 	});
 
-	describe("caching", () => {
+	it("falls back to 'basic' when the on-disk value is invalid", async () => {
+		const root = await mkdtemp(join(tmpdir(), "core-global-settings-"));
+		try {
+			const settingsPath = join(root, "global-settings.json");
+			process.env.TRUMBO_GLOBAL_SETTINGS_PATH = settingsPath;
+
+			await writeFile(settingsPath, JSON.stringify({ compactionStrategy: "bogus" }));
+			expect(readCompactionStrategyGlobally()).toBe("basic");
+		} finally {
+			await rm(root, { recursive: true, force: true });
+		}
+	});
+});
+
+describe("caching", () => {
 		it("invalidates the cache when writeGlobalSettings is called", async () => {
 			const root = await mkdtemp(join(tmpdir(), "core-global-settings-"));
 			try {

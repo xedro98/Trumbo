@@ -62,6 +62,34 @@ export function isUnconfiguredTrumboUrl(url: string | undefined): boolean {
 	);
 }
 
+/**
+ * True when `url` is the local-dev environment's default API base (the
+ * `TRUMBO_ENVIRONMENTS.local.apiBaseUrl` catalog value, with or without a
+ * trailing `/api/v1`). Such URLs get persisted to `providers.json` during a
+ * `TRUMBO_ENVIRONMENT=local` session and become stale artifacts in
+ * production/staging: production tokens (signed with the production JWT
+ * secret) would be sent to a local wrangler-dev server that rejects them
+ * with 401. In non-local environments the resolve functions fall through to
+ * the configured environment default instead.
+ *
+ * This is deliberately narrow — it matches only the local env's exact
+ * default origin (`http://localhost:8787`), not arbitrary loopback URLs,
+ * so self-hosted deployments behind `http://127.0.0.1:9000` etc. keep
+ * working as explicit overrides.
+ */
+function isStaleLocalEnvBaseUrl(url: string | undefined): boolean {
+	if (!url?.trim()) {
+		return false;
+	}
+	const localApiBase = TRUMBO_ENVIRONMENTS.local.apiBaseUrl;
+	const normalized = url.trim().replace(/\/$/, "");
+	return (
+		normalized === localApiBase ||
+		normalized === `${localApiBase}/api/v1` ||
+		normalized.startsWith(`${localApiBase}/api/v1`)
+	);
+}
+
 function stripApiV1Suffix(url: string): string {
 	return url.replace(/\/api\/v1\/?$/, "").replace(/\/$/, "");
 }
@@ -73,7 +101,7 @@ export function resolveTrumboApiBaseUrl(settingsBaseUrl?: string): string {
 	}
 
 	const fromSettings = settingsBaseUrl?.trim();
-	if (fromSettings && !isUnconfiguredTrumboUrl(fromSettings)) {
+	if (fromSettings && !isUnconfiguredTrumboUrl(fromSettings) && !isStaleLocalEnvBaseUrl(fromSettings)) {
 		return stripApiV1Suffix(fromSettings);
 	}
 
@@ -87,7 +115,7 @@ export function resolveTrumboProviderBaseUrl(settingsBaseUrl?: string): string {
 	}
 
 	const fromSettings = settingsBaseUrl?.trim();
-	if (fromSettings && !isUnconfiguredTrumboUrl(fromSettings)) {
+	if (fromSettings && !isUnconfiguredTrumboUrl(fromSettings) && !isStaleLocalEnvBaseUrl(fromSettings)) {
 		return fromSettings.replace(/\/$/, "");
 	}
 	return `${resolveTrumboApiBaseUrl()}/api/v1`;

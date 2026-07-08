@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="color-scheme" content="light dark" />
+		<script>
+			(function () {
+				try {
+					var key = "trumbo-marketing-theme";
+					var stored = localStorage.getItem(key);
+					var theme =
+						stored === "light" || stored === "dark" || stored === "system"
+							? stored
+							: "system";
+					var resolved =
+						theme === "system"
+							? window.matchMedia("(prefers-color-scheme: dark)").matches
+								? "dark"
+								: "light"
+							: theme;
+					document.documentElement.classList.add(
+						resolved === "dark" ? "marketing-dark" : "marketing-light",
+					);
+					document.documentElement.style.colorScheme = resolved;
+				} catch (e) {
+					document.documentElement.classList.add("marketing-light");
+				}
+			})();
+		</script>
+		<meta
+			name="description"
+			content="Trumbo is where builders run agents in the terminal. Open models, real tools, and a platform built for your whole team."
+		/>
+		<meta name="robots" content="index, follow" />
+		<link rel="canonical" href="https://trumbo.dev/" />
+		<meta property="og:site_name" content="Trumbo" />
+		<meta property="og:title" content="Trumbo" />
+		<meta
+			property="og:description"
+			content="Trumbo is where builders run agents in the terminal. Open models, real tools, and a platform built for your whole team."
+		/>
+		<meta property="og:url" content="https://trumbo.dev/" />
+		<meta property="og:type" content="website" />
+		<meta property="og:image" content="https://talanture.b-cdn.net/Trumbo-Logo.svg" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Trumbo" />
+		<meta
+			name="twitter:description"
+			content="Trumbo is where builders run agents in the terminal. Open models, real tools, and a platform built for your whole team."
+		/>
+		<meta name="twitter:image" content="https://talanture.b-cdn.net/Trumbo-Logo.svg" />
+		<meta name="theme-color" content="#2BBF77" />
+		<link rel="icon" type="image/png" href="https://talanture.b-cdn.net/Trumbo_Face.png" />
+		<link rel="apple-touch-icon" href="https://talanture.b-cdn.net/Trumbo_Face.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+		/>
+		<title>Trumbo</title>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="module" src="/src/main.tsx"></script>
+	</body>
+</html>

@@ -1,0 +1,29 @@
+#:schema https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/virtual-modules/schemas/config-schema.json
+
+name = "trumbo-marketing"
+main = "src/server/index.ts"
+compatibility_date = "2025-07-01"
+
+routes = [
+	{ pattern = "trumbo.dev", custom_domain = true },
+	{ pattern = "www.trumbo.dev", custom_domain = true },
+]
+
+[assets]
+directory = "./dist/web"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = true
+
+[vars]
+TRUMBO_PLATFORM_URL = "https://platform.trumbo.dev"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "trumbo-marketing-blog"
+database_id = "b2dce4c6-be6b-46da-a65e-c067c06366a9"
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "trumbo-marketing-uploads"

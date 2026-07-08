@@ -128,6 +128,15 @@ describe("resolveTrumboApiBaseUrl", () => {
 		);
 	});
 
+	it("ignores a stale local-dev base URL in production and uses the production default", () => {
+		expect(resolveTrumboApiBaseUrl("http://localhost:8787/api/v1")).toBe(
+			"https://platform.trumbo.dev",
+		);
+		expect(resolveTrumboApiBaseUrl("http://localhost:8787")).toBe(
+			"https://platform.trumbo.dev",
+		);
+	});
+
 	it("ignores persisted production URLs in local dev builds", () => {
 		process.env[TRUMBO_BUILD_ENV_ENV] = "development";
 		expect(resolveTrumboApiBaseUrl("https://platform.trumbo.dev/api/v1")).toBe(
@@ -152,6 +161,25 @@ describe("resolveTrumboProviderBaseUrl", () => {
 		expect(resolveTrumboProviderBaseUrl("http://0.0.0.0:0/api/v1")).toBe(
 			"http://localhost:8787/api/v1",
 		);
+	});
+
+	it("ignores a stale local-dev base URL persisted from a prior local session in production", () => {
+		// Default env is production. A localhost:8787 base URL leaked into
+		// providers.json from a TRUMBO_ENVIRONMENT=local session must NOT be
+		// reused in production, or production JWTs get sent to a local
+		// wrangler-dev server that rejects them with 401.
+		expect(resolveTrumboProviderBaseUrl("http://localhost:8787/api/v1")).toBe(
+			"https://platform.trumbo.dev/api/v1",
+		);
+		expect(resolveTrumboProviderBaseUrl("http://localhost:8787")).toBe(
+			"https://platform.trumbo.dev/api/v1",
+		);
+	});
+
+	it("still honors an explicit non-local override in production", () => {
+		expect(
+			resolveTrumboProviderBaseUrl("http://127.0.0.1:9000/api/v1"),
+		).toBe("http://127.0.0.1:9000/api/v1");
 	});
 });
 

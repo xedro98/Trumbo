@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package trumbo;
+
+import "trumbo/common.proto";
+
+option go_package = "github.com/trumbo/grpc-go/trumbo";
+option java_multiple_files = true;
+option java_package = "bot.trumbo.proto";
+
+// Service for account-related operations
+service AccountService {
+  // Handles the user clicking the login link in the UI.
+  // Generates a secure nonce for state validation, stores it in secrets,
+  // and opens the authentication URL in the external browser.
+  rpc accountLoginClicked(EmptyRequest) returns (String);
+
+  // Handles the user clicking the logout button in the UI.
+  // Clears API keys and user state.
+  rpc accountLogoutClicked(EmptyRequest) returns (Empty);
+
+  // Subscribe to auth status update events (when authentication state changes)
+  rpc subscribeToAuthStatusUpdate(EmptyRequest) returns (stream AuthState);
+
+  // Handles authentication state changes from the Firebase context.
+  // Updates the user info in global state and returns the updated value.
+  rpc authStateChanged(AuthStateChangedRequest) returns (AuthState);
+
+  // Fetches the current user's subscription plan + live rate-limit usage.
+  // Replaces the legacy credit-balance fetch (Trumbo is subscription-based:
+  // Pro/Max/Ultra tiers with 5h/daily/weekly request caps, no credit balance).
+  rpc getCurrentPlan(EmptyRequest) returns (GetCurrentPlanResponse);
+
+  // Fetches all user organizations data
+  // Returns a list of UserOrganization objects
+  rpc getUserOrganizations(EmptyRequest) returns (UserOrganizationsResponse);
+
+  rpc setUserOrganization(UserOrganizationUpdateRequest) returns (Empty);
+
+  rpc openrouterAuthClicked(EmptyRequest) returns (Empty);
+
+  rpc requestyAuthClicked(StringRequest) returns (Empty);
+
+  rpc hicapAuthClicked(EmptyRequest) returns (Empty);
+
+  // Returns a link the webview can use to redirect back to the user's IDE.
+  rpc getRedirectUrl(EmptyRequest) returns (String);
+
+  // OpenAI Codex OAuth authentication
+  // Starts the OAuth flow and opens browser for user to sign in with ChatGPT Plus/Pro
+  rpc openAiCodexSignIn(EmptyRequest) returns (Empty);
+
+  // Signs out of OpenAI Codex and clears stored credentials
+  rpc openAiCodexSignOut(EmptyRequest) returns (Empty);
+
+  // Submits a spend limit increase request to the user's org admin.
+  // Called when the user hits a SPEND_LIMIT_EXCEEDED (429) error and clicks "Request Increase".
+  rpc submitLimitIncreaseRequest(EmptyRequest) returns (SubmitLimitIncreaseResponse);
+}
+
+message AuthStateChangedRequest {
+  Metadata metadata = 1;
+  UserInfo user = 2;
+}
+
+message AuthState {
+  optional UserInfo user = 1;
+}
+
+// User's information
+message UserInfo {
+  string uid = 1;
+  optional string display_name = 2;
+  optional string email = 3;
+  optional string photo_url = 4;
+  optional string app_base_url = 5; // Trumbo app base URL
+}
+
+message UserOrganization {
+  bool active = 1;
+  string member_id = 2;
+  string name = 3;
+  string organization_id = 4;
+  repeated string roles = 5; // ["admin", "member", "owner"]
+}
+
+message UserOrganizationsResponse {
+  repeated UserOrganization organizations = 1;
+}
+
+message UserOrganizationUpdateRequest {
+  optional string organization_id = 1;
+}
+
+// Response from a spend limit increase request submission
+message SubmitLimitIncreaseResponse {
+  bool success = 1;
+}
+
+// Current subscription plan + live rate-limit usage (subscription billing model).
+message GetCurrentPlanResponse {
+  // Opaque plan tier id, e.g. "pro" | "max" | "ultra". Empty when there is no
+  // active paid subscription (the user must subscribe to use the Trumbo provider).
+  optional string plan_tier = 1;
+  optional string plan_name = 2;
+  optional string display_name = 3;
+  optional int32 price_per_seat_cents = 4;
+  optional string interval = 5;
+  optional string current_period_start = 6;
+  optional string current_period_end = 7;
+  optional string cancel_at = 8;
+  optional string canceled_at = 9;
+  optional string subscription_id = 10;
+  // Live request usage per rate-limit window. Absent when there is no plan.
+  optional PlanRateLimitWindow five_hour = 11;
+  optional PlanRateLimitWindow daily = 12;
+  optional PlanRateLimitWindow weekly = 13;
+}
+
+message PlanRateLimitWindow {
+  int32 used = 1;
+  int32 limit = 2;
+  int64 resets_at_sec = 3;
+}
