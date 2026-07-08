@@ -132,6 +132,10 @@ jobs:
       - name: Build SDK packages
         run: bun run build:sdk
 
+      - name: Install VS Code webview dependencies
+        working-directory: projects/vscode/webview-ui
+        run: bun install
+
       - name: Package VSIX
         working-directory: projects/vscode
         run: bun run package:vsix

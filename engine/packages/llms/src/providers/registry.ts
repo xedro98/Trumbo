@@ -94,7 +94,7 @@ function createUnregisteredModel(
 		providerId: provider.id,
 	};
 
-	if (isQwenModel({ modelId })) {
+	if (provider.id === "trumbo" && isQwenModel({ modelId })) {
 		model.metadata = { family: "qwen" };
 		model.capabilities = ["text", "prompt-cache"];
 	}
