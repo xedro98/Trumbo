@@ -1292,7 +1292,9 @@ export class Controller {
 			}
 
 			const resolvedPrompt = await this.resolveContextMentions(editedText)
-			const metadataRunCount = input.restoreWorkspace ? sdkCheckpointRunCount : countSdkCheckpointRuns(initialMessages)
+			const metadataRunCount = input.restoreWorkspace
+				? sdkCheckpointRunCount
+				: countSdkCheckpointRuns(sdkMessages.slice(0, sdkTargetIndex))
 			const restoredCheckpointMetadata =
 				metadataRunCount && metadataRunCount > 0
 					? createRestoredCheckpointMetadata(sessionRecord, metadataRunCount)
