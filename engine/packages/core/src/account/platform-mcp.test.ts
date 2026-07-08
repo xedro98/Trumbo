@@ -86,9 +86,8 @@ describe("platform-mcp", () => {
 				},
 			},
 		});
-		const transport = loadMcpSettingsFile({ filePath: settingsPath }).mcpServers[
-			PLATFORM_KNOWLEDGE_MCP_SERVER_NAME
-		]?.transport;
+		const transport = loadMcpSettingsFile({ filePath: settingsPath })
+			.mcpServers[PLATFORM_KNOWLEDGE_MCP_SERVER_NAME]?.transport;
 		expect(transport?.type).toBe("streamableHttp");
 		if (transport?.type === "streamableHttp") {
 			expect(transport.headers?.Authorization).toBe("Bearer bearer-token");

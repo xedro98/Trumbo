@@ -14,7 +14,7 @@ export const GENERATED_PROVIDER_MODELS: {
 	version: number;
 	providers: Record<string, Record<string, ModelInfo>>;
 } = {
-	version: 1783522109741,
+	version: 1783537896715,
 	providers: {
 		aihubmix: {
 			"glm-5.2": {
@@ -11919,6 +11919,30 @@ export const GENERATED_PROVIDER_MODELS: {
 			},
 		},
 		openrouter: {
+			"~x-ai/grok-latest": {
+				id: "~x-ai/grok-latest",
+				name: "Grok Latest",
+				contextWindow: 1000000,
+				maxInputTokens: 1000000,
+				maxTokens: 1000000,
+				capabilities: [
+					"images",
+					"files",
+					"tools",
+					"reasoning",
+					"structured_output",
+					"temperature",
+					"prompt-cache",
+				],
+				pricing: {
+					input: 1.25,
+					output: 2.5,
+					cacheRead: 0.2,
+					cacheWrite: 0,
+				},
+				releaseDate: "2026-07-08",
+				family: "grok",
+			},
 			"aion-labs/aion-3.0": {
 				id: "aion-labs/aion-3.0",
 				name: "Aion-3.0",
@@ -12756,9 +12780,9 @@ export const GENERATED_PROVIDER_MODELS: {
 					"prompt-cache",
 				],
 				pricing: {
-					input: 0.66,
+					input: 0.65,
 					output: 3.41,
-					cacheRead: 0.14,
+					cacheRead: 0.3,
 					cacheWrite: 0,
 				},
 				releaseDate: "2026-04-27",
@@ -12861,7 +12885,7 @@ export const GENERATED_PROVIDER_MODELS: {
 				name: "DeepSeek V4 Flash",
 				contextWindow: 1048576,
 				maxInputTokens: 1048576,
-				maxTokens: 16384,
+				maxTokens: 65536,
 				capabilities: [
 					"tools",
 					"reasoning",
@@ -13094,9 +13118,9 @@ export const GENERATED_PROVIDER_MODELS: {
 					"prompt-cache",
 				],
 				pricing: {
-					input: 0.66,
+					input: 0.65,
 					output: 3.41,
-					cacheRead: 0.14,
+					cacheRead: 0.3,
 					cacheWrite: 0,
 				},
 				releaseDate: "2026-04-21",
@@ -13217,6 +13241,7 @@ export const GENERATED_PROVIDER_MODELS: {
 				maxTokens: 256000,
 				capabilities: [
 					"images",
+					"files",
 					"tools",
 					"reasoning",
 					"structured_output",
@@ -19657,7 +19682,7 @@ export const GENERATED_PROVIDER_MODELS: {
 			"deepseek-v4-flash": {
 				contextWindow: 1048576,
 				maxInputTokens: 1048576,
-				maxTokens: 16384,
+				maxTokens: 65536,
 				capabilities: [
 					"tools",
 					"reasoning",
@@ -23044,7 +23069,7 @@ export const GENERATED_PROVIDER_MODELS: {
 			"deepseek-v4-flash": {
 				contextWindow: 1048576,
 				maxInputTokens: 1048576,
-				maxTokens: 16384,
+				maxTokens: 65536,
 				capabilities: [
 					"tools",
 					"reasoning",
@@ -30191,6 +30216,29 @@ export const GENERATED_PROVIDER_MODELS: {
 			},
 		},
 		xai: {
+			"grok-4.5": {
+				id: "grok-4.5",
+				name: "Grok 4.5",
+				contextWindow: 500000,
+				maxInputTokens: 500000,
+				maxTokens: 500000,
+				capabilities: [
+					"images",
+					"tools",
+					"reasoning",
+					"structured_output",
+					"temperature",
+					"prompt-cache",
+				],
+				pricing: {
+					input: 2,
+					output: 6,
+					cacheRead: 0.5,
+					cacheWrite: 0,
+				},
+				releaseDate: "2026-07-08",
+				family: "grok",
+			},
 			"grok-4.3": {
 				id: "grok-4.3",
 				name: "Grok 4.3",
