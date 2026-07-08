@@ -86,11 +86,14 @@ describe("platform-mcp", () => {
 				},
 			},
 		});
-		const headers = loadMcpSettingsFile({ filePath: settingsPath }).mcpServers[
+		const transport = loadMcpSettingsFile({ filePath: settingsPath }).mcpServers[
 			PLATFORM_KNOWLEDGE_MCP_SERVER_NAME
-		]?.transport?.headers;
-		expect(headers?.Authorization).toBe("Bearer bearer-token");
-		expect(headers?.["X-Org-Id"]).toBeUndefined();
+		]?.transport;
+		expect(transport?.type).toBe("streamableHttp");
+		if (transport?.type === "streamableHttp") {
+			expect(transport.headers?.Authorization).toBe("Bearer bearer-token");
+			expect(transport.headers?.["X-Org-Id"]).toBeUndefined();
+		}
 	});
 
 	it("skips writes when the managed entry is already current", async () => {
