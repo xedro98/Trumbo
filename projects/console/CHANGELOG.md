@@ -9,6 +9,14 @@
 
 # Trumbo CLI Changelog
 
+
+## 3.0.54
+
+- chore(sdk): bump workspace packages to v0.0.56
+- fix: hub stop, SDK path bugs, checkpoints, and CLI runtime hardening
+- fix(release): install vscode webview deps and allow confirmed SDK publish
+- fix(release): unblock SDK tests and VSCode publish workflow
+
 ## 3.0.53
 
 - Knowledge base search (`search_knowledge`) is now wired automatically when you sign in with Trumbo; no manual MCP server setup required
