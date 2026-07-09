@@ -150,14 +150,14 @@ jobs:
       - name: Resolve Marketplace auth mode
         id: auth
         run: |
-          if [ -n "${AZURE_CLIENT_ID}" ] && [ -n "${AZURE_TENANT_ID}" ]; then
+          if [ -n "${VSCE_PAT}" ]; then
+            echo "mode=pat" >> "$GITHUB_OUTPUT"
+            echo "Using VSCE_PAT for VS Code Marketplace publish"
+          elif [ -n "${AZURE_CLIENT_ID}" ] && [ -n "${AZURE_TENANT_ID}" ]; then
             echo "mode=azure-credential" >> "$GITHUB_OUTPUT"
             echo "Using Entra ID (GitHub OIDC) for VS Code Marketplace publish"
-          elif [ -n "${VSCE_PAT}" ]; then
-            echo "mode=pat" >> "$GITHUB_OUTPUT"
-            echo "Using VSCE_PAT for VS Code Marketplace publish (legacy; migrate to OIDC before 2026-12-01)"
           else
-            echo "Set repository vars AZURE_CLIENT_ID + AZURE_TENANT_ID (recommended) or secret VSCE_PAT."
+            echo "Set secret VSCE_PAT or repository vars AZURE_CLIENT_ID + AZURE_TENANT_ID."
             echo "See projects/vscode/docs/MARKETPLACE_PUBLISH.md"
             exit 1
           fi

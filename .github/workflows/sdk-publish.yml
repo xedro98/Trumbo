@@ -131,6 +131,7 @@ jobs:
       - name: Verify publish tooling
         if: steps.check_commits.outputs.skip != 'true'
         run: |
+          npm install -g sigstore
           NPM_VERSION=$(npm --version)
           echo "npm ${NPM_VERSION}"
           IFS=. read -r major minor patch <<EOF
