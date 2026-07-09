@@ -61,6 +61,7 @@ const ALL_FEATURES = [
 	"Session history and checkpoints",
 	"Permissions and .trumborules",
 	"Trumbo Knowledge (team docs + RAG)",
+	"Trumbo Browser Run (in-agent browser tools)",
 	"Priority Quartz routing",
 	"Long-horizon reasoning sessions",
 	"Sub-agents and parallel workstreams",
@@ -78,7 +79,7 @@ const TIERS: Tier[] = [
 		tagline: "For individual developers",
 		description:
 			"The CLI, Quartz, hosted models, sessions, and checkpoints. Generous limits for solo work.",
-		features: ALL_FEATURES.map((label, i) => ({ label, included: i < 5 })),
+		features: ALL_FEATURES.map((label, i) => ({ label, included: i < 6 })),
 		limits: [
 			{ window: "5-hour", requests: "75" },
 			{ window: "Daily", requests: "300" },
@@ -93,7 +94,7 @@ const TIERS: Tier[] = [
 		description:
 			"Priority Quartz, sub-agents, MCP tools, and deeper limits for daily multi-step work.",
 		featured: true,
-		features: ALL_FEATURES.map((label, i) => ({ label, included: i < 8 })),
+		features: ALL_FEATURES.map((label, i) => ({ label, included: i < 9 })),
 		limits: [
 			{ window: "5-hour", requests: "375" },
 			{ window: "Daily", requests: "1,500" },

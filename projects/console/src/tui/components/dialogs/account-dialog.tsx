@@ -553,6 +553,18 @@ export function AccountDialogContent(
 						value={`${loaded.currentPlan.rateLimits.weekly.used}/${loaded.currentPlan.rateLimits.weekly.limit}`}
 					/>
 				)}
+				{loaded.currentPlan?.browser?.enabled && (
+					<AccountField
+						label="Browser min/mo"
+						value={`${loaded.currentPlan.browser.minutesUsed.toFixed(0)}/${loaded.currentPlan.browser.minutesMonthly}`}
+					/>
+				)}
+				{loaded.currentPlan?.credits && (
+					<AccountField
+						label="Credits"
+						value={loaded.currentPlan.credits.balance.toLocaleString()}
+					/>
+				)}
 				<AccountField
 					label="Organizations"
 					value={String(loaded.organizations.length)}

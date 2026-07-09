@@ -5,6 +5,7 @@ import {
 } from "@/components/grid-shell-context";
 import { MarketingShell } from "@/components/MarketingShell";
 import {
+	AgentBrowserSection,
 	AgentCapabilitiesSection,
 	AgentHeroSection,
 	AgentHeroVisual,
@@ -30,9 +31,12 @@ export function AgentPage() {
 					<GridBoxStackCell className="!p-0">
 						<AgentCapabilitiesSection />
 					</GridBoxStackCell>
-					<GridBoxStackCell className="!p-0">
-						<AgentKnowledgeSection />
-					</GridBoxStackCell>
+				<GridBoxStackCell className="!p-0">
+					<AgentKnowledgeSection />
+				</GridBoxStackCell>
+				<GridBoxStackCell className="!p-0">
+					<AgentBrowserSection />
+				</GridBoxStackCell>
 					<GridBoxStackCell className="!p-0">
 						<AgentStatsSection />
 					</GridBoxStackCell>

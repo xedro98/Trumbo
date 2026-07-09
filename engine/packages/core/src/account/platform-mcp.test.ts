@@ -34,7 +34,7 @@ describe("platform-mcp", () => {
 		const result = await syncPlatformKnowledgeMcpServer({
 			accessToken: "workos:access-token",
 			orgId: "org-123",
-			mcpBaseUrl: "https://platform.trumbo.dev/v1/mcp",
+			mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
 			settingsPath,
 		});
 
@@ -43,7 +43,7 @@ describe("platform-mcp", () => {
 		expect(settings.mcpServers[PLATFORM_KNOWLEDGE_MCP_SERVER_NAME]).toEqual({
 			transport: {
 				type: "streamableHttp",
-				url: "https://platform.trumbo.dev/v1/mcp",
+				url: "https://api.trumbo.dev/v1/mcp",
 				headers: {
 					Authorization: "Bearer access-token",
 					"X-Org-Id": "org-123",
@@ -64,13 +64,13 @@ describe("platform-mcp", () => {
 		await syncPlatformKnowledgeMcpServer({
 			accessToken: "Bearer bearer-token",
 			orgId: "org-123",
-			mcpBaseUrl: "https://platform.trumbo.dev/v1/mcp",
+			mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
 			settingsPath,
 		});
 		const cleared = await syncPlatformKnowledgeMcpServer({
 			accessToken: "bearer-token",
 			orgId: null,
-			mcpBaseUrl: "https://platform.trumbo.dev/v1/mcp",
+			mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
 			settingsPath,
 		});
 
@@ -103,7 +103,7 @@ describe("platform-mcp", () => {
 		const options = {
 			accessToken: "access-token",
 			orgId: "org-123",
-			mcpBaseUrl: "https://platform.trumbo.dev/v1/mcp",
+			mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
 			settingsPath,
 		};
 		await syncPlatformKnowledgeMcpServer(options);
@@ -138,7 +138,7 @@ describe("platform-mcp", () => {
 
 		const result = await syncPlatformKnowledgeMcpServer({
 			accessToken: "access-token",
-			mcpBaseUrl: "https://platform.trumbo.dev/v1/mcp",
+			mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
 			settingsPath,
 		});
 
@@ -168,7 +168,7 @@ describe("platform-mcp", () => {
 			syncPlatformKnowledgeMcpServer({
 				accessToken: "access-token",
 				orgId: "org\r\nInjected: true",
-				mcpBaseUrl: "https://platform.trumbo.dev/v1/mcp",
+				mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
 				settingsPath,
 			}),
 		).rejects.toThrow(/invalid characters/i);
@@ -183,7 +183,7 @@ describe("platform-mcp", () => {
 
 		await syncPlatformKnowledgeMcpServer({
 			accessToken: "access-token",
-			mcpBaseUrl: "https://platform.trumbo.dev/v1/mcp",
+			mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
 			settingsPath,
 		});
 		const result = await removePlatformKnowledgeMcpServer({ settingsPath });
@@ -238,7 +238,7 @@ describe("platform-mcp", () => {
 			providerId: "trumbo",
 			apiKey: "access-token",
 			headers: { "X-Org-Id": "org-456" },
-			mcpBaseUrl: "https://platform.trumbo.dev/v1/mcp",
+			mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
 			settingsPath,
 		});
 

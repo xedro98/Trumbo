@@ -8,7 +8,7 @@ import {
 	updateMcpSettingsFile,
 } from "../extensions/mcp";
 
-/** Matches the MCP server name exposed at platform.trumbo.dev/v1/mcp. */
+/** Matches the MCP server name exposed at api.trumbo.dev/v1/mcp. */
 export const PLATFORM_KNOWLEDGE_MCP_SERVER_NAME = "trumbo-platform";
 
 const MANAGED_BY = "trumbo-platform";

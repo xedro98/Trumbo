@@ -116,6 +116,20 @@ export interface UserCurrentPlan {
 		daily: PlanRateLimitWindow;
 		weekly: PlanRateLimitWindow;
 	};
+	/** Trumbo Browser Run in-agent tier limits + current month usage. */
+	browser?: {
+		enabled: boolean;
+		minutesMonthly: number;
+		minutesUsed: number;
+		resetsAtSec: number;
+		concurrentSessions: number;
+	};
+	/** Trumbo Credits pre-paid balance for standalone API usage. */
+	credits?: {
+		balance: number;
+		totalPurchased: number;
+		totalUsed: number;
+	};
 	subscriptionId?: string;
 	userId?: string;
 	[key: string]: unknown;

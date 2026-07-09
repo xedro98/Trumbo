@@ -130,10 +130,10 @@ describe("resolveTrumboApiBaseUrl", () => {
 
 	it("ignores a stale local-dev base URL in production and uses the production default", () => {
 		expect(resolveTrumboApiBaseUrl("http://localhost:8787/api/v1")).toBe(
-			"https://platform.trumbo.dev",
+			"https://api.trumbo.dev",
 		);
 		expect(resolveTrumboApiBaseUrl("http://localhost:8787")).toBe(
-			"https://platform.trumbo.dev",
+			"https://api.trumbo.dev",
 		);
 	});
 
@@ -169,10 +169,10 @@ describe("resolveTrumboProviderBaseUrl", () => {
 		// reused in production, or production JWTs get sent to a local
 		// wrangler-dev server that rejects them with 401.
 		expect(resolveTrumboProviderBaseUrl("http://localhost:8787/api/v1")).toBe(
-			"https://platform.trumbo.dev/api/v1",
+			"https://api.trumbo.dev/api/v1",
 		);
 		expect(resolveTrumboProviderBaseUrl("http://localhost:8787")).toBe(
-			"https://platform.trumbo.dev/api/v1",
+			"https://api.trumbo.dev/api/v1",
 		);
 	});
 
@@ -227,6 +227,14 @@ describe("TRUMBO_ENVIRONMENTS catalog", () => {
 		for (const [key, config] of Object.entries(TRUMBO_ENVIRONMENTS)) {
 			expect(config.environment).toBe(key);
 		}
+	});
+
+	it("splits API and platform hosts in production", () => {
+		expect(TRUMBO_ENVIRONMENTS.production).toMatchObject({
+			appBaseUrl: "https://platform.trumbo.dev",
+			apiBaseUrl: "https://api.trumbo.dev",
+			mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
+		});
 	});
 
 	it("populates appBaseUrl, apiBaseUrl, and mcpBaseUrl for every environment", () => {

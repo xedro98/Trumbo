@@ -10,6 +10,11 @@
 # Trumbo CLI Changelog
 
 
+## 3.0.55
+
+- Default API and MCP traffic to `api.trumbo.dev`; browser links and device approval stay on `platform.trumbo.dev`
+- chore(sdk): bump workspace packages to v0.0.57
+
 ## 3.0.54
 
 - chore(sdk): bump workspace packages to v0.0.56

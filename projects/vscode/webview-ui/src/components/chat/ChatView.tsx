@@ -75,7 +75,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 		checkpointRestoreInput,
 		queuedPrompts,
 	} = useExtensionState()
-	const isProdHostedApp = userInfo?.apiBaseUrl === "https://platform.trumbo.dev"
+	const isProdHostedApp = userInfo?.apiBaseUrl === "https://api.trumbo.dev"
 	const shouldShowQuickWins = isProdHostedApp && (!taskHistory || taskHistory.length < QUICK_WINS_HISTORY_THRESHOLD)
 
 	// Use custom hooks for state management

@@ -16,16 +16,14 @@ export const TRUMBO_ENVIRONMENTS: Readonly<
 > = {
 	production: {
 		environment: "production",
-		// Production Trumbo backend = the Trumbo web app deployed to Cloudflare
-		// Workers at platform.trumbo.dev. The Worker hosts the SPA + the
-		// /api/v1 auth, account, billing, and chat-completion endpoints. The
-		// device-code verification URI is returned by the server (built from
-		// TRUMBO_APP_URL on the Worker), so the CLI prints the right link
-		// automatically. Override locally with TRUMBO_API_BASE_URL /
-		// TRUMBO_APP_URL, or run against `wrangler dev` with TRUMBO_ENVIRONMENT=local.
+		// Split surface: api.trumbo.dev (programmatic API + MCP) and
+		// platform.trumbo.dev (browser dashboard + same-origin API for cookies).
+		// Device-code verification URIs use appBaseUrl (platform). CLI/VSCode
+		// use apiBaseUrl. Override locally with TRUMBO_API_BASE_URL /
+		// TRUMBO_APP_URL, or TRUMBO_ENVIRONMENT=local for wrangler dev.
 		appBaseUrl: "https://platform.trumbo.dev",
-		apiBaseUrl: "https://platform.trumbo.dev",
-		mcpBaseUrl: "https://platform.trumbo.dev/v1/mcp",
+		apiBaseUrl: "https://api.trumbo.dev",
+		mcpBaseUrl: "https://api.trumbo.dev/v1/mcp",
 		workOsClientId: "",
 	},
 	staging: {

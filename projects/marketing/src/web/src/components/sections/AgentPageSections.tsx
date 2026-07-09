@@ -1134,7 +1134,7 @@ function AgentKnowledgeMcpPipelineDiagram() {
 				</span>
 				<div className="h-px flex-1 bg-grid-line" />
 				<span className="font-stat text-[0.625rem] tabular-nums tracking-[0.1em] text-muted-foreground">
-					platform.trumbo.dev/v1/mcp
+					api.trumbo.dev/v1/mcp
 				</span>
 			</div>
 		</div>
@@ -1165,7 +1165,7 @@ function AgentKnowledgeMcpDiagram() {
 				<p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground md:text-[0.9375rem] lg:text-base">
 					One tool name on every surface. CLI, VS Code, and the platform all call the same
 					org-scoped endpoint at{" "}
-					<code className="font-mono text-foreground/90">platform.trumbo.dev/v1/mcp</code>.
+					<code className="font-mono text-foreground/90">api.trumbo.dev/v1/mcp</code>.
 				</p>
 			</div>
 			<AgentKnowledgeMcpPipelineDiagram />
@@ -1242,6 +1242,46 @@ export function AgentWorkflowSection() {
 						</div>
 					))}
 				</div>
+			</GridBoxCell>
+		</GridBox>
+	);
+}
+
+/* Browser Run — cloud browser automation as a built-in agent tool          */
+
+export function AgentBrowserSection() {
+	return (
+		<GridBox id="browser" className="scroll-mt-4 grid-cols-1 !border-t-0">
+			<GridBoxCell className="!p-0 md:!border-r-0">
+				<section className="mx-auto max-w-3xl px-6 py-16 md:py-24 text-center">
+					<p className="marketing-kicker mb-3">Trumbo Browser Run</p>
+					<h2 className="marketing-heading-2 mb-4">
+						Browse the web from your agent
+					</h2>
+					<p className="marketing-body-lg text-muted-foreground mb-8">
+						Trumbo Agent can take screenshots, fetch pages as Markdown, generate PDFs,
+						and extract structured data from any website, all running in a cloud browser.
+						No local Playwright setup, no browser dependencies, no headless Chrome to manage.
+					</p>
+					<div className="grid gap-4 text-left sm:grid-cols-2">
+						<div className="rounded-lg border border-grid-line p-5">
+							<p className="mb-1 text-sm font-semibold">In-agent (subscription)</p>
+							<p className="text-sm text-muted-foreground">
+								Use browser_screenshot, browser_markdown, browser_content, and browser_pdf
+								MCP tools directly from the CLI or VS Code. Covered by your plan's browser
+								minutes (Pro: 100 min/mo, Max: 500, Ultra: 2000).
+							</p>
+						</div>
+						<div className="rounded-lg border border-grid-line p-5">
+							<p className="mb-1 text-sm font-semibold">Standalone API (credits)</p>
+							<p className="text-sm text-muted-foreground">
+								Call the REST API directly from any script or service. Billed per
+								browser-minute via pre-paid credits (25 credits/min). Create API tokens
+								from the platform dashboard.
+							</p>
+						</div>
+					</div>
+				</section>
 			</GridBoxCell>
 		</GridBox>
 	);

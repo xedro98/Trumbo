@@ -16,7 +16,7 @@ mock.module("os", osMock)
 mock.module("node:os", osMock)
 
 import os from "os"
-import { TrumboConfigurationError, TrumboEndpoint, TrumboEnv, Environment } from "../config"
+import { Environment, TrumboConfigurationError, TrumboEndpoint, TrumboEnv } from "../config"
 
 describe("TrumboEndpoint configuration", () => {
 	let sandbox: sinon.SinonSandbox
@@ -82,7 +82,8 @@ describe("TrumboEndpoint configuration", () => {
 			config.environment.should.not.equal(Environment.selfHosted)
 			// Should use production defaults
 			config.appBaseUrl.should.equal("https://platform.trumbo.dev")
-			config.apiBaseUrl.should.equal("https://platform.trumbo.dev")
+			config.apiBaseUrl.should.equal("https://api.trumbo.dev")
+			config.mcpBaseUrl.should.equal("https://api.trumbo.dev/v1/mcp")
 		})
 
 		it("should accept URLs with ports", async () => {
@@ -647,7 +648,8 @@ describe("TrumboEndpoint configuration", () => {
 			const config = TrumboEndpoint.config
 			config.environment.should.not.equal(Environment.selfHosted)
 			config.appBaseUrl.should.equal("https://platform.trumbo.dev")
-			config.apiBaseUrl.should.equal("https://platform.trumbo.dev")
+			config.apiBaseUrl.should.equal("https://api.trumbo.dev")
+			config.mcpBaseUrl.should.equal("https://api.trumbo.dev/v1/mcp")
 		})
 
 		it("should throw TrumboConfigurationError for invalid bundled file", async () => {

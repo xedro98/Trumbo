@@ -9,6 +9,11 @@
 
 # Trumbo SDK Changelog
 
+## 0.0.57
+
+- Split production endpoints: `api.trumbo.dev` for programmatic API and MCP, `platform.trumbo.dev` for browser app and device-code verification
+- Update platform MCP URL resolution and environment tests for the new API host
+
 ## 0.0.55
 
 - Auto-register the platform Knowledge MCP server (`trumbo-platform`) so signed-in Trumbo users get the `search_knowledge` tool without manual MCP setup
