@@ -132,6 +132,24 @@ export interface UserCurrentPlan {
 		resetsAtSec: number;
 		concurrentSessions: number;
 	};
+	/** Trumbo Cloud Agents tier limits + current month usage. */
+	agents?: {
+		enabled: boolean;
+		hoursMonthly: number;
+		hoursUsed: number;
+		resetsAtSec: number;
+		concurrentAgents: number;
+		concurrentUsed: number;
+	};
+	/** Trumbo Sandbox tier limits + current month usage. */
+	sandbox?: {
+		enabled: boolean;
+		cpuSecondsMonthly: number;
+		cpuSecondsUsed: number;
+		resetsAtSec: number;
+		concurrentSandboxes: number;
+		concurrentUsed: number;
+	};
 	/** Trumbo Credits pre-paid balance for standalone API usage. */
 	credits?: {
 		balance: number;

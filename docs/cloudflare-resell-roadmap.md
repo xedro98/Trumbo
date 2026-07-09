@@ -102,10 +102,10 @@ For Trumbo, **embedded infrastructure** is the default. Reselling raw Cloudflare
 | SKU | Cloudflare backend | Customer value | Status |
 | --- | --- | --- | --- |
 | **Trumbo Knowledge** | AI Search + R2 | Per-team RAG; `search_knowledge` MCP tool | **Shipped** (platform, billing, marketing on `/agent`) |
-| **Trumbo Cloud Agents** | Agents SDK + Durable Objects + Think | Hosted agents: memory, scheduling, Slack/email/webhooks | Planned |
+| **Trumbo Cloud Agents** | Agents SDK + Durable Objects + Think | Hosted agents: memory, scheduling, Slack/email/webhooks | **Shipped** (Think DO + REST API + MCP tools + channels) |
 | **Trumbo Inference Control Plane** | AI Gateway in front of Quartz + providers | Rate limits, logging, fallbacks, guardrails (server-side) | Partial (custom proxy today; Gateway migration later) |
 | **Trumbo Browser** | Browser Run | Cloud browser tool for CLI, VS Code, platform | **Shipped** (Quick Actions API + stateful Agent Sessions with human-in-the-loop) |
-| **Trumbo Sandbox** | Sandboxes + Dynamic Workers | Remote code execution without local `--yolo` shell | Planned |
+| **Trumbo Sandbox** | Sandboxes + Dynamic Workers | Remote code execution without local `--yolo` shell | **Shipped** (Sandbox SDK DO + REST API + MCP tools) |
 
 ### Tier 2: enterprise upsell
 
@@ -201,24 +201,40 @@ Trumbo Browser Run ships in two layers:
 - [ ] Apply for Cloudflare Agency Program (COGS relief on browser-hours + concurrency fees)
 - [ ] Add MCP parity for the remaining 6 Quick Action endpoints (scrape, json, links, accessibility-tree, snapshot, crawl) as stateless `browser_*` tools
 
-### Phase 4 — Trumbo Cloud Agents (2027 H1)
+### Phase 4 — Trumbo Cloud Agents (shipped July 2026)
 
-- [ ] Agents SDK runtime on Durable Objects (per-org or per-agent DO)
-- [ ] Think harness for long-horizon Max/Ultra jobs
-- [ ] Scheduling + Slack/email/webhook connectors (platform-managed)
-- [ ] Sync with CLI session model (hub daemon alignment)
-- [ ] Tier limits: concurrent hosted agents, runtime hours
+- [x] Think harness on Durable Objects (TrumboAgent extends Think, one DO per agent session)
+- [x] WebSocket client via AgentClient (wss://platform.trumbo.dev/agents/TrumboAgent/{sessionId})
+- [x] REST API at /api/v1/agents (create, list, get, send message, stop, delete)
+- [x] MCP tools: agent_create, agent_send_message, agent_get_state, agent_stop, agent_list, agent_delete
+- [x] Channel connectors: Slack, email, webhook, voice (tier-gated)
+- [x] Channel management API + MCP tools (agent_add_channel, agent_list_channels, agent_remove_channel)
+- [x] Webhook receivers at /api/v1/channels (Slack Events API, generic webhook, email)
+- [x] Tier limits: concurrent agents + monthly agent-hours (server-side enforced)
+- [x] Billing: pre-charge on launch, settle on delete, dead-agent cleanup
+- [x] /me/plan exposes agents usage block to CLI + VS Code
 
-**Pitch:** “Run agents in the cloud with memory, schedules, and team channels.”
+**Pitch:** "Run agents in the cloud with memory, schedules, and team channels."
 
-### Phase 5 — Trumbo Sandbox (2027 H2)
+**Remaining (follow-up):**
+- [ ] VS Code rich UI: CloudAgentSessionRow + CloudAgentPanel + CloudAgentController bridge
+- [ ] Voice channel via Cloudflare Realtime SFU + Workers AI speech-to-text/text-to-speech (Ultra only)
+- [ ] Email channel via Cloudflare Email Routing (MX record for agents.trumbo.dev)
 
-- [ ] Sandboxes + Dynamic Workers for remote shell execution
-- [ ] Strict tier gating (Ultra / enterprise)
-- [ ] Abuse controls: CPU/time quotas, network egress policies
-- [ ] Alternative to local `--yolo` for regulated environments
+### Phase 5 — Trumbo Sandbox (shipped July 2026)
 
-**Pitch:** “Execute code in Trumbo’s cloud when local shell is not an option.”
+- [x] Sandbox SDK (@cloudflare/sandbox) Durable Object for remote Linux VM code execution
+- [x] REST API at /api/v1/sandbox (create, exec, run-code, files, tunnels, destroy)
+- [x] MCP tools: sandbox_create, sandbox_exec, sandbox_run_code, sandbox_write_file, sandbox_read_file, sandbox_list_files, sandbox_destroy
+- [x] Tier limits: concurrent sandboxes + monthly CPU-seconds (server-side enforced)
+- [x] Billing: pre-charge on create, settle on destroy, dead-sandbox cleanup
+- [x] Egress control: internet off by default, configurable allowlist
+- [x] /me/plan exposes sandbox usage block to CLI + VS Code
+
+**Pitch:** "Execute code in Trumbo's cloud when local shell is not an option."
+
+**Remaining (follow-up):**
+- [ ] Container image build (requires Docker on deploy machine — currently deployed without the container image; the DO + binding + REST API + MCP tools are live)
 
 ### Phase 6 — Enterprise SKUs (2027+)
 

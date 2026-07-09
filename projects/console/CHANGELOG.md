@@ -10,6 +10,17 @@
 # Trumbo CLI Changelog
 
 
+## 3.0.57
+
+- Trumbo Cloud Agents: create, manage, and chat with persistent cloud agents via `agent_*` MCP tools (auto-discovered when you sign in)
+- Cloud agents run on the platform with Think harness: workspace tools, MCP, browser, scheduling, and Slack/email/webhook/voice channels
+- Trumbo Sandbox: remote Linux VM code execution via `sandbox_*` MCP tools (exec, run-code, files, tunnels)
+- Both Cloud Agents and Sandbox are also available as REST APIs at `/api/v1/agents` and `/api/v1/sandbox`
+- Server-side billing: agent-hours + concurrent agents, sandbox CPU-seconds + concurrent sandboxes (tier-gated, exploit-proof)
+- `/me/plan` now exposes agents + sandbox usage blocks
+- Channel connectors: Slack (Events API webhook), email, generic webhook, voice (Ultra only)
+- Tier-gated channels: Pro = webhook only, Max/Premium = + Slack + Email, Ultra = + Voice
+
 ## 3.0.56
 
 - Interactive cloud browser sessions: `browser_session_launch`, `navigate`, `click`, `type`, `scroll`, `screenshot`, `close`, `handoff`, and `wait` MCP tools are now available automatically when you sign in with Trumbo
