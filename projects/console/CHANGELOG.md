@@ -10,6 +10,15 @@
 # Trumbo CLI Changelog
 
 
+## 3.0.56
+
+- Interactive cloud browser sessions: `browser_session_launch`, `navigate`, `click`, `type`, `scroll`, `screenshot`, `close`, `handoff`, and `wait` MCP tools are now available automatically when you sign in with Trumbo
+- Stateful browser sessions run on Trumbo Browser Run (Cloudflare) with a live CDP connection per session, keepalive pings, and human-in-the-loop Live View URLs for logins/MFA/CAPTCHA
+- Concurrent-session and monthly-minute limits are enforced server-side per tier (no client bypass)
+- fix: MCP tool results with image content (screenshots, PDFs) are no longer silently dropped before reaching the model; `mimeType` is now normalized to `mediaType` so the AI SDK formatter passes images through
+- fix: dead browser sessions now release their concurrent slot automatically (alarm cleanup + failed-reconnect detection) so capacity never leaks
+- fix: session billing settles actual browser-ms against the launch reservation (was double-counting the estimate)
+
 ## 3.0.55
 
 - Default API and MCP traffic to `api.trumbo.dev`; browser links and device approval stay on `platform.trumbo.dev`

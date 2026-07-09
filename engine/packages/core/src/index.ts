@@ -117,6 +117,7 @@ export {
 	isTrumboPlatformProvider,
 	normalizePlatformKnowledgeOrgId,
 	PLATFORM_KNOWLEDGE_MCP_SERVER_NAME,
+	type PlanBillingInfo,
 	type ProviderActionExecutor,
 	RpcTrumboAccountService,
 	removePlatformKnowledgeMcpServer,

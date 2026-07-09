@@ -13,6 +13,34 @@ function defaultMcpDescription(
 	return `Execute MCP tool "${tool.name}" from server "${serverName}".`;
 }
 
+/** Normalize a raw MCP `tools/call` result into a shape the AI SDK formatter
+ *  recognizes. Exported for unit testing. */
+export function normalizeMcpToolResult(raw: unknown): unknown {
+	if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+		return raw;
+	}
+	const obj = raw as Record<string, unknown>;
+	const content = obj.content;
+	if (!Array.isArray(content)) {
+		return raw;
+	}
+	const normalized = content.map((block) => {
+		if (!block || typeof block !== "object" || Array.isArray(block)) {
+			return block;
+		}
+		const b = block as Record<string, unknown>;
+		if (
+			b.type === "image" &&
+			typeof b.mimeType === "string" &&
+			b.mediaType === undefined
+		) {
+			return { ...b, mediaType: b.mimeType };
+		}
+		return block;
+	});
+	return normalized;
+}
+
 export async function createMcpTools(
 	options: CreateMcpToolsOptions,
 ): Promise<AgentTool[]> {
@@ -32,8 +60,8 @@ export async function createMcpTools(
 			timeoutMs: options.timeoutMs,
 			retryable: options.retryable,
 			maxRetries: options.maxRetries,
-			execute: async (input: unknown, context) =>
-				options.provider.callTool({
+			execute: async (input: unknown, context) => {
+				const raw = await options.provider.callTool({
 					serverName: options.serverName,
 					toolName: descriptor.name,
 					arguments:
@@ -41,7 +69,9 @@ export async function createMcpTools(
 							? (input as Record<string, unknown>)
 							: undefined,
 					context,
-				}),
+				});
+				return normalizeMcpToolResult(raw);
+			},
 		});
 	});
 }

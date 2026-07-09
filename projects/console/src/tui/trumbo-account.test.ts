@@ -308,9 +308,7 @@ describe("loadIndividualSubscriptionPlans", () => {
 			config: makeConfig(),
 		});
 
-		expect(coreMocks.fetchAvailableSubscriptionPlans).toHaveBeenCalledWith({
-			type: "individual",
-		});
+		expect(coreMocks.fetchAvailableSubscriptionPlans).toHaveBeenCalledWith();
 		expect(result).toEqual(plans);
 	});
 });

@@ -164,16 +164,10 @@ export class TrumboAccountService {
 		return me.organizations ?? [];
 	}
 
-	public async fetchAvailableSubscriptionPlans(input?: {
-		type?: "individual" | "teams";
-	}): Promise<TrumboSubscriptionPlan[]> {
-		const path = new URL("/api/v1/plans", this.apiBaseUrl);
-		if (input?.type) {
-			path.searchParams.set("type", input.type);
-		}
-		return this.request<TrumboSubscriptionPlan[]>(
-			`${path.pathname}${path.search}`,
-		);
+	public async fetchAvailableSubscriptionPlans(): Promise<
+		TrumboSubscriptionPlan[]
+	> {
+		return this.request<TrumboSubscriptionPlan[]>("/api/v1/billing/plans");
 	}
 
 	public async fetchCurrentUserPlan(): Promise<UserCurrentPlan | undefined> {

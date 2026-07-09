@@ -103,6 +103,13 @@ export interface PlanRateLimitWindow {
 	resetsAtSec: number;
 }
 
+export interface PlanBillingInfo {
+	model: "individual" | "per_seat";
+	seatCount: number | null;
+	memberCount: number | null;
+	pendingInviteCount: number | null;
+}
+
 export interface UserCurrentPlan {
 	cancelAt?: string;
 	canceledAt?: string;
@@ -111,6 +118,7 @@ export interface UserCurrentPlan {
 	plan?: TrumboSubscriptionPlan | null;
 	planHistoryId?: string;
 	planTier?: string;
+	billing?: PlanBillingInfo;
 	rateLimits?: {
 		fiveHour: PlanRateLimitWindow;
 		daily: PlanRateLimitWindow;

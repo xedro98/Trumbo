@@ -8,6 +8,7 @@ type PlanUsageProps = {
 	billingUrl: URL
 	lastFetchTime: number
 	isLoading: boolean
+	canManageBilling: boolean
 }
 
 const WINDOW_LABELS: { key: "fiveHour" | "daily" | "weekly"; label: string }[] = [
@@ -37,8 +38,8 @@ function formatResetsIn(resetsAtSec: number | undefined): string | null {
 
 const WindowBar = ({ label, window: w }: { label: string; window: PlanRateLimitWindow | undefined }) => {
 	const hasData = typeof w?.used === "number" && typeof w?.limit === "number" && w.limit > 0
-	const used = hasData ? w!.used : 0
-	const limit = hasData ? w!.limit : 0
+	const used = hasData ? (w?.used ?? 0) : 0
+	const limit = hasData ? (w?.limit ?? 0) : 0
 	const pct = hasData ? Math.min(100, Math.round((used / limit) * 100)) : 0
 	const resetsIn = formatResetsIn(w?.resetsAtSec)
 	const isHigh = hasData && pct >= 80
@@ -47,9 +48,7 @@ const WindowBar = ({ label, window: w }: { label: string; window: PlanRateLimitW
 		<div className="w-full mb-3 last:mb-0">
 			<div className="mb-1.5 flex justify-between items-baseline text-xs">
 				<span className="text-(--vscode-descriptionForeground)">{label}</span>
-				<span className="font-brand-mono tabular-nums text-foreground/80">
-					{hasData ? `${used} / ${limit}` : "—"}
-				</span>
+				<span className="font-brand-mono tabular-nums text-foreground/80">{hasData ? `${used} / ${limit}` : "—"}</span>
 			</div>
 			<div className="h-1.5 w-full rounded-full bg-(--vscode-editorWidget-background) overflow-hidden">
 				<div
@@ -57,17 +56,18 @@ const WindowBar = ({ label, window: w }: { label: string; window: PlanRateLimitW
 					style={{ width: `${pct}%` }}
 				/>
 			</div>
-			{resetsIn && (
-				<div className="mt-1 text-[11px] text-(--vscode-descriptionForeground)">Resets in {resetsIn}</div>
-			)}
+			{resetsIn && <div className="mt-1 text-[11px] text-(--vscode-descriptionForeground)">Resets in {resetsIn}</div>}
 		</div>
 	)
 }
 
-export const PlanUsage = ({ plan, fetchPlan, billingUrl, lastFetchTime, isLoading }: PlanUsageProps) => {
+export const PlanUsage = ({ plan, fetchPlan, billingUrl, lastFetchTime, isLoading, canManageBilling }: PlanUsageProps) => {
 	const tier = plan?.planTier || plan?.displayName || plan?.planName
 	const hasPlan = Boolean(tier)
 	const periodEnd = plan?.currentPeriodEnd
+	const isPerSeat = plan?.billingModel === "per_seat"
+	const seatCount = plan?.seatCount
+	const memberCount = plan?.memberCount
 
 	return (
 		<div
@@ -84,6 +84,13 @@ export const PlanUsage = ({ plan, fetchPlan, billingUrl, lastFetchTime, isLoadin
 					{periodEnd && (
 						<span className="text-xs text-(--vscode-descriptionForeground) mt-0.5">
 							Renews {new Date(periodEnd).toLocaleDateString()}
+						</span>
+					)}
+					{isPerSeat && typeof seatCount === "number" && (
+						<span className="text-xs text-(--vscode-descriptionForeground) mt-0.5">
+							{typeof memberCount === "number"
+								? `${memberCount} members / ${seatCount} licensed seats`
+								: `${seatCount} licensed seats`}
 						</span>
 					)}
 				</div>
@@ -111,9 +118,15 @@ export const PlanUsage = ({ plan, fetchPlan, billingUrl, lastFetchTime, isLoadin
 				</p>
 			)}
 
-			<VSCodeButtonLink className="w-full" href={billingUrl.href}>
-				{hasPlan ? "Manage Subscription" : "Choose a Plan"}
-			</VSCodeButtonLink>
+			{canManageBilling ? (
+				<VSCodeButtonLink className="w-full" href={billingUrl.href}>
+					{hasPlan ? "Manage Subscription" : "Choose a Plan"}
+				</VSCodeButtonLink>
+			) : (
+				<p className="text-sm text-(--vscode-descriptionForeground) m-0 text-center py-2">
+					Contact a team owner or admin to manage billing.
+				</p>
+			)}
 		</div>
 	)
 }

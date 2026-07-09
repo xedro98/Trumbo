@@ -118,21 +118,21 @@ describe("TrumboAccountService", () => {
 		});
 	});
 
-	it("fetches available individual subscription plans with auth header", async () => {
+	it("fetches scope-aware subscription plans with auth header", async () => {
 		const plansPayload = [
 			{
 				id: "plan-1",
-				displayName: "TrumboPass Monthly",
-				interval: "Monthly",
-				features: { included: ["Major open-weights models"] },
+				displayName: "Pro",
+				interval: "monthly",
+				type: "per_seat",
+				features: { included: ["500 requests / 5 hours"] },
 			},
 		];
 		const fetchImpl = vi.fn(async (input: unknown, init?: RequestInit) => {
-			expect(String(input)).toBe(
-				"http://0.0.0.0:0/api/v1/plans?type=individual",
-			);
+			expect(String(input)).toBe("http://0.0.0.0:0/api/v1/billing/plans");
 			expect(init?.headers).toMatchObject({
 				Authorization: "Bearer workos:token-123",
+				"X-Org-Id": "org-1",
 			});
 			return new Response(
 				JSON.stringify({ success: true, data: plansPayload }),
@@ -143,12 +143,11 @@ describe("TrumboAccountService", () => {
 		const service = new TrumboAccountService({
 			apiBaseUrl: "http://0.0.0.0:0",
 			getAuthToken: async () => "workos:token-123",
+			getHeaders: async () => ({ "X-Org-Id": "org-1" }),
 			fetchImpl: fetchImpl as unknown as typeof fetch,
 		});
 
-		const plans = await service.fetchAvailableSubscriptionPlans({
-			type: "individual",
-		});
+		const plans = await service.fetchAvailableSubscriptionPlans();
 
 		expect(plans).toEqual(plansPayload);
 	});

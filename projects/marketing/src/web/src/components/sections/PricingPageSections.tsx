@@ -1,9 +1,12 @@
+import { Tabs } from "@cloudflare/kumo";
 import { useState } from "react";
 import { marketingGridCellClass, marketingGridListRowClass } from "@/components/grid-shell-context";
 import { GridBox, GridBoxCell } from "@/components/ui/grid-box";
 import { Button } from "@/components/ui/button";
 import { platformLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
+
+const ENTERPRISE_CONTACT_EMAIL = "enterprise@trumbo.dev";
 
 /**
  * Pricing page — blended with the existing design system.
@@ -25,9 +28,9 @@ export function PricingHeroSection() {
 				Rate-limited plans. No per-token bills.
 			</h1>
 			<p className="max-w-5xl text-lg leading-relaxed text-muted-foreground md:max-w-6xl md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
-				One flat monthly fee. No token counting, no surprise bills. Every plan ships with the
-				full CLI and 210+ hosted open models. Tiers differ only in request limits and team
-				features.
+				Personal plans are a flat monthly fee. Team plans bill per seat and scale with your
+				roster. No token counting, no surprise bills. Every plan ships with the full CLI and
+				210+ hosted open models.
 			</p>
 		</div>
 	);
@@ -38,6 +41,7 @@ export function PricingHeroSection() {
 /* -------------------------------------------------------------------------- */
 
 type Tier = {
+	id: string;
 	name: string;
 	price: string;
 	period: string;
@@ -46,6 +50,10 @@ type Tier = {
 	features: TierFeature[];
 	limits: { window: string; requests: string }[];
 	featured?: boolean;
+	perSeat?: boolean;
+	customPrice?: boolean;
+	contactSales?: boolean;
+	contactEmail?: string;
 };
 
 type TierFeature = {
@@ -71,8 +79,9 @@ const ALL_FEATURES = [
 	"Slack, Discord, and Linear connectors",
 ];
 
-const TIERS: Tier[] = [
+const PERSONAL_TIERS: Tier[] = [
 	{
+		id: "pro",
 		name: "Pro",
 		price: "$20",
 		period: "/month",
@@ -87,12 +96,13 @@ const TIERS: Tier[] = [
 		],
 	},
 	{
+		id: "max",
 		name: "Max",
 		price: "$100",
 		period: "/month",
 		tagline: "For power users shipping every day",
 		description:
-			"Priority Quartz, sub-agents, MCP tools, and deeper limits for daily multi-step work.",
+			"Priority Quartz, sub-agents, and deeper limits for daily multi-step work.",
 		featured: true,
 		features: ALL_FEATURES.map((label, i) => ({ label, included: i < 9 })),
 		limits: [
@@ -102,13 +112,17 @@ const TIERS: Tier[] = [
 		],
 	},
 	{
+		id: "ultra",
 		name: "Ultra",
 		price: "$200",
 		period: "/month",
-		tagline: "For teams running agents in production",
+		tagline: "For production-grade solo workloads",
 		description:
-			"Team sessions, shared permissions, scheduled jobs, headless CI, and chat connectors.",
-		features: ALL_FEATURES.map((label) => ({ label, included: true })),
+			"MCP integrations, scheduled jobs, chat connectors, and the deepest personal limits.",
+		features: ALL_FEATURES.map((label, i) => ({
+			label,
+			included: i < 12 && i !== 10,
+		})),
 		limits: [
 			{ window: "5-hour", requests: "1,500" },
 			{ window: "Daily", requests: "6,000" },
@@ -117,12 +131,183 @@ const TIERS: Tier[] = [
 	},
 ];
 
+const TEAM_FEATURES = [
+	"Full Trumbo Agent CLI for every teammate",
+	"Team workspace with shared billing",
+	"Per-seat billing that scales with invites",
+	"Trumbo Knowledge (team docs + RAG)",
+	"Trumbo Browser Run (in-agent browser tools)",
+	"Shared sessions and team permissions",
+	"Scheduled jobs and headless CI",
+	"Slack, Discord, and Linear connectors",
+];
+
+const TEAM_TIERS: Tier[] = [
+	{
+		id: "scaling",
+		name: "Scaling",
+		price: "$40",
+		period: "/ seat / month",
+		tagline: "For growing teams",
+		description:
+			"Per-seat billing for teams getting started. Seats increase automatically when you invite teammates.",
+		perSeat: true,
+		features: [
+			{ label: TEAM_FEATURES[0], included: true },
+			{ label: TEAM_FEATURES[1], included: true },
+			{ label: TEAM_FEATURES[2], included: true },
+			{ label: TEAM_FEATURES[3], included: true },
+			{ label: TEAM_FEATURES[4], included: true },
+			{ label: TEAM_FEATURES[5], included: true },
+			{ label: TEAM_FEATURES[6], included: false },
+			{ label: TEAM_FEATURES[7], included: false },
+			{ label: "96K max tokens / request", included: true },
+			{ label: "Trumbo Knowledge: 100 docs, 200 MB, 200 searches/day", included: true },
+		],
+		limits: [
+			{ window: "5-hour", requests: "150" },
+			{ window: "Daily", requests: "600" },
+			{ window: "Weekly", requests: "2,800" },
+		],
+	},
+	{
+		id: "premium",
+		name: "Premium",
+		price: "$120",
+		period: "/ seat / month",
+		tagline: "For teams shipping daily",
+		description:
+			"Higher limits, larger Knowledge quotas, and production connectors for teams running agents at scale.",
+		perSeat: true,
+		featured: true,
+		features: [
+			...TEAM_FEATURES.map((label) => ({ label, included: true })),
+			{ label: "128K max tokens / request", included: true },
+			{ label: "Trumbo Knowledge: 250 docs, 500 MB, 1,000 searches/day", included: true },
+		],
+		limits: [
+			{ window: "5-hour", requests: "375" },
+			{ window: "Daily", requests: "1,500" },
+			{ window: "Weekly", requests: "7,000" },
+		],
+	},
+];
+
+const ENTERPRISE_TIER: Tier = {
+	id: "enterprise",
+	name: "Enterprise",
+	price: "Custom",
+	period: "pricing",
+	tagline: "For larger organizations",
+	description:
+		"Tailored request limits, Knowledge quotas, support, and per-seat pricing for teams with custom needs.",
+	customPrice: true,
+	contactSales: true,
+	contactEmail: ENTERPRISE_CONTACT_EMAIL,
+	features: [
+		{ label: "Custom request rate limits", included: true },
+		{ label: "Custom Knowledge storage and search quotas", included: true },
+		{ label: "Custom max tokens per request", included: true },
+		{ label: "Dedicated support and SLA options", included: true },
+		{ label: "Custom per-seat pricing", included: true },
+		{ label: "Team workspace with shared billing", included: true },
+	],
+	limits: [
+		{ window: "5-hour", requests: "Custom" },
+		{ window: "Daily", requests: "Custom" },
+		{ window: "Weekly", requests: "Custom" },
+	],
+};
+
 export function PricingTiersSection() {
+	const [scope, setScope] = useState<"personal" | "team" | "enterprise">("personal");
+	const tiers =
+		scope === "personal"
+			? PERSONAL_TIERS
+			: scope === "team"
+				? TEAM_TIERS
+				: [ENTERPRISE_TIER];
+	const [planTab, setPlanTab] = useState(tiers[0]?.id ?? "pro");
+	const activeTier = tiers.find((tier) => tier.id === planTab) ?? tiers[0];
+	const gridClassName =
+		scope === "personal"
+			? "md:grid-cols-3"
+			: scope === "team"
+				? "md:grid-cols-2"
+				: "md:grid-cols-1";
+
+	const handleScopeChange = (value: string) => {
+		const nextScope = value as "personal" | "team" | "enterprise";
+		setScope(nextScope);
+		const nextTiers =
+			nextScope === "personal"
+				? PERSONAL_TIERS
+				: nextScope === "team"
+					? TEAM_TIERS
+					: [ENTERPRISE_TIER];
+		const defaultPlan =
+			nextTiers.find((tier) => tier.featured)?.id ?? nextTiers[0]?.id ?? "pro";
+		setPlanTab(defaultPlan);
+	};
+
 	return (
-		<GridBox className="grid-cols-1 !border-t-0 md:grid-cols-3">
-			{TIERS.map((tier, index) => (
-				<TierColumn key={tier.name} tier={tier} isLast={index === TIERS.length - 1} />
-			))}
+		<GridBox className="grid-cols-1 !border-t-0">
+			<GridBoxCell
+				className={cn(
+					marketingGridCellClass,
+					"border-b border-b-dotted border-grid-line !py-5 md:!py-6",
+				)}
+			>
+				<Tabs
+					variant="segmented"
+					tabs={[
+						{ value: "personal", label: "Personal", className: "min-w-0 flex-1 justify-center" },
+						{ value: "team", label: "Team", className: "min-w-0 flex-1 justify-center" },
+						{ value: "enterprise", label: "Enterprise", className: "min-w-0 flex-1 justify-center" },
+					]}
+					value={scope}
+					onValueChange={handleScopeChange}
+					className="w-full"
+					listClassName="w-full"
+					aria-label="Plan type"
+				/>
+			</GridBoxCell>
+			{tiers.length > 1 ? (
+				<GridBoxCell
+					className={cn(
+						marketingGridCellClass,
+						"border-b border-b-dotted border-grid-line !py-5 md:hidden",
+					)}
+				>
+					<Tabs
+						variant="segmented"
+						tabs={tiers.map((tier) => ({
+							value: tier.id,
+							label: tier.name,
+							className: "min-w-0 flex-1 justify-center",
+						}))}
+						value={planTab}
+						onValueChange={setPlanTab}
+						className="w-full"
+						listClassName="w-full"
+						aria-label="Plan"
+					/>
+				</GridBoxCell>
+			) : null}
+			<GridBoxCell className="!border-r-0 !p-0">
+				<div className="md:hidden">
+					{activeTier ? <TierColumn tier={activeTier} isLast /> : null}
+				</div>
+				<div className={cn("hidden md:grid", gridClassName)}>
+					{tiers.map((tier, index) => (
+						<TierColumn
+							key={tier.id}
+							tier={tier}
+							isLast={index === tiers.length - 1}
+						/>
+					))}
+				</div>
+			</GridBoxCell>
 		</GridBox>
 	);
 }
@@ -173,6 +358,8 @@ function FeatureRow({
 }
 
 function TierColumn({ tier, isLast }: { tier: Tier; isLast: boolean }) {
+	const contactEmail = tier.contactEmail ?? ENTERPRISE_CONTACT_EMAIL;
+
 	return (
 		<GridBoxCell
 			className={cn(
@@ -197,15 +384,30 @@ function TierColumn({ tier, isLast }: { tier: Tier; isLast: boolean }) {
 			</p>
 
 			{/* Price */}
-			<div className="mt-5 flex items-baseline gap-1">
-				<span className="font-stat text-[1.5rem] font-medium leading-none text-muted-foreground md:text-[1.75rem]">
-					$
-				</span>
-				<span className="font-stat text-[2.75rem] font-light leading-none tabular-nums tracking-tight text-foreground md:text-[3.25rem]">
-					{tier.price.replace("$", "")}
-				</span>
+			<div className="mt-5 flex items-baseline gap-1.5">
+				{tier.customPrice ? (
+					<span className="font-stat text-[2.75rem] font-light leading-none tracking-tight text-foreground md:text-[3.25rem]">
+						{tier.price}
+					</span>
+				) : (
+					<>
+						<span className="font-stat text-[1.5rem] font-medium leading-none text-muted-foreground md:text-[1.75rem]">
+							$
+						</span>
+						<span className="font-stat text-[2.75rem] font-light leading-none tabular-nums tracking-tight text-foreground md:text-[3.25rem]">
+							{tier.price.replace("$", "")}
+						</span>
+					</>
+				)}
 				<span className="font-stat text-sm text-muted-foreground">{tier.period}</span>
 			</div>
+
+			{tier.perSeat ? (
+				<p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+					Billed per teammate (members + pending invites). Seats increase automatically when
+					you invite people.
+				</p>
+			) : null}
 
 			<p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-[0.9375rem]">
 				{tier.description}
@@ -237,17 +439,30 @@ function TierColumn({ tier, isLast }: { tier: Tier; isLast: boolean }) {
 						included={feature.included}
 					/>
 				))}
-				<FeatureRow label={QUARTZ_COMING_SOON} comingSoon />
+				{!tier.contactSales ? <FeatureRow label={QUARTZ_COMING_SOON} comingSoon /> : null}
 			</ul>
 
 			{/* CTA */}
-			<Button
-				variant={tier.featured ? "default" : "outline"}
-				className="mt-6 w-full"
-				onClick={() => { window.location.href = platformLink("/signup"); }}
-			>
-				Get {tier.name}
-			</Button>
+			{tier.contactSales ? (
+				<Button
+					className="mt-6 w-full"
+					onClick={() => {
+						window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent("Trumbo Enterprise inquiry")}`;
+					}}
+				>
+					Contact sales
+				</Button>
+			) : (
+				<Button
+					variant={tier.featured ? "default" : "outline"}
+					className="mt-6 w-full"
+					onClick={() => {
+						window.location.href = platformLink("/signup");
+					}}
+				>
+					Get {tier.name}
+				</Button>
+			)}
 		</GridBoxCell>
 	);
 }
@@ -387,9 +602,9 @@ export function PricingIncludedSection() {
 				</h2>
 				<p className="mt-4 max-w-6xl text-lg leading-relaxed text-muted-foreground md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
 					No feature gating on the core experience. Every tier gets the same agent, the same
-					models, the same tools, and the same CLI. Tiers differ only in how many requests you
-					can make and whether team-level features like shared sessions, scheduled jobs, and
-					chat connectors are included.
+					models, and the same CLI. Personal tiers differ in request limits and advanced
+					features. Team tiers add shared workspaces, per-seat billing, and collaboration
+					tools.
 				</p>
 			</GridBoxCell>
 			<GridBoxCell className="!border-r-0 !p-0">
@@ -446,6 +661,11 @@ function IncludedRow({
 
 const FAQ_ITEMS = [
 	{
+		question: "How does team per-seat billing work?",
+		answer:
+			"Team plans (Scaling and Premium) bill per seat each month. A seat covers every active member plus pending invites in your workspace. When you invite a teammate, your seat count increases automatically and billing updates on the next cycle. Enterprise plans use custom per-seat pricing arranged through sales. Personal plans (Pro, Max, Ultra) are flat monthly fees with no seat math.",
+	},
+	{
 		question: "What happens when I hit a rate limit?",
 		answer:
 			"Requests pause until the current window resets. You will not be charged extra, and your session is not terminated. The agent simply waits before sending the next request. The 5-hour window resets every 5 hours from your first request in that window, the daily window resets at midnight UTC, and the weekly window resets every 7 days from your subscription start date. If you consistently hit limits, consider upgrading to a higher tier. You can also use your own API keys for any provider, which bypasses Trumbo rate limits entirely since those requests are billed directly by the provider.",
@@ -473,17 +693,12 @@ const FAQ_ITEMS = [
 	{
 		question: "Is the CLI open source?",
 		answer:
-			"Yes. The Trumbo CLI is published as @trumbodev/cli on npm and the source code is available on GitHub at github.com/xedro98/Trumbo. The CLI includes the full agent loop, tool system, MCP integration, session management, permissions, and provider routing. It is free to use, modify, and distribute. The Trumbo platform (the hosted web app at platform.trumbo.dev), the Quartz reasoning model, and the server-side rate limiting and billing infrastructure are proprietary and not open source. This split means the client-side agent is fully transparent and auditable, while the billing logic lives on the server where it cannot be bypassed.",
+			"Yes. The Trumbo CLI is published as @trumbodev/cli on npm and the source code is available on GitHub at github.com/xedro98/Trumbo. The CLI includes the full agent loop, tool system, MCP integration, session management, permissions, and provider routing. It is free to use, modify, and distribute. The Trumbo platform (the hosted web app at platform.trumbo.dev), the Quartz reasoning model, and hosted model routing are proprietary.",
 	},
 	{
 		question: "What models are included?",
 		answer:
 			"Every paid plan includes access to 210+ open models hosted on our inference infrastructure. This covers DeepSeek (V3, V4-Flash, R1, Coder, Prover, and distill variants), Qwen (Qwen3, Qwen2.5, Qwen2.5-Coder, QwQ, Qwen2.5-VL, and 50+ more), Llama (Llama 2, 3, 3.1, 3.2, 4, Code Llama, Llama Guard), Mistral (Mistral 7B, Mixtral 8x7B and 8x22B, Large 3, Nemo, Small), Zhipu GLM (4.5, 4.7, 5.2), Moonshot Kimi K2, MiniMax M1 and M2, and specialized models from NVIDIA, Google Gemma, Phi, and others. You can browse the full catalog with model IDs on the Model Library page at trumbo.dev/models.",
-	},
-	{
-		question: "How is billing exploit-proof?",
-		answer:
-			"Rate limits are enforced server-side on the Trumbo platform, not in the CLI client. Every request to a hosted model or Quartz passes through the platform API, which checks your account's rate limits before forwarding the request to the model. Because the CLI is open source, a user could modify the client, but the client does not control billing. The platform rejects requests that exceed limits regardless of what the client sends. There is no way to bypass rate limits by modifying the CLI, spoofing headers, or replaying tokens. The only way to get more requests is to upgrade your tier or use your own provider API keys, which are billed by the provider directly.",
 	},
 ];
 

@@ -7,12 +7,12 @@ import type { UserResponse } from "@shared/TrumboAccount"
 import axios, { type AxiosRequestConfig, type AxiosResponse } from "axios"
 import { TrumboEnv } from "@/config"
 import { buildBasicTrumboHeaders } from "@/services/EnvUtils"
-import { TRUMBO_API_ENDPOINT } from "@/shared/trumbo/api"
 import { getAxiosSettings } from "@/shared/net"
 import { Logger } from "@/shared/services/Logger"
+import { TRUMBO_API_ENDPOINT } from "@/shared/trumbo/api"
 import { AuthService } from "./auth-service"
-import { getProviderSettingsManager } from "./provider-migration"
 import { syncPlatformKnowledgeMcpFromAuthService } from "./platform-knowledge-mcp"
+import { getProviderSettingsManager } from "./provider-migration"
 
 /**
  * Live rate-limit usage for a single window (5h / daily / weekly).
@@ -21,6 +21,13 @@ export interface CurrentPlanRateLimitWindow {
 	used: number
 	limit: number
 	resetsAtSec: number
+}
+
+export interface CurrentPlanBillingInfo {
+	model: "individual" | "per_seat"
+	seatCount: number | null
+	memberCount: number | null
+	pendingInviteCount: number | null
 }
 
 /**
@@ -38,6 +45,7 @@ export interface CurrentPlanResponse {
 		interval?: string
 	} | null
 	planTier?: string
+	billing?: CurrentPlanBillingInfo
 	rateLimits?: {
 		fiveHour?: CurrentPlanRateLimitWindow
 		daily?: CurrentPlanRateLimitWindow
@@ -77,6 +85,20 @@ export class TrumboAccountService {
 		return TrumboEnv.config().apiBaseUrl
 	}
 
+	private async resolveOrganizationId(): Promise<string | undefined> {
+		try {
+			const manager = getProviderSettingsManager()
+			const settings = manager.getProviderSettings("trumbo")
+			const fromSettings = settings?.auth?.organizationId?.trim()
+			if (fromSettings) {
+				return fromSettings
+			}
+		} catch {
+			// Fall through to auth service active org.
+		}
+		return this._authService.getActiveOrganizationId()?.trim() || undefined
+	}
+
 	/**
 	 * Helper function to make authenticated requests to the Trumbo API.
 	 * Uses the SDK-backed AuthService for token management.
@@ -92,11 +114,13 @@ export class TrumboAccountService {
 		if (!trumboAccountAuthToken) {
 			throw new Error("No Trumbo account auth token found")
 		}
+		const organizationId = await this.resolveOrganizationId()
 		const requestConfig: AxiosRequestConfig = {
 			...config,
 			headers: {
 				Authorization: `Bearer ${trumboAccountAuthToken}`,
 				"Content-Type": "application/json",
+				...(organizationId ? { "X-Org-Id": organizationId } : {}),
 				...(await buildBasicTrumboHeaders()),
 				...config.headers,
 			},
@@ -237,9 +261,5 @@ export class TrumboAccountService {
 				}`,
 			)
 		}
-	}
-
-	private getCurrentUser() {
-		return this._authService.getInfo().user
 	}
 }

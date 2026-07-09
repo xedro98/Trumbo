@@ -1,11 +1,15 @@
 import {
 	ArrowsLeftRight,
 	Books,
+	Camera,
+	FilePdf,
+	Globe,
 	MagnifyingGlass,
 	PencilSimple,
 	PlugsConnected,
 	ShieldCheck,
 	Terminal,
+	TextAa,
 	UploadSimple,
 } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
@@ -1249,39 +1253,210 @@ export function AgentWorkflowSection() {
 
 /* Browser Run — cloud browser automation as a built-in agent tool          */
 
+const BROWSER_STEPS = [
+	{
+		tag: "Cloud browser",
+		description:
+			"Every browse runs on Trumbo infrastructure. No local Playwright setup, no browser dependencies, and no headless Chrome to manage on your machine.",
+	},
+	{
+		tag: "MCP tools",
+		description:
+			"Call browser_screenshot, browser_markdown, browser_content, and browser_pdf from the CLI or VS Code. The agent fetches live pages, screenshots, PDFs, and structured data in-session.",
+	},
+	{
+		tag: "Included",
+		description:
+			"In-agent browser usage is covered by your subscription's browser minutes: Pro 100 min/mo, Max 500, Ultra 2000.",
+	},
+] as const;
+
+const BROWSER_STEP_ICONS = [Globe, PlugsConnected, ShieldCheck] as const;
+
+const BROWSER_MCP_TOOLS = [
+	"browser_screenshot",
+	"browser_markdown",
+	"browser_content",
+	"browser_pdf",
+] as const;
+
+function AgentBrowserBannerHeading() {
+	return (
+		<div className="flex flex-col">
+			<p className="marketing-kicker mb-3">Trumbo Browser Run</p>
+			<h2 className="max-w-5xl font-heading text-[1.75rem] font-normal leading-[1.34] tracking-[-0.02em] text-foreground md:text-[2.125rem] lg:text-[2.375rem]">
+				Browse the web from your agent
+			</h2>
+			<p className="mt-5 max-w-5xl text-lg leading-relaxed text-muted-foreground md:max-w-6xl md:text-xl lg:max-w-none">
+				Trumbo Agent can take screenshots, fetch pages as Markdown, generate PDFs, and extract
+				structured data from any website, all running in a cloud browser. Built into the agent
+				on CLI and VS Code, included with your plan.
+			</p>
+		</div>
+	);
+}
+
+function AgentBrowserBanner() {
+	return (
+		<>
+			<div className="hidden border-b border-b-dotted border-grid-line md:flex md:items-stretch">
+				<div className={cn(marketingGridCellClass, "flex flex-1 flex-col justify-center !py-8")}>
+					<AgentBrowserBannerHeading />
+				</div>
+				<AgentGridPanel className="border-l border-dotted" rows={GRID_ROWS} cols={GRID_COLS} />
+			</div>
+			<div className="border-b border-b-dotted border-grid-line md:hidden">
+				<div className={cn(marketingGridCellClass, "!py-5")}>
+					<AgentBrowserBannerHeading />
+				</div>
+			</div>
+		</>
+	);
+}
+
+function AgentBrowserStepCard({
+	index,
+	icon: Icon,
+	tag,
+	description,
+	className,
+}: {
+	index: number;
+	icon: Icon;
+	tag: string;
+	description: string;
+	className?: string;
+}) {
+	return (
+		<div className={cn(marketingGridCellClass, "flex flex-col gap-3 !py-5 md:!py-6", className)}>
+			<div className="flex items-center gap-3">
+				<span className="font-stat text-[0.6875rem] tabular-nums tracking-[0.06em] text-muted-foreground/70">
+					{String(index + 1).padStart(2, "0")}
+				</span>
+				<span className="inline-flex items-center gap-2 font-stat text-xs uppercase tracking-[0.1em] text-brand">
+					<Icon size={14} weight="duotone" aria-hidden="true" />
+					{tag}
+				</span>
+			</div>
+			<p className="text-sm leading-relaxed text-muted-foreground md:text-[0.9375rem]">{description}</p>
+		</div>
+	);
+}
+
+function AgentBrowserStepsGrid() {
+	return (
+		<div className="grid grid-cols-1 md:grid-cols-3">
+			{BROWSER_STEPS.map((step, index) => (
+				<AgentBrowserStepCard
+					key={step.tag}
+					index={index}
+					icon={BROWSER_STEP_ICONS[index] ?? Globe}
+					tag={step.tag}
+					description={step.description}
+					className={cn(
+						index < BROWSER_STEPS.length - 1 &&
+							"border-b border-b-dotted border-grid-line md:border-b-0",
+						index > 0 && "border-t border-t-dotted border-grid-line md:border-t-0",
+						index < BROWSER_STEPS.length - 1 &&
+							"md:border-r md:border-r-solid md:border-grid-line",
+					)}
+				/>
+			))}
+		</div>
+	);
+}
+
+function AgentBrowserToolsPanel() {
+	return (
+		<>
+			<div className={cn(marketingGridCellClass, "flex flex-col justify-center !py-6 md:!py-8")}>
+				<p className="marketing-kicker mb-3">In-agent tools</p>
+				<h3 className="max-w-3xl font-heading text-[1.375rem] font-normal leading-[1.34] tracking-[-0.02em] text-foreground md:text-[1.625rem]">
+					Browser MCP tools on every surface
+				</h3>
+				<p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground md:text-[0.9375rem] lg:text-base">
+					The same tool names in the CLI and VS Code extension. Your agent calls them over MCP
+					while you stay in Plan or Act mode.
+				</p>
+			</div>
+			<div className="grid grid-cols-1 border-t border-t-dotted border-grid-line sm:grid-cols-2">
+				{BROWSER_MCP_TOOLS.map((tool, index) => {
+					const icons = [Camera, TextAa, Terminal, FilePdf] as const;
+					const Icon = icons[index] ?? Globe;
+					const labels = [
+						"Capture screenshots from any URL or rendered page.",
+						"Fetch pages as clean Markdown after JavaScript runs.",
+						"Pull fully rendered HTML content from live sites.",
+						"Generate PDFs with the same cloud browser session.",
+					] as const;
+
+					return (
+						<div
+							key={tool}
+							className={cn(
+								marketingGridCellClass,
+								"flex flex-col gap-3 !py-5 md:!py-6",
+								index < 2 && "border-b border-b-dotted border-grid-line sm:border-b-0",
+								index >= 2 && "border-t border-t-dotted border-grid-line sm:border-t-0",
+								index % 2 === 0 && "sm:border-r sm:border-r-solid sm:border-grid-line",
+							)}
+						>
+							<Icon size={20} weight="duotone" className="shrink-0 text-brand" aria-hidden="true" />
+							<code className="font-mono text-sm text-foreground">{tool}</code>
+							<p className="text-sm leading-relaxed text-muted-foreground md:text-[0.9375rem]">
+								{labels[index]}
+							</p>
+						</div>
+					);
+				})}
+			</div>
+		</>
+	);
+}
+
+function AgentBrowserFooter() {
+	return (
+		<div
+			className={cn(
+				marketingGridCellClass,
+				"flex flex-col gap-4 border-t border-t-dotted border-grid-line !py-5 md:flex-row md:items-center md:justify-between md:!py-6",
+			)}
+		>
+			<p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-[0.9375rem]">
+				Included on Pro, Max, and Ultra with per-tier browser minutes. Use browser tools from
+				the Trumbo CLI or VS Code extension after you sign in.
+			</p>
+			<div className="flex flex-wrap gap-3">
+				<Button
+					onClick={() => {
+						window.location.href = platformLink("/signup");
+					}}
+				>
+					Get started
+				</Button>
+				<Button
+					variant="outline"
+					onClick={() => {
+						window.location.href = "/pricing";
+					}}
+				>
+					See plan limits
+				</Button>
+			</div>
+		</div>
+	);
+}
+
 export function AgentBrowserSection() {
 	return (
 		<GridBox id="browser" className="scroll-mt-4 grid-cols-1 !border-t-0">
 			<GridBoxCell className="!p-0 md:!border-r-0">
-				<section className="mx-auto max-w-3xl px-6 py-16 md:py-24 text-center">
-					<p className="marketing-kicker mb-3">Trumbo Browser Run</p>
-					<h2 className="marketing-heading-2 mb-4">
-						Browse the web from your agent
-					</h2>
-					<p className="marketing-body-lg text-muted-foreground mb-8">
-						Trumbo Agent can take screenshots, fetch pages as Markdown, generate PDFs,
-						and extract structured data from any website, all running in a cloud browser.
-						No local Playwright setup, no browser dependencies, no headless Chrome to manage.
-					</p>
-					<div className="grid gap-4 text-left sm:grid-cols-2">
-						<div className="rounded-lg border border-grid-line p-5">
-							<p className="mb-1 text-sm font-semibold">In-agent (subscription)</p>
-							<p className="text-sm text-muted-foreground">
-								Use browser_screenshot, browser_markdown, browser_content, and browser_pdf
-								MCP tools directly from the CLI or VS Code. Covered by your plan's browser
-								minutes (Pro: 100 min/mo, Max: 500, Ultra: 2000).
-							</p>
-						</div>
-						<div className="rounded-lg border border-grid-line p-5">
-							<p className="mb-1 text-sm font-semibold">Standalone API (credits)</p>
-							<p className="text-sm text-muted-foreground">
-								Call the REST API directly from any script or service. Billed per
-								browser-minute via pre-paid credits (25 credits/min). Create API tokens
-								from the platform dashboard.
-							</p>
-						</div>
-					</div>
-				</section>
+				<AgentBrowserBanner />
+				<AgentCapabilitiesGridFrame edge="top" />
+				<AgentBrowserStepsGrid />
+				<AgentBrowserToolsPanel />
+				<AgentCapabilitiesGridFrame edge="bottom" />
+				<AgentBrowserFooter />
 			</GridBoxCell>
 		</GridBox>
 	);

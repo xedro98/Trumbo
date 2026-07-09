@@ -57,7 +57,7 @@ export const STATIC_PAGE_SEO: Record<string, PageSEOConfig> = {
 	"/pricing": {
 		title: "Pricing",
 		description:
-			"Flat monthly plans with rate limits, not per-token billing. Every tier includes the full CLI, Quartz reasoning, and 210+ hosted open models.",
+			"Personal plans from $20/month, team plans from $40/seat/month, and Enterprise with custom limits. Flat-rate billing with no per-token charges.",
 	},
 	"/company": {
 		title: "Company",

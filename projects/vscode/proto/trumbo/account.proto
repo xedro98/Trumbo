@@ -115,6 +115,11 @@ message GetCurrentPlanResponse {
   optional PlanRateLimitWindow five_hour = 11;
   optional PlanRateLimitWindow daily = 12;
   optional PlanRateLimitWindow weekly = 13;
+  // Billing scope for the active account: "individual" (personal) or "per_seat" (team).
+  optional string billing_model = 14;
+  optional int32 seat_count = 15;
+  optional int32 member_count = 16;
+  optional int32 pending_invite_count = 17;
 }
 
 message PlanRateLimitWindow {

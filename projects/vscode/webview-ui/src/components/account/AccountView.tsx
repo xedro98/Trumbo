@@ -5,15 +5,15 @@ import { VSCodeButton, VSCodeDivider, VSCodeDropdown, VSCodeOption, VSCodeTag } 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useInterval } from "react-use"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { type TrumboUser, handleSignOut } from "@/context/TrumboAuthContext"
 import { useExtensionState } from "@/context/ExtensionStateContext"
+import { handleSignOut, type TrumboUser } from "@/context/TrumboAuthContext"
 import { AccountServiceClient } from "@/services/grpc-client"
 import ViewHeader from "../common/ViewHeader"
 import VSCodeButtonLink from "../common/VSCodeButtonLink"
 import { updateSetting } from "../settings/utils/settingsHandlers"
 import { AccountWelcomeView } from "./AccountWelcomeView"
+import { getMainRole, getTrumboUris, isAdminOrOwner } from "./helpers"
 import { PlanUsage } from "./PlanUsage"
-import { getTrumboUris, getMainRole } from "./helpers"
 import { RemoteConfigToggle } from "./RemoteConfigToggle"
 
 type AccountViewProps = {
@@ -47,9 +47,9 @@ const AccountView = ({ onDone, trumboUser, organizations, activeOrganization }: 
 				{trumboUser?.uid ? (
 					<TrumboAccountView
 						activeOrganization={activeOrganization}
+						key={trumboUser.uid}
 						trumboEnv={environment === "local" ? "Local" : environment === "staging" ? "Staging" : "Production"}
 						trumboUser={trumboUser}
-						key={trumboUser.uid}
 						userOrganizations={organizations}
 					/>
 				) : (
@@ -149,8 +149,8 @@ const TrumboAccountView = ({ trumboUser, userOrganizations, activeOrganization, 
 	)
 
 	const handleOrganizationChange = useCallback(
-		async (event: any) => {
-			const target = event.target as HTMLSelectElement
+		async (event: React.ChangeEvent<HTMLSelectElement>) => {
+			const target = event.target
 			if (!target) {
 				return
 			}
@@ -200,6 +200,15 @@ const TrumboAccountView = ({ trumboUser, userOrganizations, activeOrganization, 
 
 	const trumboUrl = appBaseUrl || "https://platform.trumbo.dev"
 
+	const selectedOrganization = useMemo(() => {
+		if (dropdownValue === uid) {
+			return null
+		}
+		return userOrganizations?.find((org) => org.organizationId === dropdownValue) ?? null
+	}, [dropdownValue, uid, userOrganizations])
+
+	const canManageBilling = dropdownValue === uid || (selectedOrganization != null && isAdminOrOwner(selectedOrganization))
+
 	// Fetch plan on mount
 	useEffect(() => {
 		async function initialFetch() {
@@ -207,7 +216,7 @@ const TrumboAccountView = ({ trumboUser, userOrganizations, activeOrganization, 
 			initialFetchCompleteRef.current = true
 		}
 		initialFetch()
-	}, [])
+	}, [dropdownValue, fetchPlan])
 
 	// Refetch the plan when the panel regains visibility/focus, so a subscription
 	// upgrade completed in the browser (e.g. on /billing) is reflected here
@@ -288,15 +297,7 @@ const TrumboAccountView = ({ trumboUser, userOrganizations, activeOrganization, 
 				clearTimeout(debounceTimeoutRef.current)
 			}
 		}
-	}, [
-		activeOrganization?.organizationId,
-		lastActiveOrgId,
-		uid,
-		dropdownValue,
-		loadCachedData,
-		fetchPlan,
-		cacheCurrentData,
-	])
+	}, [activeOrganization?.organizationId, lastActiveOrgId, uid, dropdownValue, loadCachedData, fetchPlan, cacheCurrentData])
 
 	return (
 		<div className="h-full flex flex-col">
@@ -353,7 +354,10 @@ const TrumboAccountView = ({ trumboUser, userOrganizations, activeOrganization, 
 
 				<div className="w-full flex gap-2 flex-col min-[225px]:flex-row">
 					<div className="w-full min-[225px]:w-1/2">
-						<VSCodeButtonLink appearance="primary" className="w-full" href={getTrumboUris(trumboUrl, "dashboard").href}>
+						<VSCodeButtonLink
+							appearance="primary"
+							className="w-full"
+							href={getTrumboUris(trumboUrl, "dashboard").href}>
 							Dashboard
 						</VSCodeButtonLink>
 					</div>
@@ -365,11 +369,12 @@ const TrumboAccountView = ({ trumboUser, userOrganizations, activeOrganization, 
 				<VSCodeDivider className="w-full my-6" />
 
 				<PlanUsage
-					plan={plan}
 					billingUrl={getTrumboUris(trumboUrl, "billing")}
+					canManageBilling={canManageBilling}
 					fetchPlan={() => fetchPlan(dropdownValue)}
 					isLoading={isLoading}
 					lastFetchTime={lastFetchTime}
+					plan={plan}
 				/>
 
 				{/* Hide environment switching UI when in self-hosted mode */}

@@ -33,6 +33,7 @@ export async function getCurrentPlan(controller: Controller, _request: EmptyRequ
 
 		const sub = plan.subscription
 		const rl = plan.rateLimits
+		const billing = plan.billing
 
 		return GetCurrentPlanResponse.create({
 			planTier: plan.planTier ?? plan.plan?.tier,
@@ -42,6 +43,10 @@ export async function getCurrentPlan(controller: Controller, _request: EmptyRequ
 			currentPeriodStart: sub?.currentPeriodStart,
 			currentPeriodEnd: sub?.currentPeriodEnd,
 			subscriptionId: sub?.id,
+			billingModel: billing?.model,
+			seatCount: billing?.seatCount ?? undefined,
+			memberCount: billing?.memberCount ?? undefined,
+			pendingInviteCount: billing?.pendingInviteCount ?? undefined,
 			fiveHour: toWindow(rl?.fiveHour),
 			daily: toWindow(rl?.daily),
 			weekly: toWindow(rl?.weekly),

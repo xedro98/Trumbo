@@ -6,9 +6,9 @@ import {
 	type ProviderSettings,
 	ProviderSettingsManager,
 	removePlatformKnowledgeMcpServer,
+	resolveActiveOrganizationIdFromUser,
 	saveLocalProviderOAuthCredentials,
 	syncPlatformKnowledgeMcpServer,
-	resolveActiveOrganizationIdFromUser,
 	type TrumboAccountBalance,
 	type TrumboAccountOrganization,
 	type TrumboAccountOrganizationBalance,
@@ -340,7 +340,7 @@ export async function switchTrumboAccount(input: {
 	});
 }
 
-export async function loadIndividualSubscriptionPlans(input: {
+export async function loadSubscriptionPlans(input: {
 	config: TrumboAccountConfig;
 	trumboApiBaseUrl?: string;
 	trumboProviderSettings?: ProviderSettings;
@@ -349,7 +349,16 @@ export async function loadIndividualSubscriptionPlans(input: {
 	if (!service) {
 		throw new Error("No Trumbo account auth token found");
 	}
-	return service.fetchAvailableSubscriptionPlans({ type: "individual" });
+	return service.fetchAvailableSubscriptionPlans();
+}
+
+/** @deprecated Use loadSubscriptionPlans — plans are scope-aware via X-Org-Id. */
+export async function loadIndividualSubscriptionPlans(input: {
+	config: TrumboAccountConfig;
+	trumboApiBaseUrl?: string;
+	trumboProviderSettings?: ProviderSettings;
+}): Promise<TrumboSubscriptionPlan[]> {
+	return loadSubscriptionPlans(input);
 }
 
 export async function loadCurrentUserPlan(input: {
@@ -379,7 +388,7 @@ export async function loadCurrentUserPlanFromProviderSettings(input: {
 	return service.fetchCurrentUserPlan();
 }
 
-export async function loadIndividualSubscriptionPlansFromProviderSettings(input: {
+export async function loadSubscriptionPlansFromProviderSettings(input: {
 	providerSettingsManager: ProviderSettingsManager;
 	trumboApiBaseUrl?: string;
 }): Promise<TrumboSubscriptionPlan[]> {
@@ -391,7 +400,15 @@ export async function loadIndividualSubscriptionPlansFromProviderSettings(input:
 	if (!service) {
 		throw new Error("No Trumbo account auth token found");
 	}
-	return service.fetchAvailableSubscriptionPlans({ type: "individual" });
+	return service.fetchAvailableSubscriptionPlans();
+}
+
+/** @deprecated Use loadSubscriptionPlansFromProviderSettings. */
+export async function loadIndividualSubscriptionPlansFromProviderSettings(input: {
+	providerSettingsManager: ProviderSettingsManager;
+	trumboApiBaseUrl?: string;
+}): Promise<TrumboSubscriptionPlan[]> {
+	return loadSubscriptionPlansFromProviderSettings(input);
 }
 
 async function onChangeToTrumboPass(config: TrumboAccountConfig) {

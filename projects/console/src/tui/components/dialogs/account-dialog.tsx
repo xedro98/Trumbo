@@ -535,6 +535,20 @@ export function AccountDialogContent(
 					label="Plan"
 					value={loaded.currentPlan?.plan?.displayName ?? "Free"}
 				/>
+				{loaded.currentPlan?.billing?.model === "per_seat" &&
+					typeof loaded.currentPlan.billing.seatCount === "number" && (
+						<AccountField
+							label="Licensed seats"
+							value={String(loaded.currentPlan.billing.seatCount)}
+						/>
+					)}
+				{loaded.currentPlan?.billing?.model === "per_seat" &&
+					typeof loaded.currentPlan.billing.memberCount === "number" && (
+						<AccountField
+							label="Members"
+							value={String(loaded.currentPlan.billing.memberCount)}
+						/>
+					)}
 				{loaded.currentPlan?.rateLimits?.fiveHour && (
 					<AccountField
 						label="5h usage"
