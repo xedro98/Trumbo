@@ -201,7 +201,9 @@ export function SessionProvider(props: {
 	const setCompactionMode = useCallback(
 		(mode: CliCompactionMode) => {
 			_setCompactionMode(mode);
-			void onCompactionModeChange(mode);
+			void onCompactionModeChange(mode).catch(() => {
+				// Runtime logs compaction restart failures; avoid unhandled rejections.
+			});
 		},
 		[onCompactionModeChange],
 	);

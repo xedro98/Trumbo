@@ -441,7 +441,7 @@ const nativeZaiGlmThinkingRule: ProviderOptionRule = {
 	phase: "model-overlay",
 	description: "Providers routed to the GLM thinking format use thinking.type.",
 	applies: usesGlmThinkingProviderRouting,
-	suppresses: { genericThinking: true },
+	suppresses: { genericThinking: true, genericEffort: true },
 	build: (input) =>
 		buildNativeGlmThinkingProviderOptionsPatch(
 			input.request,
@@ -470,7 +470,7 @@ const routedGlmReasoningRule: ProviderOptionRule = {
 	applies: (input) =>
 		!usesGlmThinkingProviderRouting(input) &&
 		isGlmModel(input.request, input.context),
-	suppresses: { genericThinking: true },
+	suppresses: { genericThinking: true, genericEffort: true },
 	build: (input) =>
 		buildRoutedGlmReasoningProviderOptionsPatch(
 			input.request,

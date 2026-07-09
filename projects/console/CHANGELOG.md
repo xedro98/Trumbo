@@ -11,6 +11,14 @@
 
 
 
+## 3.0.59
+
+- fix: CLI no longer crashes when switching Plan/Act mode, changing model, or toggling compaction during an active run
+- fix: mode and model change failures show a TUI toast instead of triggering a fatal unhandled rejection exit
+- fix: session reconfigs (model, account, compaction, policy refresh) are serialized and deferred until the current turn finishes
+- fix: pending Plan/Act switches from Tab or `switch_to_act_mode` now apply correctly after abort or turn completion
+- fix: GLM 5.2 routes effort through `reasoning_effort` instead of sending unsupported `effort` / `reasoningSummary` fields
+
 ## 3.0.58
 
 Platform companion release: sandbox delete fix, MCP API token auth, expanded API token scopes

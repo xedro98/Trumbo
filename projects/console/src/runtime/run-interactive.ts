@@ -54,6 +54,7 @@ import {
 import { createMistakeLimitDecisionResolver } from "./interactive/mistakes";
 import { createInteractiveModeSwitchTool } from "./interactive/mode";
 import { assertInteractivePreflight } from "./interactive/preflight";
+import { createReconfigScheduler } from "./interactive/reconfig-scheduler";
 import { createInteractiveSessionRuntime } from "./interactive/session-runtime";
 import { buildUserInputMessage } from "./prompt";
 import { getUIEventEmitter } from "./session-events";
@@ -202,45 +203,57 @@ export async function runInteractive(
 			uiEvents.emit("pending-prompt-submitted", event);
 		},
 	});
-	let modeChangePromise: Promise<void> | undefined;
-	let modeChangeTarget: "plan" | "act" | undefined;
-
 	const isInteractiveMode = (mode: unknown): mode is "plan" | "act" =>
 		mode === "plan" || mode === "act";
 
-	const applyModeChange = (mode: "plan" | "act"): Promise<void> => {
-		if (modeChangePromise && modeChangeTarget === mode) {
-			return modeChangePromise;
-		}
-		let next: Promise<void>;
-		next = (async () => {
-			if (modeChangePromise) {
-				await modeChangePromise;
-			}
+	let isRunning = false;
+	const reconfigScheduler = createReconfigScheduler({
+		isRunning: () => isRunning,
+		isShutdown: () => sessionRuntime.isShutdownRequested(),
+	});
+
+	const notifyModeChange = (mode: "plan" | "act"): void => {
+		tuiModeChanged.current?.(mode);
+	};
+
+	const revertModeUi = (): void => {
+		notifyModeChange(config.mode === "plan" ? "plan" : "act");
+	};
+
+	const applyModeChange = (mode: "plan" | "act"): Promise<void> =>
+		reconfigScheduler.runSerialized(async () => {
 			await sessionRuntime.ensureReady();
 			await sessionRuntime.applyMode(mode);
-		})().finally(() => {
-			if (modeChangePromise === next) {
-				modeChangePromise = undefined;
-				modeChangeTarget = undefined;
-			}
 		});
-		modeChangePromise = next;
-		modeChangeTarget = mode;
-		return next;
+
+	const flushPendingModeChange = async (): Promise<void> => {
+		if (!pendingModeChange.current) {
+			return;
+		}
+		const newMode = pendingModeChange.current;
+		pendingModeChange.current = null;
+		try {
+			await applyModeChange(newMode);
+			notifyModeChange(newMode);
+		} catch (error) {
+			pendingModeChange.current = newMode;
+			revertModeUi();
+			logCliError(config.logger, "Interactive mode change failed", {
+				error,
+				mode: newMode,
+			});
+			writeErr(error instanceof Error ? error.message : String(error));
+		}
 	};
 
 	const waitForSubmittedMode = async (mode: unknown): Promise<void> => {
 		if (!isInteractiveMode(mode)) return;
-		if (modeChangePromise) {
-			await modeChangePromise;
-		}
+		await reconfigScheduler.waitForIdle();
 		if (config.mode !== mode) {
 			await applyModeChange(mode);
 		}
 	};
 
-	let isRunning = false;
 	setActiveRuntimeAbort(sessionRuntime.abortAll);
 
 	let cleanupPromise: Promise<InteractiveExitSummary | undefined> | undefined;
@@ -310,14 +323,15 @@ export async function runInteractive(
 			return await sessionPolicyRefresh;
 		}
 		pendingSessionPolicyRefresh = false;
-		sessionPolicyRefresh = (async () => {
-			await sessionRuntime.ensureReady();
-			if (isRunning || sessionRuntime.isShutdownRequested()) {
-				pendingSessionPolicyRefresh = isRunning;
-				return;
-			}
-			await sessionRuntime.restartWithCurrentMessages();
-		})()
+		sessionPolicyRefresh = reconfigScheduler
+			.runSerialized(async () => {
+				await sessionRuntime.ensureReady();
+				if (isRunning || sessionRuntime.isShutdownRequested()) {
+					pendingSessionPolicyRefresh = isRunning;
+					return;
+				}
+				await sessionRuntime.restartWithCurrentMessages();
+			})
 			.catch((error) => {
 				logCliError(config.logger, "Interactive policy refresh failed", {
 					error,
@@ -329,10 +343,13 @@ export async function runInteractive(
 			});
 		return await sessionPolicyRefresh;
 	};
-	const refreshInteractiveSessionPoliciesIfPending = (): void => {
+	const flushDeferredInteractiveWork = (): void => {
+		void flushPendingModeChange();
 		if (pendingSessionPolicyRefresh) {
+			pendingSessionPolicyRefresh = false;
 			void refreshInteractiveSessionPolicies();
 		}
+		reconfigScheduler.flushPending();
 	};
 
 	const shouldRefreshInteractiveSessionForConfigItem = (
@@ -531,15 +548,6 @@ export async function runInteractive(
 					...userImages,
 				];
 
-				const applyPendingModeChange = async () => {
-					if (!pendingModeChange.current) return undefined;
-					const newMode = pendingModeChange.current;
-					pendingModeChange.current = null;
-					await sessionRuntime.applyMode(newMode);
-					tuiModeChanged.current?.(newMode);
-					return newMode;
-				};
-
 				const result = await sessionRuntime.sendCurrentTurn({
 					prompt: userInput,
 					mode,
@@ -549,7 +557,7 @@ export async function runInteractive(
 					delivery,
 				});
 
-				await applyPendingModeChange();
+				await flushPendingModeChange();
 
 				if (!result) {
 					return {
@@ -610,7 +618,7 @@ export async function runInteractive(
 				if (!delivery) {
 					isRunning = false;
 					clearAbortInProgress();
-					refreshInteractiveSessionPoliciesIfPending();
+					flushDeferredInteractiveWork();
 				}
 			}
 		},
@@ -635,7 +643,7 @@ export async function runInteractive(
 			isRunning = running;
 			if (!running) {
 				sessionRuntime.resetAbortRequest();
-				refreshInteractiveSessionPoliciesIfPending();
+				flushDeferredInteractiveWork();
 			}
 		},
 		onTurnErrorReported: () => {},
@@ -644,58 +652,103 @@ export async function runInteractive(
 			void refreshInteractiveSessionPolicies();
 		},
 		onCompactionModeChange: async (mode) => {
-			await sessionRuntime.ensureReady();
 			applyCliCompactionMode(config, mode);
-			await sessionRuntime.restartWithCurrentMessages();
+			await reconfigScheduler.enqueueWhenIdle(async () => {
+				try {
+					await sessionRuntime.ensureReady();
+					await sessionRuntime.restartWithCurrentMessages();
+				} catch (error) {
+					logCliError(
+						config.logger,
+						"Interactive compaction mode change failed",
+						{
+							error,
+							mode,
+						},
+					);
+					writeErr(error instanceof Error ? error.message : String(error));
+				}
+			});
 		},
 		onModeChange: async (mode) => {
 			if (!isInteractiveMode(mode)) return;
+			if (config.mode === mode) return;
 			if (isRunning) {
 				pendingModeChange.current = mode;
 				sessionRuntime.abortAll();
 				return;
 			}
-			await applyModeChange(mode);
+			try {
+				await applyModeChange(mode);
+				notifyModeChange(mode);
+			} catch (error) {
+				revertModeUi();
+				logCliError(config.logger, "Interactive mode change failed", {
+					error,
+					mode,
+				});
+				throw error;
+			}
 		},
 		onNewSession: async () => {
 			await sessionRuntime.resetForNewSession();
 		},
 		onModelChange: async () => {
-			await sessionRuntime.ensureReady();
-			await onProviderChange({
-				config,
-				providerId: config.providerId,
+			await reconfigScheduler.enqueueWhenIdle(async () => {
+				try {
+					await sessionRuntime.ensureReady();
+					await onProviderChange({
+						config,
+						providerId: config.providerId,
+					});
+					const existing = providerSettingsManager.getProviderSettings(
+						config.providerId,
+					) ?? {
+						provider: config.providerId,
+					};
+					const reasoning = resolveReasoningForModelChange(config, existing);
+					providerSettingsManager.saveProviderSettings({
+						...existing,
+						model: config.modelId,
+						...(reasoning === undefined ? {} : { reasoning }),
+					});
+					await sessionRuntime.restartWithCurrentMessages();
+				} catch (error) {
+					logCliError(config.logger, "Interactive model change failed", {
+						error,
+						providerId: config.providerId,
+						modelId: config.modelId,
+					});
+					writeErr(error instanceof Error ? error.message : String(error));
+				}
 			});
-			const existing = providerSettingsManager.getProviderSettings(
-				config.providerId,
-			) ?? {
-				provider: config.providerId,
-			};
-			const reasoning = resolveReasoningForModelChange(config, existing);
-			providerSettingsManager.saveProviderSettings({
-				...existing,
-				model: config.modelId,
-				...(reasoning === undefined ? {} : { reasoning }),
-			});
-			await sessionRuntime.restartWithCurrentMessages();
 		},
 		onSessionRestart: async () => {
 			await sessionRuntime.ensureReady();
 			await sessionRuntime.restartEmpty();
 		},
 		onAccountChange: async () => {
-			await sessionRuntime.ensureReady();
-			await loadTrumboAccountSnapshot({
-				config,
-				trumboApiBaseUrl: options?.trumboApiBaseUrl,
-			}).catch((error) => {
-				logCliError(
-					config.logger,
-					"Trumbo account refresh after account change failed",
-					{ error },
-				);
+			await reconfigScheduler.enqueueWhenIdle(async () => {
+				try {
+					await sessionRuntime.ensureReady();
+					await loadTrumboAccountSnapshot({
+						config,
+						trumboApiBaseUrl: options?.trumboApiBaseUrl,
+					}).catch((error) => {
+						logCliError(
+							config.logger,
+							"Trumbo account refresh after account change failed",
+							{ error },
+						);
+					});
+					await sessionRuntime.restartWithCurrentMessages();
+				} catch (error) {
+					logCliError(config.logger, "Interactive account change failed", {
+						error,
+					});
+					writeErr(error instanceof Error ? error.message : String(error));
+				}
 			});
-			await sessionRuntime.restartWithCurrentMessages();
 		},
 		onResumeSession: async (sessionId: string) => {
 			await sessionRuntime.ensureReady();

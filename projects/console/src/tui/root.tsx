@@ -174,14 +174,28 @@ function App(props: TuiProps) {
 	);
 
 	const toggleMode = useCallback(() => {
-		const newMode = session.uiMode === "act" ? "plan" : "act";
+		const previousMode = session.uiMode;
+		const newMode = previousMode === "act" ? "plan" : "act";
 		session.toggleMode();
-		void props.onModeChange(newMode);
-	}, [props, session]);
+		void props.onModeChange(newMode).catch((error) => {
+			session.setUiMode(previousMode);
+			showToast(
+				error instanceof Error ? error.message : String(error),
+				"error",
+			);
+		});
+	}, [props, session, showToast]);
 
 	const handleModelChange = useCallback(async () => {
-		await props.onModelChange();
-	}, [props]);
+		try {
+			await props.onModelChange();
+		} catch (error) {
+			showToast(
+				error instanceof Error ? error.message : String(error),
+				"error",
+			);
+		}
+	}, [props, showToast]);
 
 	const openModelSelector = useModelSelector({
 		dialog,
