@@ -10,6 +10,11 @@
 # Trumbo CLI Changelog
 
 
+
+## 3.0.58
+
+Platform companion release: sandbox delete fix, MCP API token auth, expanded API token scopes
+
 ## 3.0.57
 
 - Trumbo Cloud Agents: create, manage, and chat with persistent cloud agents via `agent_*` MCP tools (auto-discovered when you sign in)
