@@ -1,7 +1,6 @@
 import { Tabs } from "@cloudflare/kumo";
 import { useState } from "react";
 import { CopyCommand } from "@/components/CopyCommand";
-import { PLATFORM_URL } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
 const INSTALL_SH_URL =
@@ -34,6 +33,18 @@ const INSTALL_TABS: InstallTab[] = [
 	},
 ];
 
+// Auto-detect the visitor's OS and pick the install method that needs no
+// prerequisites: PowerShell on Windows, curl on macOS/Linux. These download
+// the self-contained binary directly (no Node, no npm allow-scripts gating).
+// Falls back to npm when detection isn't possible.
+function detectDefaultInstallTab(): string {
+	if (typeof navigator === "undefined") return "npm";
+	const ua = navigator.userAgent || navigator.platform || "";
+	if (/win/i.test(ua)) return "powershell";
+	if (/mac|linux|freebsd|x11/i.test(ua)) return "curl";
+	return "npm";
+}
+
 interface InstallCommandTabsProps {
 	className?: string;
 	defaultTabId?: string;
@@ -41,9 +52,11 @@ interface InstallCommandTabsProps {
 
 export function InstallCommandTabs({
 	className,
-	defaultTabId = "npm",
+	defaultTabId,
 }: InstallCommandTabsProps) {
-	const [tab, setTab] = useState(defaultTabId);
+	const [tab, setTab] = useState(
+		() => defaultTabId ?? detectDefaultInstallTab(),
+	);
 	const active =
 		INSTALL_TABS.find((item) => item.id === tab) ?? INSTALL_TABS[0];
 
@@ -69,21 +82,6 @@ export function InstallCommandTabs({
 					className="border-0 bg-transparent"
 				/>
 			</div>
-			{tab === "npm" && (
-				<p className="mt-2 px-1 text-xs text-muted-foreground">
-					On Windows, add{" "}
-					<code className="font-mono text-muted-foreground">
-						--allow-scripts=@trumbodev/cli
-					</code>{" "}
-					for smoother upgrades, and close any running Trumbo before upgrading.{" "}
-					<a
-						href={`${PLATFORM_URL}/docs/getting-started/installing-trumbo#upgrading`}
-						className="underline underline-offset-2 hover:text-foreground"
-					>
-						Upgrade guide
-					</a>
-				</p>
-			)}
 		</div>
 	);
 }
