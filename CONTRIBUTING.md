@@ -1,11 +1,39 @@
 <div align="center">
 <pre>
-████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
-╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
-   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
-   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
-   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
-   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++
++++++                                  ++++++
++++++                                  ++++++
++++++    +++++++++++++++++++++++++++++++++++++++++++++
++++++    +++++++++++++++++++++++++++++++++++++++++++++
++++++    +++++++++++++++++++++++++++++++++++++++++++++
++++++    ++++++                                 ++++++
++++++    ++++++                                 ++++++
++++++    ++++++   +++++++++++++++++++++++++++++++++++++++++++++
++++++    ++++++   +++++++++++++++++++++++++++++++++++++++++++++
++++++    ++++++   +++++++++++++++++++++++++++++++++++++++++++++
++++++    ++++++   ++++++                                  +++++
++++++    ++++++   ++++++                                  +++++
++++++    ++++++   ++++++     +++++++                      +++++
++++++++++++++++   ++++++    +++++++++                     +++++
++++++++++++++++   ++++++    ++++++++++                    +++++
++++++++++++++++   ++++++    ++++++++++                    +++++
+         ++++++   ++++++     ++++++++                     +++++
+         ++++++   ++++++                                  +++++
+         +++++++++++++++                                  +++++
+         +++++++++++++++                                  +++++
+         +++++++++++++++                                 ++++++
+                  ++++++                                 ++++++
+                  ++++++                                +++++++
+                  +++++++++++++++                      +++++++
+                  +++++++++++++++                     +++++++
+                  +++++++++++++++                    ++++++++
+                            +++++                 +++++++++
+                            +++++              ++++++++++
+                            +++++++++++++++++++++++++++
+                            ++++++++++++++++++++++++
+                            ++++++++++++++++++++
 </pre>
 </div>
 
@@ -15,15 +43,15 @@ Thanks for your interest in Trumbo. This guide covers how to report issues, set 
 
 ## Reporting bugs
 
-Before opening a new issue, [search existing ones](https://github.com/xedro98/trembo/issues) to avoid duplicates. When you're ready, [open a new issue](https://github.com/xedro98/trembo/issues/new/choose) and fill in the template.
+Before opening a new issue, [search existing ones](https://github.com/xedro98/Trumbo/issues) to avoid duplicates. When you're ready, [open a new issue](https://github.com/xedro98/Trumbo/issues/new/choose) and fill in the template.
 
-> **Security:** If you find a security vulnerability, do **not** open a public issue. Report it privately via [GitHub Security Advisories](https://github.com/xedro98/trembo/security/advisories/new). See [SECURITY.md](SECURITY.md).
+> **Security:** If you find a security vulnerability, do **not** open a public issue. Report it privately via [GitHub Security Advisories](https://github.com/xedro98/Trumbo/security/advisories/new). See [SECURITY.md](SECURITY.md).
 
 ## Before you build a feature
 
 All non-trivial changes start with a GitHub issue:
 
-1. Check the [Discussions](https://github.com/xedro98/trembo/discussions) for similar ideas.
+1. Check the [Discussions](https://github.com/xedro98/Trumbo/discussions) for similar ideas.
 2. If your idea is new, open a feature request.
 3. Wait for a maintainer to ack it before implementing.
 4. Open a PR once it's approved.
@@ -32,7 +60,7 @@ PRs that change behavior without an approved issue may be closed.
 
 ## Finding something to work on
 
-Look for issues labeled [`good first issue`](https://github.com/xedro98/trembo/labels/good%20first%20issue) or [`help wanted`](https://github.com/xedro98/trembo/labels/help%20wanted). Docs improvements are always welcome — browse [`book/`](./docs) and send a PR.
+Look for issues labeled [`good first issue`](https://github.com/xedro98/Trumbo/labels/good%20first%20issue) or [`help wanted`](https://github.com/xedro98/Trumbo/labels/help%20wanted). Docs improvements are always welcome — browse [`book/`](./book) and send a PR.
 
 ## Development setup
 
@@ -45,15 +73,15 @@ Look for issues labeled [`good first issue`](https://github.com/xedro98/trembo/l
 ### Clone and install
 
 ```bash
-git clone https://github.com/xedro98/trembo.git
-cd trumbo
+git clone https://github.com/xedro98/Trumbo.git
+cd Trumbo
 bun install
 ```
 
 ### Build the SDK (required before first run)
 
 ```bash
-cd sdk && bun run build && cd ..
+bun run build:sdk
 ```
 
 ### Run the CLI
