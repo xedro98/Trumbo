@@ -11,6 +11,19 @@
 
 
 
+## 3.4.0
+
+Wiring follow-ups + MCP token expiry fix.
+
+### New features
+- **Pre-execution diff preview**: the approval dialog now shows a red/green diff of proposed file changes before you approve an edit. Computed in-memory (no write) for `editor`/`edit`/`write` tools.
+- **TUI view contributions**: plugin-contributed footer views (from the `tui` capability + `registerView` API) now render below the status bar in the chat view. A descriptor interpreter (`plugin-views.tsx`) translates serializable render descriptors to React elements.
+- **`/reload` is real**: clears the theme cache, refreshes skills/rules/workflows from disk, and re-syncs the platform MCP token.
+- **Sticky column in the editor**: the editor now preserves your visual column when moving up/down across lines of different length (Emacs-style `preferredCol` behavior). Cleared on character input.
+
+### Bug fixes
+- **MCP token never expires**: the `trumbo-platform` MCP server's bearer token is now refreshed and rewritten to `trumbo_mcp_settings.json` at startup, on model change, on account change, and on `/reload`. Previously the token was written once at sign-in with a 1-hour expiry and never refreshed, causing the MCP server to show an OAuth error after 1 hour.
+
 ## 3.3.1
 
 Fix: compiled CLI binary now correctly resolves to the production environment.

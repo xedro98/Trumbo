@@ -165,6 +165,31 @@ export function ToolApprovalContent(
 				</box>
 			)}
 
+			{props.request.diffPreview && (
+				<box flexDirection="column" marginTop={1}>
+					<text fg="gray">
+						<em>Proposed changes:</em>
+					</text>
+					<box flexDirection="column" paddingLeft={1}>
+						{props.request.diffPreview.split("\n").map((line, i) => (
+							<text
+								key={i}
+								fg={
+									line.startsWith("-")
+										? "red"
+										: line.startsWith("+")
+											? palette.success
+											: "gray"
+								}
+								selectable
+							>
+								{line || " "}
+							</text>
+						))}
+					</box>
+				</box>
+			)}
+
 			<text marginTop={1}>
 				<span fg={palette.success}>[y]</span> approve{"  "}
 				<span fg="red">[n]</span> deny

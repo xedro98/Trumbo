@@ -240,6 +240,30 @@ function ToolApprovalResponse(
 						{params}
 					</box>
 				)}
+				{request.diffPreview && (
+					<box flexDirection="column" overflow="hidden">
+						<text fg="gray">
+							<em>Proposed changes:</em>
+						</text>
+						<box flexDirection="column" paddingLeft={1}>
+							{request.diffPreview.split("\n").map((line, i) => (
+								<text
+									key={i}
+									fg={
+										line.startsWith("-")
+											? "red"
+											: line.startsWith("+")
+												? palette.success
+												: "gray"
+									}
+									selectable
+								>
+									{line || " "}
+								</text>
+							))}
+						</box>
+					</box>
+				)}
 			</box>
 			<box flexDirection="row" gap={1}>
 				<ChoiceButton

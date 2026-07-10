@@ -184,6 +184,7 @@ export interface TuiProps {
 	onRenameSession: (name: string) => Promise<boolean>;
 	onReloadConfig: () => Promise<void>;
 	onTrustWorkspace: () => Promise<void>;
+	pluginViews?: import("@trumbo/shared").TuiViewContribution[];
 	onOpenExternalEditor: (currentText: string) => Promise<string | undefined>;
 	getCheckpointData: () => Promise<
 		{ messages: Message[]; checkpointHistory: CheckpointEntry[] } | undefined

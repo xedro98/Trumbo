@@ -19,8 +19,8 @@ export interface PluginSlashCommand {
 
 export interface WorkspaceChatCommandHostResult {
 	host: ChatCommandHost;
-	// Plugin-registered commands surfaced as slash commands for TUI autocomplete.
 	pluginSlashCommands: PluginSlashCommand[];
+	pluginViews?: import("@trumbo/shared").TuiViewContribution[];
 	shutdown?: () => Promise<void>;
 }
 
@@ -98,13 +98,7 @@ export async function createWorkspaceChatCommandHost(input: {
 		input.logger?.log(
 			`plugin command loading failed; continuing without plugin commands (${message})`,
 		);
-		return { host: chatCommandHost, pluginSlashCommands: [] };
-	}
-	if (!loaded.extensions.length) {
-		await loaded.shutdown?.().catch(() => {
-			// Best effort cleanup when no command-capable plugins were loaded.
-		});
-		return { host: chatCommandHost, pluginSlashCommands: [] };
+		return { host: chatCommandHost, pluginSlashCommands: [], pluginViews: [] };
 	}
 
 	const registry = createContributionRegistry<
@@ -124,7 +118,7 @@ export async function createWorkspaceChatCommandHost(input: {
 		await loaded.shutdown?.().catch(() => {
 			// Best effort cleanup after failed command discovery.
 		});
-		return { host: chatCommandHost, pluginSlashCommands: [] };
+		return { host: chatCommandHost, pluginSlashCommands: [], pluginViews: [] };
 	}
 
 	const host = chatCommandHost.clone();
@@ -143,5 +137,11 @@ export async function createWorkspaceChatCommandHost(input: {
 			});
 		}
 	}
-	return { host, pluginSlashCommands, shutdown: loaded.shutdown };
+	const snapshot = registry.getRegistrySnapshot();
+	return {
+		host,
+		pluginSlashCommands,
+		pluginViews: snapshot.views,
+		shutdown: loaded.shutdown,
+	};
 }

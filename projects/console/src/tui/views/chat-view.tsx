@@ -16,6 +16,7 @@ import {
 	StatusBar,
 } from "../components/status-bar";
 import { useSession } from "../contexts/session-context";
+import { PluginFooterViews } from "../extensions/plugin-views";
 import {
 	useTerminalBackground,
 	useTerminalTheme,
@@ -175,6 +176,17 @@ export function ChatView(props: {
 					gitDiffStats={repoStatus.diffStats}
 					onToggleMode={props.onToggleMode}
 					variant="chat"
+				/>
+				<PluginFooterViews
+					views={
+						"pluginViews" in props
+							? (
+									props as {
+										pluginViews?: import("@trumbo/shared").TuiViewContribution[];
+									}
+								).pluginViews
+							: undefined
+					}
 				/>
 			</box>
 		</box>

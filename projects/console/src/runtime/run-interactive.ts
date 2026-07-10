@@ -21,6 +21,7 @@ import {
 	loadTrumboAccountSnapshot,
 	onProviderChange,
 	switchTrumboAccount,
+	syncTrumboPlatformKnowledgeMcp,
 } from "../tui/trumbo-account";
 import type { QueuedPromptItem } from "../tui/types";
 import { type ChatCommandState, chatCommandHost } from "../utils/chat-commands";
@@ -124,6 +125,8 @@ export async function runInteractive(
 	let interactiveChatCommandHost = chatCommandHost;
 	let pluginChatCommandHostLoaded = false;
 	let pluginChatSlashCommands: InteractiveSlashCommand[] = [];
+	let interactivePluginViews: import("@trumbo/shared").TuiViewContribution[] =
+		[];
 	let pluginChatCommandHostShutdown: (() => Promise<void>) | undefined;
 	let pluginChatCommandHostPromise:
 		| Promise<InteractiveSlashCommand[]>
@@ -143,7 +146,7 @@ export async function runInteractive(
 			workspaceRoot: config.workspaceRoot,
 			logger: config.logger,
 		})
-			.then(({ host, pluginSlashCommands, shutdown }) => {
+			.then(({ host, pluginSlashCommands, pluginViews, shutdown }) => {
 				interactiveChatCommandHost = host;
 				pluginChatCommandHostShutdown = shutdown;
 				pluginChatSlashCommands = pluginSlashCommands.map((cmd) => ({
@@ -151,6 +154,7 @@ export async function runInteractive(
 					instructions: "",
 					description: cmd.description ?? "Plugin command",
 				}));
+				interactivePluginViews = pluginViews ?? [];
 				return pluginChatSlashCommands;
 			})
 			.finally(() => {
@@ -457,6 +461,23 @@ export async function runInteractive(
 			}
 		: undefined;
 
+	// Refresh the Trumbo platform MCP token before starting the TUI so the
+	// MCP server never connects with a stale/expired token. This calls
+	// resolveValidTrumboAccountAuthToken (which refreshes if needed) and
+	// rewrites trumbo_mcp_settings.json with the current token.
+	if (config.providerId === "trumbo") {
+		await syncTrumboPlatformKnowledgeMcp({
+			config: {
+				apiKey: config.apiKey,
+				logger: config.logger,
+				providerId: "trumbo",
+			},
+			trumboApiBaseUrl: options?.trumboApiBaseUrl,
+		}).catch((error) => {
+			config.logger?.debug("Startup MCP token sync failed", { error });
+		});
+	}
+
 	tuiApp = await renderOpenTui({
 		config,
 		initialView: options?.initialView,
@@ -467,6 +488,7 @@ export async function runInteractive(
 		initialRepoStatus,
 		workflowSlashCommands,
 		loadAdditionalSlashCommands,
+		pluginViews: interactivePluginViews,
 		loadWelcomeLine: async () =>
 			await resolveTrumboWelcomeLine({
 				config,
@@ -767,6 +789,17 @@ export async function runInteractive(
 						...(reasoning === undefined ? {} : { reasoning }),
 					});
 					await sessionRuntime.restartWithCurrentMessages();
+					// Re-sync the MCP settings with the potentially refreshed token.
+					if (config.providerId === "trumbo") {
+						await syncTrumboPlatformKnowledgeMcp({
+							config: {
+								apiKey: config.apiKey,
+								logger: config.logger,
+								providerId: "trumbo",
+							},
+							trumboApiBaseUrl: options?.trumboApiBaseUrl,
+						}).catch(() => {});
+					}
 				} catch (error) {
 					logCliError(config.logger, "Interactive model change failed", {
 						error,
@@ -796,6 +829,15 @@ export async function runInteractive(
 						);
 					});
 					await sessionRuntime.restartWithCurrentMessages();
+					// Re-sync the MCP settings after account switch (org ID may change).
+					await syncTrumboPlatformKnowledgeMcp({
+						config: {
+							apiKey: config.apiKey,
+							logger: config.logger,
+							providerId: "trumbo",
+						},
+						trumboApiBaseUrl: options?.trumboApiBaseUrl,
+					}).catch(() => {});
 				} catch (error) {
 					logCliError(config.logger, "Interactive account change failed", {
 						error,
@@ -843,9 +885,28 @@ export async function runInteractive(
 			return await sessionRuntime.renameSession(name);
 		},
 		onReloadConfig: async () => {
-			// The config file watcher auto-reloads on file change.
-			// This is a no-op stub that confirms the watcher is active.
-			// Future: trigger an explicit refresh of extensions, skills, rules.
+			// Clear the theme cache so themes are re-read from disk.
+			const { clearThemeCache } = await import("../tui/utils/themes");
+			clearThemeCache();
+			// Refresh user instructions (skills, rules, workflows) from disk.
+			try {
+				await userInstructionService?.refreshType("skill");
+				await userInstructionService?.refreshType("rule");
+				await userInstructionService?.refreshType("workflow");
+			} catch {
+				// Best-effort — the watcher may handle it separately.
+			}
+			// Re-sync the MCP settings with a potentially refreshed token.
+			if (config.providerId === "trumbo") {
+				await syncTrumboPlatformKnowledgeMcp({
+					config: {
+						apiKey: config.apiKey,
+						logger: config.logger,
+						providerId: "trumbo",
+					},
+					trumboApiBaseUrl: options?.trumboApiBaseUrl,
+				}).catch(() => {});
+			}
 		},
 		onTrustWorkspace: async () => {
 			const { setTrustDecision } = await import("../utils/project-trust");

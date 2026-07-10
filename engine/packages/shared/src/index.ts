@@ -87,6 +87,7 @@ export {
 	ContributionRegistry,
 	createContributionRegistry,
 	normalizePluginManifest,
+	type TuiViewContribution,
 } from "./extensions/contribution-registry";
 export { PLUGIN_FILE_EXTENSIONS } from "./extensions/plugin";
 export {

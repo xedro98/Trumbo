@@ -182,6 +182,7 @@ export function InputBar(props: InputBarProps) {
 
 	const killRingRef = useRef(new KillRing());
 	const lastKeyWasKillRef = useRef(false);
+	const preferredColRef = useRef<number | null>(null);
 
 	const handleKeyDown = useCallback(
 		(event: KeyEvent) => {
@@ -249,6 +250,56 @@ export function InputBar(props: InputBarProps) {
 
 			// Any other key resets the accumulate behavior.
 			lastKeyWasKillRef.current = false;
+
+			// Sticky column: track preferred column on horizontal moves, clear
+			// on edits. On Up/Down (when the textarea is multiline), restore
+			// the preferred column after the native move.
+			if (ta && (event.name === "up" || event.name === "down")) {
+				if (preferredColRef.current !== null) {
+					// Let the native handler move the cursor, then schedule a
+					// column restore on the next tick (after the native move).
+					const preferred = preferredColRef.current;
+					queueMicrotask(() => {
+						const ta2 = inputRef.current;
+						if (!ta2) return;
+						const text = ta2.plainText ?? "";
+						const offset = ta2.cursorOffset ?? 0;
+						// Find the start of the current line.
+						const lineStart = text.lastIndexOf("\n", offset - 1) + 1;
+						const lineEnd = text.indexOf("\n", offset);
+						const lineLen =
+							(lineEnd === -1 ? text.length : lineEnd) - lineStart;
+						const colInLine = offset - lineStart;
+						if (colInLine > preferred && colInLine > lineLen) {
+							// Cursor is past the line end — snap to the preferred column
+							// (or line end if shorter).
+							const newOffset = lineStart + Math.min(preferred, lineLen);
+							ta2.cursorOffset = newOffset;
+						} else if (colInLine < preferred && colInLine < lineLen) {
+							// Cursor snapped to col 0 — restore the preferred column.
+							const newOffset = lineStart + Math.min(preferred, lineLen);
+							ta2.cursorOffset = newOffset;
+						}
+					});
+				}
+			} else if (
+				ta &&
+				(event.name === "left" ||
+					event.name === "right" ||
+					event.name === "home" ||
+					event.name === "end")
+			) {
+				// Horizontal move — set the preferred column.
+				preferredColRef.current = ta.visualCursor?.visualCol ?? null;
+			} else if (
+				!event.ctrl &&
+				!event.meta &&
+				!event.meta &&
+				event.name.length === 1
+			) {
+				// Typing a character — clear the preferred column.
+				preferredColRef.current = null;
+			}
 
 			if (!event.ctrl || event.name !== "v" || !onImagePasteRef.current) {
 				return;
