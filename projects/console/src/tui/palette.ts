@@ -21,6 +21,12 @@ export const palette = {
 	// dimmer automatically)
 	border: "#333333",
 	borderStrong: "#555555",
+	// Role + magic accents for the redesigned chat surface. ANSI defaults let
+	// the terminal map them to the user's palette; hex overrides below tune
+	// contrast on light terminals.
+	user: "blue",
+	magic: "magenta",
+	tool: "yellow",
 } as const;
 
 // Spacing scale in terminal cells. Use these instead of ad-hoc margin numbers
@@ -41,12 +47,18 @@ export const themePalette = {
 		act: palette.act,
 		plan: palette.plan,
 		success: palette.success,
+		user: "#5fb3f5",
+		magic: "#b794f4",
+		tool: "#e0af68",
 	},
 	light: {
 		brand: "#15803d",
 		act: "#15803d",
 		plan: "#9a6700",
 		success: "#116329",
+		user: "#2563eb",
+		magic: "#7c3aed",
+		tool: "#b45309",
 	},
 } as const;
 
@@ -84,6 +96,18 @@ export function getSuccessColor(theme: TerminalTheme = "dark"): string {
 
 export function getBrandColor(theme: TerminalTheme = "dark"): string {
 	return themePalette[theme].brand;
+}
+
+export function getUserColor(theme: TerminalTheme = "dark"): string {
+	return themePalette[theme].user;
+}
+
+export function getMagicColor(theme: TerminalTheme = "dark"): string {
+	return themePalette[theme].magic;
+}
+
+export function getToolAccent(theme: TerminalTheme = "dark"): string {
+	return themePalette[theme].tool;
 }
 
 // Input field adaptive color system

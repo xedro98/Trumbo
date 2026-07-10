@@ -13,8 +13,11 @@ import {
 import { useTerminalBackground } from "../hooks/use-terminal-background";
 import {
 	getDefaultForeground,
+	getMagicColor,
 	getModeAccent,
 	getModeInputBackground,
+	getToolAccent,
+	getUserColor,
 	palette,
 	type TerminalTheme,
 } from "../palette";
@@ -33,85 +36,52 @@ import {
 	parseWebFetchInput,
 	shortenPath,
 } from "../utils/tool-parsing";
+import { AccentRail } from "./accent-rail";
+import { Avatar, type AvatarVariant, toolGlyph } from "./avatar";
 import { ToolOutput } from "./tool-output";
 
 function trimLeading(text: string): string {
 	return text.replace(/^\n+/, "");
 }
 
-function ReasoningBlock(props: { text: string; streaming: boolean }) {
-	const [expanded, setExpanded] = useState(false);
-	const { width } = useTerminalDimensions();
-	const content = trimLeading(props.text);
-	if (!content.trim()) {
-		if (props.streaming) {
-			return (
-				<box flexDirection="row" gap={1}>
-					<spinner name="dots" color="gray" />
-					<text fg="gray">
-						<em>Thinking...</em>
-					</text>
-				</box>
-			);
-		}
-		return null;
-	}
-
-	if (props.streaming) {
-		const lines = content.split("\n");
-		return (
-			<box flexDirection="column">
-				<box flexDirection="row" gap={1}>
-					<spinner name="dots" color="gray" />
-					<text fg="gray">
-						<em>Thinking...</em>
-					</text>
-				</box>
-				<box flexDirection="column" paddingLeft={2}>
-					{lines.map((line) => (
-						<text key={line} fg="gray" selectable>
-							<em>{line || " "}</em>
-						</text>
-					))}
-				</box>
-			</box>
-		);
-	}
-
-	if (expanded) {
-		const lines = content.split("\n");
-		return (
-			// biome-ignore lint/a11y/noStaticElementInteractions: OpenTUI boxes handle terminal mouse input.
-			<box flexDirection="column" onMouseDown={() => setExpanded(false)}>
-				<text fg="gray">
-					{"\u25bc"} <em>Thinking:</em>
-				</text>
-				<box flexDirection="column" paddingLeft={2}>
-					{lines.map((line) => (
-						<text key={line} fg="gray" selectable>
-							<em>{line || " "}</em>
-						</text>
-					))}
-				</box>
-			</box>
-		);
-	}
-
-	const padding = 4;
-	const prefix = "\u25b6 Thinking: ";
-	const available = Math.max(10, width - padding - prefix.length - 3);
-	const flat = content.replace(/\n/g, " ").trim();
-	const tail =
-		flat.length <= available
-			? flat
-			: `...${flat.slice(flat.length - available)}`;
-
+// The single layout primitive for every chat entry.
+//
+//   [indent?][avatar][content column]
+//
+// - "turns" (user / assistant) sit at the left edge with a bold role label
+//   (You / Trumbo) so the transcript reads like a messenger.
+// - "events" (tools / reasoning / status / errors) pass `indent` to nest two
+//   columns in, under the active turn, with no label — they read as things the
+//   assistant is doing, not as speakers.
+// The avatar column is a fixed 2 cells; the content column gets a 1-cell gap
+// after it. Every entry shares this skeleton so the left edge stays rhythmic.
+function MessageShell(props: {
+	variant: AvatarVariant;
+	color: string;
+	glyph?: string;
+	streaming?: boolean;
+	label?: string;
+	indent?: boolean;
+	children: React.ReactNode;
+}) {
+	const { variant, color, glyph, streaming, label, indent, children } = props;
 	return (
-		// biome-ignore lint/a11y/noStaticElementInteractions: OpenTUI boxes handle terminal mouse input.
-		<box onMouseDown={() => setExpanded(true)}>
-			<text fg="gray" selectable>
-				{"\u25b6"} <em>Thinking: {tail}</em>
-			</text>
+		<box flexDirection="row">
+			{indent && <box width={2} flexShrink={0} />}
+			<Avatar
+				variant={variant}
+				color={color}
+				glyph={glyph}
+				streaming={streaming}
+			/>
+			<box flexGrow={1} flexDirection="column" paddingLeft={1}>
+				{label && (
+					<text fg={color}>
+						<strong>{label}</strong>
+					</text>
+				)}
+				{children}
+			</box>
 		</box>
 	);
 }
@@ -203,35 +173,31 @@ function formatToolParams(
 	}
 }
 
-function ToolCallView(props: {
+// Tool-call content (no avatar — MessageShell provides it): a header row with
+// a status icon + tool name + params, then the indented result.
+function ToolCallContent(props: {
 	toolName: string;
 	inputSummary: string;
 	rawInput?: unknown;
-	accent?: string;
-	defaultFg?: string;
 	streaming: boolean;
 	result?: {
 		outputSummary: string;
 		rawOutput?: unknown;
 		error?: string;
 	};
+	toolAccent: string;
+	defaultFg?: string;
 }) {
-	const {
-		toolName,
-		inputSummary,
-		streaming,
-		result,
-		accent = palette.act,
-		defaultFg,
-	} = props;
+	const { toolName, inputSummary, streaming, result, toolAccent, defaultFg } =
+		props;
 	const failed = result?.error != null;
 	const warningFailure = isWarningToolError(result?.error);
 	const params = formatToolParams(toolName, props.rawInput, inputSummary);
 
 	return (
 		<box flexDirection="column">
-			<box flexDirection="row">
-				<box width={2}>
+			<box flexDirection="row" gap={1}>
+				<box width={1} flexShrink={0}>
 					{streaming ? (
 						<spinner name="dots" color="gray" />
 					) : warningFailure ? (
@@ -239,44 +205,121 @@ function ToolCallView(props: {
 					) : failed ? (
 						<text fg="red">x</text>
 					) : (
-						<text fg={accent}>~</text>
+						<text fg={palette.success}>+</text>
 					)}
 				</box>
 				<text fg={defaultFg} selectable>
-					<span fg={accent}>
+					<span fg={toolAccent}>
 						<strong>{toolName}</strong>
 					</span>
-					<span fg={accent}>
-						<strong>(</strong>
-					</span>
+					<span fg="gray"> {"\u2192"} </span>
 					<span>{params}</span>
-					<span fg={accent}>
-						<strong>)</strong>
-					</span>
 				</text>
 			</box>
 			{result && (
-				<ToolOutput
-					toolName={toolName}
-					outputSummary={result.outputSummary}
-					rawOutput={result.rawOutput}
-					rawInput={props.rawInput}
-					error={result.error}
-				/>
+				<box marginLeft={2}>
+					<ToolOutput
+						toolName={toolName}
+						outputSummary={result.outputSummary}
+						rawOutput={result.rawOutput}
+						rawInput={props.rawInput}
+						error={result.error}
+					/>
+				</box>
 			)}
 		</box>
 	);
 }
 
-function RateLimitErrorView(props: { defaultFg?: string; text: string }) {
-	// Try to extract the "Resets in Xh Ym" portion from the error message
+// Reasoning content (no avatar): collapsible thinking block. Streaming shows
+// the live text under a "Thinking..." header; collapsed shows a one-line tail.
+function ReasoningContent(props: {
+	text: string;
+	streaming: boolean;
+	color: string;
+}) {
+	const [expanded, setExpanded] = useState(false);
+	const { width } = useTerminalDimensions();
+	const content = trimLeading(props.text);
+	const { color } = props;
+
+	if (!content.trim()) {
+		if (props.streaming) {
+			return (
+				<text fg="gray">
+					<em>Thinking...</em>
+				</text>
+			);
+		}
+		return null;
+	}
+
+	if (props.streaming) {
+		const lines = content.split("\n");
+		return (
+			<box flexDirection="column">
+				<text fg={color}>
+					<em>Thinking...</em>
+				</text>
+				{lines.map((line) => (
+					<text key={line} fg="gray" selectable>
+						<em>{line || " "}</em>
+					</text>
+				))}
+			</box>
+		);
+	}
+
+	if (expanded) {
+		const lines = content.split("\n");
+		return (
+			// biome-ignore lint/a11y/noStaticElementInteractions: OpenTUI boxes handle terminal mouse input.
+			<box flexDirection="column" onMouseDown={() => setExpanded(false)}>
+				<text fg={color}>
+					<em>Thinking</em>
+				</text>
+				{lines.map((line) => (
+					<text key={line} fg="gray" selectable>
+						<em>{line || " "}</em>
+					</text>
+				))}
+			</box>
+		);
+	}
+
+	const padding = 8;
+	const prefix = "> Thinking: ";
+	const available = Math.max(10, width - padding - prefix.length - 3);
+	const flat = content.replace(/\n/g, " ").trim();
+	const tail =
+		flat.length <= available
+			? flat
+			: `...${flat.slice(flat.length - available)}`;
+
+	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: OpenTUI boxes handle terminal mouse input.
+		<text fg="gray" selectable onMouseDown={() => setExpanded(true)}>
+			<span fg={color}>{">"} </span>
+			<em>Thinking: {tail}</em>
+		</text>
+	);
+}
+
+function RateLimitCard(props: { defaultFg?: string; text: string }) {
 	const resetMatch = props.text.match(/Resets in ([^.]+)/i);
 	const resetDuration = resetMatch?.[1]?.trim();
 	const windowMatch = props.text.match(/(\w+)\s+window/i);
 	const windowName = windowMatch?.[1]?.trim();
 
 	return (
-		<box flexDirection="column" paddingX={1} gap={0}>
+		<box
+			flexDirection="column"
+			border
+			borderStyle="rounded"
+			borderColor="yellow"
+			paddingX={1}
+			gap={0}
+		>
 			<text fg="yellow">Rate limit reached</text>
 			<text fg={props.defaultFg}>
 				{windowName
@@ -284,11 +327,9 @@ function RateLimitErrorView(props: { defaultFg?: string; text: string }) {
 					: "You've hit a request limit for your plan."}
 			</text>
 			{resetDuration && (
-				<text fg="gray">Resets in {resetDuration}. Please try again then.</text>
+				<text fg="gray">Resets in {resetDuration}. Try again then.</text>
 			)}
-			<text fg="gray">
-				Upgrade your plan at {TRUMBO_BILLING_URL} for higher limits.
-			</text>
+			<text fg="gray">Upgrade at {TRUMBO_BILLING_URL} for higher limits.</text>
 		</box>
 	);
 }
@@ -303,7 +344,7 @@ function isRateLimitErrorMessage(message: string): boolean {
 	);
 }
 
-function TrumboPassSubscriptionErrorView(props: {
+function TrumboPassSubscriptionCard(props: {
 	defaultFg?: string;
 	loadIndividualSubscriptionPlans?: () => Promise<TrumboSubscriptionPlan[]>;
 	terminalTheme: TerminalTheme;
@@ -334,72 +375,66 @@ function TrumboPassSubscriptionErrorView(props: {
 	}, [props.loadIndividualSubscriptionPlans]);
 
 	return (
-		<box flexDirection="row">
-			<text fg={planAccent} content="~ " />
-			<box
-				flexDirection="column"
-				border
-				borderStyle="rounded"
-				borderColor={planAccent}
-				paddingX={1}
-			>
-				<text fg={planAccent}>TrumboPass subscription required</text>
-				<text
-					fg={props.defaultFg}
-					selectable
-					content="No access to TrumboPass subscription models yet. Subscribe to TrumboPass, the low cost open weights model coding plan."
-				/>
-				{planFeatures.length > 0 && (
-					<box flexDirection="column" marginTop={1}>
-						<text fg={props.defaultFg}>TrumboPass includes:</text>
-						{planFeatures.map((feature) => (
-							<text key={feature} fg={props.defaultFg} selectable>
-								<span fg={palette.brand}>✓ </span>
-								<span>{feature}</span>
-							</text>
-						))}
-					</box>
-				)}
-				<box flexDirection="row">
-					<text fg="gray">Subscribe: </text>
-					<text fg={palette.brand} selectable>
-						<a href={subscriptionUrl}>Open subscription page</a>
-					</text>
+		<box
+			flexDirection="column"
+			border
+			borderStyle="rounded"
+			borderColor={planAccent}
+			paddingX={1}
+		>
+			<text fg={planAccent}>TrumboPass subscription required</text>
+			<text
+				fg={props.defaultFg}
+				selectable
+				content="No access to TrumboPass subscription models yet. Subscribe to TrumboPass, the low cost open weights model coding plan."
+			/>
+			{planFeatures.length > 0 && (
+				<box flexDirection="column" marginTop={1}>
+					<text fg={props.defaultFg}>TrumboPass includes:</text>
+					{planFeatures.map((feature) => (
+						<text key={feature} fg={props.defaultFg} selectable>
+							<span fg={palette.brand}>{"+"} </span>
+							<span>{feature}</span>
+						</text>
+					))}
 				</box>
-				<box flexDirection="row">
-					<text fg="gray">URL: </text>
-					<text fg={palette.brand} selectable>
-						<a href={subscriptionUrl}>{subscriptionUrl}</a>
-					</text>
-				</box>
+			)}
+			<box flexDirection="row">
+				<text fg="gray">Subscribe: </text>
+				<text fg={palette.brand} selectable>
+					<a href={subscriptionUrl}>Open subscription page</a>
+				</text>
+			</box>
+			<box flexDirection="row">
+				<text fg="gray">URL: </text>
+				<text fg={palette.brand} selectable>
+					<a href={subscriptionUrl}>{subscriptionUrl}</a>
+				</text>
 			</box>
 		</box>
 	);
 }
 
-function TrumboOrgIndividualInferenceSubscriptionErrorView(props: {
+function TrumboOrgIndividualInferenceSubscriptionCard(props: {
 	defaultFg?: string;
 	terminalTheme: TerminalTheme;
 }) {
 	const planAccent = getModeAccent("plan", props.terminalTheme);
 
 	return (
-		<box flexDirection="row">
-			<text fg={planAccent} content="~ " />
-			<box
-				flexDirection="column"
-				border
-				borderStyle="rounded"
-				borderColor={planAccent}
-				paddingX={1}
-			>
-				<text fg={planAccent}>Personal TrumboPass required</text>
-				<text
-					fg={props.defaultFg}
-					selectable
-					content={getTrumboOrgIndividualInferenceSubscriptionMessage()}
-				/>
-			</box>
+		<box
+			flexDirection="column"
+			border
+			borderStyle="rounded"
+			borderColor={planAccent}
+			paddingX={1}
+		>
+			<text fg={planAccent}>Personal TrumboPass required</text>
+			<text
+				fg={props.defaultFg}
+				selectable
+				content={getTrumboOrgIndividualInferenceSubscriptionMessage()}
+			/>
 		</box>
 	);
 }
@@ -413,6 +448,9 @@ export function ChatEntryView(props: {
 	const { entry, accent = palette.act, terminalTheme } = props;
 	const terminalBg = useTerminalBackground();
 	const defaultFg = getDefaultForeground(terminalBg);
+	const userColor = getUserColor(terminalTheme);
+	const toolAccent = getToolAccent(terminalTheme);
+	const magic = getMagicColor(terminalTheme);
 	const userMsgBg = getModeInputBackground(
 		accent === palette.plan ? "plan" : "act",
 		terminalBg,
@@ -421,128 +459,159 @@ export function ChatEntryView(props: {
 	switch (entry.kind) {
 		case "user":
 			return (
-				<box
-					flexDirection="row"
-					backgroundColor={userMsgBg}
-					marginX={-1}
-					paddingLeft={1}
-					paddingRight={2}
-					paddingY={1}
-				>
-					<box width={2}>
-						<text fg={accent}>{"\u276f"}</text>
+				<MessageShell variant="user" color={userColor} label="You">
+					<box
+						border
+						borderStyle="rounded"
+						borderColor={userColor}
+						backgroundColor={userMsgBg}
+						paddingX={1}
+					>
+						<text fg={defaultFg} selectable>
+							{entry.text}
+						</text>
 					</box>
-					<text fg={defaultFg} selectable>
-						{entry.text}
-					</text>
-				</box>
+				</MessageShell>
 			);
 
 		case "user_submitted":
 			return (
-				<box
-					flexDirection="row"
-					backgroundColor={userMsgBg}
-					marginX={-1}
-					paddingLeft={1}
-					paddingRight={2}
-					paddingY={1}
-				>
-					<box width={2}>
-						<text fg={accent}>{"\u276f"}</text>
+				<MessageShell variant="user" color={userColor} label="You">
+					<box
+						border
+						borderStyle="rounded"
+						borderColor={userColor}
+						backgroundColor={userMsgBg}
+						paddingX={1}
+					>
+						{entry.delivery === "steer" && (
+							<text fg="yellow">{"> steer  "}</text>
+						)}
+						{entry.delivery === "queue" && (
+							<text fg="gray">{"> queued  "}</text>
+						)}
+						<text fg={defaultFg} selectable>
+							{entry.text}
+						</text>
 					</box>
-					{entry.delivery === "steer" && <text fg="yellow">[steer] </text>}
-					{entry.delivery === "queue" && <text fg="gray">[queued] </text>}
-					<text fg={defaultFg} selectable>
-						{entry.text}
-					</text>
-				</box>
+				</MessageShell>
 			);
 
 		case "assistant_text": {
 			const content = trimLeading(entry.text);
 			if (!content.trim()) return null;
 			return (
-				<box flexDirection="row">
-					<box width={2}>
-						{entry.streaming ? (
-							<spinner name="dots" color={accent} />
-						) : (
-							<text fg={accent}>~</text>
-						)}
-					</box>
-					<box flexGrow={1}>
+				<MessageShell
+					variant="assistant"
+					color={accent}
+					label="Trumbo"
+					streaming={entry.streaming}
+				>
+					<AccentRail color={accent}>
 						<markdown
 							content={content}
 							syntaxStyle={getSyntaxStyle(terminalTheme)}
 							streaming={entry.streaming}
 							fg={defaultFg}
 						/>
-					</box>
-				</box>
+					</AccentRail>
+				</MessageShell>
 			);
 		}
 
 		case "reasoning":
-			return <ReasoningBlock text={entry.text} streaming={entry.streaming} />;
+			return (
+				<MessageShell
+					variant="reasoning"
+					color={magic}
+					streaming={entry.streaming}
+					indent
+				>
+					<ReasoningContent
+						text={entry.text}
+						streaming={entry.streaming}
+						color={magic}
+					/>
+				</MessageShell>
+			);
 
 		case "tool_call":
 			return (
-				<ToolCallView
-					toolName={entry.toolName}
-					inputSummary={entry.inputSummary}
-					rawInput={entry.rawInput}
-					streaming={entry.streaming}
-					result={entry.result}
-					accent={accent}
-					defaultFg={defaultFg}
-				/>
+				<MessageShell
+					variant="tool"
+					color={toolAccent}
+					glyph={toolGlyph(entry.toolName)}
+					indent
+				>
+					<ToolCallContent
+						toolName={entry.toolName}
+						inputSummary={entry.inputSummary}
+						rawInput={entry.rawInput}
+						streaming={entry.streaming}
+						result={entry.result}
+						toolAccent={toolAccent}
+						defaultFg={defaultFg}
+					/>
+				</MessageShell>
 			);
 
 		case "error":
 			if (isRateLimitErrorMessage(entry.text)) {
-				return <RateLimitErrorView defaultFg={defaultFg} text={entry.text} />;
+				return (
+					<MessageShell variant="error" color="yellow" indent>
+						<RateLimitCard defaultFg={defaultFg} text={entry.text} />
+					</MessageShell>
+				);
 			}
 			if (isTrumboOrgIndividualInferenceSubscriptionErrorMessage(entry.text)) {
 				return (
-					<TrumboOrgIndividualInferenceSubscriptionErrorView
-						defaultFg={defaultFg}
-						terminalTheme={terminalTheme}
-					/>
+					<MessageShell
+						variant="error"
+						color={getModeAccent("plan", terminalTheme)}
+						indent
+					>
+						<TrumboOrgIndividualInferenceSubscriptionCard
+							defaultFg={defaultFg}
+							terminalTheme={terminalTheme}
+						/>
+					</MessageShell>
 				);
 			}
 			if (isTrumboPassSubscriptionError(entry.text)) {
 				return (
-					<TrumboPassSubscriptionErrorView
-						defaultFg={defaultFg}
-						loadIndividualSubscriptionPlans={
-							props.loadIndividualSubscriptionPlans
-						}
-						terminalTheme={terminalTheme}
-					/>
+					<MessageShell
+						variant="error"
+						color={getModeAccent("plan", terminalTheme)}
+						indent
+					>
+						<TrumboPassSubscriptionCard
+							defaultFg={defaultFg}
+							loadIndividualSubscriptionPlans={
+								props.loadIndividualSubscriptionPlans
+							}
+							terminalTheme={terminalTheme}
+						/>
+					</MessageShell>
 				);
 			}
 			return (
-				<box flexDirection="row">
-					<text fg="red" content="~ " />
+				<MessageShell variant="error" color="red" indent>
 					<text fg="red" selectable content={`Error: ${entry.text}`} />
-				</box>
+				</MessageShell>
 			);
 
 		case "status":
 			return (
-				<box flexDirection="row">
-					<text fg="gray" content="~ " />
+				<MessageShell variant="system" color="gray" indent>
 					<text fg="gray" selectable content={entry.text} />
-				</box>
+				</MessageShell>
 			);
 
 		case "team":
 			return (
-				<box flexDirection="row">
-					<text fg="gray" content="~ " />
+				<MessageShell variant="system" color="gray" indent>
 					<text fg="gray" selectable content={entry.text} />
-				</box>
+				</MessageShell>
 			);
 
 		case "done": {
@@ -556,7 +625,15 @@ export function ChatEntryView(props: {
 					`${entry.iterations} iteration${entry.iterations !== 1 ? "s" : ""}`,
 				);
 			if (parts.length === 0) return null;
-			return <text fg="gray" content={parts.join(" | ")} />;
+			return (
+				<box flexDirection="row" justifyContent="center" marginTop={1}>
+					<text fg={magic}>{"* "}</text>
+					<text fg="gray" content={parts.join(" \u00b7 ")} />
+					<text fg={magic}>{" *"}</text>
+				</box>
+			);
 		}
 	}
 }
+
+export type { AvatarVariant };

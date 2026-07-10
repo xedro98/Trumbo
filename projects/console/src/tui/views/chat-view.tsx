@@ -6,6 +6,7 @@ import {
 	ChatMessageList,
 	type TranscriptScrollHandle,
 } from "../components/chat-message-list";
+import { HeaderBar } from "../components/header-bar";
 import { InlineToolResponse } from "../components/inline-tool-response";
 import { InputBar, type TextareaHandle } from "../components/input-bar";
 import { QueuedPrompts } from "../components/queued-prompts";
@@ -86,6 +87,20 @@ export function ChatView(props: {
 
 	return (
 		<box flexDirection="column" width="100%" height="100%">
+			<HeaderBar
+				uiMode={session.uiMode}
+				providerId={config.providerId}
+				modelId={config.modelId}
+				knownModels={config.knownModels}
+				thinking={config.thinking}
+				reasoningEffort={config.reasoningEffort}
+				workspaceName={
+					config.workspaceRoot
+						? (config.workspaceRoot.split("/").pop() ?? "")
+						: ""
+				}
+				gitBranch={repoStatus.branch}
+			/>
 			<ChatMessageList
 				ref={props.transcriptScrollRef}
 				entries={session.entries}

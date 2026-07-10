@@ -209,17 +209,19 @@ export function InputBar(props: InputBarProps) {
 		// biome-ignore lint/a11y/noStaticElementInteractions: OpenTUI boxes handle terminal mouse input.
 		<box
 			flexDirection="row"
-			alignItems="flex-start"
+			alignItems="center"
 			backgroundColor={inputBackground}
 			border
 			borderStyle="rounded"
 			borderColor={accent}
+			title="Ask Trumbo"
+			titleAlignment="left"
 			paddingX={2}
 			paddingY={1}
 			onMouseDown={props.onFocusRequest}
 		>
 			<text fg={accent}>
-				<strong>{"\u276f"}</strong>
+				<strong>{"*"}</strong>
 			</text>
 			<box flexGrow={1} paddingLeft={1}>
 				<textarea

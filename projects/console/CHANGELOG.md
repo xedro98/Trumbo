@@ -11,6 +11,19 @@
 
 
 
+## 3.2.0
+
+The chat UI is redesigned into a modern, avatar-driven messenger experience.
+
+- New chat layout: every message uses a unified avatar + content shell with a two-level hierarchy — labeled turns (You / Trumbo) at the left edge, indented events (tools, thinking, status) nested under the active turn
+- Avatars throughout: `*` for Trumbo (animates while streaming), `●` for you, per-tool letter glyphs, `~` for thinking, with distinct role colors (user blue, assistant green, reasoning magenta, tools amber)
+- Distinct message shapes: your messages render as rounded bordered bubbles; Trumbo's responses render as accent-rail markdown cards
+- Persistent branded header bar showing mode, model, and workspace/branch above a sparkle rule, with balanced spacing
+- Compact "Ask Trumbo" input with a centered prompt glyph and adaptive theme-aware background
+- Empty-state splash now shows the Trumbo ASCII logo (sourced from `ascii-art.txt`) centered in the chat area before the first message
+- Magical touches: sparkle brand mark, per-tool status icons (`+`/`x`/`!`), and a centered turn-end summary divider
+- All decorative glyphs switched to Windows-terminal-safe characters so avatars and icons never render as broken boxes
+
 ## 3.0.59
 
 - fix: CLI no longer crashes when switching Plan/Act mode, changing model, or toggling compaction during an active run

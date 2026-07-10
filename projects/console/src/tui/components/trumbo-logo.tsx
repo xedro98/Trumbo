@@ -1,6 +1,6 @@
 import { useTerminalDimensions } from "@opentui/react";
 import { useMemo } from "react";
-import logoRaw from "../assets/trumbo-logo.txt";
+import logoRaw from "../assets/ascii-art.txt";
 import { TRUMBO_LOGO_DISPLAY_SCALE } from "../logo-config";
 import { palette } from "../palette";
 import {

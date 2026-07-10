@@ -10,9 +10,10 @@ import {
 } from "react";
 import type { TranscriptCommand } from "../hooks/transcript-keybinds";
 import { useTerminalTheme } from "../hooks/use-terminal-background";
-import { getModeAccent } from "../palette";
+import { getModeAccent, palette } from "../palette";
 import type { ChatEntry } from "../types";
 import { ChatEntryView } from "./chat-entry";
+import { TrumboLogo } from "./trumbo-logo";
 
 export interface TranscriptScrollHandle {
 	runTranscriptCommand: (command: TranscriptCommand) => void;
@@ -86,6 +87,28 @@ export const ChatMessageList = forwardRef<
 		return () => clearTimeout(timeout);
 	}, [userSubmissionScrollKey]);
 
+	// Branded empty state: before the first message, show the Trumbo ASCII logo
+	// centered in the chat area instead of an empty scrollbox. The logo makes
+	// way for the transcript as soon as a message arrives.
+	const isEmpty = props.entries.length === 0 && !props.isStreaming;
+	if (isEmpty) {
+		return (
+			<box
+				flexGrow={1}
+				flexDirection="column"
+				alignItems="center"
+				justifyContent="center"
+			>
+				<box marginBottom={1} flexShrink={0}>
+					<TrumboLogo color={accent} reservedHeight={18} />
+				</box>
+				<text fg={palette.muted}>
+					<em>Message Trumbo to get started</em>
+				</text>
+			</box>
+		);
+	}
+
 	return (
 		<scrollbox
 			ref={scrollboxRef}
@@ -93,7 +116,13 @@ export const ChatMessageList = forwardRef<
 			stickyScroll
 			stickyStart="bottom"
 		>
-			<box flexDirection="column" paddingX={1} paddingY={1} gap={1}>
+			<box
+				flexDirection="column"
+				paddingX={1}
+				paddingTop={1}
+				paddingBottom={1}
+				gap={1}
+			>
 				{props.entries.map((entry, i) => {
 					const key = `${i}:${entry.kind}`;
 					return (
@@ -109,9 +138,11 @@ export const ChatMessageList = forwardRef<
 					);
 				})}
 				{props.isStreaming && (
-					<box flexDirection="row" gap={1}>
+					<box flexDirection="row" gap={1} marginLeft={2}>
 						<spinner name="dots" color={accent} />
-						<text fg="gray">Thinking... (esc to cancel)</text>
+						<text fg="gray">
+							<em>Thinking... (esc to cancel)</em>
+						</text>
 					</box>
 				)}
 			</box>

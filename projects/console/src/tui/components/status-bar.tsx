@@ -10,6 +10,7 @@ import {
 } from "../hooks/use-terminal-background";
 import {
 	getDefaultForeground,
+	getMagicColor,
 	getModeAccent,
 	getSuccessColor,
 	palette,
@@ -177,6 +178,7 @@ export function StatusBar(props: StatusBarProps) {
 	const actAccent = getModeAccent("act", terminalTheme);
 	const planAccent = getModeAccent("plan", terminalTheme);
 	const successColor = getSuccessColor(terminalTheme);
+	const magic = getMagicColor(terminalTheme);
 	const hasMaxInputTokens =
 		typeof maxInputTokens === "number" &&
 		Number.isFinite(maxInputTokens) &&
@@ -265,6 +267,7 @@ export function StatusBar(props: StatusBarProps) {
 		<box flexDirection="column" paddingX={1}>
 			<box flexDirection="row" justifyContent="space-between">
 				<text fg={palette.muted}>
+					<span fg={magic}>{"*"}</span>{" "}
 					{planPrefix && <span fg={successColor}>{planPrefix}</span>}
 					{truncatedModel}
 					{firstRowFits && renderContextText(true)}
@@ -277,10 +280,11 @@ export function StatusBar(props: StatusBarProps) {
 					onMouseDown={onToggleMode}
 				>
 					<text fg={uiMode === "plan" ? planAccent : palette.muted}>
-						{uiMode === "plan" ? "●" : "○"} Plan
+						{uiMode === "plan" ? "*" : "\u25cb"} Plan
 					</text>
+					<text fg={palette.muted}>|</text>
 					<text fg={uiMode === "act" ? actAccent : palette.muted}>
-						{uiMode === "act" ? "●" : "○"} Act
+						{uiMode === "act" ? "*" : "\u25cb"} Act
 					</text>
 					<text fg={palette.muted}>(Tab)</text>
 				</box>
@@ -294,7 +298,7 @@ export function StatusBar(props: StatusBarProps) {
 				{truncatedPath}
 				{hasGitDiff && (
 					<span fg={palette.muted}>
-						{" | "}
+						{" \u00b7 "}
 						{gitDiffStats.files} file
 						{gitDiffStats.files !== 1 ? "s" : ""}{" "}
 						<span fg={successColor}>+{gitDiffStats.additions}</span>{" "}
