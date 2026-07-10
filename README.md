@@ -38,14 +38,19 @@
 
 <h1>Trumbo</h1>
 
-<p align="center">An open-source AI coding agent for your terminal.<br/>Bring your own keys or sign in with Trumbo. Interactive TUI, headless JSON, RPC embedding, and a full TypeScript SDK.</p>
+<p>An open-source AI coding agent for your terminal.<br>Bring your own keys or sign in with Trumbo. Interactive TUI, headless JSON, RPC embedding, and a full TypeScript SDK.</p>
 
-<div align="center">
+<br>
 
-[![npm](https://img.shields.io/npm/v/@trumbodev/cli?label=%40trumbodev%2Fcli)](https://www.npmjs.com/package/@trumbodev/cli)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](./LICENSE)
+[![npm version](https://img.shields.io/npm/v/@trumbodev/cli?label=%40trumbodev%2Fcli&color=2BBF77)](https://www.npmjs.com/package/@trumbodev/cli)
+[![License](https://img.shields.io/badge/license-Apache%202.0-2BBF77)](./LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/xedro98/Trumbo?color=2BBF77)](https://github.com/xedro98/Trumbo)
+[![Last commit](https://img.shields.io/github/last-commit/xedro98/Trumbo?color=2BBF77)](https://github.com/xedro98/Trumbo)
+[![Bun](https://img.shields.io/badge/runtime-Bun-2BBF77)](https://bun.sh)
 
-[Docs](https://platform.trumbo.dev/docs) · [Issues](https://github.com/xedro98/Trumbo/issues) · [Discussions](https://github.com/xedro98/Trumbo/discussions) · [npm](https://www.npmjs.com/package/@trumbodev/cli)
+<br>
+
+[Docs](https://platform.trumbo.dev/docs) &nbsp;&middot;&nbsp; [Install](#quick-start) &nbsp;&middot;&nbsp; [Issues](https://github.com/xedro98/Trumbo/issues) &nbsp;&middot;&nbsp; [Discussions](https://github.com/xedro98/Trumbo/discussions) &nbsp;&middot;&nbsp; [npm](https://www.npmjs.com/package/@trumbodev/cli) &nbsp;&middot;&nbsp; [Changelog](./projects/console/CHANGELOG.md)
 
 </div>
 
