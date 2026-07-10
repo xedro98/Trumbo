@@ -9,9 +9,15 @@ export interface LocalSlashCommandActionInput {
 	openModelSelector: () => void;
 	openSkills: (invocation?: LocalSlashCommandInvocation) => void;
 	invocation?: LocalSlashCommandInvocation;
-	runCompact: () => void;
+	runCompact: (focus?: string) => void;
 	runFork: () => void;
+	runClone: () => void;
 	runUndo: () => Promise<void>;
+	openTree: () => void;
+	setSessionName: (name: string) => void;
+	openHotkeys: () => void;
+	openChangelog: () => void;
+	reloadConfig: () => void;
 	clearConversation: () => Promise<void>;
 	openHelp: () => void;
 	openHistory: () => void;
@@ -46,7 +52,10 @@ export function runLocalSlashCommandAction(
 		return true;
 	}
 	if (normalized === "compact") {
-		input.runCompact();
+		const focusArg = input.invocation?.text
+			?.replace(/^\/compact\s*/i, "")
+			.trim();
+		input.runCompact(focusArg || undefined);
 		return true;
 	}
 	if (normalized === "fork") {
@@ -55,6 +64,33 @@ export function runLocalSlashCommandAction(
 	}
 	if (normalized === "undo") {
 		return input.runUndo().then(() => true);
+	}
+	if (normalized === "tree") {
+		input.openTree();
+		return true;
+	}
+	if (normalized === "name") {
+		const nameArg = input.invocation?.text?.replace(/^\/name\s*/i, "").trim();
+		if (nameArg) {
+			input.setSessionName(nameArg);
+		}
+		return true;
+	}
+	if (normalized === "clone") {
+		input.runClone();
+		return true;
+	}
+	if (normalized === "hotkeys") {
+		input.openHotkeys();
+		return true;
+	}
+	if (normalized === "changelog") {
+		input.openChangelog();
+		return true;
+	}
+	if (normalized === "reload") {
+		input.reloadConfig();
+		return true;
 	}
 	if (normalized === "clear") {
 		return input.clearConversation().then(() => true);

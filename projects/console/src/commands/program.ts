@@ -41,6 +41,7 @@ export function addRootOptions(cmd: Command): Command {
 				"Open the terminal user interface (TUI) for interactive sessions",
 			)
 			.option("--id <session-id>", "Resume an existing session by ID")
+			.option("--name <session-name>", "Set a display name for this session")
 			.option("-P, --provider <id>", "Provider id (default: trumbo)")
 			.option("-k, --key <api-key>", "API key override for this run")
 			.option(
@@ -65,6 +66,10 @@ export function addRootOptions(cmd: Command): Command {
 				"Run in Agent Client Protocol (ACP) mode for editor integration",
 			)
 			.option(
+				"--mode <mode>",
+				"Output mode: text|json|rpc (rpc = JSONL stdin/stdout for embedding)",
+			)
+			.option(
 				"--config <path>",
 				"Configuration directory (default: ~/.trumbo/data/settings)",
 			)
@@ -79,6 +84,10 @@ export function addRootOptions(cmd: Command): Command {
 			.option(
 				"--worktree",
 				"Auto-create a detached git worktree under ~/.trumbo/worktrees/ and run the task there",
+			)
+			.option(
+				"--sandbox",
+				"Run in an isolated sandbox with restricted file and network access (requires Docker)",
 			)
 			.option("--update", "Check for updates and install if available")
 			.option("--kanban", "Removed: kanban is no longer bundled")
@@ -134,7 +143,12 @@ export function commanderToParsedArgs(program: Command): ParsedArgs {
 	const result: ParsedArgs = {
 		verbose: !!opts.verbose,
 		interactive: !!opts.tui,
-		outputMode: opts.json ? "json" : "text",
+		outputMode:
+			opts.mode === "rpc"
+				? "rpc"
+				: opts.mode === "json" || opts.json
+					? "json"
+					: "text",
 		mode: opts.plan ? "plan" : opts.yolo ? "yolo" : opts.zen ? "zen" : "act",
 		sandbox: !!opts.dataDir,
 		acpMode: !!opts.acp,
@@ -142,6 +156,7 @@ export function commanderToParsedArgs(program: Command): ParsedArgs {
 		reasoningEffort: undefined,
 		defaultToolAutoApprove: true,
 		id: opts.id,
+		name: opts.name,
 	};
 
 	// Approval: last-wins semantics
@@ -221,6 +236,7 @@ export function commanderToParsedArgs(program: Command): ParsedArgs {
 	if (opts.config !== undefined) result.configDir = opts.config;
 	if (opts.hooksDir !== undefined) result.hooksDir = opts.hooksDir;
 	if (opts.worktree !== undefined) result.worktree = !!opts.worktree;
+	if (opts.sandbox !== undefined) result.osSandbox = !!opts.sandbox;
 	if (opts.cwd !== undefined) result.cwd = opts.cwd;
 	if (opts.teamName !== undefined) result.teamName = opts.teamName;
 	if (opts.system !== undefined) result.systemPrompt = opts.system;

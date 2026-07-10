@@ -9,6 +9,7 @@ export type CommandPaletteAction =
 	| "skills"
 	| "fork"
 	| "undo"
+	| "tree"
 	| "clear"
 	| "history"
 	| "help"
@@ -106,6 +107,13 @@ const ACTION_ITEMS: Array<{
 		shortcut: "Opt+U",
 		description: "Return to an earlier checkpoint",
 		keywords: ["undo", "checkpoint", "restore"],
+	},
+	{
+		action: "tree",
+		label: "Navigate Message Tree",
+		shortcut: "Opt+T",
+		description: "Browse and branch the session conversation tree",
+		keywords: ["tree", "navigate", "branch", "messages", "history"],
 	},
 	{
 		action: "clear",

@@ -10,7 +10,7 @@ import type {
 } from "@trumbo/core";
 import type { Message } from "@trumbo/shared";
 
-export type CliOutputMode = "text" | "json";
+export type CliOutputMode = "text" | "json" | "rpc";
 export type CliAgentMode = AgentMode;
 export type CliReasoningEffort = NonNullable<
 	NonNullable<ProviderSettings["reasoning"]>["effort"]
@@ -86,10 +86,12 @@ export interface ParsedArgs {
 	configDir?: string;
 	hooksDir?: string;
 	worktree?: boolean;
+	osSandbox?: boolean;
 	acpMode: boolean;
 	model?: string;
 	provider?: string;
 	id?: string;
+	name?: string;
 	retries?: number;
 	invalidRetries?: string;
 	cwd?: string;

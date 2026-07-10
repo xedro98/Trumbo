@@ -52,6 +52,7 @@ export async function compactInteractiveMessages(input: {
 	providerSettingsManager: ProviderSettingsManager;
 	sessionId: string;
 	messages: Message[];
+	focus?: string;
 }): Promise<{ compacted: boolean; messages: Message[] }> {
 	const modelInfo = input.config.knownModels?.[input.config.modelId];
 	const maxInputTokens =

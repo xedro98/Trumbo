@@ -208,6 +208,11 @@ export {
 	resolveReasoningEffortRatio,
 } from "./llms/reasoning-effort";
 export { DEFAULT_REQUEST_HEADERS, serializeAbortReason } from "./llms/requests";
+export {
+	convertThinkingToTextTags,
+	prepareForProviderSwitch,
+	stripThinkingBlocks,
+} from "./llms/thinking-handoff";
 export { CHARS_PER_TOKEN, estimateTokens } from "./llms/tokens";
 export type {
 	ToolApprovalRequest,
@@ -467,6 +472,23 @@ export {
 	RUNTIME_CONFIG_EXTENSION_KINDS,
 } from "./session/runtime-config";
 export type { RuntimeEnv } from "./session/runtime-env";
+export type {
+	MigratedSessionTree,
+	SessionTree,
+	SessionTreeEntry,
+	SessionTreeNode,
+} from "./session/session-tree";
+export {
+	buildSessionTree,
+	getActivePath,
+	getAncestorPath,
+	getChildren,
+	getDescendants,
+	getLeafEntryIds,
+	migrateLinearToTree,
+	switchLeaf,
+	validateSessionTree,
+} from "./session/session-tree";
 export * from "./session/workspace";
 export * from "./team";
 export { createTool } from "./tools/create";

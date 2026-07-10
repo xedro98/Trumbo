@@ -1,3 +1,4 @@
+// @jsxImportSource @opentui/react
 import { useTerminalDimensions } from "@opentui/react";
 import type { ChoiceContext } from "@opentui-ui/dialog";
 import { useDialog } from "@opentui-ui/dialog/react";
@@ -8,6 +9,7 @@ import { ForkConfirmContent } from "../components/dialogs/fork-confirm";
 import { HelpDialogContent } from "../components/dialogs/help-dialog";
 import { withLoadingDialog } from "../components/dialogs/loading-dialog";
 import { useSession } from "../contexts/session-context";
+import { palette } from "../palette";
 import type { AppView, TuiProps } from "../types";
 import { formatCompactionStatus } from "../utils/compaction-status";
 import { hydrateSessionMessages } from "../utils/hydrate-messages";
@@ -30,8 +32,12 @@ export function useLocalCommandActions(input: {
 	onResumeSession: TuiProps["onResumeSession"];
 	onCompact: TuiProps["onCompact"];
 	onFork: TuiProps["onFork"];
+	onClone: TuiProps["onClone"];
+	onRenameSession: TuiProps["onRenameSession"];
 	onUndo: () => Promise<void>;
 	onExit: TuiProps["onExit"];
+	openTree: () => void;
+	onReloadConfig: () => Promise<void>;
 }) {
 	const dialog = useDialog();
 	const session = useSession();
@@ -50,8 +56,12 @@ export function useLocalCommandActions(input: {
 		onResumeSession,
 		onCompact,
 		onFork,
+		onClone,
+		onRenameSession,
 		onUndo,
 		onExit,
+		openTree,
+		onReloadConfig,
 	} = input;
 
 	const openHistory = useCallback(async () => {
@@ -114,24 +124,29 @@ export function useLocalCommandActions(input: {
 		refocusTextarea();
 	}, [dialog, refocusTextarea, termHeight]);
 
-	const runCompact = useCallback(async () => {
-		session.appendEntry({
-			kind: "status",
-			text: "Compacting context...",
-		});
-		try {
-			const result = await onCompact();
-			session.updateLastEntry(() => ({
-				kind: "status",
-				text: formatCompactionStatus(result),
-			}));
-		} catch (error) {
+	const runCompact = useCallback(
+		async (focus?: string) => {
 			session.appendEntry({
-				kind: "error",
-				text: `Compaction failed: ${error instanceof Error ? error.message : String(error)}`,
+				kind: "status",
+				text: focus
+					? `Compacting context (focus: ${focus.slice(0, 60)})...`
+					: "Compacting context...",
 			});
-		}
-	}, [onCompact, session]);
+			try {
+				const result = await onCompact(focus);
+				session.updateLastEntry(() => ({
+					kind: "status",
+					text: formatCompactionStatus(result),
+				}));
+			} catch (error) {
+				session.appendEntry({
+					kind: "error",
+					text: `Compaction failed: ${error instanceof Error ? error.message : String(error)}`,
+				});
+			}
+		},
+		[onCompact, session],
+	);
 
 	const runFork = useCallback(async () => {
 		if (!canForkSession) {
@@ -172,6 +187,115 @@ export function useLocalCommandActions(input: {
 		}
 	}, [canForkSession, dialog, onFork, refocusTextarea, session]);
 
+	const runClone = useCallback(async () => {
+		if (!canForkSession) {
+			session.appendEntry({
+				kind: "status",
+				text: "Clone is available after this session has messages.",
+			});
+			return;
+		}
+		session.appendEntry({
+			kind: "status",
+			text: "Cloning current session...",
+		});
+		try {
+			const result = await onClone();
+			if (result) {
+				session.updateLastEntry(() => ({
+					kind: "status",
+					text: `Cloned into new session ${result.newSessionId}. The clone is now the active session.`,
+				}));
+			} else {
+				session.updateLastEntry(() => ({
+					kind: "error",
+					text: "Clone failed: could not read messages from the current session.",
+				}));
+			}
+		} catch (error) {
+			session.updateLastEntry(() => ({
+				kind: "error",
+				text: `Clone failed: ${error instanceof Error ? error.message : String(error)}`,
+			}));
+		}
+	}, [canForkSession, onClone, session]);
+
+	const setSessionName = useCallback(
+		(name: string) => {
+			const trimmed = name.trim();
+			if (!trimmed) {
+				session.appendEntry({
+					kind: "error",
+					text: "Session name cannot be empty. Usage: /name <title>",
+				});
+				return;
+			}
+			void onRenameSession(trimmed)
+				.then(() => {
+					session.appendEntry({
+						kind: "status",
+						text: `Session renamed to "${trimmed}".`,
+					});
+				})
+				.catch((error) => {
+					session.appendEntry({
+						kind: "error",
+						text: `Failed to rename session: ${error instanceof Error ? error.message : String(error)}`,
+					});
+				});
+		},
+		[onRenameSession, session],
+	);
+
+	const openHotkeys = useCallback(async () => {
+		await dialog.choice<void>({
+			size: "large",
+			style: { maxHeight: termHeight - 2 },
+			content: (ctx: ChoiceContext<void>) => <HelpDialogContent {...ctx} />,
+		});
+		refocusTextarea();
+	}, [dialog, refocusTextarea, termHeight]);
+
+	const openChangelog = useCallback(async () => {
+		await dialog.choice<void>({
+			size: "large",
+			style: { maxHeight: termHeight - 2 },
+			content: (_ctx: ChoiceContext<void>) => (
+				<box flexDirection="column" paddingX={1}>
+					<text fg={palette.brand} marginBottom={1}>
+						Changelog
+					</text>
+					<text fg="gray">
+						<em>
+							See https://github.com/xedro98/Trumbo/releases for the full
+							changelog.
+						</em>
+					</text>
+				</box>
+			),
+		});
+		refocusTextarea();
+	}, [dialog, refocusTextarea, termHeight]);
+
+	const reloadConfig = useCallback(async () => {
+		session.appendEntry({
+			kind: "status",
+			text: "Reloading extensions, skills, and config...",
+		});
+		try {
+			await onReloadConfig();
+			session.updateLastEntry(() => ({
+				kind: "status",
+				text: "Config reloaded successfully.",
+			}));
+		} catch (error) {
+			session.updateLastEntry(() => ({
+				kind: "error",
+				text: `Reload failed: ${error instanceof Error ? error.message : String(error)}`,
+			}));
+		}
+	}, [onReloadConfig, session]);
+
 	const handleSlashCommand = useCallback(
 		(command: string, invocation?: LocalSlashCommandInvocation) => {
 			const resolved = resolveSlashCommand(slashCommandRegistry, command);
@@ -188,7 +312,13 @@ export function useLocalCommandActions(input: {
 				openSkills,
 				runCompact,
 				runFork,
+				runClone,
 				runUndo: onUndo,
+				openTree,
+				openHotkeys,
+				openChangelog,
+				reloadConfig,
+				setSessionName,
 				clearConversation: onClearConversation,
 				openHelp,
 				openHistory,
@@ -200,14 +330,20 @@ export function useLocalCommandActions(input: {
 			onExit,
 			onUndo,
 			openAccount,
+			openChangelog,
 			openConfig,
+			openHotkeys,
 			openMcpManager,
 			openHelp,
 			openHistory,
 			openModelSelector,
 			openSkills,
+			openTree,
+			reloadConfig,
+			runClone,
 			runCompact,
 			runFork,
+			setSessionName,
 			slashCommandRegistry,
 		],
 	);

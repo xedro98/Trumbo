@@ -102,6 +102,20 @@ export class SessionManifestStore {
 		messages: LlmsProviders.Message[],
 		systemPrompt?: string,
 	): Promise<void> {
+		return this.persistSessionTree(
+			sessionId,
+			messages,
+			undefined,
+			systemPrompt,
+		);
+	}
+
+	async persistSessionTree(
+		sessionId: string,
+		messages: LlmsProviders.Message[],
+		activeLeafId?: string,
+		systemPrompt?: string,
+	): Promise<void> {
 		const path = await this.resolveArtifactPath(
 			sessionId,
 			"messagesPath",
@@ -112,6 +126,7 @@ export class SessionManifestStore {
 			context: resolveMessagesFileContext(sessionId),
 			messages: messages as StoredMessageWithMetadata[],
 			systemPrompt,
+			activeLeafId,
 		});
 		const contents = `${JSON.stringify(payload, null, 2)}\n`;
 		mkdirSync(dirname(path), { recursive: true });

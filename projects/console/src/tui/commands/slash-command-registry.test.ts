@@ -216,6 +216,53 @@ describe("slash command registry", () => {
 		).toContain("fork");
 	});
 
+	it("hides tree from autocomplete until a session has messages", () => {
+		const emptySessionRegistry = buildSlashCommandRegistry({ canFork: false });
+		const activeSessionRegistry = buildSlashCommandRegistry({ canFork: true });
+
+		expect(resolveSlashCommand(emptySessionRegistry, "tree")).toMatchObject({
+			execution: "local",
+			visible: false,
+			selectable: false,
+		});
+		expect(
+			getVisibleSystemSlashCommands(emptySessionRegistry).map(
+				(command) => command.name,
+			),
+		).not.toContain("tree");
+		expect(
+			getVisibleSystemSlashCommands(activeSessionRegistry).map(
+				(command) => command.name,
+			),
+		).toContain("tree");
+	});
+
+	it("hides clone from autocomplete until a session has messages", () => {
+		const emptySessionRegistry = buildSlashCommandRegistry({ canFork: false });
+		const activeSessionRegistry = buildSlashCommandRegistry({ canFork: true });
+
+		expect(resolveSlashCommand(emptySessionRegistry, "clone")).toMatchObject({
+			execution: "local",
+			visible: false,
+			selectable: false,
+		});
+		expect(
+			getVisibleSystemSlashCommands(activeSessionRegistry).map(
+				(command) => command.name,
+			),
+		).toContain("clone");
+	});
+
+	it("exposes name command regardless of session state", () => {
+		const emptyRegistry = buildSlashCommandRegistry({ canFork: false });
+
+		expect(resolveSlashCommand(emptyRegistry, "name")).toMatchObject({
+			execution: "local",
+			visible: true,
+			selectable: true,
+		});
+	});
+
 	it("keeps skills visible even when no invokable skills are installed", () => {
 		const emptyRegistry = buildSlashCommandRegistry({});
 

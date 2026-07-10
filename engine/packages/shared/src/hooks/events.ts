@@ -61,11 +61,17 @@ export const HookEventNameSchema = z.enum([
 	"agent_abort",
 	"agent_end",
 	"agent_error",
+	"agent_settled",
 	"tool_call",
 	"tool_result",
 	"prompt_submit",
 	"pre_compact",
+	"session_before_compact",
 	"session_shutdown",
+	"before_provider_request",
+	"iteration_end",
+	"user_bash",
+	"context_inject",
 ]);
 
 export type HookEventName = z.infer<typeof HookEventNameSchema>;
@@ -88,6 +94,35 @@ export interface PostToolUseData {
 export interface UserPromptSubmitData {
 	prompt: string;
 	attachments: string[];
+}
+
+export interface BeforeProviderRequestData {
+	providerId: string;
+	modelId: string;
+	/** Mutable payload that will be sent to the provider. Extensions can inspect and modify this. */
+	payload?: Record<string, unknown>;
+}
+
+export interface IterationEndData {
+	iteration: number;
+	/** Whether the agent will continue to another iteration. */
+	willContinue: boolean;
+}
+
+export interface UserBashData {
+	command: string;
+	/** Whether the command was run with session context (!! prefix) or without (! prefix). */
+	withContext: boolean;
+}
+
+export interface ContextInjectData {
+	/** Additional context text to inject into the system prompt. Extensions can set this. */
+	context?: string;
+}
+
+export interface AgentSettledData {
+	/** Total iterations in this agent run. */
+	iterations: number;
 }
 
 export interface TaskStartData {

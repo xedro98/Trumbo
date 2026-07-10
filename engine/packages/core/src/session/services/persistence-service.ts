@@ -310,12 +310,27 @@ export class UnifiedSessionPersistenceService {
 		messages: LlmsProviders.Message[],
 		systemPrompt?: string,
 	): Promise<void> {
+		return this.persistSessionTree(
+			sessionId,
+			messages,
+			undefined,
+			systemPrompt,
+		);
+	}
+
+	persistSessionTree(
+		sessionId: string,
+		messages: LlmsProviders.Message[],
+		activeLeafId?: string,
+		systemPrompt?: string,
+	): Promise<void> {
 		const normalizedMessages = normalizeStoredMessagesForPersistence(
 			messages as LlmsProviders.MessageWithMetadata[],
 		);
-		return this.manifestStore.persistSessionMessages(
+		return this.manifestStore.persistSessionTree(
 			sessionId,
 			normalizedMessages,
+			activeLeafId,
 			systemPrompt,
 		);
 	}

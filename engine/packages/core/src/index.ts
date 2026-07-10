@@ -700,6 +700,13 @@ export type {
 	CoreSessionSnapshot,
 } from "./session/session-snapshot";
 export { createCoreSessionSnapshot } from "./session/session-snapshot";
+export {
+	hostSupportsSessionTree,
+	type SessionTreeHost,
+	SessionTreeService,
+	type SessionTreeSnapshot,
+	type SessionTreeValidationResult,
+} from "./session/session-tree-service";
 export type {
 	SessionCheckpointRestoreContext,
 	SessionCheckpointRestoreResult,
@@ -728,6 +735,7 @@ export {
 	createCoreSettingsService,
 } from "./settings";
 export { TrumboCore } from "./TrumboCore";
+export type { TrumboCoreSessionTreeApi } from "./trumbo-core/runtime-services";
 export type {
 	CompareCheckpointInput,
 	CompareCheckpointResult,

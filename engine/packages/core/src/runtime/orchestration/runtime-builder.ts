@@ -6,6 +6,7 @@ import type {
 } from "@trumbo/shared";
 import { hasRuntimeConfigExtension } from "@trumbo/shared";
 import { nanoid } from "nanoid";
+import { syncPlatformKnowledgeMcpForSession } from "../../account/platform-mcp";
 import { createUserInstructionConfigService } from "../../extensions/config";
 import {
 	createDefaultMcpServerClientFactory,
@@ -38,7 +39,6 @@ import {
 	filterDisabledTools,
 	resolveDisabledToolNames,
 } from "../../services/global-settings";
-import { syncPlatformKnowledgeMcpForSession } from "../../account/platform-mcp";
 import { createLocalTeamStore } from "../../services/storage/team-store";
 import type { CoreAgentMode, CoreSessionConfig } from "../../types/config";
 import type {

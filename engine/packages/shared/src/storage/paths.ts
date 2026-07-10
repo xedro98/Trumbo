@@ -370,6 +370,8 @@ export function resolveSkillsConfigSearchPaths(
 			LEGACY_AGENT_SKILLS_CONFIG_DIR,
 			SKILLS_CONFIG_DIRECTORY_NAME,
 		),
+		join(HOME_DIR, ".claude", SKILLS_CONFIG_DIRECTORY_NAME),
+		join(HOME_DIR, ".codex", SKILLS_CONFIG_DIRECTORY_NAME),
 	]);
 }
 
@@ -394,6 +396,7 @@ export function resolveRulesConfigSearchPaths(
 		...wsPaths,
 		resolveGlobalAgentsRulesPath(),
 		join(resolveTrumboDir(), RULES_CONFIG_DIRECTORY_NAME),
+		join(HOME_DIR, ".claude", "CLAUDE.md"),
 		resolveDocumentsExtensionPath("Rules"),
 	]);
 }

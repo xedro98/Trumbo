@@ -21,6 +21,12 @@ export type LocalSlashCommandName =
 	| "skills"
 	| "fork"
 	| "undo"
+	| "tree"
+	| "name"
+	| "clone"
+	| "hotkeys"
+	| "changelog"
+	| "reload"
 	| "clear"
 	| "history"
 	| "quit"
@@ -92,6 +98,30 @@ const TUI_LOCAL_COMMANDS: Array<{
 		description: "Restore to a previous checkpoint",
 	},
 	{
+		name: "tree",
+		description: "Navigate the session message tree",
+	},
+	{
+		name: "name",
+		description: "Set a display name for this session",
+	},
+	{
+		name: "clone",
+		description: "Duplicate the current session into a new one",
+	},
+	{
+		name: "hotkeys",
+		description: "Show keyboard shortcuts",
+	},
+	{
+		name: "changelog",
+		description: "Show recent changes",
+	},
+	{
+		name: "reload",
+		description: "Reload extensions, skills, and config",
+	},
+	{
 		name: "clear",
 		description: "Start a new session",
 	},
@@ -119,6 +149,12 @@ const SYSTEM_COMMAND_ORDER = [
 	"skills",
 	"fork",
 	"undo",
+	"tree",
+	"name",
+	"clone",
+	"hotkeys",
+	"changelog",
+	"reload",
 	"clear",
 	"team",
 	"history",
@@ -186,8 +222,13 @@ export function buildSlashCommandRegistry(input: {
 
 	for (const command of TUI_LOCAL_COMMANDS) {
 		const isFork = command.name === "fork";
+		const isTree = command.name === "tree";
+		const isClone = command.name === "clone";
 		const visible =
-			(command.visible ?? true) && (!isFork || input.canFork === true);
+			(command.visible ?? true) &&
+			(!isFork || input.canFork === true) &&
+			(!isTree || input.canFork === true) &&
+			(!isClone || input.canFork === true);
 		addEntry(byName, {
 			name: command.name,
 			description: command.description,

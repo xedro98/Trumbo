@@ -28,7 +28,28 @@ async function generateSummary(options: {
 	const handler = await createHandlerAsync(options.providerConfig);
 	let text = "";
 	for await (const chunk of handler.createMessage(
-		"Summarize the provided coding session into a concise continuation note with detailed next steps.",
+		[
+			"Summarize the provided coding session into a structured continuation note.",
+			"Use the following sections, omitting any that have no relevant content:",
+			"",
+			"## Goal",
+			"What the user is trying to accomplish.",
+			"",
+			"## Progress",
+			"What has been done so far, including key code changes and tool results.",
+			"",
+			"## Key Decisions",
+			"Important decisions made and their rationale.",
+			"",
+			"## Files Touched",
+			"List of files created, modified, or read.",
+			"",
+			"## Open Questions",
+			"Unresolved issues or decisions that need attention.",
+			"",
+			"## Next Steps",
+			"Detailed next steps to continue the work.",
+		].join("\n"),
 		[{ role: "user", content: options.request }],
 	)) {
 		if (chunk.type === "text") {

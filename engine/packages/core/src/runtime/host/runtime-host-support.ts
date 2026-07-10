@@ -47,24 +47,52 @@ export class RuntimeHostEventBus {
 export async function readPersistedMessagesFile(
 	messagesPath?: string | null,
 ): Promise<LlmsProviders.Message[]> {
+	const tree = await readSessionTreeFile(messagesPath);
+	return tree.messages;
+}
+
+export interface ReadSessionTreeResult {
+	messages: LlmsProviders.Message[];
+	activeLeafId?: string;
+}
+
+export async function readSessionTreeFile(
+	messagesPath?: string | null,
+): Promise<ReadSessionTreeResult> {
 	const path = messagesPath?.trim();
-	if (!path || !existsSync(path)) return [];
+	if (!path || !existsSync(path)) return { messages: [] };
 	try {
 		const raw = (await readFile(path, "utf8")).trim();
-		if (!raw) return [];
+		if (!raw) return { messages: [] };
 		const parsed = JSON.parse(raw) as unknown;
+
 		if (Array.isArray(parsed)) {
-			return sanitizeDisplayMessages(parsed as LlmsProviders.Message[]);
+			return {
+				messages: sanitizeDisplayMessages(parsed as LlmsProviders.Message[]),
+			};
 		}
+
 		if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-			const messages = (parsed as { messages?: unknown }).messages;
-			if (Array.isArray(messages)) {
-				return sanitizeDisplayMessages(messages as LlmsProviders.Message[]);
+			const obj = parsed as {
+				messages?: unknown;
+				active_leaf_id?: unknown;
+				version?: unknown;
+			};
+			if (Array.isArray(obj.messages)) {
+				const messages = sanitizeDisplayMessages(
+					obj.messages as LlmsProviders.Message[],
+				);
+				const activeLeafId =
+					typeof obj.active_leaf_id === "string" && obj.active_leaf_id.trim()
+						? obj.active_leaf_id.trim()
+						: undefined;
+				return { messages, activeLeafId };
 			}
 		}
-		return [];
+
+		return { messages: [] };
 	} catch {
-		return [];
+		return { messages: [] };
 	}
 }
 

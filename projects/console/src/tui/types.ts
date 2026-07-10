@@ -7,6 +7,7 @@ import type {
 } from "@trumbo/core";
 import type {
 	Message,
+	MessageWithMetadata,
 	ToolApprovalRequest,
 	ToolApprovalResult,
 } from "@trumbo/shared";
@@ -173,10 +174,16 @@ export interface TuiProps {
 	onSessionRestart: () => Promise<void>;
 	onAccountChange: () => Promise<void>;
 	onResumeSession: (sessionId: string) => Promise<ResumedSessionResult>;
-	onCompact: () => Promise<InteractiveCompactionResult>;
+	onCompact: (focus?: string) => Promise<InteractiveCompactionResult>;
 	onFork: () => Promise<
 		{ forkedFromSessionId: string; newSessionId: string } | undefined
 	>;
+	onClone: () => Promise<
+		{ clonedFromSessionId: string; newSessionId: string } | undefined
+	>;
+	onRenameSession: (name: string) => Promise<boolean>;
+	onReloadConfig: () => Promise<void>;
+	onOpenExternalEditor: (currentText: string) => Promise<string | undefined>;
 	getCheckpointData: () => Promise<
 		{ messages: Message[]; checkpointHistory: CheckpointEntry[] } | undefined
 	>;
@@ -184,6 +191,14 @@ export interface TuiProps {
 		runCount: number,
 		restoreWorkspace: boolean,
 	) => Promise<{ newSessionId: string; messages: Message[] } | undefined>;
+	getSessionTreeData: () => Promise<
+		| {
+				entries: MessageWithMetadata[];
+				activeLeafId?: string;
+		  }
+		| undefined
+	>;
+	onSwitchLeaf: (entryId: string) => Promise<boolean>;
 	setToolApprover: (
 		approver:
 			| ((request: ToolApprovalRequest) => Promise<ToolApprovalResult>)

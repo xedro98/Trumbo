@@ -1280,6 +1280,7 @@ export async function runCli(): Promise<void> {
 			}
 			await runInteractive(config, userInstructionService, resumeSessionId, {
 				initialPrompt: args.prompt,
+				initialSessionName: args.name as string | undefined,
 				trumboApiBaseUrl: initialTrumboProviderSettings?.baseUrl,
 				trumboProviderSettings: initialTrumboProviderSettings,
 				initialView,

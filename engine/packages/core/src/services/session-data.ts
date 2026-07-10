@@ -302,23 +302,32 @@ export function buildMessagesFilePayload(input: {
 	context: MessagesFileContext;
 	messages: LlmsProviders.MessageWithMetadata[];
 	systemPrompt?: string;
+	activeLeafId?: string;
 }): {
-	version: 1;
+	version: 2;
 	updated_at: string;
 	agent: "lead" | "subagent" | "teammate";
 	sessionId: string;
 	taskType?: string;
 	messages: StoredMessageWithMetadata[];
 	system_prompt?: string;
+	active_leaf_id?: string;
 } {
+	const messages = normalizeStoredMessagesForPersistence(input.messages);
+	const activeLeafId =
+		input.activeLeafId?.trim() ||
+		messages[messages.length - 1]?.id ||
+		undefined;
+
 	return {
-		version: 1,
+		version: 2,
 		updated_at: input.updatedAt,
 		agent: input.context.agent,
 		sessionId: input.context.sessionId,
 		...(input.context.taskType ? { taskType: input.context.taskType } : {}),
-		messages: normalizeStoredMessagesForPersistence(input.messages),
+		messages,
 		...(input.systemPrompt ? { system_prompt: input.systemPrompt } : {}),
+		...(activeLeafId ? { active_leaf_id: activeLeafId } : {}),
 	};
 }
 

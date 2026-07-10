@@ -131,6 +131,17 @@ export interface Message {
 export interface MessageWithMetadata extends Message {
 	/** Unique message ID */
 	id?: string;
+	/**
+	 * Parent entry ID in the session conversation tree.
+	 *
+	 * Root entries have `parentId` of `null` or `undefined`. Each entry's
+	 * `parentId` points to the entry that precedes it in its branch. The
+	 * active leaf (tracked separately) determines the current position.
+	 *
+	 * Linear sessions (v1 format) are migrated to a linked-list tree where
+	 * each entry's `parentId` is the previous entry's `id`.
+	 */
+	parentId?: string | null;
 	/** Logical agent kind for persisted session/history consumers */
 	agent?: string;
 	/** Concrete session id that owns this persisted message */

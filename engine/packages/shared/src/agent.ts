@@ -153,6 +153,12 @@ export interface AgentToolDefinition {
 		 */
 		completesRun?: boolean;
 	};
+	/**
+	 * Whether this tool can run in parallel with other tools in the same
+	 * response batch. Defaults to "parallel". Set to "sequential" for
+	 * stateful tools that must not run concurrently with others.
+	 */
+	executionMode?: "parallel" | "sequential";
 }
 
 export interface AgentToolResult<TOutput = unknown> {

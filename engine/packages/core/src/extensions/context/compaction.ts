@@ -147,6 +147,53 @@ function summarizeToolResults(messages: CoreCompactionContext["messages"]): {
 	};
 }
 
+/**
+ * Threshold for split-turn compaction: if a single tool result exceeds
+ * this fraction of the context window, it is truncated in-place before
+ * the full compaction runs. This prevents a single oversized tool result
+ * from overflowing the context and blocking the session.
+ */
+const SPLIT_TURN_TOOL_RESULT_THRESHOLD = 0.4;
+
+/**
+ * Detect and truncate oversized tool results in-place (TRU-59: split-turn compaction).
+ *
+ * When a single tool result's serialized size exceeds the threshold fraction
+ * of the context window, it is truncated with a marker indicating how much
+ * was removed. This is a pre-compaction pass that runs before the main
+ * compaction strategy, preventing single-turn context overflow.
+ *
+ * @returns The (possibly modified) messages and whether any truncation occurred
+ */
+export function truncateOversizedToolResults(
+	messages: CoreCompactionContext["messages"],
+	contextWindow: number,
+): { messages: CoreCompactionContext["messages"]; truncated: boolean } {
+	const maxChars = Math.floor(
+		contextWindow * SPLIT_TURN_TOOL_RESULT_THRESHOLD * 4, // ~4 chars per token
+	);
+	if (maxChars <= 0) return { messages: [...messages], truncated: false };
+
+	let truncated = false;
+	const result = messages.map((message) => {
+		if (!Array.isArray(message.content)) return message;
+		const newContent = message.content.map((block) => {
+			if (block.type !== "tool_result") return block;
+			const size = safeJsonSize(block.content);
+			if (size <= maxChars) return block;
+			truncated = true;
+			const truncatedContent =
+				typeof block.content === "string"
+					? `${block.content.slice(0, maxChars)}\n\n[...truncated ${size - maxChars} chars by split-turn compaction...]`
+					: `[...truncated ${size - maxChars} chars by split-turn compaction...]`;
+			return { ...block, content: truncatedContent };
+		});
+		return { ...message, content: newContent };
+	});
+
+	return { messages: result, truncated };
+}
+
 const BUILTIN_COMPACTION_STRATEGIES = {
 	basic: ({ context, estimateMessageTokens, logger }) =>
 		runBasicCompaction({

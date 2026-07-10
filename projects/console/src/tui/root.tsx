@@ -40,6 +40,11 @@ import {
 	SKILLS_MARKETPLACE_URL,
 	SkillsPickerContent,
 } from "./components/dialogs/skills-picker";
+import {
+	TreePickerContent,
+	type TreePickerResult,
+} from "./components/dialogs/tree-picker";
+import { buildTreePickerItems } from "./components/dialogs/tree-picker-utils";
 import { Toast, type ToastState, type ToastVariant } from "./components/toast";
 import { EventBridgeProvider } from "./contexts/event-bridge-context";
 import { SessionProvider, useSession } from "./contexts/session-context";
@@ -441,6 +446,50 @@ function App(props: TuiProps) {
 		}
 	}, [dialog, props, session, showToast, termHeight]);
 
+	const openTree = useCallback(async () => {
+		if (session.isRunning) {
+			session.appendEntry({
+				kind: "status",
+				text: "Wait for the current run to finish before opening the tree navigator.",
+			});
+			return;
+		}
+		const data = await props.getSessionTreeData();
+		if (!data || data.entries.length === 0) {
+			session.appendEntry({
+				kind: "status",
+				text: "No messages in this session to navigate.",
+			});
+			refocusTextareaRef.current();
+			return;
+		}
+		const items = buildTreePickerItems(data.entries, data.activeLeafId);
+		const result = await dialog.choice<TreePickerResult>({
+			size: "large",
+			style: { maxHeight: termHeight - 2 },
+			content: (ctx: ChoiceContext<TreePickerResult>) => (
+				<TreePickerContent {...ctx} items={items} />
+			),
+		});
+		refocusTextareaRef.current();
+		if (!result) return;
+		const switched = await props.onSwitchLeaf(result.entryId);
+		if (switched) {
+			session.appendEntry({
+				kind: "status",
+				text:
+					result.role === "user"
+						? `Switched to branch point. Edit and resubmit to create a new branch.`
+						: `Switched active position in the session tree.`,
+			});
+		} else {
+			session.appendEntry({
+				kind: "error",
+				text: "Failed to switch branch in the session tree.",
+			});
+		}
+	}, [dialog, props, session, termHeight]);
+
 	const exitTrumbo = useCallback(() => {
 		session.requestExit();
 	}, [session]);
@@ -671,7 +720,11 @@ function App(props: TuiProps) {
 		onResumeSession: props.onResumeSession,
 		onCompact: props.onCompact,
 		onFork: props.onFork,
+		onClone: props.onClone,
+		onRenameSession: props.onRenameSession,
+		onReloadConfig: props.onReloadConfig,
 		onUndo: openCheckpointRestore,
+		openTree,
 		onExit: exitTrumbo,
 	});
 

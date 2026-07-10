@@ -225,6 +225,47 @@ export function withMinimumReleaseAgeBypass(
 	}
 }
 
+/**
+ * Build an update command with a minimum release age for auto-updates.
+ *
+ * Auto-updates should wait a minimum period (default: 2 days) before
+ * installing a new version. This gives time for security issues to be
+ * discovered and reported before the update is automatically applied.
+ * Manual `trumbo update` bypasses this via `withMinimumReleaseAgeBypass`.
+ */
+export function withAutoUpdateReleaseAge(
+	updateCommand: string,
+	packageManager: PackageManager,
+	minAgeSeconds = 172800,
+): ManualUpdateCommand {
+	switch (packageManager) {
+		case PackageManager.NPM:
+			return {
+				command: `${updateCommand} --min-release-age=${minAgeSeconds}`,
+			};
+		case PackageManager.PNPM:
+			return {
+				command: updateCommand,
+				env: {
+					PNPM_CONFIG_MINIMUM_RELEASE_AGE: String(minAgeSeconds),
+					pnpm_config_minimum_release_age: String(minAgeSeconds),
+					npm_config_minimum_release_age: String(minAgeSeconds),
+				},
+			};
+		case PackageManager.YARN:
+			return {
+				command: updateCommand,
+				env: { YARN_NPM_MINIMAL_AGE_GATE: String(minAgeSeconds) },
+			};
+		case PackageManager.BUN:
+			return {
+				command: `${updateCommand} --minimum-release-age=${minAgeSeconds}`,
+			};
+		default:
+			return { command: updateCommand };
+	}
+}
+
 const UPDATE_CHILD_ENV: Readonly<Record<string, string>> = {
 	TRUMBO_NO_AUTO_UPDATE: "1",
 	TRUMBO_UPDATE_IN_PROGRESS: "1",
@@ -432,7 +473,7 @@ export function autoUpdateOnStartup(): void {
 		try {
 			const latest = await getLatestVersion(packageName, version);
 			if (!latest || compareVersions(version, latest) >= 0) return;
-			const autoUpdateCommand = withMinimumReleaseAgeBypass(
+			const autoUpdateCommand = withAutoUpdateReleaseAge(
 				updateCommand,
 				packageManager,
 			);

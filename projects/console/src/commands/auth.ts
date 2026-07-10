@@ -16,6 +16,7 @@ import {
 	disableOpenTuiGraphicsProbe,
 	resolveOpenTuiInputConfig,
 } from "../tui/opentui-env";
+import { syncTrumboPlatformKnowledgeMcp } from "../tui/trumbo-account";
 import {
 	getPersistedProviderApiKey,
 	isOAuthProvider,
@@ -26,7 +27,6 @@ import {
 } from "../utils/provider-auth";
 import { listLocalProviders } from "../utils/provider-catalog";
 import { identifyTelemetryAccount } from "../utils/telemetry";
-import { syncTrumboPlatformKnowledgeMcp } from "../tui/trumbo-account";
 
 export {
 	getPersistedProviderApiKey,

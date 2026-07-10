@@ -76,6 +76,31 @@ export function resolveReasoningForModelChange(
 	return existing.reasoning;
 }
 
+async function inlineShellExec(
+	command: string,
+	_withContext: boolean,
+	cwd: string,
+): Promise<string> {
+	const { exec } = await import("node:child_process");
+	return new Promise((resolve, reject) => {
+		exec(
+			command,
+			{
+				cwd,
+				timeout: 30000,
+				maxBuffer: 1024 * 1024,
+			},
+			(error, stdout, stderr) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+				resolve(stdout || stderr || "(no output)");
+			},
+		);
+	});
+}
+
 export async function runInteractive(
 	config: Config,
 	userInstructionService?: UserInstructionConfigService,
@@ -85,6 +110,7 @@ export async function runInteractive(
 		trumboProviderSettings?: ProviderSettings;
 		initialView?: "chat" | "config";
 		initialPrompt?: string;
+		initialSessionName?: string;
 		initialNotice?: CliMigrationNotice;
 		onInitialNoticeShown?: (notice: CliMigrationNotice) => void | Promise<void>;
 	},
@@ -184,6 +210,7 @@ export async function runInteractive(
 		providerSettingsManager,
 		userInstructionService,
 		resumeSessionId,
+		initialSessionName: options?.initialSessionName,
 		chatCommandState,
 		requestToolApproval,
 		resolveToolPolicy,
@@ -487,6 +514,33 @@ export async function runInteractive(
 		onSubmit: async (input, mode, delivery, attachments, onCommandOutput) => {
 			let commandOutput: string | undefined;
 			let zeroTurnCost = false;
+
+			// Inline shell: !command (no context) or !!command (with context)
+			if (input.startsWith("!") && !input.startsWith("!!/")) {
+				const withContext = input.startsWith("!!");
+				const command = input.slice(withContext ? 2 : 1).trim();
+				if (command) {
+					try {
+						const output = await inlineShellExec(
+							command,
+							withContext,
+							config.cwd,
+						);
+						return {
+							usage: { inputTokens: 0, outputTokens: 0 },
+							iterations: 0,
+							commandOutput: output,
+						};
+					} catch (error) {
+						return {
+							usage: { inputTokens: 0, outputTokens: 0 },
+							iterations: 0,
+							commandOutput: `Error: ${error instanceof Error ? error.message : String(error)}`,
+						};
+					}
+				}
+			}
+
 			try {
 				await sessionRuntime.ensureReady();
 				await waitForSubmittedMode(mode);
@@ -763,12 +817,12 @@ export async function runInteractive(
 				currentContextSize: getCurrentContextSize(messages),
 			};
 		},
-		onCompact: async () => {
+		onCompact: async (focus?: string) => {
 			if (isRunning) {
 				throw new Error("Wait for the current run to finish before compacting");
 			}
 			await sessionRuntime.ensureReady();
-			return await sessionRuntime.compactCurrentSession();
+			return await sessionRuntime.compactCurrentSession(focus);
 		},
 		onFork: async () => {
 			if (isRunning) {
@@ -777,9 +831,73 @@ export async function runInteractive(
 			await sessionRuntime.ensureReady();
 			return await sessionRuntime.forkCurrentSession();
 		},
+		onClone: async () => {
+			if (isRunning) {
+				throw new Error("Wait for the current run to finish before cloning");
+			}
+			await sessionRuntime.ensureReady();
+			return await sessionRuntime.cloneCurrentSession();
+		},
+		onRenameSession: async (name: string) => {
+			await sessionRuntime.ensureReady();
+			return await sessionRuntime.renameSession(name);
+		},
+		onReloadConfig: async () => {
+			// The config file watcher auto-reloads on file change.
+			// This is a no-op stub that confirms the watcher is active.
+			// Future: trigger an explicit refresh of extensions, skills, rules.
+		},
+		onOpenExternalEditor: async (currentText: string) => {
+			const { spawn } = await import("node:child_process");
+			const { writeFileSync, readFileSync, unlinkSync } = await import(
+				"node:fs"
+			);
+			const { join } = await import("node:path");
+			const { tmpdir } = await import("node:os");
+			const editor =
+				process.env.VISUAL?.trim() || process.env.EDITOR?.trim() || "vi";
+			const tmpFile = join(tmpdir(), `trumbo-editor-${Date.now()}.md`);
+			try {
+				writeFileSync(tmpFile, currentText, "utf8");
+				await new Promise<void>((resolve, reject) => {
+					const parts = editor.split(/\s+/);
+					const cmd = parts[0];
+					const args = [...parts.slice(1), tmpFile];
+					const child = spawn(cmd, args, {
+						stdio: "inherit",
+						shell: process.platform === "win32",
+					});
+					child.on("exit", (code) => {
+						if (code === 0) resolve();
+						else reject(new Error(`Editor exited with code ${code}`));
+					});
+					child.on("error", reject);
+				});
+				return readFileSync(tmpFile, "utf8");
+			} catch {
+				return undefined;
+			} finally {
+				try {
+					unlinkSync(tmpFile);
+				} catch {}
+			}
+		},
 		getCheckpointData: async () => {
 			await sessionRuntime.ensureReady();
 			return await sessionRuntime.getCheckpointData();
+		},
+		getSessionTreeData: async () => {
+			await sessionRuntime.ensureReady();
+			return await sessionRuntime.getSessionTreeData();
+		},
+		onSwitchLeaf: async (entryId: string) => {
+			if (isRunning) {
+				throw new Error(
+					"Wait for the current run to finish before switching branches",
+				);
+			}
+			await sessionRuntime.ensureReady();
+			return await sessionRuntime.switchLeaf(entryId);
 		},
 		onRestoreCheckpoint: async (runCount, restoreWorkspace) => {
 			if (isRunning) {

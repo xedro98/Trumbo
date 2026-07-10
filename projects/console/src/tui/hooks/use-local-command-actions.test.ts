@@ -16,7 +16,13 @@ function makeActions(
 		openSkills: vi.fn(),
 		runCompact: vi.fn(),
 		runFork: vi.fn(),
+		runClone: vi.fn(),
 		runUndo: vi.fn(async () => {}),
+		openTree: vi.fn(),
+		openHotkeys: vi.fn(),
+		openChangelog: vi.fn(),
+		reloadConfig: vi.fn(),
+		setSessionName: vi.fn(),
 		clearConversation: vi.fn(async () => {}),
 		openHelp: vi.fn(),
 		openHistory: vi.fn(),
@@ -118,6 +124,60 @@ describe("runLocalSlashCommandAction", () => {
 
 		expect(await handledPromise).toBe(true);
 		expect(settled).toBe(true);
+	});
+
+	it("opens the tree navigator with tree", () => {
+		const openTree = vi.fn();
+		const actions = makeActions({ openTree });
+
+		const handled = runLocalSlashCommandAction({
+			name: "tree",
+			...actions,
+		});
+
+		expect(openTree).toHaveBeenCalledOnce();
+		expect(handled).toBe(true);
+	});
+
+	it("sets the session name with name", () => {
+		const setSessionName = vi.fn();
+		const actions = makeActions({ setSessionName });
+
+		const handled = runLocalSlashCommandAction({
+			name: "name",
+			invocation: { text: "/name My Session", cursorOffset: 16 },
+			...actions,
+		});
+
+		expect(setSessionName).toHaveBeenCalledWith("My Session");
+		expect(handled).toBe(true);
+	});
+
+	it("does not set session name when no argument provided", () => {
+		const setSessionName = vi.fn();
+		const actions = makeActions({ setSessionName });
+
+		const handled = runLocalSlashCommandAction({
+			name: "name",
+			invocation: { text: "/name", cursorOffset: 5 },
+			...actions,
+		});
+
+		expect(setSessionName).not.toHaveBeenCalled();
+		expect(handled).toBe(true);
+	});
+
+	it("clones the session with clone", () => {
+		const runClone = vi.fn();
+		const actions = makeActions({ runClone });
+
+		const handled = runLocalSlashCommandAction({
+			name: "clone",
+			...actions,
+		});
+
+		expect(runClone).toHaveBeenCalledOnce();
+		expect(handled).toBe(true);
 	});
 
 	it("exits Trumbo with quit", () => {

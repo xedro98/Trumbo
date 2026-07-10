@@ -28,8 +28,10 @@ import {
 } from "./trumbo-core/automation";
 import {
 	createTrumboCorePendingPromptsApi,
+	createTrumboCoreSessionTreeApi,
 	createTrumboCoreSettingsApi,
 	type RuntimeHostServiceExtensions,
+	type TrumboCoreSessionTreeApi,
 } from "./trumbo-core/runtime-services";
 import {
 	normalizeTrumboCoreStartInput,
@@ -97,6 +99,7 @@ export class TrumboCore {
 	readonly settings: TrumboCoreSettingsApi;
 	readonly featureFlags: FeatureFlagsService;
 	readonly pendingPrompts: PendingPromptsServiceApi;
+	readonly tree: TrumboCoreSessionTreeApi;
 	private readonly host: RuntimeHost;
 	private readonly prepare: TrumboCoreOptions["prepare"] | undefined;
 	private readonly capabilities: RuntimeCapabilities | undefined;
@@ -135,6 +138,7 @@ export class TrumboCore {
 		this.featureFlags = featureFlags;
 		this.settings = createTrumboCoreSettingsApi(host);
 		this.pendingPrompts = createTrumboCorePendingPromptsApi(host);
+		this.tree = createTrumboCoreSessionTreeApi(host);
 		this.automation = new TrumboCoreAutomationController(() => {
 			if (!this.automationService) {
 				throw new Error(

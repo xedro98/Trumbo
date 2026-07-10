@@ -113,10 +113,12 @@ import type {
 	StartSessionResult,
 } from "./runtime-host";
 import { SessionNotFoundError } from "./runtime-host";
+import type { ReadSessionTreeResult } from "./runtime-host-support";
 import {
 	cloneAccumulatedUsage,
 	RuntimeHostEventBus,
 	readPersistedMessagesFile,
+	readSessionTreeFile,
 	replaySubagentHookEvent,
 } from "./runtime-host-support";
 
@@ -944,6 +946,17 @@ export class LocalRuntimeHost implements RuntimeHost {
 		}
 		const manifest = await this.readManifest(target);
 		return readPersistedMessagesFile(manifest?.messages_path);
+	}
+
+	async readSessionTree(sessionId: string): Promise<ReadSessionTreeResult> {
+		const target = sessionId.trim();
+		if (!target) return { messages: [] };
+		const row = await this.getRow(target);
+		if (row?.messagesPath) {
+			return readSessionTreeFile(row.messagesPath);
+		}
+		const manifest = await this.readManifest(target);
+		return readSessionTreeFile(manifest?.messages_path);
 	}
 
 	async dispatchHookEvent(payload: HookEventPayload): Promise<void> {

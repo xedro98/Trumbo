@@ -14,7 +14,7 @@ import {
 	type ToolApprovalResult,
 	type UserInstructionConfigService,
 } from "@trumbo/core";
-import type { Message } from "@trumbo/shared";
+import type { Message, MessageWithMetadata } from "@trumbo/shared";
 import { createCliCore } from "../../session/session";
 import { submitAndExitInTerminal } from "../../utils/approval";
 import type {
@@ -40,6 +40,7 @@ import {
 	type InteractiveExitSummary,
 } from "./exit-summary";
 import { buildForkSessionMetadata } from "./fork/metadata";
+import { deriveForkSessionTitle } from "./fork/title";
 import { applyInteractiveModeConfig } from "./mode";
 import { buildInteractiveSessionConfig } from "./session-config";
 
@@ -93,6 +94,7 @@ export function createInteractiveSessionRuntime(input: {
 	providerSettingsManager: ProviderSettingsManager;
 	userInstructionService?: UserInstructionConfigService;
 	resumeSessionId?: string;
+	initialSessionName?: string;
 	chatCommandState: ChatCommandState;
 	requestToolApproval: (
 		request: ToolApprovalRequest,
@@ -281,6 +283,15 @@ export function createInteractiveSessionRuntime(input: {
 				}
 			} else {
 				await startFreshSession(initialMessages);
+				if (input.initialSessionName && activeSessionId) {
+					try {
+						await manager.update(activeSessionId, {
+							title: input.initialSessionName,
+						});
+					} catch {
+						// Non-fatal: name is cosmetic
+					}
+				}
 			}
 		})().catch((error) => {
 			startupError = error;
@@ -552,6 +563,64 @@ export function createInteractiveSessionRuntime(input: {
 		return { forkedFromSessionId, newSessionId: activeSessionId };
 	};
 
+	const cloneCurrentSession = async (): Promise<
+		{ clonedFromSessionId: string; newSessionId: string } | undefined
+	> => {
+		const manager = sessionManager;
+		if (!manager || !activeSessionId) {
+			return undefined;
+		}
+		const clonedFromSessionId = activeSessionId;
+		const sessionRecord = await manager.get(clonedFromSessionId);
+		const messages = await manager
+			.readMessages(clonedFromSessionId)
+			.catch(() => undefined);
+		if (!messages) {
+			return undefined;
+		}
+		if (messages.length === 0) {
+			throw new Error("Cannot clone an empty session.");
+		}
+		const sourceMetadata = sessionRecord?.metadata ?? {};
+		const cloneMetadata: Record<string, unknown> = {};
+		for (const [key, value] of Object.entries(sourceMetadata)) {
+			if (key !== "fork" && key !== "clone") {
+				cloneMetadata[key] = value;
+			}
+		}
+		cloneMetadata.clone = {
+			clonedFromSessionId,
+			clonedAt: new Date().toISOString(),
+		};
+		const sourceTitle =
+			typeof sourceMetadata.title === "string"
+				? sourceMetadata.title
+				: undefined;
+		cloneMetadata.title = sourceTitle
+			? `${sourceTitle} (clone)`
+			: deriveForkSessionTitle({
+					sourcePrompt: sessionRecord?.prompt,
+					messages,
+				});
+		await startFreshSession(messages, cloneMetadata);
+		return { clonedFromSessionId, newSessionId: activeSessionId };
+	};
+
+	const renameSession = async (name: string): Promise<boolean> => {
+		const manager = sessionManager;
+		if (!manager || !activeSessionId) {
+			return false;
+		}
+		try {
+			await manager.update(activeSessionId, {
+				title: name.trim().slice(0, 120),
+			});
+			return true;
+		} catch {
+			return false;
+		}
+	};
+
 	const resumeSession = async (sessionId: string): Promise<Message[]> => {
 		const manager = await ensureSessionManager();
 		const sessionRecord = await manager.get(sessionId);
@@ -571,7 +640,9 @@ export function createInteractiveSessionRuntime(input: {
 		return messages;
 	};
 
-	const compactCurrentSession = async (): Promise<{
+	const compactCurrentSession = async (
+		focus?: string,
+	): Promise<{
 		messagesBefore: number;
 		messagesAfter: number;
 		compacted: boolean;
@@ -595,6 +666,7 @@ export function createInteractiveSessionRuntime(input: {
 			providerSettingsManager: input.providerSettingsManager,
 			sessionId: activeSessionId,
 			messages,
+			focus,
 		});
 		if (!result.compacted) {
 			return {
@@ -654,6 +726,38 @@ export function createInteractiveSessionRuntime(input: {
 			return undefined;
 		}
 		return { messages, checkpointHistory };
+	};
+
+	const getSessionTreeData = async (): Promise<
+		| {
+				entries: MessageWithMetadata[];
+				activeLeafId?: string;
+		  }
+		| undefined
+	> => {
+		if (!sessionManager || !activeSessionId) {
+			return undefined;
+		}
+		try {
+			const snapshot = await sessionManager.tree.getSnapshot(activeSessionId);
+			return {
+				entries: snapshot.entries as MessageWithMetadata[],
+				activeLeafId: snapshot.activeLeafId,
+			};
+		} catch {
+			return undefined;
+		}
+	};
+
+	const switchLeaf = async (entryId: string): Promise<boolean> => {
+		if (!sessionManager || !activeSessionId) {
+			return false;
+		}
+		try {
+			return await sessionManager.tree.switchLeaf(activeSessionId, entryId);
+		} catch {
+			return false;
+		}
 	};
 
 	const restoreCheckpoint = async (
@@ -792,8 +896,12 @@ export function createInteractiveSessionRuntime(input: {
 		restartWithCurrentMessages,
 		resumeSession,
 		forkCurrentSession,
+		cloneCurrentSession,
+		renameSession,
 		compactCurrentSession,
 		getCheckpointData,
+		getSessionTreeData,
+		switchLeaf,
 		restoreCheckpoint,
 		applyMode,
 		resetAbortRequest,
