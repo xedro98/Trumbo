@@ -72,7 +72,7 @@ function cacheBinaryBesideWrapper(binaryPath) {
 function windowsInstallHelp(packageName) {
 	const cached = readLocalRuntimeBinaryPath();
 	if (cached) {
-		console.log(`Using cached Trumbo binary at ${cached}`);
+		// Silent on success — the wrapper will resolve this cached binary.
 		return;
 	}
 
@@ -96,15 +96,13 @@ function main() {
 	try {
 		binaryPath = resolvePlatformBinary(packageName);
 	} catch (_error) {
-		console.log(`Note: ${packageName} not found, skipping binary cache`);
 		if (os.platform() === "win32") {
 			windowsInstallHelp(packageName);
 		}
 		return;
 	}
 
-	const cached = copyBinaryToLocalCache(binaryPath);
-	console.log(`Cached Trumbo binary at ${cached}`);
+	copyBinaryToLocalCache(binaryPath);
 	cacheBinaryBesideWrapper(binaryPath);
 }
 
