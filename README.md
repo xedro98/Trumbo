@@ -74,8 +74,6 @@ Bring your own API keys (Anthropic, OpenAI, Google, OpenRouter, Bedrock, Vertex,
 | **CLI** | Terminal UI, headless mode, RPC mode, connectors, schedules, install scripts. | [`projects/console/`](./projects/console) |
 | **SDK** | Programmatic agent engine: shared contracts, LLM providers, agent loop, session lifecycle, tools, plugins, cron, hub daemon. | [`engine/`](./engine) |
 | **Docs** | Published documentation (served at `platform.trumbo.dev/docs`). | [`book/`](./book) |
-| **Web App** | Trumbo platform dashboard (account, billing, teams, cloud agents, sandbox). | [`projects/web/`](./projects/web) |
-| **Marketing** | Public marketing site at `trumbo.dev`. | [`projects/marketing/`](./projects/marketing) |
 | **VS Code** | Trumbo extension for VS Code. | [`projects/vscode/`](./projects/vscode) |
 | **Hub** | Trumbo Hub dashboard (session management, team coordination). | [`projects/hub/`](./projects/hub) |
 
