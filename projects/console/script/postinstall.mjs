@@ -12,6 +12,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
 	copyBinaryToLocalCache,
+	localRuntimeBinaryPath,
 	platformBinaryFileName,
 	platformPackageName,
 	readLocalRuntimeBinaryPath,
@@ -19,6 +20,36 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
+
+// The wrapper version this postinstall is bundling for. Written alongside the
+// cached binaries so the bin/trumbo resolver can refuse stale caches when an
+// npm update landed without running this script (allow-scripts gating).
+function wrapperVersion() {
+	for (const candidate of [
+		path.join(__dirname, "package.json"),
+		path.join(__dirname, "..", "package.json"),
+	]) {
+		try {
+			const pkg = JSON.parse(fs.readFileSync(candidate, "utf8"));
+			if (typeof pkg.version === "string" && pkg.version) {
+				return pkg.version;
+			}
+		} catch {
+			// try next candidate
+		}
+	}
+	return "";
+}
+
+function writeVersionMarker(markerPath, version) {
+	if (!version) return;
+	try {
+		fs.mkdirSync(path.dirname(markerPath), { recursive: true });
+		fs.writeFileSync(markerPath, version, "utf8");
+	} catch {
+		// best-effort — the resolver falls back to the npm binary if missing.
+	}
+}
 
 function resolvePlatformBinary(packageName) {
 	const binaryName = platformBinaryFileName();
@@ -91,6 +122,7 @@ function windowsInstallHelp(packageName) {
 
 function main() {
 	const packageName = platformPackageName();
+	const version = wrapperVersion();
 
 	let binaryPath;
 	try {
@@ -103,7 +135,15 @@ function main() {
 	}
 
 	copyBinaryToLocalCache(binaryPath);
+	// Mark the stable local cache with the installed version so the wrapper can
+	// detect and skip a stale cache on a future gated update.
+	writeVersionMarker(
+		path.join(path.dirname(localRuntimeBinaryPath()), "version.txt"),
+		version,
+	);
+
 	cacheBinaryBesideWrapper(binaryPath);
+	writeVersionMarker(path.join(binDirectory(), ".trumbo.version"), version);
 }
 
 try {

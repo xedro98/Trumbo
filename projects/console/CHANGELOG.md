@@ -11,6 +11,14 @@
 
 
 
+## 3.2.1
+
+Fix: `trumbo` launcher no longer runs a stale cached binary after an npm update.
+
+- The launcher now version-checks its local binary cache: a cached binary is only used when a version marker written by `postinstall` matches the installed wrapper version. If an npm update landed without running `postinstall` (e.g., npm `allow-scripts` gating), the stale cache is skipped and the freshly-installed npm platform binary is used instead.
+- `postinstall` writes `version.txt` (local cache) and `.trumbo.version` (beside-wrapper cache) markers so the launcher can detect stale caches.
+- `postinstall` is now silent on success for cleaner npm install output.
+
 ## 3.2.0
 
 The chat UI is redesigned into a modern, avatar-driven messenger experience.

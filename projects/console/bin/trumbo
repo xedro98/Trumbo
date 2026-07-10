@@ -127,25 +127,48 @@ function readLocalRuntimeBinaryPath() {
 	return fs.existsSync(resolved) ? resolved : undefined;
 }
 
+// Read a version marker file written by postinstall. Returns undefined if the
+// marker is missing (e.g., an old cache from before version-marking, or a
+// cache that was never refreshed because postinstall was gated by allow-scripts).
+function readCacheVersion(markerPath) {
+	try {
+		return fs.readFileSync(markerPath, "utf8").trim();
+	} catch (_error) {
+		return undefined;
+	}
+}
+
 // 1. Check env var override
 const envPath = process.env.TRUMBO_BIN_PATH;
 if (envPath) {
 	run(envPath);
 }
 
-// 2. Stable cache outside node_modules (survives npm EBUSY on Windows)
-const localRuntime = readLocalRuntimeBinaryPath();
-if (localRuntime) {
-	run(localRuntime);
+// 2. Stable cache outside node_modules (survives npm EBUSY on Windows).
+// Only trust the cache when its version marker matches this wrapper's version;
+// otherwise a stale cache from a previous install (left behind when postinstall
+// was gated by allow-scripts) would shadow the fresh npm-installed binary.
+const installedVersion = wrapperVersion();
+const cacheVersion = readCacheVersion(
+	path.join(path.dirname(localRuntimeBinaryPath()), "version.txt"),
+);
+if (installedVersion && cacheVersion === installedVersion) {
+	const localRuntime = readLocalRuntimeBinaryPath();
+	if (localRuntime) {
+		run(localRuntime);
+	}
 }
 
-// 3. Cached binary beside wrapper
-const cachedNames =
-	process.platform === "win32" ? [".trumbo.exe", ".trumbo"] : [".trumbo"];
-for (const cachedName of cachedNames) {
-	const cached = path.join(scriptDir, cachedName);
-	if (fs.existsSync(cached)) {
-		run(cached);
+// 3. Cached binary beside wrapper — same version guard as the local cache.
+const besideVersion = readCacheVersion(path.join(scriptDir, ".trumbo.version"));
+if (besideVersion === installedVersion) {
+	const cachedNames =
+		process.platform === "win32" ? [".trumbo.exe", ".trumbo"] : [".trumbo"];
+	for (const cachedName of cachedNames) {
+		const cached = path.join(scriptDir, cachedName);
+		if (fs.existsSync(cached)) {
+			run(cached);
+		}
 	}
 }
 
