@@ -11,6 +11,13 @@
 
 
 
+## 3.3.1
+
+Fix: compiled CLI binary now correctly resolves to the production environment.
+
+- `isBunSourceCliDev()` excluded compiled Bun binaries whose `bun.main` contains the original source path under the Bun virtual filesystem (`/~BUN/root/...`). Without this fix, the compiled binary resolved to the "local" environment (localhost:8787), causing `trumbo auth trumbo` to fail with "Unable to connect" and the `trumbo-platform` MCP server to show an OAuth error.
+- `isPublishedCliBinary()` now matches `.trumbo.exe` (the dot-prefixed beside-wrapper cache name) in addition to `trumbo.exe`.
+
 ## 3.3.0
 
 Pi parity: 15 features across 3 tiers bringing Trumbo to parity with earendil-works/pi.

@@ -203,6 +203,12 @@ function isBunSourceCliDev(): boolean {
 		return false;
 	}
 	const main = String(bun.main ?? "").replace(/\\/g, "/");
+	// Compiled Bun binaries embed the original source path in bun.main (e.g.
+	// /~BUN/root/projects/console/src/index.ts). Exclude these so the
+	// environment resolves to "production" for published CLI binaries.
+	if (main.includes("/~BUN/root/") || main.includes(":/~BUN/root/")) {
+		return false;
+	}
 	return (
 		main.includes("/projects/console/src/index.ts") ||
 		main.endsWith("/console/src/index.ts")
@@ -217,7 +223,9 @@ function isPublishedCliBinary(): boolean {
 	const argv0 = (process.argv[0] ?? "").replace(/\\/g, "/");
 	return (
 		argv0.includes("@trumbodev/cli-") ||
-		(/\/bin\/trumbo(\.exe)?$/i.test(argv0) && readBunRuntime() === undefined)
+		// Match both `trumbo.exe` and `.trumbo.exe` (the beside-wrapper cache
+		// uses a dot-prefixed name to keep it hidden).
+		(/\/bin\/\.?trumbo(\.exe)?$/i.test(argv0) && readBunRuntime() === undefined)
 	);
 }
 
