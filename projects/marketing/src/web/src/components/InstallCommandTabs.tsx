@@ -1,6 +1,7 @@
 import { Tabs } from "@cloudflare/kumo";
 import { useState } from "react";
 import { CopyCommand } from "@/components/CopyCommand";
+import { PLATFORM_URL } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
 const INSTALL_SH_URL =
@@ -76,7 +77,7 @@ export function InstallCommandTabs({
 					</code>{" "}
 					for smoother upgrades, and close any running Trumbo before upgrading.{" "}
 					<a
-						href="/getting-started/installing-trumbo#upgrading"
+						href={`${PLATFORM_URL}/docs/getting-started/installing-trumbo#upgrading`}
 						className="underline underline-offset-2 hover:text-foreground"
 					>
 						Upgrade guide
