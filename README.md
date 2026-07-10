@@ -60,7 +60,7 @@
 
 Trumbo is a full-stack AI coding agent. It reads your project, plans changes, edits files across your codebase, runs shell commands, browses the web, and reports back, all with you in the loop. It runs four ways from one engine:
 
-- **Interactive TUI** — a terminal chat interface with Plan/Act modes, slash commands, file mentions, avatars, live tool approvals, session trees, themes, and more.
+- **Interactive TUI** — terminal chat with Plan/Act modes, slash commands, session trees, live tool approvals, and themes.
 - **Headless / JSON** — pipe a prompt, get styled text or NDJSON events for CI/CD and scripting.
 - **RPC mode** — JSONL over stdin/stdout for embedding Trumbo in editors, orchestrators, and other tools.
 - **SDK** — a TypeScript API (`@trumbo/sdk`) for building your own agents, tools, connectors, and scheduled automations.
@@ -113,25 +113,70 @@ bun install
 bun --conditions=development --cwd projects/console dev
 ```
 
-## Interactive TUI
+## Agent engine
 
-The terminal interface is built on [OpenTUI](https://github.com/sst/opentui) + React with:
+### Agent loop
 
-- **Avatar-driven chat** — `*` for Trumbo (animates while streaming), `●` for you, per-tool letter glyphs, with distinct role colors (user blue, assistant green, reasoning magenta, tools amber).
-- **Message bubbles** — your messages render as rounded bordered bubbles; Trumbo's responses render as accent-rail markdown cards. A two-level hierarchy: labeled turns at the left edge, indented events (tools, thinking, status) nested under the active turn.
-- **Branded header bar** — shows `* TRUMBO`, the current mode (`● Act` / `● Plan`), model name, and workspace/branch above a sparkle rule.
-- **Session tree** — conversations are stored as a tree (not a flat list). Use `/tree` to navigate to any previous point, switch branches, and continue from there. All branches live in a single session file. Filter by message type, label entries as bookmarks.
-- **Plan / Act modes** — Tab to toggle. Plan mode explores and strategizes; Act mode executes.
-- **Slash commands** — 22+ built-in commands: `/tree`, `/fork`, `/clone`, `/name`, `/compact`, `/model`, `/undo`, `/trust`, `/scoped-models`, `/reload`, `/hotkeys`, `/changelog`, and more. Plus plugin- and skill-registered commands.
-- **Prompt templates** — create reusable prompt macros in `~/.trumbo/prompts/*.md` with `$1`, `$@` positional arguments. Invoke with `/templatename args`.
-- **Scoped model cycling** — define a subset of models in `~/.trumbo/scoped-models.json` and cycle through them with `Ctrl+M`.
-- **Themes** — 51-token theme system with 5 built-in themes (dark, light, dracula, nord, solarized). Add your own in `~/.trumbo/themes/*.json`. Hot-reloads when you edit theme files.
-- **Keybindings** — customize via `~/.trumbo/keybindings.json`. Emacs-style defaults.
-- **Emacs kill-ring** — `Ctrl+K` / `Ctrl+U` kill to line end/start, `Ctrl+Y` yank, `Meta+Y` yank-pop. Sticky column preserves your visual column on vertical moves.
-- **Steering + follow-up queue** — press Enter while the agent is working to queue a steering message (delivered after the current tool batch). Alt+Enter for a follow-up (delivered after the agent finishes).
-- **Checkpoints** — `/undo` rewinds chat and workspace state via git-stash-based checkpoints.
-- **Empty-state splash** — shows the Trumbo ASCII logo centered in the chat area before the first message.
-- **Project trust** — the CLI asks before loading project-local extensions, skills, and config from `.trumbo/`. Use `/trust` or `--trust always` to save the decision.
+The agent loop is stateless and streaming-first, designed for reliability and extensibility:
+
+- **Two-queue message model** — steering messages (delivered before the next assistant response) and follow-up messages (delivered after the agent would stop). Lets you redirect the agent mid-task without interrupting tool execution.
+- **Parallel tool execution** — tools with `executionMode: "parallel"` run concurrently. File mutations are serialized per-file via a mutation queue (`withFileMutationQueue`) so concurrent edits to different files don't block each other.
+- **Retry handling** — retries are kept out of the core loop. The provider layer handles transient failures; the session layer auto-retries on auth errors with a force-refresh + restore cycle.
+- **Truncated tool call safety** — when `stopReason === "length"`, all tool calls in the message are failed instead of executing with potentially truncated arguments.
+- **Cross-provider thinking handoff** — when switching models mid-session, thinking/reasoning blocks are automatically converted to portable `<thinking>` text tags so context is preserved across providers.
+
+### Agent hooks
+
+The `AgentRuntimeHooks` interface provides 10 callbacks for extending the agent loop at every decision point:
+
+| Hook | When | Can do |
+|------|------|--------|
+| `beforeRun` | Before the run starts | Stop the run |
+| `afterRun` | After the run completes | Observe |
+| `beforeModel` | Before each LLM call | Replace messages/tools/options, stop |
+| `afterModel` | After each LLM call | Stop |
+| `beforeTool` | Before each tool executes | Skip, mutate input, override policy, stop |
+| `afterTool` | After each tool executes | Mutate result, stop |
+| `transformContext` | Before the LLM call (after beforeModel) | Transform system prompt + messages (RAG, filtering, long-term memory) |
+| `prepareNextTurn` | At the turn boundary (after tools, before next iteration) | Inject messages for the next turn |
+| `shouldStopAfterTurn` | After each turn completes | Clean stop at the turn boundary |
+| `onEvent` | Every runtime event | Observe |
+
+### Subprocess hook events
+
+30 lifecycle events are available for file-based and subprocess hooks, enabling external scripts and automation to react to every stage of the agent lifecycle:
+
+`agent_start`, `agent_resume`, `agent_abort`, `agent_end`, `agent_error`, `agent_settled`, `tool_call`, `tool_result`, `prompt_submit`, `pre_compact`, `session_before_compact`, `session_shutdown`, `before_provider_request` (read-only), `iteration_end`, `user_bash`, `context_inject`, `message_start`, `message_end`, `turn_start`, `turn_end`, `context_transform`, `session_branch`, `model_switch`, `skill_invoked`, `command_run`, `session_fork`, `session_clone`, `checkpoint_created`, `checkpoint_restored`, `compaction_completed`.
+
+> **Security**: The `before_provider_request` payload is `readonly`. Extensions can observe but not modify provider requests, keeping billing and auth server-authoritative.
+
+## Tools
+
+### Built-in tools
+
+| Tool | Description |
+|------|-------------|
+| `read_files` | Read file contents with line ranges |
+| `run_commands` | Execute shell commands with live output |
+| `editor` / `edit` / `write` | Edit files with fuzzy-match fallback, pre-execution diff preview |
+| `apply_patch` | Apply multi-file unified patches |
+| `search_codebase` | Search across the codebase |
+| `fetch_web_content` | Fetch and extract web page content |
+| `skills` | Load skills on-demand |
+| `ask_question` | Ask the user a structured question |
+| `spawn_agent` | Spawn a sub-agent with a custom system prompt |
+
+### Fuzzy-match edit engine
+
+The `editor` tool uses a fuzzy-match fallback: if the exact `old_str` isn't found, it searches for the most similar region using Levenshtein distance (0.66 similarity threshold) and replaces it, preserving unchanged lines. This makes edits resilient to minor whitespace or formatting differences between what the model remembers and the actual file state.
+
+### Output truncation
+
+Tool output is truncated with a bounded-memory `OutputAccumulator` (head + rolling tail + temp-file spill). The truncation notice includes `Use offset=N to continue reading the elided middle`, giving the model an actionable continuation cursor instead of a dead-end "output truncated" message.
+
+### Pre-execution diff preview
+
+When approval is required for an edit, the approval dialog shows a red/green diff of the proposed changes before the file is written. Computed in-memory (no write) by reading the current file content and applying the edit, so you can review exactly what will change before approving.
 
 ## Session management
 
@@ -147,13 +192,11 @@ trumbo --fork <id>         # fork a session into a new one
 
 ### Session tree
 
-Sessions are stored as JSONL files with a tree structure. Each entry has an `id` and `parentId`, enabling in-place branching without creating new files.
+Sessions are stored as JSONL files with a tree structure. Each entry has an `id` and `parentId`, enabling in-place branching without creating new files. Navigate with `/tree`, switch branches, and continue from any point. All branches live in a single session file.
 
-- `/tree` — navigate to any previous point, switch branches, continue from there. Filter modes: default, no-tools, user-only, labeled-only, all.
-- `/fork` — create a new session file from a previous user message.
-- `/clone` — duplicate the current active branch into a new session.
-- **Branch summaries** — when switching branches, a summary of the abandoned branch is injected so context is preserved.
+- **Branch summaries** — when switching branches, a summary of the abandoned branch is automatically injected so context is preserved across branch switches.
 - **Labels** — bookmark entries in the tree for quick navigation.
+- **Fork / clone** — `/fork` creates a new session file from a previous user message; `/clone` duplicates the current active branch.
 
 ### Compaction
 
@@ -164,77 +207,17 @@ Long sessions can exhaust context windows. Compaction summarizes older messages 
 - **Strategies**: basic (truncation) or agentic (LLM-generated summaries).
 - **Split-turn compaction**: oversized tool results are truncated mid-turn without losing the conversation flow.
 
-## Agent engine
-
-### Agent loop
-
-The agent loop is stateless and streaming-first:
-
-- **Two-queue steering** — steering messages (delivered before the next assistant response) and follow-up messages (delivered after the agent would stop).
-- **Parallel tool execution** — tools with `executionMode: "parallel"` run concurrently; file mutations are serialized per-file via a mutation queue.
-- **Retry handling** — retries are kept out of the core loop (provider-level + session auto-retry with auth-error detection).
-- **Truncated tool call safety** — when `stopReason === "length"`, all tool calls in the message are failed instead of executing with truncated arguments.
-
-### Agent hooks
-
-The `AgentRuntimeHooks` interface provides 10 callbacks for extending the agent loop:
-
-| Hook | When | Can do |
-|------|------|--------|
-| `beforeRun` | Before the run starts | Stop the run |
-| `afterRun` | After the run completes | Observe |
-| `beforeModel` | Before each LLM call | Replace messages/tools/options, stop |
-| `afterModel` | After each LLM call | Stop |
-| `beforeTool` | Before each tool executes | Skip, mutate input, override policy, stop |
-| `afterTool` | After each tool executes | Mutate result, stop |
-| `transformContext` | Before the LLM call (after beforeModel) | Transform system prompt + messages (RAG, filtering, long-term memory) |
-| `prepareNextTurn` | At the turn boundary (after tools, before next iteration) | Inject messages for the next turn |
-| `shouldStopAfterTurn` | After each turn completes | Clean stop at the turn boundary |
-| `onEvent` | Every runtime event | Observe |
-
-### Cross-provider thinking handoff
-
-When switching models mid-session, thinking/reasoning blocks from the previous provider may not be understood by the new provider. Trumbo automatically converts thinking blocks to portable `<thinking>` text tags so the context is preserved across providers.
-
-### Subprocess hook events
-
-30 lifecycle events are available for file-based and subprocess hooks:
-
-`agent_start`, `agent_resume`, `agent_abort`, `agent_end`, `agent_error`, `agent_settled`, `tool_call`, `tool_result`, `prompt_submit`, `pre_compact`, `session_before_compact`, `session_shutdown`, `before_provider_request` (read-only), `iteration_end`, `user_bash`, `context_inject`, `message_start`, `message_end`, `turn_start`, `turn_end`, `context_transform`, `session_branch`, `model_switch`, `skill_invoked`, `command_run`, `session_fork`, `session_clone`, `checkpoint_created`, `checkpoint_restored`, `compaction_completed`.
-
-> **Security**: The `before_provider_request` payload is `readonly`. Extensions can observe but not modify provider requests, keeping billing and auth server-authoritative.
-
-## Tools
-
-### Built-in tools
-
-| Tool | Description |
-|------|-------------|
-| `read_files` | Read file contents with line ranges |
-| `run_commands` | Execute shell commands with live output |
-| `editor` / `edit` / `write` | Edit files with fuzzy-match fallback (Levenshtein 0.66 threshold), pre-execution diff preview in approval dialog |
-| `apply_patch` | Apply multi-file unified patches |
-| `search_codebase` | Search across the codebase |
-| `fetch_web_content` | Fetch and extract web page content |
-| `skills` | Load skills on-demand |
-| `ask_question` | Ask the user a structured question |
-| `spawn_agent` | Spawn a sub-agent with a custom system prompt |
-
-### Edit engine
-
-The `editor` tool uses a fuzzy-match fallback: if the exact `old_str` isn't found, it searches for the most similar region using Levenshtein distance (0.66 threshold) and replaces it, preserving unchanged lines. A note is appended to the result when fuzzy matching was used.
-
-### Output truncation
-
-Tool output is truncated with a bounded-memory `OutputAccumulator` (head + rolling tail + temp-file spill). The truncation notice includes `Use offset=N to continue reading the elided middle`, giving the model an actionable continuation cursor.
-
-### Pre-execution diff preview
-
-When approval is required for an edit, the approval dialog shows a red/green diff of the proposed changes before the file is written. Computed in-memory (no write) by reading the current file content and applying the edit.
-
 ## Multi-agent teams
 
-A coordinator agent splits work into subtasks and delegates to specialist agents, each with its own tools and context. 17+ team tools (`team_spawn_teammate`, `team_run_task`, `team_await_runs`, `team_broadcast`, `team_create_outcome`, etc.) manage the team lifecycle. Team state persists across sessions.
+A coordinator agent splits work into subtasks and delegates to specialist agents, each with its own tools and context. 17+ team tools manage the team lifecycle:
+
+- `team_spawn_teammate` — spawn a specialist with a role prompt
+- `team_run_task` — assign a task to a teammate
+- `team_await_runs` — wait for parallel teammate runs to complete
+- `team_broadcast` — send a message to all teammates
+- `team_create_outcome` — define a success criterion for the mission
+
+Team state persists across sessions, so you can resume a team sprint days later.
 
 ```bash
 trumbo --team-name auth-sprint "Plan and implement user authentication with tests"
@@ -268,7 +251,7 @@ trumbo connect --stop            # stop all bridges
 
 ## Hub daemon
 
-The hub daemon is a shared WebSocket session server that manages multiple agent sessions. It enables the dashboard, background zen mode, and connector bridges.
+The hub daemon is a shared WebSocket session server that manages multiple agent sessions. It enables the dashboard, background zen mode (`--zen`), and connector bridges.
 
 ```bash
 trumbo hub ensure    # start if not running
@@ -279,15 +262,29 @@ trumbo dashboard     # open the hub dashboard
 
 ## RPC mode
 
-Embed Trumbo in other tools via newline-delimited JSON over stdin/stdout.
+Embed Trumbo in other tools via newline-delimited JSON over stdin/stdout. Every session operation is available programmatically.
 
 ```bash
 echo '{"type":"start","config":{"providerId":"anthropic","modelId":"claude-sonnet-4"}}' | trumbo --mode rpc
 ```
 
-Requests: `start`, `send`, `abort`, `stop`, `get`, `list`, `readMessages`, `getTree`, `switchLeaf`, `delete`, `exit`. Events are streamed as they happen. See the [RPC protocol docs](https://platform.trumbo.dev/docs/getting-started/installing-trumbo) for details.
+| Request | Action |
+|---------|--------|
+| `start` | Create a new session with provider/model config |
+| `send` | Send a prompt to an active session |
+| `abort` | Abort the current tool execution |
+| `stop` | Stop and clean up a session |
+| `get` | Get session metadata |
+| `list` | List all sessions |
+| `readMessages` | Read the full message transcript |
+| `getTree` | Get the session tree snapshot |
+| `switchLeaf` | Switch the active branch in the tree |
+| `delete` | Delete a session |
+| `exit` | Shut down the RPC server |
 
-## Works with every model
+Events are streamed as they happen (agent events, tool calls, tool results, turn boundaries). See the [RPC docs](https://platform.trumbo.dev/docs/getting-started/installing-trumbo) for the full protocol.
+
+## Providers
 
 | Provider | Models |
 |----------|--------|
@@ -311,7 +308,7 @@ trumbo auth trumbo    # sign in with Trumbo account (device code flow)
 
 ### Plugins
 
-Register tools, commands, rules, message builders, providers, MCP servers, and TUI views programmatically:
+Register tools, commands, rules, message builders, providers, MCP servers, and TUI views programmatically. Plugins can run in-process (jiti-loaded TypeScript) or in a subprocess sandbox.
 
 ```typescript
 import { Agent, createTool } from "@trumbo/sdk"
@@ -328,11 +325,9 @@ const deployTool = createTool({
 const agent = new Agent({ tools: [deployTool] })
 ```
 
-Plugins can run in-process (jiti-loaded TypeScript) or in a subprocess sandbox. The `tui` capability lets plugins contribute footer/header/widget views to the TUI via `api.registerView()`.
-
 ### Skills
 
-Skills are capability packages following the [Agent Skills standard](https://agentskills.io). Place `SKILL.md` files in:
+Capability packages following the [Agent Skills standard](https://agentskills.io). Place `SKILL.md` files in:
 
 - `~/.trumbo/skills/` (global)
 - `~/.agents/skills/` (cross-harness standard)
@@ -340,11 +335,11 @@ Skills are capability packages following the [Agent Skills standard](https://age
 - `~/.codex/skills/` (Codex compatibility)
 - `.trumbo/skills/` (project-local, trust-gated)
 
-Invoke with `/skill:name` or let the agent load them automatically.
+Invoke with `/skill:name` or let the agent load them automatically via progressive disclosure.
 
 ### MCP servers
 
-Connect [MCP servers](https://modelcontextprotocol.io) for databases, APIs, cloud infra, and external systems. Manage from the CLI:
+Connect [MCP servers](https://modelcontextprotocol.io) for databases, APIs, cloud infra, and external systems.
 
 ```bash
 trumbo mcp install fs -- npx -y @modelcontextprotocol/server-filesystem /tmp
@@ -371,6 +366,14 @@ trumbo --trust never     # don't trust
 trumbo --trust ask       # prompt (default)
 ```
 
+### Prompt templates
+
+Create reusable prompt macros in `~/.trumbo/prompts/*.md` with `$1`, `$@` positional arguments. Invoke with `/templatename args`.
+
+### Scoped model cycling
+
+Define a subset of models in `~/.trumbo/scoped-models.json` and cycle through them with `Ctrl+M` during a session.
+
 ## Headless CLI for CI/CD
 
 Pipe input, get JSON out, chain commands, wire into pipelines.
@@ -382,6 +385,46 @@ trumbo --json "List all TODO comments" | jq -r 'select(.type == "agent_event" an
 trumbo --yolo "Refactor this package"    # skip approvals
 trumbo --zen "Background task"           # dispatch to hub daemon, exit immediately
 ```
+
+## SDK
+
+```typescript
+import { TrumboCore } from "@trumbo/sdk"
+
+const trumbo = await TrumboCore.create({
+  hub: { cwd: process.cwd(), clientType: "my-app", displayName: "My App" },
+})
+
+const { sessionId } = await trumbo.start({
+  config: { providerId: "anthropic", modelId: "claude-sonnet-4" },
+})
+
+await trumbo.send(sessionId, { prompt: "Explain this codebase" })
+
+// Subscribe to streaming events
+trumbo.subscribe((event) => {
+  console.log("Event:", event)
+})
+
+// Navigate the session tree
+const snapshot = await trumbo.tree.getSnapshot(sessionId)
+await trumbo.tree.switchLeaf(sessionId, entryId)
+```
+
+The SDK exposes session lifecycle, tree navigation (`trumbo.tree`), tool orchestration, hooks, plugins, and the hub daemon. See the [SDK docs](https://platform.trumbo.dev/docs) for the full API.
+
+## Interactive TUI
+
+The terminal interface (built on [OpenTUI](https://github.com/sst/opentui) + React) provides:
+
+- **Plan / Act modes** — Tab to toggle between read-only exploration and execution
+- **Session tree navigation** — `/tree` to browse branches, switch leaves, label bookmarks
+- **Slash commands** — 22+ built-in: `/tree`, `/fork`, `/clone`, `/compact`, `/model`, `/undo`, `/trust`, `/scoped-models`, `/reload`, `/hotkeys`, `/changelog`, plus plugin/skill/prompt commands
+- **Steering + follow-up queue** — queue messages while the agent is working (Enter = steer, Alt+Enter = follow-up)
+- **Checkpoints** — `/undo` rewinds chat and workspace state via git-stash
+- **Tool approvals** — approve/deny each tool call with optional pre-execution diff preview
+- **Themes** — 5 built-in (dark, light, dracula, nord, solarized) + custom `~/.trumbo/themes/*.json` with hot-reload
+- **Keybindings** — customizable via `~/.trumbo/keybindings.json`
 
 ## Upgrading
 
@@ -399,24 +442,6 @@ npm install -g @trumbodev/cli@latest --allow-scripts=@trumbodev/cli
 The `--allow-scripts=@trumbodev/cli` flag lets the postinstall cache the binary outside `node_modules` for smoother Windows upgrades. The launcher version-checks its cache on every start, so a stale cached binary can never shadow a fresh npm install.
 
 See the [upgrade guide](https://platform.trumbo.dev/docs/getting-started/installing-trumbo#upgrading) for full details.
-
-## SDK
-
-```typescript
-import { TrumboCore } from "@trumbo/sdk"
-
-const trumbo = await TrumboCore.create({
-  hub: { cwd: process.cwd(), clientType: "my-app", displayName: "My App" },
-})
-
-const { sessionId } = await trumbo.start({
-  config: { providerId: "anthropic", modelId: "claude-sonnet-4" },
-})
-
-await trumbo.send(sessionId, { prompt: "Explain this codebase" })
-```
-
-The SDK exposes session lifecycle, tree navigation (`trumbo.tree`), tool orchestration, hooks, plugins, and the hub daemon. See the [SDK docs](https://platform.trumbo.dev/docs) for the full API.
 
 ## Contributing
 
