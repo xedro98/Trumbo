@@ -33,7 +33,7 @@ Fix: compiled CLI binary now correctly resolves to the production environment.
 
 ## 3.3.0
 
-Pi parity: 15 features across 3 tiers bringing Trumbo to parity with earendil-works/pi.
+v3.3.0 — 15 new features across 3 tiers.
 
 ### Tier 1 — wiring (already-built modules now live)
 - `--mode rpc` JSONL stdin/stdout embedding mode wired into the CLI entry point (enables orchestrator-style multi-client usage)

@@ -72,7 +72,7 @@ export const HookEventNameSchema = z.enum([
 	"iteration_end",
 	"user_bash",
 	"context_inject",
-	// Expanded events (pi parity) — observation-only, no mutation:
+	// Expanded events — observation-only, no mutation:
 	"message_start",
 	"message_end",
 	"turn_start",
