@@ -231,13 +231,50 @@ export class SessionTreeService {
 
 		if (messages.length === 0) return false;
 
-		const entries = messages as SessionTreeEntry[];
+		const entries = [...(messages as SessionTreeEntry[])];
+		let summaryText: string | undefined;
+		if (currentLeafId && currentLeafId !== entryId) {
+			const abandonedPath = getAncestorPath(entries, currentLeafId);
+			const userMessages = abandonedPath.filter(
+				(e) =>
+					e.role === "user" &&
+					e.entryKind !== "label" &&
+					e.entryKind !== "branchSummary",
+			);
+			const lastUser = userMessages[userMessages.length - 1];
+			const lastText =
+				typeof lastUser?.content === "string"
+					? lastUser.content.slice(0, 120)
+					: (lastUser?.content
+							?.find((b) => b.type === "text")
+							?.text?.slice(0, 120) ?? "");
+			summaryText = `Switched from a branch with ${abandonedPath.length} entries.${
+				lastText ? ` Last user request: "${lastText}".` : ""
+			}`;
+		}
+
 		const newLeafId = sharedSwitchLeaf(entries, entryId);
 		if (!newLeafId) return false;
 
 		if (newLeafId === currentLeafId) return true;
 
-		await this.host.persistSessionTree(sessionId, messages, newLeafId);
+		// Inject a branch summary entry so the new active path carries context
+		// from the abandoned branch.
+		let finalLeafId = newLeafId;
+		if (summaryText) {
+			const summaryId = crypto.randomUUID();
+			entries.push({
+				id: summaryId,
+				parentId: newLeafId,
+				role: "user",
+				content: [{ type: "text", text: summaryText }],
+				entryKind: "branchSummary",
+				summaryText,
+			});
+			finalLeafId = summaryId;
+		}
+
+		await this.host.persistSessionTree(sessionId, entries, finalLeafId);
 		return true;
 	}
 

@@ -216,6 +216,18 @@ const HELP_ROWS: HelpRow[] = [
 		key: "/reload",
 		desc: "Reload extensions, skills, and config",
 	},
+	{
+		kind: "entry",
+		id: "c-trust",
+		key: "/trust",
+		desc: "Trust this workspace (enable project resources; restart required)",
+	},
+	{
+		kind: "entry",
+		id: "c-scoped-models",
+		key: "/scoped-models",
+		desc: "Show scoped models for Ctrl+M cycling",
+	},
 	{ kind: "entry", id: "c-quit", key: "/quit", desc: "Exit Trumbo" },
 	{ kind: "entry", id: "c-help", key: "/help", desc: "Show this help" },
 

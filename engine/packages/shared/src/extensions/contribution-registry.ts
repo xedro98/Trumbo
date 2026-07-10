@@ -136,6 +136,34 @@ export interface AgentExtensionApi<TTool = AgentTool, TMessage = unknown> {
 	) => void;
 	// Register an MCP server exposed as runtime tools. Requires the `mcp` capability.
 	registerMcpServer: (server: AgentExtensionMcpServer) => void;
+	/**
+	 * Register a TUI view contribution (custom footer, header, or widget).
+	 * Requires the `tui` capability. The view descriptor is a serializable
+	 * object so it works across the subprocess-sandbox boundary.
+	 */
+	registerView: (view: TuiViewContribution) => void;
+}
+
+/**
+ * A TUI view contributed by an extension. The `slot` determines where the view
+ * renders in the TUI layout. The `render` descriptor is a serializable
+ * description of what to draw (not a React component — the TUI layer
+ * interprets it). This keeps the contribution cross-sandbox compatible.
+ */
+export interface TuiViewContribution {
+	/** Unique view id (namespaced by extension name). */
+	id: string;
+	/** Display name shown in the TUI. */
+	name: string;
+	/** Where the view renders: "footer" | "header" | "widget" | "overlay". */
+	slot: "footer" | "header" | "widget" | "overlay";
+	/**
+	 * Serializable render descriptor. The TUI layer interprets this to draw
+	 * the view. For subprocess-sandboxed plugins, this is a JSON description
+	 * (e.g. `{ kind: "text", content: "Custom status: ...", fg: "green" }`)
+	 * that the host TUI translates to React elements.
+	 */
+	render: Record<string, unknown>;
 }
 
 export type AgentExtensionHooks = Partial<AgentRuntimeHooks>;
@@ -198,6 +226,7 @@ const ExtensionCapabilityOptions = [
 	"providers",
 	"automationEvents",
 	"mcp",
+	"tui",
 ] as const;
 
 export type AgentExtensionCapability =
@@ -218,6 +247,7 @@ export interface AgentExtensionRegistry<TTool = AgentTool, TMessage = unknown> {
 	providers: AgentExtensionProvider[];
 	automationEventTypes: AgentExtensionAutomationEventType[];
 	mcpServers: AgentExtensionMcpServer[];
+	views: TuiViewContribution[];
 }
 
 /**
@@ -438,6 +468,7 @@ export class ContributionRegistry<
 		providers: [],
 		automationEventTypes: [],
 		mcpServers: [],
+		views: [],
 	};
 	private normalized: NormalizedExtension<TExtension, TTool, TMessage>[] = [];
 	private phase: "resolve" | "validate" | "setup" | "activate" | "run" =
@@ -498,6 +529,7 @@ export class ContributionRegistry<
 				providers: [],
 				automationEventTypes: [],
 				mcpServers: [],
+				views: [],
 			};
 			const api: AgentExtensionApi<TTool, TMessage> = {
 				registerTool: (tool) => pending.tools.push(tool),
@@ -537,6 +569,14 @@ export class ContributionRegistry<
 							plugin: extensionName,
 						},
 					});
+				},
+				registerView: (view) => {
+					if (!entry.manifest.capabilities.has("tui")) {
+						throw new Error(
+							`Invalid setup for extension "${extensionName}": registerView requires the "tui" capability`,
+						);
+					}
+					pending.views.push(view);
 				},
 			};
 			const setupContext = entry.manifest.capabilities.has("automationEvents")
@@ -612,6 +652,7 @@ export class ContributionRegistry<
 			providers: [...this.registry.providers],
 			automationEventTypes: [...this.registry.automationEventTypes],
 			mcpServers: [...this.registry.mcpServers],
+			views: [...this.registry.views],
 		};
 	}
 

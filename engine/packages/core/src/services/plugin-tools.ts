@@ -136,6 +136,7 @@ async function collectPluginContributions(
 				throw new Error('registerMcpServer requires the "mcp" capability');
 			}
 		},
+		registerView: () => {},
 	};
 	await extension.setup(api, { workspaceInfo });
 	return { tools };

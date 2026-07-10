@@ -19,7 +19,8 @@
  * ```
  */
 
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { EventEmitter } from "node:events";
+import { existsSync, readdirSync, readFileSync, watch } from "node:fs";
 import { join } from "node:path";
 import { resolveTrumboDir } from "@trumbo/shared/storage";
 
@@ -382,4 +383,56 @@ export function themeToPalette(tokens: ThemeTokens) {
 		border: tokens.border,
 		borderStrong: tokens.borderStrong,
 	} as const;
+}
+
+// --- Cached loader + hot-reload ---------------------------------------------
+// loadThemes() hits the filesystem; callers during render should use
+// getCachedThemes(). A file watcher on ~/.trumbo/themes/ clears the cache and
+// emits "change" so the TUI can re-render with the new theme.
+
+let cachedThemes: Record<string, Theme> | undefined;
+const themeEmitter = new EventEmitter();
+let watcherStarted = false;
+
+/** Load themes once and cache the result. Use this in render paths. */
+export function getCachedThemes(): Record<string, Theme> {
+	if (!cachedThemes) {
+		cachedThemes = loadThemes();
+	}
+	return cachedThemes;
+}
+
+/** Clear the theme cache and notify subscribers that the theme set changed. */
+export function clearThemeCache(): void {
+	cachedThemes = undefined;
+	themeEmitter.emit("change");
+}
+
+/** Subscribe to theme-set changes (e.g. a theme file was added/edited). */
+export function subscribeThemeChanges(cb: () => void): () => void {
+	themeEmitter.on("change", cb);
+	return () => {
+		themeEmitter.off("change", cb);
+	};
+}
+
+/**
+ * Start watching ~/.trumbo/themes/ for changes. Safe to call multiple times.
+ * On any change the theme cache is cleared and subscribers are notified.
+ */
+export function startThemeWatcher(): void {
+	if (watcherStarted) return;
+	watcherStarted = true;
+	const themesDir = join(resolveTrumboDir(), "themes");
+	if (!existsSync(themesDir)) return;
+	try {
+		const watcher = watch(themesDir, () => {
+			clearThemeCache();
+		});
+		watcher.on("error", () => {
+			// Ignore watcher errors (dir deleted, etc.) — best-effort.
+		});
+	} catch {
+		// Watch unavailable (platform/permissions) — hot-reload disabled.
+	}
 }

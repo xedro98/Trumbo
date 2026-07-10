@@ -182,6 +182,37 @@ describe("getActivePath", () => {
 
 		expect(path.map((e) => e.id)).toEqual(["a", "b"]);
 	});
+
+	it("excludes label (bookmark) entries from the active path", () => {
+		const entries = [
+			makeEntry("a", null),
+			makeEntry("b", "a"),
+			{ ...makeEntry("L1", "b"), entryKind: "label", label: "bookmark" },
+			makeEntry("c", "b"),
+		];
+
+		const path = getActivePath(entries, "c");
+
+		expect(path.map((e) => e.id)).toEqual(["a", "b", "c"]);
+		expect(path.find((e) => e.entryKind === "label")).toBeUndefined();
+	});
+
+	it("includes branchSummary entries on the active path", () => {
+		const entries = [
+			makeEntry("a", null),
+			{
+				...makeEntry("s1", "a"),
+				entryKind: "branchSummary",
+				summaryText: "abandoned branch summary",
+			},
+			makeEntry("b", "s1"),
+		];
+
+		const path = getActivePath(entries, "b");
+
+		expect(path.map((e) => e.id)).toEqual(["a", "s1", "b"]);
+		expect(path.find((e) => e.entryKind === "branchSummary")).toBeDefined();
+	});
 });
 
 describe("getChildren", () => {

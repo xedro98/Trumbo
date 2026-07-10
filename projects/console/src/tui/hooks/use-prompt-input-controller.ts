@@ -15,6 +15,11 @@ import {
 	type PastedTextSnippet,
 } from "../utils/pasted-snippets";
 import {
+	expandTemplate,
+	type PromptTemplate,
+	parseTemplateInvocation,
+} from "../utils/prompt-templates";
+import {
 	insertSelectedSkillCommand,
 	type LocalSlashCommandInvocation,
 	removeLocalSlashCommandInvocation,
@@ -42,6 +47,7 @@ export function usePromptInputController(input: {
 	refreshRepoStatus: () => void;
 	setAppView: (view: AppView) => void;
 	turnErrorReportedRef: { current: boolean };
+	promptTemplates: Map<string, PromptTemplate>;
 }) {
 	const {
 		autocomplete,
@@ -303,8 +309,25 @@ export function usePromptInputController(input: {
 			const activeUserImages = pastedImagesRef.current
 				.filter((image) => prompt.includes(image.marker))
 				.map((image) => image.dataUrl);
+			// Prompt template expansion: if the input matches a loaded prompt
+			// template (/name args), expand $1/$@ placeholders and use the
+			// expanded text as the prompt instead of the raw slash command.
+			let promptAfterTemplates = expandedPrompt;
+			const templateInvocation = parseTemplateInvocation(expandedPrompt);
+			if (
+				templateInvocation &&
+				input.promptTemplates.has(templateInvocation.name)
+			) {
+				const template = input.promptTemplates.get(templateInvocation.name);
+				if (template) {
+					promptAfterTemplates = expandTemplate(
+						template.content,
+						templateInvocation.args,
+					);
+				}
+			}
 			const promptForSubmit = expandUserCommandPrompt(
-				expandedPrompt,
+				promptAfterTemplates,
 				slashCommandRegistry,
 			);
 
@@ -401,6 +424,8 @@ export function usePromptInputController(input: {
 			setAppView,
 			slashCommandRegistry,
 			turnErrorReportedRef,
+			input.promptTemplates.get,
+			input.promptTemplates.has,
 		],
 	);
 

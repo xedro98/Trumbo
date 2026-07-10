@@ -1,9 +1,19 @@
+import {
+	BUILTIN_DARK,
+	BUILTIN_LIGHT,
+	getCachedThemes,
+	subscribeThemeChanges,
+	themeToPalette,
+} from "./utils/themes";
+
 // Trumbo terminal palette.
 //
 // `palette` holds the dark-terminal token set using ANSI named colors so the
-// renderer can map them to the user's actual terminal palette. `themePalette`
-// provides hex overrides for light terminals where ANSI green/yellow blow out
-// contrast. `spacing` is a tiny shared rhythm scale for consistent margins.
+// renderer can map them to the user's actual terminal palette. The themed
+// accents (brand/act/plan/success + role colors) are resolved at runtime by
+// `resolveThemePalette()` from the 51-token theme system (utils/themes.ts),
+// which honors a `TRUMBO_THEME` env override and falls back to the detected
+// dark/light built-in theme. `spacing` is a tiny shared rhythm scale.
 export const palette = {
 	// Brand + mode accents
 	brand: "green",
@@ -83,31 +93,88 @@ export const diffPalettes = {
 	},
 } as const;
 
+/**
+ * Resolve the active palette for a terminal theme. Honors a `TRUMBO_THEME`
+ * env override (a key from utils/themes.ts loadThemes(), e.g. "dracula"),
+ * falling back to the detected dark/light built-in theme. Role colors
+ * (user/magic/tool) are preserved per terminal theme. Cached per
+ * (override, theme) and invalidated when the theme set changes.
+ */
+export function resolveThemePalette(theme: TerminalTheme = "dark"): {
+	brand: string;
+	act: string;
+	plan: string;
+	selection: string;
+	success: string;
+	error: string;
+	muted: string;
+	dim: string;
+	textOnSelection: string;
+	border: string;
+	borderStrong: string;
+	user: string;
+	magic: string;
+	tool: string;
+} {
+	const override = process.env.TRUMBO_THEME ?? "";
+	const cacheKey = `${override}:${theme}`;
+	const hit = resolvePaletteCache.get(cacheKey);
+	if (hit) return hit;
+
+	const themes = getCachedThemes();
+	const tokens =
+		override && themes[override]
+			? themes[override].tokens
+			: theme === "light"
+				? BUILTIN_LIGHT
+				: BUILTIN_DARK;
+	const resolved = {
+		...themeToPalette(tokens),
+		user: themePalette[theme].user,
+		magic: themePalette[theme].magic,
+		tool: themePalette[theme].tool,
+	};
+	resolvePaletteCache.set(cacheKey, resolved);
+	return resolved;
+}
+
+const resolvePaletteCache = new Map<
+	string,
+	ReturnType<typeof resolveThemePalette>
+>();
+
+// Keep the resolved palette cache in sync with theme-file changes so
+// hot-reload picks up edited/added themes.
+subscribeThemeChanges(() => {
+	resolvePaletteCache.clear();
+});
+
 export function getModeAccent(
 	mode: string,
 	theme: TerminalTheme = "dark",
 ): string {
-	return mode === "plan" ? themePalette[theme].plan : themePalette[theme].act;
+	const p = resolveThemePalette(theme);
+	return mode === "plan" ? p.plan : p.act;
 }
 
 export function getSuccessColor(theme: TerminalTheme = "dark"): string {
-	return themePalette[theme].success;
+	return resolveThemePalette(theme).success;
 }
 
 export function getBrandColor(theme: TerminalTheme = "dark"): string {
-	return themePalette[theme].brand;
+	return resolveThemePalette(theme).brand;
 }
 
 export function getUserColor(theme: TerminalTheme = "dark"): string {
-	return themePalette[theme].user;
+	return resolveThemePalette(theme).user;
 }
 
 export function getMagicColor(theme: TerminalTheme = "dark"): string {
-	return themePalette[theme].magic;
+	return resolveThemePalette(theme).magic;
 }
 
 export function getToolAccent(theme: TerminalTheme = "dark"): string {
-	return themePalette[theme].tool;
+	return resolveThemePalette(theme).tool;
 }
 
 // Input field adaptive color system

@@ -35,6 +35,7 @@ import {
 	writeErr,
 	writeln,
 } from "./utils/output";
+import { isWorkspaceTrusted } from "./utils/project-trust";
 import {
 	ensureOAuthProviderApiKey,
 	getPersistedProviderApiKey,
@@ -943,6 +944,32 @@ export async function runCli(): Promise<void> {
 		return;
 	}
 
+	// RPC mode: newline-delimited JSON over stdio for embedding Trumbo in other
+	// tools (editors, orchestrators). Mutually exclusive with interactive/piped
+	// modes; never falls through.
+	if (args.outputMode === "rpc") {
+		const { createCliCore } = await import("./session/session");
+		const { createRpcEmitter, startRpcServer } = await import(
+			"./runtime/rpc-mode"
+		);
+		const { createRpcHandler } = await import("./runtime/rpc-handler");
+		const core = await createCliCore();
+		const emitter = createRpcEmitter(process.stdout);
+		const handler = createRpcHandler(core, emitter);
+		await startRpcServer({
+			stdin: process.stdin,
+			stdout: process.stdout,
+			handler,
+			onExit: () => {
+				void core.dispose("rpc_exit");
+			},
+		});
+		// Explicitly exit after the RPC server closes — the core/hub daemon
+		// may keep the process alive with open handles otherwise.
+		process.exit(0);
+		return;
+	}
+
 	if (args.worktree) {
 		if (
 			!args.prompt &&
@@ -980,6 +1007,10 @@ export async function runCli(): Promise<void> {
 
 	const cwd = args.cwd ?? process.cwd();
 	const workspaceRoot = resolveWorkspaceRoot(cwd);
+	// Project trust: only load project-local skills/rules/workflows when the
+	// workspace is trusted (decision "always" or --trust/--approve override).
+	// Untrusted workspaces skip project-local resource loading.
+	const workspaceTrusted = isWorkspaceTrusted(workspaceRoot, args.trust);
 	// Sandbox mode is enabled implicitly whenever --data-dir is provided, or
 	// when TRUMBO_SANDBOX=1 is set in the environment (in which case the data
 	// dir falls back to $TRUMBO_SANDBOX_DATA_DIR or /tmp/trumbo-sandbox).
@@ -1004,12 +1035,14 @@ export async function runCli(): Promise<void> {
 
 	const userInstructionService = createUserInstructionConfigService({
 		skills: {
-			workspacePath: workspaceRoot,
+			workspacePath: workspaceTrusted ? workspaceRoot : undefined,
 			includePluginSkills: true,
 			cwd,
 		},
-		rules: { workspacePath: workspaceRoot },
-		workflows: { workspacePath: workspaceRoot },
+		rules: { workspacePath: workspaceTrusted ? workspaceRoot : undefined },
+		workflows: {
+			workspacePath: workspaceTrusted ? workspaceRoot : undefined,
+		},
 	});
 	await userInstructionService.start().catch(() => {});
 	let userInstructionServiceDisposed = false;

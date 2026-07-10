@@ -60,10 +60,15 @@ import { useQueuedPrompts } from "./hooks/use-queued-prompts";
 import { useRootKeyboard } from "./hooks/use-root-keyboard";
 import { useRuntimeDialogBridge } from "./hooks/use-runtime-dialog-bridge";
 import { useSlashCommands } from "./hooks/use-slash-commands";
-import { TerminalColorsContext } from "./hooks/use-terminal-background";
+import {
+	TerminalColorsContext,
+	useThemeReload,
+} from "./hooks/use-terminal-background";
 import type { AppView, TuiProps } from "./types";
 import { hydrateSessionMessages } from "./utils/hydrate-messages";
+import { loadPromptTemplates } from "./utils/prompt-templates";
 import { isProviderConfigured } from "./utils/provider-configured";
+import { getNextScopedModel } from "./utils/scoped-models";
 import { createSelectionCopyHandler } from "./utils/selection-copy";
 import type { LocalSlashCommandInvocation } from "./utils/skill-command-input";
 import { deriveTerminalTitle } from "./utils/terminal-title";
@@ -118,6 +123,10 @@ function App(props: TuiProps) {
 		setWorkflowSlashCommands(props.workflowSlashCommands);
 	}, [props.workflowSlashCommands]);
 
+	const promptTemplates = useMemo(
+		() => loadPromptTemplates(props.config.workspaceRoot),
+		[props.config.workspaceRoot],
+	);
 	const {
 		registry: slashCommandRegistry,
 		systemCommands,
@@ -127,6 +136,7 @@ function App(props: TuiProps) {
 		workflowSlashCommands,
 		loadAdditionalSlashCommands: props.loadAdditionalSlashCommands,
 		canFork: canForkSession,
+		promptTemplates,
 	});
 
 	const autocomplete = useAutocomplete({
@@ -723,6 +733,7 @@ function App(props: TuiProps) {
 		onClone: props.onClone,
 		onRenameSession: props.onRenameSession,
 		onReloadConfig: props.onReloadConfig,
+		onTrustWorkspace: props.onTrustWorkspace,
 		onUndo: openCheckpointRestore,
 		openTree,
 		onExit: exitTrumbo,
@@ -749,6 +760,33 @@ function App(props: TuiProps) {
 		() => buildCommandPaletteItems({ canForkSession }),
 		[canForkSession],
 	);
+	const cycleScopedModel = useCallback(() => {
+		const config = props.config;
+		const currentFull =
+			config.modelId?.includes("/") || !config.providerId
+				? (config.modelId ?? "")
+				: `${config.providerId}/${config.modelId}`;
+		const next = getNextScopedModel(currentFull);
+		if (!next) {
+			setToast({
+				variant: "info",
+				message:
+					"No scoped models configured. Add models to ~/.trumbo/scoped-models.json or use /scoped-models.",
+			});
+			return;
+		}
+		const slashIndex = next.indexOf("/");
+		if (slashIndex > 0) {
+			config.providerId = next.slice(0, slashIndex);
+			config.modelId = next.slice(slashIndex + 1);
+		} else {
+			config.modelId = next;
+		}
+		void props.onModelChange().then(() => {
+			setToast({ variant: "success", message: `Model: ${next}` });
+		});
+	}, [props.config, props.onModelChange]);
+
 	const openCommandPalette = useCallback(async () => {
 		if (commandPaletteOpenRef.current) return;
 		commandPaletteOpenRef.current = true;
@@ -813,6 +851,7 @@ function App(props: TuiProps) {
 		refreshRepoStatus,
 		setAppView,
 		turnErrorReportedRef: agentHandlers.turnErrorReportedRef,
+		promptTemplates,
 	});
 	const focusPromptTextarea = promptInput.focusTextarea;
 	const submitInitialPrompt = promptInput.submitInitialPrompt;
@@ -931,6 +970,7 @@ function App(props: TuiProps) {
 		onRestoreCheckpoint: openCheckpointRestore,
 		onOpenCommandPalette: openCommandPalette,
 		onCommandPaletteShortcut: runCommandPaletteShortcut,
+		onCycleScopedModel: cycleScopedModel,
 	});
 
 	const acOptions = autocomplete.getFilteredOptions();
@@ -1047,6 +1087,9 @@ export function Root(
 		}),
 		[props.terminalBackground, props.terminalForeground],
 	);
+	// Re-render the tree when a theme file changes in ~/.trumbo/themes/ so the
+	// resolved theme palette (palette.ts resolveThemePalette) is re-read.
+	useThemeReload();
 	return (
 		<TerminalColorsContext value={terminalColors}>
 			<DialogProvider size="medium">

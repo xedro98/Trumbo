@@ -223,6 +223,9 @@ interface HookBag {
 	beforeTool: NonNullable<AgentRuntimeHooks["beforeTool"]>[];
 	afterTool: NonNullable<AgentRuntimeHooks["afterTool"]>[];
 	onEvent: NonNullable<AgentRuntimeHooks["onEvent"]>[];
+	transformContext: NonNullable<AgentRuntimeHooks["transformContext"]>[];
+	prepareNextTurn: NonNullable<AgentRuntimeHooks["prepareNextTurn"]>[];
+	shouldStopAfterTurn: NonNullable<AgentRuntimeHooks["shouldStopAfterTurn"]>[];
 }
 
 class ControlledStopError extends Error {
@@ -396,6 +399,9 @@ export class AgentRuntime {
 		beforeTool: [],
 		afterTool: [],
 		onEvent: [],
+		transformContext: [],
+		prepareNextTurn: [],
+		shouldStopAfterTurn: [],
 	};
 	private readonly state = {
 		agentId: "",
@@ -527,6 +533,12 @@ export class AgentRuntime {
 		if (hooks.beforeTool) this.hooks.beforeTool.push(hooks.beforeTool);
 		if (hooks.afterTool) this.hooks.afterTool.push(hooks.afterTool);
 		if (hooks.onEvent) this.hooks.onEvent.push(hooks.onEvent);
+		if (hooks.transformContext)
+			this.hooks.transformContext.push(hooks.transformContext);
+		if (hooks.prepareNextTurn)
+			this.hooks.prepareNextTurn.push(hooks.prepareNextTurn);
+		if (hooks.shouldStopAfterTurn)
+			this.hooks.shouldStopAfterTurn.push(hooks.shouldStopAfterTurn);
 	}
 
 	private getRequiredCompletionToolNames(): string[] {
@@ -691,6 +703,53 @@ export class AgentRuntime {
 					iteration: this.state.iteration,
 					toolCallCount: toolCalls.length,
 				});
+
+				// shouldStopAfterTurn: a hook can end the run cleanly at the
+				// turn boundary (not abort-style).
+				if (this.hooks.shouldStopAfterTurn.length > 0) {
+					for (const hook of this.hooks.shouldStopAfterTurn) {
+						const control = await hook({
+							message: finalAssistantMessage,
+							iteration: this.state.iteration,
+						});
+						if (control?.stop) {
+							const stopResult = this.finishRun(
+								"completed",
+								finalAssistantMessage,
+								control.reason,
+							);
+							await this.callAfterRunHooks(stopResult);
+							await this.emit({
+								type: "run-finished",
+								snapshot: this.snapshot(),
+								result: stopResult,
+							});
+							return stopResult;
+						}
+					}
+				}
+
+				// prepareNextTurn: a hook can inject messages for the next
+				// iteration (steering, context refresh, long-term memory).
+				if (this.hooks.prepareNextTurn.length > 0) {
+					for (const hook of this.hooks.prepareNextTurn) {
+						const next = await hook({
+							message: finalAssistantMessage,
+							iteration: this.state.iteration,
+						});
+						if (next?.injectMessages) {
+							for (const msg of next.injectMessages) {
+								this.state.messages.push(msg);
+								await this.emit({
+									type: "message-added",
+									snapshot: this.snapshot(),
+									message: msg,
+								});
+							}
+						}
+					}
+				}
+
 				const terminalToolMessage = this.findCompletingToolMessage(
 					toolCalls,
 					toolMessages,
@@ -821,6 +880,23 @@ export class AgentRuntime {
 					...request,
 					options: mergeModelOptions(request.options, result.options),
 				};
+			}
+		}
+
+		// transformContext: a hook can transform the system prompt and/or
+		// messages before the LLM call (RAG, context filtering, long-term memory).
+		if (this.hooks.transformContext.length > 0) {
+			for (const hook of this.hooks.transformContext) {
+				const transformed = await hook({
+					systemPrompt: request.systemPrompt ?? "",
+					messages: request.messages,
+				});
+				if (typeof transformed?.systemPrompt === "string") {
+					request = { ...request, systemPrompt: transformed.systemPrompt };
+				}
+				if (transformed?.messages) {
+					request = { ...request, messages: transformed.messages };
+				}
 			}
 		}
 

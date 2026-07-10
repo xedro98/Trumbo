@@ -368,6 +368,38 @@ export interface AgentRuntimeHooks {
 		| undefined
 		| Promise<AgentAfterToolResult | undefined>;
 	onEvent?: (event: AgentRuntimeEvent) => void | Promise<void>;
+	/**
+	 * Transform the system prompt and/or messages before the LLM call.
+	 * Enables RAG injection, context filtering, and long-term memory.
+	 * Returns overrides for systemPrompt and/or messages.
+	 */
+	transformContext?: (data: {
+		systemPrompt: string;
+		messages: readonly AgentMessage[];
+	}) =>
+		| { systemPrompt?: string; messages?: AgentMessage[] }
+		| undefined
+		| Promise<{ systemPrompt?: string; messages?: AgentMessage[] } | undefined>;
+	/**
+	 * Called at the turn boundary (after tool execution, before the next
+	 * iteration). Can inject messages for the next turn (e.g. steering,
+	 * context refresh).
+	 */
+	prepareNextTurn?: (context: {
+		message: AgentMessage;
+		iteration: number;
+	}) =>
+		| { injectMessages?: AgentMessage[] }
+		| undefined
+		| Promise<{ injectMessages?: AgentMessage[] } | undefined>;
+	/**
+	 * Post-turn stop decision. Return `{ stop: true }` to end the run
+	 * cleanly at the turn boundary (not abort-style).
+	 */
+	shouldStopAfterTurn?: (context: {
+		message: AgentMessage;
+		iteration: number;
+	}) => AgentStopControl | undefined | Promise<AgentStopControl | undefined>;
 }
 
 // =============================================================================

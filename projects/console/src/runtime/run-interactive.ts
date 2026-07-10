@@ -847,6 +847,13 @@ export async function runInteractive(
 			// This is a no-op stub that confirms the watcher is active.
 			// Future: trigger an explicit refresh of extensions, skills, rules.
 		},
+		onTrustWorkspace: async () => {
+			const { setTrustDecision } = await import("../utils/project-trust");
+			const root = config.workspaceRoot?.trim() || config.cwd;
+			if (root) {
+				setTrustDecision(root, "always");
+			}
+		},
 		onOpenExternalEditor: async (currentText: string) => {
 			const { spawn } = await import("node:child_process");
 			const { writeFileSync, readFileSync, unlinkSync } = await import(

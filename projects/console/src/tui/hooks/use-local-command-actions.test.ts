@@ -22,6 +22,8 @@ function makeActions(
 		openHotkeys: vi.fn(),
 		openChangelog: vi.fn(),
 		reloadConfig: vi.fn(),
+		trustWorkspace: vi.fn(async () => {}),
+		showScopedModels: vi.fn(),
 		setSessionName: vi.fn(),
 		clearConversation: vi.fn(async () => {}),
 		openHelp: vi.fn(),

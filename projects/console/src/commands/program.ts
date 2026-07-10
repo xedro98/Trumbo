@@ -91,6 +91,14 @@ export function addRootOptions(cmd: Command): Command {
 			)
 			.option("--update", "Check for updates and install if available")
 			.option("--kanban", "Removed: kanban is no longer bundled")
+			.option(
+				"--trust <decision>",
+				"Project trust override: always|never|ask (controls loading of project-local skills/rules/workflows)",
+			)
+			.option(
+				"--approve",
+				"Trust project-local resources for this run (alias for --trust always)",
+			)
 			.option("-v, --verbose", "Show verbose output")
 			// HIDDEN/LEGACY OPTIONS BELOW
 			.addOption(
@@ -245,6 +253,20 @@ export function commanderToParsedArgs(program: Command): ParsedArgs {
 	if (opts.key !== undefined) result.key = opts.key;
 	else if (opts.apiKey !== undefined) result.key = opts.apiKey;
 	if (opts.id !== undefined) result.id = opts.id;
+
+	// Project trust override: --trust <decision> takes precedence; --approve /
+	// --no-approve are convenience aliases (commander sets opts.approve=false
+	// for --no-approve).
+	if (opts.trust !== undefined) {
+		const raw = String(opts.trust).trim().toLowerCase();
+		if (raw === "always" || raw === "never" || raw === "ask") {
+			result.trust = raw;
+		}
+	} else if (opts.approve === true) {
+		result.trust = "always";
+	} else if (opts.approve === false) {
+		result.trust = "never";
+	}
 
 	// Positional args → prompt
 	const positional = program.args;

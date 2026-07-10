@@ -307,3 +307,43 @@ describe("ConversationStore — session started gate", () => {
 		expect(store.isSessionStarted()).toBe(false);
 	});
 });
+
+describe("ConversationStore — branch summary + label entries", () => {
+	it("appendBranchSummary adds a branchSummary entry and advances the leaf", () => {
+		const store = new ConversationStore();
+		store.appendMessage(makeMessage("user", "hello"));
+		const summaryId = store.appendBranchSummary("abandoned branch context");
+		const entries = store.getEntries();
+		const summary = entries.find((e) => e.id === summaryId);
+		expect(summary).toBeDefined();
+		expect(summary?.entryKind).toBe("branchSummary");
+		expect(summary?.summaryText).toBe("abandoned branch context");
+		expect(store.getActiveLeafId()).toBe(summaryId);
+	});
+
+	it("appendLabel adds a label entry without advancing the leaf", () => {
+		const store = new ConversationStore();
+		store.appendMessage(makeMessage("user", "hello"));
+		const userId = store.getActiveLeafId();
+		const labelId = store.appendLabel(userId!, "important turn");
+		const entries = store.getEntries();
+		const label = entries.find((e) => e.id === labelId);
+		expect(label).toBeDefined();
+		expect(label?.entryKind).toBe("label");
+		expect(label?.label).toBe("important turn");
+		expect(label?.parentId).toBe(userId);
+		// The leaf should NOT advance for labels
+		expect(store.getActiveLeafId()).toBe(userId);
+	});
+
+	it("getMessages excludes label entries from the active path", () => {
+		const store = new ConversationStore();
+		store.appendMessage(makeMessage("user", "hello"));
+		const userId = store.getActiveLeafId();
+		store.appendLabel(userId!, "bookmark");
+		store.appendMessage(makeMessage("assistant", "hi"));
+		const messages = store.getMessages();
+		expect(messages.find((m) => m.entryKind === "label")).toBeUndefined();
+		expect(messages).toHaveLength(2);
+	});
+});

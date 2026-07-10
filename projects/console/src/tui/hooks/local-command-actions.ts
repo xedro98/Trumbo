@@ -18,6 +18,8 @@ export interface LocalSlashCommandActionInput {
 	openHotkeys: () => void;
 	openChangelog: () => void;
 	reloadConfig: () => void;
+	trustWorkspace: () => Promise<void>;
+	showScopedModels: () => void;
 	clearConversation: () => Promise<void>;
 	openHelp: () => void;
 	openHistory: () => void;
@@ -90,6 +92,13 @@ export function runLocalSlashCommandAction(
 	}
 	if (normalized === "reload") {
 		input.reloadConfig();
+		return true;
+	}
+	if (normalized === "trust") {
+		return input.trustWorkspace().then(() => true);
+	}
+	if (normalized === "scoped-models") {
+		input.showScopedModels();
 		return true;
 	}
 	if (normalized === "clear") {

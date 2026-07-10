@@ -103,6 +103,45 @@ export class ConversationStore {
 	}
 
 	/**
+	 * Append a branch summary entry to the tree. This is used when switching
+	 * branches — a summary of the abandoned branch is injected as a context
+	 * entry on the new active path.
+	 */
+	appendBranchSummary(summaryText: string): string {
+		const id = nanoid();
+		const parentId = this.activeLeafId ?? null;
+		const entry: SessionTreeEntry = {
+			id,
+			parentId,
+			role: "user",
+			content: [{ type: "text", text: summaryText }],
+			entryKind: "branchSummary",
+			summaryText,
+		};
+		this.entries.push(entry);
+		this.activeLeafId = id;
+		return id;
+	}
+
+	/**
+	 * Append a label (bookmark) entry to the tree. Labels are tree members
+	 * for navigation but are NOT included in the active path sent to the model.
+	 */
+	appendLabel(entryId: string, labelText: string): string {
+		const id = nanoid();
+		const entry: SessionTreeEntry = {
+			id,
+			parentId: entryId,
+			role: "user",
+			content: [{ type: "text", text: labelText }],
+			entryKind: "label",
+			label: labelText,
+		};
+		this.entries.push(entry);
+		return id;
+	}
+
+	/**
 	 * Replace the active path with a new set of messages.
 	 *
 	 * In linear mode, this replaces all entries. Each new message is linked to

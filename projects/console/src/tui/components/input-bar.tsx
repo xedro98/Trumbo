@@ -11,6 +11,7 @@ import {
 	readImagePasteAttachment,
 	readImmediateImagePasteAttachment,
 } from "../utils/image-paste";
+import { KillRing } from "../utils/kill-ring";
 import { shouldCompactPastedText } from "../utils/pasted-snippets";
 import { shouldBlockTerminalInputKey } from "../utils/sanitize-terminal-input";
 
@@ -179,12 +180,75 @@ export function InputBar(props: InputBarProps) {
 		[insertAtomicText, insertImageAttachment],
 	);
 
+	const killRingRef = useRef(new KillRing());
+	const lastKeyWasKillRef = useRef(false);
+
 	const handleKeyDown = useCallback(
 		(event: KeyEvent) => {
 			if (shouldBlockTerminalInputKey(event)) {
 				event.preventDefault();
 				return;
 			}
+
+			const ta = inputRef.current;
+			const ring = killRingRef.current;
+
+			// Kill-ring: Ctrl+K (kill to line end), Ctrl+U (kill to line start).
+			// Capture the text before the native delete, push to the ring, then
+			// let OpenTUI's native handler do the actual deletion.
+			if (event.ctrl && !event.shift && ta) {
+				const text = ta.plainText ?? "";
+				const cursor = ta.cursorOffset ?? 0;
+
+				if (event.name === "k") {
+					const lineEnd = text.indexOf("\n", cursor);
+					const end = lineEnd === -1 ? text.length : lineEnd;
+					const killed = text.slice(cursor, end);
+					if (killed.length > 0) {
+						ring.kill(killed, lastKeyWasKillRef.current);
+					}
+					lastKeyWasKillRef.current = true;
+					return; // let native handler delete
+				}
+
+				if (event.name === "u") {
+					const lineStart = text.lastIndexOf("\n", cursor - 1) + 1;
+					const start = lineStart < 0 ? 0 : lineStart;
+					const killed = text.slice(start, cursor);
+					if (killed.length > 0) {
+						ring.kill(killed, lastKeyWasKillRef.current);
+					}
+					lastKeyWasKillRef.current = true;
+					return;
+				}
+			}
+
+			// Yank: Ctrl+Y inserts the top of the kill ring.
+			if (event.ctrl && !event.shift && event.name === "y" && ta) {
+				const yanked = ring.yank();
+				if (yanked !== undefined) {
+					const cursor = ta.cursorOffset ?? 0;
+					ta.insertText(yanked);
+					ring.recordYankPosition(cursor, cursor + yanked.length);
+					event.preventDefault();
+				}
+				lastKeyWasKillRef.current = false;
+				return;
+			}
+
+			// Yank-pop: Meta+Y (Alt+Y) rotates the ring and inserts the next entry.
+			if (event.meta && !event.ctrl && event.name === "y" && ta) {
+				const next = ring.yankPop();
+				if (next !== undefined) {
+					ta.insertText(next);
+					event.preventDefault();
+				}
+				lastKeyWasKillRef.current = false;
+				return;
+			}
+
+			// Any other key resets the accumulate behavior.
+			lastKeyWasKillRef.current = false;
 
 			if (!event.ctrl || event.name !== "v" || !onImagePasteRef.current) {
 				return;
@@ -196,7 +260,7 @@ export function InputBar(props: InputBarProps) {
 				insertImageAttachment(dataUrl);
 			});
 		},
-		[insertImageAttachment],
+		[insertImageAttachment, inputRef.current],
 	);
 
 	const emitContentChange = useCallback(() => {

@@ -15,6 +15,7 @@ import {
 	type UserInstructionConfigService,
 } from "@trumbo/core";
 import type { Message, MessageWithMetadata } from "@trumbo/shared";
+import { prepareForProviderSwitch } from "@trumbo/shared";
 import { createCliCore } from "../../session/session";
 import { submitAndExitInTerminal } from "../../utils/approval";
 import type {
@@ -425,12 +426,16 @@ export function createInteractiveSessionRuntime(input: {
 	const restartWithCurrentMessages = async (): Promise<void> => {
 		const { messages, status } = await readCurrentMessages();
 		if (status !== "read") {
-			// If reading recovered a missing hub session, the current messages are
-			// already in the replacement session. If the read is stale, another async
-			// operation changed the active session while this read was in flight.
 			return;
 		}
-		await restartWithMessages(messages);
+		// Transform thinking blocks for the current provider before re-feeding
+		// messages — if the provider was switched, thinking blocks from the
+		// previous provider are converted to portable <thinking> text tags.
+		const preparedMessages = prepareForProviderSwitch(
+			messages as MessageWithMetadata[],
+			input.config.providerId,
+		) as Message[];
+		await restartWithMessages(preparedMessages);
 	};
 
 	const restartEmpty = async (): Promise<void> => {

@@ -13,6 +13,7 @@ import { palette } from "../palette";
 import type { AppView, TuiProps } from "../types";
 import { formatCompactionStatus } from "../utils/compaction-status";
 import { hydrateSessionMessages } from "../utils/hydrate-messages";
+import { loadScopedModels } from "../utils/scoped-models";
 import type { LocalSlashCommandInvocation } from "../utils/skill-command-input";
 import { HistoryDialogContent } from "../views/history-view";
 import { runLocalSlashCommandAction } from "./local-command-actions";
@@ -38,6 +39,7 @@ export function useLocalCommandActions(input: {
 	onExit: TuiProps["onExit"];
 	openTree: () => void;
 	onReloadConfig: () => Promise<void>;
+	onTrustWorkspace: () => Promise<void>;
 }) {
 	const dialog = useDialog();
 	const session = useSession();
@@ -62,6 +64,7 @@ export function useLocalCommandActions(input: {
 		onExit,
 		openTree,
 		onReloadConfig,
+		onTrustWorkspace,
 	} = input;
 
 	const openHistory = useCallback(async () => {
@@ -296,6 +299,40 @@ export function useLocalCommandActions(input: {
 		}
 	}, [onReloadConfig, session]);
 
+	const trustWorkspace = useCallback(async () => {
+		session.appendEntry({
+			kind: "status",
+			text: "Marking this workspace as trusted...",
+		});
+		try {
+			await onTrustWorkspace();
+			session.updateLastEntry(() => ({
+				kind: "status",
+				text: "Workspace trusted. Restart Trumbo for project-local skills/rules/workflows to load.",
+			}));
+		} catch (error) {
+			session.updateLastEntry(() => ({
+				kind: "error",
+				text: `Trust failed: ${error instanceof Error ? error.message : String(error)}`,
+			}));
+		}
+	}, [onTrustWorkspace, session]);
+
+	const showScopedModels = useCallback(() => {
+		const cfg = loadScopedModels();
+		if (cfg.models.length === 0) {
+			session.appendEntry({
+				kind: "status",
+				text: "No scoped models configured. Add provider/model IDs to ~/.trumbo/scoped-models.json. Press Ctrl+M to cycle.",
+			});
+		} else {
+			session.appendEntry({
+				kind: "status",
+				text: `Scoped models (${cfg.models.length}): ${cfg.models.join(", ")}. Press Ctrl+M to cycle.`,
+			});
+		}
+	}, [session]);
+
 	const handleSlashCommand = useCallback(
 		(command: string, invocation?: LocalSlashCommandInvocation) => {
 			const resolved = resolveSlashCommand(slashCommandRegistry, command);
@@ -318,6 +355,8 @@ export function useLocalCommandActions(input: {
 				openHotkeys,
 				openChangelog,
 				reloadConfig,
+				trustWorkspace,
+				showScopedModels,
 				setSessionName,
 				clearConversation: onClearConversation,
 				openHelp,
@@ -345,6 +384,8 @@ export function useLocalCommandActions(input: {
 			runFork,
 			setSessionName,
 			slashCommandRegistry,
+			trustWorkspace,
+			showScopedModels,
 		],
 	);
 

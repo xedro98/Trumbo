@@ -11,6 +11,35 @@
 
 
 
+## 3.3.0
+
+Pi parity: 15 features across 3 tiers bringing Trumbo to parity with earendil-works/pi.
+
+### Tier 1 — wiring (already-built modules now live)
+- `--mode rpc` JSONL stdin/stdout embedding mode wired into the CLI entry point (enables orchestrator-style multi-client usage)
+- 51-token theme system wired into the renderer with hot-reload (`~/.trumbo/themes/*.json`, `TRUMBO_THEME` env override)
+- Project trust enforced at startup — `--trust always|never|ask`, `--approve`/`--no-approve` flags, `/trust` slash command (gates project-local skills/rules/workflows loading)
+- Scoped-model cycling via `Ctrl+M` + `/scoped-models` command (cycles models from `~/.trumbo/scoped-models.json`)
+- Prompt-template expansion: `/templatename args` expands `$1`/`$@` macros from `~/.trumbo/prompts/*.md`
+- Cross-provider thinking handoff: `prepareForProviderSwitch` converts thinking blocks to portable `<thinking>` text tags when switching models mid-session
+- CSI 2026 synchronized-output utilities built + tested (deferred to OpenTUI upstream for per-frame wiring)
+
+### Tier 2 — session/tools/agent
+- Session tree entry types: `BranchSummaryEntry` + `LabelEntry` (bookmark) support added to the session tree model; `getActivePath` filters label entries from the model context
+- Branch summary injection: switching leaves in `/tree` injects a summary of the abandoned branch so context is preserved
+- Fuzzy-match edit engine: the `editor` tool now falls back to Levenshtein similarity (0.66 threshold) when exact match fails, preserving unchanged lines
+- `diffPreview` field added to `ToolApprovalRequest` for future pre-execution diff display in approval dialogs
+- `OutputAccumulator` class + `TruncationResult` type with `Use offset=N to continue` continuation notices
+- Agent loop hooks: `transformContext`, `prepareNextTurn`, `shouldStopAfterTurn` added to `AgentRuntimeHooks` for RAG injection, turn-boundary message injection, and clean stop control
+
+### Tier 3 — editor + extensions
+- Emacs kill-ring: `Ctrl+K`/`Ctrl+U` kill to line end/start, `Ctrl+Y` yank, `Meta+Y` yank-pop in the TUI editor
+- Extension hooks expanded from 16 to 30 events (observation-only); `before_provider_request` payload guarded as `readonly` to keep provider/billing server-authoritative
+- TUI view contribution capability added (`tui` capability, `registerView` API, `TuiViewContribution` type, `views` registry slot)
+
+### Bug fixes
+- RPC mode now exits cleanly after `exit` request (explicit `process.exit(0)` after server closes — previously the hub daemon kept the process alive)
+
 ## 3.2.1
 
 Fix: `trumbo` launcher no longer runs a stale cached binary after an npm update.

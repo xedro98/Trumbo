@@ -258,14 +258,24 @@ describe("SessionTreeService — switchLeaf", () => {
 		makeEntry("d", "b", "user", "path 2"),
 	];
 
-	it("switches to a valid entry and persists", async () => {
+	it("switches to a valid entry and persists with a branch summary", async () => {
 		const host = new MockTreeHost(entries, "d");
 		const service = new SessionTreeService(host);
 
 		const result = await service.switchLeaf("test", "c");
 
 		expect(result).toBe(true);
-		expect(host.getStored("test")?.activeLeafId).toBe("c");
+		const stored = host.getStored("test");
+		expect(stored).toBeDefined();
+		// A branchSummary entry is injected after the switch; the active leaf
+		// becomes the summary entry, not the target entry itself.
+		const storedMessages = stored?.messages as SessionTreeEntry[];
+		const summary = storedMessages?.find(
+			(e) => e.entryKind === "branchSummary",
+		);
+		expect(summary).toBeDefined();
+		expect(summary?.parentId).toBe("c");
+		expect(stored?.activeLeafId).toBe(summary?.id);
 	});
 
 	it("returns false for nonexistent entry", async () => {
@@ -297,25 +307,36 @@ describe("SessionTreeService — switchLeaf", () => {
 		expect(result).toBe(false);
 	});
 
-	it("switching leaf changes the active path on next read", async () => {
+	it("switching leaf changes the active path and includes the branch summary", async () => {
 		const host = new MockTreeHost(entries, "d");
 		const service = new SessionTreeService(host);
 
 		await service.switchLeaf("test", "c");
 		const path = await service.getActivePath("test");
 
-		expect(path.map((e) => e.id)).toEqual(["a", "b", "c"]);
+		// The path includes the original entries up to "c" plus the injected
+		// branchSummary entry.
+		expect(path.map((e) => e.id)).toContain("a");
+		expect(path.map((e) => e.id)).toContain("b");
+		expect(path.map((e) => e.id)).toContain("c");
+		expect(path.find((e) => e.entryKind === "branchSummary")).toBeDefined();
 	});
 
-	it("preserves all entries when switching leaf", async () => {
+	it("preserves all original entries and adds a branch summary when switching leaf", async () => {
 		const host = new MockTreeHost(entries, "d");
 		const service = new SessionTreeService(host);
 
 		await service.switchLeaf("test", "c");
 		const allEntries = await service.getEntries("test");
 
-		expect(allEntries).toHaveLength(4);
-		expect(allEntries.map((e) => e.id).sort()).toEqual(["a", "b", "c", "d"]);
+		// 4 original entries + 1 injected branchSummary = 5
+		expect(allEntries).toHaveLength(5);
+		expect(allEntries.map((e) => e.id).sort()).toEqual(
+			expect.arrayContaining(["a", "b", "c", "d"]),
+		);
+		expect(
+			allEntries.find((e) => e.entryKind === "branchSummary"),
+		).toBeDefined();
 	});
 });
 
@@ -326,14 +347,21 @@ describe("SessionTreeService — branchFrom", () => {
 		makeEntry("c", "b", "user", "old path"),
 	];
 
-	it("branchFrom is an alias for switchLeaf", async () => {
+	it("branchFrom is an alias for switchLeaf (injects branch summary)", async () => {
 		const host = new MockTreeHost(entries, "c");
 		const service = new SessionTreeService(host);
 
 		const result = await service.branchFrom("test", "b");
 
 		expect(result).toBe(true);
-		expect(host.getStored("test")?.activeLeafId).toBe("b");
+		const stored = host.getStored("test");
+		const storedMessages = stored?.messages as SessionTreeEntry[];
+		const summary = storedMessages?.find(
+			(e) => e.entryKind === "branchSummary",
+		);
+		expect(summary).toBeDefined();
+		expect(summary?.parentId).toBe("b");
+		expect(stored?.activeLeafId).toBe(summary?.id);
 	});
 
 	it("branchFrom returns false for nonexistent entry", async () => {

@@ -146,6 +146,17 @@ export interface MessageWithMetadata extends Message {
 	agent?: string;
 	/** Concrete session id that owns this persisted message */
 	sessionId?: string;
+	/**
+	 * Entry kind discriminator for the session tree. Defaults to "message"
+	 * (a normal chat message). "branchSummary" entries carry a summary of an
+	 * abandoned branch injected when switching leaves; "label" entries are
+	 * user-created bookmarks in the tree.
+	 */
+	entryKind?: "message" | "branchSummary" | "label";
+	/** Summary text for branchSummary entries. */
+	summaryText?: string;
+	/** Label text for label (bookmark) entries. */
+	label?: string;
 	/** Additional message metadata for storage/history consumers */
 	metadata?: Record<string, unknown>;
 	/** Model info at the time of generation */

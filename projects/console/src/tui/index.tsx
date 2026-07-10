@@ -22,6 +22,11 @@ export async function renderOpenTui(
 		autoFocus: false,
 		useMouse: openTuiInput.useMouse,
 		enableMouseMovement: openTuiInput.enableMouseMovement,
+		// CSI 2026 synchronized output: the detection + wrapping utilities are
+		// built (utils/synchronized-output.ts) but OpenTUI doesn't expose a
+		// render-hook or sync-output config option, so per-frame wrapping can't
+		// be applied without forking. When OpenTUI adds sync support, enable it
+		// here via supportsSynchronizedOutput().
 	});
 	const restoreStdio = installTuiStdioCapture();
 

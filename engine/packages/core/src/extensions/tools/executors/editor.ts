@@ -64,6 +64,90 @@ function countOccurrences(content: string, needle: string): number {
 	return content.split(needle).length - 1;
 }
 
+// --- Fuzzy matching (ported from apply-patch-parser.ts) ----------------------
+// Allows edits to succeed when the file has minor differences (whitespace,
+// formatting) from the model's `oldStr`. Falls back to a similarity-based
+// search when the exact match fails.
+
+function levenshteinDistance(str1: string, str2: string): number {
+	const rows = str2.length + 1;
+	const cols = str1.length + 1;
+	const matrix = new Array<number>(rows * cols).fill(0);
+	const at = (r: number, c: number): number => matrix[r * cols + c] ?? 0;
+	const set = (r: number, c: number, value: number): void => {
+		matrix[r * cols + c] = value;
+	};
+
+	for (let r = 0; r < rows; r++) set(r, 0, r);
+	for (let c = 0; c < cols; c++) set(0, c, c);
+
+	for (let r = 1; r < rows; r++) {
+		for (let c = 1; c < cols; c++) {
+			const cost = str2[r - 1] === str1[c - 1] ? 0 : 1;
+			set(
+				r,
+				c,
+				Math.min(at(r - 1, c) + 1, at(r, c - 1) + 1, at(r - 1, c - 1) + cost),
+			);
+		}
+	}
+	return at(rows - 1, cols - 1);
+}
+
+function calculateSimilarity(str1: string, str2: string): number {
+	const longer = str1.length > str2.length ? str1 : str2;
+	const shorter = str1.length > str2.length ? str2 : str1;
+	if (longer.length === 0) return 1;
+	const dist = levenshteinDistance(shorter, longer);
+	return (longer.length - dist) / longer.length;
+}
+
+const FUZZY_THRESHOLD = 0.66;
+
+/**
+ * Find the best matching region in `content` for `oldStr` and replace it.
+ * Tries exact match first, then falls back to fuzzy (line-level similarity).
+ * Returns `{ result, fuzzy }` on success, or `null` if no good match found.
+ */
+function fuzzyReplace(
+	content: string,
+	oldStr: string,
+	newStr: string,
+): { result: string; fuzzy: boolean } | null {
+	// Exact match
+	if (content.includes(oldStr)) {
+		return { result: content.replace(oldStr, newStr), fuzzy: false };
+	}
+
+	// Fuzzy: slide a window of the same line count over the content and find
+	// the region with the highest similarity to oldStr.
+	const oldLines = oldStr.split("\n");
+	const contentLines = content.split("\n");
+	const windowLen = oldLines.length;
+	if (windowLen === 0 || windowLen > contentLines.length) return null;
+
+	let bestScore = 0;
+	let bestStart = -1;
+
+	for (let i = 0; i <= contentLines.length - windowLen; i++) {
+		const candidate = contentLines.slice(i, i + windowLen).join("\n");
+		const score = calculateSimilarity(candidate, oldStr);
+		if (score > bestScore) {
+			bestScore = score;
+			bestStart = i;
+		}
+	}
+
+	if (bestScore >= FUZZY_THRESHOLD && bestStart >= 0) {
+		const before = contentLines.slice(0, bestStart).join("\n");
+		const after = contentLines.slice(bestStart + windowLen).join("\n");
+		const result = `${before}\n${newStr}\n${after}`;
+		return { result, fuzzy: true };
+	}
+
+	return null;
+}
+
 function createLineDiff(
 	oldContent: string,
 	newContent: string,
@@ -130,23 +214,35 @@ async function replaceInFile(
 	maxDiffLines: number,
 ): Promise<string> {
 	const content = await fs.readFile(filePath, encoding);
-	const occurrences = countOccurrences(content, oldStr);
 
-	if (occurrences === 0) {
-		throw new Error(`No replacement performed: text not found in ${filePath}.`);
-	}
+	// Try exact match first (fast path), then fall back to fuzzy matching
+	// for cases where the file has minor differences from the model's oldStr.
+	const fuzzyResult = fuzzyReplace(content, oldStr, newStr ?? "");
 
-	if (occurrences > 1) {
+	if (!fuzzyResult) {
 		throw new Error(
-			`No replacement performed: multiple occurrences of text found in ${filePath}.`,
+			`No replacement performed: text not found in ${filePath} (exact and fuzzy match both failed).`,
 		);
 	}
 
-	const updated = content.replace(oldStr, newStr ?? "");
-	await fs.writeFile(filePath, updated, { encoding });
+	// For exact matches, verify there's only one occurrence (avoid ambiguous
+	// replacements). Fuzzy matches are inherently single-result.
+	if (!fuzzyResult.fuzzy) {
+		const occurrences = countOccurrences(content, oldStr);
+		if (occurrences > 1) {
+			throw new Error(
+				`No replacement performed: multiple occurrences of text found in ${filePath}.`,
+			);
+		}
+	}
 
-	const diff = createLineDiff(content, updated, maxDiffLines);
-	return `Edited ${filePath}\n${diff}`;
+	await fs.writeFile(filePath, fuzzyResult.result, { encoding });
+
+	const diff = createLineDiff(content, fuzzyResult.result, maxDiffLines);
+	const fuzzyNote = fuzzyResult.fuzzy
+		? " (fuzzy match — the file had minor differences from the provided old_str)"
+		: "";
+	return `Edited ${filePath}${fuzzyNote}\n${diff}`;
 }
 
 async function insertInFile(

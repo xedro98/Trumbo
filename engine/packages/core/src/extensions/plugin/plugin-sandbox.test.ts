@@ -36,6 +36,7 @@ function createApiCapture() {
 		registerAutomationEventType: (eventType: unknown) =>
 			automationEventTypes.push(eventType),
 		registerMcpServer: () => {},
+		registerView: () => {},
 	};
 	return { tools, rules, messageBuilders, automationEventTypes, api };
 }

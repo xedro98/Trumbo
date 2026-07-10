@@ -288,6 +288,7 @@ async function collectPluginMcpServers(
 					}
 					mcpServers.push(server);
 				},
+				registerView: () => {},
 			};
 			try {
 				await extension.setup(api, {

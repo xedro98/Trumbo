@@ -176,22 +176,26 @@ export function getActivePath(
 ): SessionTreeEntry[] {
 	if (entries.length === 0) return [];
 
+	// Filter out label (bookmark) entries — they're tree members for
+	// navigation but not part of the conversation context sent to the model.
+	const contextEntries = entries.filter((e) => e.entryKind !== "label");
+
 	// For linear sessions (v1, no parentId on any entry), the active path
 	// is the entire array in order. This preserves backward compatibility
 	// with pre-tree sessions.
-	const hasTreeLinks = entries.some(
+	const hasTreeLinks = contextEntries.some(
 		(e) => e.parentId !== undefined && e.parentId !== null,
 	);
-	if (!hasTreeLinks) return [...entries];
+	if (!hasTreeLinks) return [...contextEntries];
 
 	const leafId = activeLeafId?.trim()
 		? activeLeafId.trim()
-		: entries[entries.length - 1]?.id;
+		: contextEntries[contextEntries.length - 1]?.id;
 
-	if (!leafId) return [...entries];
+	if (!leafId) return [...contextEntries];
 
-	const path = getAncestorPath(entries, leafId);
-	return path.length > 0 ? path : [...entries];
+	const path = getAncestorPath(contextEntries, leafId);
+	return path.length > 0 ? path : [...contextEntries];
 }
 
 /**

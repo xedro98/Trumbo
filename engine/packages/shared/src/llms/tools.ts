@@ -77,6 +77,12 @@ export interface ToolApprovalRequest {
 	toolName: string;
 	input: unknown;
 	policy: ToolPolicy;
+	/**
+	 * Optional pre-execution diff preview for file-editing tools. When present,
+	 * the approval dialog can show the proposed changes before the user
+	 * approves, so they can review the diff before the file is written.
+	 */
+	diffPreview?: string;
 }
 
 export interface ToolApprovalResult {

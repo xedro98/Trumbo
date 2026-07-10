@@ -98,4 +98,6 @@ export interface ParsedArgs {
 	teamName?: string;
 	defaultToolAutoApprove: boolean;
 	autoApproveOverride?: boolean;
+	/** Project trust override from --trust / --approve / --no-approve */
+	trust?: "always" | "never" | "ask";
 }

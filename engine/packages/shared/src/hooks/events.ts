@@ -72,6 +72,21 @@ export const HookEventNameSchema = z.enum([
 	"iteration_end",
 	"user_bash",
 	"context_inject",
+	// Expanded events (pi parity) — observation-only, no mutation:
+	"message_start",
+	"message_end",
+	"turn_start",
+	"turn_end",
+	"context_transform",
+	"session_branch",
+	"model_switch",
+	"skill_invoked",
+	"command_run",
+	"session_fork",
+	"session_clone",
+	"checkpoint_created",
+	"checkpoint_restored",
+	"compaction_completed",
 ]);
 
 export type HookEventName = z.infer<typeof HookEventNameSchema>;
@@ -99,8 +114,13 @@ export interface UserPromptSubmitData {
 export interface BeforeProviderRequestData {
 	providerId: string;
 	modelId: string;
-	/** Mutable payload that will be sent to the provider. Extensions can inspect and modify this. */
-	payload?: Record<string, unknown>;
+	/**
+	 * Read-only provider request payload. Extensions can inspect but NOT
+	 * modify this — provider requests and billing paths stay
+	 * server-authoritative (per the exploit-proof billing requirement for
+	 * the open-source CLI).
+	 */
+	readonly payload?: Readonly<Record<string, unknown>>;
 }
 
 export interface IterationEndData {

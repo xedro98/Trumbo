@@ -60,6 +60,7 @@ export function useRootKeyboard(input: {
 	onRestoreCheckpoint: () => Promise<void>;
 	onOpenCommandPalette: () => Promise<void>;
 	onCommandPaletteShortcut: (key: KeyEvent) => boolean;
+	onCycleScopedModel: () => void;
 }) {
 	const session = useSession();
 	const lastEscapeRef = useRef(0);
@@ -146,6 +147,13 @@ export function useRootKeyboard(input: {
 
 		if (key.ctrl && key.name === "p" && !session.isRunning) {
 			void input.onOpenCommandPalette();
+			return;
+		}
+
+		// Cycle to the next scoped model (Ctrl+M). No-op if no scoped models
+		// are configured in ~/.trumbo/scoped-models.json.
+		if (key.ctrl && key.name === "m" && !session.isRunning) {
+			input.onCycleScopedModel();
 			return;
 		}
 

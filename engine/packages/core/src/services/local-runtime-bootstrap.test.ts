@@ -179,6 +179,7 @@ describe("prepareLocalRuntimeBootstrap", () => {
 				registerProvider: () => {},
 				registerAutomationEventType: () => {},
 				registerMcpServer: () => {},
+				registerView: () => {},
 			},
 			{},
 		);
@@ -271,6 +272,7 @@ describe("prepareLocalRuntimeBootstrap", () => {
 				registerProvider: () => {},
 				registerAutomationEventType: () => {},
 				registerMcpServer: () => {},
+				registerView: () => {},
 			},
 			{},
 		);

@@ -32,7 +32,7 @@ export function truncateCommandOutput(
 	return (
 		`${text.slice(0, headLimit)}\n` +
 		`[... output truncated: ${totalChars} chars total. ` +
-		"Refine the command (grep, head, tail) to view the elided middle ...]\n" +
+		`Use offset=${headLimit} to continue reading the elided middle ...]\n` +
 		text.slice(-tailLimit)
 	);
 }
@@ -48,3 +48,73 @@ export const MAX_READ_OUTPUT_CHARS = 48_000;
 
 /** Max characters returned per search query; beyond this the middle is elided. */
 export const MAX_SEARCH_OUTPUT_CHARS = 48_000;
+
+// --- OutputAccumulator + TruncationResult -----------------------------------
+// A bounded-memory streaming collector for tool output. Keeps a head (first
+// N chars) and a rolling tail (last N chars), tracking total chars seen. When
+// the output exceeds the limit, the middle is elided with an actionable
+// "Use offset=N to continue" notice so the model can page through the output.
+
+export interface TruncationResult {
+	/** The (possibly truncated) text with notice. */
+	text: string;
+	/** Total characters received (before truncation). */
+	totalChars: number;
+	/** Characters elided from the middle. */
+	dropped: number;
+	/** Character offset where the elided middle starts; the model can pass
+	 * this as an offset to continue reading from this point. */
+	nextOffset: number;
+}
+
+export class OutputAccumulator {
+	private head = "";
+	private tail = "";
+	private totalChars = 0;
+	private readonly headLimit: number;
+	private readonly tailLimit: number;
+
+	constructor(maxChars: number = MAX_COMMAND_OUTPUT_CHARS) {
+		this.headLimit = Math.ceil(maxChars / 2);
+		this.tailLimit = Math.max(1, maxChars - this.headLimit);
+	}
+
+	append(chunk: string): void {
+		this.totalChars += chunk.length;
+		if (this.head.length < this.headLimit) {
+			const remaining = this.headLimit - this.head.length;
+			this.head += chunk.slice(0, remaining);
+			chunk = chunk.slice(remaining);
+		}
+		if (chunk.length > 0) {
+			const newTail = this.tail + chunk;
+			this.tail = newTail.slice(-this.tailLimit);
+		}
+	}
+
+	snapshot(): TruncationResult {
+		const dropped = Math.max(
+			0,
+			this.totalChars - this.head.length - this.tail.length,
+		);
+		if (dropped === 0) {
+			return {
+				text: this.head + this.tail,
+				totalChars: this.totalChars,
+				dropped: 0,
+				nextOffset: this.totalChars,
+			};
+		}
+		const nextOffset = this.head.length + dropped;
+		return {
+			text:
+				`${this.head}\n` +
+				`[... output truncated: ${this.totalChars} chars total. ` +
+				`Use offset=${nextOffset} to continue reading the elided middle ...]\n` +
+				this.tail,
+			totalChars: this.totalChars,
+			dropped,
+			nextOffset,
+		};
+	}
+}

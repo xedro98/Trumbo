@@ -27,6 +27,8 @@ export type LocalSlashCommandName =
 	| "hotkeys"
 	| "changelog"
 	| "reload"
+	| "trust"
+	| "scoped-models"
 	| "clear"
 	| "history"
 	| "quit"
@@ -122,6 +124,15 @@ const TUI_LOCAL_COMMANDS: Array<{
 		description: "Reload extensions, skills, and config",
 	},
 	{
+		name: "trust",
+		description: "Trust this workspace and enable project-local resources",
+	},
+	{
+		name: "scoped-models",
+		description: "Manage scoped models for quick cycling (Ctrl+M)",
+		preserveInput: true,
+	},
+	{
 		name: "clear",
 		description: "Start a new session",
 	},
@@ -155,6 +166,8 @@ const SYSTEM_COMMAND_ORDER = [
 	"hotkeys",
 	"changelog",
 	"reload",
+	"trust",
+	"scoped-models",
 	"clear",
 	"team",
 	"history",
