@@ -107,6 +107,17 @@ export function buildSessionTree(
 		}
 	}
 
+	// If no roots were found (e.g., pure cycle where all entries reference
+	// each other), treat all entries as roots so the tree is still displayable.
+	if (roots.length === 0 && entries.length > 0) {
+		for (const entry of entries) {
+			const nodeId = entry.id ?? "";
+			if (!nodeId) continue;
+			const node = byId.get(nodeId);
+			if (node) roots.push(node);
+		}
+	}
+
 	return roots;
 }
 
@@ -173,10 +184,9 @@ export function getActivePath(
 	);
 	if (!hasTreeLinks) return [...entries];
 
-	const leafId =
-		activeLeafId && activeLeafId.trim()
-			? activeLeafId.trim()
-			: entries[entries.length - 1]?.id;
+	const leafId = activeLeafId?.trim()
+		? activeLeafId.trim()
+		: entries[entries.length - 1]?.id;
 
 	if (!leafId) return [...entries];
 
