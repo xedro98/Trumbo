@@ -66,6 +66,37 @@ irm https://raw.githubusercontent.com/xedro98/Trumbo/main/projects/console/scrip
 
 More details: [CLI Installation & Setup](/usage/cli-overview)
 
+## Upgrading
+
+Trumbo checks for new versions on startup and can self-update. To upgrade manually:
+
+```bash
+npm install -g @trumbodev/cli@latest
+```
+
+### Windows
+
+Close any running Trumbo sessions before upgrading. npm can't replace `trumbo.exe` while it's running, which can leave a stale binary cached in `%LOCALAPPDATA%\Trumbo\bin`.
+
+As of CLI v3.2.1, the `trumbo` launcher version-checks its cached binary and automatically falls back to the freshly-installed npm binary if the cache is stale, so a stale cache can no longer shadow a new install.
+
+If you hit `EBUSY` or `EPERM` errors, stop Trumbo and reinstall:
+
+```powershell
+Get-Process trumbo -ErrorAction SilentlyContinue | Stop-Process -Force
+npm install -g @trumbodev/cli@latest --allow-scripts=@trumbodev/cli
+```
+
+### About `allow-scripts` warnings
+
+npm 11 gates install scripts (like Trumbo's binary-cache postinstall) behind `allow-scripts`. If your config restricts scripts, pass `--allow-scripts=@trumbodev/cli` so Trumbo's postinstall runs and caches the binary outside `node_modules` for smoother Windows upgrades:
+
+```bash
+npm install -g @trumbodev/cli --allow-scripts=@trumbodev/cli
+```
+
+`npm warn allow-scripts` lines for other global packages on your machine are harmless.
+
 ## SDK
 
 Pick this if you're building your own app or agent on top of Trumbo.

@@ -43,7 +43,8 @@ export function InstallCommandTabs({
 	defaultTabId = "npm",
 }: InstallCommandTabsProps) {
 	const [tab, setTab] = useState(defaultTabId);
-	const active = INSTALL_TABS.find((item) => item.id === tab) ?? INSTALL_TABS[0];
+	const active =
+		INSTALL_TABS.find((item) => item.id === tab) ?? INSTALL_TABS[0];
 
 	return (
 		<div className={cn("max-w-[44rem]", className)}>
@@ -67,6 +68,21 @@ export function InstallCommandTabs({
 					className="border-0 bg-transparent"
 				/>
 			</div>
+			{tab === "npm" && (
+				<p className="mt-2 px-1 text-xs text-muted-foreground">
+					On Windows, add{" "}
+					<code className="font-mono text-muted-foreground">
+						--allow-scripts=@trumbodev/cli
+					</code>{" "}
+					for smoother upgrades, and close any running Trumbo before upgrading.{" "}
+					<a
+						href="/getting-started/installing-trumbo#upgrading"
+						className="underline underline-offset-2 hover:text-foreground"
+					>
+						Upgrade guide
+					</a>
+				</p>
+			)}
 		</div>
 	);
 }

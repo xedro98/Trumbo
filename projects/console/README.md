@@ -56,6 +56,21 @@ Installs to `%USERPROFILE%\.trumbo\bin\trumbo.exe` and adds it to your user PATH
 trumbo --version
 ```
 
+## Upgrading
+
+```sh
+npm install -g @trumbodev/cli@latest
+```
+
+On Windows, close any running Trumbo sessions before upgrading — npm can't replace a locked `trumbo.exe`. If you hit `EBUSY` or `EPERM`:
+
+```powershell
+Get-Process trumbo -ErrorAction SilentlyContinue | Stop-Process -Force
+npm install -g @trumbodev/cli@latest --allow-scripts=@trumbodev/cli
+```
+
+`--allow-scripts=@trumbodev/cli` lets Trumbo's postinstall cache the binary outside `node_modules` for smoother upgrades. As of v3.2.1, the launcher version-checks its cache, so a stale cached binary can no longer shadow a fresh install.
+
 ## Quick start
 
 ```sh
