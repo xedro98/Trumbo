@@ -20,11 +20,10 @@ import { cn } from "@/lib/utils";
 
 type MarkdownCodeProps = ComponentProps<"code"> & {
 	"data-block"?: boolean | string;
-	node?: {
-		properties?: {
-			metastring?: string;
-		};
-	};
+	// react-markdown passes a hast Element as `node`; typing `properties` as a
+	// permissive record keeps this component assignable to Components["code"]
+	// without a direct hast type dependency.
+	node?: { properties?: Record<string, unknown> };
 };
 
 const LANGUAGE_CLASS_PATTERN = /(?:^|\s)language-([^\s]+)/;
@@ -67,7 +66,7 @@ const MarkdownCode = ({
 		);
 	}
 
-	const meta = node?.properties?.metastring;
+	const meta = node?.properties?.metastring as string | undefined;
 	const startLineMatch = meta?.match(START_LINE_PATTERN);
 	const startLine = startLineMatch ? Number.parseInt(startLineMatch[1], 10) : 1;
 	const showLineNumbers = meta ? !NO_LINE_NUMBERS_PATTERN.test(meta) : true;
