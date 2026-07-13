@@ -1416,6 +1416,49 @@ describe("default read_files tool", () => {
 		);
 	});
 
+	it("coalesces pathless line-range entries onto the preceding file path", async () => {
+		const execute = vi.fn(async (request: { path: string }) => {
+			return `content for ${request.path}`;
+		});
+		const tool = createReadFilesTool(execute);
+
+		const result = await tool.execute(
+			// Weak models sometimes emit the line range as a separate array
+			// item after the file path instead of attaching it to the path.
+			{
+				files: [
+					{ path: "/tmp/alpha.ts" },
+					{ start_line: 10, end_line: 20 },
+					{ path: "/tmp/beta.ts" },
+				],
+			},
+			{
+				agentId: "agent-1",
+				conversationId: "conv-1",
+				iteration: 1,
+			},
+		);
+
+		expect(result).toEqual([
+			{
+				query: "/tmp/alpha.ts:10-20",
+				result: "content for /tmp/alpha.ts",
+				success: true,
+			},
+			{
+				query: "/tmp/beta.ts",
+				result: "content for /tmp/beta.ts",
+				success: true,
+			},
+		]);
+		// The range-only entry must be merged onto the preceding path, not
+		// executed as a standalone (pathless) request.
+		expect(execute).toHaveBeenCalledWith(
+			{ path: "/tmp/alpha.ts", start_line: 10, end_line: 20 },
+			expect.objectContaining({ agentId: "agent-1" }),
+		);
+	});
+
 	it("returns per-file errors for reversed ranges while executing valid batch entries", async () => {
 		const execute = vi.fn(async (request: { path: string }) => {
 			return `content for ${request.path}`;

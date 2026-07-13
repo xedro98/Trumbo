@@ -1,6 +1,6 @@
 {
 	"name": "@trumbo/shared",
-	"version": "0.0.57",
+	"version": "0.0.58",
 	"description": "Shared utilities, types, and schemas for Trumbo packages",
 	"repository": {
 		"type": "git",

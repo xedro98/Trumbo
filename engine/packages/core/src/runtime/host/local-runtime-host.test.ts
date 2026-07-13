@@ -343,7 +343,7 @@ describe("LocalRuntimeHost", () => {
 				config: createConfig({
 					sessionId,
 					providerId: "trumbo-pass",
-					modelId: "trumbo-pass/glm-5.1",
+					modelId: "trumbo-pass/glm-5.2",
 					apiKey: undefined,
 				}),
 				prompt: "hello",

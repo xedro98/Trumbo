@@ -50,6 +50,18 @@ export const ReadFileRequestSchema = z
 	);
 
 /**
+ * A line-range-only entry: `start_line`/`end_line` with no `path`.
+ *
+ * Weak models sometimes emit the line range for a file as a *separate* array
+ * item after the file path, e.g. `[{ path: "/a.ts" }, { start_line: 10,
+ * end_line: 20 }]` instead of `[{ path: "/a.ts", start_line: 10, end_line:
+ * 20 }]`. Accepting this shape lets the executor coalesce those entries back
+ * onto the preceding file path (see `createReadFilesTool`) instead of
+ * rejecting the whole call.
+ */
+export const ReadFileLineRangeOnlySchema = ReadFileLineRangeSchema;
+
+/**
  * Schema for read_files tool input
  */
 export const ReadFilesInputSchema = z.object({
@@ -61,20 +73,41 @@ export const ReadFilesInputSchema = z.object({
 });
 
 /**
- * Union schema for read_files tool input, allowing either a single string, an array of strings, or the full object schema
+ * Union schema for read_files tool input, allowing either a single string, an array of strings, or the full object schema.
+ *
+ * Also accepts line-range-only entries (`{ start_line, end_line }` without a
+ * `path`) inside arrays, so weak models that split a file's line range into a
+ * separate array item can be coalesced back onto the preceding file path
+ * instead of being rejected.
  */
 export const ReadFilesInputUnionSchema = z.union([
 	ReadFilesInputSchema,
 	ReadFileRequestSchema,
-	z.array(ReadFileRequestSchema),
+	z.array(z.union([ReadFileRequestSchema, ReadFileLineRangeOnlySchema])),
 	z.array(z.string()),
 	z.string(),
-	z.object({ files: z.array(z.union([AbsolutePath, ReadFileRequestSchema])) }),
+	z.object({
+		files: z.array(
+			z.union([
+				AbsolutePath,
+				ReadFileRequestSchema,
+				ReadFileLineRangeOnlySchema,
+			]),
+		),
+	}),
 	z.object({ files: ReadFileRequestSchema }),
 	z.object({ files: AbsolutePath }),
 	z.object({ file_paths: z.array(AbsolutePath) }),
 	z.object({ file_paths: z.string() }),
-	z.object({ paths: z.array(z.union([AbsolutePath, ReadFileRequestSchema])) }),
+	z.object({
+		paths: z.array(
+			z.union([
+				AbsolutePath,
+				ReadFileRequestSchema,
+				ReadFileLineRangeOnlySchema,
+			]),
+		),
+	}),
 	z.object({ paths: ReadFileRequestSchema }),
 	z.object({ paths: z.string() }),
 ]);

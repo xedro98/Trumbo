@@ -233,6 +233,65 @@ async function executeShellCommands(
 // =============================================================================
 
 /**
+ * A loose read_files entry shape used during input normalization.
+ *
+ * `path` may be absent when a weak model emits a line range as a separate
+ * array item (e.g. `[{ path: "/a.ts" }, { start_line: 10, end_line: 20 }]`).
+ * These pathless range entries are coalesced onto the preceding path-bearing
+ * entry by {@link coalesceReadFileRequests}.
+ */
+type LooseReadFileEntry = {
+	path?: string;
+	start_line?: number | null;
+	end_line?: number | null;
+};
+
+/**
+ * Coalesce pathless line-range entries onto the preceding path-bearing entry.
+ *
+ * Weak models (e.g. DeepSeek) sometimes split a file's line range into a
+ * separate array item instead of attaching it to the file path. Without this,
+ * the strict {@link ReadFileRequestSchema} rejects the whole call. Here we
+ * merge each `{ start_line, end_line }`-only entry back onto the previous
+ * file so the read runs as intended. Entries with neither a path nor a range
+ * are dropped; a range-only entry with no preceding path is also dropped
+ * (there is nothing to attach it to) instead of failing the entire request.
+ */
+function coalesceReadFileRequests(
+	entries: LooseReadFileEntry[],
+): ReadFileRequest[] {
+	const result: ReadFileRequest[] = [];
+	for (const entry of entries) {
+		const hasPath =
+			typeof entry.path === "string" && entry.path.trim().length > 0;
+		// Only an actual (non-null) range on a pathless entry is coalesced onto
+		// the preceding file. null bounds mean "full file" and only make sense
+		// attached to a path, so they are not merged from pathless entries.
+		const hasCoalesceRange = entry.start_line != null || entry.end_line != null;
+		if (hasPath) {
+			const request: ReadFileRequest = { path: entry.path as string };
+			// Preserve explicit bounds (including null = full file) on the
+			// path-bearing request so the executor sees the same shape the
+			// model sent.
+			if (entry.start_line !== undefined) {
+				request.start_line = entry.start_line;
+			}
+			if (entry.end_line !== undefined) {
+				request.end_line = entry.end_line;
+			}
+			result.push(request);
+		} else if (hasCoalesceRange) {
+			const previous = result[result.length - 1];
+			if (previous) {
+				if (entry.start_line != null) previous.start_line = entry.start_line;
+				if (entry.end_line != null) previous.end_line = entry.end_line;
+			}
+		}
+	}
+	return result;
+}
+
+/**
  * Create the read_files tool
  *
  * Reads the content of one or more files from the filesystem.
@@ -257,35 +316,39 @@ export function createReadFilesTool(
 		maxRetries: 1,
 		execute: async (input, context) => {
 			const validate = validateWithZod(ReadFilesInputUnionSchema, input);
-			let requests: ReadFileRequest[];
+			const rawEntries: LooseReadFileEntry[] = [];
 			if (typeof validate === "string") {
-				requests = [{ path: validate }];
+				rawEntries.push({ path: validate });
 			} else if (Array.isArray(validate)) {
-				requests = validate.map((value) =>
-					typeof value === "string" ? { path: value } : value,
-				);
+				for (const value of validate) {
+					rawEntries.push(typeof value === "string" ? { path: value } : value);
+				}
 			} else if ("files" in validate) {
 				const files = Array.isArray(validate.files)
 					? validate.files
 					: [validate.files];
-				requests = files.map((file) =>
-					typeof file === "string" ? { path: file } : file,
-				);
+				for (const file of files) {
+					rawEntries.push(typeof file === "string" ? { path: file } : file);
+				}
 			} else if ("file_paths" in validate) {
 				const filePaths = Array.isArray(validate.file_paths)
 					? validate.file_paths
 					: [validate.file_paths];
-				requests = filePaths.map((path) => ({ path }));
+				for (const path of filePaths) rawEntries.push({ path });
 			} else if ("paths" in validate) {
 				const paths = Array.isArray(validate.paths)
 					? validate.paths
 					: [validate.paths];
-				requests = paths.map((path) =>
-					typeof path === "string" ? { path } : path,
-				);
+				for (const path of paths) {
+					rawEntries.push(typeof path === "string" ? { path } : path);
+				}
 			} else {
-				requests = [validate];
+				rawEntries.push(validate);
 			}
+
+			// Coalesce pathless line-range entries (emitted by weaker models as
+			// separate array items) back onto the preceding file path.
+			const requests = coalesceReadFileRequests(rawEntries);
 
 			return Promise.all(
 				requests.map(async (request): Promise<ToolOperationResult> => {

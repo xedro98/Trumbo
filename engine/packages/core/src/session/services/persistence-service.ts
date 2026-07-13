@@ -508,9 +508,19 @@ export class UnifiedSessionPersistenceService {
 		await this.reconcileDeadSessions(scanLimit);
 
 		const rows = await this.adapter.listSessions({ limit: scanLimit });
-		return rows.slice(0, requestedLimit).map((row) => {
+		const limited = rows.slice(0, requestedLimit);
+		// Read manifests concurrently off the libuv threadpool instead of a
+		// serial readFileSync-per-session loop, so listing many sessions does
+		// not block the extension host. Manifest title still overrides the
+		// DB metadata title (semantics unchanged).
+		const manifests = await Promise.all(
+			limited.map((row) =>
+				this.manifestStore.readSessionManifestAsync(row.sessionId),
+			),
+		);
+		return limited.map((row, index) => {
 			const meta = sanitizeMetadata(row.metadata ?? undefined);
-			const manifest = this.manifestStore.readSessionManifest(row.sessionId);
+			const manifest = manifests[index];
 			const manifestTitle = normalizeTitle(
 				typeof manifest?.metadata?.title === "string"
 					? (manifest.metadata.title as string)

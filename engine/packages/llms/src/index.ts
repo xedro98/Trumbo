@@ -59,6 +59,7 @@ export {
 	BUILT_IN_PROVIDER_IDS,
 	createHandler,
 	createHandlerAsync,
+	extractTrumboPassLimitMessage,
 	getRegisteredHandler,
 	getRegisteredHandlerAsync,
 	getTrumboNotSubscribedMessage,
@@ -71,11 +72,15 @@ export {
 	isTrumboNotSubscribedMessage,
 	isTrumboOrgIndividualInferenceSubscriptionError,
 	isTrumboOrgIndividualInferenceSubscriptionMessage,
+	isTrumboPassLimitError,
+	isTrumboPassLimitMessage,
 	normalizeProviderId,
 	registerAsyncHandler,
 	registerHandler,
 	TrumboNotSubscribedError,
 	TrumboOrgIndividualInferenceSubscriptionError,
+	type TrumboPassLimitDetails,
+	TrumboPassLimitError,
 } from "./providers";
 export {
 	type ProviderUsageCostDisplay,

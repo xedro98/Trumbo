@@ -296,6 +296,12 @@ export function identifyAccount(
 	if (distinctId) {
 		telemetry?.setDistinctId(distinctId);
 	}
+	// Stamp `user_id` as a persistent identity attribute on every event so
+	// telemetry can be correlated per signed-in user independently of the
+	// machine distinct id. Mirrors the gateway's client-identity attribution.
+	if (account.id) {
+		telemetry?.updateMetadata({ user_id: account.id });
+	}
 	telemetry?.updateCommonProperties({
 		account_id: account.id,
 		account_email: account.email,

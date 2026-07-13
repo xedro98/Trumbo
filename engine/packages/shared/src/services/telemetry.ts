@@ -64,6 +64,12 @@ export interface TelemetryMetadata {
 	os_version: string;
 	is_dev?: string;
 	is_remote_workspace?: boolean;
+	/**
+	 * Signed-in Trumbo account/user id. Attached to every telemetry event as
+	 * an identity attribute when the user is authenticated, so events can be
+	 * correlated per user independently of the machine distinct id.
+	 */
+	user_id?: string;
 }
 
 export interface ITelemetryService {

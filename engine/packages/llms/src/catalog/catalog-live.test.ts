@@ -74,15 +74,15 @@ describe("models-dev-catalog", () => {
 			{
 				trumboPass: [
 					{
-						id: "trumbo-pass/trumbo-pass/glm-5.1",
-						name: "zai/glm-5.1",
+						id: "trumbo-pass/trumbo-pass/glm-5.2",
+						name: "zai/glm-5.2",
 					},
 				],
 			},
 			{
-				"z-ai/glm-5.1": {
-					id: "z-ai/glm-5.1",
-					name: "GLM 5.1",
+				"z-ai/glm-5.2": {
+					id: "z-ai/glm-5.2",
+					name: "GLM 5.2",
 					contextWindow: 256_000,
 					maxInputTokens: 200_000,
 					maxTokens: 32_000,
@@ -93,10 +93,10 @@ describe("models-dev-catalog", () => {
 		);
 
 		expect(
-			result["trumbo-pass"]?.["trumbo-pass/trumbo-pass/glm-5.1"],
+			result["trumbo-pass"]?.["trumbo-pass/trumbo-pass/glm-5.2"],
 		).toMatchObject({
-			id: "trumbo-pass/trumbo-pass/glm-5.1",
-			name: "zai/glm-5.1",
+			id: "trumbo-pass/trumbo-pass/glm-5.2",
+			name: "zai/glm-5.2",
 			contextWindow: 256_000,
 			maxInputTokens: 200_000,
 			maxTokens: 32_000,

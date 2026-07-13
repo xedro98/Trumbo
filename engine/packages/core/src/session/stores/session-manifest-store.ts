@@ -5,6 +5,7 @@ import {
 	readFileSync,
 	writeFileSync,
 } from "node:fs";
+import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import type * as LlmsProviders from "@trumbo/llms";
 import type { BasicLogger } from "@trumbo/shared";
@@ -63,6 +64,31 @@ export class SessionManifestStore {
 
 	readSessionManifest(sessionId: string): SessionManifest | undefined {
 		return this.readManifestFile(sessionId).manifest;
+	}
+
+	/**
+	 * Async variant of {@link readSessionManifest} for batch/list paths.
+	 *
+	 * Uses `fs/promises` so concurrent reads run on the libuv threadpool
+	 * instead of blocking the host thread the way a serial `readFileSync`
+	 * loop does. This keeps session listing from hanging the extension host
+	 * when many sessions each need a manifest read for their title.
+	 */
+	async readSessionManifestAsync(
+		sessionId: string,
+	): Promise<SessionManifest | undefined> {
+		const manifestPath = this.artifacts.sessionManifestPath(sessionId, false);
+		if (!existsSync(manifestPath)) {
+			return undefined;
+		}
+		try {
+			const contents = await readFile(manifestPath, "utf8");
+			return SessionManifestSchema.parse(
+				JSON.parse(contents) as SessionManifest,
+			);
+		} catch {
+			return undefined;
+		}
 	}
 
 	readManifestFile(sessionId: string): {

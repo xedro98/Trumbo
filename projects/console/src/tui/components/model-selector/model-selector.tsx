@@ -331,7 +331,13 @@ export function ThinkingLevelContent(
 	const { resolve, dismiss, dialogId, modelName, currentLevel } = props;
 	const [selected, setSelected] = useState(() => {
 		const idx = THINKING_LEVELS.findIndex((l) => l.value === currentLevel);
-		return idx >= 0 ? idx : 0;
+		if (idx >= 0 && currentLevel !== "none") {
+			return idx;
+		}
+		// Default the cursor to Medium (the balanced default) when no level is
+		// chosen, instead of Off, so the most useful level is one Enter away.
+		const mediumIdx = THINKING_LEVELS.findIndex((l) => l.value === "medium");
+		return mediumIdx >= 0 ? mediumIdx : 0;
 	});
 
 	useDialogKeyboard((key) => {

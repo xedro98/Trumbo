@@ -1,4 +1,5 @@
 import {
+	DEFAULT_REQUEST_HEADERS,
 	type GatewayModelCapability,
 	type GatewayModelDefinition,
 	type GatewayProviderManifest,
@@ -19,8 +20,10 @@ import type {
 import {
 	isTrumboNotSubscribedMessage,
 	isTrumboOrgIndividualInferenceSubscriptionMessage,
+	isTrumboPassLimitMessage,
 	TrumboNotSubscribedError,
 	TrumboOrgIndividualInferenceSubscriptionError,
+	TrumboPassLimitError,
 } from "./errors";
 import { filterOpenAICodexModels } from "./openai-codex-models";
 import {
@@ -500,6 +503,17 @@ async function handleTrumboResponseError(
 	response: Response,
 	providerId: string,
 ): Promise<void> {
+	if (response.status === 429) {
+		const body = await response
+			.clone()
+			.text()
+			.catch(() => "");
+		if (isTrumboPassLimitMessage(body)) {
+			throw new TrumboPassLimitError(providerId, body);
+		}
+		return;
+	}
+
 	if (response.status !== 403) {
 		return;
 	}
@@ -525,6 +539,7 @@ const trumbo = createTrumboLikeSpec({
 	modelsFactory: buildTrumboModels,
 	defaultModelId: TRUMBO_DEFAULT_MODEL_ID,
 	defaults: {
+		headers: { ...DEFAULT_REQUEST_HEADERS },
 		options: {
 			onResponseError: async (response: Response) => {
 				await handleTrumboResponseError(response, "trumbo");
@@ -542,6 +557,7 @@ const trumboPass = createTrumboLikeSpec({
 	defaultModelId: firstGeneratedModelId(TRUMBO_PASS_PROVIDER_ID),
 	metadata: { usageCostDisplay: "subscription" },
 	defaults: {
+		headers: { ...DEFAULT_REQUEST_HEADERS },
 		options: {
 			onResponseError: async (response: Response) => {
 				await handleTrumboResponseError(response, TRUMBO_PASS_PROVIDER_ID);

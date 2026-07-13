@@ -35,6 +35,7 @@ export type {
 	ProviderId,
 } from "./providers.browser";
 export {
+	extractTrumboPassLimitMessage,
 	getTrumboNotSubscribedMessage,
 	getTrumboOrgIndividualInferenceSubscriptionMessage,
 	getTrumboPassSubscriptionUrl,
@@ -42,7 +43,11 @@ export {
 	isTrumboNotSubscribedMessage,
 	isTrumboOrgIndividualInferenceSubscriptionError,
 	isTrumboOrgIndividualInferenceSubscriptionMessage,
+	isTrumboPassLimitError,
+	isTrumboPassLimitMessage,
 	normalizeProviderId,
 	TrumboNotSubscribedError,
 	TrumboOrgIndividualInferenceSubscriptionError,
+	type TrumboPassLimitDetails,
+	TrumboPassLimitError,
 } from "./providers.browser";

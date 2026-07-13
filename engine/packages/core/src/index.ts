@@ -6,6 +6,7 @@
 
 export * as Llms from "@trumbo/llms";
 export {
+	extractTrumboPassLimitMessage,
 	getTrumboNotSubscribedMessage,
 	getTrumboOrgIndividualInferenceSubscriptionMessage,
 	getTrumboPassSubscriptionUrl,
@@ -13,8 +14,12 @@ export {
 	isTrumboNotSubscribedMessage,
 	isTrumboOrgIndividualInferenceSubscriptionError,
 	isTrumboOrgIndividualInferenceSubscriptionMessage,
+	isTrumboPassLimitError,
+	isTrumboPassLimitMessage,
 	TrumboNotSubscribedError,
 	TrumboOrgIndividualInferenceSubscriptionError,
+	type TrumboPassLimitDetails,
+	TrumboPassLimitError,
 } from "@trumbo/llms";
 // Shared contracts and path helpers re-exported for app consumers.
 export type {

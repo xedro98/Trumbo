@@ -208,7 +208,11 @@ export {
 	resolveReasoningBudgetFromRatio,
 	resolveReasoningEffortRatio,
 } from "./llms/reasoning-effort";
-export { DEFAULT_REQUEST_HEADERS, serializeAbortReason } from "./llms/requests";
+export {
+	DEFAULT_REQUEST_HEADERS,
+	serializeAbortReason,
+	TRUMBO_SDK_VERSION,
+} from "./llms/requests";
 export {
 	convertThinkingToTextTags,
 	prepareForProviderSwitch,

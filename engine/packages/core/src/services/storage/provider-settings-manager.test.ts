@@ -89,14 +89,14 @@ describe("ProviderSettingsManager", () => {
 		manager.saveProviderSettings(
 			{
 				provider: "trumbo-pass",
-				model: "trumbo-pass/glm-5.1",
+				model: "trumbo-pass/glm-5.2",
 			},
 			{ setLastUsed: true },
 		);
 
 		expect(manager.getProviderSettings("trumbo-pass")).toEqual({
 			provider: "trumbo-pass",
-			model: "trumbo-pass/glm-5.1",
+			model: "trumbo-pass/glm-5.2",
 			baseUrl: "https://api.example.test",
 			auth: {
 				accessToken: "workos:shared-token",
@@ -128,14 +128,14 @@ describe("ProviderSettingsManager", () => {
 		manager.saveProviderSettings(
 			{
 				provider: "trumbo-pass",
-				model: "trumbo-pass/glm-5.1",
+				model: "trumbo-pass/glm-5.2",
 			},
 			{ setLastUsed: true },
 		);
 
 		expect(manager.getLastUsedProviderSettings()).toMatchObject({
 			provider: "trumbo-pass",
-			model: "trumbo-pass/glm-5.1",
+			model: "trumbo-pass/glm-5.2",
 		});
 		expect(
 			manager.getLastUsedProviderSettings({ isTrumboPassEnabled: false }),
@@ -168,7 +168,7 @@ describe("ProviderSettingsManager", () => {
 		manager.saveProviderSettings(
 			{
 				provider: "trumbo-pass",
-				model: "trumbo-pass/glm-5.1",
+				model: "trumbo-pass/glm-5.2",
 			},
 			{ setLastUsed: true },
 		);

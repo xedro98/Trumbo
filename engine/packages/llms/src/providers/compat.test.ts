@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createGatewayApiHandler, toGatewayRequestMessages } from "./compat";
-import { TrumboNotSubscribedError } from "./errors";
+import { TrumboNotSubscribedError, TrumboPassLimitError } from "./errors";
 import type { Message } from "./types";
 
 const streamTextSpy = vi.fn();
@@ -643,6 +643,52 @@ describe("createGatewayApiHandler.createMessage", () => {
 				method: "POST",
 			}),
 		).rejects.toBeInstanceOf(TrumboNotSubscribedError);
+	});
+
+	it("throws TrumboPassLimitError for TrumboPass rate-limit 429 responses", async () => {
+		streamTextSpy.mockReturnValue({
+			fullStream: (async function* () {
+				yield { type: "finish", finishReason: "stop" };
+			})(),
+			usage: Promise.resolve({ inputTokens: 1, outputTokens: 1 }),
+		});
+		const providerFetch = vi.fn(
+			async () =>
+				new Response(
+					JSON.stringify({
+						error: {
+							code: "rate_limit_error",
+							message:
+								"rate limit exceeded for daily window. Resets in 3 hours.",
+						},
+					}),
+					{ status: 429 },
+				),
+		) as unknown as typeof fetch;
+
+		const handler = createGatewayApiHandler({
+			providerId: "trumbo-pass",
+			clientType: "openai-compatible",
+			modelId: "premium-model",
+			apiKey: "test-key",
+			fetch: providerFetch,
+		});
+
+		for await (const _chunk of handler.createMessage("", [
+			{ role: "user", content: "Hello" },
+		])) {
+			// Drain the stream so the provider is constructed.
+		}
+
+		const factoryConfig = openaiCompatibleFactorySpy.mock.calls.at(-1)?.[0] as
+			| { fetch?: typeof fetch }
+			| undefined;
+
+		await expect(
+			factoryConfig?.fetch?.("http://0.0.0.0:0/api/v1/chat/completions", {
+				method: "POST",
+			}),
+		).rejects.toBeInstanceOf(TrumboPassLimitError);
 	});
 });
 

@@ -11,6 +11,23 @@
 
 
 
+## 3.4.1
+
+SDK parity + thinking-level default.
+
+### Changed
+- The thinking-level picker now defaults its cursor to Medium instead of Off, so the balanced level is one Enter away (persisted levels are still honored)
+
+### Bundled SDK improvements (0.0.58)
+- Versioned client-identity headers on Trumbo/TrumboPass provider requests
+- `user_id` telemetry identity attribute when signed in
+- Typed `TrumboPassLimitError` for subscription plan-cap 429 responses (upgrade-plan affordance, no usage-based billing)
+- `read_files` coalesces pathless line-range entries from weaker models onto the preceding file path
+- Removed retired TrumboPass GLM 5.1 references (GLM 5.2 is the active default)
+- Session listing no longer hangs the extension host (concurrent manifest reads)
+
+
+
 ## 3.4.0
 
 Wiring follow-ups + MCP token expiry fix.

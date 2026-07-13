@@ -1,8 +1,9 @@
+import { type ModelInfo, openAiModelInfoSafeDefaults } from "@shared/api"
 import VertexData from "@shared/providers/vertex.json"
 import type { Mode } from "@shared/storage/types"
 import { isClaudeOpusAdaptiveThinkingModel, resolveClaudeOpusAdaptiveThinking } from "@shared/utils/reasoning-support"
 import { VSCodeDropdown, VSCodeLink, VSCodeOption } from "@vscode/webview-ui-toolkit/react"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { useProviderConfig } from "@/hooks/useProviderConfig"
 import { useProviderModelSelection } from "@/hooks/useProviderModelSelection"
@@ -35,6 +36,13 @@ export const VertexProvider = ({ showModelOptions, isPopup, currentMode }: Verte
 	const { apiConfiguration, remoteConfigSettings } = useExtensionState()
 	const { models: allVertexModels, defaultModelId } = useProviderModels("vertex")
 	const { config, write, commitSelection } = useProviderConfig("vertex")
+	// Vertex lets users deploy custom models in their own GCP project that are
+	// not part of the bundled catalog. Provide a ModelInfo fallback so a
+	// custom (non-catalog) model id resolves to a usable entry instead of
+	// being dropped by the selection hook. The model id itself is tracked
+	// separately by the selection hook, so the ModelInfo only needs safe
+	// capability defaults.
+	const vertexCustomModelInfo = useCallback((): ModelInfo => ({ ...openAiModelInfoSafeDefaults }), [])
 	const { selectedModel, selectedModelId, selectedModelInfo, commitModelSelection } = useProviderModelSelection(
 		"vertex",
 		currentMode,
@@ -43,6 +51,7 @@ export const VertexProvider = ({ showModelOptions, isPopup, currentMode }: Verte
 			defaultModelId,
 			config,
 			commitSelection,
+			customModelInfo: vertexCustomModelInfo,
 		},
 	)
 	const hideUsageCost = useProviderUsageCostDisplay("vertex") === "hide"
@@ -156,6 +165,8 @@ export const VertexProvider = ({ showModelOptions, isPopup, currentMode }: Verte
 			{showModelOptions && (
 				<>
 					<ModelSelector
+						allowCustomModel
+						customModelValue=""
 						label="Model"
 						models={modelsToUse}
 						onChange={(e: any) => {
@@ -164,6 +175,14 @@ export const VertexProvider = ({ showModelOptions, isPopup, currentMode }: Verte
 								modelId,
 								modelInfo: modelsToUse[modelId] ?? selectedModel.modelInfo,
 							}).catch((err) => console.error("Failed to commit Vertex model selection:", err))
+						}}
+						onCustomModelChange={(value: string) => {
+							const trimmed = value.trim()
+							if (!trimmed) return
+							void commitModelSelection({
+								modelId: trimmed,
+								modelInfo: vertexCustomModelInfo(),
+							}).catch((err) => console.error("Failed to commit custom Vertex model:", err))
 						}}
 						selectedModelId={selectedModelId}
 						zIndex={DROPDOWN_Z_INDEX - 2}

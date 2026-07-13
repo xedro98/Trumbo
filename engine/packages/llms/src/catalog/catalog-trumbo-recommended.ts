@@ -35,7 +35,8 @@ const TRUMBO_PASS_MODEL_DEFAULTS = {
 } as const satisfies ModelCapabilities;
 
 // Trumbo-Pass models have only the model name (and not the lab),
-// so we need to look-up using glm-5.1 instead of trumbo-pass/glm-5.1
+// so we look-up using the model slug (e.g. glm-5.2) instead of the
+// fully-qualified trumbo-pass/<model> id.
 function buildModelsNameMap(
 	openrouterModels: Record<string, ModelInfo>,
 ): Record<string, ModelInfo> {

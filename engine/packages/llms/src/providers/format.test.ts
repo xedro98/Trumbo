@@ -1,11 +1,15 @@
 import { describe, expect, it } from "vitest";
 import {
+	extractTrumboPassLimitMessage,
 	getTrumboNotSubscribedMessage,
 	getTrumboOrgIndividualInferenceSubscriptionMessage,
 	isTrumboNotSubscribedMessage,
 	isTrumboOrgIndividualInferenceSubscriptionMessage,
+	isTrumboPassLimitError,
+	isTrumboPassLimitMessage,
 	TrumboNotSubscribedError,
 	TrumboOrgIndividualInferenceSubscriptionError,
+	TrumboPassLimitError,
 } from "./errors";
 import { extractErrorMessage } from "./format";
 
@@ -118,5 +122,52 @@ describe("TrumboOrgIndividualInferenceSubscriptionError", () => {
 				"the user is not subscribed to required model plan",
 			),
 		).toBe(false);
+	});
+});
+
+describe("TrumboPassLimitError", () => {
+	it("detects rate-limit / plan-cap response messages", () => {
+		expect(
+			isTrumboPassLimitMessage(
+				'{"error":{"code":"rate_limit_error","message":"rate limit exceeded for daily window. Resets in 3 hours."}}',
+			),
+		).toBe(true);
+		expect(isTrumboPassLimitMessage("rate limit exceeded")).toBe(true);
+		expect(isTrumboPassLimitMessage("spend_limit_exceeded")).toBe(true);
+		expect(isTrumboPassLimitMessage("plan limit reached")).toBe(true);
+		expect(isTrumboPassLimitMessage("an unrelated error")).toBe(false);
+	});
+
+	it("extracts the window and reset duration from a rate-limit response", () => {
+		const details = extractTrumboPassLimitMessage(
+			"rate limit exceeded for daily window. Resets in 3 hours.",
+		);
+		expect(details.window).toBe("daily");
+		expect(details.resetsIn).toBe("3 hours");
+	});
+
+	it("preserves the raw response text on the error and parses structured fields", () => {
+		const raw =
+			'{"error":{"code":"rate_limit_error","message":"rate limit exceeded for weekly window. Resets in 12 hours."}}';
+		const error = new TrumboPassLimitError("trumbo-pass", raw);
+		expect(error.name).toBe("TrumboPassLimitError");
+		expect(error.providerId).toBe("trumbo-pass");
+		expect(error.rawMessage).toBe(raw);
+		// The message preserves the raw gateway text so existing string-based
+		// rate-limit detection (e.g. the CLI RateLimitCard parser) keeps working.
+		expect(error.message).toBe(raw);
+		// The structured fields are best-effort parsed from the embedded text,
+		// even when the body is JSON-wrapped.
+		expect(error.window).toBe("weekly");
+		expect(error.resetsIn).toBe("12 hours");
+		expect(isTrumboPassLimitError(error)).toBe(true);
+	});
+
+	it("detects the typed error by name even across realms", () => {
+		const alien = Object.assign(new Error("rate limit exceeded"), {
+			name: "TrumboPassLimitError",
+		});
+		expect(isTrumboPassLimitError(alien)).toBe(true);
+		expect(isTrumboPassLimitError(new Error("other"))).toBe(false);
 	});
 });

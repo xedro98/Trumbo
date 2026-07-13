@@ -9,6 +9,15 @@
 
 # Trumbo SDK Changelog
 
+## 0.0.58
+
+- Add versioned client-identity headers (`X-CLIENT-VERSION`) to Trumbo and TrumboPass provider requests so the gateway can route and feature-flag by SDK version
+- Add `user_id` as a telemetry identity attribute on every event when a user is signed in, independent of the machine distinct id
+- Add a typed `TrumboPassLimitError` (with `isTrumboPassLimitError`, `isTrumboPassLimitMessage`, `extractTrumboPassLimitMessage` helpers) that recognizes subscription plan-cap 429 responses; recovery action is to upgrade the plan (Trumbo has no usage-based billing tier)
+- `read_files` now coalesces pathless line-range entries emitted by weaker models back onto the preceding file path instead of rejecting the whole call
+- Remove retired TrumboPass GLM 5.1 references from recommended-models tests and fixtures (GLM 5.2 is the active default)
+- Fix a performance issue where listing sessions could hang the extension host: manifest reads now run concurrently via async I/O instead of a serial readFileSync loop
+
 ## 0.0.57
 
 - Split production endpoints: `api.trumbo.dev` for programmatic API and MCP, `platform.trumbo.dev` for browser app and device-code verification

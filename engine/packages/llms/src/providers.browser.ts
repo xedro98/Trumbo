@@ -1,4 +1,5 @@
 export {
+	extractTrumboPassLimitMessage,
 	getTrumboNotSubscribedMessage,
 	getTrumboOrgIndividualInferenceSubscriptionMessage,
 	getTrumboPassSubscriptionUrl,
@@ -6,8 +7,12 @@ export {
 	isTrumboNotSubscribedMessage,
 	isTrumboOrgIndividualInferenceSubscriptionError,
 	isTrumboOrgIndividualInferenceSubscriptionMessage,
+	isTrumboPassLimitError,
+	isTrumboPassLimitMessage,
 	TrumboNotSubscribedError,
 	TrumboOrgIndividualInferenceSubscriptionError,
+	type TrumboPassLimitDetails,
+	TrumboPassLimitError,
 } from "./providers/errors";
 export {
 	normalizeProviderId,
