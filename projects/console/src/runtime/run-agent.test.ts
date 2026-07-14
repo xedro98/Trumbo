@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { clearTrumboFreeModelCostCache } from "../utils/free-model-cost";
 
 const sessionManagerMocks = vi.hoisted(() => ({
 	start: vi.fn(),
@@ -71,6 +72,19 @@ vi.mock("@trumbo/core", () => ({
 	},
 }));
 
+vi.mock("@trumbo/shared", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@trumbo/shared")>();
+	return {
+		...actual,
+		// Pin the app base URL so getCliSubscriptionUrl() is deterministic
+		// (the real default resolves to the Vite dev host in this env).
+		getTrumboEnvironmentConfig: () => ({
+			...actual.getTrumboEnvironmentConfig(),
+			appBaseUrl: "http://0.0.0.0:0",
+		}),
+	};
+});
+
 vi.mock("../utils/approval", () => ({
 	askQuestionInTerminal: vi.fn(),
 	requestToolApproval: vi.fn(),
@@ -141,6 +155,7 @@ describe("runAgent", () => {
 		sessionEventsMocks.listener = undefined;
 		sessionEventsMocks.subscribeToAgentEvents.mockClear();
 		vi.unstubAllGlobals();
+		clearTrumboFreeModelCostCache();
 	});
 
 	afterEach(() => {
@@ -1110,6 +1125,7 @@ describe("runAgent", () => {
 				modelId: "deepseek/deepseek-v4-flash",
 				outputMode: "json",
 				providerId: "trumbo",
+				apiKey: "test-token",
 				systemPrompt: "system",
 				thinking: false,
 				toolPolicies: { "*": { autoApprove: true } },

@@ -550,6 +550,9 @@ async function runCommand(
 			env: process.env,
 			// Prevent a console window from flashing on Windows.
 			windowsHide: true,
+			// Resolve `.cmd` shims (npm/pnpm/yarn) on Windows and let the
+			// platform shell find the executable on PATH.
+			shell: true,
 		});
 		let stderr = "";
 		child.stderr.on("data", (chunk) => {

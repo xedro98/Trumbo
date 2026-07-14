@@ -11,6 +11,18 @@
 
 
 
+## 3.4.2
+
+Windows plugin install + test-suite cleanup.
+
+### Fixed
+- Plugin install/uninstall now works on Windows. The package-manager spawn (`npm`/`pnpm`/`yarn`) runs with `shell: true` so the `.cmd` shims resolve on Windows (previously failed with `spawn UNKNOWN`).
+
+### Internal
+- Cleared 63 pre-existing test failures across `main.test.ts`, `run-agent.test.ts`, and `plugin.test.ts` (stale `shouldSkipAutoUpdateOnStartup` mock, non-deterministic app base URL, stale free-model cost cache, missing authed-user `apiKey` in the free-model cost test)
+
+
+
 ## 3.4.1
 
 SDK parity + thinking-level default.

@@ -75,6 +75,7 @@ const updateMocks = vi.hoisted(() => ({
 	autoUpdateOnStartup: vi.fn(),
 	checkForUpdates: vi.fn(async () => 0),
 	getPreferredKanbanInstaller: vi.fn(() => undefined),
+	shouldSkipAutoUpdateOnStartup: vi.fn(() => false),
 }));
 const runtimeMocks = vi.hoisted(() => ({
 	runAgent: vi.fn(async () => {

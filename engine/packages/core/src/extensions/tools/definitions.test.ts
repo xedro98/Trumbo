@@ -1425,13 +1425,16 @@ describe("default read_files tool", () => {
 		const result = await tool.execute(
 			// Weak models sometimes emit the line range as a separate array
 			// item after the file path instead of attaching it to the path.
+			// The input is intentionally shape-invalid for the strict
+			// ReadFilesInput type (pathless entry) to exercise the runtime
+			// union-validation + coalescing path.
 			{
 				files: [
 					{ path: "/tmp/alpha.ts" },
 					{ start_line: 10, end_line: 20 },
 					{ path: "/tmp/beta.ts" },
 				],
-			},
+			} as unknown as Parameters<typeof tool.execute>[0],
 			{
 				agentId: "agent-1",
 				conversationId: "conv-1",
