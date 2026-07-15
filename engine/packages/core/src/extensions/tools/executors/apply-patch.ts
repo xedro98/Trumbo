@@ -20,12 +20,18 @@ import {
 	PatchParser,
 	type PatchWarning,
 } from "./apply-patch-parser";
+import { detectLineEnding, restoreLineEndings, stripBom } from "./fuzzy-diff";
 
 interface FileChange {
 	type: PatchActionType;
 	oldContent?: string;
 	newContent?: string;
 	movePath?: string;
+}
+
+interface FileMetadata {
+	bom: string;
+	lineEnding: "\r\n" | "\n";
 }
 
 interface NormalizedPatchInput {
@@ -191,12 +197,16 @@ async function loadFiles(
 	cwd: string,
 	encoding: BufferEncoding,
 	restrictToCwd: boolean,
-): Promise<Record<string, string>> {
+): Promise<{
+	files: Record<string, string>;
+	metadata: Record<string, FileMetadata>;
+}> {
 	const filesToLoad = extractFilesForOperations(lines, [
 		PATCH_MARKERS.UPDATE,
 		PATCH_MARKERS.DELETE,
 	]);
 	const files: Record<string, string> = {};
+	const metadata: Record<string, FileMetadata> = {};
 
 	for (const filePath of filesToLoad) {
 		const absolutePath = resolveFilePath(cwd, filePath, restrictToCwd);
@@ -206,10 +216,18 @@ async function loadFiles(
 		} catch {
 			throw new DiffError(`File not found: ${filePath}`);
 		}
-		files[filePath] = fileContent.replace(/\r\n/g, "\n");
+		// Strip BOM before matching (the model won't include it in patch context)
+		const { bom, text: textWithoutBom } = stripBom(fileContent);
+		// Detect line ending before normalizing to LF
+		const lineEnding = detectLineEnding(textWithoutBom);
+		// Normalize to LF for the parser
+		files[filePath] = textWithoutBom
+			.replace(/\r\n/g, "\n")
+			.replace(/\r/g, "\n");
+		metadata[filePath] = { bom, lineEnding };
 	}
 
-	return files;
+	return { files, metadata };
 }
 
 function patchToChanges(
@@ -277,11 +295,13 @@ async function applyChanges(
 	cwd: string,
 	encoding: BufferEncoding,
 	restrictToCwd: boolean,
+	metadata: Record<string, FileMetadata>,
 ): Promise<string[]> {
 	const touched: string[] = [];
 
 	for (const [filePath, change] of Object.entries(changes)) {
 		const sourceAbsPath = resolveFilePath(cwd, filePath, restrictToCwd);
+		const meta = metadata[filePath];
 		switch (change.type) {
 			case PatchActionType.DELETE:
 				await fs.rm(sourceAbsPath, { force: true });
@@ -302,6 +322,12 @@ async function applyChanges(
 					);
 				}
 
+				// Restore line endings and BOM if the original file had them
+				const lineEnding = meta?.lineEnding ?? "\n";
+				const bom = meta?.bom ?? "";
+				const restoredContent =
+					bom + restoreLineEndings(change.newContent, lineEnding);
+
 				if (change.movePath) {
 					const moveAbsPath = resolveFilePath(
 						cwd,
@@ -309,11 +335,11 @@ async function applyChanges(
 						restrictToCwd,
 					);
 					await fs.mkdir(path.dirname(moveAbsPath), { recursive: true });
-					await fs.writeFile(moveAbsPath, change.newContent, { encoding });
+					await fs.writeFile(moveAbsPath, restoredContent, { encoding });
 					await fs.rm(sourceAbsPath, { force: true });
 					touched.push(`${filePath} -> ${change.movePath}`);
 				} else {
-					await fs.writeFile(sourceAbsPath, change.newContent, { encoding });
+					await fs.writeFile(sourceAbsPath, restoredContent, { encoding });
 					touched.push(filePath);
 				}
 				break;
@@ -338,7 +364,7 @@ export function createApplyPatchExecutor(
 		_context: AgentToolContext,
 	): Promise<string> => {
 		const normalizedInput = normalizePatchInput(input.input);
-		const currentFiles = await loadFiles(
+		const { files: currentFiles, metadata } = await loadFiles(
 			normalizedInput.lines,
 			cwd,
 			encoding,
@@ -351,7 +377,13 @@ export function createApplyPatchExecutor(
 		}
 
 		const changes = patchToChanges(patch, currentFiles);
-		const touched = await applyChanges(changes, cwd, encoding, restrictToCwd);
+		const touched = await applyChanges(
+			changes,
+			cwd,
+			encoding,
+			restrictToCwd,
+			metadata,
+		);
 
 		const responseLines = [
 			"Successfully applied patch to the following files:",

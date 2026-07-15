@@ -2,6 +2,9 @@
  * Editor Executor
  *
  * Built-in implementation for filesystem editing operations.
+ * Uses the fuzzy-diff module for robust text matching that survives
+ * Unicode normalization differences, trailing whitespace mismatches,
+ * smart quote/dash variants, BOM-prefixed files, and CRLF line endings.
  */
 
 import * as fs from "node:fs/promises";
@@ -9,6 +12,16 @@ import * as path from "node:path";
 import type { AgentToolContext } from "@trumbo/shared";
 import type { EditFileInput } from "../schemas";
 import type { EditorExecutor } from "../types";
+import {
+	applyEditsToNormalizedContent,
+	detectLineEnding,
+	type Edit,
+	generateDiffString,
+	normalizeForFuzzyMatch,
+	normalizeToLF,
+	restoreLineEndings,
+	stripBom,
+} from "./fuzzy-diff";
 
 /**
  * Options for the editor executor
@@ -28,7 +41,7 @@ export interface EditorExecutorOptions {
 	restrictToCwd?: boolean;
 
 	/**
-	 * Maximum number of diff lines in str_replace output
+	 * Maximum number of diff lines in the editor output
 	 * @default 200
 	 */
 	maxDiffLines?: number;
@@ -59,134 +72,6 @@ function resolveFilePath(
 	return resolved;
 }
 
-function countOccurrences(content: string, needle: string): number {
-	if (needle.length === 0) return 0;
-	return content.split(needle).length - 1;
-}
-
-// --- Fuzzy matching (ported from apply-patch-parser.ts) ----------------------
-// Allows edits to succeed when the file has minor differences (whitespace,
-// formatting) from the model's `oldStr`. Falls back to a similarity-based
-// search when the exact match fails.
-
-function levenshteinDistance(str1: string, str2: string): number {
-	const rows = str2.length + 1;
-	const cols = str1.length + 1;
-	const matrix = new Array<number>(rows * cols).fill(0);
-	const at = (r: number, c: number): number => matrix[r * cols + c] ?? 0;
-	const set = (r: number, c: number, value: number): void => {
-		matrix[r * cols + c] = value;
-	};
-
-	for (let r = 0; r < rows; r++) set(r, 0, r);
-	for (let c = 0; c < cols; c++) set(0, c, c);
-
-	for (let r = 1; r < rows; r++) {
-		for (let c = 1; c < cols; c++) {
-			const cost = str2[r - 1] === str1[c - 1] ? 0 : 1;
-			set(
-				r,
-				c,
-				Math.min(at(r - 1, c) + 1, at(r, c - 1) + 1, at(r - 1, c - 1) + cost),
-			);
-		}
-	}
-	return at(rows - 1, cols - 1);
-}
-
-function calculateSimilarity(str1: string, str2: string): number {
-	const longer = str1.length > str2.length ? str1 : str2;
-	const shorter = str1.length > str2.length ? str2 : str1;
-	if (longer.length === 0) return 1;
-	const dist = levenshteinDistance(shorter, longer);
-	return (longer.length - dist) / longer.length;
-}
-
-const FUZZY_THRESHOLD = 0.66;
-
-/**
- * Find the best matching region in `content` for `oldStr` and replace it.
- * Tries exact match first, then falls back to fuzzy (line-level similarity).
- * Returns `{ result, fuzzy }` on success, or `null` if no good match found.
- */
-function fuzzyReplace(
-	content: string,
-	oldStr: string,
-	newStr: string,
-): { result: string; fuzzy: boolean } | null {
-	// Exact match
-	if (content.includes(oldStr)) {
-		return { result: content.replace(oldStr, newStr), fuzzy: false };
-	}
-
-	// Fuzzy: slide a window of the same line count over the content and find
-	// the region with the highest similarity to oldStr.
-	const oldLines = oldStr.split("\n");
-	const contentLines = content.split("\n");
-	const windowLen = oldLines.length;
-	if (windowLen === 0 || windowLen > contentLines.length) return null;
-
-	let bestScore = 0;
-	let bestStart = -1;
-
-	for (let i = 0; i <= contentLines.length - windowLen; i++) {
-		const candidate = contentLines.slice(i, i + windowLen).join("\n");
-		const score = calculateSimilarity(candidate, oldStr);
-		if (score > bestScore) {
-			bestScore = score;
-			bestStart = i;
-		}
-	}
-
-	if (bestScore >= FUZZY_THRESHOLD && bestStart >= 0) {
-		const before = contentLines.slice(0, bestStart).join("\n");
-		const after = contentLines.slice(bestStart + windowLen).join("\n");
-		const result = `${before}\n${newStr}\n${after}`;
-		return { result, fuzzy: true };
-	}
-
-	return null;
-}
-
-function createLineDiff(
-	oldContent: string,
-	newContent: string,
-	maxLines: number,
-): string {
-	const oldLines = oldContent.split("\n");
-	const newLines = newContent.split("\n");
-	const max = Math.max(oldLines.length, newLines.length);
-	const out: string[] = ["```diff"];
-	let emitted = 0;
-
-	for (let i = 0; i < max; i++) {
-		if (emitted >= maxLines) {
-			out.push("... diff truncated ...");
-			break;
-		}
-
-		const oldLine = oldLines[i];
-		const newLine = newLines[i];
-
-		if (oldLine === newLine) {
-			continue;
-		}
-
-		const lineNo = i + 1;
-		if (oldLine !== undefined) {
-			out.push(`-${lineNo}: ${oldLine}`);
-			emitted++;
-		}
-		if (newLine !== undefined && emitted < maxLines) {
-			out.push(`+${lineNo}: ${newLine}`);
-			emitted++;
-		}
-	}
-
-	out.push("```");
-	return out.join("\n");
-}
-
 async function createFile(
 	filePath: string,
 	fileText: string,
@@ -213,36 +98,47 @@ async function replaceInFile(
 	encoding: BufferEncoding,
 	maxDiffLines: number,
 ): Promise<string> {
-	const content = await fs.readFile(filePath, encoding);
+	const rawContent = await fs.readFile(filePath, encoding);
 
-	// Try exact match first (fast path), then fall back to fuzzy matching
-	// for cases where the file has minor differences from the model's oldStr.
-	const fuzzyResult = fuzzyReplace(content, oldStr, newStr ?? "");
+	// Strip BOM before matching (the model won't include the invisible BOM in oldText)
+	const { bom, text: content } = stripBom(rawContent);
 
-	if (!fuzzyResult) {
-		throw new Error(
-			`No replacement performed: text not found in ${filePath} (exact and fuzzy match both failed).`,
-		);
-	}
+	// Detect and normalize line endings
+	const lineEnding = detectLineEnding(content);
+	const normalizedContent = normalizeToLF(content);
 
-	// For exact matches, verify there's only one occurrence (avoid ambiguous
-	// replacements). Fuzzy matches are inherently single-result.
-	if (!fuzzyResult.fuzzy) {
-		const occurrences = countOccurrences(content, oldStr);
-		if (occurrences > 1) {
-			throw new Error(
-				`No replacement performed: multiple occurrences of text found in ${filePath}.`,
-			);
-		}
-	}
+	// Apply the edit using the fuzzy diff engine
+	const edits: Edit[] = [{ oldText: oldStr, newText: newStr ?? "" }];
+	const { baseContent, newContent } = applyEditsToNormalizedContent(
+		normalizedContent,
+		edits,
+		filePath,
+	);
 
-	await fs.writeFile(filePath, fuzzyResult.result, { encoding });
+	// Restore line endings and BOM before writing
+	const restoredContent = restoreLineEndings(newContent, lineEnding);
+	await fs.writeFile(filePath, bom + restoredContent, { encoding });
 
-	const diff = createLineDiff(content, fuzzyResult.result, maxDiffLines);
-	const fuzzyNote = fuzzyResult.fuzzy
-		? " (fuzzy match — the file had minor differences from the provided old_str)"
-		: "";
-	return `Edited ${filePath}${fuzzyNote}\n${diff}`;
+	// Generate a display diff
+	const { diff, firstChangedLine } = generateDiffString(
+		baseContent,
+		newContent,
+	);
+	const truncatedDiff =
+		diff.split("\n").length > maxDiffLines
+			? `${diff.split("\n").slice(0, maxDiffLines).join("\n")}\n... diff truncated ...`
+			: diff;
+
+	const fuzzyNote =
+		normalizeForFuzzyMatch(content) !== content
+			? " (fuzzy match — the file had minor Unicode or whitespace differences from the provided old_text)"
+			: "";
+
+	const lineNote =
+		firstChangedLine !== undefined
+			? ` (first change at line ${firstChangedLine})`
+			: "";
+	return `Edited ${filePath}${fuzzyNote}${lineNote}\n\`\`\`diff\n${truncatedDiff}\n\`\`\``;
 }
 
 async function insertInFile(
@@ -251,8 +147,16 @@ async function insertInFile(
 	newStr: string,
 	encoding: BufferEncoding,
 ): Promise<string> {
-	const content = await fs.readFile(filePath, encoding);
-	const lines = content.split("\n");
+	const rawContent = await fs.readFile(filePath, encoding);
+
+	// Strip BOM before processing
+	const { bom, text: content } = stripBom(rawContent);
+
+	// Detect and normalize line endings
+	const lineEnding = detectLineEnding(content);
+	const normalizedContent = normalizeToLF(content);
+
+	const lines = normalizedContent.split("\n");
 	const maxBoundaryLine = lines.length + 1;
 
 	if (insertLineOneBased < 1 || insertLineOneBased > maxBoundaryLine) {
@@ -262,8 +166,11 @@ async function insertInFile(
 	}
 
 	const insertLine = insertLineOneBased - 1;
-	lines.splice(insertLine, 0, ...newStr.split("\n"));
-	await fs.writeFile(filePath, lines.join("\n"), { encoding });
+	lines.splice(insertLine, 0, ...normalizeToLF(newStr).split("\n"));
+
+	// Restore line endings and BOM before writing
+	const restoredContent = restoreLineEndings(lines.join("\n"), lineEnding);
+	await fs.writeFile(filePath, bom + restoredContent, { encoding });
 
 	return `Inserted content at line ${insertLineOneBased} in ${filePath}.`;
 }

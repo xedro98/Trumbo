@@ -4,6 +4,8 @@
  * This parser supports the Trumbo apply_patch format used by the legacy runtime.
  */
 
+import { normalizeForFuzzyMatch } from "./fuzzy-diff";
+
 export const PATCH_MARKERS = {
 	BEGIN: "*** Begin Patch",
 	END: "*** End Patch",
@@ -56,27 +58,7 @@ export class DiffError extends Error {
 }
 
 function canonicalize(input: string): string {
-	const punctuationMap: Record<string, string> = {
-		"\u2010": "-",
-		"\u2011": "-",
-		"\u2012": "-",
-		"\u2013": "-",
-		"\u2014": "-",
-		"\u2212": "-",
-		"\u201C": '"',
-		"\u201D": '"',
-		"\u201E": '"',
-		"\u00AB": '"',
-		"\u00BB": '"',
-		"\u2018": "'",
-		"\u2019": "'",
-		"\u201B": "'",
-		"\u00A0": " ",
-		"\u202F": " ",
-	};
-	return input
-		.normalize("NFC")
-		.replace(/./gu, (char) => punctuationMap[char] ?? char)
+	return normalizeForFuzzyMatch(input)
 		.replace(/\\`/g, "`")
 		.replace(/\\'/g, "'")
 		.replace(/\\"/g, '"');
