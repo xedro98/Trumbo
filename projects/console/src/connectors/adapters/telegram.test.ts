@@ -1,7 +1,7 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { ConnectTelegramOptions } from "@trumbo/shared";
+import type { ConnectTelegramOptions } from "@trumbodev/shared";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { __test__, telegramConnector } from "./telegram";
 

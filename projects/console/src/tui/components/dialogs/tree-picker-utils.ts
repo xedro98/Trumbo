@@ -4,7 +4,7 @@
  * Separated from `tree-picker.tsx` so they can be unit-tested without
  * the OpenTUI runtime (which requires a terminal).
  */
-import type { MessageWithMetadata } from "@trumbo/shared";
+import type { MessageWithMetadata } from "@trumbodev/shared";
 
 export interface TreePickerItem {
 	id: string;

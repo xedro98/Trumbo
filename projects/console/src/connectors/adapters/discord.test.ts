@@ -2,7 +2,7 @@ import { writeFileSync } from "node:fs";
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { ConnectDiscordOptions } from "@trumbo/shared";
+import type { ConnectDiscordOptions } from "@trumbodev/shared";
 import type { Thread } from "chat";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { readBindings, writeBindings } from "../thread-bindings";

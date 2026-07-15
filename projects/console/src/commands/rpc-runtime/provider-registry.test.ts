@@ -1,8 +1,8 @@
-import type { SaveProviderSettingsActionRequest } from "@trumbo/core";
+import type { SaveProviderSettingsActionRequest } from "@trumbodev/core";
 import {
 	type ProviderSettingsManager,
 	saveLocalProviderSettings,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import { describe, expect, it, vi } from "vitest";
 
 describe("saveLocalProviderSettings", () => {

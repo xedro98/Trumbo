@@ -1,6 +1,9 @@
 import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import type { ToolApprovalRequest, ToolApprovalResult } from "@trumbo/shared";
+import type {
+	ToolApprovalRequest,
+	ToolApprovalResult,
+} from "@trumbodev/shared";
 
 export type DesktopToolApprovalOptions = {
 	approvalDir?: string;

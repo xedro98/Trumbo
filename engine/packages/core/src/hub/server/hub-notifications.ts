@@ -1,4 +1,4 @@
-import type { SessionRecord as HubSessionRecord } from "@trumbo/shared";
+import type { SessionRecord as HubSessionRecord } from "@trumbodev/shared";
 import { readPersistedMessagesFile } from "../../runtime/host/runtime-host-support";
 
 function extractAssistantText(content: unknown): string | undefined {

@@ -1,7 +1,7 @@
 import type {
 	ProviderActionRequest,
 	TrumboAccountActionRequest,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type {
 	FeaturebaseTokenResponse,
 	TrumboAccountBalance,

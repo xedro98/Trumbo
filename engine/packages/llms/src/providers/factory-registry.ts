@@ -7,7 +7,7 @@
  *
  * @example
  * ```typescript
- * import { registerHandler, BaseHandler, type ProviderConfig, type ApiStream, type Message } from "@trumbo/providers"
+ * import { registerHandler, BaseHandler, type ProviderConfig, type ApiStream, type Message } from "@trumbodev/providers"
  * import * as vscode from "vscode"
  *
  * class VSCodeLmHandler extends BaseHandler {

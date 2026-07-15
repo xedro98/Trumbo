@@ -1,4 +1,4 @@
-import type { ITelemetryService } from "@trumbo/shared";
+import type { ITelemetryService } from "@trumbodev/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ProviderSettings } from "../types/provider-settings";
 

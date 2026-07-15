@@ -1,6 +1,6 @@
-import type { UserInstructionConfigService } from "@trumbo/core";
-import { HubSessionClient } from "@trumbo/core";
-import type { ChatStartSessionRequest } from "@trumbo/shared";
+import type { UserInstructionConfigService } from "@trumbodev/core";
+import { HubSessionClient } from "@trumbodev/core";
+import type { ChatStartSessionRequest } from "@trumbodev/shared";
 import { resolveCliSessionMetadata } from "../utils/enterprise";
 import { ensureCliHubServer } from "../utils/hub-runtime";
 import { c, emitJsonLine, writeErr, writeln } from "../utils/output";

@@ -1,9 +1,9 @@
 import { fstatSync } from "node:fs";
 import { homedir } from "node:os";
 import { basename } from "node:path";
-import type { ToolPolicy } from "@trumbo/core";
+import type { ToolPolicy } from "@trumbodev/core";
 
-import { registerDisposable } from "@trumbo/shared";
+import { registerDisposable } from "@trumbodev/shared";
 import type { Command } from "commander";
 import {
 	CommanderError,
@@ -64,13 +64,13 @@ export function stdinHasPipedInput(): boolean {
 }
 
 async function createProviderSettingsManager() {
-	const { ProviderSettingsManager } = await import("@trumbo/core");
+	const { ProviderSettingsManager } = await import("@trumbodev/core");
 	return new ProviderSettingsManager();
 }
 
 async function loadCliRuntimeModules() {
 	const [coreServer, prompt, runAgentModule] = await Promise.all([
-		import("@trumbo/core"),
+		import("@trumbodev/core"),
 		import("./runtime/prompt"),
 		import("./runtime/run-agent"),
 	]);
@@ -139,7 +139,9 @@ export async function runCli(): Promise<void> {
 	}
 
 	const configDir = resolveConfigDirArg(cliArgs);
-	const { setTrumboDir, setHomeDir } = await import("@trumbo/shared/storage");
+	const { setTrumboDir, setHomeDir } = await import(
+		"@trumbodev/shared/storage"
+	);
 	if (configDir) {
 		setTrumboDir(configDir);
 	}
@@ -205,7 +207,7 @@ export async function runCli(): Promise<void> {
 			// --config=<dir> form) is always respected before any provider
 			// settings manager is constructed against ~/.trumbo.
 			if (opts.config?.trim()) {
-				const { setTrumboDir } = await import("@trumbo/shared/storage");
+				const { setTrumboDir } = await import("@trumbodev/shared/storage");
 				setTrumboDir(opts.config.trim());
 			}
 			// Honor --data-dir before constructing the provider settings manager
@@ -243,7 +245,7 @@ export async function runCli(): Promise<void> {
 		.action(async () => {
 			const opts = teamListCmd.opts<{ config?: string; dataDir?: string }>();
 			if (opts.config?.trim()) {
-				const { setTrumboDir } = await import("@trumbo/shared/storage");
+				const { setTrumboDir } = await import("@trumbodev/shared/storage");
 				setTrumboDir(opts.config.trim());
 			}
 			configureSandboxEnvironment({
@@ -270,7 +272,7 @@ export async function runCli(): Promise<void> {
 		.action(async () => {
 			const opts = teamCurrentCmd.opts<{ config?: string; dataDir?: string }>();
 			if (opts.config?.trim()) {
-				const { setTrumboDir } = await import("@trumbo/shared/storage");
+				const { setTrumboDir } = await import("@trumbodev/shared/storage");
 				setTrumboDir(opts.config.trim());
 			}
 			configureSandboxEnvironment({
@@ -298,7 +300,7 @@ export async function runCli(): Promise<void> {
 		.action(async (team: string) => {
 			const opts = teamSwitchCmd.opts<{ config?: string; dataDir?: string }>();
 			if (opts.config?.trim()) {
-				const { setTrumboDir } = await import("@trumbo/shared/storage");
+				const { setTrumboDir } = await import("@trumbodev/shared/storage");
 				setTrumboDir(opts.config.trim());
 			}
 			configureSandboxEnvironment({

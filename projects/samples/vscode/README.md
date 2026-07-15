@@ -7,7 +7,7 @@
    ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
 ```
 
-# `projects/samples/vscode` (`@trumbo/vscode`)
+# `projects/samples/vscode` (`@trumbodev/vscode`)
 
 A VS Code extension that opens a chat webview and runs Trumbo sessions over the RPC runtime. It is a minimal, end-to-end example of embedding Trumbo in an editor: spawn an owner-scoped RPC sidecar, drive chat turns from the extension, and stream runtime events into the webview.
 
@@ -27,15 +27,15 @@ A VS Code extension that opens a chat webview and runs Trumbo sessions over the 
 
 ```bash
 # Build the extension bundle
-bun -F @trumbo/vscode build
+bun -F @trumbodev/vscode build
 
 # Typecheck
-bun -F @trumbo/vscode typecheck
+bun -F @trumbodev/vscode typecheck
 ```
 
 To run it locally in VS Code:
 
-1. Build the extension: `bun -F @trumbo/vscode build`.
+1. Build the extension: `bun -F @trumbodev/vscode build`.
 2. Open `projects/samples/vscode` in VS Code.
 3. Press `F5` to launch the Extension Development Host.
 4. Run the command `Trumbo: Open Chat in Editor`.

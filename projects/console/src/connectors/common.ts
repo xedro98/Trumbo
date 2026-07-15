@@ -8,9 +8,9 @@ import {
 	writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
-import type { HubSessionClient, HubSessionRow } from "@trumbo/core";
-import { ensureParentDir, resolveTrumboDataDir } from "@trumbo/core";
-import { withResolvedTrumboBuildEnv } from "@trumbo/shared";
+import type { HubSessionClient, HubSessionRow } from "@trumbodev/core";
+import { ensureParentDir, resolveTrumboDataDir } from "@trumbodev/core";
+import { withResolvedTrumboBuildEnv } from "@trumbodev/shared";
 import { createCliLoggerAdapter } from "../logging/adapter";
 import { logSpawnedProcess } from "../logging/process";
 import { resolveCliLaunchSpec } from "../utils/internal-launch";

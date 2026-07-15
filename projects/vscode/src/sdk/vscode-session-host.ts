@@ -26,8 +26,8 @@ import {
 	TrumboCore,
 	type TrumboCoreListHistoryOptions,
 	type TrumboCoreStartInput,
-} from "@trumbo/core"
-import { type AgentToolContext, type ToolApprovalRequest, type ToolApprovalResult, type ToolPolicy } from "@trumbo/shared"
+} from "@trumbodev/core"
+import { type AgentToolContext, type ToolApprovalRequest, type ToolApprovalResult, type ToolPolicy } from "@trumbodev/shared"
 import type { CommandExecutorCallbacks, ITerminalManager, TerminalProcessResultPromise } from "@/integrations/terminal/types"
 import { getDistinctId } from "@/services/logging/distinctId"
 import type { McpHub } from "@/services/mcp/McpHub"

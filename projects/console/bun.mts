@@ -58,7 +58,7 @@ function shouldBuildHubWebview(): boolean {
 
 if (shouldBuildHubWebview()) {
 	console.log("Building Trumbo Hub webview...");
-	await $`bun -F @trumbo/hub build:webview`.cwd(repoRoot);
+	await $`bun -F @trumbodev/hub build:webview`.cwd(repoRoot);
 }
 
 console.log("Syncing Trumbo CLI logo...");
@@ -73,7 +73,7 @@ const result = await Bun.build({
 	loader: {
 		".txt": "text",
 	},
-	packages: "bundle", // Keep private workspace packages bundled so npm consumers do not need @trumbo/* at runtime.
+	packages: "bundle", // Keep private workspace packages bundled so npm consumers do not need @trumbodev/* at runtime.
 	external: [
 		// OpenTUI resolves a platform-specific native package at runtime.
 		// Bundling through that resolution path rewrites the import in a way that

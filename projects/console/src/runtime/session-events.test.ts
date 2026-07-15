@@ -1,4 +1,4 @@
-import type { AgentEvent } from "@trumbo/core";
+import type { AgentEvent } from "@trumbodev/core";
 import { describe, expect, it, vi } from "vitest";
 import { subscribeToAgentEvents } from "./session-events";
 

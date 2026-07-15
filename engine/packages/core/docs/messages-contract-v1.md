@@ -9,7 +9,7 @@
 
 # messages.json contract — v1
 
-This document describes the persisted session messages artifact written by `@trumbo/core` at:
+This document describes the persisted session messages artifact written by `@trumbodev/core` at:
 
 ```
 ~/.trumbo/data/sessions/<sessionId>/<sessionId>.messages.json

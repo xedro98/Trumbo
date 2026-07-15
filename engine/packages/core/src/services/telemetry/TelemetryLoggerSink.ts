@@ -1,4 +1,4 @@
-import type { BasicLogger } from "@trumbo/shared";
+import type { BasicLogger } from "@trumbodev/shared";
 import type {
 	ITelemetryAdapter,
 	TelemetryProperties,

@@ -63,7 +63,7 @@ Trumbo is a full-stack AI coding agent. It reads your project, plans changes, ed
 - **Interactive TUI** — terminal chat with Plan/Act modes, slash commands, session trees, live tool approvals, and themes.
 - **Headless / JSON** — pipe a prompt, get styled text or NDJSON events for CI/CD and scripting.
 - **RPC mode** — JSONL over stdin/stdout for embedding Trumbo in editors, orchestrators, and other tools.
-- **SDK** — a TypeScript API (`@trumbo/sdk`) for building your own agents, tools, connectors, and scheduled automations.
+- **SDK** — a TypeScript API (`@trumbodev/sdk`) for building your own agents, tools, connectors, and scheduled automations.
 
 Bring your own API keys (Anthropic, OpenAI, Google, OpenRouter, Bedrock, Vertex, Azure, Cerebras, Groq, Ollama, LM Studio, or any OpenAI-compatible endpoint), or sign in with a Trumbo account for hosted model access and cloud agent tools.
 
@@ -311,7 +311,7 @@ trumbo auth trumbo    # sign in with Trumbo account (device code flow)
 Register tools, commands, rules, message builders, providers, MCP servers, and TUI views programmatically. Plugins can run in-process (jiti-loaded TypeScript) or in a subprocess sandbox.
 
 ```typescript
-import { Agent, createTool } from "@trumbo/sdk"
+import { Agent, createTool } from "@trumbodev/sdk"
 
 const deployTool = createTool({
   name: "deploy",
@@ -389,7 +389,7 @@ trumbo --zen "Background task"           # dispatch to hub daemon, exit immediat
 ## SDK
 
 ```typescript
-import { TrumboCore } from "@trumbo/sdk"
+import { TrumboCore } from "@trumbodev/sdk"
 
 const trumbo = await TrumboCore.create({
   hub: { cwd: process.cwd(), clientType: "my-app", displayName: "My App" },

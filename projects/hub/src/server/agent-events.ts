@@ -1,5 +1,5 @@
-import type { CoreSessionEvent } from "@trumbo/core";
-import type { AgentEvent } from "@trumbo/shared";
+import type { CoreSessionEvent } from "@trumbodev/core";
+import type { AgentEvent } from "@trumbodev/shared";
 import type { WebviewToolEvent } from "../webview-protocol";
 import { rejectPendingApprovalsForSession } from "./approvals";
 import type { HubContext } from "./state";

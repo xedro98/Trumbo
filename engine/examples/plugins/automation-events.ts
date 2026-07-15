@@ -12,7 +12,7 @@
  *   TRUMBO_LOCAL_EVENT_INTERVAL_MS=2000 trumbo -i "wait for the plugin event"
  */
 
-import type { AgentPlugin } from "@trumbo/core";
+import type { AgentPlugin } from "@trumbodev/core";
 
 const stopLocalEmitters = new Map<string, () => void>();
 

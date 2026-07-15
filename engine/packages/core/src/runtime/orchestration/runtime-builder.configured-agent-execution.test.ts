@@ -8,8 +8,8 @@ import {
 	type AgentTool,
 	createContributionRegistry,
 	type Message,
-} from "@trumbo/shared";
-import { setHomeDir } from "@trumbo/shared/storage";
+} from "@trumbodev/shared";
+import { setHomeDir } from "@trumbodev/shared/storage";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { UserInstructionConfigService } from "../../extensions/config";
 import type { CoreSessionConfig } from "../../types/config";

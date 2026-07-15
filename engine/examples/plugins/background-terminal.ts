@@ -14,7 +14,7 @@ import {
 	type AgentPlugin,
 	type AgentToolContext,
 	createTool,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
 /**
  * Background Terminal Plugin Example

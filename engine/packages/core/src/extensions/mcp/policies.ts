@@ -1,4 +1,4 @@
-import type { ToolPolicy } from "@trumbo/shared";
+import type { ToolPolicy } from "@trumbodev/shared";
 import { defaultMcpToolNameTransform } from "./name-transform";
 import type { McpToolNameTransform } from "./types";
 

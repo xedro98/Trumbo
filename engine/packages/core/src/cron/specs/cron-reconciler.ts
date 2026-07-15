@@ -1,10 +1,10 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { relative } from "node:path";
-import type { CronSpecParseResult } from "@trumbo/shared";
+import type { CronSpecParseResult } from "@trumbodev/shared";
 import {
 	type ResolveCronSpecsDirOptions,
 	resolveCronSpecsDir,
-} from "@trumbo/shared/storage";
+} from "@trumbodev/shared/storage";
 import { getNextCronTime } from "../schedule/scheduler";
 import type {
 	CronSpecRecord,

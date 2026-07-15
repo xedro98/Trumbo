@@ -19,7 +19,7 @@ import {
 import {
 	discoverPluginModulePaths,
 	resolvePluginConfigSearchPaths,
-} from "@trumbo/shared/storage";
+} from "@trumbodev/shared/storage";
 import { readGlobalSettings, writeGlobalSettings } from "./global-settings";
 import { removePluginMcpServersFromSettings } from "./plugin-mcp-settings";
 

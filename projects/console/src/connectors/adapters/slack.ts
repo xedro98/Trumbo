@@ -1,10 +1,13 @@
 import { createSlackAdapter, type SlackAdapter } from "@chat-adapter/slack";
-import type { ChatStartSessionRequest } from "@trumbo/core";
+import type { ChatStartSessionRequest } from "@trumbodev/core";
 import {
 	createUserInstructionConfigService,
 	HubSessionClient,
-} from "@trumbo/core";
-import type { ConnectSlackOptions, SlackConnectorState } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type {
+	ConnectSlackOptions,
+	SlackConnectorState,
+} from "@trumbodev/shared";
 import {
 	type Adapter,
 	Chat,

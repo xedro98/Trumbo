@@ -4,8 +4,8 @@ const mocks = vi.hoisted(() => ({
 	listLocalProviders: vi.fn(async () => ({ providers: [], settingsPath: "" })),
 }));
 
-vi.mock("@trumbo/core", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("@trumbo/core")>();
+vi.mock("@trumbodev/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@trumbodev/core")>();
 	return {
 		...actual,
 		listLocalProviders: mocks.listLocalProviders,

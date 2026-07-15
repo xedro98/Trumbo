@@ -1,4 +1,4 @@
-// Converts Trumbo SDK messages (@trumbo/llms `Message`) into VS Code Language
+// Converts Trumbo SDK messages (@trumbodev/llms `Message`) into VS Code Language
 // Model API messages (`vscode.LanguageModelChatMessage`).
 //
 // SDK content blocks (text / image / tool_use / tool_result) map onto VS Code LM
@@ -6,7 +6,7 @@
 // placeholder. Tool calls and tool results round-trip as
 // `LanguageModelToolCallPart` / `LanguageModelToolResultPart`.
 
-import type { ContentBlock, Message } from "@trumbo/llms"
+import type { ContentBlock, Message } from "@trumbodev/llms"
 import * as vscode from "vscode"
 import { Logger } from "@/shared/services/Logger"
 import { extractToolOutputText } from "../message-translator"

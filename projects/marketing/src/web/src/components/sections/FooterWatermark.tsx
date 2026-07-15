@@ -9,7 +9,7 @@ import {
 	SOCIAL_ITEMS,
 } from "@/components/MarketingSidebar";
 import { GridBox, GridBoxCell } from "@/components/ui/grid-box";
-import { MARKETING_EXPLORE_ITEMS } from "@/lib/marketing-sections";
+import { MARKETING_EXPLORE_ITEMS, isMarketingExploreGroup } from "@/lib/marketing-sections";
 import { platformLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
@@ -75,9 +75,14 @@ export function MarketingFooter() {
 				<GridBoxCell className={footerGridCellClass}>
 					<p className={footerKickerClass}>Explore</p>
 					<nav className="flex flex-col gap-3.5 sm:gap-5">
-						{MARKETING_EXPLORE_ITEMS.map((item) => (
-							<FooterLink key={item.href} {...item} />
-						))}
+						{MARKETING_EXPLORE_ITEMS.map((entry) => {
+							if (isMarketingExploreGroup(entry)) {
+								return entry.items.map((item) => (
+									<FooterLink key={item.href} {...item} />
+								));
+							}
+							return <FooterLink key={entry.href} {...entry} />;
+						})}
 					</nav>
 				</GridBoxCell>
 

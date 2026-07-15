@@ -26,7 +26,7 @@
 		},
 		{
 			"path": "engine/AGENTS.md",
-			"description": "Package boundary rules. Telemetry runtime services live in @trumbo/core; @trumbo/agents must not own stateful telemetry. Use to evaluate whether a telemetry change is being made in the correct package."
+			"description": "Package boundary rules. Telemetry runtime services live in @trumbodev/core; @trumbodev/agents must not own stateful telemetry. Use to evaluate whether a telemetry change is being made in the correct package."
 		}
 	]
 }

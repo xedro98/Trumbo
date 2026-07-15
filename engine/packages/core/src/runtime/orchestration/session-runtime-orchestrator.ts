@@ -19,8 +19,8 @@
  * OAuth-retry and run replay feasible.
  */
 
-import type { AgentRuntime } from "@trumbo/agents";
-import { createAgentRuntime } from "@trumbo/agents";
+import type { AgentRuntime } from "@trumbodev/agents";
+import { createAgentRuntime } from "@trumbodev/agents";
 import {
 	type AgentConfig,
 	type AgentEvent,
@@ -46,7 +46,7 @@ import {
 	type ModelInfo,
 	mergeModelOptions,
 	type ToolCallRecord,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { filterDisabledTools } from "../../services/global-settings";
 import {
 	createAgentModelFromConfig,

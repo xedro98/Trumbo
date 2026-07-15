@@ -1,4 +1,4 @@
-import type { ToolApprovalRequest } from "@trumbo/shared";
+import type { ToolApprovalRequest } from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import type { Config } from "../../utils/types";
 import { createInteractiveApprovalController } from "./approvals";

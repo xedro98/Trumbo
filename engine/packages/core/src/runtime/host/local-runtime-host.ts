@@ -1,7 +1,7 @@
 import { readdirSync } from "node:fs";
 import { homedir } from "node:os";
 import { isAbsolute, join, resolve } from "node:path";
-import type * as LlmsProviders from "@trumbo/llms";
+import type * as LlmsProviders from "@trumbodev/llms";
 import {
 	type AgentConfig,
 	type AgentEvent,
@@ -11,8 +11,8 @@ import {
 	type ITelemetryService,
 	isLikelyAuthError,
 	normalizeUserInput,
-} from "@trumbo/shared";
-import { setHomeDirIfUnset } from "@trumbo/shared/storage";
+} from "@trumbodev/shared";
+import { setHomeDirIfUnset } from "@trumbodev/shared/storage";
 import { isOAuthProvider } from "../../auth/provider-auth-registry";
 import { createContextCompactionPrepareTurn } from "../../extensions/context/compaction";
 import type { ToolExecutors } from "../../extensions/tools";

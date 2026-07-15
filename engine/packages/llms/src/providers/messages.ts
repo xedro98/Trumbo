@@ -1,5 +1,5 @@
 /**
- * Message Types — re-exported from @trumbo/shared
+ * Message Types — re-exported from @trumbodev/shared
  */
 export type {
 	ContentBlock,
@@ -14,4 +14,4 @@ export type {
 	ToolDefinition,
 	ToolResultContent,
 	ToolUseContent,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";

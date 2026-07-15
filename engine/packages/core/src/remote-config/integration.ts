@@ -13,7 +13,7 @@ import {
 	REMOTE_CONFIG_SESSION_BLOB_UPLOAD_METADATA_KEY,
 	readRemoteConfigSessionBlobUploadMetadata,
 	registerRemoteConfigSessionBlobUpload,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { createConfiguredTelemetryService } from "../services/telemetry";
 import type { CreateOpenTelemetryTelemetryServiceOptions } from "../services/telemetry/OpenTelemetryProvider";
 import type { TrumboCoreStartInput } from "../trumbo-core/types";

@@ -1,4 +1,4 @@
-import type { HubCommandEnvelope, HubEventEnvelope } from "@trumbo/shared";
+import type { HubCommandEnvelope, HubEventEnvelope } from "@trumbodev/shared";
 
 export function eventNameForScheduleCommand(
 	command: HubCommandEnvelope["command"],

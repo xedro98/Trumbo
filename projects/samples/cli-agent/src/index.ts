@@ -1,5 +1,5 @@
 import * as readline from "node:readline";
-import { Agent, createTool } from "@trumbo/sdk";
+import { Agent, createTool } from "@trumbodev/sdk";
 import { z } from "zod";
 
 const agent = new Agent({

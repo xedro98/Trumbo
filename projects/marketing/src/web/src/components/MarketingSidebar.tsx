@@ -1,10 +1,16 @@
-import { ArrowRight, GithubLogo, List, X } from "@phosphor-icons/react";
+import { ArrowRight, CaretDown, GithubLogo, List, X } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 import { MarketingThemeSwitcher } from "@/components/MarketingThemeSwitcher";
 import { TrumboLogo } from "@/components/TrumboLogo";
-import { MARKETING_EXPLORE_ITEMS } from "@/lib/marketing-sections";
+import {
+	MARKETING_EXPLORE_ITEMS,
+	isMarketingExploreGroup,
+	type MarketingExploreEntry,
+	type MarketingExploreGroup,
+	type MarketingExploreItem,
+} from "@/lib/marketing-sections";
 import { platformLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
@@ -137,6 +143,75 @@ function ActionNavLink({
 	);
 }
 
+function isExploreChildActive(location: string, items: MarketingExploreItem[]) {
+	return items.some(
+		(item) =>
+			!item.external &&
+			(location === item.href || location.startsWith(`${item.href}/`)),
+	);
+}
+
+function MarketingExploreGroupNav({
+	entry,
+	bordered,
+	linkClassName,
+	onNavigate,
+}: {
+	entry: MarketingExploreGroup;
+	bordered?: boolean;
+	linkClassName?: string;
+	onNavigate?: () => void;
+}) {
+	const [location] = useLocation();
+	const childActive = isExploreChildActive(location, entry.items);
+	const [expanded, setExpanded] = useState(childActive);
+
+	useEffect(() => {
+		if (childActive) {
+			setExpanded(true);
+		}
+	}, [childActive]);
+
+	return (
+		<>
+			<SidebarNavRow bordered={bordered}>
+				<button
+					type="button"
+					onClick={() => setExpanded((current) => !current)}
+					className={cn(
+						exploreLinkClass(childActive),
+						"flex w-full items-center justify-between gap-3 py-4 text-left",
+						linkClassName,
+					)}
+					aria-expanded={expanded}
+				>
+					<span>{entry.group}</span>
+					<CaretDown
+						size={14}
+						weight="regular"
+						aria-hidden="true"
+						className={cn(
+							"shrink-0 text-muted-foreground transition-transform duration-200",
+							expanded && "rotate-180",
+						)}
+					/>
+				</button>
+			</SidebarNavRow>
+			{expanded
+				? entry.items.map((item) => (
+						<SidebarNavRow key={item.href} bordered>
+							<ExploreNavLink
+								{...item}
+								className={cn("block w-full py-4 pl-4 text-left", linkClassName)}
+								onNavigate={onNavigate}
+							/>
+						</SidebarNavRow>
+					))
+				: null}
+		</>
+	);
+}
+
 function MarketingExploreNav({
 	className,
 	linkClassName,
@@ -146,17 +221,36 @@ function MarketingExploreNav({
 	linkClassName?: string;
 	onNavigate?: () => void;
 }) {
+	let keyCounter = 0;
+	const nextKey = () => `explore-${keyCounter++}`;
+
 	return (
 		<nav className={cn("flex w-full flex-col", className)}>
-			{MARKETING_EXPLORE_ITEMS.map((item, index) => (
-				<SidebarNavRow key={item.href} bordered={index > 0}>
-					<ExploreNavLink
-						{...item}
-						className={cn("block w-full py-4 text-left", linkClassName)}
-						onNavigate={onNavigate}
-					/>
-				</SidebarNavRow>
-			))}
+			{MARKETING_EXPLORE_ITEMS.map((entry: MarketingExploreEntry) => {
+				if (isMarketingExploreGroup(entry)) {
+					keyCounter++;
+					return (
+						<MarketingExploreGroupNav
+							key={nextKey()}
+							entry={entry}
+							bordered={keyCounter > 1}
+							linkClassName={linkClassName}
+							onNavigate={onNavigate}
+						/>
+					);
+				}
+
+				keyCounter++;
+				return (
+					<SidebarNavRow key={entry.href} bordered={keyCounter > 1}>
+						<ExploreNavLink
+							{...entry}
+							className={cn("block w-full py-4 text-left", linkClassName)}
+							onNavigate={onNavigate}
+						/>
+					</SidebarNavRow>
+				);
+			})}
 		</nav>
 	);
 }

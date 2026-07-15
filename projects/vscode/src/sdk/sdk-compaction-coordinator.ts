@@ -16,7 +16,7 @@
 
 import type { TrumboMessage } from "@shared/ExtensionMessage"
 import type { Mode } from "@shared/storage/types"
-import type { Message as SdkMessage } from "@trumbo/llms"
+import type { Message as SdkMessage } from "@trumbodev/llms"
 import type { StateManager } from "@/core/storage/StateManager"
 import { Logger } from "@/shared/services/Logger"
 import { compactSessionMessages } from "./sdk-compaction"

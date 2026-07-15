@@ -1,5 +1,5 @@
 import * as os from "node:os";
-import type { RuntimeEnv } from "@trumbo/shared";
+import type { RuntimeEnv } from "@trumbodev/shared";
 import { displayName, version } from "../../package.json";
 
 export function getCliBuildInfo(): RuntimeEnv {

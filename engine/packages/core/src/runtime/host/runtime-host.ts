@@ -1,9 +1,9 @@
-import type * as LlmsProviders from "@trumbo/llms";
+import type * as LlmsProviders from "@trumbodev/llms";
 import type {
 	AgentMode,
 	AgentResult,
 	RuntimeConfigExtensionKind,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type { HookEventPayload } from "../../hooks";
 import type { CheckpointEntry } from "../../hooks/checkpoint-hooks";
 import type { ProviderSettings } from "../../services/llms/provider-settings";
@@ -113,7 +113,7 @@ export interface StartSessionInput {
 	 */
 	localRuntime?: LocalRuntimeStartOptions;
 	capabilities?: RuntimeCapabilities;
-	toolPolicies?: import("@trumbo/shared").AgentConfig["toolPolicies"];
+	toolPolicies?: import("@trumbodev/shared").AgentConfig["toolPolicies"];
 }
 
 export function splitCoreSessionConfig(config: CoreSessionConfig): {

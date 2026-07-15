@@ -1,4 +1,4 @@
-import type { ITelemetryService } from "@trumbo/shared";
+import type { ITelemetryService } from "@trumbodev/shared";
 import type { OAuthServerCloseInfo, OAuthServerListeningInfo } from "./server";
 
 export interface OAuthPrompt {

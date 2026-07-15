@@ -2,7 +2,7 @@ import {
 	getProviderConfigFields,
 	type ProviderConfig,
 	type ProviderSettings,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	getPersistedProviderApiKey,
 	isOAuthProvider,

@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { MessageWithMetadata } from "@trumbo/llms";
+import type { MessageWithMetadata } from "@trumbodev/llms";
 import type {
 	AgentConfig,
 	AgentEvent,
@@ -10,8 +10,8 @@ import type {
 	AgentResult,
 	AgentRuntimeEvent,
 	BasicLogger,
-} from "@trumbo/shared";
-import { setHomeDir, setTrumboDir } from "@trumbo/shared/storage";
+} from "@trumbodev/shared";
+import { setHomeDir, setTrumboDir } from "@trumbodev/shared/storage";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TelemetryService } from "../../services/telemetry/TelemetryService";
 import type { SessionManifest } from "../../session/models/session-manifest";

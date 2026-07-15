@@ -3,7 +3,7 @@
 // API and module aliases — run under `bun test`.
 //
 // TODO: migrate these suites to native `bun:test` (use `mock.module` / `spyOn`
-// directly and stub `vscode`/`@trumbo/core` per-file) and delete this preload's
+// directly and stub `vscode`/`@trumbodev/core` per-file) and delete this preload's
 // `vi` shim. Until then the detail below documents exactly why the shim is shaped
 // the way it is.
 //
@@ -11,21 +11,21 @@
 // lightweight stubs in unit tests:
 //
 //   vscode       -> src/test/vscode-vitest-stub.ts     (no VS Code host under bun)
-//   @trumbo/core  -> src/test/trumbo-core-vitest-stub.ts (lightweight SDK stub)
+//   @trumbodev/core  -> src/test/trumbo-core-vitest-stub.ts (lightweight SDK stub)
 //
 // bun's runtime plugin `onResolve` hook does NOT intercept these (`vscode` is
-// host/builtin-like and `@trumbo/core` is a symlinked workspace package — both
+// host/builtin-like and `@trumbodev/core` is a symlinked workspace package — both
 // resolve below the JS plugin resolver). `mock.module()` is what works: it
 // registers an in-memory override that takes precedence for the whole test
-// process. (Other workspace packages — @trumbo/llms, @trumbo/shared,
-// @trumbo/shared/storage — and the tsconfig `paths` aliases resolve on their own.)
+// process. (Other workspace packages — @trumbodev/llms, @trumbodev/shared,
+// @trumbodev/shared/storage — and the tsconfig `paths` aliases resolve on their own.)
 //
 // bun's ESM linker statically validates every named import against the names on
-// the mock namespace. The stub only implements the @trumbo/core exports these
+// the mock namespace. The stub only implements the @trumbodev/core exports these
 // tests exercise, but other modules in the import graph statically import
 // additional names (e.g. `prepareRemoteConfigCoreIntegration`, `TrumboCore`,
 // `createMcpTools`); a missing name is a hard "Export named 'X' not found" link
-// error. So we seed the mock namespace with every name the real @trumbo/core
+// error. So we seed the mock namespace with every name the real @trumbodev/core
 // exports (value `undefined`) and overlay the stub on top: stub names keep stub
 // behavior, every other valid import links as `undefined`.
 //
@@ -33,7 +33,7 @@
 // file, so this is the only point the real module is linked, and we only read
 // its export *names*, never its behavior (the mock shadows it everywhere tests look).
 import { vi as bunVi, mock } from "bun:test"
-import * as realTrumboCore from "@trumbo/core"
+import * as realTrumboCore from "@trumbodev/core"
 import * as trumboCoreStub from "./trumbo-core-vitest-stub"
 import * as vscodeStub from "./vscode-vitest-stub"
 
@@ -43,7 +43,7 @@ for (const name of Object.keys(realTrumboCore)) {
 }
 Object.assign(trumboCoreNamespace, trumboCoreStub)
 
-mock.module("@trumbo/core", () => trumboCoreNamespace)
+mock.module("@trumbodev/core", () => trumboCoreNamespace)
 
 // `vscode`: the stub provides both named exports (Position, Uri, …) and a
 // default export (the namespace object). Preserve both shapes so `import * as
@@ -70,7 +70,7 @@ mock.module("vscode", () => ({ ...vscodeStub, default: vscodeStub.default }))
 //   • vi.importActual(s)  — the module as resolved by vitest's `resolve.alias`
 //                           BEFORE `vi.mock` is layered on. For specifiers we
 //                           substitute via `mock.module` in this preload
-//                           (@trumbo/core, vscode), calling bun's `import()` from
+//                           (@trumbodev/core, vscode), calling bun's `import()` from
 //                           inside a `vi.mock(sameSpecifier)` factory re-enters
 //                           the in-flight mock and DEADLOCKS. So we serve those
 //                           from a registry of the pre-built "actual" namespaces
@@ -109,7 +109,7 @@ const viWaitFor = async <T>(predicate: () => T | Promise<T>, options?: { timeout
 // substitutes. `importActual` serves these directly to avoid the re-entrant
 // mock-factory deadlock described above.
 const actualNamespaceRegistry: Record<string, unknown> = {
-	"@trumbo/core": trumboCoreNamespace,
+	"@trumbodev/core": trumboCoreNamespace,
 	vscode: { ...vscodeStub, default: vscodeStub.default },
 }
 

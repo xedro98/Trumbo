@@ -36,10 +36,10 @@ execute: async (input) => {
 
 ## Browser Compatibility
 
-`@trumbo/agents` (and by extension, the `Agent` class) is browser-safe with no Node.js dependencies. However, `@trumbo/core` and `TrumboCore` require Node.js 22+. If you import from `@trumbo/sdk`, you get everything including the Node-only code. For browser usage, import directly from `@trumbo/agents`:
+`@trumbodev/agents` (and by extension, the `Agent` class) is browser-safe with no Node.js dependencies. However, `@trumbodev/core` and `TrumboCore` require Node.js 22+. If you import from `@trumbodev/sdk`, you get everything including the Node-only code. For browser usage, import directly from `@trumbodev/agents`:
 
 ```typescript
-import { Agent } from "@trumbo/agents"
+import { Agent } from "@trumbodev/agents"
 ```
 
 ## No Top-Level onEvent on Agent Config

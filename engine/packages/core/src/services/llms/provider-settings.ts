@@ -1,9 +1,9 @@
-import * as Llms from "@trumbo/llms";
+import * as Llms from "@trumbodev/llms";
 import {
 	formatUnconfiguredTrumboUrlError,
 	isUnconfiguredTrumboUrl,
 	resolveTrumboProviderBaseUrl,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { z } from "zod";
 import {
 	DEFAULT_EXTERNAL_OCA_BASE_URL,

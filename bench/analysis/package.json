@@ -1,5 +1,5 @@
 {
-	"name": "@trumbo/analysis",
+	"name": "@trumbodev/analysis",
 	"version": "1.0.0",
 	"description": "Analysis framework for Trumbo evaluations with failure classification and metrics",
 	"type": "module",

@@ -2,7 +2,7 @@ import type {
 	FeatureFlagsAndPayloads,
 	FeatureFlagsSettings,
 	IFeatureFlagsProvider,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 export class NoOpFeatureFlagsProvider implements IFeatureFlagsProvider {
 	async getAllFlagsAndPayloads(): Promise<FeatureFlagsAndPayloads> {

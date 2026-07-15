@@ -1,4 +1,4 @@
-import type { AgentHooks, HookEventPayload } from "@trumbo/core";
+import type { AgentHooks, HookEventPayload } from "@trumbodev/core";
 import { closeInlineStreamIfNeeded } from "./events";
 import {
 	c,

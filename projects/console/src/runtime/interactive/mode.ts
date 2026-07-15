@@ -1,4 +1,4 @@
-import { createTool } from "@trumbo/shared";
+import { createTool } from "@trumbodev/shared";
 import type { Config } from "../../utils/types";
 import { resolveSystemPrompt } from "../prompt";
 

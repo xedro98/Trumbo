@@ -3,7 +3,7 @@ import { isAbsolute, resolve as resolvePath } from "node:path";
 import {
 	augmentNodeCommandForDebug,
 	type TrumboDebugRole,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 export interface ResolveCliLaunchSpecOptions {
 	execPath?: string;

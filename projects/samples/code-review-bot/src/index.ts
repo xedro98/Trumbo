@@ -3,7 +3,7 @@ import {
 	type IncomingMessage,
 	type ServerResponse,
 } from "node:http";
-import { Agent, createTool } from "@trumbo/sdk";
+import { Agent, createTool } from "@trumbodev/sdk";
 import { z } from "zod";
 
 const PORT = Number(process.env.PORT || 3457);

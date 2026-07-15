@@ -2,7 +2,7 @@ import {
 	type ITelemetryService,
 	resolveTrumboApiBaseUrl,
 	resolveTrumboProviderBaseUrl,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type { ProviderSettingsManager } from "../services/storage/provider-settings-manager";
 import type { ProviderSettings } from "../types/provider-settings";
 import { getValidOpenAICodexCredentials, loginOpenAICodex } from "./codex";

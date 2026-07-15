@@ -1,8 +1,8 @@
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { CronOneOffSpec, CronScheduleSpec } from "@trumbo/shared";
-import { loadSqliteDb } from "@trumbo/shared/db";
+import type { CronOneOffSpec, CronScheduleSpec } from "@trumbodev/shared";
+import { loadSqliteDb } from "@trumbodev/shared/db";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { SqliteCronStore } from "./sqlite-cron-store";
 

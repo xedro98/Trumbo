@@ -1,4 +1,4 @@
-import type { TeamProgressProjectionEvent } from "@trumbo/shared";
+import type { TeamProgressProjectionEvent } from "@trumbodev/shared";
 import type { SessionUsageSummary } from "../../../runtime/host/runtime-host";
 import type {
 	CoreSessionEvent,

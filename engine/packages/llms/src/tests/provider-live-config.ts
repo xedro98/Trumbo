@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
-import { resolveProviderSettingsPath } from "@trumbo/shared/storage";
+import { resolveProviderSettingsPath } from "@trumbodev/shared/storage";
 
 type ProviderConfig = import("../providers").ProviderConfig;
 

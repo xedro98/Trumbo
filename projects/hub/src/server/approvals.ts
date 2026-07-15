@@ -1,4 +1,7 @@
-import type { ToolApprovalRequest, ToolApprovalResult } from "@trumbo/shared";
+import type {
+	ToolApprovalRequest,
+	ToolApprovalResult,
+} from "@trumbodev/shared";
 import type { WebviewInboundMessage } from "../webview-protocol";
 import type { HubContext } from "./state";
 import { broadcastHubState } from "./state-payloads";

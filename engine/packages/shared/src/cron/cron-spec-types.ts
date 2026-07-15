@@ -1,6 +1,6 @@
 /**
  * Shared types describing automation cron specs parsed from Markdown files.
- * Split out from `@trumbo/core` so the parser can live in `shared` where
+ * Split out from `@trumbodev/core` so the parser can live in `shared` where
  * multiple consumers (hub daemon, CLI tools, enterprise adapters) can validate
  * the same `.trumbo/cron/` spec format without pulling in core's stateful
  * orchestration layer.

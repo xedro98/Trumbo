@@ -2,7 +2,7 @@
 //
 // The SDK-backed Controller. It provides the same interface as the classic
 // Controller but delegates session lifecycle (initTask, askResponse,
-// cancelTask, …) to the Trumbo SDK (@trumbo/core) and bridges SDK events to
+// cancelTask, …) to the Trumbo SDK (@trumbodev/core) and bridges SDK events to
 // the webview's gRPC streams.
 import * as fs from "node:fs/promises"
 import * as path from "node:path"
@@ -29,8 +29,8 @@ import {
 	type SessionHistoryRecord,
 	setTelemetryOptOutGlobally,
 	type UserInstructionConfigService,
-} from "@trumbo/core"
-import { formatDisplayUserInput, type RemoteConfig, type RemoteConfigBundle } from "@trumbo/shared"
+} from "@trumbodev/core"
+import { formatDisplayUserInput, type RemoteConfig, type RemoteConfigBundle } from "@trumbodev/shared"
 import { parseMentions } from "@/core/mentions"
 import { ensureMcpServersDirectoryExists } from "@/core/storage/disk"
 import { refreshSdkRemoteConfig } from "@/core/storage/remote-config/sdk-refresh"

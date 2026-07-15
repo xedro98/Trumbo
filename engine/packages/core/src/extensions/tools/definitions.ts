@@ -10,7 +10,7 @@ import {
 	createTool,
 	validateWithZod,
 	zodToJsonSchema,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { captureRunCommandsTimeout } from "../../services/telemetry/core-events";
 import { getToolContextTelemetry } from "../../services/telemetry/tool-context";
 import { CommandExitError } from "./executors/bash";
@@ -837,7 +837,7 @@ export function createSubmitAndExitTool(
  *
  * @example
  * ```typescript
- * import { Agent, createDefaultTools } from "@trumbo/core"
+ * import { Agent, createDefaultTools } from "@trumbodev/core"
  * import * as fs from "fs/promises"
  * import { exec } from "child_process"
  *

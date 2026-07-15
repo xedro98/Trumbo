@@ -33,7 +33,7 @@ const {
 	mockStartHubWebSocketServer: vi.fn(),
 }));
 
-vi.mock("@trumbo/shared", () => ({
+vi.mock("@trumbodev/shared", () => ({
 	resolveTrumboBuildEnv: mockResolveTrumboBuildEnv,
 }));
 

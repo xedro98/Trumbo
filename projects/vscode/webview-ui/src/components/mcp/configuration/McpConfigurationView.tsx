@@ -4,6 +4,7 @@ import { McpServers } from "@shared/proto/trumbo/mcp"
 import { convertProtoMcpServersToMcpServers } from "@shared/proto-conversions/mcp/mcp-server-conversion"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
+import CloudAgentsPanel from "@/components/cloud-agent/CloudAgentsPanel"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { McpServiceClient } from "@/services/grpc-client"
 import ViewHeader from "../../common/ViewHeader"
@@ -73,6 +74,9 @@ const McpConfigurationView = ({ onDone, initialTab }: McpViewProps) => {
 					<TabButton isActive={activeTab === "configure"} onClick={() => handleTabChange("configure")}>
 						Configure
 					</TabButton>
+					<TabButton isActive={activeTab === "platform"} onClick={() => handleTabChange("platform")}>
+						Cloud Platform
+					</TabButton>
 				</div>
 
 				{/* Content container */}
@@ -81,6 +85,7 @@ const McpConfigurationView = ({ onDone, initialTab }: McpViewProps) => {
 						<AddRemoteServerForm onServerAdded={() => handleTabChange("configure")} />
 					)}
 					{activeTab === "configure" && <ConfigureServersView />}
+					{activeTab === "platform" && <CloudAgentsPanel />}
 				</div>
 			</div>
 		</div>

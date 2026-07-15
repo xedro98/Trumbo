@@ -10,7 +10,7 @@ import {
 	type AgentToolContext,
 	getDefaultShell,
 	getShellArgs,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { TimeoutError } from "../helpers";
 import type { ShellExecutor } from "../types";
 import {

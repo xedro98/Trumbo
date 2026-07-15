@@ -1,9 +1,9 @@
-import { runSubprocessEvent } from "@trumbo/core";
+import { runSubprocessEvent } from "@trumbodev/core";
 import type {
 	ConnectorAuthorizationDecision,
 	ConnectorAuthorizationRequest,
 	ConnectorHookEvent,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { z } from "zod";
 import type { CliLoggerAdapter } from "../logging/adapter";
 

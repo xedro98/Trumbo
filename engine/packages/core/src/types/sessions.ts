@@ -1,4 +1,7 @@
-import type { SessionLineage, SessionRuntimeRecordShape } from "@trumbo/shared";
+import type {
+	SessionLineage,
+	SessionRuntimeRecordShape,
+} from "@trumbodev/shared";
 import type { SessionSource, SessionStatus } from "./common";
 
 export interface SessionUsageMetadata {

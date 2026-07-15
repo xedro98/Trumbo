@@ -35,7 +35,7 @@ interface ZAiProviderProps {
 /**
  * The Z AI provider configuration component.
  *
- * Model catalog and default come from the `@trumbo/llms` SDK via gRPC.
+ * Model catalog and default come from the `@trumbodev/llms` SDK via gRPC.
  * The SDK consumes `apiLine` from the effective provider config so the
  * international vs. mainland catalog selection happens upstream — the
  * webview sees a single catalog per render.

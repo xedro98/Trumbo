@@ -112,7 +112,7 @@ if (!values.dry) {
 	console.log("Removed stale bun.lock if present");
 	await runCommandOrThrow(["bun", "install", "--lockfile-only"], root);
 	await runCommandOrThrow(
-		["bun", "-F", "@trumbo/llms", "generate:models"],
+		["bun", "-F", "@trumbodev/llms", "generate:models"],
 		root,
 	);
 	await runCommandOrThrow(["bun", "format", "--write"], root);

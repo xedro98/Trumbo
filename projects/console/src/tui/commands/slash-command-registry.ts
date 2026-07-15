@@ -1,4 +1,4 @@
-import { formatUserCommandBlock } from "@trumbo/shared";
+import { formatUserCommandBlock } from "@trumbodev/shared";
 import type { InteractiveSlashCommand } from "../interactive-welcome";
 
 export type SlashCommandSource =

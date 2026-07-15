@@ -16,7 +16,7 @@
  *   ANTHROPIC_API_KEY=sk-... bun run examples/plugins/weather-metrics.ts
  */
 
-import { type AgentPlugin, createTool } from "@trumbo/core";
+import { type AgentPlugin, createTool } from "@trumbodev/core";
 
 // ---------------------------------------------------------------------------
 // Plugin-level state — populated from setup context and available to all hook

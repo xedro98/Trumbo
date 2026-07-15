@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import { access, mkdir, rm } from "node:fs/promises";
 import * as path from "node:path";
 import { promisify } from "node:util";
-import { resolveTrumboDir } from "@trumbo/shared/storage";
+import { resolveTrumboDir } from "@trumbodev/shared/storage";
 
 const execFileAsync = promisify(execFile);
 const TASK_ID_LENGTH = 5;

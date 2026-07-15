@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import { Agent } from "@trumbo/sdk";
+import { Agent } from "@trumbodev/sdk";
 
 const PORT = Number(process.env.PORT || 3456);
 

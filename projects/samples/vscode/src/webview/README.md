@@ -9,7 +9,7 @@
 
 # Trumbo VS Code webview
 
-This is the webview frontend for the [`@trumbo/vscode`](..) example extension — the React surface that renders inside the VS Code chat panel. It is built with Vite + React + TypeScript, so most of the tooling here is standard Vite template plumbing. The interesting Trumbo-specific wiring lives one level up in the extension host; this directory is concerned with rendering chat messages, streaming deltas, and posting user input back to the extension.
+This is the webview frontend for the [`@trumbodev/vscode`](..) example extension — the React surface that renders inside the VS Code chat panel. It is built with Vite + React + TypeScript, so most of the tooling here is standard Vite template plumbing. The interesting Trumbo-specific wiring lives one level up in the extension host; this directory is concerned with rendering chat messages, streaming deltas, and posting user input back to the extension.
 
 ## Toolchain
 

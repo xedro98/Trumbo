@@ -2,7 +2,7 @@
 	"shortcuts": [
 		{
 			"label": "Build & Link CLI",
-			"command": "bun -F @trumbo/cli build && bun -F @trumbo/cli link",
+			"command": "bun -F @trumbodev/cli build && bun -F @trumbodev/cli link",
 			"icon": "play"
 		}
 	]

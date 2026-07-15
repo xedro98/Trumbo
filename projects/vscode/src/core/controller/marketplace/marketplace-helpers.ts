@@ -3,6 +3,21 @@ import { createHash } from "node:crypto"
 import { existsSync, readFileSync } from "node:fs"
 import { homedir, platform } from "node:os"
 import { basename, dirname, extname, isAbsolute, join, relative, resolve } from "node:path"
+import { deleteSkillFile } from "@core/controller/file/deleteSkillFile"
+import { refreshSkills } from "@core/controller/file/refreshSkills"
+import { toggleSkill } from "@core/controller/file/toggleSkill"
+import { resolveActiveModelIdFromApiConfiguration } from "@core/controller/models/taskApiModel"
+import { DeleteSkillRequest, ToggleSkillRequest } from "@shared/proto/trumbo/file"
+import {
+	MarketplaceCatalog,
+	MarketplaceEntry,
+	MarketplaceInstalledEntries,
+	MarketplaceInstallResult,
+	MarketplaceLocalInstalledEntries,
+	MarketplaceLocalInstalledEntry,
+	MarketplaceLocalInstalledEntryRequest,
+	ToggleMarketplaceLocalInstalledEntryRequest,
+} from "@shared/proto/trumbo/marketplace"
 import {
 	disablePluginMcpServersInSettings,
 	discoverPluginModulePaths,
@@ -19,22 +34,7 @@ import {
 	syncPluginMcpServersToSettings,
 	uninstallMarketplaceEntry as uninstallCoreMarketplaceEntry,
 	uninstallPlugin,
-} from "@trumbo/core"
-import { deleteSkillFile } from "@core/controller/file/deleteSkillFile"
-import { refreshSkills } from "@core/controller/file/refreshSkills"
-import { toggleSkill } from "@core/controller/file/toggleSkill"
-import { resolveActiveModelIdFromApiConfiguration } from "@core/controller/models/taskApiModel"
-import { DeleteSkillRequest, ToggleSkillRequest } from "@shared/proto/trumbo/file"
-import {
-	MarketplaceCatalog,
-	MarketplaceEntry,
-	MarketplaceInstalledEntries,
-	MarketplaceInstallResult,
-	MarketplaceLocalInstalledEntries,
-	MarketplaceLocalInstalledEntry,
-	MarketplaceLocalInstalledEntryRequest,
-	ToggleMarketplaceLocalInstalledEntryRequest,
-} from "@shared/proto/trumbo/marketplace"
+} from "@trumbodev/core"
 import { HostProvider } from "@/hosts/host-provider"
 import type { Controller } from "../index"
 

@@ -24,7 +24,7 @@ export default defineConfig({
 		environment: "node",
 		// Several suites lazily `await import()` their subject inside the first test
 		// (needed so vi.mock factories apply first). That import pulls in heavy
-		// workspace packages (@trumbo/core/@trumbo/llms/@trumbo/shared), and on loaded
+		// workspace packages (@trumbodev/core/@trumbodev/llms/@trumbodev/shared), and on loaded
 		// CI runners the first test in a file can blow past the 5s default and flake
 		// (seen in catalog.test.ts and resolveModelInfo.test.ts). Raise the per-test
 		// timeout so import cost attributed to the first test doesn't cause flakes.
@@ -36,15 +36,15 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			"@trumbo/core": path.resolve(__dirname, "src/test/trumbo-core-vitest-stub.ts"),
-			"@trumbo/llms": path.resolve(__dirname, "node_modules/@trumbo/llms/dist/index.js"),
-			// Map @trumbo/shared subpath exports explicitly. The bare "@trumbo/shared"
-			// alias below does not cover subpaths (e.g. "@trumbo/shared/storage"), and
+			"@trumbodev/core": path.resolve(__dirname, "src/test/trumbo-core-vitest-stub.ts"),
+			"@trumbodev/llms": path.resolve(__dirname, "node_modules/@trumbodev/llms/dist/index.js"),
+			// Map @trumbodev/shared subpath exports explicitly. The bare "@trumbodev/shared"
+			// alias below does not cover subpaths (e.g. "@trumbodev/shared/storage"), and
 			// Vite's fallback Node resolution does not read the package `exports` map
 			// here, so subpath imports fail with "Cannot find package". Keep the more
 			// specific subpath alias(es) before the bare package alias.
-			"@trumbo/shared/storage": path.resolve(__dirname, "node_modules/@trumbo/shared/dist/storage/index.js"),
-			"@trumbo/shared": path.resolve(__dirname, "node_modules/@trumbo/shared/dist/index.js"),
+			"@trumbodev/shared/storage": path.resolve(__dirname, "node_modules/@trumbodev/shared/dist/storage/index.js"),
+			"@trumbodev/shared": path.resolve(__dirname, "node_modules/@trumbodev/shared/dist/index.js"),
 			vscode: path.resolve(__dirname, "src/test/vscode-vitest-stub.ts"),
 			"@": path.resolve(__dirname, "src"),
 			"@api": path.resolve(__dirname, "src/core/api"),

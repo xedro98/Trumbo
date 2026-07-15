@@ -1,1 +1,1 @@
-export * from "@trumbo/core";
+export * from "@trumbodev/core";

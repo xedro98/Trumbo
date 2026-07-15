@@ -1,11 +1,11 @@
-import type { TrumboCoreStartInput, ITelemetryService } from "@trumbo/core"
+import type { ITelemetryService, TrumboCoreStartInput } from "@trumbodev/core"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 const mockTrumboCoreCreate = vi.hoisted(() => vi.fn())
 const mockCreateVscodeExtraTools = vi.hoisted(() => vi.fn(async () => []))
 
-vi.mock("@trumbo/core", async () => {
-	const actual = await vi.importActual<typeof import("@trumbo/core")>("@trumbo/core")
+vi.mock("@trumbodev/core", async () => {
+	const actual = await vi.importActual<typeof import("@trumbodev/core")>("@trumbodev/core")
 	return {
 		...actual,
 		TrumboCore: {

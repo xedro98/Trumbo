@@ -1,8 +1,8 @@
-import type { CoreSessionConfig } from "@trumbo/core"
-import { type AgentTool, createTool } from "@trumbo/shared"
+import type { CoreSessionConfig } from "@trumbodev/core"
+import { type AgentTool, createTool } from "@trumbodev/shared"
 import type { StateManager } from "@/core/storage/StateManager"
-import { buildSessionConfig, type SessionConfigInput } from "./trumbo-session-factory"
 import { buildAgentHooks, type HookMessageEmitter } from "./hooks-adapter"
+import { buildSessionConfig, type SessionConfigInput } from "./trumbo-session-factory"
 
 export interface SdkSessionConfigBuilderOptions {
 	stateManager: StateManager

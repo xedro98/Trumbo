@@ -1,5 +1,8 @@
-import type { AgentMode } from "@trumbo/core";
-import type { ToolApprovalRequest, ToolApprovalResult } from "@trumbo/shared";
+import type { AgentMode } from "@trumbodev/core";
+import type {
+	ToolApprovalRequest,
+	ToolApprovalResult,
+} from "@trumbodev/shared";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { RuntimeToolInteraction, TuiProps } from "../types";
 

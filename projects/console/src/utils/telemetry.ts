@@ -3,7 +3,7 @@ import type {
 	ITelemetryService,
 	TelemetryMetadata,
 	TelemetryProperties,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { getCliBuildInfo } from "./common";
 
 // ── No-op telemetry service ───────────────────────────────────────

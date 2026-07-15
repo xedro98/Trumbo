@@ -1,5 +1,5 @@
 /**
- * @trumbo/agents
+ * @trumbodev/agents
  *
  * Browser-safe agent runtime for the next-generation Trumbo SDK.
  *
@@ -11,10 +11,10 @@
  *   - `AgentRuntimeConfig` and its two variants (`AgentRuntimeConfigWithModel`,
  *     `AgentRuntimeConfigWithProvider`) — the discriminated config union.
  *   - `AgentRunInput` / `AgentEventListener` — convenience type aliases.
- *   - `createTool` — re-exported from `@trumbo/shared` for authoring tools.
+ *   - `createTool` — re-exported from `@trumbodev/shared` for authoring tools.
  *
  * Shared types (`AgentMessage`, `AgentRunResult`, etc.) should be imported
- * directly from `@trumbo/shared`.
+ * directly from `@trumbodev/shared`.
  */
 
 export type {
@@ -39,8 +39,8 @@ export type {
 	AgentUsage,
 	ToolApprovalResult,
 	ToolPolicy,
-} from "@trumbo/shared";
-export { createTool } from "@trumbo/shared";
+} from "@trumbodev/shared";
+export { createTool } from "@trumbodev/shared";
 export type {
 	AgentEventListener,
 	AgentRunInput,

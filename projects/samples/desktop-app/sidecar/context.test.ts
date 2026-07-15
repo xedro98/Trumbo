@@ -1,4 +1,4 @@
-import type { RuntimeCapabilities } from "@trumbo/core";
+import type { RuntimeCapabilities } from "@trumbodev/core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { SidecarContext } from "./types";
 
@@ -6,9 +6,9 @@ const createCoreMock = vi.hoisted(() => vi.fn());
 const connectMock = vi.hoisted(() => vi.fn());
 const subscribeMock = vi.hoisted(() => vi.fn());
 
-vi.mock("@trumbo/core", async () => {
+vi.mock("@trumbodev/core", async () => {
 	const actual =
-		await vi.importActual<typeof import("@trumbo/core")>("@trumbo/core");
+		await vi.importActual<typeof import("@trumbodev/core")>("@trumbodev/core");
 	return {
 		...actual,
 		TrumboCore: {

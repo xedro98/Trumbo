@@ -25,11 +25,9 @@
 // - SDK "agent_event" usage → TrumboMessage say="api_req_started" with TrumboApiReqInfo JSON
 // - SDK "ended" event → finalizes the session
 
-import type { CoreSessionEvent } from "@trumbo/core"
-import type { Message as SdkMessage } from "@trumbo/llms"
-import type { AgentEvent } from "@trumbo/shared"
 import { COMMAND_OUTPUT_STRING } from "@shared/combineCommandSequences"
 import type {
+	SubagentStatusItem,
 	TrumboApiReqInfo,
 	TrumboAskUseMcpServer,
 	TrumboAskUseSubagents,
@@ -38,9 +36,11 @@ import type {
 	TrumboSaySubagentStatus,
 	TrumboSayTool,
 	TrumboSubagentUsageInfo,
-	SubagentStatusItem,
 } from "@shared/ExtensionMessage"
 import { Logger } from "@shared/services/Logger"
+import type { CoreSessionEvent } from "@trumbodev/core"
+import type { Message as SdkMessage } from "@trumbodev/llms"
+import type { AgentEvent } from "@trumbodev/shared"
 import { MessageIdMinter } from "./message-id-minter"
 import { isDeniedToolApprovalMistake, isKnownToolApprovalDenial } from "./tool-approval-denial"
 
@@ -1958,7 +1958,7 @@ const RESHAPE_AUTH_HINTS = [
 	"requires re-authentication",
 	"authentication failed",
 	"401",
-] as const;
+] as const
 
 /**
  * Reshape an SDK error into the serialized TrumboError JSON the webview's

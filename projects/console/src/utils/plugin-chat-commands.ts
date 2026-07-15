@@ -4,8 +4,8 @@ import {
 	type BasicLogger,
 	createContributionRegistry,
 	resolveAndLoadAgentPlugins,
-} from "@trumbo/core";
-import type { AgentTool, Message } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type { AgentTool, Message } from "@trumbodev/shared";
 import {
 	type ChatCommandDefinition,
 	type ChatCommandHost,
@@ -20,7 +20,7 @@ export interface PluginSlashCommand {
 export interface WorkspaceChatCommandHostResult {
 	host: ChatCommandHost;
 	pluginSlashCommands: PluginSlashCommand[];
-	pluginViews?: import("@trumbo/shared").TuiViewContribution[];
+	pluginViews?: import("@trumbodev/shared").TuiViewContribution[];
 	shutdown?: () => Promise<void>;
 }
 

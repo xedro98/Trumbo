@@ -1,10 +1,10 @@
-import * as sdkCore from "@trumbo/core"
+import * as sdkCore from "@trumbodev/core"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { TrumboEnv } from "@/config"
 import { refreshTrumboRecommendedModels, resetTrumboRecommendedModelsCacheForTests } from "../refreshTrumboRecommendedModels"
 
 // The HTTP fetch + normalization + offline fallback lives in the SDK
-// (`@trumbo/core` `fetchTrumboRecommendedModels`). These tests cover the
+// (`@trumbodev/core` `fetchTrumboRecommendedModels`). These tests cover the
 // extension-side wrapper: delegation to the SDK and in-memory caching. There is
 // intentionally no feature-flag gate here; onboarding must not race against the
 // remote-config cache and accidentally keep the hardcoded fallback list.

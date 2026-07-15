@@ -4,7 +4,7 @@ import type {
 	HubUINotifyPayload,
 	HubUIShowWindowPayload,
 	SessionRecord,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { NodeHubClient } from "../client";
 
 export interface HubUIClientOptions {

@@ -2,7 +2,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import type {
 	GatewayProviderContext,
 	GatewayResolvedProviderConfig,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { resolveApiKey } from "../http";
 import type { ProviderFactoryResult } from "./types";
 

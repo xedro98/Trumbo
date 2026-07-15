@@ -2,8 +2,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import type * as LlmsProviders from "@trumbo/llms";
-import type { MessageWithMetadata, SessionTreeEntry } from "@trumbo/shared";
+import type * as LlmsProviders from "@trumbodev/llms";
+import type { MessageWithMetadata, SessionTreeEntry } from "@trumbodev/shared";
 import { afterEach, describe, expect, it } from "vitest";
 import { buildMessagesFilePayload } from "../services/session-data";
 import {

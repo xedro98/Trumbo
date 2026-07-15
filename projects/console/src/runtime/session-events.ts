@@ -4,7 +4,7 @@ import type {
 	CoreSessionEvent,
 	RuntimeHostSubscribeOptions,
 	TeamEvent,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
 export const getUIEventEmitter = () =>
 	new EventEmitter() as InteractiveEventBridge;

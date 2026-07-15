@@ -1,4 +1,4 @@
-import type { ProviderSettings } from "@trumbo/core";
+import type { ProviderSettings } from "@trumbodev/core";
 import { describe, expect, it } from "vitest";
 import { isProviderSettingsUsable } from "./provider-readiness";
 

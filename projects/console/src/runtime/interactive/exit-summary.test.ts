@@ -1,4 +1,4 @@
-import type { SessionRecord } from "@trumbo/core";
+import type { SessionRecord } from "@trumbodev/core";
 import { describe, expect, it } from "vitest";
 import {
 	createInteractiveExitSummary,

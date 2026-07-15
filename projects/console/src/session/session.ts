@@ -5,12 +5,12 @@ import type {
 	RuntimeHostMode,
 	SessionHistoryRecord,
 	SessionRecord,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	listSessionHistoryFromBackend,
 	resolveSessionBackend,
 	TrumboCore,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	createCliMessagesArtifactUploader,
 	prepareCliEnterpriseIntegration,

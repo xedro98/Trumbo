@@ -49,6 +49,26 @@ export const STATIC_PAGE_SEO: Record<string, PageSEOConfig> = {
 		description:
 			"Quartz 1.0 introduces Hyper and Lite, two adaptive reasoning models on one architecture. Flagship depth or fast, economical routing for agent work.",
 	},
+	"/cloud-agents": {
+		title: "Cloud Agents",
+		description:
+			"Autonomous AI agents running on Trumbo's cloud infrastructure with persistent state, scheduled tasks, multi-agent teams, and channel connectors for Slack, Discord, Linear, and more.",
+	},
+	"/sandbox": {
+		title: "Sandbox",
+		description:
+			"Remote Linux VM code execution on Trumbo Sandbox. Isolated, credit-billed sandbox sessions for code interpreters, CI/CD, interactive development, and test runners.",
+	},
+	"/browser-run": {
+		title: "Browser Run",
+		description:
+			"Interactive cloud browser sessions on Trumbo Browser Run with CDP control, screenshots, markdown extraction, PDF export, and live view URLs for agent-driven web automation.",
+	},
+	"/security": {
+		title: "Trumbo Security",
+		description:
+			"LLM-first application security with the Sentinel six-stage pipeline, seven check categories including AI agent trust, diff-aware PR scans, runtime protection, supply chain monitoring, and AI remediation on platform.trumbo.dev.",
+	},
 	"/models": {
 		title: "Model Library",
 		description:
@@ -112,6 +132,10 @@ export const SITEMAP_STATIC_PATHS = [
 	"/",
 	"/agent",
 	"/quartz",
+	"/cloud-agents",
+	"/sandbox",
+	"/browser-run",
+	"/security",
 	"/models",
 	"/pricing",
 	"/company",

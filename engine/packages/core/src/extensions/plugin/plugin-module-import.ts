@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { builtinModules, createRequire } from "node:module";
 import { dirname, extname, isAbsolute, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PLUGIN_FILE_EXTENSIONS } from "@trumbo/shared";
+import { PLUGIN_FILE_EXTENSIONS } from "@trumbodev/shared";
 
 const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
 const HOST_REQUIRE = createRequire(import.meta.url);
@@ -11,20 +11,20 @@ const HOST_REQUIRE = createRequire(import.meta.url);
 const WORKSPACE_ROOT = resolve(MODULE_DIR, "..", "..", "..", "..", "..");
 const WORKSPACE_ALIASES = collectWorkspaceAliases(WORKSPACE_ROOT);
 const HOST_PROVIDED_SDK_SPECIFIERS = [
-	"@trumbo/sdk",
-	"@trumbo/agents",
-	"@trumbo/core",
-	"@trumbo/core/hub",
-	"@trumbo/core/hub/daemon-entry",
-	"@trumbo/core/telemetry",
-	"@trumbo/llms",
-	"@trumbo/llms/browser",
-	"@trumbo/shared",
-	"@trumbo/shared/automation",
-	"@trumbo/shared/browser",
-	"@trumbo/shared/storage",
-	"@trumbo/shared/db",
-	"@trumbo/shared/types",
+	"@trumbodev/sdk",
+	"@trumbodev/agents",
+	"@trumbodev/core",
+	"@trumbodev/core/hub",
+	"@trumbodev/core/hub/daemon-entry",
+	"@trumbodev/core/telemetry",
+	"@trumbodev/llms",
+	"@trumbodev/llms/browser",
+	"@trumbodev/shared",
+	"@trumbodev/shared/automation",
+	"@trumbodev/shared/browser",
+	"@trumbodev/shared/storage",
+	"@trumbodev/shared/db",
+	"@trumbodev/shared/types",
 ];
 const BUILTIN_MODULES = new Set(
 	builtinModules.flatMap((id) => [id, id.replace(/^node:/, "")]),
@@ -45,16 +45,16 @@ export interface ImportPluginModuleOptions {
 function collectWorkspaceAliases(root: string): Record<string, string> {
 	const aliases: Record<string, string> = {};
 	const candidates: Record<string, string> = {
-		"@trumbo/sdk": resolve(root, "packages/sdk/src/index.ts"),
-		"@trumbo/agents": resolve(root, "packages/agents/src/index.ts"),
-		"@trumbo/core": resolve(root, "packages/core/src/index.ts"),
-		"@trumbo/llms": resolve(root, "packages/llms/src/index.ts"),
-		"@trumbo/shared": resolve(root, "packages/shared/src/index.ts"),
-		"@trumbo/shared/storage": resolve(
+		"@trumbodev/sdk": resolve(root, "packages/sdk/src/index.ts"),
+		"@trumbodev/agents": resolve(root, "packages/agents/src/index.ts"),
+		"@trumbodev/core": resolve(root, "packages/core/src/index.ts"),
+		"@trumbodev/llms": resolve(root, "packages/llms/src/index.ts"),
+		"@trumbodev/shared": resolve(root, "packages/shared/src/index.ts"),
+		"@trumbodev/shared/storage": resolve(
 			root,
 			"packages/shared/src/storage/index.ts",
 		),
-		"@trumbo/shared/db": resolve(root, "packages/shared/src/db/index.ts"),
+		"@trumbodev/shared/db": resolve(root, "packages/shared/src/db/index.ts"),
 	};
 	for (const [key, value] of Object.entries(candidates)) {
 		if (existsSync(value)) {
@@ -207,7 +207,7 @@ function getPackageExportPath(specifier: string): string {
 }
 
 function isTrumboSdkSpecifier(specifier: string): boolean {
-	return getPackageName(specifier).startsWith("@trumbo/");
+	return getPackageName(specifier).startsWith("@trumbodev/");
 }
 
 function hasInstalledDependency(
@@ -672,7 +672,7 @@ export async function importPluginModule(
 		transformModules,
 		// On Bun (the packaged binary), tryNative defaults to true, which makes
 		// jiti hand the plugin path straight to Bun's `import()`. Bun then owns
-		// every nested import in the plugin, sees `import "@trumbo/core"` with no
+		// every nested import in the plugin, sees `import "@trumbodev/core"` with no
 		// node_modules adjacent to the drop-in plugin. Forcing tryNative off keeps
 		// jiti in charge so bare specifiers can be rewritten through aliases first.
 		tryNative: false,

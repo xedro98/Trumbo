@@ -1,4 +1,4 @@
-import { upsertWorkspaceInfo } from "@trumbo/shared";
+import { upsertWorkspaceInfo } from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import { workspaceHintForPath } from "./workspace-manifest";
 

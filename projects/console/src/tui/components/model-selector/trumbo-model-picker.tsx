@@ -6,7 +6,7 @@ import {
 	ProviderSettingsManager,
 	type TrumboRecommendedModel,
 	type TrumboRecommendedModelsData,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import "opentui-spinner/react";

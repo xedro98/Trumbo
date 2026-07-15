@@ -3,10 +3,10 @@ import type {
 	BasicLogger,
 	ChatRunTurnRequest,
 	ChatStartSessionRequest,
-} from "@trumbo/shared";
-import { buildTrumboSystemPrompt } from "@trumbo/shared";
-import { nowIso } from "@trumbo/shared/db";
-import type { ResolveCronSpecsDirOptions } from "@trumbo/shared/storage";
+} from "@trumbodev/shared";
+import { buildTrumboSystemPrompt } from "@trumbodev/shared";
+import { nowIso } from "@trumbodev/shared/db";
+import type { ResolveCronSpecsDirOptions } from "@trumbodev/shared/storage";
 import { DefaultToolNames } from "../../extensions/tools/constants";
 import { mergeRulesForSystemPrompt } from "../../runtime/safety/rules";
 import { buildWorkspaceMetadata } from "../../services/workspace/workspace-manifest";

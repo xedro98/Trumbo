@@ -3,7 +3,7 @@
 // extension trying to load @jerome-benoit/sap-ai-provider from node_modules at
 // runtime, but VSIX packaging uses the bundled extension output.
 import { createSAPAIProvider } from "@jerome-benoit/sap-ai-provider";
-import type { GatewayResolvedProviderConfig } from "@trumbo/shared";
+import type { GatewayResolvedProviderConfig } from "@trumbodev/shared";
 import { createClaudeCode } from "ai-sdk-provider-claude-code";
 import { createCodexExec } from "ai-sdk-provider-codex-cli";
 import { createDifyProvider } from "dify-ai-provider";
@@ -202,8 +202,6 @@ async function withSapServiceKey<T>(
 	process.env.AICORE_SERVICE_KEY = serviceKey;
 	try {
 		return await fn();
-	} catch (error) {
-		throw error;
 	} finally {
 		restoreSapServiceKey(previous);
 		releaseQueue();

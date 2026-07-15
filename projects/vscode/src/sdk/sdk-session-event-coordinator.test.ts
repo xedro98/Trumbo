@@ -1,5 +1,5 @@
-import type { CoreSessionEvent } from "@trumbo/core"
 import type { TrumboMessage } from "@shared/ExtensionMessage"
+import type { CoreSessionEvent } from "@trumbodev/core"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { MessageTranslatorState } from "./message-translator"
 import { PROVIDER_FAILURE_ERROR_TYPE, PROVIDER_FAILURE_PHASE } from "./provider-failure-telemetry"

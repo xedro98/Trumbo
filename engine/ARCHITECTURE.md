@@ -14,7 +14,7 @@ This document is the architecture source of truth for the Trumbo SDK repository.
 **Who should read this?**
 
 - SDK contributors working across multiple packages
-- Developers building integrations or host applications on `@trumbo/core`
+- Developers building integrations or host applications on `@trumbodev/core`
 - Plugin authors who need to understand the runtime and extension systems
 
 **What this covers:**
@@ -37,10 +37,10 @@ The workspace is organized as a layered runtime stack.
 
 ```mermaid
 flowchart LR
-  shared["@trumbo/shared"]
-  llms["@trumbo/llms"]
-  agents["@trumbo/agents"]
-  core["@trumbo/core"]
+  shared["@trumbodev/shared"]
+  llms["@trumbodev/llms"]
+  agents["@trumbodev/agents"]
+  core["@trumbodev/core"]
   apps["Host Apps"]
 
   llms --> shared
@@ -54,7 +54,7 @@ flowchart LR
 
 ## Package Responsibilities
 
-### `@trumbo/shared`
+### `@trumbodev/shared`
 
 Owns reusable low-level contracts and infrastructure:
 
@@ -70,7 +70,7 @@ Design rule:
 
 - `shared` must not depend on higher-level runtime packages.
 
-### `@trumbo/llms`
+### `@trumbodev/llms`
 
 Owns model/provider runtime concerns:
 
@@ -84,7 +84,7 @@ Design rule:
 
 - provider-specific behavior stays isolated here, not spread across `core` or apps.
 
-### `@trumbo/agents`
+### `@trumbodev/agents`
 
 Owns the stateless runtime loop:
 
@@ -99,7 +99,7 @@ Design rule:
 
 - `agents` must not own persistent storage or host lifecycle concerns.
 
-### `@trumbo/core`
+### `@trumbodev/core`
 
 Owns stateful orchestration:
 
@@ -113,8 +113,8 @@ Owns stateful orchestration:
 - default context compaction policy
 - telemetry integration
 - hub server and scheduled-runtime services under `src/hub/`
-- hub discovery, the detached hub daemon, and the `@trumbo/core/hub/daemon-entry` subpath
-- host-side hub client adapters (`NodeHubClient`, `HubSessionClient`, `HubUIClient`, `connectToHub`) exported from `@trumbo/core/hub`
+- hub discovery, the detached hub daemon, and the `@trumbodev/core/hub/daemon-entry` subpath
+- host-side hub client adapters (`NodeHubClient`, `HubSessionClient`, `HubUIClient`, `connectToHub`) exported from `@trumbodev/core/hub`
 
 Design rules:
 
@@ -130,26 +130,26 @@ Design rules:
 
 ### Local In-Process Runtime
 
-1. Host constructs a `RuntimeHost` through `@trumbo/core`.
-2. `@trumbo/core` selects `LocalRuntimeHost` through `packages/core/src/runtime/host.ts`.
+1. Host constructs a `RuntimeHost` through `@trumbodev/core`.
+2. `@trumbodev/core` selects `LocalRuntimeHost` through `packages/core/src/runtime/host.ts`.
 3. Hosts normalize broad local config into `RuntimeSessionConfig` plus `localRuntime` overrides before calling `RuntimeHost.start(...)`.
-4. `@trumbo/core` prepares a local bootstrap artifact from `localRuntime`, then builds the runtime from it.
-5. `@trumbo/core` creates an `Agent` from `@trumbo/agents`.
-6. `@trumbo/agents` runs the loop using `@trumbo/llms` handlers.
-7. `@trumbo/core` persists state, artifacts, and metadata.
+4. `@trumbodev/core` prepares a local bootstrap artifact from `localRuntime`, then builds the runtime from it.
+5. `@trumbodev/core` creates an `Agent` from `@trumbodev/agents`.
+6. `@trumbodev/agents` runs the loop using `@trumbodev/llms` handlers.
+7. `@trumbodev/core` persists state, artifacts, and metadata.
 
 Completion telemetry is anchored to the assistant's explicit completion declaration, not session shutdown. After each agent turn, the local runtime inspects `AgentResult.toolCalls` and emits `task.completed` the moment a successful `submit_and_exit` (the SDK analog of original Trumbo's `attempt_completion`) is observed. `shutdownSession(...)` retains a fallback emission for completed sessions that finished without an explicit completion-tool observation, so non-interactive runs that do not use the yolo preset still produce a `task.completed` signal. Each session emits at most one `task.completed`. See `DOC.md` for the event payload and `source` field.
 
 ### Hub-Backed Runtime
 
-1. Host constructs a `RuntimeHost` through `@trumbo/core`.
-2. `@trumbo/core` selects `HubRuntimeHost` or `RemoteRuntimeHost` through `packages/core/src/runtime/host.ts`.
-3. When no compatible local hub is already discovered, `@trumbo/core` can spawn a detached hub daemon and reconnect through discovery.
+1. Host constructs a `RuntimeHost` through `@trumbodev/core`.
+2. `@trumbodev/core` selects `HubRuntimeHost` or `RemoteRuntimeHost` through `packages/core/src/runtime/host.ts`.
+3. When no compatible local hub is already discovered, `@trumbodev/core` can spawn a detached hub daemon and reconnect through discovery.
 4. Hosts attach and detach from shared sessions without stopping the authority runtime, so another client can keep streaming or resume the same session later.
-5. The hub-hosted runtime executes the agent loop using `@trumbo/agents` and `@trumbo/llms`.
-6. `@trumbo/core` hub services broker sessions, events, approvals, schedules, and client-owned runtime capabilities such as session-local tool executors.
+5. The hub-hosted runtime executes the agent loop using `@trumbodev/agents` and `@trumbodev/llms`.
+6. `@trumbodev/core` hub services broker sessions, events, approvals, schedules, and client-owned runtime capabilities such as session-local tool executors.
 7. Hub event forwarding preserves structured streaming lifecycle boundaries: text/reasoning deltas, final text/reasoning completion, tool start/finish, and agent done events are translated across the hub transport so host UIs can reliably close loading/streaming state.
-8. Hub client adapters exported from `@trumbo/core/hub` (`NodeHubClient`, `HubSessionClient`, `HubUIClient`, `connectToHub`) translate command/reply and event streams into host-facing APIs.
+8. Hub client adapters exported from `@trumbodev/core/hub` (`NodeHubClient`, `HubSessionClient`, `HubUIClient`, `connectToHub`) translate command/reply and event streams into host-facing APIs.
 9. Hub `session.get` records include both canonical root-session usage and explicit aggregate usage from the hub-owned `RuntimeHost`, so attached clients can intentionally render either root-only or root-plus-teammate costs without replaying event streams.
 
 Detached daemon startup retries transient `ETXTBSY` spawn failures before polling discovery. This covers package-manager updates that replace the CLI binary immediately before a command restarts the shared hub.
@@ -169,11 +169,11 @@ Local hub rediscovery is limited to managed shared-daemon endpoints obtained thr
 ### Remote-Config Managed Runtime
 
 1. A host or core wrapper fetches a normalized `RemoteConfigBundle`.
-2. `@trumbo/shared/remote-config` caches the bundle when configured.
+2. `@trumbodev/shared/remote-config` caches the bundle when configured.
 3. Shared remote-config materializes managed rules/workflows/skills under workspace-local `.trumbo/<plugin>/`.
 4. Shared remote-config derives generic OpenTelemetry config and session blob upload metadata from the bundle.
-5. `@trumbo/core` exposes the app-facing integration wrapper that applies extensions, telemetry, and session metadata to `StartSessionInput`.
-6. `@trumbo/core` consumes the prepared local overrides during local bootstrap.
+5. `@trumbodev/core` exposes the app-facing integration wrapper that applies extensions, telemetry, and session metadata to `StartSessionInput`.
+6. `@trumbodev/core` consumes the prepared local overrides during local bootstrap.
 
 This keeps reusable remote-config behavior in `shared` while the session-specific bridge remains in `core`.
 
@@ -256,7 +256,7 @@ Design implication:
 
 ### 6. Logging
 
-Cross-package logging uses a small injected interface exported from `@trumbo/shared`:
+Cross-package logging uses a small injected interface exported from `@trumbodev/shared`:
 
 - **`BasicLogger`** — required `debug` and `log`; optional `error`. Hosts map these to their backend (Pino, VS Code `OutputChannel`, etc.). Many runtime options take `logger?: BasicLogger`; when omitted, components skip logging or use `noopBasicLogger` where a full object is required.
 - **`BasicLogMetadata`** — optional structured fields (`sessionId`, `runId`, `providerId`, `toolName`, `durationMs`, …) plus `severity` on `log` when a single method must represent both informational and warning-style messages (for example the CLI Pino bridge maps `severity: "warn"` to Pino `warn`).
@@ -264,7 +264,7 @@ Cross-package logging uses a small injected interface exported from `@trumbo/sha
 Naming clarity:
 
 - **`CliLoggerAdapter` (CLI)** — a **host bundle**: holds the raw `pino` logger (for file paths, rotation, and CLI-only concerns) and exposes `.core: BasicLogger` for anything that consumes the SDK contract. It is not an `ITelemetryAdapter`.
-- **`TelemetryLoggerSink` (`@trumbo/core`)** — an **`ITelemetryAdapter`** that mirrors telemetry events and metrics into a `BasicLogger`. It is a telemetry sink, not a host logging implementation.
+- **`TelemetryLoggerSink` (`@trumbodev/core`)** — an **`ITelemetryAdapter`** that mirrors telemetry events and metrics into a `BasicLogger`. It is a telemetry sink, not a host logging implementation.
 
 The agent and other call sites route former `info` / `warn` semantics through `log` (warnings include `severity: "warn"` in metadata). Errors prefer `error` when implemented; otherwise `log` with `severity: "error"` is used as a fallback.
 
@@ -296,10 +296,10 @@ Design implication:
 
 Context compaction is owned by `core`.
 
-- `@trumbo/agents` owns the generic turn-preparation seam:
+- `@trumbodev/agents` owns the generic turn-preparation seam:
   - run normal lifecycle hooks
   - allow hosts to rewrite message history or system prompt before the provider call
-- `@trumbo/core` owns compaction policy:
+- `@trumbodev/core` owns compaction policy:
   - inject a prepare-turn pipeline for root sessions
   - choose between built-in strategies through a registry map
   - keep compaction logic out of the low-level agent message builder
@@ -327,7 +327,7 @@ Design implications:
 
 ### Keep `agents` Stateless
 
-Do not move these concerns into `@trumbo/agents`:
+Do not move these concerns into `@trumbodev/agents`:
 
 - session persistence
 - provider settings storage
@@ -337,9 +337,9 @@ Do not move these concerns into `@trumbo/agents`:
 
 ### Keep `core` Generic
 
-Do not make `@trumbo/core` organization- or provider-specific.
+Do not make `@trumbodev/core` organization- or provider-specific.
 
-If a capability is truly generic and app-facing, add a generic core seam. Reusable remote-config parsing, materialization, and upload primitives belong in `@trumbo/shared/remote-config`.
+If a capability is truly generic and app-facing, add a generic core seam. Reusable remote-config parsing, materialization, and upload primitives belong in `@trumbodev/shared/remote-config`.
 
 ### Use One-Way Optional Layers
 
@@ -349,11 +349,11 @@ For remote config, that means shared owns the reusable bundle/materialization/bl
 
 ## File-Based And Event-Driven Automation (`TrumboCore` / `CronService`)
 
-`@trumbo/core` ships a file-based automation subsystem under `packages/core/src/cron/`. It lets operators author recurring and one-off tasks as Markdown files under global `~/.trumbo/cron/` by default, and event-driven tasks as `events/*.event.md` specs. All trigger kinds run through the same durable queue and runtime handlers. `TrumboCore` exposes the SDK-facing `trumbo.automation.*` entry points; `CronService` is the internal orchestrator used by core and hub layers.
+`@trumbodev/core` ships a file-based automation subsystem under `packages/core/src/cron/`. It lets operators author recurring and one-off tasks as Markdown files under global `~/.trumbo/cron/` by default, and event-driven tasks as `events/*.event.md` specs. All trigger kinds run through the same durable queue and runtime handlers. `TrumboCore` exposes the SDK-facing `trumbo.automation.*` entry points; `CronService` is the internal orchestrator used by core and hub layers.
 
 ### Layers
 
-1. **Spec parser** (`cron/specs/cron-spec-parser.ts`): parses YAML frontmatter + body into a `CronSpec` discriminated union (`one_off | schedule | event`). Types live in `@trumbo/shared` under `src/cron/cron-spec-types.ts` so other packages can consume them without the YAML parser. Schedule expressions and timezones are validated before a spec can become runnable.
+1. **Spec parser** (`cron/specs/cron-spec-parser.ts`): parses YAML frontmatter + body into a `CronSpec` discriminated union (`one_off | schedule | event`). Types live in `@trumbodev/shared` under `src/cron/cron-spec-types.ts` so other packages can consume them without the YAML parser. Schedule expressions and timezones are validated before a spec can become runnable.
 2. **Store** (`cron/store/sqlite-cron-store.ts`): owns `cron.db` at `resolveCronDbPath()` (default `.trumbo/data/db/cron.db`). Schema is bootstrapped from `cron/store/cron-schema.ts` — sessions and cron live in separate DBs so their lifecycles stay decoupled.
 3. **Reconciler** (`cron/specs/cron-reconciler.ts`): scans the configured cron specs directory (global `~/.trumbo/cron/` by default, or workspace-scoped when configured), parses each file independently, and upserts spec state. Invalid specs are recorded with `parse_status='invalid'` so state is durable rather than silently dropped. Files that disappear between scans get `removed=1` and their queued runs are cancelled.
 4. **Watcher** (`cron/specs/cron-watcher.ts`): `node:fs watch({ recursive: true })` with a ~250ms per-path debounce. Watcher events always trigger a re-reconcile — the reconciler is always the source of truth, not the watcher stream.
@@ -437,10 +437,10 @@ Architectural consequence:
 
 The following packages are published to npm:
 
-- `@trumbo/shared` — shared types, contracts, and low-level utilities
-- `@trumbo/llms` — provider integrations and model manifests
-- `@trumbo/agents` — the agent loop and tool orchestration
-- `@trumbo/core` — the main SDK with session management, hub, and configuration
+- `@trumbodev/shared` — shared types, contracts, and low-level utilities
+- `@trumbodev/llms` — provider integrations and model manifests
+- `@trumbodev/agents` — the agent loop and tool orchestration
+- `@trumbodev/core` — the main SDK with session management, hub, and configuration
 
 ### Internal Apps
 

@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import {
 	augmentNodeCommandForDebug,
 	withResolvedTrumboBuildEnv,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 export interface RunSubprocessEventOptions {
 	command: string[];

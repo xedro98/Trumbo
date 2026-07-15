@@ -96,10 +96,10 @@ async function main(): Promise<void> {
 					private: true,
 					type: "module",
 					dependencies: {
-						"@trumbo/core": `file:${tarballs.core}`,
-						"@trumbo/agents": `file:${tarballs.agents}`,
-						"@trumbo/llms": `file:${tarballs.llms}`,
-						"@trumbo/shared": `file:${tarballs.shared}`,
+						"@trumbodev/core": `file:${tarballs.core}`,
+						"@trumbodev/agents": `file:${tarballs.agents}`,
+						"@trumbodev/llms": `file:${tarballs.llms}`,
+						"@trumbodev/shared": `file:${tarballs.shared}`,
 					},
 				},
 				null,
@@ -118,7 +118,7 @@ async function main(): Promise<void> {
 		const smokeSource =
 			nodeMajor >= 24
 				? `
-					const { SqliteSessionStore } = await import("@trumbo/core");
+					const { SqliteSessionStore } = await import("@trumbodev/core");
 					const store = new SqliteSessionStore({ sessionsDir: process.env.TRUMBO_DATA_DIR });
 					try {
 						store.init();
@@ -128,7 +128,7 @@ async function main(): Promise<void> {
 					}
 				`
 				: `
-					const { resolveSessionBackend } = await import("@trumbo/core");
+					const { resolveSessionBackend } = await import("@trumbodev/core");
 					await resolveSessionBackend({ backendMode: "local" });
 					console.log("Node compatibility smoke test passed");
 				`;

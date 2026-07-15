@@ -5,8 +5,8 @@ import {
 	stopLocalHubServerGracefully,
 	TrumboCore,
 	toHubHealthUrl,
-} from "@trumbo/core";
-import type { HubUINotifyPayload } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type { HubUINotifyPayload } from "@trumbodev/shared";
 import { handleSessionEvent } from "./agent-events";
 import {
 	rejectAllPendingApprovals,

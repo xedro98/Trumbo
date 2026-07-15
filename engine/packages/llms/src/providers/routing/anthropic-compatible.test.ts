@@ -2,7 +2,7 @@ import type {
 	GatewayModelRoute,
 	GatewayProviderContext,
 	GatewayProviderManifest,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import {
 	isAnthropicCompatibleModel,

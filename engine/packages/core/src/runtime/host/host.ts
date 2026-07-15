@@ -1,4 +1,4 @@
-import { captureSdkError } from "@trumbo/shared";
+import { captureSdkError } from "@trumbodev/shared";
 import {
 	ensureCompatibleLocalHubUrl,
 	resolveCompatibleLocalHubUrl,

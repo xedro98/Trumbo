@@ -8,7 +8,7 @@ import type {
 	CronSpecMode,
 	CronSpecParseResult,
 	CronTriggerKind,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import YAML from "yaml";
 import { ALL_DEFAULT_TOOL_NAMES } from "../../extensions/tools/constants";
 import { validateCronSchedule } from "../schedule/scheduler";
@@ -16,8 +16,8 @@ import { validateCronSchedule } from "../schedule/scheduler";
 /**
  * Markdown frontmatter parser for `.trumbo/cron/*.md` automation specs.
  *
- * Lives in @trumbo/core because it depends on `yaml`. The spec types
- * themselves live in @trumbo/shared so other packages can consume them
+ * Lives in @trumbodev/core because it depends on `yaml`. The spec types
+ * themselves live in @trumbodev/shared so other packages can consume them
  * without pulling in a YAML parser.
  *
  * The parser never throws for a single bad file — it produces a

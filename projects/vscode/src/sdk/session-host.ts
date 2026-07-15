@@ -1,6 +1,4 @@
 import type {
-	TrumboCoreListHistoryOptions,
-	TrumboCoreStartInput,
 	CoreSessionEvent,
 	HookEventPayload,
 	PendingPromptMutationResult,
@@ -16,8 +14,10 @@ import type {
 	SessionRecord,
 	StartSessionInput,
 	StartSessionResult,
-} from "@trumbo/core"
-import type { AgentResult } from "@trumbo/shared"
+	TrumboCoreListHistoryOptions,
+	TrumboCoreStartInput,
+} from "@trumbodev/core"
+import type { AgentResult } from "@trumbodev/shared"
 
 export interface SdkSessionHost {
 	readonly runtimeAddress: string | undefined

@@ -63,7 +63,7 @@ cd projects/console
 bun link
 ```
 
-The `build:sdk` step is required because `bun link` runs without the `--conditions=development` flag, so Bun resolves workspace packages (`@trumbo/llms`, `@trumbo/core`, etc.) via their `package.json` exports which point to `dist/`. Without the build, those dist files don't exist and you'll get "Cannot find module" errors.
+The `build:sdk` step is required because `bun link` runs without the `--conditions=development` flag, so Bun resolves workspace packages (`@trumbodev/llms`, `@trumbodev/core`, etc.) via their `package.json` exports which point to `dist/`. Without the build, those dist files don't exist and you'll get "Cannot find module" errors.
 
 After linking, you can run `trumbo` from any directory:
 
@@ -462,11 +462,11 @@ See [DISTRIBUTION.md](./DISTRIBUTION.md) for details on how the CLI is packaged.
 
 `trumbo` uses a `pino`-backed adapter that targets the core `BasicLogger` contract:
 
-- CLI runtime passes `logger` directly into local `@trumbo/core` sessions.
+- CLI runtime passes `logger` directly into local `@trumbodev/core` sessions.
 - Hub-backed sessions include a serialized logger payload in `ChatStartSessionRequest.logger`; the runtime reconstructs the same `pino` settings and injects them into core.
 - Hosts can attach stable runtime logger bindings (for example `clientId`, `clientType`, `clientApp`) through `RuntimeLoggerConfig.bindings`.
 
-After login, OAuth credentials are persisted with `auth.expiresAt`, and `@trumbo/core` refreshes these tokens automatically during session turns. Provider auth and model settings should be changed through `trumbo auth`, the interactive config UI, or core provider-settings APIs rather than editing provider settings files directly.
+After login, OAuth credentials are persisted with `auth.expiresAt`, and `@trumbodev/core` refreshes these tokens automatically during session turns. Provider auth and model settings should be changed through `trumbo auth`, the interactive config UI, or core provider-settings APIs rather than editing provider settings files directly.
 
 On startup, `trumbo` also attempts a legacy settings import:
 

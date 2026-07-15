@@ -2,7 +2,7 @@ import {
 	CORE_BUILD_VERSION,
 	type HubUIClient,
 	type TrumboCore,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import type { WebviewHubEvent } from "../webview-protocol";
 import type {
 	BrowserPeer,

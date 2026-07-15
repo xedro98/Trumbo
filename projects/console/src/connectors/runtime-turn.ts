@@ -1,4 +1,4 @@
-import type { ChatRunTurnRequest, HubSessionClient } from "@trumbo/core";
+import type { ChatRunTurnRequest, HubSessionClient } from "@trumbodev/core";
 import type { CliLoggerAdapter } from "../logging/adapter";
 
 export type PendingConnectorApproval = {

@@ -1,4 +1,4 @@
-import type { ProviderConfigFieldKey } from "@trumbo/core";
+import type { ProviderConfigFieldKey } from "@trumbodev/core";
 
 /** Render order for provider config fields and Tab cycling. */
 export const FIELD_ORDER: ProviderConfigFieldKey[] = [

@@ -2,7 +2,7 @@ import {
 	type BasicLogger,
 	CHARS_PER_TOKEN,
 	type MessageWithMetadata,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type {
 	CoreCompactionContext,
 	CoreCompactionResult,

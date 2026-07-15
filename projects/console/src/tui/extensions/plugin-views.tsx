@@ -1,4 +1,4 @@
-import type { TuiViewContribution } from "@trumbo/shared";
+import type { TuiViewContribution } from "@trumbodev/shared";
 import type React from "react";
 
 /**

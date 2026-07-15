@@ -15,17 +15,17 @@ import type {
 	ConnectorPlatformDef,
 	HubCommandEnvelope,
 	HubReplyEnvelope,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	CONNECTOR_PLATFORMS,
 	connectorChannelsFromPlatforms,
 	listConnectorCatalog,
 	shouldIncludeConnectorField,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	resolveConnectorDataDir,
 	resolveConnectorSettingsPath,
-} from "@trumbo/shared/storage";
+} from "@trumbodev/shared/storage";
 import { captureToolUsage } from "../../../services/telemetry/core-events";
 import { errorReply, type HubTransportContext, okReply } from "./context";
 

@@ -1,6 +1,6 @@
 # Scheduling and automation
 
-The Trumbo SDK supports scheduled, one-off, and event-driven agent execution through the automation subsystem in `@trumbo/core`.
+The Trumbo SDK supports scheduled, one-off, and event-driven agent execution through the automation subsystem in `@trumbodev/core`.
 
 ## Overview
 

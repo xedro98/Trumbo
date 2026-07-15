@@ -3,7 +3,7 @@ import { useDialogKeyboard } from "@opentui-ui/dialog/react";
 import {
 	resolveDefaultMcpSettingsPath,
 	setMcpServerDisabled,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import { useState } from "react";
 import { palette } from "../../palette";
 

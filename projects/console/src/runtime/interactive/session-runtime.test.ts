@@ -4,9 +4,9 @@ import type {
 	TeamEvent,
 	ToolApprovalRequest,
 	ToolApprovalResult,
-} from "@trumbo/core";
-import { SessionNotFoundError } from "@trumbo/core";
-import type { AgentTool, Message } from "@trumbo/shared";
+} from "@trumbodev/core";
+import { SessionNotFoundError } from "@trumbodev/core";
+import type { AgentTool, Message } from "@trumbodev/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChatCommandState } from "../../utils/chat-commands";
 import type { Config } from "../../utils/types";

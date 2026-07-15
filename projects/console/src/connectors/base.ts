@@ -1,6 +1,6 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { resolveTrumboDataDir } from "@trumbo/core";
+import { resolveTrumboDataDir } from "@trumbodev/core";
 import { Command, CommanderError } from "commander";
 import {
 	isProcessRunning,

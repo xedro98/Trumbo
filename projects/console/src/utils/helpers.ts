@@ -2,8 +2,11 @@ import { spawnSync } from "node:child_process";
 import { appendFileSync, existsSync, unlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { type HookEventPayload, parseHookEventPayload } from "@trumbo/shared";
-import { ensureHookLogDir } from "@trumbo/shared/storage";
+import {
+	type HookEventPayload,
+	parseHookEventPayload,
+} from "@trumbodev/shared";
+import { ensureHookLogDir } from "@trumbodev/shared/storage";
 import { nanoid } from "nanoid";
 import { commanderToParsedArgs, createProgram } from "../commands/program";
 import type { ParsedArgs } from "./types";

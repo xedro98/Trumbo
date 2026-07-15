@@ -1,6 +1,6 @@
 import type { ChoiceContext } from "@opentui-ui/dialog";
 import type { DialogActions } from "@opentui-ui/dialog/react";
-import { Llms } from "@trumbo/core";
+import { Llms } from "@trumbodev/core";
 import { useCallback, useMemo } from "react";
 import type {
 	InteractiveConfigData,

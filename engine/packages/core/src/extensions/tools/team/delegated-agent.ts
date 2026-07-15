@@ -8,7 +8,7 @@ import type {
 	ITelemetryService,
 	ToolApprovalRequest,
 	ToolApprovalResult,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { SessionRuntime } from "../../../runtime/orchestration/session-runtime-orchestrator";
 import {
 	buildSubAgentSystemPrompt,

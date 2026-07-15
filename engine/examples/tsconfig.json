@@ -28,28 +28,28 @@
 		"noUnusedParameters": false,
 		"noPropertyAccessFromIndexSignature": false,
 		"paths": {
-			"@trumbo/agents": ["../packages/agents/src/index.ts"],
-			"@trumbo/agents/*": [
+			"@trumbodev/agents": ["../packages/agents/src/index.ts"],
+			"@trumbodev/agents/*": [
 				"../packages/agents/src/*",
 				"../packages/agents/src/*/index.ts"
 			],
-			"@trumbo/hub": ["../../projects/hub/src/server.ts"],
-			"@trumbo/core": ["../packages/core/src/index.ts"],
-			"@trumbo/core/hub/daemon-entry": [
+			"@trumbodev/hub": ["../../projects/hub/src/server.ts"],
+			"@trumbodev/core": ["../packages/core/src/index.ts"],
+			"@trumbodev/core/hub/daemon-entry": [
 				"../packages/core/src/hub/daemon/entry.ts"
 			],
-			"@trumbo/core/*": [
+			"@trumbodev/core/*": [
 				"../packages/core/src/*",
 				"../packages/core/src/*/index.ts"
 			],
-			"@trumbo/core/telemetry": [
+			"@trumbodev/core/telemetry": [
 				"../packages/core/src/services/telemetry/index.ts"
 			],
-			"@trumbo/llms": ["../packages/llms/src/index.ts"],
-			"@trumbo/shared": ["../packages/shared/src/index.ts"],
-			"@trumbo/shared/storage": ["../packages/shared/src/storage/index.ts"],
-			"@trumbo/shared/db": ["../packages/shared/src/db/index.ts"],
-			"@trumbo/shared/*": [
+			"@trumbodev/llms": ["../packages/llms/src/index.ts"],
+			"@trumbodev/shared": ["../packages/shared/src/index.ts"],
+			"@trumbodev/shared/storage": ["../packages/shared/src/storage/index.ts"],
+			"@trumbodev/shared/db": ["../packages/shared/src/db/index.ts"],
+			"@trumbodev/shared/*": [
 				"../packages/shared/src/*",
 				"../packages/shared/src/*/index.ts"
 			]

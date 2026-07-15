@@ -1,4 +1,4 @@
-import type { ProviderConfigFieldKey } from "@trumbo/core";
+import type { ProviderConfigFieldKey } from "@trumbodev/core";
 import { resolveAwsRegion } from "../../utils/aws-region";
 
 export type ProviderConfigValues = Partial<

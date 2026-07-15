@@ -18,7 +18,7 @@ Any Client (CLI, VS Code, agents)
     │
     │  ws://  ui.notify / ui.show_window commands
     ▼
-Hub WebSocket Server (@trumbo/core/hub/server.ts)
+Hub WebSocket Server (@trumbodev/core/hub/server.ts)
     │
     │  broadcasts ui.notify / ui.show_window events to ALL subscribers
     ▼

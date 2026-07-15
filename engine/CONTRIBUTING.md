@@ -49,10 +49,10 @@ This repo is a work-in-progress framework for building and orchestrating AI agen
 
 | Package | Owns |
 |---------|------|
-| `@trumbo/shared` | Contracts, schemas, path helpers, hook engine, extension registry |
-| `@trumbo/llms` | Provider settings, model catalogs, manifests, handler creation |
-| `@trumbo/agents` | Stateless agent loop, tool orchestration, hook/extension runtime |
-| `@trumbo/core` | Stateful orchestration, session lifecycle, storage, config, telemetry, hub runtime services, hub discovery, detached daemon, and hub client adapters (`@trumbo/core/hub`, `@trumbo/core/hub/daemon-entry`) |
+| `@trumbodev/shared` | Contracts, schemas, path helpers, hook engine, extension registry |
+| `@trumbodev/llms` | Provider settings, model catalogs, manifests, handler creation |
+| `@trumbodev/agents` | Stateless agent loop, tool orchestration, hook/extension runtime |
+| `@trumbodev/core` | Stateful orchestration, session lifecycle, storage, config, telemetry, hub runtime services, hub discovery, detached daemon, and hub client adapters (`@trumbodev/core/hub`, `@trumbodev/core/hub/daemon-entry`) |
 
 ### Apps
 
@@ -80,15 +80,15 @@ This repo is a work-in-progress framework for building and orchestrating AI agen
 Package-scoped commands:
 
 ```sh
-bun -F @trumbo/core build|test|typecheck
-bun -F @trumbo/agents build|test|typecheck
+bun -F @trumbodev/core build|test|typecheck
+bun -F @trumbodev/agents build|test|typecheck
 ```
 
 ### Rebuilding
 
 Changes to published SDK packages require `bun run build:sdk`. Direct CLI runs pick up rebuilt packages immediately. Use the `dev:*` scripts for automatic rebuilding during development.
 
-The CLI build (`bun -F @trumbo/cli build`) bundles packages from their compiled `dist/`, not their TypeScript source. If you edit a package and then build the CLI without rebuilding the package first, the CLI binary will silently include the old package code. Always run `bun run build:sdk` (or the relevant `bun -F @trumbo/<pkg> build`) before building the CLI when testing changes end-to-end.
+The CLI build (`bun -F @trumbodev/cli build`) bundles packages from their compiled `dist/`, not their TypeScript source. If you edit a package and then build the CLI without rebuilding the package first, the CLI binary will silently include the old package code. Always run `bun run build:sdk` (or the relevant `bun -F @trumbodev/<pkg> build`) before building the CLI when testing changes end-to-end.
 
 Hub-backed hosts use shared workspace discovery and owned daemon startup logic. If you touch hub bootstrap, preserve the startup lock and owner-scoped discovery behavior so multiple builds can coexist safely.
 
@@ -231,7 +231,7 @@ tar -xOf "$tmpdir"/*.tgz package/package.json | jq '.version, .dependencies'
 Check installed versions in a consuming project:
 
 ```sh
-bun pm ls @trumbo/core @trumbo/agents @trumbo/llms
+bun pm ls @trumbodev/core @trumbodev/agents @trumbodev/llms
 ```
 
 ### CI

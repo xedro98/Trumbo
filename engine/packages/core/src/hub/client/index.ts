@@ -8,7 +8,7 @@ import {
 	isHubProtocolCompatible,
 	resolveHubCommandTimeoutMs,
 	resolveTrumboBuildEnv,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	SESSION_NOT_FOUND_ERROR_CODE,
 	SessionNotFoundError,

@@ -1,4 +1,4 @@
-import type { HubUINotifyPayload } from "@trumbo/shared";
+import type { HubUINotifyPayload } from "@trumbodev/shared";
 import { afterEach, describe, expect, it } from "vitest";
 import { SessionSource } from "../../types/common";
 import { HubUIClient } from "../client/ui-client";

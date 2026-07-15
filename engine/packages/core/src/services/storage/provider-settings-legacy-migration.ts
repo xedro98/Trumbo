@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import * as LlmsModels from "@trumbo/llms";
-import { resolveTrumboDataDir } from "@trumbo/shared/storage";
+import * as LlmsModels from "@trumbodev/llms";
+import { resolveTrumboDataDir } from "@trumbodev/shared/storage";
 import {
 	emptyStoredProviderSettings,
 	type ProviderSettings,

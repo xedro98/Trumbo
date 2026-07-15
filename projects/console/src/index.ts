@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 import { isMainThread } from "node:worker_threads";
-import { disposeAll, initVcr, isHubDaemonProcess } from "@trumbo/shared";
+import { disposeAll, initVcr, isHubDaemonProcess } from "@trumbodev/shared";
 import { logCliProcessError } from "./logging/errors";
 import {
 	abortActiveRuntime,
@@ -58,7 +58,7 @@ if (!isMainThread) {
 
 	void (async () => {
 		if (isHubDaemonProcess()) {
-			await import("@trumbo/core/hub/daemon-entry");
+			await import("@trumbodev/core/hub/daemon-entry");
 			return;
 		}
 

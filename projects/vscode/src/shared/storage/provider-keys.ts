@@ -1,15 +1,15 @@
 // Map providers to their specific model ID keys
 
-import { getProviderCollectionSync } from "@trumbo/llms"
 import { SettingsKey } from "@shared/storage/state-keys"
+import { getProviderCollectionSync } from "@trumbodev/llms"
 import { toSdkProviderId } from "@/sdk/model-catalog/sdk-provider-id"
 import { toLegacyApiProvider } from "@/shared/model-catalog/provider-helpers"
 import {
 	type ApiProvider,
-	trumboPassDefaultModelId,
 	liteLlmDefaultModelId,
 	openRouterDefaultModelId,
 	requestyDefaultModelId,
+	trumboPassDefaultModelId,
 } from "../api"
 
 const ProviderKeyMap: Partial<Record<ApiProvider, string>> = {

@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
-import type * as LlmsProviders from "@trumbo/llms";
-import { formatDisplayUserInput } from "@trumbo/shared";
+import type * as LlmsProviders from "@trumbodev/llms";
+import { formatDisplayUserInput } from "@trumbodev/shared";
 import type { HookEventPayload } from "../../hooks";
 import type { CoreSessionEvent } from "../../types/events";
 import type {

@@ -8,8 +8,8 @@ import {
 	writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
-import type { TeamTeammateSpec } from "@trumbo/shared";
-import { resolveTeamDataDir } from "@trumbo/shared/storage";
+import type { TeamTeammateSpec } from "@trumbodev/shared";
+import { resolveTeamDataDir } from "@trumbodev/shared/storage";
 import type { AgentTeamsRuntime, TeamEvent } from "../../extensions/tools/team";
 import {
 	type PersistedTeamEnvelope,

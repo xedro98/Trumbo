@@ -1,9 +1,9 @@
-import type { ToolResultContent } from "@trumbo/llms";
+import type { ToolResultContent } from "@trumbodev/llms";
 import {
 	CHARS_PER_TOKEN,
 	estimateTokens,
 	type MessageWithMetadata,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 export { CHARS_PER_TOKEN, estimateTokens };
 

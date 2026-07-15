@@ -1,4 +1,4 @@
-import { getFileIndex } from "@trumbo/core";
+import { getFileIndex } from "@trumbodev/core";
 import type { SidecarContext } from "../types";
 
 export function searchWorkspaceFiles(

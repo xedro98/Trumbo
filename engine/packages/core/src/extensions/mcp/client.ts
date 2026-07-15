@@ -168,7 +168,7 @@ class StdioMcpClient implements McpServerClient {
 						protocolVersion: MCP_PROTOCOL_VERSION,
 						capabilities: {},
 						clientInfo: {
-							name: "@trumbo/core",
+							name: "@trumbodev/core",
 							version: "0.0.0",
 						},
 					},
@@ -468,7 +468,7 @@ class SdkUrlMcpClient implements McpServerClient {
 		this.authContext = authContext;
 		try {
 			const client = new Client({
-				name: this.options.clientName?.trim() || "@trumbo/core",
+				name: this.options.clientName?.trim() || "@trumbodev/core",
 				version: this.options.clientVersion?.trim() || "0.0.0",
 			});
 			const transport = createMcpSdkTransport({

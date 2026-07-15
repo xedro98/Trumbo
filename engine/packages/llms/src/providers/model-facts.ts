@@ -3,7 +3,7 @@ import type {
 	GatewayProviderContext,
 	GatewayReasoningFormat,
 	GatewayStreamRequest,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 export function resolveModelFamily(
 	context: GatewayProviderContext,

@@ -1,4 +1,4 @@
-import { Tabs } from "@cloudflare/kumo";
+import { Tabs, Tooltip } from "@cloudflare/kumo";
 import { useState } from "react";
 import { marketingGridCellClass, marketingGridListRowClass } from "@/components/grid-shell-context";
 import { GridBox, GridBoxCell } from "@/components/ui/grid-box";
@@ -49,6 +49,7 @@ type Tier = {
 	description: string;
 	features: TierFeature[];
 	limits: { window: string; requests: string }[];
+	platformLimits?: { label: string; value: string; tooltip: string }[];
 	featured?: boolean;
 	perSeat?: boolean;
 	customPrice?: boolean;
@@ -60,6 +61,116 @@ type TierFeature = {
 	label: string;
 	included: boolean;
 };
+
+type PlatformQuotaLimits = {
+	browserMinutes: number;
+	browserConcurrent: number;
+	agentHours: number;
+	agentConcurrent: number;
+	sandboxCpuHours: number;
+	sandboxConcurrent: number;
+	securityCredits: number;
+	securityOverageCents: number;
+};
+
+const PLATFORM_LIMIT_TOOLTIPS = {
+	Browser:
+		"Monthly active minutes for in-agent browser sessions. The multiplier is how many browser sessions can run at once.",
+	Agents:
+		"Monthly agent-hours for Cloud Agents on Trumbo infrastructure. The multiplier is how many agents can run in parallel.",
+	Sandbox:
+		"Monthly CPU-hours for isolated code execution sandboxes. The multiplier is how many sandboxes can run at once.",
+	Security:
+		"Monthly scan credits for repository and dependency security analysis. Extra credits bill at the overage rate shown.",
+} as const;
+
+function platformQuotaRows(limits: PlatformQuotaLimits): { label: string; value: string; tooltip: string }[] {
+	return [
+		{
+			label: "Browser",
+			value: `${limits.browserMinutes.toLocaleString()} min, ×${limits.browserConcurrent}`,
+			tooltip: PLATFORM_LIMIT_TOOLTIPS.Browser,
+		},
+		{
+			label: "Agents",
+			value: `${limits.agentHours} h, ×${limits.agentConcurrent}`,
+			tooltip: PLATFORM_LIMIT_TOOLTIPS.Agents,
+		},
+		{
+			label: "Sandbox",
+			value: `${limits.sandboxCpuHours} CPU-h, ×${limits.sandboxConcurrent}`,
+			tooltip: PLATFORM_LIMIT_TOOLTIPS.Sandbox,
+		},
+		{
+			label: "Security",
+			value: `${limits.securityCredits.toLocaleString()} cr, ${limits.securityOverageCents}¢`,
+			tooltip: PLATFORM_LIMIT_TOOLTIPS.Security,
+		},
+	];
+}
+
+function personalFeatures(includedCount: number): TierFeature[] {
+	return ALL_FEATURES.map((label, index) => ({
+		label,
+		included: index < includedCount,
+	}));
+}
+
+const PERSONAL_PLATFORM_QUOTAS = {
+	pro: {
+		browserMinutes: 100,
+		browserConcurrent: 1,
+		agentHours: 10,
+		agentConcurrent: 1,
+		sandboxCpuHours: 3,
+		sandboxConcurrent: 1,
+		securityCredits: 1_000,
+		securityOverageCents: 25,
+	},
+	max: {
+		browserMinutes: 500,
+		browserConcurrent: 3,
+		agentHours: 50,
+		agentConcurrent: 3,
+		sandboxCpuHours: 15,
+		sandboxConcurrent: 3,
+		securityCredits: 10_000,
+		securityOverageCents: 25,
+	},
+	ultra: {
+		browserMinutes: 2_000,
+		browserConcurrent: 10,
+		agentHours: 200,
+		agentConcurrent: 10,
+		sandboxCpuHours: 60,
+		sandboxConcurrent: 10,
+		securityCredits: 40_000,
+		securityOverageCents: 20,
+	},
+} as const satisfies Record<string, PlatformQuotaLimits>;
+
+const TEAM_PLATFORM_QUOTAS = {
+	scaling: {
+		browserMinutes: 250,
+		browserConcurrent: 2,
+		agentHours: 25,
+		agentConcurrent: 2,
+		sandboxCpuHours: 3,
+		sandboxConcurrent: 2,
+		securityCredits: 2_500,
+		securityOverageCents: 25,
+	},
+	premium: {
+		browserMinutes: 500,
+		browserConcurrent: 3,
+		agentHours: 50,
+		agentConcurrent: 3,
+		sandboxCpuHours: 9,
+		sandboxConcurrent: 5,
+		securityCredits: 10_000,
+		securityOverageCents: 25,
+	},
+} as const satisfies Record<string, PlatformQuotaLimits>;
 
 const QUARTZ_COMING_SOON = "Quartz reasoning model access";
 
@@ -88,7 +199,8 @@ const PERSONAL_TIERS: Tier[] = [
 		tagline: "For individual developers",
 		description:
 			"The CLI, Quartz, hosted models, sessions, and checkpoints. Generous limits for solo work.",
-		features: ALL_FEATURES.map((label, i) => ({ label, included: i < 6 })),
+		features: personalFeatures(6),
+		platformLimits: platformQuotaRows(PERSONAL_PLATFORM_QUOTAS.pro),
 		limits: [
 			{ window: "5-hour", requests: "75" },
 			{ window: "Daily", requests: "300" },
@@ -104,7 +216,8 @@ const PERSONAL_TIERS: Tier[] = [
 		description:
 			"Priority Quartz, sub-agents, and deeper limits for daily multi-step work.",
 		featured: true,
-		features: ALL_FEATURES.map((label, i) => ({ label, included: i < 9 })),
+		features: personalFeatures(9),
+		platformLimits: platformQuotaRows(PERSONAL_PLATFORM_QUOTAS.max),
 		limits: [
 			{ window: "5-hour", requests: "375" },
 			{ window: "Daily", requests: "1,500" },
@@ -119,10 +232,11 @@ const PERSONAL_TIERS: Tier[] = [
 		tagline: "For production-grade solo workloads",
 		description:
 			"MCP integrations, scheduled jobs, chat connectors, and the deepest personal limits.",
-		features: ALL_FEATURES.map((label, i) => ({
+		features: ALL_FEATURES.map((label, index) => ({
 			label,
-			included: i < 12 && i !== 10,
+			included: index < 12 && index !== 10,
 		})),
+		platformLimits: platformQuotaRows(PERSONAL_PLATFORM_QUOTAS.ultra),
 		limits: [
 			{ window: "5-hour", requests: "1,500" },
 			{ window: "Daily", requests: "6,000" },
@@ -134,7 +248,7 @@ const PERSONAL_TIERS: Tier[] = [
 const TEAM_FEATURES = [
 	"Full Trumbo Agent CLI for every teammate",
 	"Team workspace with shared billing",
-	"Per-seat billing that scales with invites",
+	"Per-seat billing for confirmed members",
 	"Trumbo Knowledge (team docs + RAG)",
 	"Trumbo Browser Run (in-agent browser tools)",
 	"Shared sessions and team permissions",
@@ -150,7 +264,7 @@ const TEAM_TIERS: Tier[] = [
 		period: "/ seat / month",
 		tagline: "For growing teams",
 		description:
-			"Per-seat billing for teams getting started. Seats increase automatically when you invite teammates.",
+			"Per-seat billing for teams getting started. Seats increase when teammates accept their invite.",
 		perSeat: true,
 		features: [
 			{ label: TEAM_FEATURES[0], included: true },
@@ -164,6 +278,7 @@ const TEAM_TIERS: Tier[] = [
 			{ label: "96K max tokens / request", included: true },
 			{ label: "Trumbo Knowledge: 100 docs, 200 MB, 200 searches/day", included: true },
 		],
+		platformLimits: platformQuotaRows(TEAM_PLATFORM_QUOTAS.scaling),
 		limits: [
 			{ window: "5-hour", requests: "150" },
 			{ window: "Daily", requests: "600" },
@@ -185,6 +300,7 @@ const TEAM_TIERS: Tier[] = [
 			{ label: "128K max tokens / request", included: true },
 			{ label: "Trumbo Knowledge: 250 docs, 500 MB, 1,000 searches/day", included: true },
 		],
+		platformLimits: platformQuotaRows(TEAM_PLATFORM_QUOTAS.premium),
 		limits: [
 			{ window: "5-hour", requests: "375" },
 			{ window: "Daily", requests: "1,500" },
@@ -211,6 +327,12 @@ const ENTERPRISE_TIER: Tier = {
 		{ label: "Dedicated support and SLA options", included: true },
 		{ label: "Custom per-seat pricing", included: true },
 		{ label: "Team workspace with shared billing", included: true },
+	],
+	platformLimits: [
+		{ label: "Browser", value: "Custom", tooltip: PLATFORM_LIMIT_TOOLTIPS.Browser },
+		{ label: "Agents", value: "Custom", tooltip: PLATFORM_LIMIT_TOOLTIPS.Agents },
+		{ label: "Sandbox", value: "Custom", tooltip: PLATFORM_LIMIT_TOOLTIPS.Sandbox },
+		{ label: "Security", value: "Custom", tooltip: PLATFORM_LIMIT_TOOLTIPS.Security },
 	],
 	limits: [
 		{ window: "5-hour", requests: "Custom" },
@@ -255,7 +377,7 @@ export function PricingTiersSection() {
 			<GridBoxCell
 				className={cn(
 					marketingGridCellClass,
-					"border-b border-b-dotted border-grid-line !py-5 md:!py-6",
+					"border-b border-b-dotted border-grid-line !py-5 !pl-0 !pr-7 md:!py-6 md:!pl-1 md:!pr-10",
 				)}
 			>
 				<Tabs
@@ -276,7 +398,7 @@ export function PricingTiersSection() {
 				<GridBoxCell
 					className={cn(
 						marketingGridCellClass,
-						"border-b border-b-dotted border-grid-line !py-5 md:hidden",
+						"border-b border-b-dotted border-grid-line !py-5 !pl-0 !pr-7 md:!pl-1 md:!pr-10 md:hidden",
 					)}
 				>
 					<Tabs
@@ -357,6 +479,52 @@ function FeatureRow({
 	);
 }
 
+function LimitRow({ label, value }: { label: string; value: string }) {
+	return (
+		<div className="flex items-baseline justify-between gap-3">
+			<span className="font-stat shrink-0 text-[0.75rem] uppercase tracking-[0.06em] text-muted-foreground">
+				{label}
+			</span>
+			<span className="font-stat whitespace-nowrap text-right text-[0.8125rem] tabular-nums text-foreground md:text-sm">
+				{value}
+			</span>
+		</div>
+	);
+}
+
+function PlatformLimitRow({
+	label,
+	value,
+	tooltip,
+}: {
+	label: string;
+	value: string;
+	tooltip: string;
+}) {
+	return (
+		<div className="flex items-center justify-between gap-2">
+			<span className="font-stat shrink-0 text-[0.75rem] uppercase tracking-[0.06em] text-muted-foreground">
+				{label}
+			</span>
+			<Tooltip
+				content={<span className="marketing-limit-tooltip-content">{tooltip}</span>}
+				side="top"
+				align="end"
+				delay={250}
+				render={
+					<span
+						tabIndex={0}
+						className="marketing-limit-dotted-underline font-stat cursor-help whitespace-nowrap text-[0.8125rem] tabular-nums text-foreground outline-none md:text-sm"
+						aria-label={`About ${label} limits`}
+					/>
+				}
+			>
+				{value}
+			</Tooltip>
+		</div>
+	);
+}
+
 function TierColumn({ tier, isLast }: { tier: Tier; isLast: boolean }) {
 	const contactEmail = tier.contactEmail ?? ENTERPRISE_CONTACT_EMAIL;
 
@@ -404,8 +572,7 @@ function TierColumn({ tier, isLast }: { tier: Tier; isLast: boolean }) {
 
 			{tier.perSeat ? (
 				<p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-					Billed per teammate (members + pending invites). Seats increase automatically when
-					you invite people.
+					Billed per teammate (confirmed members who accepted their invite).
 				</p>
 			) : null}
 
@@ -413,21 +580,34 @@ function TierColumn({ tier, isLast }: { tier: Tier; isLast: boolean }) {
 				{tier.description}
 			</p>
 
-			{/* Rate limits */}
+			{/* Limits */}
 			<div className="mt-6 flex flex-col gap-2.5 border-y border-y-dotted border-grid-line py-4">
 				<span className="font-stat text-[0.6875rem] uppercase tracking-[0.08em] text-muted-foreground">
 					Rate limits
 				</span>
 				{tier.limits.map((limit) => (
-					<div key={limit.window} className="flex items-center justify-between">
-						<span className="font-stat text-[0.75rem] uppercase tracking-[0.06em] text-muted-foreground">
-							{limit.window}
-						</span>
-						<span className="font-stat text-[0.8125rem] tabular-nums text-foreground md:text-sm">
-							{limit.requests}
-						</span>
-					</div>
+					<LimitRow key={limit.window} label={limit.window} value={limit.requests} />
 				))}
+
+				{tier.platformLimits?.length ? (
+					<>
+						<div
+							className="my-0.5 border-t border-t-dotted border-grid-line"
+							aria-hidden="true"
+						/>
+						<span className="font-stat text-[0.6875rem] uppercase tracking-[0.08em] text-muted-foreground">
+							Platform limits
+						</span>
+						{tier.platformLimits.map((limit) => (
+							<PlatformLimitRow
+								key={limit.label}
+								label={limit.label}
+								value={limit.value}
+								tooltip={limit.tooltip}
+							/>
+						))}
+					</>
+				) : null}
 			</div>
 
 			{/* Features */}
@@ -663,7 +843,7 @@ const FAQ_ITEMS = [
 	{
 		question: "How does team per-seat billing work?",
 		answer:
-			"Team plans (Scaling and Premium) bill per seat each month. A seat covers every active member plus pending invites in your workspace. When you invite a teammate, your seat count increases automatically and billing updates on the next cycle. Enterprise plans use custom per-seat pricing arranged through sales. Personal plans (Pro, Max, Ultra) are flat monthly fees with no seat math.",
+			"Team plans (Scaling and Premium) bill per seat each month. A seat covers each confirmed member who accepted their invite. Pending invites do not add seats until they join. Billing updates when teammates accept. Enterprise plans use custom per-seat pricing arranged through sales. Personal plans (Pro, Max, Ultra) are flat monthly fees with no seat math.",
 	},
 	{
 		question: "What happens when I hit a rate limit?",

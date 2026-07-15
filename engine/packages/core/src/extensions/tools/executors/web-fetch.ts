@@ -4,7 +4,7 @@
  * Built-in implementation for fetching web content using native fetch.
  */
 
-import type { AgentToolContext } from "@trumbo/shared";
+import type { AgentToolContext } from "@trumbodev/shared";
 import type { WebFetchExecutor } from "../types";
 
 /**

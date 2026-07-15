@@ -1,4 +1,4 @@
-import * as LlmsModels from "@trumbo/llms";
+import * as LlmsModels from "@trumbodev/llms";
 import { afterEach, describe, expect, it } from "vitest";
 import { registerCustomProvider } from "./local-provider-registry";
 import { getProviderConfigFields } from "./provider-config-fields";

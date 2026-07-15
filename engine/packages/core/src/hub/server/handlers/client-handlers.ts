@@ -2,8 +2,8 @@ import type {
 	HubClientRegistration,
 	HubCommandEnvelope,
 	HubReplyEnvelope,
-} from "@trumbo/shared";
-import { createSessionId } from "@trumbo/shared";
+} from "@trumbodev/shared";
+import { createSessionId } from "@trumbodev/shared";
 import {
 	asPlainRecord,
 	errorReply,

@@ -11,7 +11,7 @@ import type {
 	AgentModelEvent,
 	AgentTool,
 	ITelemetryService,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { describe, expect, it, vi } from "vitest";
 import {
 	buildMessageModelInfo,

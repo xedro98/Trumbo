@@ -14,9 +14,9 @@ const {
 	mockGetBooleanFlagEnabled: vi.fn(),
 }));
 
-vi.mock("@trumbo/core", async () => {
+vi.mock("@trumbodev/core", async () => {
 	const actual =
-		await vi.importActual<typeof import("@trumbo/core")>("@trumbo/core");
+		await vi.importActual<typeof import("@trumbodev/core")>("@trumbodev/core");
 	return {
 		...actual,
 		ProviderSettingsManager: class {

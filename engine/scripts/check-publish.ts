@@ -274,7 +274,7 @@ async function main(): Promise<number> {
 
 		console.log("\n--- Verifying publish-only package invariants ---");
 		for (const pkg of published) {
-			if (pkg.name !== "@trumbo/core") {
+			if (pkg.name !== "@trumbodev/core") {
 				continue;
 			}
 
@@ -285,17 +285,17 @@ async function main(): Promise<number> {
 					`import { readFileSync } from "node:fs";`,
 					`import { join } from "node:path";`,
 					`try {`,
-					`  const root = await import("@trumbo/core");`,
+					`  const root = await import("@trumbodev/core");`,
 					`  if (typeof root.TrumboCore?.create !== "function") {`,
-					`    console.error("  FAIL @trumbo/core: root export is missing TrumboCore.create");`,
+					`    console.error("  FAIL @trumbodev/core: root export is missing TrumboCore.create");`,
 					`    process.exit(1);`,
 					`  }`,
 					`} catch (error) {`,
 					`  const message = error instanceof Error ? error.message : String(error);`,
-					`  console.error("  FAIL @trumbo/core: published runtime shape is invalid:", message);`,
+					`  console.error("  FAIL @trumbodev/core: published runtime shape is invalid:", message);`,
 					`  process.exit(1);`,
 					`}`,
-					`console.log("  OK @trumbo/core publish shape");`,
+					`console.log("  OK @trumbodev/core publish shape");`,
 				].join("\n"),
 			);
 			try {

@@ -1,4 +1,4 @@
-import type { ApiHandler } from "@trumbo/llms";
+import type { ApiHandler } from "@trumbodev/llms";
 import {
 	BUILT_IN_PROVIDER_IDS,
 	createHandler as createProviderHandler,
@@ -9,7 +9,7 @@ import {
 	registerHandler,
 	registerModel as registerModelInCatalog,
 	registerProvider as registerProviderInCatalog,
-} from "@trumbo/llms";
+} from "@trumbodev/llms";
 import {
 	ConfiguredProviderRegistry,
 	toBuiltInProviderSummary,

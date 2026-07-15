@@ -7,8 +7,8 @@ import type {
 	SessionLineage,
 	SessionManifest,
 	ToolPolicy,
-} from "@trumbo/core";
-import type { Message } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type { Message } from "@trumbodev/shared";
 
 export type CliOutputMode = "text" | "json" | "rpc";
 export type CliAgentMode = AgentMode;

@@ -2,7 +2,7 @@ import {
 	getFileIndex,
 	type ProviderSettings,
 	type UserInstructionConfigService,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import { byLengthAsc, Fzf, type FzfResultItem } from "fzf";
 import type { Config } from "../utils/types";
 import { loadTrumboAccountSnapshot } from "./trumbo-account";

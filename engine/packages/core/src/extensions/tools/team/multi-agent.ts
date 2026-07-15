@@ -30,7 +30,7 @@ import {
 	type TeamTask,
 	type TeamTaskListItem,
 	type TeamTaskStatus,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { nanoid } from "nanoid";
 import { SessionRuntime } from "../../../runtime/orchestration/session-runtime-orchestrator";
 
@@ -59,10 +59,10 @@ export {
 	type TeamTask,
 	type TeamTaskListItem,
 	type TeamTaskStatus,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 // =============================================================================
-// Types that depend on @trumbo/agents (cannot live in shared)
+// Types that depend on @trumbodev/agents (cannot live in shared)
 // =============================================================================
 
 export interface TeamMemberConfig extends AgentConfig {

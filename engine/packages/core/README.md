@@ -7,9 +7,9 @@
    ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
 ```
 
-# [experimental] @trumbo/core
+# [experimental] @trumbodev/core
 
-`@trumbo/core` is the stateful orchestration layer of the Trumbo SDK. It wires the agent runtime, provider settings, storage, default tools, and session lifecycle together into a host-ready runtime.
+`@trumbodev/core` is the stateful orchestration layer of the Trumbo SDK. It wires the agent runtime, provider settings, storage, default tools, and session lifecycle together into a host-ready runtime.
 
 ## What You Get
 
@@ -17,24 +17,24 @@
 - provider settings and account services
 - default runtime tools and MCP integration
 - storage-backed session and team state helpers
-- host-facing Node helpers through `@trumbo/core`
+- host-facing Node helpers through `@trumbodev/core`
 
 ## Installation
 
 ```bash
-npm install @trumbo/core
+npm install @trumbodev/core
 ```
 
 ## Entry Points
 
-- `@trumbo/core`: core contracts, shared utilities, and Node/server helpers for building hosts and runtimes
+- `@trumbodev/core`: core contracts, shared utilities, and Node/server helpers for building hosts and runtimes
 
 ## Typical Usage
 
-Most host apps should start with `@trumbo/core`.
+Most host apps should start with `@trumbodev/core`.
 
 ```ts
-import { TrumboCore } from "@trumbo/core";
+import { TrumboCore } from "@trumbodev/core";
 
 const trumbo = await TrumboCore.create({});
 
@@ -68,7 +68,7 @@ Use it when a host needs to prepare workspace-scoped runtime state before each s
 
 ### Runtime and Sessions
 
-Use `@trumbo/core` for host-facing runtime assembly:
+Use `@trumbodev/core` for host-facing runtime assembly:
 
 - `TrumboCore.create(...)`
 - `createRuntimeHost(...)`
@@ -80,7 +80,7 @@ Use `@trumbo/core` for host-facing runtime assembly:
 
 ### Default Tools
 
-`@trumbo/core` owns the built-in host tools and executors:
+`@trumbodev/core` owns the built-in host tools and executors:
 
 - `createBuiltinTools(...)`
 - `createDefaultTools(...)`
@@ -94,12 +94,12 @@ The package also exports storage and settings helpers such as:
 - `CoreSettingsService` and `createCoreSettingsService`
 - MCP settings helpers such as `setMcpServerDisabled`
 - `SqliteTeamStore`
-- SQLite-backed local session stores and artifacts through `@trumbo/core`
+- SQLite-backed local session stores and artifacts through `@trumbodev/core`
 
 ## Related Packages
 
-- `@trumbo/agents`: stateless agent loop and tool primitives
-- `@trumbo/llms`: provider/model configuration and handlers
+- `@trumbodev/agents`: stateless agent loop and tool primitives
+- `@trumbodev/llms`: provider/model configuration and handlers
 
 ## More Examples
 

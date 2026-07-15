@@ -2,7 +2,7 @@ import type {
 	MessageWithMetadata,
 	SessionTreeEntry,
 	SessionTreeNode,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type {
 	PendingPromptsRuntimeService,
 	PendingPromptsServiceApi,

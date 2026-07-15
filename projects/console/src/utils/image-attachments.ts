@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { resolveExistingFilePath } from "@trumbo/shared/storage";
+import { resolveExistingFilePath } from "@trumbodev/shared/storage";
 
 const IMAGE_EXTENSIONS = new Set([
 	".png",

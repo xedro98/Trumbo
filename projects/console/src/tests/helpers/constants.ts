@@ -15,7 +15,7 @@ function resolveTrumboBin(): string {
 	}
 
 	throw new Error(
-		"Unable to resolve trumbo binary. Run bun -F @trumbo/cli build",
+		"Unable to resolve trumbo binary. Run bun -F @trumbodev/cli build",
 	);
 }
 

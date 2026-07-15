@@ -7,7 +7,7 @@ const PROVIDER_OPTIONS = {
 	apiBaseUrl: "https://auth.example.com",
 };
 const ORIGINAL_FETCH = globalThis.fetch;
-const socketBindingSupported = await (async () => {
+const _socketBindingSupported = await (async () => {
 	try {
 		const srv = net.createServer();
 		await new Promise<void>((resolve, reject) => {

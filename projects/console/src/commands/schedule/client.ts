@@ -3,7 +3,7 @@ import {
 	HubScheduleCommandService,
 	HubScheduleService,
 	sendHubCommand,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	ensureCliHubServer,
 	parseHubEndpointOverride,

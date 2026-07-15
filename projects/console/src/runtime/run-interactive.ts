@@ -3,7 +3,7 @@ import {
 	type ProviderSettings,
 	ProviderSettingsManager,
 	type UserInstructionConfigService,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import type { CliMigrationNotice } from "../kanban-migration/notice";
 import { logCliError } from "../logging/errors";
 import type {
@@ -125,7 +125,7 @@ export async function runInteractive(
 	let interactiveChatCommandHost = chatCommandHost;
 	let pluginChatCommandHostLoaded = false;
 	let pluginChatSlashCommands: InteractiveSlashCommand[] = [];
-	let interactivePluginViews: import("@trumbo/shared").TuiViewContribution[] =
+	let interactivePluginViews: import("@trumbodev/shared").TuiViewContribution[] =
 		[];
 	let pluginChatCommandHostShutdown: (() => Promise<void>) | undefined;
 	let pluginChatCommandHostPromise:

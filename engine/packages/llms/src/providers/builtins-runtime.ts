@@ -1,7 +1,7 @@
 import type {
 	GatewayProviderFactory,
 	GatewayProviderRegistration,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { BUILTIN_SPECS, type ProviderFamily, toManifest } from "./builtins";
 
 const FAMILY_FACTORY_PROMISES = new Map<

@@ -56,6 +56,9 @@ service AccountService {
   // Submits a spend limit increase request to the user's org admin.
   // Called when the user hits a SPEND_LIMIT_EXCEEDED (429) error and clicks "Request Increase".
   rpc submitLimitIncreaseRequest(EmptyRequest) returns (SubmitLimitIncreaseResponse);
+
+  // Fetches Trumbo Cloud Agents + Sandbox usage and active sessions from the platform API.
+  rpc getPlatformInfrastructure(EmptyRequest) returns (PlatformInfrastructureResponse);
 }
 
 message AuthStateChangedRequest {
@@ -126,4 +129,13 @@ message PlanRateLimitWindow {
   int32 used = 1;
   int32 limit = 2;
   int64 resets_at_sec = 3;
+}
+
+// Platform Cloud Agents + Sandbox dashboard data (hosted on Cloudflare Workers).
+message PlatformInfrastructureResponse {
+  optional string agents_json = 1;
+  optional string sandboxes_json = 2;
+  optional string agents_usage_json = 3;
+  optional string sandbox_usage_json = 4;
+  optional string error = 5;
 }

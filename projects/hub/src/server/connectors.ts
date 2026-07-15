@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { basename } from "node:path";
 import process from "node:process";
-import { withResolvedTrumboBuildEnv } from "@trumbo/shared";
+import { withResolvedTrumboBuildEnv } from "@trumbodev/shared";
 import { listConnectorCatalog } from "../../../console/src/connectors/catalog";
 import { listActiveConnectors } from "../../../console/src/connectors/status";
 import {

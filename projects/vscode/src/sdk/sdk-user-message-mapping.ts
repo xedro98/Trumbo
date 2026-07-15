@@ -1,5 +1,5 @@
 import type { TrumboMessage } from "@shared/ExtensionMessage"
-import { normalizeUserInput } from "@trumbo/shared"
+import { normalizeUserInput } from "@trumbodev/shared"
 import { ACT_MODE_CONTINUATION_PROMPT } from "./sdk-mode-coordinator"
 
 export type SdkUserMessage = {

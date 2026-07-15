@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs"
-import { readGlobalSettings, setTelemetryOptOutGlobally } from "@trumbo/core"
-import { resolveGlobalSettingsPath } from "@trumbo/shared/storage"
 import type { TelemetrySetting } from "@shared/TelemetrySetting"
+import { readGlobalSettings, setTelemetryOptOutGlobally } from "@trumbodev/core"
+import { resolveGlobalSettingsPath } from "@trumbodev/shared/storage"
 import { Logger } from "@/shared/services/Logger"
 
 interface TelemetryStateManager {

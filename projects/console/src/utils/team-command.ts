@@ -1,5 +1,5 @@
-import { createTeamName } from "@trumbo/core";
-import { formatUserCommandBlock } from "@trumbo/shared";
+import { createTeamName } from "@trumbodev/core";
+import { formatUserCommandBlock } from "@trumbodev/shared";
 import type { Config } from "./types";
 
 export const TEAM_COMMAND_USAGE =

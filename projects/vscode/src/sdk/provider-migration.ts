@@ -12,8 +12,8 @@
 // - Auto-migration on ProviderSettingsManager construction
 
 import path from "node:path"
-import { ProviderSettingsManager } from "@trumbo/core"
 import { Logger } from "@shared/services/Logger"
+import { ProviderSettingsManager } from "@trumbodev/core"
 import { resolveDataDir } from "./legacy-state-reader"
 
 // ---------------------------------------------------------------------------

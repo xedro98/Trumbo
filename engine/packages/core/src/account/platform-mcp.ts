@@ -1,7 +1,7 @@
 import {
 	getTrumboEnvironmentConfig,
 	isUnconfiguredTrumboUrl,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	McpSettingsUpdateSkippedError,
 	resolveDefaultMcpSettingsPath,

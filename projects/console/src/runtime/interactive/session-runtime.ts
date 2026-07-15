@@ -13,9 +13,9 @@ import {
 	type ToolApprovalRequest,
 	type ToolApprovalResult,
 	type UserInstructionConfigService,
-} from "@trumbo/core";
-import type { Message, MessageWithMetadata } from "@trumbo/shared";
-import { prepareForProviderSwitch } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type { Message, MessageWithMetadata } from "@trumbodev/shared";
+import { prepareForProviderSwitch } from "@trumbodev/shared";
 import { createCliCore } from "../../session/session";
 import { submitAndExitInTerminal } from "../../utils/approval";
 import type {

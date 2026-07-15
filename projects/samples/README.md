@@ -65,10 +65,10 @@ Trumbo is bring-your-own-key with no hosted backend, so set `TRUMBO_API_KEY` to 
 When you build your own app, install the public SDK package:
 
 ```bash
-npm add @trumbo/sdk
+npm add @trumbodev/sdk
 ```
 
-`@trumbo/sdk` re-exports everything from `@trumbo/core`. Reach for `@trumbo/agents` or `@trumbo/llms` only when you need lower-level control over the agent runtime or the model gateway directly.
+`@trumbodev/sdk` re-exports everything from `@trumbodev/core`. Reach for `@trumbodev/agents` or `@trumbodev/llms` only when you need lower-level control over the agent runtime or the model gateway directly.
 
 ## Learn more
 

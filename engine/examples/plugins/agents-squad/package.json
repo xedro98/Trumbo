@@ -25,10 +25,10 @@
 		]
 	},
 	"peerDependencies": {
-		"@trumbo/core": "*"
+		"@trumbodev/core": "*"
 	},
 	"peerDependenciesMeta": {
-		"@trumbo/core": {
+		"@trumbodev/core": {
 			"optional": true
 		}
 	},

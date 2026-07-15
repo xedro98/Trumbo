@@ -7,7 +7,7 @@ parallel recon, planning, implementation, and review.
 ## Quick start
 
 ```ts
-import { TrumboCore } from "@trumbo/core";
+import { TrumboCore } from "@trumbodev/core";
 
 const trumbo = await TrumboCore.create({ backendMode: "auto" });
 

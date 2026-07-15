@@ -1,4 +1,4 @@
-import { FALLBACK_TRUMBO_RECOMMENDED_MODELS, fetchTrumboRecommendedModels } from "@trumbo/core"
+import { FALLBACK_TRUMBO_RECOMMENDED_MODELS, fetchTrumboRecommendedModels } from "@trumbodev/core"
 import { TrumboEnv } from "@/config"
 import { fetch } from "@/shared/net"
 

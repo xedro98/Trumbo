@@ -1,14 +1,14 @@
 import type {
 	ChatStartSessionRequest,
 	RuntimeLoggerConfig,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	CoreSessionService,
 	HubSessionClient,
 	Llms,
 	ProviderSettingsManager,
 	SqliteSessionStore,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import type { Thread } from "chat";
 import {
 	ensureOAuthProviderApiKey,

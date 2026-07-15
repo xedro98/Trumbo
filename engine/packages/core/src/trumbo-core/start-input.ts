@@ -1,4 +1,4 @@
-import type { ExtensionContext } from "@trumbo/shared";
+import type { ExtensionContext } from "@trumbodev/shared";
 import type { RuntimeCapabilities } from "../runtime/capabilities";
 import { normalizeRuntimeCapabilities } from "../runtime/capabilities";
 import type {

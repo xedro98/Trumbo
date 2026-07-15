@@ -9,7 +9,7 @@
  */
 
 import { execFile } from "node:child_process";
-import type { AgentPlugin, AgentRunResult } from "@trumbo/core";
+import type { AgentPlugin, AgentRunResult } from "@trumbodev/core";
 
 function quoteAppleScriptString(value: string): string {
 	return `"${value

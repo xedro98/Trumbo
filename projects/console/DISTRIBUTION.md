@@ -258,7 +258,7 @@ Direct `bun pm pack` and `bun pm pack --dry-run` from `projects/console` are blo
 Cross-compiles the CLI for all target platforms:
 
 1. When `--install-native-variants` is passed, pre-installs all platform variants of `@opentui/core` using `bun install --os="*" --cpu="*"` so Bun can resolve native FFI binaries for cross-compilation. Without this, Bun only has the host platform's native binary and cross-compiled builds fail.
-2. Builds SDK packages (`bun run build:sdk`) and the CLI JS bundle (`bun -F @trumbo/cli build`)
+2. Builds SDK packages (`bun run build:sdk`) and the CLI JS bundle (`bun -F @trumbodev/cli build`)
 3. For each target platform:
    - Runs `bun build --compile --target bun-{os}-{arch}` to create a standalone executable
    - Generates a `package.json` with `os` and `cpu` fields for npm platform filtering

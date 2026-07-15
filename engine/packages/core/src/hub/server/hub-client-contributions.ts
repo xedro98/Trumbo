@@ -11,7 +11,7 @@ import type {
 	HubClientToolContribution,
 	HubClientToolExecutorContribution,
 	JsonValue,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	HUB_CHECKPOINT_CAPABILITY,
 	HUB_COMPACTION_CAPABILITY,
@@ -21,7 +21,7 @@ import {
 	HUB_TOOL_EXECUTOR_CAPABILITY_PREFIX,
 	HUB_USER_INSTRUCTIONS_SNAPSHOT_CAPABILITY,
 	isHubToolExecutorName,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 export {
 	HUB_CHECKPOINT_CAPABILITY,
@@ -31,7 +31,7 @@ export {
 	HUB_MISTAKE_LIMIT_CAPABILITY,
 	HUB_TOOL_EXECUTOR_CAPABILITY_PREFIX,
 	HUB_USER_INSTRUCTIONS_SNAPSHOT_CAPABILITY,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 import type {
 	AvailableRuntimeCommand,

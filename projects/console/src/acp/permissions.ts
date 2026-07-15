@@ -5,7 +5,10 @@ import type {
 	RequestPermissionRequest,
 	ToolCallUpdate,
 } from "@agentclientprotocol/sdk";
-import type { ToolApprovalRequest, ToolApprovalResult } from "@trumbo/shared";
+import type {
+	ToolApprovalRequest,
+	ToolApprovalResult,
+} from "@trumbodev/shared";
 import { buildToolTitle, mapToolKind } from "./tool-utils";
 
 // ---------------------------------------------------------------------------

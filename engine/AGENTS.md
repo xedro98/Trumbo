@@ -27,16 +27,16 @@ Run SDK commands from `engine/`, not from the legacy repository root. Avoid dire
 
 ### Published SDK Packages
 
-- `@trumbo/shared`: shared contracts, schemas, path helpers, hook engine, extension registry, and low-level utilities
-- `@trumbo/llms`: provider settings/config, model catalogs, provider manifests, gateway contracts, and handler creation
-- `@trumbo/agents`: stateless agent loop, tool orchestration, hook/extension runtime, and event streaming
-- `@trumbo/core`: stateful orchestration, session lifecycle, storage, config watching, plugin loading, default tools, and telemetry. Exposes `@trumbo/core/hub` for discovery, the detached daemon entry, WebSocket clients, and session/UI client adapters, plus `@trumbo/core/hub/daemon-entry` for launching the shared daemon
+- `@trumbodev/shared`: shared contracts, schemas, path helpers, hook engine, extension registry, and low-level utilities
+- `@trumbodev/llms`: provider settings/config, model catalogs, provider manifests, gateway contracts, and handler creation
+- `@trumbodev/agents`: stateless agent loop, tool orchestration, hook/extension runtime, and event streaming
+- `@trumbodev/core`: stateful orchestration, session lifecycle, storage, config watching, plugin loading, default tools, and telemetry. Exposes `@trumbodev/core/hub` for discovery, the detached daemon entry, WebSocket clients, and session/UI client adapters, plus `@trumbodev/core/hub/daemon-entry` for launching the shared daemon
 
 ### Dependency Direction
 
 ```mermaid
 flowchart TD
-  shared["@trumbo/shared"] --> llms["@trumbo/llms"] & agents["@trumbo/agents"] & core["@trumbo/core"]
+  shared["@trumbodev/shared"] --> llms["@trumbodev/llms"] & agents["@trumbodev/agents"] & core["@trumbodev/core"]
   llms --> agents & core
   agents --> core
   core --> apps["CLI / VS Code / Code App"]
@@ -52,10 +52,10 @@ Rules:
 
 Route every change to the package that owns the concern:
 
-- model/provider schemas or handler behavior: `@trumbo/llms`
-- stateless loop, tool orchestration, streaming, hook/extension runtime: `@trumbo/agents`
-- session lifecycle, storage, config watching, default tools, plugin loading, telemetry, hub runtime services, hub discovery, hub daemon spawn, and session-oriented client helpers (`HubSessionClient`, `HubUIClient`, `connectToHub`): `@trumbo/core` (hub pieces live under `src/hub/`)
-- remote-config schemas, managed instruction materialization, blob upload metadata, and OpenTelemetry config normalization: `@trumbo/shared/src/remote-config`
+- model/provider schemas or handler behavior: `@trumbodev/llms`
+- stateless loop, tool orchestration, streaming, hook/extension runtime: `@trumbodev/agents`
+- session lifecycle, storage, config watching, default tools, plugin loading, telemetry, hub runtime services, hub discovery, hub daemon spawn, and session-oriented client helpers (`HubSessionClient`, `HubUIClient`, `connectToHub`): `@trumbodev/core` (hub pieces live under `src/hub/`)
+- remote-config schemas, managed instruction materialization, blob upload metadata, and OpenTelemetry config normalization: `@trumbodev/shared/src/remote-config`
 - host-specific UX or shell behavior: the app package
 
 ## Verifying Changes
@@ -84,14 +84,14 @@ bun run check       # lint + build + typecheck + check-publish
 For focused verification, prefer workspace package scripts from the SDK root:
 
 ```sh
-bun -F @trumbo/shared test
-bun -F @trumbo/llms test
-bun -F @trumbo/agents test
-bun -F @trumbo/core test:unit
-bun -F @trumbo/cli test:unit
+bun -F @trumbodev/shared test
+bun -F @trumbodev/llms test
+bun -F @trumbodev/agents test
+bun -F @trumbodev/core test:unit
+bun -F @trumbodev/cli test:unit
 ```
 
-If a focused test command fails with a missing `@trumbo/*` export or missing `dist/` file, build the relevant dependency package or run `bun run build:sdk`, then rerun the same test command. Treat that as a workspace setup issue, not evidence of a source-code bug.
+If a focused test command fails with a missing `@trumbodev/*` export or missing `dist/` file, build the relevant dependency package or run `bun run build:sdk`, then rerun the same test command. Treat that as a workspace setup issue, not evidence of a source-code bug.
 
 If you touch hub/bootstrap/session flows, update `ARCHITECTURE.md` to match.
 
@@ -100,7 +100,7 @@ If you touch hub/bootstrap/session flows, update `ARCHITECTURE.md` to match.
 ### Keep Boundaries Clean
 
 - Do not push stateful logic down into `agents`
-- For `@trumbo/llms` provider/model routing rules, follow [packages/llms/AGENTS.md](./packages/llms/AGENTS.md)
+- For `@trumbodev/llms` provider/model routing rules, follow [packages/llms/AGENTS.md](./packages/llms/AGENTS.md)
 - Do not put app-specific behavior into `core` unless it is genuinely shared host behavior
 - Keep remote-config primitives generic in `shared`; host-facing session integration belongs in `core`
 

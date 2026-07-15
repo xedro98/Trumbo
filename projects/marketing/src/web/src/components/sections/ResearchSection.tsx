@@ -6,9 +6,9 @@ import { platformLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 const FEATURED = {
 	category: "Engineering",
-	title: "Building Trumbo on Cloudflare",
+	title: "Building the Trumbo platform",
 	description:
-		"How we run the platform on Workers, D1, and static assets, and why we split marketing from the authenticated app.",
+		"How we run the platform on Trumbo edge infrastructure, managed SQL, and static assets, and why we split marketing from the authenticated app.",
 };
 
 const POSTS = [
@@ -24,14 +24,14 @@ const POSTS = [
 		category: "Platform",
 		title: "Org-scoped billing and subscription fixes",
 		excerpt:
-			"Personal orgs, legacy scope fallbacks, and checkout polling: lessons from shipping Stripe on Workers.",
+			"Personal orgs, legacy scope fallbacks, and checkout polling: lessons from shipping Stripe on the Trumbo platform.",
 	},
 	{
 		date: "Apr 2026",
 		category: "Design",
 		title: "Kumo design system adoption",
 		excerpt:
-			"Migrating buttons, charts, and tabs to @cloudflare/kumo while keeping Trumbo green as the brand anchor.",
+			"Migrating buttons, charts, and tabs to our admin component library while keeping Trumbo green as the brand anchor.",
 	},
 ];
 

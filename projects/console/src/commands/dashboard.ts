@@ -141,7 +141,7 @@ function resolvePlatformPackageName(): string {
 }
 
 async function startDefaultDashboardServer(): Promise<DashboardServerHandle> {
-	const { startTrumboHubDashboardServer } = await import("@trumbo/hub");
+	const { startTrumboHubDashboardServer } = await import("@trumbodev/hub");
 	return await startTrumboHubDashboardServer();
 }
 

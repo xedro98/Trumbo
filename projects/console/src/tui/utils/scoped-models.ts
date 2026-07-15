@@ -19,7 +19,7 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { resolveTrumboDir } from "@trumbo/shared/storage";
+import { resolveTrumboDir } from "@trumbodev/shared/storage";
 
 export interface ScopedModelsConfig {
 	models: string[];

@@ -1,5 +1,5 @@
 import { useKeyboard } from "@opentui/react";
-import type { ProviderConfigFieldKey } from "@trumbo/core";
+import type { ProviderConfigFieldKey } from "@trumbodev/core";
 import type { Dispatch, SetStateAction } from "react";
 import type { TrumboModelPickerEntry } from "../../components/model-selector/trumbo-model-picker";
 import type { SearchableListState } from "../../components/searchable-list";

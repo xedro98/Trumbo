@@ -1,5 +1,5 @@
-import type { CoreSessionEvent } from "@trumbo/core"
 import type { TrumboApiReqInfo, TrumboMessage } from "@shared/ExtensionMessage"
+import type { CoreSessionEvent } from "@trumbodev/core"
 import { Logger } from "@/shared/services/Logger"
 import type { MessageIdMinter } from "./message-id-minter"
 import type { TaskProxy } from "./task-proxy"

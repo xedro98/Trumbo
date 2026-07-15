@@ -7,7 +7,7 @@ import type {
 	ProviderProtocol,
 	SaveProviderSettingsActionRequest,
 	TrumboAccountActionRequest,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	addLocalProvider,
 	createLocalHubScheduleRuntimeHandlers,
@@ -39,8 +39,8 @@ import {
 	TrumboAccountService,
 	toggleDisabledTool,
 	updateMcpSettingsFileSync,
-} from "@trumbo/core";
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+} from "@trumbodev/core";
+import { getTrumboEnvironmentConfig } from "@trumbodev/shared";
 import { broadcastEvent, resolveSidecarAskQuestion } from "./context";
 import {
 	findArtifactUnderDir,

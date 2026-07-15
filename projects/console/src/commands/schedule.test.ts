@@ -7,7 +7,7 @@ import { createScheduleCommand } from "./schedule";
 const mockSendHubCommand = vi.hoisted(() => vi.fn());
 const mockEnsureCliHubServer = vi.hoisted(() => vi.fn());
 
-vi.mock("@trumbo/core", () => ({
+vi.mock("@trumbodev/core", () => ({
 	sendHubCommand: mockSendHubCommand,
 }));
 

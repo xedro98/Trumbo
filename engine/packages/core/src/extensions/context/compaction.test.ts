@@ -1,5 +1,5 @@
-import type * as LlmsProviders from "@trumbo/llms";
-import type { MessageWithMetadata } from "@trumbo/shared";
+import type * as LlmsProviders from "@trumbodev/llms";
+import type { MessageWithMetadata } from "@trumbodev/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { CoreCompactionContext } from "../../types/config";
 import { runBasicCompaction } from "./basic-compaction";
@@ -15,7 +15,7 @@ type FakeChunk = Record<string, unknown>;
 
 const createHandlerMock = vi.fn();
 
-vi.mock("@trumbo/llms", () => ({
+vi.mock("@trumbodev/llms", () => ({
 	createHandlerAsync: (config: unknown) => createHandlerMock(config),
 }));
 

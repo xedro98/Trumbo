@@ -8,8 +8,8 @@ import {
 	writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
-import type { TeamRuntimeState, TeamTeammateSpec } from "@trumbo/shared";
-import { resolveTeamDataDir } from "@trumbo/shared/storage";
+import type { TeamRuntimeState, TeamTeammateSpec } from "@trumbodev/shared";
+import { resolveTeamDataDir } from "@trumbodev/shared/storage";
 import type { TeamEvent } from "../../extensions/tools/team";
 import type { TeamStore } from "../../types/storage";
 

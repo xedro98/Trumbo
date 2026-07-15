@@ -1,4 +1,4 @@
-import type { AgentExtension, AgentHooks } from "@trumbo/shared";
+import type { AgentExtension, AgentHooks } from "@trumbodev/shared";
 
 export function createAgentHooksExtension(
 	name: string,

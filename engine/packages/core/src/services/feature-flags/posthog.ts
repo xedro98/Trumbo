@@ -4,7 +4,7 @@ import type {
 	FeatureFlagsContext,
 	FeatureFlagsSettings,
 	IFeatureFlagsProvider,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { PostHog, type PostHogOptions } from "posthog-node";
 
 export interface PostHogFeatureFlagsProviderConfig {

@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { resolveTeamDataDir } from "@trumbo/shared/storage";
+import { resolveTeamDataDir } from "@trumbodev/shared/storage";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createDelegatedAgentConfigProvider } from "./delegated-agent";
 import { AgentTeamsRuntime } from "./multi-agent";

@@ -2,7 +2,7 @@ import type {
 	AgentConfig,
 	AgentModel,
 	ITelemetryService,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const gatewayMock = vi.hoisted(() => {
@@ -17,7 +17,7 @@ const gatewayMock = vi.hoisted(() => {
 	};
 });
 
-vi.mock("@trumbo/llms", () => ({
+vi.mock("@trumbodev/llms", () => ({
 	createGateway: gatewayMock.createGateway,
 	MODEL_COLLECTIONS_BY_PROVIDER_ID: {},
 	hasRegisteredHandler: gatewayMock.hasRegisteredHandler,
@@ -360,7 +360,7 @@ describe("createAgentModelFromConfig", () => {
 			>
 		).at(-1)?.[0];
 		const { createSapAiCoreProviderModule } = await import(
-			// biome-ignore lint/style/noRestrictedImports: test asserts internal SAP provider module behavior not exposed via @trumbo/llms entrypoint
+			// biome-ignore lint/style/noRestrictedImports: test asserts internal SAP provider module behavior not exposed via @trumbodev/llms entrypoint
 			"../../../../llms/src/providers/vendors/community"
 		);
 		const provider = await createSapAiCoreProviderModule(

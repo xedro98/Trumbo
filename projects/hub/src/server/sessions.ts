@@ -3,8 +3,8 @@ import {
 	type SessionRecord,
 	SessionSource,
 	type TrumboCoreStartInput,
-} from "@trumbo/core";
-import type { Message } from "@trumbo/llms";
+} from "@trumbodev/core";
+import type { Message } from "@trumbodev/llms";
 import type { WebviewConfig, WebviewReasonLevel } from "../webview-protocol";
 import { rejectPendingApprovalsForSession } from "./approvals";
 import { providerSettingsManager, workspaceRoot } from "./deps";

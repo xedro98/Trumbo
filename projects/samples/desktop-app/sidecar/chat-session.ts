@@ -7,9 +7,9 @@ import {
 	SessionSource,
 	splitCoreSessionConfig,
 	type TrumboCore,
-} from "@trumbo/core";
-import type { Message } from "@trumbo/llms";
-import { buildTrumboSystemPrompt } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type { Message } from "@trumbodev/llms";
+import { buildTrumboSystemPrompt } from "@trumbodev/shared";
 import { emitChunk, nowMs, sendEvent } from "./context";
 import { readSessionManifest, sharedSessionDataDir } from "./paths";
 import type {

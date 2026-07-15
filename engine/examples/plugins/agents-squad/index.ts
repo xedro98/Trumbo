@@ -13,7 +13,7 @@ import {
 	type AgentToolContext,
 	createTool,
 	TrumboCore,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import YAML from "yaml";
 import { z } from "zod";
 

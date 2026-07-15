@@ -1,4 +1,4 @@
-import type { AgentMode } from "@trumbo/core";
+import type { AgentMode } from "@trumbodev/core";
 import type React from "react";
 import {
 	createContext,

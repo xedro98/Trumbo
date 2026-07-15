@@ -2,7 +2,7 @@ import {
 	resolveTrumboBuildEnv,
 	TRUMBO_HUB_DEV_PORT,
 	TRUMBO_HUB_PORT,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 const HUB_HOST_ENV = "TRUMBO_HUB_HOST";
 const HUB_PORT_ENV = "TRUMBO_HUB_PORT";

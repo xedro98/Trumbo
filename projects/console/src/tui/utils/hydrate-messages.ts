@@ -1,4 +1,4 @@
-import { formatDisplayUserInput, type Message } from "@trumbo/shared";
+import { formatDisplayUserInput, type Message } from "@trumbodev/shared";
 import { formatToolInput } from "../../utils/helpers";
 import type { ChatEntry } from "../types";
 

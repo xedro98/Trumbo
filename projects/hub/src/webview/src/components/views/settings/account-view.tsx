@@ -8,7 +8,7 @@ import type {
 	TrumboAccountPaymentTransaction,
 	TrumboAccountUsageTransaction,
 	TrumboAccountUser,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	AlertCircle,
 	Building,

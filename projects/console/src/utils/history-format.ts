@@ -1,5 +1,5 @@
-import type { SessionHistoryRecord } from "@trumbo/core";
-import { formatDisplayUserInput, truncateStr } from "@trumbo/shared";
+import type { SessionHistoryRecord } from "@trumbodev/core";
+import { formatDisplayUserInput, truncateStr } from "@trumbodev/shared";
 import { formatUsd } from "./output";
 import { shouldShowCliUsageCost } from "./usage-cost-display";
 

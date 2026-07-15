@@ -8,8 +8,8 @@ import {
 	refreshProviderModelsFromSource,
 	resolveProviderConfig,
 	saveLocalProviderSettings,
-} from "@trumbo/core";
-import { isTrumboProvider } from "@trumbo/shared";
+} from "@trumbodev/core";
+import { isTrumboProvider } from "@trumbodev/shared";
 import open from "open";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {

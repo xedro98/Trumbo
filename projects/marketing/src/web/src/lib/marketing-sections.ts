@@ -9,9 +9,37 @@ export type MarketingExploreItem = {
 	external?: boolean;
 };
 
-export const MARKETING_EXPLORE_ITEMS: readonly MarketingExploreItem[] = [
+export type MarketingExploreGroup = {
+	group: string;
+	items: MarketingExploreItem[];
+};
+
+export type MarketingExploreEntry = MarketingExploreItem | MarketingExploreGroup;
+
+function isExploreGroup(
+	entry: MarketingExploreEntry,
+): entry is MarketingExploreGroup {
+	return "group" in entry;
+}
+
+export function isMarketingExploreGroup(
+	entry: MarketingExploreEntry,
+): entry is MarketingExploreGroup {
+	return isExploreGroup(entry);
+}
+
+export const MARKETING_EXPLORE_ITEMS: readonly MarketingExploreEntry[] = [
 	{ label: "Trumbo Agent", href: "/agent" },
 	{ label: "Trumbo Quartz", href: "/quartz" },
+	{ label: "Trumbo Security", href: "/security" },
+	{
+		group: "Agentic Cloud",
+		items: [
+			{ label: "Cloud Agents", href: "/cloud-agents" },
+			{ label: "Sandbox", href: "/sandbox" },
+			{ label: "Browser Run", href: "/browser-run" },
+		],
+	},
 	{ label: "Model Library", href: "/models" },
 	{ label: "Pricing", href: "/pricing" },
 	{ label: "Company", href: "/company" },

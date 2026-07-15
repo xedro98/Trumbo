@@ -1,6 +1,9 @@
 import { readFileSync } from "node:fs";
 import { relative, resolve } from "node:path";
-import type { ToolApprovalRequest, ToolApprovalResult } from "@trumbo/shared";
+import type {
+	ToolApprovalRequest,
+	ToolApprovalResult,
+} from "@trumbodev/shared";
 import type { Config } from "../../utils/types";
 import {
 	applyInteractiveAutoApproveOverride,

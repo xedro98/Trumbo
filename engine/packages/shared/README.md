@@ -7,18 +7,18 @@
    ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
 ```
 
-# [experimental] @trumbo/shared
+# [experimental] @trumbodev/shared
 
 Package-level docs are centralized:
 
 - Overview: [`packages/README.md`](../README.md)
 - Architecture and interactions: [`ARCHITECTURE.md`](../../ARCHITECTURE.md)
 
-`@trumbo/shared` owns the shared cross-package primitives (session common types and utilities) that the rest of the SDK builds on.
+`@trumbodev/shared` owns the shared cross-package primitives (session common types and utilities) that the rest of the SDK builds on.
 
 Node-only filesystem path resolvers live under the storage subpath export:
 
-- `@trumbo/shared/storage`
+- `@trumbodev/shared/storage`
 - examples: `resolveTrumboDataDir`, `resolveDbDataDir`, `resolveSessionDataDir`, `resolveTeamDataDir`
 
 It also exports cross-client logging contracts, including `BasicLogger`, so the runtime, SDK, and host applications can all share a single logger type.
@@ -37,7 +37,7 @@ It also exports the hook session context primitives used across agents, core, an
 - `resolveRootSessionId(...)`
 - `resolveHookLogPath(...)`
 
-It also exports cross-client runtime payload DTOs used by multiple hosts (`@trumbo/cli`, `@trumbo/code`) so request/response contracts are not duplicated outside transport wiring:
+It also exports cross-client runtime payload DTOs used by multiple hosts (`@trumbodev/cli`, `@trumbodev/code`) so request/response contracts are not duplicated outside transport wiring:
 
 - chat runtime payloads (`ChatStartSessionRequest`, `ChatRunTurnRequest`, `ChatTurnResult`)
 - provider runtime payloads (`ProviderActionRequest`, `ProviderCatalogResponse`, `ProviderOAuthLoginResponse`)

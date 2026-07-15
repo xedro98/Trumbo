@@ -4,12 +4,16 @@ import { RouteSEO } from "@/components/PageSEO";
 import { AdminPage } from "@/pages/AdminPage";
 import { AgentPage } from "@/pages/AgentPage";
 import { BlogIndexPage, BlogPostPage } from "@/pages/BlogPages";
+import { BrowserRunPage } from "@/pages/BrowserRunPage";
+import { CloudAgentsPage } from "@/pages/CloudAgentsPage";
 import { CompanyPage } from "@/pages/CompanyPage";
 import { HomePage } from "@/pages/HomePage";
 import { PrivacyPage, RefundPage, TermsPage } from "@/pages/LegalPages";
 import { ModelLibraryPage } from "@/pages/ModelLibraryPage";
 import { PricingPage } from "@/pages/PricingPage";
 import { QuartzPage } from "@/pages/QuartzPage";
+import { SandboxPage } from "@/pages/SandboxPage";
+import { SecurityPage } from "@/pages/SecurityPage";
 
 function ScrollToTop() {
 	const [location] = useLocation();
@@ -36,6 +40,10 @@ export default function App() {
 			<Route path="/" component={HomePage} />
 		<Route path="/agent" component={AgentPage} />
 		<Route path="/quartz" component={QuartzPage} />
+		<Route path="/cloud-agents" component={CloudAgentsPage} />
+		<Route path="/sandbox" component={SandboxPage} />
+		<Route path="/browser-run" component={BrowserRunPage} />
+		<Route path="/security" component={SecurityPage} />
 		<Route path="/models" component={ModelLibraryPage} />
 			<Route path="/pricing" component={PricingPage} />
 			<Route path="/company" component={CompanyPage} />

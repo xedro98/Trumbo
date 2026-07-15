@@ -1,7 +1,7 @@
 import type {
 	ProviderSettingsManager,
 	TrumboAccountOrganization,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	createTrumboAccountService,
 	loadTrumboAccountSnapshot,

@@ -4,7 +4,7 @@
  * Core interfaces that all provider handlers must implement.
  */
 
-import type { Message, ModelInfo, ToolDefinition } from "@trumbo/shared";
+import type { Message, ModelInfo, ToolDefinition } from "@trumbodev/shared";
 import type { ApiStream, ApiStreamUsageChunk } from "./stream";
 
 /**

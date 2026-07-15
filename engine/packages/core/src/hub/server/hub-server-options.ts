@@ -1,4 +1,4 @@
-import type { ITelemetryService } from "@trumbo/shared";
+import type { ITelemetryService } from "@trumbodev/shared";
 import type { CronServiceOptions } from "../../cron/service/cron-service";
 import type {
 	HubScheduleRuntimeHandlers,

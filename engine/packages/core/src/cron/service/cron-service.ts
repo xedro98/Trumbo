@@ -1,5 +1,5 @@
-import type { AutomationEventEnvelope, BasicLogger } from "@trumbo/shared";
-import type { ResolveCronSpecsDirOptions } from "@trumbo/shared/storage";
+import type { AutomationEventEnvelope, BasicLogger } from "@trumbodev/shared";
+import type { ResolveCronSpecsDirOptions } from "@trumbodev/shared/storage";
 import {
 	CronEventIngress,
 	type CronEventIngressResult,

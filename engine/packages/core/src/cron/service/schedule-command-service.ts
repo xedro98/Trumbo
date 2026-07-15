@@ -3,8 +3,8 @@ import type {
 	HubReplyEnvelope,
 	HubScheduleCreateInput,
 	HubScheduleUpdateInput,
-} from "@trumbo/shared";
-import { createSessionId } from "@trumbo/shared";
+} from "@trumbodev/shared";
+import { createSessionId } from "@trumbodev/shared";
 import type { HubScheduleService } from "./schedule-service";
 
 function okReply(

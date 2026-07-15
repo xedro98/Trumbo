@@ -2,7 +2,7 @@ import type {
 	HubCommandEnvelope,
 	HubEventEnvelope,
 	HubReplyEnvelope,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type { HubCommandTransport } from "./command-transport";
 
 export interface NativeHubTransport {

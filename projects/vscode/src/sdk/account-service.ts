@@ -58,6 +58,30 @@ export interface CurrentPlanResponse {
 		currentPeriodEnd?: string
 	} | null
 	userId?: string
+	agents?: {
+		enabled: boolean
+		hoursMonthly: number
+		hoursUsed: number
+		resetsAtSec: number
+		concurrentAgents: number
+		concurrentUsed: number
+	}
+	sandbox?: {
+		enabled: boolean
+		cpuSecondsMonthly: number
+		cpuSecondsUsed: number
+		resetsAtSec: number
+		concurrentSandboxes: number
+		concurrentUsed: number
+		maxBackups?: number
+	}
+}
+
+export interface PlatformInfrastructureRpcResponse {
+	agentsJson?: string
+	sandboxesJson?: string
+	agentsUsageJson?: string
+	sandboxUsageJson?: string
 }
 
 export class TrumboAccountService {
@@ -167,6 +191,35 @@ export class TrumboAccountService {
 			return data ?? null
 		} catch (error) {
 			Logger.error("Failed to fetch current plan (RPC):", error)
+			return undefined
+		}
+	}
+
+	/**
+	 * Fetches cloud agent + sandbox sessions and usage for the platform dashboard.
+	 */
+	async fetchPlatformInfrastructureRPC(): Promise<PlatformInfrastructureRpcResponse | undefined> {
+		try {
+			const [plan, agentsRes, sandboxesRes] = await Promise.all([
+				this.fetchCurrentUserPlanRPC(),
+				this.authenticatedRequest<{ success: boolean; data: unknown[] }>("/api/v1/agents").catch(() => ({
+					success: false,
+					data: [],
+				})),
+				this.authenticatedRequest<{ success: boolean; data: unknown[] }>("/api/v1/sandbox").catch(() => ({
+					success: false,
+					data: [],
+				})),
+			])
+
+			return {
+				agentsJson: JSON.stringify(agentsRes.data ?? []),
+				sandboxesJson: JSON.stringify(sandboxesRes.data ?? []),
+				agentsUsageJson: plan?.agents ? JSON.stringify(plan.agents) : undefined,
+				sandboxUsageJson: plan?.sandbox ? JSON.stringify(plan.sandbox) : undefined,
+			}
+		} catch (error) {
+			Logger.error("Failed to fetch platform infrastructure (RPC):", error)
 			return undefined
 		}
 	}

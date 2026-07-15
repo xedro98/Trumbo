@@ -1,5 +1,5 @@
 import { useTerminalDimensions } from "@opentui/react";
-import type { ProviderSettingsManager } from "@trumbo/core";
+import type { ProviderSettingsManager } from "@trumbodev/core";
 import { useMouseTracker } from "../../components/tracked-robot";
 import { HOME_VIEW_MAX_WIDTH } from "../../types";
 import { useOnboardingController } from "./controller";

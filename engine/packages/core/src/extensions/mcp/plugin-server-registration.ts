@@ -1,7 +1,7 @@
 import type {
 	AgentExtensionMcpEnvValue,
 	AgentExtensionMcpServer,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type { McpServerRegistration } from "./types";
 
 export interface PluginMcpServerResolution<TOwner> {

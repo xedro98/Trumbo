@@ -1,4 +1,4 @@
-import type { ITelemetryService } from "@trumbo/shared";
+import type { ITelemetryService } from "@trumbodev/shared";
 
 export const TRUMBO_INTERNAL_TELEMETRY_METADATA_KEY =
 	"__trumboInternalTelemetry";

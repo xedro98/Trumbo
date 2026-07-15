@@ -5,8 +5,8 @@ import {
 	type ProviderSettingsManager,
 	type ReasoningSettings,
 	toProviderConfig,
-} from "@trumbo/core";
-import type { Message } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type { Message } from "@trumbodev/shared";
 import type { Config } from "../../utils/types";
 
 const FALLBACK_MANUAL_COMPACTION_MAX_INPUT_TOKENS = 64_000;

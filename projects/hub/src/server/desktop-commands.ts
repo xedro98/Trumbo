@@ -24,8 +24,8 @@ import {
 	type TrumboAccountActionRequest,
 	TrumboAccountService,
 	toggleDisabledTool,
-} from "@trumbo/core";
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+} from "@trumbodev/core";
+import { getTrumboEnvironmentConfig } from "@trumbodev/shared";
 import {
 	connectorChannelsPayload,
 	startConnectorChannel,

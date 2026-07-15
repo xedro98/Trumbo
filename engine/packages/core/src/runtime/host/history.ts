@@ -1,8 +1,8 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
-import type * as LlmsProviders from "@trumbo/llms";
-import { formatDisplayUserInput, normalizeUserInput } from "@trumbo/shared";
-import { resolveSessionDataDir } from "@trumbo/shared/storage";
+import type * as LlmsProviders from "@trumbodev/llms";
+import { formatDisplayUserInput, normalizeUserInput } from "@trumbodev/shared";
+import { resolveSessionDataDir } from "@trumbodev/shared/storage";
 import { toSessionRecord } from "../../services/session-data";
 import type { SessionManifest } from "../../session/models/session-manifest";
 import { SessionManifestSchema } from "../../session/models/session-manifest";

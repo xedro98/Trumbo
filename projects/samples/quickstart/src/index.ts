@@ -1,4 +1,4 @@
-import { Agent } from "@trumbo/sdk";
+import { Agent } from "@trumbodev/sdk";
 
 const agent = new Agent({
 	providerId: "trumbo",

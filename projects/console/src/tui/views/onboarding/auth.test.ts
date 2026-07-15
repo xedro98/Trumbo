@@ -9,7 +9,7 @@ const hoisted = vi.hoisted(() => ({
 	openMock: vi.fn(() => Promise.resolve()),
 }));
 
-vi.mock("@trumbo/core", () => ({
+vi.mock("@trumbodev/core", () => ({
 	loginLocalProvider: hoisted.loginLocalProvider,
 	startTrumboDeviceAuth: hoisted.startTrumboDeviceAuth,
 	completeTrumboDeviceAuth: hoisted.completeTrumboDeviceAuth,
@@ -17,7 +17,7 @@ vi.mock("@trumbo/core", () => ({
 	ProviderSettingsManager: class {},
 }));
 
-vi.mock("@trumbo/shared", () => ({
+vi.mock("@trumbodev/shared", () => ({
 	getTrumboEnvironmentConfig: () => ({ apiBaseUrl: "https://api.example" }),
 }));
 

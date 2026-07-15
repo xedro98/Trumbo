@@ -1,4 +1,4 @@
-import { installMcpServer } from "@trumbo/core";
+import { installMcpServer } from "@trumbodev/core";
 import { describe, expect, it, vi } from "vitest";
 import {
 	buildMcpInstallDefaults,
@@ -6,8 +6,8 @@ import {
 	runMcpInstallCommand,
 } from "./mcp";
 
-vi.mock("@trumbo/core", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("@trumbo/core")>();
+vi.mock("@trumbodev/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@trumbodev/core")>();
 	return {
 		...actual,
 		installMcpServer: vi.fn((options) => {

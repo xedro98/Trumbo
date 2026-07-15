@@ -7,7 +7,7 @@ import {
 	loginAndSaveLocalProviderOAuthCredentials,
 	normalizeOAuthProvider,
 	saveLocalProviderSettings,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import type {
 	WebviewInboundMessage,
 	WebviewProviderModel,

@@ -1,5 +1,5 @@
-import type { AgentEvent } from "@trumbo/core";
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+import type { AgentEvent } from "@trumbodev/core";
+import { getTrumboEnvironmentConfig } from "@trumbodev/shared";
 import type { Config } from "./types";
 
 const TRUMBO_RECOMMENDED_MODELS_TIMEOUT_MS = 5_000;

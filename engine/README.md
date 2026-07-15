@@ -12,7 +12,7 @@
 The Trumbo SDK is a TypeScript framework for building AI agents that do real work, not just generate text. An agent built on Trumbo can edit files, run shell commands, browse the web, call APIs, and use any custom tool you hand it. It is the same engine that powers the [Trumbo CLI and VS Code extension](https://github.com/xedro98/trembo), repackaged as a library you can embed in your own applications, bots, and automation pipelines.
 
 ```typescript
-import { Agent } from "@trumbo/sdk"
+import { Agent } from "@trumbodev/sdk"
 
 const agent = new Agent({
   providerId: "trumbo",
@@ -30,7 +30,7 @@ That is the entire loop. The agent streams its response, calls tools when you gi
 ## Install
 
 ```bash
-npm install @trumbo/sdk
+npm install @trumbodev/sdk
 ```
 
 ## What You Can Build
@@ -77,7 +77,7 @@ Full working examples live in [`examples/`](examples) and [`projects/samples/`](
 Tools are how agents reach into the world. Define a tool with a name, a description the model reads, a JSON Schema for its inputs, and a function that does the work:
 
 ```typescript
-import { createTool } from "@trumbo/sdk"
+import { createTool } from "@trumbodev/sdk"
 
 const deploy = createTool({
   name: "deploy",
@@ -166,7 +166,7 @@ const metrics: AgentPlugin = {
 When you need session persistence, built-in tools, config discovery, and multi-process support, reach for `TrumboCore`:
 
 ```typescript
-import { TrumboCore } from "@trumbo/sdk"
+import { TrumboCore } from "@trumbodev/sdk"
 
 const trumbo = await TrumboCore.create({ clientName: "my-app" })
 
@@ -192,13 +192,13 @@ The SDK is a layered stack. Use as much or as little as you need:
 
 | Package | What it does |
 |---------|-------------|
-| `@trumbo/sdk` | Everything you need — install this one |
-| `@trumbo/core` | Sessions, persistence, built-in tools, config discovery, RPC |
-| `@trumbo/agents` | Stateless agent loop with tool execution and streaming |
-| `@trumbo/llms` | LLM provider gateway (Anthropic, OpenAI, Google, Bedrock, Mistral, and more) |
-| `@trumbo/shared` | Types, tool creation helpers, hook engine |
+| `@trumbodev/sdk` | Everything you need — install this one |
+| `@trumbodev/core` | Sessions, persistence, built-in tools, config discovery, RPC |
+| `@trumbodev/agents` | Stateless agent loop with tool execution and streaming |
+| `@trumbodev/llms` | LLM provider gateway (Anthropic, OpenAI, Google, Bedrock, Mistral, and more) |
+| `@trumbodev/shared` | Types, tool creation helpers, hook engine |
 
-`@trumbo/sdk` is an alias for `@trumbo/core` that re-exports from every package, so a single install gives you the full API. The individual packages are there if you want a smaller dependency footprint.
+`@trumbodev/sdk` is an alias for `@trumbodev/core` that re-exports from every package, so a single install gives you the full API. The individual packages are there if you want a smaller dependency footprint.
 
 ## CLI
 

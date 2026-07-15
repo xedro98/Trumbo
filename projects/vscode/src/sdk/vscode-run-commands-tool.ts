@@ -18,8 +18,8 @@ import {
 	type ShellExecutor,
 	type StructuredCommandInput,
 	truncateCommandOutput,
-} from "@trumbo/core"
-import type { AgentTool } from "@trumbo/shared"
+} from "@trumbodev/core"
+import type { AgentTool } from "@trumbodev/shared"
 import { StateManager } from "@/core/storage/StateManager"
 import { orchestrateCommandExecution } from "@/integrations/terminal/CommandOrchestrator"
 import type { CommandExecutorCallbacks, ITerminalManager, TerminalProcessResultPromise } from "@/integrations/terminal/types"

@@ -1,7 +1,7 @@
 import {
 	isUnconfiguredTrumboUrl,
 	resolveTrumboProviderBaseUrl,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type {
 	ModelCollection,
 	ModelInfo,

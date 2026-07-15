@@ -1,5 +1,5 @@
-import { SessionSource } from "@trumbo/core";
-import type { Message } from "@trumbo/shared";
+import { SessionSource } from "@trumbodev/core";
+import type { Message } from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import { buildForkSessionMetadata } from "./metadata";
 

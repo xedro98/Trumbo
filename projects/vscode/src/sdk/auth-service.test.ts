@@ -8,9 +8,9 @@
 // - Streaming subscription management
 // - workos: prefix handling
 
-import { getValidTrumboCredentials, type OAuthCredentials } from "@trumbo/core"
+import { getValidTrumboCredentials, type OAuthCredentials } from "@trumbodev/core"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { AuthService, type TrumboAuthInfo, LogoutReason } from "./auth-service"
+import { AuthService, LogoutReason, type TrumboAuthInfo } from "./auth-service"
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -102,8 +102,8 @@ vi.mock("axios", () => ({
 
 const mockLoginTrumboOAuth = vi.hoisted(() => vi.fn())
 
-// Mock @trumbo/core OAuth functions
-vi.mock("@trumbo/core", () => ({
+// Mock @trumbodev/core OAuth functions
+vi.mock("@trumbodev/core", () => ({
 	createOAuthClientCallbacks: (opts: {
 		onOutput?: (message: string) => void
 		onPrompt: () => void

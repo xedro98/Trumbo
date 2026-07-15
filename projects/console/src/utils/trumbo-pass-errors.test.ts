@@ -1,4 +1,4 @@
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+import { getTrumboEnvironmentConfig } from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import {
 	formatCliErrorMessage,

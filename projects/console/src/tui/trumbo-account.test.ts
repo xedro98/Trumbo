@@ -21,8 +21,8 @@ const telemetryMocks = vi.hoisted(() => ({
 	identifyTelemetryAccount: vi.fn(),
 }));
 
-vi.mock("@trumbo/core", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("@trumbo/core")>();
+vi.mock("@trumbodev/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@trumbodev/core")>();
 	return {
 		...actual,
 		TrumboAccountService: class {

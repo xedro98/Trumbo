@@ -3,7 +3,7 @@
 ## Basic Session with Built-in Tools
 
 ```typescript
-import { TrumboCore } from "@trumbo/sdk"
+import { TrumboCore } from "@trumbodev/sdk"
 
 const trumbo = await TrumboCore.create({ clientName: "my-app" })
 
@@ -105,7 +105,7 @@ const trumbo = await TrumboCore.create({
 ## Custom Tools Alongside Built-ins
 
 ```typescript
-import { TrumboCore, createTool } from "@trumbo/sdk"
+import { TrumboCore, createTool } from "@trumbodev/sdk"
 import { z } from "zod"
 
 const deployTool = createTool({
@@ -139,7 +139,7 @@ await trumbo.start({
 Load plugins inline with `extensions` and provide workspace context so plugins can access `ctx.workspaceInfo`:
 
 ```typescript
-import { TrumboCore } from "@trumbo/sdk"
+import { TrumboCore } from "@trumbodev/sdk"
 import myPlugin from "./my-plugin"
 
 const trumbo = await TrumboCore.create({
@@ -217,7 +217,7 @@ process.on("SIGTERM", async () => {
 For request/response workloads (API endpoints, queue consumers):
 
 ```typescript
-import { TrumboCore } from "@trumbo/sdk"
+import { TrumboCore } from "@trumbodev/sdk"
 
 const trumbo = await TrumboCore.create({
   clientName: "worker",

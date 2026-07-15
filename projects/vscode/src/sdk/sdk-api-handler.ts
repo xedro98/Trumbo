@@ -1,19 +1,19 @@
 // Replaces classic src/core/api buildApiHandler (see origin/main).
 //
-// Builds an SDK ApiHandler (from `@trumbo/llms`) directly from the extension's
+// Builds an SDK ApiHandler (from `@trumbodev/llms`) directly from the extension's
 // legacy ApiConfiguration. This is the single inference path: the main task
 // loop runs through TrumboCore (see trumbo-session-factory.ts), and standalone
 // utility callers (commit message generation) use the handler
 // returned here. Both share the same provider/model/key/baseUrl resolution so
 // there is no second source of truth.
 
-import { type ApiHandler, createHandler, type ProviderConfig } from "@trumbo/llms"
 import type { ApiConfiguration } from "@shared/api"
 import type { Mode } from "@shared/storage/types"
+import { type ApiHandler, createHandler, type ProviderConfig } from "@trumbodev/llms"
 import { fetch } from "@/shared/net"
 import { buildBedrockProviderConfig } from "./bedrock-config"
-import { resolveApiKey, resolveBaseUrl, resolveModelId, resolveVertexProviderConfig } from "./trumbo-session-factory"
 import { toSdkProviderId } from "./model-catalog/sdk-provider-id"
+import { resolveApiKey, resolveBaseUrl, resolveModelId, resolveVertexProviderConfig } from "./trumbo-session-factory"
 
 export interface BuildApiHandlerOptions {
 	/**

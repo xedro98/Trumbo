@@ -4,10 +4,10 @@ Tools are how agents interact with the world. The Trumbo SDK supports both built
 
 ## Creating custom tools
 
-Use `createTool()` from `@trumbo/sdk` (or `@trumbo/shared`):
+Use `createTool()` from `@trumbodev/sdk` (or `@trumbodev/shared`):
 
 ```typescript
-import { createTool } from "@trumbo/sdk"
+import { createTool } from "@trumbodev/sdk"
 
 const myTool = createTool({
   name: "search_issues",
@@ -30,7 +30,7 @@ const myTool = createTool({
 ### With Zod Schema
 
 ```typescript
-import { createTool } from "@trumbo/sdk"
+import { createTool } from "@trumbodev/sdk"
 import { z } from "zod"
 
 const deployTool = createTool({

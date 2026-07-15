@@ -1,4 +1,4 @@
-import type { AgentToolContext, HubEventEnvelope } from "@trumbo/shared";
+import type { AgentToolContext, HubEventEnvelope } from "@trumbodev/shared";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SessionSource } from "../../types/common";
 

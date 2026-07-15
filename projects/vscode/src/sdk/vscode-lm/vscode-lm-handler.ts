@@ -1,4 +1,4 @@
-// Trumbo SDK `ApiHandler` (from `@trumbo/llms`) backed by the VS Code Language
+// Trumbo SDK `ApiHandler` (from `@trumbodev/llms`) backed by the VS Code Language
 // Model API (`vscode.lm`). Registered via `registerHandler("vscode-lm", ...)`
 // (see ./register-vscode-lm.ts) so the SDK routes "vscode-lm" inference here.
 //
@@ -8,7 +8,7 @@
 // uses) and is parsed back into a `LanguageModelChatSelector` here. See
 // parseVsCodeLmSelector / apps/vscode/src/shared/vsCodeSelectorUtils.ts.
 
-import type { ApiHandler, ApiStreamChunk, HandlerModelInfo, Message, ProviderConfig, ToolDefinition } from "@trumbo/llms"
+import type { ApiHandler, ApiStreamChunk, HandlerModelInfo, Message, ProviderConfig, ToolDefinition } from "@trumbodev/llms"
 import { nanoid } from "nanoid"
 import * as vscode from "vscode"
 import { Logger } from "@/shared/services/Logger"

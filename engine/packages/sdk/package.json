@@ -1,6 +1,6 @@
 {
-	"name": "@trumbo/sdk",
-	"description": "Trumbo SDK - user-facing alias for @trumbo/core",
+	"name": "@trumbodev/sdk",
+	"description": "Trumbo SDK - user-facing alias for @trumbodev/core",
 	"version": "0.0.59",
 	"repository": {
 		"type": "git",
@@ -25,7 +25,7 @@
 		"typecheck": "bun tsc -p tsconfig.json --noEmit"
 	},
 	"dependencies": {
-		"@trumbo/core": "workspace:*"
+		"@trumbodev/core": "workspace:*"
 	},
 	"engines": {
 		"node": ">=22"

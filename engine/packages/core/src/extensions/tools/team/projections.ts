@@ -4,7 +4,7 @@ import type {
 	TeamProgressLifecycleEvent,
 	TeamProgressSummary,
 	TeamRuntimeState,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type { TeamEvent } from "./multi-agent";
 
 function toIsoNow(): string {

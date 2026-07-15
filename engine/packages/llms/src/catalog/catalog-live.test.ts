@@ -1,4 +1,4 @@
-import { TRUMBO_ENVIRONMENTS } from "@trumbo/shared";
+import { TRUMBO_ENVIRONMENTS } from "@trumbodev/shared";
 import { describe, expect, it, vi } from "vitest";
 import {
 	getGeneratedModelsForProvider,

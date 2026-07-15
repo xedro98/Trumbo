@@ -1,5 +1,5 @@
 {
-	"name": "@trumbo/shared",
+	"name": "@trumbodev/shared",
 	"version": "0.0.59",
 	"description": "Shared utilities, types, and schemas for Trumbo packages",
 	"repository": {

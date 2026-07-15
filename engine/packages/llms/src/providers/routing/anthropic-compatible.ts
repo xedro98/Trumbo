@@ -5,7 +5,7 @@ import type {
 	GatewayProviderManifest,
 	GatewayProviderMetadata,
 	GatewayStreamRequest,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	isAnthropicCompatibleModel,
 	isQwenModel,

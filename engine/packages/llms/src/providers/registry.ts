@@ -8,7 +8,7 @@ import type {
 	GatewayProviderRegistration,
 	GatewayResolvedModel,
 	GatewayResolvedProviderConfig,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { isQwenModel } from "./model-facts";
 
 interface ProviderRecord {

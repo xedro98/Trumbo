@@ -1,4 +1,4 @@
-import type { BasicLogger } from "@trumbo/core";
+import type { BasicLogger } from "@trumbodev/core";
 import { createCliLoggerAdapter, flushCliLoggerAdapters } from "./adapter";
 
 export function logCliError(

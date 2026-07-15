@@ -2,7 +2,7 @@ import * as p from "@clack/prompts";
 import {
 	authorizeMcpServerOAuth,
 	resolveDefaultMcpSettingsPath,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import open from "open";
 
 function toErrorMessage(error: unknown): string {

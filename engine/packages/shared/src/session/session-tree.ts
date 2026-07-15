@@ -12,7 +12,7 @@
  *
  * This module provides pure, side-effect-free utilities for building,
  * navigating, and mutating conversation trees. The storage layer
- * (`@trumbo/core`) uses these to persist and restore branched sessions.
+ * (`@trumbodev/core`) uses these to persist and restore branched sessions.
  *
  * @see TRU-22 — Session tree data model
  * @see https://pi.dev/docs/latest/sessions — Pi's session tree reference

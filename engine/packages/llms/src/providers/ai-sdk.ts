@@ -6,14 +6,14 @@ import type {
 	GatewayProviderFactory,
 	GatewayResolvedProviderConfig,
 	GatewayStreamRequest,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	type AiSdkFormatterMessage,
 	type AiSdkFormatterPart,
 	captureSdkError,
 	formatMessagesForAiSdk,
 	sanitizeSurrogates,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { jsonSchema, streamText } from "ai";
 import { nanoid } from "nanoid";
 import { z } from "zod";

@@ -16,12 +16,12 @@ import {
 	type TrumboAccountUser,
 	type TrumboSubscriptionPlan,
 	type UserCurrentPlan,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	getTrumboEnvironmentConfig,
 	isUnconfiguredTrumboUrl,
 	resolveTrumboApiBaseUrl,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { identifyTelemetryAccount } from "../utils/telemetry";
 import type { Config } from "../utils/types";
 

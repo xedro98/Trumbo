@@ -1,4 +1,4 @@
-import type { AgentResult } from "@trumbo/shared";
+import type { AgentResult } from "@trumbodev/shared";
 import {
 	type AgentTool,
 	createTool,
@@ -70,7 +70,7 @@ import {
 	type TeamTeammateSpec,
 	validateWithZod,
 	zodToJsonSchema,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	buildDelegatedAgentConfig,
 	type DelegatedAgentConfigProvider,

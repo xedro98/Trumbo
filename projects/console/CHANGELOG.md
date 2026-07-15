@@ -226,7 +226,7 @@ Platform companion release: sandbox delete fix, MCP API token auth, expanded API
 
 ## 3.0.36
 
-- Fixed the npm publish path and the CI "Verify build output" step to strip the new `@trumbodev/` scope when locating built platform packages in `dist/` (the previous `@trumbo/` strip left the path scoped, so the verify step could not find the `dist/cli-*` manifests and the publish step targeted the wrong directory). Supersedes the unpublished 3.0.35 tag.
+- Fixed the npm publish path and the CI "Verify build output" step to strip the new `@trumbodev/` scope when locating built platform packages in `dist/` (the previous `@trumbodev/` strip left the path scoped, so the verify step could not find the `dist/cli-*` manifests and the publish step targeted the wrong directory). Supersedes the unpublished 3.0.35 tag.
 
 ## 3.0.35
 
@@ -241,7 +241,7 @@ Platform companion release: sandbox delete fix, MCP API token auth, expanded API
 - Added standalone curl (POSIX `install.sh`) and PowerShell (`install.ps1`) installers that download the platform binary from the npm registry — no Node, Bun, or npm required.
 - Documented npm/pnpm/bun/yarn/curl/PowerShell install methods in the README and DISTRIBUTION guide.
 - Fixed the `cli-publish` and `sdk-publish` workflow repo guard so releases run on `xedro98/Trumbo`.
-- Decoupled the `trumbo` wrapper package from the SDK packages: the published CLI is a self-contained compiled binary, so global installs no longer pull unused `@trumbo/*` packages and CLI publishing no longer requires the SDK to be published first.
+- Decoupled the `trumbo` wrapper package from the SDK packages: the published CLI is a self-contained compiled binary, so global installs no longer pull unused `@trumbodev/*` packages and CLI publishing no longer requires the SDK to be published first.
 - Corrected the package `repository`/`homepage`/`bugs` URLs to `xedro98/Trumbo`.
 
 ## 3.0.33
@@ -577,7 +577,7 @@ npm install -g trumbo@nightly
 
 - Fix crash when pressing Escape to cancel a running turn
 - Add plugin and SDK tool toggles to the settings panel
-- Add `@trumbo/sdk` as a user-facing alias for `@trumbo/core`
+- Add `@trumbodev/sdk` as a user-facing alias for `@trumbodev/core`
 - Improve hub recovery with better error handling, logging, and recovery timeouts
 - Show session summary (ID, model, cost, resume command) on exit
 - Fix OAuth browser-launch failure

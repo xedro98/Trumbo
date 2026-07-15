@@ -1,5 +1,5 @@
-import { Empty, EmptyRequest } from "@shared/proto/trumbo/common"
 import { ShowMessageType } from "@shared/proto/host/window"
+import { Empty, EmptyRequest } from "@shared/proto/trumbo/common"
 import { HostProvider } from "@/hosts/host-provider"
 import { AuthService } from "@/sdk/auth-service"
 import { Logger } from "@/shared/services/Logger"
@@ -7,7 +7,7 @@ import { Controller } from ".."
 
 /**
  * Initiates OpenAI Codex OAuth authentication flow.
- * Uses the SDK-backed AuthService which delegates to @trumbo/core's
+ * Uses the SDK-backed AuthService which delegates to @trumbodev/core's
  * loginOpenAICodex() function.
  */
 export async function openAiCodexSignIn(controller: Controller, _: EmptyRequest): Promise<Empty> {

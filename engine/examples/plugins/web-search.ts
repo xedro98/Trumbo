@@ -12,7 +12,7 @@
  *                            is still required for CLI inference.
  */
 
-import { type AgentPlugin, createTool } from "@trumbo/core";
+import { type AgentPlugin, createTool } from "@trumbodev/core";
 
 export interface WebSearchInput {
 	query: string;

@@ -3,8 +3,8 @@ import type {
 	ApiStreamChunk,
 	HandlerModelInfo,
 	Message,
-} from "@trumbo/llms";
-import type { AgentModelEvent, AgentModelRequest } from "@trumbo/shared";
+} from "@trumbodev/llms";
+import type { AgentModelEvent, AgentModelRequest } from "@trumbodev/shared";
 import { describe, expect, it, vi } from "vitest";
 import { createAgentModelFromApiHandler } from "./apihandler-agent-model-adapter";
 

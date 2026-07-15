@@ -3,7 +3,7 @@ import {
 	type AgentEvent,
 	type ToolApprovalRequest,
 	TrumboCore,
-} from "@trumbo/sdk";
+} from "@trumbodev/sdk";
 
 // TrumboCore does not choose a model automatically; each session config must provide one.
 // These example defaults use the Trumbo gateway with Claude Sonnet, and can be overridden with env vars.

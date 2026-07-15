@@ -1,6 +1,6 @@
 import { stat } from "node:fs/promises";
 import { isAbsolute, relative, resolve } from "node:path";
-import type { AgentConfig, AgentTool } from "@trumbo/shared";
+import type { AgentConfig, AgentTool } from "@trumbodev/shared";
 import { resolveAgentPluginPaths } from "../extensions/plugin/plugin-config-loader";
 import type {
 	PluginInitializationFailure,

@@ -4,7 +4,7 @@ import {
 	McpSettingsUpdateSkippedError,
 	resolveDefaultMcpSettingsPath,
 	updateMcpSettingsFileSync,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
 export interface McpServerEntry {
 	name: string;
@@ -72,7 +72,7 @@ function getOwnServerRecord(
 }
 
 /**
- * Mutate the MCP settings file through @trumbo/core's locked read-update-write
+ * Mutate the MCP settings file through @trumbodev/core's locked read-update-write
  * helper. The mutator must be synchronous and pure; the helper may call it more
  * than once to verify deterministic output. Throw McpSettingsUpdateSkippedError
  * for normal no-op cases instead of returning a boolean that callers can ignore.

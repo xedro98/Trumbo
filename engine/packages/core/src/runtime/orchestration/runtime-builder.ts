@@ -3,8 +3,8 @@ import type {
 	BasicLogger,
 	RuntimeConfigExtensionKind,
 	TeamTeammateSpec,
-} from "@trumbo/shared";
-import { hasRuntimeConfigExtension } from "@trumbo/shared";
+} from "@trumbodev/shared";
+import { hasRuntimeConfigExtension } from "@trumbodev/shared";
 import { nanoid } from "nanoid";
 import { syncPlatformKnowledgeMcpForSession } from "../../account/platform-mcp";
 import { createUserInstructionConfigService } from "../../extensions/config";

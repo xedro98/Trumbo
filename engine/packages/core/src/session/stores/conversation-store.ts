@@ -18,11 +18,11 @@
  * `getEntries()` returns all entries including abandoned branches.
  *
  * @see TRU-22 — Session tree data model
- * @see session-tree.ts in @trumbo/shared for pure tree utilities
+ * @see session-tree.ts in @trumbodev/shared for pure tree utilities
  */
 
-import type { MessageWithMetadata, SessionTreeEntry } from "@trumbo/shared";
-import { getActivePath } from "@trumbo/shared";
+import type { MessageWithMetadata, SessionTreeEntry } from "@trumbodev/shared";
+import { getActivePath } from "@trumbodev/shared";
 import { nanoid } from "nanoid";
 
 /** Generate a fresh conversation id. Exported for reuse by `SessionRuntime`. */

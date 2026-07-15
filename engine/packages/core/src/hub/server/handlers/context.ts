@@ -7,8 +7,8 @@ import type {
 	ITelemetryService,
 	JsonValue,
 	SessionParticipant,
-} from "@trumbo/shared";
-import { createSessionId } from "@trumbo/shared";
+} from "@trumbodev/shared";
+import { createSessionId } from "@trumbodev/shared";
 import type {
 	PendingPromptsRuntimeService,
 	RuntimeHost,

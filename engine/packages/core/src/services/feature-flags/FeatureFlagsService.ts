@@ -7,12 +7,12 @@ import type {
 	FeatureFlagsContext,
 	IFeatureFlagsProvider,
 	ITelemetryService,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	FEATURE_FLAGS,
 	type FeatureFlag,
 	FeatureFlagDefaultValue,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { CORE_TELEMETRY_EVENTS } from "../..";
 
 const DEFAULT_CACHE_TTL_MS = 60 * 60 * 1000;

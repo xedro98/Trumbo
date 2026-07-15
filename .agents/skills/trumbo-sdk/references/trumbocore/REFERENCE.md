@@ -1,6 +1,6 @@
 # TrumboCore runtime
 
-`TrumboCore` is the full-featured runtime from `@trumbo/core`. It wraps the `Agent` loop with session persistence, built-in tools (bash, editor, file reading, search, web fetch), config discovery, plugin loading, and optional hub-backed multi-process support.
+`TrumboCore` is the full-featured runtime from `@trumbodev/core`. It wraps the `Agent` loop with session persistence, built-in tools (bash, editor, file reading, search, web fetch), config discovery, plugin loading, and optional hub-backed multi-process support.
 
 ## When to use TrumboCore
 
@@ -16,7 +16,7 @@
 ## Quick Start
 
 ```typescript
-import { TrumboCore } from "@trumbo/sdk"
+import { TrumboCore } from "@trumbodev/sdk"
 
 const trumbo = await TrumboCore.create({ clientName: "my-app" })
 

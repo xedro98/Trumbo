@@ -240,6 +240,45 @@
 		@apply h-3 w-px shrink-0 bg-border;
 	}
 
+	.marketing-limit-dotted-underline {
+		text-decoration: none;
+		background-image: repeating-linear-gradient(
+			90deg,
+			color-mix(in oklch, var(--foreground) 22%, transparent) 0 2px,
+			transparent 2px 5px
+		);
+		background-position: left calc(100% - 0.5px);
+		background-repeat: repeat-x;
+		background-size: 5px 1px;
+		padding-bottom: 2px;
+		transition: color 150ms ease, background-image 150ms ease;
+	}
+
+	.marketing-limit-dotted-underline:hover,
+	.marketing-limit-dotted-underline:focus-visible {
+		background-image: repeating-linear-gradient(
+			90deg,
+			color-mix(in oklch, var(--foreground) 42%, transparent) 0 2px,
+			transparent 2px 5px
+		);
+	}
+
+	.marketing-limit-tooltip-content {
+		display: block;
+		width: 14rem;
+		max-width: calc(100vw - 2rem);
+	}
+
+	.kumo-tooltip-popup:has(.marketing-limit-tooltip-content) {
+		@apply w-auto max-w-none rounded-none bg-background px-3 py-2 text-left text-[0.8125rem] leading-relaxed text-muted-foreground shadow-none outline-none;
+		font-family: var(--font-sans);
+		border: 1px solid color-mix(in oklch, var(--border) 72%, transparent);
+	}
+
+	.kumo-tooltip-popup:has(.marketing-limit-tooltip-content) > span:first-child {
+		display: none;
+	}
+
 	/* models.dev lab SVGs use currentColor; as <img> they render black and vanish on dark surfaces. */
 	.provider-lab-logo {
 		opacity: 0.92;

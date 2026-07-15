@@ -2,11 +2,11 @@ import * as os from "node:os";
 import {
 	type ConfiguredTelemetryHandle,
 	createConfiguredTelemetryHandle,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	createTrumboTelemetryServiceConfig,
 	createTrumboTelemetryServiceMetadata,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 export interface VscodeTelemetryOptions {
 	extensionVersion: string;

@@ -1,4 +1,4 @@
-import type { TeamRuntimeState, TeamTeammateSpec } from "@trumbo/shared";
+import type { TeamRuntimeState, TeamTeammateSpec } from "@trumbodev/shared";
 import type { TeamEvent } from "../extensions/tools/team";
 import type { SessionStatus } from "./common";
 import type { SessionRecord } from "./sessions";

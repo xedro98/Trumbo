@@ -61,7 +61,7 @@ import {
 	type MediaBudgetState,
 	reserveImageMediaBytes,
 	validateAndReserveImageMedia,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 const IMAGE_PLACEHOLDER = "(see following user message for image)";
 

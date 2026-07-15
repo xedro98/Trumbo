@@ -1,4 +1,4 @@
-import { Llms } from "@trumbo/core";
+import { Llms } from "@trumbodev/core";
 
 export function shouldShowCliUsageCost(providerId: string): boolean {
 	return Llms.shouldShowProviderUsageCost(providerId);

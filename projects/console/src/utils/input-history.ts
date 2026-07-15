@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { resolveTrumboDataDir } from "@trumbo/shared/storage";
+import { resolveTrumboDataDir } from "@trumbodev/shared/storage";
 
 const MAX_HISTORY = 20;
 

@@ -5,12 +5,12 @@ import {
 	createLocalHubScheduleRuntimeHandlers,
 	ensureHubWebSocketServer,
 	resolveSharedHubOwnerContext,
-} from "@trumbo/core/hub";
+} from "@trumbodev/core/hub";
 import {
 	createTrumboTelemetryServiceConfig,
 	createTrumboTelemetryServiceMetadata,
 	type TelemetryMetadata,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 type DetachedHubDaemonConfig = {
 	workspaceRoot: string;

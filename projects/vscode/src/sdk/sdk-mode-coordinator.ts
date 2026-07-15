@@ -1,7 +1,7 @@
-import { getProviderAuthStorageId } from "@trumbo/core"
 import type { ChatContent } from "@shared/ChatContent"
 import type { TrumboMessage, TurnPhase } from "@shared/ExtensionMessage"
 import type { Mode } from "@shared/storage/types"
+import { getProviderAuthStorageId } from "@trumbodev/core"
 import type { StateManager } from "@/core/storage/StateManager"
 import { Logger } from "@/shared/services/Logger"
 import type { SdkInteractionCoordinator } from "./sdk-interaction-coordinator"

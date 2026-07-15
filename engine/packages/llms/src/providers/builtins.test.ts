@@ -1,4 +1,4 @@
-import { TRUMBO_ENVIRONMENT_ENV, TRUMBO_ENVIRONMENTS } from "@trumbo/shared";
+import { TRUMBO_ENVIRONMENT_ENV, TRUMBO_ENVIRONMENTS } from "@trumbodev/shared";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { BUILTIN_SPECS } from "./builtins";
 import { getModelsForProvider, getProvider } from "./model-registry";

@@ -11,7 +11,7 @@ const state = vi.hoisted(() => ({
 	setGlobalState: vi.fn(),
 }))
 
-vi.mock("@trumbo/core", () => ({
+vi.mock("@trumbodev/core", () => ({
 	readGlobalSettings: () => {
 		const filePath = process.env.TRUMBO_GLOBAL_SETTINGS_PATH
 		if (!filePath || !existsSync(filePath)) {

@@ -5,7 +5,7 @@ import type {
 	RestoreInput,
 	RestoreResult,
 	StartSessionResult,
-} from "@trumbo/core"
+} from "@trumbodev/core"
 import { StateManager } from "@/core/storage/StateManager"
 import { ITerminalManager } from "@/integrations/terminal"
 import { McpHub } from "@/services/mcp/McpHub"

@@ -12,8 +12,8 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
-import type { BasicLogger } from "@trumbo/shared";
-import { resolveMcpSettingsPath } from "@trumbo/shared/storage";
+import type { BasicLogger } from "@trumbodev/shared";
+import { resolveMcpSettingsPath } from "@trumbodev/shared/storage";
 import { z } from "zod";
 import type {
 	McpManager,

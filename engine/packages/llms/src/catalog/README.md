@@ -121,7 +121,7 @@ src/catalog/catalog.generated.ts
 Use the package script when regenerating:
 
 ```bash
-bun -F @trumbo/llms generate:models
+bun -F @trumbodev/llms generate:models
 ```
 
 Catalog changes should usually include tests in `catalog-live.test.ts` that document how source `limit` fields map to `ModelInfo`.

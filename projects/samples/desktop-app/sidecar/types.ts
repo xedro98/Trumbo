@@ -3,7 +3,7 @@ import type {
 	NodeHubClient,
 	ToolApprovalResult,
 	TrumboCore,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
 export type JsonRecord = Record<string, unknown>;
 

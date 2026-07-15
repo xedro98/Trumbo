@@ -149,6 +149,7 @@ export interface UserCurrentPlan {
 		resetsAtSec: number;
 		concurrentSandboxes: number;
 		concurrentUsed: number;
+		maxBackups?: number;
 	};
 	/** Trumbo Credits pre-paid balance for standalone API usage. */
 	credits?: {

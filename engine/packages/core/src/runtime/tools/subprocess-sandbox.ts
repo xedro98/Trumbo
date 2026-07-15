@@ -3,7 +3,7 @@ import { basename } from "node:path";
 import {
 	augmentNodeCommandForDebug,
 	withResolvedTrumboBuildEnv,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 interface SandboxCallMessage {
 	type: "call";

@@ -2,7 +2,7 @@ import type {
 	GatewayProviderContext,
 	GatewayProviderMetadata,
 	GatewayStreamRequest,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { isGlmModel } from "../model-facts";
 import type { ProviderOptionsPatch } from "./utils";
 

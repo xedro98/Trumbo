@@ -217,7 +217,7 @@ Trumbo Browser Run ships in two layers:
 **Pitch:** "Run agents in the cloud with memory, schedules, and team channels."
 
 **Remaining (follow-up):**
-- [ ] VS Code rich UI: CloudAgentSessionRow + CloudAgentPanel + CloudAgentController bridge
+- [x] VS Code rich UI: CloudAgentSessionRow + SandboxSessionRow + Cloud Platform panel (MCP → Cloud Platform tab)
 - [ ] Voice channel via Cloudflare Realtime SFU + Workers AI speech-to-text/text-to-speech (Ultra only)
 - [ ] Email channel via Cloudflare Email Routing (MX record for agents.trumbo.dev)
 
@@ -234,7 +234,7 @@ Trumbo Browser Run ships in two layers:
 **Pitch:** "Execute code in Trumbo's cloud when local shell is not an option."
 
 **Remaining (follow-up):**
-- [ ] Container image build (requires Docker on deploy machine — currently deployed without the container image; the DO + binding + REST API + MCP tools are live)
+- [x] Container image build (Dockerfile.sandbox → Cloudflare Containers `trumbo-web-sandbox`, deployed July 2026)
 
 ### Phase 6 — Enterprise SKUs (2027+)
 

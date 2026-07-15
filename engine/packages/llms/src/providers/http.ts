@@ -1,4 +1,4 @@
-import type { GatewayProviderSettings } from "@trumbo/shared";
+import type { GatewayProviderSettings } from "@trumbodev/shared";
 
 export function ensureFetch(fetchImpl?: typeof fetch): typeof fetch {
 	const resolved = fetchImpl ?? globalThis.fetch;

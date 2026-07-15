@@ -38,9 +38,9 @@ Module.prototype.require = function (id) {
 
 	// The SDK packages are ESM-only and expose only an `import` condition.
 	// Integration tests run the tsc-built `out/` tree as CommonJS in VS Code's
-	// extension host, so `require("@trumbo/core")` fails before tests start.
+	// extension host, so `require("@trumbodev/core")` fails before tests start.
 	// Mock the small surface needed by legacy VS Code integration tests.
-	if (id === "@trumbo/core") {
+	if (id === "@trumbodev/core") {
 		const createNoopTelemetry = () => ({
 			setDistinctId() {},
 			setMetadata() {},
@@ -202,7 +202,7 @@ Module.prototype.require = function (id) {
 		}
 	}
 
-	if (id === "@trumbo/shared") {
+	if (id === "@trumbodev/shared") {
 		return {
 			buildTrumboSystemPrompt: () => "",
 			createTool: (tool) => tool,
@@ -210,13 +210,13 @@ Module.prototype.require = function (id) {
 		}
 	}
 
-	if (id === "@trumbo/shared/storage") {
+	if (id === "@trumbodev/shared/storage") {
 		return {
 			resolveGlobalSettingsPath: () => path.join(baseUrl, ".vscode-test", "shared-global-settings.json"),
 		}
 	}
 
-	if (id === "@trumbo/llms") {
+	if (id === "@trumbodev/llms") {
 		return {
 			getAllProviders: async () => [],
 			getGeneratedModelsForProvider: () => ({}),

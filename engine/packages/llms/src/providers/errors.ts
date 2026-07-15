@@ -1,4 +1,4 @@
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+import { getTrumboEnvironmentConfig } from "@trumbodev/shared";
 
 export const TRUMBO_NOT_SUBSCRIBED_RESPONSE_MESSAGE =
 	"the user is not subscribed to required model plan";

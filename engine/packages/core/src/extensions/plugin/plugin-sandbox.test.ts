@@ -8,7 +8,7 @@ import type {
 	AgentTool,
 	AgentToolContext,
 	Message,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	afterAll,
 	beforeAll,
@@ -263,7 +263,7 @@ describe("plugin-sandbox", () => {
 		await writeFile(
 			join(sdkDepDir, "package.json"),
 			JSON.stringify({
-				name: "@trumbo/shared",
+				name: "@trumbodev/shared",
 				type: "module",
 				exports: "./index.js",
 			}),
@@ -277,7 +277,7 @@ describe("plugin-sandbox", () => {
 		await writeFile(
 			join(dir, "plugin-sdk.ts"),
 			[
-				"import { sdkMarker } from '@trumbo/shared';",
+				"import { sdkMarker } from '@trumbodev/shared';",
 				"export default {",
 				"  name: sdkMarker,",
 				"  manifest: { capabilities: ['tools'] },",
@@ -289,7 +289,7 @@ describe("plugin-sandbox", () => {
 		await writeFile(
 			join(dir, "plugin-host-dep.ts"),
 			[
-				"import { resolveTrumboDataDir } from '@trumbo/shared/storage';",
+				"import { resolveTrumboDataDir } from '@trumbodev/shared/storage';",
 				"import YAML from 'yaml';",
 				"export default {",
 				"  name: YAML.stringify({ host: !!resolveTrumboDataDir() }).trim(),",
@@ -302,7 +302,7 @@ describe("plugin-sandbox", () => {
 		await writeFile(
 			join(dir, "plugin-create-tool.ts"),
 			[
-				"import { createTool } from '@trumbo/agents';",
+				"import { createTool } from '@trumbodev/agents';",
 				"export default {",
 				"  name: 'sandbox-create-tool',",
 				"  manifest: { capabilities: ['tools'] },",

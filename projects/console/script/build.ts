@@ -49,7 +49,7 @@ const pkg = JSON.parse(readFileSync(join(cliDir, "package.json"), "utf-8"));
 const version: string = pkg.version;
 const repository: unknown = pkg.repository;
 
-console.log(`Building @trumbo/cli v${version}`);
+console.log(`Building @trumbodev/cli v${version}`);
 
 const buildOptions = parseBuildOptions(process.argv.slice(2));
 
@@ -100,7 +100,7 @@ if (!buildOptions.skipSdkBuild) {
 	await $`bun run build:sdk`.cwd(rootDir);
 
 	console.log("Building CLI bundle...");
-	await $`bun -F @trumbo/cli build`.cwd(rootDir);
+	await $`bun -F @trumbodev/cli build`.cwd(rootDir);
 }
 
 const hubWebviewSource = join(cliDir, "../hub/src/webview");
@@ -142,7 +142,7 @@ function shouldBuildHubWebview(): boolean {
 
 if (shouldBuildHubWebview()) {
 	console.log("Building Trumbo Hub webview...");
-	await $`bun -F @trumbo/hub build:webview`.cwd(rootDir);
+	await $`bun -F @trumbodev/hub build:webview`.cwd(rootDir);
 }
 
 const binaries: Record<string, string> = {};

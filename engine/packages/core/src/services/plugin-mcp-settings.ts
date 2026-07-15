@@ -4,7 +4,7 @@ import type {
 	AgentConfig,
 	AgentExtensionMcpServer,
 	AgentTool,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	type McpServerRegistration,
 	resolveDefaultMcpSettingsPath,

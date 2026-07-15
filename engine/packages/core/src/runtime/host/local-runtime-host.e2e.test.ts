@@ -9,9 +9,9 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type * as LlmsProviders from "@trumbo/llms";
-import type { AgentResult } from "@trumbo/shared";
-import { setHomeDir, setTrumboDir } from "@trumbo/shared/storage";
+import type * as LlmsProviders from "@trumbodev/llms";
+import type { AgentResult } from "@trumbodev/shared";
+import { setHomeDir, setTrumboDir } from "@trumbodev/shared/storage";
 import { nanoid } from "nanoid";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SessionManifest } from "../../session/models/session-manifest";

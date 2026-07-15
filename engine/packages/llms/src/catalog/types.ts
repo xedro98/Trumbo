@@ -1,13 +1,13 @@
 /**
  * Model Schema Definitions
  *
- * Re-exports model info types from @trumbo/shared (canonical source)
- * and defines provider-level schemas local to @trumbo/llms.
+ * Re-exports model info types from @trumbodev/shared (canonical source)
+ * and defines provider-level schemas local to @trumbodev/llms.
  */
 
 import { z } from "zod";
 
-// ModelInfo and dependencies have their canonical home in @trumbo/shared
+// ModelInfo and dependencies have their canonical home in @trumbodev/shared
 export {
 	ApiFormat,
 	ApiFormatSchema,
@@ -23,10 +23,10 @@ export {
 	ModelStatusSchema,
 	type ThinkingConfig,
 	ThinkingConfigSchema,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 // Re-import for use in local schemas
-import { ModelInfoSchema, ProviderCapabilitySchema } from "@trumbo/shared";
+import { ModelInfoSchema, ProviderCapabilitySchema } from "@trumbodev/shared";
 
 export const ModelEntrySchema = z.object({
 	id: z.string(),

@@ -1,6 +1,6 @@
 ---
 name: trumbo-sdk
-description: Comprehensive Trumbo SDK skill for building AI agents. Covers the Agent runtime, TrumboCore sessions, custom tools, plugins, events, LLM providers, scheduling, multi-agent teams, and production deployment. Use for any task involving @trumbo/sdk or its sub-packages.
+description: Comprehensive Trumbo SDK skill for building AI agents. Covers the Agent runtime, TrumboCore sessions, custom tools, plugins, events, LLM providers, scheduling, multi-agent teams, and production deployment. Use for any task involving @trumbodev/sdk or its sub-packages.
 metadata:
    references: agent, trumbocore
 ---
@@ -13,9 +13,9 @@ Consolidated skill for building AI agents with the Trumbo SDK. Use the decision 
 
 Follow these rules in all Trumbo SDK code:
 
-1. Install with `npm install @trumbo/sdk`. The `@trumbo/sdk` package re-exports everything from `@trumbo/core`, `@trumbo/agents`, `@trumbo/llms`, and `@trumbo/shared`.
+1. Install with `npm install @trumbodev/sdk`. The `@trumbodev/sdk` package re-exports everything from `@trumbodev/core`, `@trumbodev/agents`, `@trumbodev/llms`, and `@trumbodev/shared`.
 2. Requires Node.js 22 or later.
-3. Use `createTool()` from `@trumbo/sdk` (or `@trumbo/shared`) to define tools. Tool names must be `snake_case`.
+3. Use `createTool()` from `@trumbodev/sdk` (or `@trumbodev/shared`) to define tools. Tool names must be `snake_case`.
 4. Return errors as structured data from tool `execute` functions. Throwing counts as a "mistake" against the agent's mistake limit.
 5. Use `lifecycle: { completesRun: true }` on tools that should end the agent loop (e.g. a "submit answer" tool).
 6. When using `TrumboCore`, always call `dispose()` when done to clean up resources.
@@ -71,9 +71,9 @@ Cross-cutting concepts in `./references/<concept>/` have `REFERENCE.md` as the e
 ```
 Which API?
 +-- I want a simple, stateless agent with custom tools
-|   +-- agent/ (Agent class from @trumbo/agents)
+|   +-- agent/ (Agent class from @trumbodev/agents)
 +-- I need session persistence, built-in tools, config discovery
-|   +-- trumbocore/ (TrumboCore from @trumbo/core)
+|   +-- trumbocore/ (TrumboCore from @trumbodev/core)
 +-- I want built-in file/shell/search/web tools
 |   +-- trumbocore/ (has built-in tools; Agent does not)
 +-- I want scheduled or recurring agents
@@ -194,11 +194,11 @@ Production?
 ### Package Map
 | Package | Purpose |
 |---------|---------|
-| `@trumbo/sdk` | Everything you need, install this one |
-| `@trumbo/core` | Sessions, persistence, built-in tools, config, hub |
-| `@trumbo/agents` | Stateless agent loop, tool orchestration, streaming |
-| `@trumbo/llms` | LLM provider gateway |
-| `@trumbo/shared` | Types, tool helpers, hook engine |
+| `@trumbodev/sdk` | Everything you need, install this one |
+| `@trumbodev/core` | Sessions, persistence, built-in tools, config, hub |
+| `@trumbodev/agents` | Stateless agent loop, tool orchestration, streaming |
+| `@trumbodev/llms` | LLM provider gateway |
+| `@trumbodev/shared` | Types, tool helpers, hook engine |
 
 ## Resources
 

@@ -8,7 +8,7 @@ import {
 } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
-import { resolveSessionDataDir } from "@trumbo/shared/storage";
+import { resolveSessionDataDir } from "@trumbodev/shared/storage";
 import type { JsonRecord } from "./types";
 
 // ---------------------------------------------------------------------------

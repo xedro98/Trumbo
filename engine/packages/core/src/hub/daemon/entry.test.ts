@@ -38,7 +38,7 @@ const {
 	})),
 }));
 
-vi.mock("@trumbo/shared", () => ({
+vi.mock("@trumbodev/shared", () => ({
 	initVcr: mockInitVcr,
 	resolveTrumboBuildEnv: () => "production",
 }));

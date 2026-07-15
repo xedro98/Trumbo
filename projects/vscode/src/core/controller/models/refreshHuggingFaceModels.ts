@@ -1,7 +1,7 @@
-import { getProviderCollectionSync } from "@trumbo/llms"
 import type { ModelInfo } from "@shared/api"
 import { EmptyRequest } from "@shared/proto/trumbo/common"
 import { OpenRouterCompatibleModelInfo, OpenRouterModelInfo } from "@shared/proto/trumbo/models"
+import { getProviderCollectionSync } from "@trumbodev/llms"
 import { fileExistsAtPath } from "@utils/fs"
 import axios from "axios"
 import fs from "fs/promises"

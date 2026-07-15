@@ -3,7 +3,7 @@ import { join } from "node:path";
 import {
 	type ResolveCronSpecsDirOptions,
 	resolveCronReportsDir,
-} from "@trumbo/shared/storage";
+} from "@trumbodev/shared/storage";
 import type {
 	CronEventLogRecord,
 	CronRunRecord,

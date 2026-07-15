@@ -1,4 +1,4 @@
-import type { HookEventPayload } from "@trumbo/core";
+import type { HookEventPayload } from "@trumbodev/core";
 import { handleSessionHookEvent } from "../session/session";
 import {
 	appendHookAudit,

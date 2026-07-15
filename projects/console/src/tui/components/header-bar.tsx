@@ -1,5 +1,5 @@
 import { useTerminalDimensions } from "@opentui/react";
-import type { AgentMode } from "@trumbo/core";
+import type { AgentMode } from "@trumbodev/core";
 import { useMemo } from "react";
 import { useTerminalTheme } from "../hooks/use-terminal-background";
 import { getMagicColor, getModeAccent, palette } from "../palette";

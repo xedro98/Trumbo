@@ -7,9 +7,9 @@
    ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
 ```
 
-# [experimental] @trumbo/agents
+# [experimental] @trumbodev/agents
 
-`@trumbo/agents` is the runtime-agnostic agent loop package in the Trumbo SDK. It gives you the core primitives for building tool-using LLM agents without pulling in session storage, hub transport, or host-specific default tools.
+`@trumbodev/agents` is the runtime-agnostic agent loop package in the Trumbo SDK. It gives you the core primitives for building tool-using LLM agents without pulling in session storage, hub transport, or host-specific default tools.
 
 ## What You Get
 
@@ -21,26 +21,26 @@
 
 ## What This Package Does Not Include
 
-`@trumbo/agents` does not ship a full application runtime by itself.
+`@trumbodev/agents` does not ship a full application runtime by itself.
 
-- Default host tools like filesystem access, shell execution, or web fetching live in `@trumbo/core`
-- Session persistence and stateful orchestration live in `@trumbo/core`
-- Shared hub runtime/session transport lives in `@trumbo/core` (see `@trumbo/core/hub`)
-- Sub-agent and team coordination primitives live in `@trumbo/core`
+- Default host tools like filesystem access, shell execution, or web fetching live in `@trumbodev/core`
+- Session persistence and stateful orchestration live in `@trumbodev/core`
+- Shared hub runtime/session transport lives in `@trumbodev/core` (see `@trumbodev/core/hub`)
+- Sub-agent and team coordination primitives live in `@trumbodev/core`
 
 That split keeps this package usable in Node, the browser, and custom host environments where you want to supply your own tools and runtime policy.
 
 ## Installation
 
 ```bash
-npm install @trumbo/agents @trumbo/shared @trumbo/llms
+npm install @trumbodev/agents @trumbodev/shared @trumbodev/llms
 ```
 
 ## Quick Start
 
 ```ts
-import { Agent } from "@trumbo/agents";
-import type { AgentTool } from "@trumbo/shared";
+import { Agent } from "@trumbodev/agents";
+import type { AgentTool } from "@trumbodev/shared";
 
 const getWeather: AgentTool<{ city: string }, { forecast: string }> = {
 	name: "get_weather",
@@ -71,7 +71,7 @@ console.log(result.outputText);
 
 `Agent` / `AgentRuntime` accepts two config shapes:
 
-**Provider form** — friendly entrypoint. The runtime builds an `AgentModel` for you via `@trumbo/llms`:
+**Provider form** — friendly entrypoint. The runtime builds an `AgentModel` for you via `@trumbodev/llms`:
 
 ```ts
 new Agent({
@@ -83,10 +83,10 @@ new Agent({
 });
 ```
 
-**Model form** — advanced. Supply a pre-built `AgentModel` directly. Useful when the host already owns gateway construction (this is what `@trumbo/core` uses internally):
+**Model form** — advanced. Supply a pre-built `AgentModel` directly. Useful when the host already owns gateway construction (this is what `@trumbodev/core` uses internally):
 
 ```ts
-import { createGateway } from "@trumbo/llms";
+import { createGateway } from "@trumbodev/llms";
 
 const gateway = createGateway({ providerConfigs: [/* ... */] });
 const model = gateway.createAgentModel({ providerId, modelId });
@@ -101,10 +101,10 @@ new Agent({
 
 ### Tools
 
-Tools conform to the `AgentTool<TInput, TOutput>` interface from `@trumbo/shared`. Each tool has a JSON Schema `inputSchema` and an `execute(input, context)` function that returns the tool output directly:
+Tools conform to the `AgentTool<TInput, TOutput>` interface from `@trumbodev/shared`. Each tool has a JSON Schema `inputSchema` and an `execute(input, context)` function that returns the tool output directly:
 
 ```ts
-import type { AgentTool } from "@trumbo/shared";
+import type { AgentTool } from "@trumbodev/shared";
 
 const summarize: AgentTool<{ text: string }, { summary: string }> = {
 	name: "summarize_text",
@@ -149,7 +149,7 @@ new Agent({
 });
 ```
 
-`AgentRuntimeEvent` covers run/turn boundaries, assistant text and reasoning deltas, tool lifecycle, usage updates, and run completion/failure. See `AgentRuntimeEvent` in `@trumbo/shared` for the full union.
+`AgentRuntimeEvent` covers run/turn boundaries, assistant text and reasoning deltas, tool lifecycle, usage updates, and run completion/failure. See `AgentRuntimeEvent` in `@trumbodev/shared` for the full union.
 
 ### Conversation Control
 
@@ -189,14 +189,14 @@ new Agent({
 });
 ```
 
-For richer, host-side hook orchestration (15-stage `HookEngine`, subprocess-backed hooks, MCP extensions), use `@trumbo/core`.
+For richer, host-side hook orchestration (15-stage `HookEngine`, subprocess-backed hooks, MCP extensions), use `@trumbodev/core`.
 
 ### Plugins
 
 Plugins can contribute tools and hooks at setup time:
 
 ```ts
-import type { AgentRuntimePlugin } from "@trumbo/shared";
+import type { AgentRuntimePlugin } from "@trumbodev/shared";
 
 const loggingPlugin: AgentRuntimePlugin = {
 	name: "logging",
@@ -222,7 +222,7 @@ new Agent({
 
 ### Teams and Spawn
 
-For multi-agent workflows, use `@trumbo/core`:
+For multi-agent workflows, use `@trumbodev/core`:
 
 ```ts
 import {
@@ -230,20 +230,20 @@ import {
 	AgentTeamsRuntime,
 	createAgentTeamsTools,
 	bootstrapAgentTeams,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 ```
 
 These helpers provide coordination primitives for delegated runs, mailboxes, task management, and outcome convergence.
 
 ## Entry Point
 
-- `@trumbo/agents` — the single package entrypoint. The `package.json` `exports` map automatically serves a browser-safe bundle when bundlers resolve the `browser` condition.
+- `@trumbodev/agents` — the single package entrypoint. The `package.json` `exports` map automatically serves a browser-safe bundle when bundlers resolve the `browser` condition.
 
 ## Related Packages
 
-- `@trumbo/shared`: shared types (`AgentTool`, `AgentMessage`, `AgentRuntimeEvent`, `AgentRuntimeHooks`, etc.)
-- `@trumbo/llms`: provider settings, model catalogs, and gateway/handler creation
-- `@trumbo/core`: stateful runtime assembly, storage, default tools, subprocess hooks, hub transport, and MCP integration
+- `@trumbodev/shared`: shared types (`AgentTool`, `AgentMessage`, `AgentRuntimeEvent`, `AgentRuntimeHooks`, etc.)
+- `@trumbodev/llms`: provider settings, model catalogs, and gateway/handler creation
+- `@trumbodev/core`: stateful runtime assembly, storage, default tools, subprocess hooks, hub transport, and MCP integration
 
 ## More Examples
 

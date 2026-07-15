@@ -1,7 +1,7 @@
 import {
 	AGENT_UNEXPECTED_REASONING_TOKENS_EVENT,
 	type ITelemetryService,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { describe, expect, test, vi } from "vitest";
 import {
 	CORE_TELEMETRY_EVENTS,

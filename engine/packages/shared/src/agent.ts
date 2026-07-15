@@ -1,5 +1,5 @@
 /**
- * AgentRuntime contract types (ported from trumboe `@trumbo/shared`).
+ * AgentRuntime contract types (ported from trumboe `@trumbodev/shared`).
  *
  * These are the canonical type definitions consumed by `AgentRuntime`.
  *

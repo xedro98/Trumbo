@@ -10,12 +10,12 @@ import {
 	type SessionMessagesArtifactUploader,
 	TrumboAccountService,
 	type TrumboCoreStartInput,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	getTrumboEnvironmentConfig,
 	type RemoteConfigBundle,
 	RemoteConfigSchema,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { getCliTelemetryService } from "./telemetry";
 
 const initializedRemoteConfigKeys = new Set<string>();

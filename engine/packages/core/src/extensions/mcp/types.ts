@@ -1,4 +1,4 @@
-import type { AgentToolContext } from "@trumbo/shared";
+import type { AgentToolContext } from "@trumbodev/shared";
 
 export interface McpToolDescriptor {
 	name: string;

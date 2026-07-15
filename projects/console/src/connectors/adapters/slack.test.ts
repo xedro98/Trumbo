@@ -1,4 +1,4 @@
-import type { ConnectSlackOptions } from "@trumbo/shared";
+import type { ConnectSlackOptions } from "@trumbodev/shared";
 import { type Message, ThreadImpl } from "chat";
 import { describe, expect, it } from "vitest";
 import { __test__, slackConnector } from "./slack";

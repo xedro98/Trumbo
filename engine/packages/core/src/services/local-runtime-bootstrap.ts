@@ -9,8 +9,8 @@ import type {
 	ToolApprovalRequest,
 	ToolApprovalResult,
 	WorkspaceInfo,
-} from "@trumbo/shared";
-import { hasRuntimeConfigExtension } from "@trumbo/shared";
+} from "@trumbodev/shared";
+import { hasRuntimeConfigExtension } from "@trumbodev/shared";
 import { decodeJwtPayload } from "../auth/utils";
 import {
 	resolveAndLoadAgentPlugins,

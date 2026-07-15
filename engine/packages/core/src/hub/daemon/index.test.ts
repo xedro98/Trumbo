@@ -57,7 +57,7 @@ vi.mock("node:fs", () => ({
 	openSync,
 }));
 
-vi.mock("@trumbo/shared", () => ({
+vi.mock("@trumbodev/shared", () => ({
 	TRUMBO_RUN_AS_HUB_DAEMON_ENV,
 	TRUMBO_HUB_PORT: 25463,
 	TRUMBO_HUB_DEV_PORT: 25466,

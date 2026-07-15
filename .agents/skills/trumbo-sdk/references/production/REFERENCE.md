@@ -98,7 +98,7 @@ agent.subscribe((event) => {
 The SDK supports OpenTelemetry for traces, metrics, and logs:
 
 ```typescript
-import { TrumboCore } from "@trumbo/sdk"
+import { TrumboCore } from "@trumbodev/sdk"
 
 const trumbo = await TrumboCore.create({
   clientName: "my-app",
@@ -112,7 +112,7 @@ const trumbo = await TrumboCore.create({
 Use the `BasicLogger` interface for injectable logging:
 
 ```typescript
-import type { BasicLogger } from "@trumbo/sdk"
+import type { BasicLogger } from "@trumbodev/sdk"
 
 const logger: BasicLogger = {
   debug: (msg, meta) => console.debug(msg, meta),

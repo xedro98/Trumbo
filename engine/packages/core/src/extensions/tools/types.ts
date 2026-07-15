@@ -8,7 +8,7 @@ import type {
 	AgentToolContext,
 	ImageContent,
 	TextContent,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type {
 	ApplyPatchInput,
 	EditFileInput,

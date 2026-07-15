@@ -7,11 +7,11 @@
    ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
 ```
 
-# Sidecar Architecture — @trumbo/code
+# Sidecar Architecture — @trumbodev/code
 
 ## Overview
 
-The sidecar is a single Bun process that owns the desktop backend runtime directly. It imports `@trumbo/core` in-process and serves the Next.js frontend over HTTP plus a WebSocket.
+The sidecar is a single Bun process that owns the desktop backend runtime directly. It imports `@trumbodev/core` in-process and serves the Next.js frontend over HTTP plus a WebSocket.
 
 ## Directory structure
 
@@ -43,7 +43,7 @@ Event:    { "type": "event", "event": { "name": string, "payload": unknown } }
 Rather than spawning a separate runtime bridge process, the sidecar uses `LocalRuntimeHost` directly:
 
 ```typescript
-import { LocalRuntimeHost } from "@trumbo/core";
+import { LocalRuntimeHost } from "@trumbodev/core";
 
 const sessionManager = await TrumboCore.create({
   backendMode: "hub",
@@ -90,14 +90,14 @@ const pendingApprovals = new Map<string, {
 ### 3. Provider management — direct ProviderSettingsManager
 
 ```typescript
-import { ProviderSettingsManager, listLocalProviders, ... } from "@trumbo/core";
+import { ProviderSettingsManager, listLocalProviders, ... } from "@trumbodev/core";
 const manager = new ProviderSettingsManager();
 ```
 
 ### 4. Session storage — direct SqliteSessionStore
 
 ```typescript
-import { SqliteSessionStore, resolveSessionBackend } from "@trumbo/core";
+import { SqliteSessionStore, resolveSessionBackend } from "@trumbodev/core";
 const store = new SqliteSessionStore();
 ```
 
@@ -106,7 +106,7 @@ const store = new SqliteSessionStore();
 Routine operations ensure the local hub server in-process and then issue hub schedule commands directly. They still run in-process, not via a child script:
 
 ```typescript
-import { ensureHubServer, sendHubCommand } from "@trumbo/core";
+import { ensureHubServer, sendHubCommand } from "@trumbodev/core";
 await ensureHubServer({ runtimeHandlers: createLocalHubScheduleRuntimeHandlers() });
 await sendHubCommand({}, { command: "schedule.list", payload: { limit: 200 } });
 ```

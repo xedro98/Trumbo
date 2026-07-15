@@ -1,7 +1,7 @@
 import type {
 	GatewayProviderContext,
 	GatewayStreamRequest,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { isAnthropicCompatibleModel, resolveModelFamily } from "../model-facts";
 import {
 	buildAnthropicProviderOptions,

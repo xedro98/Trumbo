@@ -1,8 +1,8 @@
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { AgentTool } from "@trumbo/shared";
-import { setHomeDir, setTrumboDir } from "@trumbo/shared/storage";
+import type { AgentTool } from "@trumbodev/shared";
+import { setHomeDir, setTrumboDir } from "@trumbodev/shared/storage";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { createBuiltinTools } from "../../extensions/tools";
 import { DefaultRuntimeBuilder } from "./runtime-builder";

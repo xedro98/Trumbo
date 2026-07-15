@@ -20,7 +20,7 @@ import type {
 	BasicLogMetadata,
 	ConsecutiveMistakeLimitContext,
 	ConsecutiveMistakeLimitDecision,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 /**
  * Legacy-agents-style leveled log function. The sdk-re `BasicLogger`

@@ -3,7 +3,7 @@
 ## Creating TrumboCore
 
 ```typescript
-import { TrumboCore } from "@trumbo/sdk"
+import { TrumboCore } from "@trumbodev/sdk"
 
 const trumbo = await TrumboCore.create(options: TrumboCoreOptions)
 ```

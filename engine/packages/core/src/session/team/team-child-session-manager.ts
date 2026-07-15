@@ -1,9 +1,9 @@
 import { appendFileSync } from "node:fs";
 import { join } from "node:path";
-import type * as LlmsProviders from "@trumbo/llms";
-import type { AgentResult } from "@trumbo/shared";
-import { resolveRootSessionId } from "@trumbo/shared";
-import { ensureHookLogDir } from "@trumbo/shared/storage";
+import type * as LlmsProviders from "@trumbodev/llms";
+import type { AgentResult } from "@trumbodev/shared";
+import { resolveRootSessionId } from "@trumbodev/shared";
+import { ensureHookLogDir } from "@trumbodev/shared/storage";
 import { z } from "zod";
 import type {
 	SubAgentEndContext,

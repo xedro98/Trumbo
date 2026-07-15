@@ -1,7 +1,10 @@
 import { useTerminalDimensions } from "@opentui/react";
 import type { ChoiceContext } from "@opentui-ui/dialog";
 import { useDialogKeyboard } from "@opentui-ui/dialog/react";
-import { readGlobalSettings, setAutoUpdateEnabledGlobally } from "@trumbo/core";
+import {
+	readGlobalSettings,
+	setAutoUpdateEnabledGlobally,
+} from "@trumbodev/core";
 import { useEffect, useMemo, useState } from "react";
 import type {
 	InteractiveConfigData,

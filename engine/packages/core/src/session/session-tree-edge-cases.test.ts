@@ -1,4 +1,4 @@
-import type { MessageWithMetadata } from "@trumbo/shared";
+import type { MessageWithMetadata } from "@trumbodev/shared";
 import {
 	buildSessionTree,
 	getActivePath,
@@ -10,7 +10,7 @@ import {
 	type SessionTreeEntry,
 	switchLeaf,
 	validateSessionTree,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import {
 	hostSupportsSessionTree,

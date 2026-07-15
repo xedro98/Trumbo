@@ -4,13 +4,13 @@ import type {
 	CheckpointEntry,
 	TeamEvent,
 	TrumboSubscriptionPlan,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import type {
 	Message,
 	MessageWithMetadata,
 	ToolApprovalRequest,
 	ToolApprovalResult,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type { CliMigrationNotice } from "../kanban-migration/notice";
 import type {
 	PendingPromptSnapshot,
@@ -184,7 +184,7 @@ export interface TuiProps {
 	onRenameSession: (name: string) => Promise<boolean>;
 	onReloadConfig: () => Promise<void>;
 	onTrustWorkspace: () => Promise<void>;
-	pluginViews?: import("@trumbo/shared").TuiViewContribution[];
+	pluginViews?: import("@trumbodev/shared").TuiViewContribution[];
 	onOpenExternalEditor: (currentText: string) => Promise<string | undefined>;
 	getCheckpointData: () => Promise<
 		{ messages: Message[]; checkpointHistory: CheckpointEntry[] } | undefined

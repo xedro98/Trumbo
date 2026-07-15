@@ -1,30 +1,30 @@
 {
 	"compilerOptions": {
 		"paths": {
-			"@trumbo/agents": ["../engine/packages/agents/src/index.ts"],
-			"@trumbo/agents/*": [
+			"@trumbodev/agents": ["../engine/packages/agents/src/index.ts"],
+			"@trumbodev/agents/*": [
 				"../engine/packages/agents/src/*",
 				"../engine/packages/agents/src/*/index.ts"
 			],
-			"@trumbo/hub": ["./hub/src/server.ts"],
-			"@trumbo/core": ["../engine/packages/core/src/index.ts"],
-			"@trumbo/core/hub/daemon-entry": [
+			"@trumbodev/hub": ["./hub/src/server.ts"],
+			"@trumbodev/core": ["../engine/packages/core/src/index.ts"],
+			"@trumbodev/core/hub/daemon-entry": [
 				"../engine/packages/core/src/hub/daemon/entry.ts"
 			],
-			"@trumbo/core/*": [
+			"@trumbodev/core/*": [
 				"../engine/packages/core/src/*",
 				"../engine/packages/core/src/*/index.ts"
 			],
-			"@trumbo/core/telemetry": [
+			"@trumbodev/core/telemetry": [
 				"../engine/packages/core/src/services/telemetry/index.ts"
 			],
-			"@trumbo/llms": ["../engine/packages/llms/src/index.ts"],
-			"@trumbo/shared": ["../engine/packages/shared/src/index.ts"],
-			"@trumbo/shared/storage": [
+			"@trumbodev/llms": ["../engine/packages/llms/src/index.ts"],
+			"@trumbodev/shared": ["../engine/packages/shared/src/index.ts"],
+			"@trumbodev/shared/storage": [
 				"../engine/packages/shared/src/storage/index.ts"
 			],
-			"@trumbo/shared/db": ["../engine/packages/shared/src/db/index.ts"],
-			"@trumbo/shared/*": [
+			"@trumbodev/shared/db": ["../engine/packages/shared/src/db/index.ts"],
+			"@trumbodev/shared/*": [
 				"../engine/packages/shared/src/*",
 				"../engine/packages/shared/src/*/index.ts"
 			]

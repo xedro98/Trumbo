@@ -8,8 +8,8 @@ import {
 	resolveProductionHubOwnerContext,
 	resolveSharedHubOwnerContext,
 	stopLocalHubServerGracefully,
-} from "@trumbo/core";
-import { resolveTrumboBuildEnv } from "@trumbo/shared";
+} from "@trumbodev/core";
+import { resolveTrumboBuildEnv } from "@trumbodev/shared";
 import { version } from "../../package.json";
 import { ensureCliHubServer } from "../utils/hub-runtime";
 import { c, writeErr, writeln } from "../utils/output";

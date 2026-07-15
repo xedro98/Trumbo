@@ -3,12 +3,12 @@
 import { useKeyboard, useTerminalDimensions } from "@opentui/react";
 import type { ChoiceContext } from "@opentui-ui/dialog";
 import { useDialogKeyboard } from "@opentui-ui/dialog/react";
-import type { SessionHistoryRecord } from "@trumbo/core";
+import type { SessionHistoryRecord } from "@trumbodev/core";
 import {
 	formatDisplayUserInput,
 	formatHumanReadableDate,
 	truncateStr,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { listSessions } from "../../session/session";
 import { mergeHistoryStatusRows } from "../../utils/history-format";

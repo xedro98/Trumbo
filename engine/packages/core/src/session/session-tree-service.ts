@@ -1,7 +1,7 @@
 /**
  * Session tree service — high-level API for conversation tree operations.
  *
- * Wraps the TRU-22 tree primitives (`@trumbo/shared/session-tree`) with a
+ * Wraps the TRU-22 tree primitives (`@trumbodev/shared/session-tree`) with a
  * host-backed service that reads from and persists to disk. This is the
  * API surface that `TrumboCore.tree` exposes, and that the hub/dashboard
  * can call over RPC.
@@ -21,16 +21,16 @@
  * envelope for tree reads.
  *
  * @see TRU-21 — SessionManager tree API
- * @see session-tree.ts in @trumbo/shared for pure tree utilities
+ * @see session-tree.ts in @trumbodev/shared for pure tree utilities
  * @see ConversationStore for the in-memory tree wrapper used by live sessions
  */
 
-import type * as LlmsProviders from "@trumbo/llms";
+import type * as LlmsProviders from "@trumbodev/llms";
 import type {
 	MessageWithMetadata,
 	SessionTreeEntry,
 	SessionTreeNode,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	buildSessionTree,
 	getActivePath,
@@ -40,7 +40,7 @@ import {
 	getLeafEntryIds,
 	switchLeaf as sharedSwitchLeaf,
 	validateSessionTree,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 /**
  * Serializable snapshot of a session's conversation tree.

@@ -17,7 +17,7 @@ vi.mock("./runtime/host/host", () => ({
 	createRuntimeHost: createRuntimeHostMock,
 }));
 
-import type { AgentResult } from "@trumbo/shared";
+import type { AgentResult } from "@trumbodev/shared";
 import { NoOpFeatureFlagsProvider } from "./services/feature-flags";
 import { TrumboCore } from "./TrumboCore";
 

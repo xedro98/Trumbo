@@ -1,4 +1,4 @@
-import type { AgentConfig, AgentEvent } from "@trumbo/shared";
+import type { AgentConfig, AgentEvent } from "@trumbodev/shared";
 import { describe, expect, it, vi } from "vitest";
 import {
 	AgentTeamsRuntime,

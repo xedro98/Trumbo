@@ -1,4 +1,4 @@
-import type * as LlmsProviders from "@trumbo/llms";
+import type * as LlmsProviders from "@trumbodev/llms";
 import type { CheckpointEntry } from "../hooks/checkpoint-hooks";
 import type { SessionAccumulatedUsage } from "../runtime/host/runtime-host";
 import type { SessionRecord } from "../types/sessions";

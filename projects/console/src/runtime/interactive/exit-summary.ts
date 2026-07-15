@@ -1,5 +1,5 @@
-import type { SessionAccumulatedUsage, SessionRecord } from "@trumbo/core";
-import type { Message } from "@trumbo/shared";
+import type { SessionAccumulatedUsage, SessionRecord } from "@trumbodev/core";
+import type { Message } from "@trumbodev/shared";
 import { c, formatUsd } from "../../utils/output";
 import { shouldShowCliUsageCost } from "../../utils/usage-cost-display";
 

@@ -14,7 +14,7 @@ import {
 	resolvePluginConfigSearchPaths,
 	setHomeDir,
 	setTrumboDir,
-} from "@trumbo/shared/storage";
+} from "@trumbodev/shared/storage";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
 	collectPluginMcpOAuthCandidates,
@@ -433,15 +433,15 @@ describe("plugin install command", () => {
 						plugins: [{ paths: ["./index.ts"], capabilities: ["tools"] }],
 					},
 					dependencies: {
-						"@trumbo/core": "latest",
+						"@trumbodev/core": "latest",
 						yaml: "^2.8.1",
 					},
 					peerDependencies: {
-						"@trumbo/shared": "*",
+						"@trumbodev/shared": "*",
 						bun: ">=1.0.0",
 					},
 					peerDependenciesMeta: {
-						"@trumbo/shared": {
+						"@trumbodev/shared": {
 							optional: true,
 						},
 					},
@@ -521,10 +521,10 @@ describe("plugin install command", () => {
 				"  shift",
 				"done",
 				'mkdir -p "$prefix/node_modules/published-plugin"',
-				'mkdir -p "$prefix/node_modules/@trumbo/core"',
+				'mkdir -p "$prefix/node_modules/@trumbodev/core"',
 				'printf \'%s\\n\' \'{"name":"published-plugin","type":"module","trumbo":{"plugins":["index.ts"]}}\' > "$prefix/node_modules/published-plugin/package.json"',
 				"printf '%s\\n' \"export default { name: 'published-plugin', manifest: { capabilities: ['tools'] } };\" > \"$prefix/node_modules/published-plugin/index.ts\"",
-				'printf \'%s\\n\' \'{"name":"@trumbo/core"}\' > "$prefix/node_modules/@trumbo/core/package.json"',
+				'printf \'%s\\n\' \'{"name":"@trumbodev/core"}\' > "$prefix/node_modules/@trumbodev/core/package.json"',
 				"exit 0",
 			].join("\n"),
 			{ encoding: "utf8", mode: 0o755 },

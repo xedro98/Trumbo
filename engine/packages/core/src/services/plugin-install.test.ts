@@ -14,7 +14,7 @@ import {
 	resolvePluginConfigSearchPaths,
 	setHomeDir,
 	setTrumboDir,
-} from "@trumbo/shared/storage";
+} from "@trumbodev/shared/storage";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
 	installPlugin,

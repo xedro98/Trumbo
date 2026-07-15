@@ -1,10 +1,10 @@
-import { normalizeProviderId } from "@trumbo/llms";
+import { normalizeProviderId } from "@trumbodev/llms";
 import type {
 	ChatRunTurnRequest,
 	ChatStartSessionRequest,
 	ChatTurnResult,
 	ITelemetryService,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type {
 	HubScheduleRuntimeHandlers,
 	HubScheduleServiceOptions,

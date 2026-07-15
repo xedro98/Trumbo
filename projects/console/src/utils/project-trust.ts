@@ -16,7 +16,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
-import { resolveTrumboDir } from "@trumbo/shared/storage";
+import { resolveTrumboDir } from "@trumbodev/shared/storage";
 
 export type TrustDecision = "ask" | "always" | "never";
 

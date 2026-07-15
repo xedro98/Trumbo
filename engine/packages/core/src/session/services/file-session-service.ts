@@ -6,8 +6,8 @@ import {
 	writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
-import type { BasicLogger } from "@trumbo/shared";
-import { resolveSessionDataDir } from "@trumbo/shared/storage";
+import type { BasicLogger } from "@trumbodev/shared";
+import { resolveSessionDataDir } from "@trumbodev/shared/storage";
 import type { SessionMessagesArtifactUploader } from "../../types/session";
 import type { SessionRow } from "../models/session-row";
 import type {

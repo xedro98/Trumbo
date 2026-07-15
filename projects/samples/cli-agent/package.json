@@ -1,5 +1,5 @@
 {
-	"name": "@trumbo/example-cli-agent",
+	"name": "@trumbodev/example-cli-agent",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -10,7 +10,7 @@
 		"start": "node dist/index.js"
 	},
 	"dependencies": {
-		"@trumbo/sdk": "workspace:*",
+		"@trumbodev/sdk": "workspace:*",
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {

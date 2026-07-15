@@ -261,7 +261,7 @@ export interface AgentExtensionRegistry<TTool = AgentTool, TMessage = unknown> {
  *
  * Hook handler properties are typed `unknown` here so that the generic base
  * interface stays free of agent-specific imports. Concrete extension types
- * (e.g. `AgentExtension` in `@trumbo/agents`) narrow them to the correct
+ * (e.g. `AgentExtension` in `@trumbodev/agents`) narrow them to the correct
  * context and return types.
  */
 export interface ContributionRegistryExtension<
@@ -275,7 +275,7 @@ export interface ContributionRegistryExtension<
 	manifest: PluginManifest;
 	/** Indicates whether this extension is disabled. Disabled extensions are ignored during setup. */
 	disabled?: boolean;
-	/** Runtime-native hooks consumed directly by `@trumbo/agents`. */
+	/** Runtime-native hooks consumed directly by `@trumbodev/agents`. */
 	hooks?: AgentExtensionHooks;
 	/**
 	 * Called once during registry setup to register tools, commands, and other

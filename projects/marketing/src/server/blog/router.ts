@@ -130,7 +130,7 @@ async function handleUpload(
 
 	if (file.size > D1_MAX_UPLOAD_BYTES) {
 		return json(
-			{ error: "File too large for D1 storage (max 750KB). Enable R2 in Cloudflare Dashboard for larger uploads." },
+			{ error: "File too large for D1 storage (max 750KB). Enable object storage in the admin dashboard for larger uploads." },
 			{ status: 413 },
 		);
 	}

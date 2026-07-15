@@ -9,8 +9,8 @@ import {
 	ProviderSettingsManager,
 	stopLocalHubServerGracefully,
 	toHubStatusUrl,
-} from "@trumbo/core";
-import type { HubUINotifyPayload, SessionRecord } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type { HubUINotifyPayload, SessionRecord } from "@trumbodev/shared";
 
 interface TrackedClient {
 	clientId: string;
@@ -938,7 +938,7 @@ async function main(): Promise<void> {
 }
 
 if (isBundledDaemonEntryInvocation()) {
-	await import("@trumbo/core/hub/daemon-entry");
+	await import("@trumbodev/core/hub/daemon-entry");
 } else {
 	main().catch((err) => {
 		const msg = err instanceof Error ? err.message : String(err);

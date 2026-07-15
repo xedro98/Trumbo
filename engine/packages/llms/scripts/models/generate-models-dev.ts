@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 
-import type { ModelInfo } from "@trumbo/shared";
+import type { ModelInfo } from "@trumbodev/shared";
 import { fetchModelsDevProviderModels } from "../../src/catalog/catalog-live";
 
 function sortObjectByKey<T>(

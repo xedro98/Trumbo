@@ -71,7 +71,7 @@ export function createDefaultShellExecutor(options: ShellExecutorOptions = {}) {
  *
  * @example
  * ```typescript
- * import { createDefaultTools, createDefaultExecutors } from "@trumbo/core"
+ * import { createDefaultTools, createDefaultExecutors } from "@trumbodev/core"
  *
  * const executors = createDefaultExecutors({
  *   bash: { timeoutMs: 60000 },

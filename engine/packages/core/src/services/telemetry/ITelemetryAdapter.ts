@@ -1,5 +1,5 @@
 /**
- * Telemetry adapter interface for the @trumbo/core SDK.
+ * Telemetry adapter interface for the @trumbodev/core SDK.
  *
  * This is the SDK-side counterpart to the extension's ITelemetryProvider.
  * It is intentionally free of VS Code / host-provider dependencies so that
@@ -7,7 +7,7 @@
  * backend without pulling in the full extension runtime.
  */
 
-import type { TelemetryProperties } from "@trumbo/shared";
+import type { TelemetryProperties } from "@trumbodev/shared";
 
 export type {
 	TelemetryArray,
@@ -16,7 +16,7 @@ export type {
 	TelemetryPrimitive,
 	TelemetryProperties,
 	TelemetryValue,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 // ---------------------------------------------------------------------------
 // Adapter interface

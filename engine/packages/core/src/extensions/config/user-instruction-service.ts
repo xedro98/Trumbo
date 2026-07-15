@@ -1,4 +1,4 @@
-import type { AgentExtension } from "@trumbo/shared";
+import type { AgentExtension } from "@trumbodev/shared";
 import type { SkillsExecutorWithMetadata } from "../tools";
 import {
 	type AvailableRuntimeCommand,

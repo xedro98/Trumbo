@@ -1,10 +1,10 @@
-import type { Message } from "@trumbo/llms";
+import type { Message } from "@trumbodev/llms";
 import type {
 	AgentConfig,
 	AutomationEventEnvelope,
 	BasicLogger,
 	ITelemetryService,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type { CronEventSuppression } from "../cron/events/cron-event-ingress";
 import type {
 	CronEventLogRecord,
@@ -257,9 +257,9 @@ export interface TrumboCoreOptions {
 	 * to-local auto mode). For hub and remote runtimes the HTTP call happens
 	 * inside the process that owns the gateway, so configure `fetch` there:
 	 *   - `startHubServer({ fetch })` / `ensureHubServer({ fetch })` from
-	 *     `@trumbo/hub`
+	 *     `@trumbodev/hub`
 	 *   - `createLocalHubScheduleRuntimeHandlers({ fetch })` from
-	 *     `@trumbo/core/hub` for the scheduler
+	 *     `@trumbodev/core/hub` for the scheduler
 	 */
 	fetch?: typeof fetch;
 	/**

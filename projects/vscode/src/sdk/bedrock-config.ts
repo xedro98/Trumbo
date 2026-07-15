@@ -12,10 +12,10 @@
 // credential chain with no region. This mirrors the structured aws block built
 // by the shared provider-settings legacy migration and the CLI.
 
-import type { ProviderSettings } from "@trumbo/core"
-import type { ProviderConfig } from "@trumbo/llms"
 import type { ApiConfiguration } from "@shared/api"
 import type { Mode } from "@shared/storage/types"
+import type { ProviderSettings } from "@trumbodev/core"
+import type { ProviderConfig } from "@trumbodev/llms"
 
 type AwsConfig = NonNullable<ProviderConfig["aws"]>
 type AwsAuthentication = NonNullable<AwsConfig["authentication"]>

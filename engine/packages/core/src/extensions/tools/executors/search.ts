@@ -7,7 +7,7 @@
 import { spawn } from "node:child_process";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import type { AgentToolContext } from "@trumbo/shared";
+import type { AgentToolContext } from "@trumbodev/shared";
 import { getFileIndex } from "../../../services/workspace";
 import type { SearchExecutor } from "../types";
 import { MAX_SEARCH_OUTPUT_CHARS } from "./output-limits";

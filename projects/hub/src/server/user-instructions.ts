@@ -17,7 +17,7 @@ import {
 	readGlobalSettings,
 	resolvePluginConfigSearchPaths,
 	resolveAgentConfigSearchPaths as resolveSharedAgentConfigSearchPaths,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import { readMcpServersResponse } from "./mcp";
 import type { JsonRecord } from "./types";
 

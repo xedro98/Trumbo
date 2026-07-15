@@ -1,4 +1,4 @@
-import { EMPTY_CONTENT_TEXT } from "@trumbo/shared";
+import { EMPTY_CONTENT_TEXT } from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import {
 	agentMessageToMessageWithMetadata,

@@ -9,7 +9,7 @@ import {
 	type ProviderCapability,
 	type ProviderConfigField,
 	resolveTrumboProviderBaseUrl,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { getGeneratedModelsForProvider } from "../catalog/catalog.generated-access";
 import type {
 	ModelCollection,

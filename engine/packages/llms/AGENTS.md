@@ -1,5 +1,5 @@
 ---
-description: Development guidance for the @trumbo/llms package.
+description: Development guidance for the @trumbodev/llms package.
 globs: "src/**/*.ts,src/**/*.tsx,*.md"
 alwaysApply: true
 ---
@@ -13,7 +13,7 @@ alwaysApply: true
 ```
 
 
-# @trumbo/llms Development Guidance
+# @trumbodev/llms Development Guidance
 
 ## Provider Option Routing
 

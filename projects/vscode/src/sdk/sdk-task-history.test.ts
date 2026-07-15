@@ -1,5 +1,5 @@
-import type { SessionHistoryRecord } from "@trumbo/core"
 import type { HistoryItem } from "@shared/HistoryItem"
+import type { SessionHistoryRecord } from "@trumbodev/core"
 import getFolderSize from "get-folder-size"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import type { McpHub } from "@/services/mcp/McpHub"

@@ -1,6 +1,6 @@
 import type { TrumboAskQuestion, TrumboMessage, TurnPhase } from "@shared/ExtensionMessage"
 import type { TrumboAskResponse } from "@shared/WebviewMessage"
-import type { ConsecutiveMistakeLimitContext, ConsecutiveMistakeLimitDecision } from "@trumbo/shared"
+import type { ConsecutiveMistakeLimitContext, ConsecutiveMistakeLimitDecision } from "@trumbodev/shared"
 import { Logger } from "@/shared/services/Logger"
 import { MessageIdMinter } from "./message-id-minter"
 import { buildToolApprovalAskMessage } from "./message-translator"

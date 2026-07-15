@@ -2,7 +2,7 @@ import {
 	getTrumboOrgIndividualInferenceSubscriptionMessage,
 	isTrumboNotSubscribedMessage,
 	isTrumboOrgIndividualInferenceSubscriptionMessage,
-} from "@trumbo/llms"
+} from "@trumbodev/llms"
 import { serializeError } from "serialize-error"
 import { TRUMBO_ACCOUNT_AUTH_ERROR_MESSAGE } from "../../shared/TrumboAccount"
 

@@ -3,7 +3,7 @@ import {
 	formatMessagesForAiSdk,
 	type Message,
 	type ToolResultContent,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import {
 	agentMessagesToMessages,

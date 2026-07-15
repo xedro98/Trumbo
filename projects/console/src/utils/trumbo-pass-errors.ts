@@ -5,9 +5,9 @@ import {
 	isTrumboOrgIndividualInferenceSubscriptionError,
 	isTrumboOrgIndividualInferenceSubscriptionMessage,
 	type TrumboSubscriptionPlan,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+import { getTrumboEnvironmentConfig } from "@trumbodev/shared";
 
 export { getTrumboOrgIndividualInferenceSubscriptionMessage };
 

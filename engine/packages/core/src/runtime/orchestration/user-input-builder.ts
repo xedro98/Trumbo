@@ -5,7 +5,7 @@
  * the injected `userFileContentLoader`.
  */
 
-import type * as LlmsProviders from "@trumbo/llms";
+import type * as LlmsProviders from "@trumbodev/llms";
 
 export async function buildInitialUserContent(
 	userMessage: string,

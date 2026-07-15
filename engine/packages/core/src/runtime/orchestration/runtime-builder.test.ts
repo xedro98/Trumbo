@@ -6,8 +6,8 @@ import {
 	type AgentTool,
 	createContributionRegistry,
 	type Message,
-} from "@trumbo/shared";
-import { setHomeDir } from "@trumbo/shared/storage";
+} from "@trumbodev/shared";
+import { setHomeDir } from "@trumbodev/shared/storage";
 import { afterEach, describe, expect, it } from "vitest";
 import { createUserInstructionConfigService } from "../../extensions/config";
 import { TelemetryService } from "../../services/telemetry/TelemetryService";

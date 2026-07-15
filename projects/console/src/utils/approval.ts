@@ -1,5 +1,8 @@
 import { createInterface } from "node:readline";
-import type { ToolApprovalRequest, ToolApprovalResult } from "@trumbo/shared";
+import type {
+	ToolApprovalRequest,
+	ToolApprovalResult,
+} from "@trumbodev/shared";
 import { truncate } from "./helpers";
 import { c, getActiveCliSession, write } from "./output";
 
@@ -25,7 +28,7 @@ async function requestDesktopToolApprovalFromCore(
 	request: ToolApprovalRequest,
 ): Promise<ToolApprovalResult> {
 	if (!cachedDesktopApprovalRequester) {
-		cachedDesktopApprovalRequester = import("@trumbo/core")
+		cachedDesktopApprovalRequester = import("@trumbodev/core")
 			.then((module) => {
 				const fn = (
 					module as {
@@ -40,7 +43,7 @@ async function requestDesktopToolApprovalFromCore(
 				).requestDesktopToolApproval;
 				if (typeof fn !== "function") {
 					throw new Error(
-						"Installed @trumbo/core does not expose requestDesktopToolApproval",
+						"Installed @trumbodev/core does not expose requestDesktopToolApproval",
 					);
 				}
 				return fn;

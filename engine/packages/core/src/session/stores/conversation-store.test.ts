@@ -1,4 +1,4 @@
-import type { MessageWithMetadata } from "@trumbo/shared";
+import type { MessageWithMetadata } from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import { ConversationStore } from "./conversation-store";
 

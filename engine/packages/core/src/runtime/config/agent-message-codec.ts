@@ -12,8 +12,8 @@ import type {
 	ThinkingContent,
 	ToolResultContent,
 	ToolUseContent,
-} from "@trumbo/shared";
-import { EMPTY_CONTENT_TEXT } from "@trumbo/shared";
+} from "@trumbodev/shared";
+import { EMPTY_CONTENT_TEXT } from "@trumbodev/shared";
 
 export function messageToAgentMessages(
 	message: MessageWithMetadata,

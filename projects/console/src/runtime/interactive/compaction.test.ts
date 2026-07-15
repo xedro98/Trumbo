@@ -4,7 +4,7 @@ import { join } from "node:path";
 import {
 	type CoreCompactionContext,
 	ProviderSettingsManager,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { Config } from "../../utils/types";
 import {

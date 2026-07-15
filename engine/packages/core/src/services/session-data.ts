@@ -1,8 +1,8 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import type * as LlmsProviders from "@trumbo/llms";
-import type { AgentConfig, AgentEvent, AgentResult } from "@trumbo/shared";
-import { normalizeUserInput } from "@trumbo/shared";
+import type * as LlmsProviders from "@trumbodev/llms";
+import type { AgentConfig, AgentEvent, AgentResult } from "@trumbodev/shared";
+import { normalizeUserInput } from "@trumbodev/shared";
 import { nanoid } from "nanoid";
 import {
 	parseSubSessionId,

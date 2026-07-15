@@ -1,6 +1,6 @@
 import type { ChoiceContext } from "@opentui-ui/dialog";
 import { useDialogKeyboard } from "@opentui-ui/dialog/react";
-import type { ToolApprovalRequest } from "@trumbo/shared";
+import type { ToolApprovalRequest } from "@trumbodev/shared";
 import type React from "react";
 import { palette } from "../../palette";
 import {

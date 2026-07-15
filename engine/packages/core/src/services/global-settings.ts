@@ -1,7 +1,11 @@
 import { mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import type { AgentConfig, AgentTool, ITelemetryService } from "@trumbo/shared";
-import { resolveGlobalSettingsPath } from "@trumbo/shared/storage";
+import type {
+	AgentConfig,
+	AgentTool,
+	ITelemetryService,
+} from "@trumbodev/shared";
+import { resolveGlobalSettingsPath } from "@trumbodev/shared/storage";
 import { z } from "zod";
 import { captureTelemetryOptOut } from "./telemetry/core-events";
 

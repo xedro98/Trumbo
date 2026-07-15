@@ -1,6 +1,6 @@
 # Plugins
 
-A Trumbo plugin is a TypeScript module that extends any agent built on the Trumbo SDK. The same plugin runs in the Trumbo CLI, the VS Code and JetBrains extensions, and any custom app built on `@trumbo/core`.
+A Trumbo plugin is a TypeScript module that extends any agent built on the Trumbo SDK. The same plugin runs in the Trumbo CLI, the VS Code and JetBrains extensions, and any custom app built on `@trumbodev/core`.
 
 A plugin can:
 
@@ -35,8 +35,8 @@ After validation, registration is one-shot -- no dynamic register/unregister dur
 ## The Smallest Working Plugin
 
 ```typescript
-import type { AgentPlugin } from "@trumbo/core"
-import { createTool } from "@trumbo/core"
+import type { AgentPlugin } from "@trumbodev/core"
+import { createTool } from "@trumbodev/core"
 
 const plugin: AgentPlugin = {
   name: "hello-plugin",
@@ -310,7 +310,7 @@ When you build your own host with `TrumboCore`, pass the plugin object directly:
 
 ```typescript
 import plugin from "./my-plugin"
-import { TrumboCore } from "@trumbo/core"
+import { TrumboCore } from "@trumbodev/core"
 
 const host = await TrumboCore.create({ backendMode: "local" })
 await host.start({
@@ -354,7 +354,7 @@ trumbo plugin install --git github.com/owner/repo  # from git
 Save as `my-plugin.ts`, drop in `.trumbo/plugins/`:
 
 ```typescript
-import { type AgentPlugin, TrumboCore, createTool } from "@trumbo/core"
+import { type AgentPlugin, TrumboCore, createTool } from "@trumbodev/core"
 
 let sessionRoot: string | undefined
 
@@ -468,10 +468,10 @@ my-trumbo-plugin/
     ]
   },
   "peerDependencies": {
-    "@trumbo/core": "*"
+    "@trumbodev/core": "*"
   },
   "peerDependenciesMeta": {
-    "@trumbo/core": { "optional": true }
+    "@trumbodev/core": { "optional": true }
   },
   "dependencies": {
     "zod": "^4.1.5"
@@ -483,7 +483,7 @@ Key fields:
 
 - `type: "module"` -- required. Trumbo plugins are ES modules.
 - `trumbo.plugins` -- the discovery contract. Array of entries, each with `paths` (entry files) and `capabilities` (pre-declared, validated before importing).
-- `peerDependencies` for `@trumbo/core` -- the host already provides it. Marking it optional lets you typecheck in isolation.
+- `peerDependencies` for `@trumbodev/core` -- the host already provides it. Marking it optional lets you typecheck in isolation.
 
 ### Bundling Assets
 
@@ -587,7 +587,7 @@ If the plugin fails validation or setup, the CLI prints a clear error and contin
 - State leaking across sessions -- module-level variables are shared across sessions in the same process. Key by `ctx.session?.sessionId` if your host runs multiple sessions concurrently.
 - `afterRun` firing on aborts -- guard with `if (result.status !== "completed") return`.
 - Heavy work in `setup()` -- `setup()` blocks session start. Defer expensive work into the first tool call or `beforeRun`.
-- Importing host internals -- only import from `@trumbo/core`. Reaching into host-specific packages (e.g. CLI internals) will break in non-CLI hosts.
+- Importing host internals -- only import from `@trumbodev/core`. Reaching into host-specific packages (e.g. CLI internals) will break in non-CLI hosts.
 - Sandboxed plugins and `telemetry` -- telemetry is process-local. Feature-detect `ctx.telemetry` and expect it to be undefined in sandboxed plugin processes.
 - Resolving bundled assets -- use `import.meta.url` + `fileURLToPath` to find files inside your package; never `process.cwd()`. For workspace paths, do the opposite: use `ctx.workspaceInfo?.rootPath`, never `import.meta.url`.
 - Plugin name collisions -- `name` must be unique within a session. If two plugins share a name, validation fails. Namespace by package (`my-org-redactor`, not `redactor`).
@@ -621,7 +621,7 @@ If the plugin fails validation or setup, the CLI prints a clear error and contin
 - Tool inputs have JSON Schema with `required` set.
 - `afterRun` handlers gate on `result.status === "completed"` if they only want successes.
 - State that must not leak between concurrent sessions is keyed by `ctx.session?.sessionId`.
-- (Package) `package.json` has `type: "module"`, `trumbo.plugins`, and `@trumbo/core` as an optional peer dep.
+- (Package) `package.json` has `type: "module"`, `trumbo.plugins`, and `@trumbodev/core` as an optional peer dep.
 - (Package) Bundled assets resolved via `import.meta.url`, not `process.cwd()`.
 - Smoke test: drop the plugin into `.trumbo/plugins/` (or `trumbo plugin install`), run `trumbo -i "..."`, watch it work.
 

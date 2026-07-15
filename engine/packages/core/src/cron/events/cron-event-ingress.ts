@@ -1,4 +1,4 @@
-import type { AutomationEventEnvelope, BasicLogger } from "@trumbo/shared";
+import type { AutomationEventEnvelope, BasicLogger } from "@trumbodev/shared";
 import type {
 	CronEventLogRecord,
 	CronRunRecord,

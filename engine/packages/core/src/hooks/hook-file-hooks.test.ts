@@ -6,7 +6,7 @@ import {
 	resolveTrumboDir,
 	setHomeDir,
 	setTrumboDir,
-} from "@trumbo/shared/storage";
+} from "@trumbodev/shared/storage";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
 	createHookAuditHooks,

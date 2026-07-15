@@ -12,7 +12,7 @@ const result = await Bun.build({
 	packages: "bundle",
 	minify,
 	sourcemap,
-	external: ["@trumbo/core"],
+	external: ["@trumbodev/core"],
 });
 
 if (result.logs.length > 0) {

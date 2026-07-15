@@ -8,8 +8,8 @@ import { createReadStream } from "node:fs";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { createInterface } from "node:readline";
-import type { AgentToolContext } from "@trumbo/shared";
-import { resolveExistingFilePath } from "@trumbo/shared/storage";
+import type { AgentToolContext } from "@trumbodev/shared";
+import { resolveExistingFilePath } from "@trumbodev/shared/storage";
 import type { ReadFileRequest } from "../schemas";
 import type { FileReadExecutor } from "../types";
 import {

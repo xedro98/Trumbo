@@ -1,4 +1,4 @@
-import type { HubReplyEnvelope } from "@trumbo/shared";
+import type { HubReplyEnvelope } from "@trumbodev/shared";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { BrowserWebSocketHubAdapter } from "./browser-websocket";
 

@@ -3,7 +3,7 @@ import type {
 	SessionConfigOption,
 	SessionUpdate,
 } from "@agentclientprotocol/sdk";
-import type { AgentEvent } from "@trumbo/core";
+import type { AgentEvent } from "@trumbodev/core";
 import { buildToolTitle, mapToolKind } from "./tool-utils";
 
 /**

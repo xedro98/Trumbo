@@ -2,8 +2,8 @@ import type {
 	HubCommandEnvelope,
 	HubReplyEnvelope,
 	HubTransportFrame,
-} from "@trumbo/shared";
-import { resolveTrumboBuildEnv } from "@trumbo/shared";
+} from "@trumbodev/shared";
+import { resolveTrumboBuildEnv } from "@trumbodev/shared";
 import { createHubServerUrl, readHubDiscovery } from "../discovery";
 import {
 	type HubEndpointOverrides,

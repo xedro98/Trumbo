@@ -1,6 +1,6 @@
 # Agent runtime
 
-The `Agent` class (also exported as `AgentRuntime`) is the lightweight, stateless agent loop from `@trumbo/agents`. It runs the core iteration cycle: send messages to an LLM, execute tool calls, collect results, and repeat until the task is done.
+The `Agent` class (also exported as `AgentRuntime`) is the lightweight, stateless agent loop from `@trumbodev/agents`. It runs the core iteration cycle: send messages to an LLM, execute tool calls, collect results, and repeat until the task is done.
 
 ## When to use Agent
 
@@ -15,7 +15,7 @@ The `Agent` class (also exported as `AgentRuntime`) is the lightweight, stateles
 ## Quick Start
 
 ```typescript
-import { Agent } from "@trumbo/sdk"
+import { Agent } from "@trumbodev/sdk"
 
 const agent = new Agent({
   providerId: "anthropic",

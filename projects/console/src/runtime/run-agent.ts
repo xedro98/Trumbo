@@ -5,9 +5,9 @@ import {
 	prewarmFileIndex,
 	SessionSource,
 	type UserInstructionConfigService,
-} from "@trumbo/core";
-import type { ConsecutiveMistakeLimitContext } from "@trumbo/shared";
-import { createSessionId } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type { ConsecutiveMistakeLimitContext } from "@trumbodev/shared";
+import { createSessionId } from "@trumbodev/shared";
 import { logCliError } from "../logging/errors";
 import { createCliCore } from "../session/session";
 import { resolveTrumboWelcomeLine } from "../tui/interactive-welcome";

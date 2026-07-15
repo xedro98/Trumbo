@@ -1,6 +1,6 @@
 import { createCliRenderer } from "@opentui/core";
 import { createRoot } from "@opentui/react";
-import type { SessionHistoryRecord } from "@trumbo/core";
+import type { SessionHistoryRecord } from "@trumbodev/core";
 import React from "react";
 import { deleteSession } from "../session/session";
 import { resolveOpenTuiInputConfig } from "./opentui-env";

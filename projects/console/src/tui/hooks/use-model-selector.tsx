@@ -7,7 +7,7 @@ import {
 	ProviderSettingsManager,
 	refreshProviderModelsFromSource,
 	resolveProviderConfig,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import { useCallback } from "react";
 import { isOpenAICodexCliProvider } from "../../utils/codex-cli";
 import {

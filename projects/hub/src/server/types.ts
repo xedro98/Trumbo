@@ -1,5 +1,5 @@
-import type { SaveProviderSettingsActionRequest } from "@trumbo/core";
-import type { ToolApprovalResult } from "@trumbo/shared";
+import type { SaveProviderSettingsActionRequest } from "@trumbodev/core";
+import type { ToolApprovalResult } from "@trumbodev/shared";
 import type {
 	WebviewInboundMessage,
 	WebviewReasonLevel,

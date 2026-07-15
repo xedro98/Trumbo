@@ -5,7 +5,7 @@
  * It is only intended for CLI use, not browser environments.
  */
 
-import type { ITelemetryService } from "@trumbo/shared";
+import type { ITelemetryService } from "@trumbodev/shared";
 import { nanoid } from "nanoid";
 import {
 	captureAuthFailed,

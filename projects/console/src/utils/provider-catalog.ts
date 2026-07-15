@@ -1,7 +1,7 @@
 import {
 	listLocalProviders as internalListLocalProviders,
 	type ProviderSettingsManager,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
 export async function listLocalProviders(
 	manager: ProviderSettingsManager,

@@ -11,15 +11,15 @@
 // Deferred hooks (NOT wired here): TaskResume, TaskError, SessionShutdown,
 // PreCompact, Notification.
 
+import type { TrumboMessage } from "@shared/ExtensionMessage"
+import { Logger } from "@shared/services/Logger"
 import type {
 	AgentAfterToolContext,
 	AgentBeforeToolContext,
 	AgentHooks,
 	AgentRunLifecycleContext,
 	AgentStopControl,
-} from "@trumbo/shared"
-import type { TrumboMessage } from "@shared/ExtensionMessage"
-import { Logger } from "@shared/services/Logger"
+} from "@trumbodev/shared"
 import { HookFactory } from "@/core/hooks/hook-factory"
 import { getHooksEnabledSafe } from "@/core/hooks/hooks-utils"
 import type { StateManager } from "@/core/storage/StateManager"

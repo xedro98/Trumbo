@@ -1,5 +1,5 @@
-import type { MessageWithMetadata } from "@trumbo/llms";
-import type { AgentResult } from "@trumbo/shared";
+import type { MessageWithMetadata } from "@trumbodev/llms";
+import type { AgentResult } from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import { withLatestAssistantTurnMetadata } from "./session-data";
 import { summarizeUsageFromMessages } from "./usage";

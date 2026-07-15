@@ -1,4 +1,4 @@
-import { type AgentTool, createTool } from "@trumbo/shared";
+import { type AgentTool, createTool } from "@trumbodev/shared";
 import { defaultMcpToolNameTransform } from "./name-transform";
 import type { CreateMcpToolsOptions, McpToolDescriptor } from "./types";
 

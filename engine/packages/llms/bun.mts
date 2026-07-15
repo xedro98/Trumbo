@@ -17,7 +17,7 @@ const minify = Bun.env.TRUMBO_SOURCEMAPS !== "1";
 const external = Object.keys({
 	...(packageJson.dependencies ?? {}),
 	...(packageJson.peerDependencies ?? {}),
-}).filter((name) => !name.startsWith("@trumbo/"));
+}).filter((name) => !name.startsWith("@trumbodev/"));
 
 const builds: Parameters<typeof Bun.build>[0][] = [
 	{

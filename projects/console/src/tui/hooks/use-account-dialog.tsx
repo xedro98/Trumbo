@@ -1,6 +1,6 @@
 import type { ChoiceContext } from "@opentui-ui/dialog";
 import type { DialogActions } from "@opentui-ui/dialog/react";
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+import { getTrumboEnvironmentConfig } from "@trumbodev/shared";
 import open from "open";
 import { useCallback } from "react";
 import {

@@ -8,7 +8,7 @@ import {
 	type ProviderSettings,
 	type ProviderSettingsManager,
 	saveProviderOAuthCredentials,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import { Command } from "commander";
 import open from "open";
 import React from "react";

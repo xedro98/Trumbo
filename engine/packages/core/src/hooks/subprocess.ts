@@ -32,7 +32,7 @@ import {
 	type ToolResultHookPayload,
 	type UserPromptSubmitData,
 	type WorkspaceInfo,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { z } from "zod";
 import {
 	type RunSubprocessEventResult,

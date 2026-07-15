@@ -4,7 +4,7 @@ import {
 	normalizeUserInput,
 	type ToolResultContent,
 	type ToolUseContent,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { formatStructuredCommand } from "../utils/helpers";
 
 export interface ConversationHistory {

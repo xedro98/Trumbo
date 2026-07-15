@@ -1,4 +1,4 @@
-import { registerDisposable } from "@trumbo/shared";
+import { registerDisposable } from "@trumbodev/shared";
 import { nowIso } from "./helpers";
 import type { ActiveCliSession, CliOutputMode } from "./types";
 
@@ -46,8 +46,8 @@ export function getActiveCliSession(): ActiveCliSession | undefined {
 // Stream error guards
 // =============================================================================
 
-const STDOUT_ERROR_GUARD = Symbol.for("@trumbo/cli.stdoutErrorGuard");
-const STDERR_ERROR_GUARD = Symbol.for("@trumbo/cli.stderrErrorGuard");
+const STDOUT_ERROR_GUARD = Symbol.for("@trumbodev/cli.stdoutErrorGuard");
+const STDERR_ERROR_GUARD = Symbol.for("@trumbodev/cli.stderrErrorGuard");
 
 type GuardedStream = NodeJS.WriteStream & {
 	[STDOUT_ERROR_GUARD]?: (error: unknown) => void;

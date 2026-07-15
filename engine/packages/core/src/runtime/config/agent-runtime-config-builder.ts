@@ -24,7 +24,7 @@ import type {
 	AgentTool,
 	BasicLogger,
 	ITelemetryService,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 /**
  * Inputs required to assemble an `AgentRuntimeConfig`. Distinct from

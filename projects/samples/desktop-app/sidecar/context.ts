@@ -11,8 +11,8 @@ import {
 	type ToolApprovalRequest,
 	type ToolApprovalResult,
 	TrumboCore,
-} from "@trumbo/core";
-import type { AgentEvent } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type { AgentEvent } from "@trumbodev/shared";
 import { sessionLogPath } from "./paths";
 import type {
 	LiveSession,

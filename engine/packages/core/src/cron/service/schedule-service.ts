@@ -8,7 +8,7 @@ import type {
 	ScheduleExecutionRecord,
 	ScheduleExecutionStatus,
 	ScheduleRecord,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { CronMaterializer } from "../runner/cron-materializer";
 import { CronRunner } from "../runner/cron-runner";
 import { validateCronPattern } from "../schedule/scheduler";

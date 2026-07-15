@@ -1,4 +1,4 @@
-import * as LlmsModels from "@trumbo/llms";
+import * as LlmsModels from "@trumbodev/llms";
 import type {
 	AddProviderActionRequest,
 	ITelemetryService,
@@ -8,7 +8,7 @@ import type {
 	ProviderListItem,
 	ProviderModel,
 	SaveProviderSettingsActionRequest,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { createOAuthClientCallbacks } from "../../auth/client";
 import {
 	getProviderAuthHandler,

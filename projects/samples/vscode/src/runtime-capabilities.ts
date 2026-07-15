@@ -2,7 +2,7 @@ import type {
 	RuntimeCapabilities,
 	ToolApprovalRequest,
 	ToolApprovalResult,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
 type QuickPickOptions = {
 	placeHolder?: string;

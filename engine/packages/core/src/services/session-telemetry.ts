@@ -1,5 +1,5 @@
-import type { ITelemetryService } from "@trumbo/shared";
-import { resolveDocumentsExtensionPath } from "@trumbo/shared/storage";
+import type { ITelemetryService } from "@trumbodev/shared";
+import { resolveDocumentsExtensionPath } from "@trumbodev/shared/storage";
 import { listHookConfigFiles } from "../hooks/hook-file-config";
 import type { CoreSessionConfig } from "../types/config";
 import {

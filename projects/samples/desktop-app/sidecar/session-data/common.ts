@@ -1,4 +1,4 @@
-import { formatDisplayUserInput } from "@trumbo/shared";
+import { formatDisplayUserInput } from "@trumbodev/shared";
 import { readSessionManifest } from "../paths";
 import type { JsonRecord } from "../types";
 

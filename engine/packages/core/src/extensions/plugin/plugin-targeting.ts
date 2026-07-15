@@ -1,4 +1,4 @@
-import type { PluginManifest } from "@trumbo/shared";
+import type { PluginManifest } from "@trumbodev/shared";
 
 export interface PluginTargeting {
 	providerId?: string;

@@ -1,6 +1,6 @@
 import { resolve } from "node:path";
-import type { AgentExtension, PluginSetupContext } from "@trumbo/shared";
-import { normalizePluginManifest } from "@trumbo/shared";
+import type { AgentExtension, PluginSetupContext } from "@trumbodev/shared";
+import { normalizePluginManifest } from "@trumbodev/shared";
 import type {
 	PluginInitializationFailure,
 	PluginInitializationWarning,

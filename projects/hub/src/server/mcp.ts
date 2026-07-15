@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
-import { updateMcpSettingsFileSync } from "@trumbo/core";
-import { resolveMcpSettingsPath } from "@trumbo/shared/storage";
+import { updateMcpSettingsFileSync } from "@trumbodev/core";
+import { resolveMcpSettingsPath } from "@trumbodev/shared/storage";
 import type { JsonRecord } from "./types";
 
 export function readMcpServersResponse(): JsonRecord {

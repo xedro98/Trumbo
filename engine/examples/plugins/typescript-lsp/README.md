@@ -23,7 +23,7 @@ identifier on that line and resolves where each one is actually defined. Given
 an import line like:
 
 ```ts
-import { disposeAll, initVcr } from "@trumbo/shared"
+import { disposeAll, initVcr } from "@trumbodev/shared"
 ```
 
 it resolves both symbols through the workspace package alias to their source

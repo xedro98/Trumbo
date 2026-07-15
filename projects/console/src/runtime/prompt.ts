@@ -5,8 +5,8 @@ import {
 	buildWorkspaceMetadata,
 	mergeRulesForSystemPrompt,
 	type UserInstructionConfigService,
-} from "@trumbo/core";
-import { type AgentMode, buildTrumboSystemPrompt } from "@trumbo/shared";
+} from "@trumbodev/core";
+import { type AgentMode, buildTrumboSystemPrompt } from "@trumbodev/shared";
 import { isImagePath, loadImageAsDataUrl } from "../utils/image-attachments";
 
 const PLAN_MODE_INSTRUCTIONS = `# Plan Mode

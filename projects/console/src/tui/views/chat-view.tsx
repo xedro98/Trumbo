@@ -182,7 +182,7 @@ export function ChatView(props: {
 						"pluginViews" in props
 							? (
 									props as {
-										pluginViews?: import("@trumbo/shared").TuiViewContribution[];
+										pluginViews?: import("@trumbodev/shared").TuiViewContribution[];
 									}
 								).pluginViews
 							: undefined

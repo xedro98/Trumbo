@@ -38,7 +38,7 @@ export function PlatformSection() {
 				<MarketingSectionHeader
 					kicker="Platform"
 					title="Go further with platform.trumbo.dev: billing, teams, and observability for production agent workflows."
-					description="The CLI is your daily driver. The platform is where teams manage subscriptions, review usage, and onboard developers, all on Cloudflare Workers with the same design system you see here."
+					description="The CLI is your daily driver. The platform is where teams manage subscriptions, review usage, and onboard developers, all on Trumbo infrastructure with the same design system you see here."
 				/>
 			</GridBoxCell>
 

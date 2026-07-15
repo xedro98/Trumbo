@@ -1,6 +1,6 @@
-import { type CoreSettingsItem, createCoreSettingsService } from "@trumbo/core"
 import { parseRemoteSkillEntries } from "@core/context/instructions/user-instructions/skills"
 import { RefreshedSkills, SkillInfo } from "@shared/proto/trumbo/file"
+import { type CoreSettingsItem, createCoreSettingsService } from "@trumbodev/core"
 import { HostProvider } from "@/hosts/host-provider"
 import { Controller } from ".."
 

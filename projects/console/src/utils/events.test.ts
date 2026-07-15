@@ -1,4 +1,4 @@
-import type { AgentEvent, TeamEvent } from "@trumbo/core";
+import type { AgentEvent, TeamEvent } from "@trumbodev/core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { handleEvent, handleTeamEvent } from "./events";
 import { setCurrentOutputMode } from "./output";

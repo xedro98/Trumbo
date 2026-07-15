@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs"
-import { getGeneratedModelsForProvider, MODEL_COLLECTIONS_BY_PROVIDER_ID } from "@trumbo/llms"
+import { getGeneratedModelsForProvider, MODEL_COLLECTIONS_BY_PROVIDER_ID } from "@trumbodev/llms"
 
 export interface OAuthCredentials {
 	accessToken?: string
@@ -122,7 +122,7 @@ export interface CheckpointWorkspaceCompareResult {
 }
 
 export async function compareCheckpointToWorkspace(): Promise<CheckpointWorkspaceCompareResult> {
-	throw new Error("compareCheckpointToWorkspace is not implemented in the Vitest @trumbo/core stub")
+	throw new Error("compareCheckpointToWorkspace is not implemented in the Vitest @trumbodev/core stub")
 }
 
 export type CoreSessionEvent = { type: string; payload?: unknown }

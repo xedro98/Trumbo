@@ -1,4 +1,4 @@
-import type { AgentConfig } from "@trumbo/shared";
+import type { AgentConfig } from "@trumbodev/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createDelegatedAgentConfigProvider } from "./delegated-agent";
 

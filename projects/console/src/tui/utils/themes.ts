@@ -22,7 +22,7 @@
 import { EventEmitter } from "node:events";
 import { existsSync, readdirSync, readFileSync, watch } from "node:fs";
 import { join } from "node:path";
-import { resolveTrumboDir } from "@trumbo/shared/storage";
+import { resolveTrumboDir } from "@trumbodev/shared/storage";
 
 /** 51-token theme schema */
 export interface ThemeTokens {

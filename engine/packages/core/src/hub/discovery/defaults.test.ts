@@ -1,4 +1,4 @@
-import { TRUMBO_BUILD_ENV_ENV } from "@trumbo/shared";
+import { TRUMBO_BUILD_ENV_ENV } from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import {
 	DEFAULT_HUB_PORT,

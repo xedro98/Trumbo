@@ -3,7 +3,7 @@ import {
 	type WorkspaceInfo,
 	type WorkspaceManifest,
 	WorkspaceManifestSchema,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	generateWorkspaceInfo,
 	normalizeWorkspacePath,

@@ -1,4 +1,4 @@
-import type { BasicLogger, ITelemetryService } from "@trumbo/shared";
+import type { BasicLogger, ITelemetryService } from "@trumbodev/shared";
 import { CronService } from "./cron/service/cron-service";
 import type { RuntimeCapabilities } from "./runtime/capabilities";
 import { normalizeRuntimeCapabilities } from "./runtime/capabilities";
@@ -86,7 +86,7 @@ export type {
  *
  * @example
  * ```ts
- * import { TrumboCore } from "@trumbo/core";
+ * import { TrumboCore } from "@trumbodev/core";
  *
  * const trumbo = await TrumboCore.create({ clientName: "my-app" });
  * const session = await trumbo.start({ ... });

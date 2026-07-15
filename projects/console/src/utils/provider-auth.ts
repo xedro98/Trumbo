@@ -5,7 +5,7 @@ import {
 	Llms,
 	type ProviderOAuthCredentials,
 	type ProviderSettings,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
 export type OAuthCredentials = ProviderOAuthCredentials;
 

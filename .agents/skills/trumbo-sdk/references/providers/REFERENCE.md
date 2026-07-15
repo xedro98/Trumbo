@@ -1,6 +1,6 @@
 # Model providers
 
-The Trumbo SDK supports every major LLM provider out of the box via `@trumbo/llms`.
+The Trumbo SDK supports every major LLM provider out of the box via `@trumbodev/llms`.
 
 ## Supported Providers
 
@@ -19,7 +19,7 @@ The Trumbo SDK supports every major LLM provider out of the box via `@trumbo/llm
 ### With Agent
 
 ```typescript
-import { Agent } from "@trumbo/sdk"
+import { Agent } from "@trumbodev/sdk"
 
 const agent = new Agent({
   providerId: "anthropic",
@@ -33,7 +33,7 @@ const agent = new Agent({
 ### With TrumboCore
 
 ```typescript
-import { TrumboCore } from "@trumbo/sdk"
+import { TrumboCore } from "@trumbodev/sdk"
 
 const trumbo = await TrumboCore.create({ clientName: "my-app" })
 
@@ -158,7 +158,7 @@ Pass additional headers to API requests:
 For advanced multi-provider setups, use the Gateway directly:
 
 ```typescript
-import { createGateway, DefaultGateway } from "@trumbo/llms"
+import { createGateway, DefaultGateway } from "@trumbodev/llms"
 
 const gateway = createGateway({
   providerConfigs: [
@@ -201,7 +201,7 @@ import {
   registerProvider,
   registerModel,
   createHandler,
-} from "@trumbo/llms"
+} from "@trumbodev/llms"
 
 // List all registered providers
 const providers = getAllProviders()
@@ -222,7 +222,7 @@ registerProvider({
 Access model info (context window, pricing, capabilities):
 
 ```typescript
-import { getModelsForProvider } from "@trumbo/llms"
+import { getModelsForProvider } from "@trumbodev/llms"
 
 const models = getModelsForProvider("anthropic")
 for (const model of models) {

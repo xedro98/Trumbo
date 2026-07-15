@@ -19,7 +19,7 @@ interface TestMcpSettings {
 	mcpServers?: Record<string, { disabled?: boolean }>;
 }
 
-vi.mock("@trumbo/core", () => ({
+vi.mock("@trumbodev/core", () => ({
 	resolveDefaultMcpSettingsPath: () =>
 		process.env.TRUMBO_MCP_SETTINGS_PATH ?? "trumbo_mcp_settings.json",
 	setMcpServerDisabled: (options: SetMcpServerDisabledOptions) => {

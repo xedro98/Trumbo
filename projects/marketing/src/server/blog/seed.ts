@@ -10,11 +10,11 @@ const SEED_CATEGORIES = [
 
 const SEED_POSTS = [
 	{
-		slug: "building-trumbo-on-cloudflare",
-		title: "Building Trumbo on Cloudflare",
+		slug: "building-the-trumbo-platform",
+		title: "Building the Trumbo platform",
 		excerpt:
-			"How we run the platform on Workers, D1, and static assets, and why we split marketing from the authenticated app.",
-		body: "<p>Trumbo's platform runs on Cloudflare Workers with D1 for application state and static assets for the marketing site.</p><p>Splitting marketing from the authenticated app keeps trumbo.dev fast and public while platform.trumbo.dev handles auth, billing, and team workflows.</p>",
+			"How we run the platform on Trumbo edge infrastructure, managed SQL, and static assets, and why we split marketing from the authenticated app.",
+		body: "<p>Trumbo's platform runs on Trumbo edge infrastructure with managed SQL for application state and static assets for the marketing site.</p><p>Splitting marketing from the authenticated app keeps trumbo.dev fast and public while platform.trumbo.dev handles auth, billing, and team workflows.</p>",
 		categorySlug: "engineering",
 		publishedAt: "2026-06-01T00:00:00.000Z",
 	},
@@ -31,17 +31,17 @@ const SEED_POSTS = [
 		slug: "org-scoped-billing-and-subscription-fixes",
 		title: "Org-scoped billing and subscription fixes",
 		excerpt:
-			"Personal orgs, legacy scope fallbacks, and checkout polling: lessons from shipping Stripe on Workers.",
-		body: "<p>Org-scoped billing required careful handling of personal workspaces, legacy subscription scopes, and Stripe checkout polling on Workers.</p><p>The result is checkout that resolves reliably even when webhooks arrive late.</p>",
+			"Personal orgs, legacy scope fallbacks, and checkout polling: lessons from shipping Stripe on the Trumbo platform.",
+		body: "<p>Org-scoped billing required careful handling of personal workspaces, legacy subscription scopes, and Stripe checkout polling on the Trumbo platform.</p><p>The result is checkout that resolves reliably even when webhooks arrive late.</p>",
 		categorySlug: "platform",
 		publishedAt: "2026-04-01T00:00:00.000Z",
 	},
 	{
-		slug: "kumo-design-system-adoption",
-		title: "Kumo design system adoption",
+		slug: "trumbo-admin-ui-adoption",
+		title: "Trumbo admin UI adoption",
 		excerpt:
-			"Migrating buttons, charts, and tabs to @cloudflare/kumo while keeping Trumbo green as the brand anchor.",
-		body: "<p>We adopted @cloudflare/kumo for buttons, charts, and tabs across the platform and marketing site.</p><p>Trumbo green stays the brand anchor while Kumo handles accessibility and component consistency.</p>",
+			"Migrating buttons, charts, and tabs to our admin component library while keeping Trumbo green as the brand anchor.",
+		body: "<p>We adopted a shared admin component library for buttons, charts, and tabs across the platform and marketing site.</p><p>Trumbo green stays the brand anchor while the library handles accessibility and component consistency.</p>",
 		categorySlug: "design",
 		publishedAt: "2026-03-01T00:00:00.000Z",
 	},

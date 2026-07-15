@@ -1,6 +1,6 @@
-import { getProviderCollectionSync } from "@trumbo/llms"
 import { ensureCacheDirectoryExists, GlobalFileNames } from "@core/storage/disk"
 import { ModelInfo } from "@shared/api"
+import { getProviderCollectionSync } from "@trumbodev/llms"
 import { fileExistsAtPath } from "@utils/fs"
 import axios from "axios"
 import fs from "fs/promises"

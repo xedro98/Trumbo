@@ -2,7 +2,7 @@ import {
 	isUnconfiguredTrumboUrl,
 	resolveTrumboApiBaseUrl,
 	resolveTrumboEnvironment,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { ProviderSettingsManager } from "../storage/provider-settings-manager";
 
 export interface TrumboRecommendedModel {

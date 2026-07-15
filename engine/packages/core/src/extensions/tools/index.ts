@@ -5,7 +5,7 @@
  */
 
 // Zod Utilities
-export { validateWithZod, zodToJsonSchema } from "@trumbo/shared";
+export { validateWithZod, zodToJsonSchema } from "@trumbodev/shared";
 // Constants
 export { ALL_DEFAULT_TOOL_NAMES, DefaultToolNames } from "./constants";
 // AgentTool Definitions
@@ -118,7 +118,7 @@ export type {
 // Convenience: Create Tools with Built-in Executors
 // =============================================================================
 
-import type { AgentTool } from "@trumbo/shared";
+import type { AgentTool } from "@trumbodev/shared";
 import { createDefaultTools } from "./definitions";
 import {
 	createDefaultExecutors,
@@ -149,7 +149,7 @@ export interface CreateBuiltinToolsOptions
  *
  * @example
  * ```typescript
- * import { Agent, createBuiltinTools } from "@trumbo/core"
+ * import { Agent, createBuiltinTools } from "@trumbodev/core"
  *
  * const tools = createBuiltinTools({
  *   cwd: "/path/to/project",

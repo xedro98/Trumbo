@@ -5,7 +5,7 @@ import { dirname, join } from "node:path";
 import {
 	resolveMcpSettingsPath,
 	resolveTrumboDir,
-} from "@trumbo/shared/storage";
+} from "@trumbodev/shared/storage";
 import { updateMcpSettingsFileSync } from "../extensions/mcp";
 import { parseMcpInstallArgs } from "./mcp-install";
 import { uninstallPlugin } from "./plugin-uninstall";

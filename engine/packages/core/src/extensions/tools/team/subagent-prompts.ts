@@ -1,4 +1,4 @@
-import { buildTrumboSystemPrompt } from "@trumbo/shared";
+import { buildTrumboSystemPrompt } from "@trumbodev/shared";
 import type { DelegatedAgentRuntimeConfig } from "./delegated-agent";
 
 export function buildTeammateSystemPrompt(

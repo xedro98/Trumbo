@@ -4,7 +4,7 @@ import {
 	hasRegisteredHandler,
 	MODEL_COLLECTIONS_BY_PROVIDER_ID,
 	normalizeProviderId,
-} from "@trumbo/llms";
+} from "@trumbodev/llms";
 import type {
 	AgentConfig,
 	AgentModel,
@@ -12,7 +12,7 @@ import type {
 	GatewayModelDefinition,
 	ITelemetryService,
 	ModelInfo,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { createAgentModelFromApiHandler } from "./apihandler-agent-model-adapter";
 import type { ProviderConfig } from "./provider-settings";
 

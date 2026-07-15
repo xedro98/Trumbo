@@ -15,8 +15,8 @@
  *   trumbo -i "Search the codebase for dispatcher usage, then summarize it"
  */
 
-import type { AgentPlugin, Message, ToolResultContent } from "@trumbo/core";
-import { estimateTokens as estimateTokensFromChars } from "@trumbo/shared";
+import type { AgentPlugin, Message, ToolResultContent } from "@trumbodev/core";
+import { estimateTokens as estimateTokensFromChars } from "@trumbodev/shared";
 
 const MAX_INPUT_TOKENS = 120_000;
 const COMPACT_AT_RATIO = 0.75;

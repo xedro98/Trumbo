@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { resolveTrumboDataDir } from "@trumbo/core";
+import { resolveTrumboDataDir } from "@trumbodev/core";
 
 function isProcessRunning(pid: number): boolean {
 	if (!Number.isInteger(pid) || pid <= 0) {

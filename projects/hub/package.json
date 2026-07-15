@@ -1,5 +1,5 @@
 {
-	"name": "@trumbo/hub",
+	"name": "@trumbodev/hub",
 	"version": "0.0.0",
 	"private": true,
 	"description": "Browser dashboard for the Trumbo hub: live clients, sessions, streaming chat, and hub restart.",
@@ -16,8 +16,8 @@
 		"typecheck": "bun tsc -p tsconfig.json --noEmit"
 	},
 	"dependencies": {
-		"@trumbo/core": "workspace:*",
-		"@trumbo/llms": "workspace:*",
-		"@trumbo/shared": "workspace:*"
+		"@trumbodev/core": "workspace:*",
+		"@trumbodev/llms": "workspace:*",
+		"@trumbodev/shared": "workspace:*"
 	}
 }

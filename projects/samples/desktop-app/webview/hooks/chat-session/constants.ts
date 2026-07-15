@@ -15,7 +15,7 @@ export const OAUTH_MANAGED_PROVIDERS = new Set([
 	"openai-codex",
 ]);
 
-// Default Trumbo model — keep in sync with @trumbo/llms TRUMBO_DEFAULT_MODEL
+// Default Trumbo model — keep in sync with @trumbodev/llms TRUMBO_DEFAULT_MODEL
 const TRUMBO_DEFAULT_MODEL = "anthropic/claude-sonnet-4.6";
 
 export const DEFAULT_CHAT_CONFIG: ChatSessionConfig = {

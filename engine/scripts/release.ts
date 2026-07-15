@@ -47,7 +47,9 @@ if (!target || !["sdk", "cli"].includes(target)) {
 	console.error("Usage: bun release <sdk|cli> [version] [options]");
 	console.error("");
 	console.error("Targets:");
-	console.error("  sdk   Publish @trumbo/{shared,llms,agents,core,sdk} to npm");
+	console.error(
+		"  sdk   Publish @trumbodev/{shared,llms,agents,core,sdk} to npm",
+	);
 	console.error(
 		"  cli   Publish @trumbodev/cli from an existing cli-vX.Y.Z git tag",
 	);
@@ -428,7 +430,7 @@ async function releaseSDK(version: string): Promise<number> {
 	header("Step 4/5: Publishing packages");
 	for (const workspace of SDK_PUBLISH_ORDER) {
 		const pkgDir = join(packagesDir, workspace);
-		const name = `@trumbo/${workspace}`;
+		const name = `@trumbodev/${workspace}`;
 		console.log(`  Publishing ${name}@${version} with tag '${npmTag}'...`);
 		const stagedReadme = await stageSdkReadmeForPublish(workspace);
 		try {
@@ -471,7 +473,7 @@ async function releaseSDK(version: string): Promise<number> {
 	} else {
 		console.log(`  Published SDK packages with tag '${npmTag}':`);
 		for (const workspace of SDK_PUBLISH_ORDER) {
-			console.log(`    - @trumbo/${workspace}@${version}`);
+			console.log(`    - @trumbodev/${workspace}@${version}`);
 		}
 	}
 	console.log(`${"═".repeat(60)}\n`);

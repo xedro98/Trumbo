@@ -1,5 +1,5 @@
 {
-	"name": "@trumbo/cli",
+	"name": "@trumbodev/cli",
 	"displayName": "Trumbo",
 	"version": "3.4.2",
 	"description": "Autonomous coding agent CLI - capable of creating/editing files, running commands, using the browser, and more",
@@ -80,7 +80,7 @@
 		"@opentui-ui/dialog": "^0.1.2",
 		"@opentui/core": "0.1.102",
 		"@opentui/react": "0.1.102",
-		"@trumbo/hub": "workspace:*",
+		"@trumbodev/hub": "workspace:*",
 		"chat": "^4.23.0",
 		"commander": "^14.0.3",
 		"fzf": "^0.5.2",
@@ -97,8 +97,8 @@
 		"zod": "^4.1.11"
 	},
 	"devDependencies": {
-		"@trumbo/core": "workspace:*",
-		"@trumbo/shared": "workspace:*",
+		"@trumbodev/core": "workspace:*",
+		"@trumbodev/shared": "workspace:*",
 		"@microsoft/tui-test": "^0.0.2",
 		"@types/react": "19.2.14",
 		"vitest": "^4.0.18",

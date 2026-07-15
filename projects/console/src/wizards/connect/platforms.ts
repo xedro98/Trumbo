@@ -1,7 +1,7 @@
 import {
 	CONNECTOR_PLATFORMS,
 	shouldIncludeConnectorField,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 export type {
 	ConnectorFieldCondition as FieldCondition,
@@ -9,7 +9,7 @@ export type {
 	ConnectorPlatformDef as PlatformDef,
 	ConnectorSecurityDef as SecurityDef,
 	ConnectorSecurityFieldDef as SecurityFieldDef,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 export { CONNECTOR_PLATFORMS, shouldIncludeConnectorField };
 
 export const PLATFORMS = CONNECTOR_PLATFORMS;

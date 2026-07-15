@@ -15,7 +15,7 @@ try {
 
 ## Node.js 22 Required
 
-TrumboCore and `@trumbo/core` require Node.js 22 or later. If you're on an older version, you'll get runtime errors. Check with `node --version`.
+TrumboCore and `@trumbodev/core` require Node.js 22 or later. If you're on an older version, you'll get runtime errors. Check with `node --version`.
 
 ## Session Config vs Global Config
 

@@ -2,7 +2,7 @@
 
 import type { ChoiceContext } from "@opentui-ui/dialog";
 import { useDialogKeyboard } from "@opentui-ui/dialog/react";
-import type { Llms } from "@trumbo/core";
+import type { Llms } from "@trumbodev/core";
 import { useMemo, useState } from "react";
 import { palette } from "../../palette";
 import { ProviderRow } from "./provider-row";

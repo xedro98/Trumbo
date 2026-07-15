@@ -4,7 +4,7 @@ import type {
 	GatewayProviderFactory,
 	GatewayProviderRegistration,
 	GatewayStreamRequest,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { nanoid } from "nanoid";
 import type {
 	ModelInfo,

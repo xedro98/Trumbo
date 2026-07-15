@@ -2,7 +2,7 @@
 
 import type { ChoiceContext } from "@opentui-ui/dialog";
 import { useDialogKeyboard } from "@opentui-ui/dialog/react";
-import type { TrumboAccountOrganization } from "@trumbo/core";
+import type { TrumboAccountOrganization } from "@trumbodev/core";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { palette } from "../../palette";
 import {

@@ -1,5 +1,5 @@
 /**
- * Adapter: wrap a custom `ApiHandler` (from the `@trumbo/llms` handler registry)
+ * Adapter: wrap a custom `ApiHandler` (from the `@trumbodev/llms` handler registry)
  * as an `AgentModel` for the agent runtime.
  *
  * The agent runtime builds models via `createAgentModelFromConfig`, which goes
@@ -10,16 +10,16 @@
  * `AgentModel` contract (`stream` -> `AgentModelEvent`).
  *
  * This is the inverse of the gateway's `toApiStreamChunk` in
- * `@trumbo/llms` `compat.ts`.
+ * `@trumbodev/llms` `compat.ts`.
  */
 
-import type { ApiHandler, ApiStreamChunk } from "@trumbo/llms";
+import type { ApiHandler, ApiStreamChunk } from "@trumbodev/llms";
 import type {
 	AgentModel,
 	AgentModelEvent,
 	AgentModelFinishReason,
 	AgentModelRequest,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { agentMessagesToMessages } from "../../runtime/config/agent-message-codec";
 
 type ApiStreamDoneChunk = Extract<ApiStreamChunk, { type: "done" }>;

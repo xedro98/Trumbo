@@ -1,6 +1,6 @@
 // Replaces classic src/services/auth/AuthService.ts (see origin/main)
 //
-// SDK-backed authentication service. Uses @trumbo/core OAuth functions
+// SDK-backed authentication service. Uses @trumbodev/core OAuth functions
 // for login flows and ProviderSettingsManager (providers.json) as the
 // single source of truth for credentials.
 //
@@ -11,7 +11,7 @@
 import type { ApiProvider } from "@shared/api"
 import { AuthState, UserInfo } from "@shared/proto/trumbo/account"
 import type { EmptyRequest, String } from "@shared/proto/trumbo/common"
-import type { OAuthCredentials } from "@trumbo/core"
+import type { OAuthCredentials } from "@trumbodev/core"
 import {
 	createOAuthClientCallbacks,
 	getValidTrumboCredentials,
@@ -19,7 +19,7 @@ import {
 	loginOpenAICodex,
 	loginTrumboOAuth,
 	removePlatformKnowledgeMcpServer,
-} from "@trumbo/core"
+} from "@trumbodev/core"
 import axios from "axios"
 import { TrumboEnv } from "@/config"
 import type { Controller } from "@/core/controller"

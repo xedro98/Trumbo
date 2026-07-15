@@ -3,8 +3,11 @@ import type React from "react"
 import { useMemo } from "react"
 import BrowserSessionRow from "@/components/chat/BrowserSessionRow"
 import ChatRow from "@/components/chat/ChatRow"
+import CloudAgentSessionRow from "@/components/chat/CloudAgentSessionRow"
+import SandboxSessionRow from "@/components/chat/SandboxSessionRow"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { cn } from "@/lib/utils"
+import { getSessionGroupKind } from "@/utils/platformMcpSession"
 import type { MessageHandlers } from "../../types/chatTypes"
 import { findReasoningForApiReq, isTextMessagePendingToolCall, isToolGroup } from "../../utils/messageUtils"
 import { ToolGroupRenderer } from "./ToolGroupRenderer"
@@ -83,8 +86,15 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
 		return <ToolGroupRenderer allMessages={modifiedMessages} isLastGroup={isLastToolGroup} messages={messageOrGroup} />
 	}
 
-	// Browser session group
+	// Platform MCP session groups (browser / cloud agent / sandbox)
 	if (Array.isArray(messageOrGroup)) {
+		const kind = getSessionGroupKind(messageOrGroup)
+		if (kind === "cloud_agent") {
+			return <CloudAgentSessionRow isLast={isLastMessage} key={messageOrGroup[0]?.ts} messages={messageOrGroup} />
+		}
+		if (kind === "sandbox") {
+			return <SandboxSessionRow isLast={isLastMessage} key={messageOrGroup[0]?.ts} messages={messageOrGroup} />
+		}
 		return (
 			<BrowserSessionRow
 				expandedRows={expandedRows}

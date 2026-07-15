@@ -1,4 +1,4 @@
-import { ProviderSettingsManager } from "@trumbo/core";
+import { ProviderSettingsManager } from "@trumbodev/core";
 import { isProviderConfigured as hasPersistedProviderConfig } from "../../utils/provider-auth";
 import type { TuiProps } from "../types";
 

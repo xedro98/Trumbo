@@ -1,4 +1,4 @@
-import type { AgentEvent, AgentTool } from "@trumbo/shared";
+import type { AgentEvent, AgentTool } from "@trumbodev/shared";
 import {
 	createBuiltinTools,
 	resolveToolPresetName,

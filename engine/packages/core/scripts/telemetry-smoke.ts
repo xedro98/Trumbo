@@ -13,7 +13,7 @@
  *   # or
  *   bun packages/core/scripts/telemetry-smoke.ts
  */
-import type { ITelemetryService, TelemetryProperties } from "@trumbo/shared";
+import type { ITelemetryService, TelemetryProperties } from "@trumbodev/shared";
 import {
 	captureConversationTurnEvent,
 	captureExtensionActivated,

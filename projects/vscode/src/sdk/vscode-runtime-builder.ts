@@ -1,5 +1,5 @@
-import { createDefaultShellExecutor, createMcpTools } from "@trumbo/core"
-import { type AgentTool, type AgentToolContext, createTool } from "@trumbo/shared"
+import { createDefaultShellExecutor, createMcpTools } from "@trumbodev/core"
+import { type AgentTool, type AgentToolContext, createTool } from "@trumbodev/shared"
 import type { CommandExecutorCallbacks, ITerminalManager, TerminalProcessResultPromise } from "@/integrations/terminal/types"
 import type { McpHub } from "@/services/mcp/McpHub"
 import { Logger } from "@/shared/services/Logger"

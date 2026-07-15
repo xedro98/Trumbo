@@ -1,4 +1,4 @@
-import { resolveTrumboApiBaseUrl } from "@trumbo/shared";
+import { resolveTrumboApiBaseUrl } from "@trumbodev/shared";
 import type { ModelInfo } from "./types";
 
 export interface TrumboRecommendedModelEntry {

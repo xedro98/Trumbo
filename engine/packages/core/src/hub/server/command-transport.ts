@@ -2,7 +2,7 @@ import type {
 	HubCommandEnvelope,
 	HubEventEnvelope,
 	HubReplyEnvelope,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 export interface HubCommandTransport {
 	command(envelope: HubCommandEnvelope): Promise<HubReplyEnvelope>;

@@ -62,7 +62,7 @@ Each session is guaranteed at most one `task.completed` emission. The `source` f
 
 ## CLI directory-ordering rule
 
-The CLI accepts `--config <dir>`. The CLI **must** apply `setTrumboDir(...)` and `setHomeDir(...)` from `@trumbo/shared/storage` **before** calling `captureCliExtensionActivated()`. Otherwise the telemetry singleton's persisted distinct-id and any other on-disk telemetry state lands under `~/.trumbo` instead of the user's chosen config dir.
+The CLI accepts `--config <dir>`. The CLI **must** apply `setTrumboDir(...)` and `setHomeDir(...)` from `@trumbodev/shared/storage` **before** calling `captureCliExtensionActivated()`. Otherwise the telemetry singleton's persisted distinct-id and any other on-disk telemetry state lands under `~/.trumbo` instead of the user's chosen config dir.
 
 The canonical pattern is in `projects/console/src/main.ts`:
 
@@ -74,7 +74,7 @@ captureCliExtensionActivated();   // <-- after dir overrides
 
 ## Hub daemon metadata forwarding
 
-Hosts that spawn a detached `@trumbo/core/hub/daemon-entry` process must forward telemetry metadata into the daemon argv so the daemon can reconstruct an equivalent `ITelemetryService`. The expected payload is base64-encoded JSON with snake_case keys:
+Hosts that spawn a detached `@trumbodev/core/hub/daemon-entry` process must forward telemetry metadata into the daemon argv so the daemon can reconstruct an equivalent `ITelemetryService`. The expected payload is base64-encoded JSON with snake_case keys:
 
 ```
 { extension_version, trumbo_type, platform, platform_version, os_type, os_version, is_remote_workspace }

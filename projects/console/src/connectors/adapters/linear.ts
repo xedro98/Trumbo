@@ -1,12 +1,12 @@
-import type { ChatStartSessionRequest } from "@trumbo/core";
+import type { ChatStartSessionRequest } from "@trumbodev/core";
 import {
 	createUserInstructionConfigService,
 	HubSessionClient,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import type {
 	ConnectLinearOptions,
 	LinearConnectorState,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { type Adapter, Chat, ConsoleLogger, type Thread } from "chat";
 import type { Command } from "commander";
 import type { CliLoggerAdapter } from "../../logging/adapter";

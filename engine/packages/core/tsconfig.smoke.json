@@ -7,11 +7,11 @@
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
 		"paths": {
-			"@trumbo/agents": ["../agents/src/index.ts"],
-			"@trumbo/agents/*": ["../agents/src/*", "../agents/src/*/index.ts"],
-			"@trumbo/llms": ["../llms/src/index.ts"],
-			"@trumbo/shared": ["../shared/src/index.ts"],
-			"@trumbo/shared/*": ["../shared/src/*", "../shared/src/*/index.ts"]
+			"@trumbodev/agents": ["../agents/src/index.ts"],
+			"@trumbodev/agents/*": ["../agents/src/*", "../agents/src/*/index.ts"],
+			"@trumbodev/llms": ["../llms/src/index.ts"],
+			"@trumbodev/shared": ["../shared/src/index.ts"],
+			"@trumbodev/shared/*": ["../shared/src/*", "../shared/src/*/index.ts"]
 		}
 	},
 	"include": ["scripts/**/*", "src/**/*"]

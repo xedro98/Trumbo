@@ -7,8 +7,8 @@ import {
 	NoOpFeatureFlagsProvider,
 	registerDisposable,
 	resolveCoreDistinctId,
-} from "@trumbo/core";
-import { resolveTrumboDataDir } from "@trumbo/shared/storage";
+} from "@trumbodev/core";
+import { resolveTrumboDataDir } from "@trumbodev/shared/storage";
 
 let cliFeatureFlagsContext: FeatureFlagsContext = { clientName: "trumbo-cli" };
 let cliFeatureFlagsService: FeatureFlagsService | undefined;

@@ -1,4 +1,4 @@
-import type { GatewayStreamRequest } from "@trumbo/shared";
+import type { GatewayStreamRequest } from "@trumbodev/shared";
 
 export function hasReasoningControls(
 	reasoning: GatewayStreamRequest["reasoning"],

@@ -10,8 +10,8 @@ import {
 	resolveSharedHubOwnerContext,
 	resolveTrumboDataDir,
 	stopLocalHubServerGracefully,
-} from "@trumbo/core";
-import { formatUptime, resolveTrumboBuildEnv } from "@trumbo/shared";
+} from "@trumbodev/core";
+import { formatUptime, resolveTrumboBuildEnv } from "@trumbodev/shared";
 import { Command } from "commander";
 import open from "open";
 import { isProcessRunning } from "../connectors/common";

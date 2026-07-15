@@ -1,8 +1,8 @@
-import type { SqliteDb } from "@trumbo/shared/db";
+import type { SqliteDb } from "@trumbodev/shared/db";
 
 /**
- * Bootstrap the dedicated cron.db schema. Unlike @trumbo/shared's
- * `ensureSessionSchema`, this schema is fully owned by @trumbo/core
+ * Bootstrap the dedicated cron.db schema. Unlike @trumbodev/shared's
+ * `ensureSessionSchema`, this schema is fully owned by @trumbodev/core
  * because cron lifecycle (specs, runs, reports) is a core concern and
  * should not be coupled to session storage.
  */

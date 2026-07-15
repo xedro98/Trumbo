@@ -3,7 +3,7 @@
 ## Constructor
 
 ```typescript
-import { Agent } from "@trumbo/sdk"
+import { Agent } from "@trumbodev/sdk"
 
 const agent = new Agent(config: AgentRuntimeConfig)
 ```
@@ -11,7 +11,7 @@ const agent = new Agent(config: AgentRuntimeConfig)
 Also available via factory function:
 
 ```typescript
-import { createAgent } from "@trumbo/sdk"
+import { createAgent } from "@trumbodev/sdk"
 
 const agent = createAgent(config)
 ```
@@ -217,7 +217,7 @@ interface AgentRuntimeStateSnapshot {
 Lower-level factory that returns the same `Agent` class:
 
 ```typescript
-import { createAgentRuntime } from "@trumbo/sdk"
+import { createAgentRuntime } from "@trumbodev/sdk"
 
 const runtime = createAgentRuntime(config)
 ```

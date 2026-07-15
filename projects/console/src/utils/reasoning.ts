@@ -1,4 +1,4 @@
-import type { ProviderSettings } from "@trumbo/core";
+import type { ProviderSettings } from "@trumbodev/core";
 import type { CliReasoningEffort } from "./types";
 
 type ActiveCliReasoningEffort = Exclude<CliReasoningEffort, "none">;

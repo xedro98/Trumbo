@@ -5,19 +5,19 @@ import {
 	type PluginMcpOAuthCandidate,
 	type PluginUninstallOptions,
 	uninstallPlugin,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
 export type {
 	PluginInstallOptions,
 	PluginInstallResult,
 	PluginMcpOAuthCandidate,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 export {
 	collectPluginMcpOAuthCandidates,
 	installPlugin,
 	isOfficialPluginSlug,
 	parsePluginSource,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
 export interface PluginInstallMcpOAuthOptions {
 	interactive?: boolean;

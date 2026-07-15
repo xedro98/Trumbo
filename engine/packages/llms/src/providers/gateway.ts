@@ -11,13 +11,13 @@ import type {
 	GatewayProviderRegistration,
 	GatewayStreamRequest,
 	ITelemetryService,
-} from "@trumbo/shared";
-import { estimateTokens } from "@trumbo/shared";
+} from "@trumbodev/shared";
+import { estimateTokens } from "@trumbodev/shared";
 import { toAsyncIterable } from "./async";
 import { BUILTIN_PROVIDER_REGISTRATIONS } from "./builtins-runtime";
 import { GatewayRegistry } from "./registry";
 
-export type * from "@trumbo/shared";
+export type * from "@trumbodev/shared";
 
 const GATEWAY_OUTPUT_RESERVE_TOKENS = 1_024;
 

@@ -7,27 +7,27 @@
    ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
 ```
 
-# [experimental] @trumbo/llms
+# [experimental] @trumbodev/llms
 
-`@trumbo/llms` is the model and provider layer for the Trumbo SDK. It gives you typed provider settings, model catalogs, shared gateway contracts, and AI SDK-backed handler creation for supported LLM backends.
+`@trumbodev/llms` is the model and provider layer for the Trumbo SDK. It gives you typed provider settings, model catalogs, shared gateway contracts, and AI SDK-backed handler creation for supported LLM backends.
 
 ## What You Get
 
-- `@trumbo/llms/runtime` for declarative config and runtime registry creation
-- `@trumbo/llms/providers` for handler creation and provider settings/types
-- `@trumbo/llms/models` for model catalogs and query helpers
-- `@trumbo/llms` root exports for the gateway registry and shared llm contracts
+- `@trumbodev/llms/runtime` for declarative config and runtime registry creation
+- `@trumbodev/llms/providers` for handler creation and provider settings/types
+- `@trumbodev/llms/models` for model catalogs and query helpers
+- `@trumbodev/llms` root exports for the gateway registry and shared llm contracts
 
 ## Installation
 
 ```bash
-npm install @trumbo/llms zod
+npm install @trumbodev/llms zod
 ```
 
 ## Quick Start
 
 ```ts
-import { createHandler } from "@trumbo/llms";
+import { createHandler } from "@trumbodev/llms";
 
 const handler = createHandler({
 	providerId: "anthropic",
@@ -56,39 +56,39 @@ Use `createLlmsRuntime(...)` when you want a small registry around:
 Preferred import:
 
 ```ts
-import { createLlmsRuntime, defineLlmsConfig } from "@trumbo/llms/runtime";
+import { createLlmsRuntime, defineLlmsConfig } from "@trumbodev/llms/runtime";
 ```
 
 ### Providers
 
-Use `@trumbo/llms/providers` for:
+Use `@trumbodev/llms/providers` for:
 
 - `createHandler(...)` and `createHandlerAsync(...)`
 - `ProviderSettings` and `ProviderSettingsSchema`
 - `ProviderConfig`
 - `Message` and `ApiStreamChunk`
 
-Built-in providers are routed through the internal gateway registry and backed by AI SDK provider implementations. Shared gateway contracts are exported from both `@trumbo/llms` and `@trumbo/shared`.
+Built-in providers are routed through the internal gateway registry and backed by AI SDK provider implementations. Shared gateway contracts are exported from both `@trumbodev/llms` and `@trumbodev/shared`.
 
 ### Models
 
-Use `@trumbo/llms/models` when you need generated provider/model metadata for selection UIs, defaults, or validation.
+Use `@trumbodev/llms/models` when you need generated provider/model metadata for selection UIs, defaults, or validation.
 
 For generated catalog field semantics and token-limit behavior, see [`src/catalog/README.md`](./src/catalog/README.md).
 
 ## Entry Points
 
-- `@trumbo/llms`: runtime-focused convenience entrypoint
-- `@trumbo/llms/node`: explicit Node/runtime entrypoint
-- `@trumbo/llms/browser`: browser-safe bundle
-- `@trumbo/llms/runtime`: focused runtime entrypoint
-- `@trumbo/llms/models`: model catalog/query entrypoint
-- `@trumbo/llms/providers`: provider handler/settings entrypoint
+- `@trumbodev/llms`: runtime-focused convenience entrypoint
+- `@trumbodev/llms/node`: explicit Node/runtime entrypoint
+- `@trumbodev/llms/browser`: browser-safe bundle
+- `@trumbodev/llms/runtime`: focused runtime entrypoint
+- `@trumbodev/llms/models`: model catalog/query entrypoint
+- `@trumbodev/llms/providers`: provider handler/settings entrypoint
 
 ## Related Packages
 
-- `@trumbo/agents`: agent loop and tool execution
-- `@trumbo/core`: stateful runtime assembly and provider settings storage
+- `@trumbodev/agents`: agent loop and tool execution
+- `@trumbodev/core`: stateful runtime assembly and provider settings storage
 
 ## More Examples
 
@@ -106,7 +106,7 @@ Use this for API-key-backed provider validation against real endpoints.
 ```bash
 LLMS_LIVE_TESTS=1 \
 LLMS_LIVE_PROVIDERS_PATH=/absolute/path/to/packages/llms/src/tests/live-providers.example.json \
-bun -F @trumbo/llms run test:live
+bun -F @trumbodev/llms run test:live
 ```
 
 Reasoning-focused live run (same command, different flags):
@@ -114,7 +114,7 @@ Reasoning-focused live run (same command, different flags):
 ```bash
 LLMS_LIVE_REASONING_TESTS=1 \
 LLMS_LIVE_REASONING_PROVIDERS_PATH=/absolute/path/to/packages/llms/src/tests/live-providers.reasoning.example.json \
-bun -F @trumbo/llms run test:live
+bun -F @trumbodev/llms run test:live
 ```
 
 Tool-use-focused live run (same command, different flags):
@@ -122,7 +122,7 @@ Tool-use-focused live run (same command, different flags):
 ```bash
 LLMS_LIVE_TOOL_TESTS=1 \
 LLMS_LIVE_TOOL_PROVIDERS_PATH=/absolute/path/to/packages/llms/src/tests/live-providers.tools.example.json \
-bun -F @trumbo/llms run test:live
+bun -F @trumbodev/llms run test:live
 ```
 
 Optional:

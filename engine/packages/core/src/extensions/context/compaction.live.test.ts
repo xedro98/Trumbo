@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import type { ProviderConfig } from "@trumbo/llms";
-import { resolveProviderSettingsPath } from "@trumbo/shared/storage";
+import type { ProviderConfig } from "@trumbodev/llms";
+import { resolveProviderSettingsPath } from "@trumbodev/shared/storage";
 import { describe, expect, it } from "vitest";
 import { createContextCompactionPrepareTurn } from "./compaction";
 

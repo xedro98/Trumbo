@@ -4,7 +4,7 @@ import { join } from "node:path";
 import {
 	resolveGlobalAgentsRulesPath,
 	setHomeDir,
-} from "@trumbo/shared/storage";
+} from "@trumbodev/shared/storage";
 import { afterEach, describe, expect, it } from "vitest";
 import {
 	createRulesConfigDefinition,

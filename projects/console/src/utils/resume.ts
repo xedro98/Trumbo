@@ -1,5 +1,5 @@
-import type { TrumboCore } from "@trumbo/core";
-import type { Message } from "@trumbo/shared";
+import type { TrumboCore } from "@trumbodev/core";
+import type { Message } from "@trumbodev/shared";
 
 export async function loadInteractiveResumeMessages(
 	sessionManager: TrumboCore,

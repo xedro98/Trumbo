@@ -8,7 +8,7 @@ import {
 	resolveTrumboBuildEnv,
 	TRUMBO_RUN_AS_HUB_DAEMON_ENV,
 	withResolvedTrumboBuildEnv,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	rememberRecoverableLocalHubUrl,
 	requestHubShutdown,

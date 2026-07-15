@@ -9,9 +9,9 @@ import {
 import {
 	getCurrentContextSize,
 	summarizeUsageFromMessages,
-} from "@trumbo/core";
-import type { Message } from "@trumbo/shared";
-import { formatDisplayUserInput, truncateStr } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type { Message } from "@trumbodev/shared";
+import { formatDisplayUserInput, truncateStr } from "@trumbodev/shared";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { shouldSuppressTrumboCliMigrationNoticeForActiveProvider } from "../kanban-migration/notice";
 import { MigrationNoticeContent } from "../kanban-migration/notice-dialog";

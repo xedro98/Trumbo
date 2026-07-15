@@ -8,7 +8,7 @@ import type {
 	AgentHooks,
 	AgentRunLifecycleContext,
 	AgentRuntimeEvent,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	augmentNodeCommandForDebug,
 	type BasicLogger,
@@ -16,8 +16,8 @@ import {
 	type HookSessionContext,
 	type WorkspaceInfo,
 	withResolvedTrumboBuildEnv,
-} from "@trumbo/shared";
-import { ensureHookLogDir } from "@trumbo/shared/storage";
+} from "@trumbodev/shared";
+import { ensureHookLogDir } from "@trumbodev/shared/storage";
 import { createAgentHooksExtension } from "./hook-extension";
 import { listHookConfigFiles } from "./hook-file-config";
 import type { HookEventName, HookEventPayload } from "./subprocess";

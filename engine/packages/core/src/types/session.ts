@@ -1,5 +1,5 @@
-import type * as LlmsProviders from "@trumbo/llms";
-import type { AgentFinishReason } from "@trumbo/shared";
+import type * as LlmsProviders from "@trumbodev/llms";
+import type { AgentFinishReason } from "@trumbodev/shared";
 import type { SessionAccumulatedUsage } from "../runtime/host/runtime-host";
 import type { BuiltRuntime } from "../runtime/orchestration/session-runtime";
 import type { SessionRuntime } from "../runtime/orchestration/session-runtime-orchestrator";

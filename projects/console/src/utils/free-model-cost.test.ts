@@ -1,4 +1,4 @@
-import type { AgentEvent } from "@trumbo/core";
+import type { AgentEvent } from "@trumbodev/core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
 	clearTrumboFreeModelCostCache,

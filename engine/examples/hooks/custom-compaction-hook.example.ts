@@ -17,8 +17,8 @@
  * to the current request and snapshot.
  */
 
-import type { AgentPlugin } from "@trumbo/core";
-import { estimateTokens as estimateTokensFromChars } from "@trumbo/shared";
+import type { AgentPlugin } from "@trumbodev/core";
+import { estimateTokens as estimateTokensFromChars } from "@trumbodev/shared";
 
 type PluginHooks = NonNullable<AgentPlugin["hooks"]>;
 type BeforeModelHook = NonNullable<PluginHooks["beforeModel"]>;

@@ -1,4 +1,4 @@
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+import { getTrumboEnvironmentConfig } from "@trumbodev/shared";
 import { CLI_PROMO_CODE } from "../../../utils/trumbo-pass-errors";
 
 const TRUMBO_PASS_BILLING_PATH = "/billing";

@@ -1,5 +1,5 @@
-import type { HubCommandEnvelope, HubReplyEnvelope } from "@trumbo/shared";
-import { createSessionId } from "@trumbo/shared";
+import type { HubCommandEnvelope, HubReplyEnvelope } from "@trumbodev/shared";
+import { createSessionId } from "@trumbodev/shared";
 import { logHubMessage } from "../hub-server-logging";
 import { errorReply, type HubTransportContext, okReply } from "./context";
 

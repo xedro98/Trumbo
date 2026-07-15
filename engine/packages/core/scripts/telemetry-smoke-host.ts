@@ -13,7 +13,7 @@
 import {
 	createTrumboTelemetryServiceConfig,
 	type ITelemetryService,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	captureExtensionActivated,
 	identifyAccount,
@@ -70,7 +70,7 @@ function dumpActivationEvents(
  * `projects/console/src/utils/telemetry.ts` (`captureCliExtensionActivated`).
  *
  * Cross-importing from `projects/console/...` here would pull the full
- * `@trumbo/core` barrel which transitively requires `@trumbo/llms`, so
+ * `@trumbodev/core` barrel which transitively requires `@trumbodev/llms`, so
  * we replicate the exact memoization pattern locally and call the same
  * underlying core helper.
  */

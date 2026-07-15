@@ -1,6 +1,6 @@
-import type { CoreSessionEvent } from "@trumbo/core"
-import type { AgentEvent } from "@trumbo/shared"
 import type { TrumboAskUseMcpServer } from "@shared/ExtensionMessage"
+import type { CoreSessionEvent } from "@trumbodev/core"
+import type { AgentEvent } from "@trumbodev/shared"
 import { describe, expect, it } from "vitest"
 import {
 	extractToolOutputText,

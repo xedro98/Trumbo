@@ -8,7 +8,7 @@ import {
 import { access } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { AgentMessage, AgentModelEvent } from "@trumbo/shared";
+import type { AgentMessage, AgentModelEvent } from "@trumbodev/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { normalizeModelsDevProviderModels } from "../catalog/catalog-live";
 import {

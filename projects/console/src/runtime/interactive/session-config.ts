@@ -1,4 +1,4 @@
-import type { TeamEvent } from "@trumbo/core";
+import type { TeamEvent } from "@trumbodev/core";
 import type { ChatCommandState } from "../../utils/chat-commands";
 import type { Config } from "../../utils/types";
 import {

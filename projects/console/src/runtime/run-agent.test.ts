@@ -47,7 +47,7 @@ const CLI_TRUMBO_PASS_SUBSCRIPTION_MESSAGE = `No access to TrumboPass subscripti
 const TRUMBO_ORG_INDIVIDUAL_INFERENCE_SUBSCRIPTION_MESSAGE =
 	"Organization accounts cannot use TrumboPass subscriptions. Go to /account -> change account to switch to your personal account for TrumboPass";
 
-vi.mock("@trumbo/core", () => ({
+vi.mock("@trumbodev/core", () => ({
 	getTrumboOrgIndividualInferenceSubscriptionMessage: () =>
 		TRUMBO_ORG_INDIVIDUAL_INFERENCE_SUBSCRIPTION_MESSAGE,
 	getTrumboPassSubscriptionUrl: () => TRUMBO_PASS_SUBSCRIPTION_URL,
@@ -72,8 +72,8 @@ vi.mock("@trumbo/core", () => ({
 	},
 }));
 
-vi.mock("@trumbo/shared", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("@trumbo/shared")>();
+vi.mock("@trumbodev/shared", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@trumbodev/shared")>();
 	return {
 		...actual,
 		// Pin the app base URL so getCliSubscriptionUrl() is deterministic

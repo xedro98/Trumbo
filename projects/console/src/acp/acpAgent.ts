@@ -27,8 +27,8 @@ import {
 	ProviderSettingsManager,
 	SessionSource,
 	type TrumboCore,
-} from "@trumbo/core";
-import type { Message } from "@trumbo/shared";
+} from "@trumbodev/core";
+import type { Message } from "@trumbodev/shared";
 import { getPersistedProviderApiKey } from "../commands/auth";
 import { resolveSystemPrompt } from "../runtime/prompt";
 import { subscribeToAgentEvents } from "../runtime/session-events";

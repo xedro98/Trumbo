@@ -2,7 +2,7 @@ import type {
 	SendSessionInput,
 	StartSessionInput,
 	TrumboCore,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import type { RpcRequest } from "./rpc-mode";
 
 /**

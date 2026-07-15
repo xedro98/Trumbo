@@ -3,8 +3,11 @@ import type {
 	HubReplyEnvelope,
 	JsonValue,
 	ToolApprovalRequest,
-} from "@trumbo/shared";
-import { createSessionId, parseRuntimeConfigExtensions } from "@trumbo/shared";
+} from "@trumbodev/shared";
+import {
+	createSessionId,
+	parseRuntimeConfigExtensions,
+} from "@trumbodev/shared";
 import type { RuntimeSessionConfig } from "../../../runtime/host/runtime-host";
 import {
 	SessionVersioningError,

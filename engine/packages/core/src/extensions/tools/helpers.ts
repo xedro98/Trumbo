@@ -1,4 +1,4 @@
-import { validateWithZod } from "@trumbo/shared";
+import { validateWithZod } from "@trumbodev/shared";
 import {
 	type EditFileInput,
 	INPUT_ARG_CHAR_LIMIT,

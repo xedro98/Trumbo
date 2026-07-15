@@ -1,3 +1,3 @@
-declare module "@trumbo/shared/storage" {
+declare module "@trumbodev/shared/storage" {
 	export function resolveGlobalSettingsPath(): string
 }

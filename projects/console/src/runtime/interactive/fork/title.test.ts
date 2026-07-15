@@ -1,4 +1,4 @@
-import type { Message } from "@trumbo/shared";
+import type { Message } from "@trumbodev/shared";
 import { describe, expect, it } from "vitest";
 import { deriveForkSessionTitle } from "./title";
 

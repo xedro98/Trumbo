@@ -180,7 +180,7 @@ interface ModelInfoViewProps {
 	 * pricing in Advanced, and tiered pricing). Set this for providers whose
 	 * billing is subscription-based or otherwise not per-token, mirroring the
 	 * SDK's `ProviderInfo.metadata.usageCostDisplay = "hide"` signal (see
-	 * `resolveProviderUsageCostDisplay` in `@trumbo/llms`).
+	 * `resolveProviderUsageCostDisplay` in `@trumbodev/llms`).
 	 */
 	hideUsageCost?: boolean
 }

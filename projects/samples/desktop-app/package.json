@@ -1,5 +1,5 @@
 {
-	"name": "@trumbo/code",
+	"name": "@trumbodev/code",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
@@ -16,9 +16,9 @@
 	},
 	"dependencies": {
 		"@base-ui/react": "^1.2.0",
-		"@trumbo/core": "workspace:*",
-		"@trumbo/llms": "workspace:*",
-		"@trumbo/shared": "workspace:*",
+		"@trumbodev/core": "workspace:*",
+		"@trumbodev/llms": "workspace:*",
+		"@trumbodev/shared": "workspace:*",
 		"@fontsource-variable/geist": "^5.2.8",
 		"@hookform/resolvers": "^3.9.1",
 		"@radix-ui/react-accordion": "1.2.12",

@@ -4,13 +4,13 @@ import type {
 	HubReplyEnvelope,
 	HubTransportFrame,
 	ITelemetryService,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	captureSdkError,
 	HUB_COMMAND_SLOW_LOG_MS,
 	resolveHubCommandTimeoutMs,
 	safeJsonParse,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type { HubCommandTransport } from "./command-transport";
 import { logHubMessage } from "./hub-server-logging";
 

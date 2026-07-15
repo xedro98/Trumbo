@@ -6,7 +6,7 @@ import {
 	syncPluginMcpServersToSettings,
 	type UserInstructionConfigService,
 	uninstallPlugin,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	type InteractiveConfigData,
 	type InteractiveConfigItem,

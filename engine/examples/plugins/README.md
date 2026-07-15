@@ -99,8 +99,8 @@ ANTHROPIC_API_KEY=sk-... bun run examples/plugins/weather-metrics.ts
 ## Anatomy of a plugin
 
 ```ts
-import type { AgentPlugin } from "@trumbo/core";
-import { createTool } from "@trumbo/core";
+import type { AgentPlugin } from "@trumbodev/core";
+import { createTool } from "@trumbodev/core";
 
 const myPlugin: AgentPlugin = {
   name: "my-plugin",
@@ -126,7 +126,7 @@ Pass it to the SDK:
 
 ```ts
 import plugin from "./my-plugin";
-import { TrumboCore } from "@trumbo/core";
+import { TrumboCore } from "@trumbodev/core";
 
 const host = await TrumboCore.create({ backendMode: "local" });
 await host.start({
@@ -167,7 +167,7 @@ The setup `ctx` may include `session`, `client`, `user`, `workspaceInfo`,
 ## Runtime hooks
 
 Hooks are typed, in-process callbacks on the same hook layer as
-`@trumbo/agents`. They run inside the agent loop with full type information.
+`@trumbodev/agents`. They run inside the agent loop with full type information.
 
 | Hook          | When it fires |
 | ------------- | ------------- |

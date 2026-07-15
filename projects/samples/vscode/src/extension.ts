@@ -19,13 +19,13 @@ import {
 	resolveSharedHubOwnerContext,
 	type ToolPolicy,
 	TrumboCore,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 import {
 	type AgentTool,
 	buildTrumboSystemPrompt,
 	createTrumboTelemetryServiceConfig,
 	createTrumboTelemetryServiceMetadata,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import * as vscode from "vscode";
 import { displayName, version } from "../package.json";
 import { createVsCodeRuntimeCapabilities } from "./runtime-capabilities";
@@ -156,7 +156,7 @@ type StartConfig = {
 	apiKey: string;
 	autoApproveTools?: boolean;
 	logger: BasicLogger;
-	extensionContext?: import("@trumbo/shared").ExtensionContext;
+	extensionContext?: import("@trumbodev/shared").ExtensionContext;
 	extraTools?: AgentTool[];
 };
 
@@ -1273,7 +1273,7 @@ class CoreChatWebviewController implements vscode.Disposable {
 				interactive: true,
 				config: forkStartConfig,
 				toolPolicies: createToolPolicies(forkStartConfig),
-				initialMessages: rawMessages as import("@trumbo/llms").Message[],
+				initialMessages: rawMessages as import("@trumbodev/llms").Message[],
 				sessionMetadata: forkMetadata,
 			});
 			const newSessionId = response.sessionId.trim();

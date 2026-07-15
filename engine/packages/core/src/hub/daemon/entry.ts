@@ -1,5 +1,5 @@
-import { AgentRuntimeAbortError } from "@trumbo/agents";
-import { initVcr, resolveTrumboBuildEnv } from "@trumbo/shared";
+import { AgentRuntimeAbortError } from "@trumbodev/agents";
+import { initVcr, resolveTrumboBuildEnv } from "@trumbodev/shared";
 import { createLocalHubScheduleRuntimeHandlers } from "../daemon/runtime-handlers";
 import { resolveHubEndpointOptions } from "../discovery/defaults";
 import {

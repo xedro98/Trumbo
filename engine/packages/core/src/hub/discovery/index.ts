@@ -2,7 +2,10 @@ import { createHash, randomBytes } from "node:crypto";
 import { existsSync } from "node:fs";
 import { chmod, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { resolveTrumboDataDir, resolveTrumboDir } from "@trumbo/shared/storage";
+import {
+	resolveTrumboDataDir,
+	resolveTrumboDir,
+} from "@trumbodev/shared/storage";
 import corePackage from "../../../package.json";
 
 const HUB_DISCOVERY_ENV = "TRUMBO_HUB_DISCOVERY_PATH";

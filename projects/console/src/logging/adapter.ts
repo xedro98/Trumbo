@@ -7,9 +7,9 @@ import {
 	truncateSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
-import type { BasicLogger, RuntimeLoggerConfig } from "@trumbo/core";
-import { resolveTrumboDataDir } from "@trumbo/core";
-import { registerDisposable } from "@trumbo/shared";
+import type { BasicLogger, RuntimeLoggerConfig } from "@trumbodev/core";
+import { resolveTrumboDataDir } from "@trumbodev/core";
+import { registerDisposable } from "@trumbodev/shared";
 import pino, {
 	type DestinationStream,
 	type LevelWithSilent,

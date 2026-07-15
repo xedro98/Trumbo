@@ -1,4 +1,4 @@
-import type { ModelInfo } from "@trumbo/llms";
+import type { ModelInfo } from "@trumbodev/llms";
 import type {
 	AgentConfig,
 	AgentHooks,
@@ -14,7 +14,7 @@ import type {
 	SessionExecutionConfig,
 	SessionPromptConfig,
 	SessionWorkspaceConfig,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import type { ToolRoutingRule } from "../extensions/tools/model-tool-routing";
 import type { TeamEvent } from "../extensions/tools/team";
 import type { ProviderConfig } from "./provider-settings";

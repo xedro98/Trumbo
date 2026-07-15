@@ -4,8 +4,8 @@ import path from "node:path";
 import {
 	ProviderSettingsManager,
 	saveLocalProviderSettings,
-} from "@trumbo/core";
-import { setHomeDir, setTrumboDir } from "@trumbo/shared/storage";
+} from "@trumbodev/core";
+import { setHomeDir, setTrumboDir } from "@trumbodev/shared/storage";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Config } from "../../utils/types";
 import { isProviderConfigured } from "./provider-configured";

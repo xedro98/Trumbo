@@ -1,11 +1,11 @@
 import {
 	type ConfiguredTelemetryHandle,
-	createTrumboTelemetryServiceConfig,
 	createConfiguredTelemetryHandle,
+	createTrumboTelemetryServiceConfig,
 	type ITelemetryService,
 	type TelemetryMetadata,
 	type TelemetryProperties,
-} from "@trumbo/core"
+} from "@trumbodev/core"
 import * as os from "os"
 import { StateManager } from "@/core/storage/StateManager"
 import { HostProvider } from "@/hosts/host-provider"

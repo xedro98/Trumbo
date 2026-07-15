@@ -11,8 +11,8 @@ import {
 	saveLocalProviderOAuthCredentials,
 	saveLocalProviderSettings,
 	startTrumboDeviceAuth,
-} from "@trumbo/core";
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+} from "@trumbodev/core";
+import { getTrumboEnvironmentConfig } from "@trumbodev/shared";
 import open from "open";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {

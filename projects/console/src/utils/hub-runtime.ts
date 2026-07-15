@@ -4,7 +4,7 @@ import {
 	type HubEndpointOverrides,
 	resolveDefaultHubHost,
 	resolveDefaultHubPort,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
 /**
  * Build a `host:port` rpc address string that respects the current build

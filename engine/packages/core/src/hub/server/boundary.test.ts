@@ -1,4 +1,4 @@
-import type { AgentToolContext, HubEventEnvelope } from "@trumbo/shared";
+import type { AgentToolContext, HubEventEnvelope } from "@trumbodev/shared";
 import { describe, expect, it, vi } from "vitest";
 import {
 	SessionNotFoundError,

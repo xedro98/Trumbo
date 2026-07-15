@@ -1,10 +1,10 @@
 /**
- * @trumbo/core
+ * @trumbodev/core
  *
  * Core contracts, shared state utilities, and Node runtime services.
  */
 
-export * as Llms from "@trumbo/llms";
+export * as Llms from "@trumbodev/llms";
 export {
 	extractTrumboPassLimitMessage,
 	getTrumboNotSubscribedMessage,
@@ -20,7 +20,7 @@ export {
 	TrumboOrgIndividualInferenceSubscriptionError,
 	type TrumboPassLimitDetails,
 	TrumboPassLimitError,
-} from "@trumbo/llms";
+} from "@trumbodev/llms";
 // Shared contracts and path helpers re-exported for app consumers.
 export type {
 	AddProviderActionRequest,
@@ -93,7 +93,7 @@ export type {
 	WorkspaceInfoSchema,
 	WorkspaceManifest,
 	WorkspaceManifestSchema,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 export {
 	buildSdkErrorProperties,
 	buildTrumboSystemPrompt as getTrumboDefaultSystemPrompt,
@@ -113,8 +113,8 @@ export {
 	parseUserCommandEnvelope,
 	registerDisposable,
 	SDK_ERROR_TELEMETRY_EVENT,
-} from "@trumbo/shared";
-export * from "@trumbo/shared/storage";
+} from "@trumbodev/shared";
+export * from "@trumbodev/shared/storage";
 export {
 	executeTrumboAccountAction,
 	type FeaturebaseTokenResponse,
@@ -785,7 +785,7 @@ export { CORE_BUILD_VERSION } from "./version";
 export async function loadOpenTelemetryAdapter() {
 	return import("./services/telemetry/index.js");
 }
-export { Agent, createAgentRuntime } from "@trumbo/agents";
+export { Agent, createAgentRuntime } from "@trumbodev/agents";
 export { createContextCompactionPrepareTurn } from "./extensions/context/compaction";
 export {
 	ALL_DEFAULT_TOOL_NAMES,

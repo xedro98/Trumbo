@@ -172,19 +172,19 @@ trumbo -i "do something"  # hooks fire automatically
 To use the SDK in your own Node app, outside this monorepo:
 
 ```bash
-npm add @trumbo/core
+npm add @trumbodev/core
 ```
 
-Reach for `@trumbo/agents` or `@trumbo/llms` only when you want lower-level
+Reach for `@trumbodev/agents` or `@trumbodev/llms` only when you want lower-level
 control over the agent loop or model transport. For RPC client helpers, import
-from `@trumbo/core` to stay on the app-facing surface.
+from `@trumbodev/core` to stay on the app-facing surface.
 
 Current SDK layering:
 
-- `@trumbo/core` owns config discovery and watchers, runtime plugin loading, and
+- `@trumbodev/core` owns config discovery and watchers, runtime plugin loading, and
   the context pipeline (compaction runs here, during turn preparation, before
   model calls).
-- Most app integrations should stay on `@trumbo/core` unless they intentionally
+- Most app integrations should stay on `@trumbodev/core` unless they intentionally
   need lower-level agent or model control.
 
 ## Learning path

@@ -1,5 +1,5 @@
 {
-	"name": "@trumbo/vscode",
+	"name": "@trumbodev/vscode",
 	"displayName": "Trumbo Chat",
 	"description": "Autonomous coding agent right in your IDE, capable of creating/editing files, running commands, using the browser, and more with your permission every step of the way. Backed by the Trumbo CLI runtime.",
 	"version": "0.0.0",
@@ -50,9 +50,9 @@
 	},
 	"dependencies": {
 		"@ai-sdk/react": "^3.0.118",
-		"@trumbo/core": "workspace:*",
-		"@trumbo/llms": "workspace:*",
-		"@trumbo/shared": "workspace:*",
+		"@trumbodev/core": "workspace:*",
+		"@trumbodev/llms": "workspace:*",
+		"@trumbodev/shared": "workspace:*",
 		"ai": "^6.0.116"
 	},
 	"devDependencies": {

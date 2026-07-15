@@ -2,7 +2,7 @@ import type {
 	ChatMessage as CoreChatMessage,
 	ProviderListItem,
 	ProviderModel,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
 export type WebviewUsage = {
 	inputTokens?: number;

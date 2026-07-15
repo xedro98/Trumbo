@@ -1,4 +1,4 @@
-import type { TrumboAccountOrganization } from "@trumbo/core";
+import type { TrumboAccountOrganization } from "@trumbodev/core";
 import { describe, expect, it } from "vitest";
 import { resolveTeamMatch } from "./team";
 

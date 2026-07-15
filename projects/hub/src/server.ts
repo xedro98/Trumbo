@@ -1,4 +1,4 @@
-import { CORE_BUILD_VERSION } from "@trumbo/core";
+import { CORE_BUILD_VERSION } from "@trumbodev/core";
 import { isNonLocalBindHost } from "./options";
 import {
 	handleToolApprovalResponse,

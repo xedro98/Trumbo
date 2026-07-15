@@ -3,9 +3,9 @@ import {
 	getCoreBuiltinToolCatalog,
 	resolveDisabledToolNames,
 	type ToolCatalogEntry,
-} from "@trumbo/core";
+} from "@trumbodev/core";
 
-export type { ToolCatalogEntry } from "@trumbo/core";
+export type { ToolCatalogEntry } from "@trumbodev/core";
 
 export function getToolCatalog(
 	availabilityContext?: BuiltinToolAvailabilityContext,

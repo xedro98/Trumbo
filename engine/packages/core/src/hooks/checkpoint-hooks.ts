@@ -1,6 +1,6 @@
 import { execFile as execFileCallback } from "node:child_process";
 import { promisify } from "node:util";
-import type { AgentHooks, BasicLogger } from "@trumbo/shared";
+import type { AgentHooks, BasicLogger } from "@trumbodev/shared";
 
 const execFile = promisify(execFileCallback);
 

@@ -1,7 +1,7 @@
 import {
 	getTrumboEnvironmentConfig,
 	type ITelemetryService,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	captureAuthFailed,
 	captureAuthLoggedOut,

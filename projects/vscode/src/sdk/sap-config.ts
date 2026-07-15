@@ -4,9 +4,9 @@
 // buildSessionConfig() uses this to hand the SDK runtime the same structured
 // SAP fields that the legacy UI stores in ApiConfiguration.
 
-import type { ProviderSettings } from "@trumbo/core"
 import type { ApiConfiguration } from "@shared/api"
 import type { Mode } from "@shared/storage/types"
+import type { ProviderSettings } from "@trumbodev/core"
 
 export type SapProviderConfig = Pick<ProviderSettings, "baseUrl" | "sap">
 

@@ -6,21 +6,21 @@ import type {
 	CronTriggerKind,
 	HubScheduleCreateInput,
 	HubScheduleUpdateInput,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import {
 	asOptionalString,
 	asString,
 	loadSqliteDb,
 	nowIso,
 	type SqliteDb,
-} from "@trumbo/shared/db";
-import { resolveCronDbPath } from "@trumbo/shared/storage";
+} from "@trumbodev/shared/db";
+import { resolveCronDbPath } from "@trumbodev/shared/storage";
 import { getNextCronTime } from "../schedule/scheduler";
 import { ensureCronSchema } from "./cron-schema";
 
 /**
  * Generalized cron/automation store backed by `cron.db`. Sessions stay in
- * their own database (see @trumbo/shared `ensureSessionSchema`). cron_runs
+ * their own database (see @trumbodev/shared `ensureSessionSchema`). cron_runs
  * here absorb one-off, recurring, and event-driven work under one queue.
  */
 

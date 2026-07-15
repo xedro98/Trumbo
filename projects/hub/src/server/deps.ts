@@ -1,6 +1,6 @@
 import { dirname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
-import { ProviderSettingsManager } from "@trumbo/core";
+import { ProviderSettingsManager } from "@trumbodev/core";
 import { buildInviteUrl, resolveTrumboHubServerOptions } from "../options";
 import type { BrowserConfig } from "./types";
 

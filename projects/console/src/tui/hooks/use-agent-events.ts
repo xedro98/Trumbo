@@ -1,4 +1,4 @@
-import type { AgentEvent, TeamEvent } from "@trumbo/core";
+import type { AgentEvent, TeamEvent } from "@trumbodev/core";
 import { useCallback, useRef } from "react";
 import type {
 	PendingPromptSnapshot,

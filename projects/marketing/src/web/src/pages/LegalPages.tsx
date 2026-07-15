@@ -229,7 +229,7 @@ export function PrivacyPage() {
 				</LegalP>
 				<ul className="ml-4 space-y-1.5">
 					<li><strong className="text-foreground">Stripe, Inc.</strong> — payment processing. Receives: billing name, address, payment method token, subscription plan, charge amounts. Processes payments under Stripe's PCI-DSS compliance. See stripe.com/privacy.</li>
-					<li><strong className="text-foreground">Cloudflare, Inc.</strong> — web hosting, CDN, DDoS protection, DNS. Receives: IP addresses, HTTP request metadata, TLS connection data. See cloudflare.com/privacy.</li>
+					<li><strong className="text-foreground">Infrastructure hosting provider</strong> — web hosting, CDN, DDoS protection, DNS. Receives: IP addresses, HTTP request metadata, TLS connection data.</li>
 					<li><strong className="text-foreground">Model Inference Provider</strong> — model inference infrastructure. Receives: model ID, token counts, request metadata for inference execution. This provider does not have access to session data or account information.</li>
 					<li><strong className="text-foreground">GitHub, Inc.</strong> — source code hosting, issue tracking. Receives: GitHub username and email (if you file issues or contribute to the open source CLI). See github.com/privacy.</li>
 					<li><strong className="text-foreground">npm, Inc. (GitHub)</strong> — package registry for CLI distribution. Receives: download metadata (package name, version, IP address for CDN routing). See npmjs.com/policies/privacy.</li>
@@ -292,8 +292,8 @@ export function PrivacyPage() {
 					<li><strong className="text-foreground">Encryption at rest:</strong> session data, API keys, and other personal information stored on our servers is encrypted using AES-256.</li>
 					<li><strong className="text-foreground">Password hashing:</strong> user passwords are hashed using bcrypt with a work factor of 12. We never store plaintext passwords.</li>
 					<li><strong className="text-foreground">Access controls:</strong> production database and server access is restricted to authorized engineering personnel using role-based access control (RBAC). All access is logged and audited monthly.</li>
-					<li><strong className="text-foreground">Network security:</strong> all services run behind Cloudflare's WAF and DDoS protection. Internal services are isolated in private networks with no public internet access.</li>
-					<li><strong className="text-foreground">Key management:</strong> encryption keys are managed through Cloudflare Workers Secrets and rotated on a regular schedule.</li>
+					<li><strong className="text-foreground">Network security:</strong> all services run behind edge WAF and DDoS protection. Internal services are isolated in private networks with no public internet access.</li>
+					<li><strong className="text-foreground">Key management:</strong> encryption keys are managed through Trumbo's managed secrets infrastructure and rotated on a regular schedule.</li>
 					<li><strong className="text-foreground">Security reviews:</strong> we conduct internal security reviews at least quarterly and engage third-party security auditors annually.</li>
 					<li><strong className="text-foreground">Incident response:</strong> we maintain an incident response plan with defined escalation procedures. In the event of a confirmed data breach affecting personal information, we will notify affected users within 72 hours of discovery, as required by GDPR Article 33 and applicable state breach notification laws.</li>
 				</ul>
@@ -398,7 +398,7 @@ export function PrivacyPage() {
 				<LegalP>
 					Your personal information may be processed in countries other than your country of
 					residence, including the United States (where {entity} is incorporated and where
-					Cloudflare and Cloudflare operates), Ireland (where Stripe's European operations
+					our infrastructure providers operate), Ireland (where Stripe's European operations
 					are based), and other locations where our subprocessors maintain infrastructure.
 				</LegalP>
 				<LegalP>
@@ -962,8 +962,8 @@ export function TermsPage() {
 					for any failure or delay in performance due to events beyond our reasonable
 					control, including acts of God, natural disasters, war, terrorism, civil unrest,
 					pandemics, government actions, labor disputes, internet or telecommunications
-					failures, and outages of third-party service providers (e.g., Cloudflare,
-					, Stripe).
+					failures, and outages of third-party service providers (e.g., infrastructure
+					hosts, Stripe).
 				</LegalP>
 				<LegalP>
 					<strong className="text-foreground">14.6 Electronic communications.</strong> You

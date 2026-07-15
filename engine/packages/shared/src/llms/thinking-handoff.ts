@@ -16,7 +16,7 @@ import type {
 	MessageWithMetadata,
 	TextContent,
 	ThinkingContent,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 
 /**
  * Convert thinking blocks in messages to portable `<thinking>` text tags.

@@ -6,13 +6,13 @@
 // the subscribeToPartialMessage and subscribeToState streams the webview
 // already listens on.
 
-import type { CoreSessionEvent } from "@trumbo/core"
 import { sendStateUpdate } from "@core/controller/state/subscribeToState"
 import { sendPartialMessageEvent } from "@core/controller/ui/subscribeToPartialMessage"
-import type { TrumboMessage, ExtensionState } from "@shared/ExtensionMessage"
+import type { ExtensionState, TrumboMessage } from "@shared/ExtensionMessage"
 import type { TrumboMessage as ProtoTrumboMessage } from "@shared/proto/trumbo/ui"
 import { convertTrumboMessageToProto } from "@shared/proto-conversions/trumbo-message"
 import { Logger } from "@shared/services/Logger"
+import type { CoreSessionEvent } from "@trumbodev/core"
 import type { MessageTranslatorState } from "./message-translator"
 import type { SessionEventListener } from "./sdk-message-coordinator"
 

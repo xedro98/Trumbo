@@ -1,4 +1,4 @@
-import type { ITelemetryService } from "@trumbo/shared";
+import type { ITelemetryService } from "@trumbodev/shared";
 import { CORE_TELEMETRY_EVENTS } from "../services/telemetry/core-events";
 import { SessionSource } from "../types/common";
 import type { TrumboCoreStartInput } from "./types";

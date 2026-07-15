@@ -6,8 +6,8 @@ import {
 	type ProviderSettingsManager,
 	saveLocalProviderOAuthCredentials,
 	startTrumboDeviceAuth,
-} from "@trumbo/core";
-import { getTrumboEnvironmentConfig } from "@trumbo/shared";
+} from "@trumbodev/core";
+import { getTrumboEnvironmentConfig } from "@trumbodev/shared";
 import open from "open";
 import { identifyFeatureFlagsAccount } from "../../../utils/feature-flags";
 import { syncTrumboPlatformKnowledgeMcp } from "../../trumbo-account";

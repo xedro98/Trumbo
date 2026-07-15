@@ -8,7 +8,7 @@ import {
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { UserInstructionConfigService } from "@trumbo/core";
+import type { UserInstructionConfigService } from "@trumbodev/core";
 import { afterEach, describe, expect, it } from "vitest";
 import {
 	buildSlashCommandRegistry,

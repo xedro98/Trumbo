@@ -1,4 +1,4 @@
-import type { BasicLogger } from "@trumbo/shared";
+import type { BasicLogger } from "@trumbodev/shared";
 import { describe, expect, it, vi } from "vitest";
 import type { ITelemetryAdapter } from "./ITelemetryAdapter";
 import { TelemetryService } from "./TelemetryService";

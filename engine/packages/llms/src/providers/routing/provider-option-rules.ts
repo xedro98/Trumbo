@@ -1,4 +1,4 @@
-import { isTrumboProvider } from "@trumbo/shared";
+import { isTrumboProvider } from "@trumbodev/shared";
 import {
 	isDeepSeekFamily,
 	isGemini3Model,

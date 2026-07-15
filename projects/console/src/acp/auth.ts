@@ -1,5 +1,5 @@
-import type { ProviderSettingsManager } from "@trumbo/core";
-import { loginAndSaveProviderOAuthCredentials } from "@trumbo/core";
+import type { ProviderSettingsManager } from "@trumbodev/core";
+import { loginAndSaveProviderOAuthCredentials } from "@trumbodev/core";
 import { getPersistedProviderApiKey } from "../commands/auth";
 import { writeDiagnostic } from "../utils/output";
 
@@ -30,7 +30,7 @@ async function performOAuthLogin(input: {
 	providerSettingsManager: ProviderSettingsManager;
 }): Promise<string> {
 	const [{ createOAuthClientCallbacks }, { default: open }] = await Promise.all(
-		[import("@trumbo/core"), import("open")],
+		[import("@trumbodev/core"), import("open")],
 	);
 
 	const callbacks = createOAuthClientCallbacks({

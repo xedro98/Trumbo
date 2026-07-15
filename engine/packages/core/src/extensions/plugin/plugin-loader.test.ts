@@ -103,7 +103,7 @@ describe("plugin-loader", () => {
 		await writeFile(
 			join(sdkDir, "package.json"),
 			JSON.stringify({
-				name: "@trumbo/shared",
+				name: "@trumbodev/shared",
 				type: "module",
 				exports: "./index.js",
 			}),
@@ -117,7 +117,7 @@ describe("plugin-loader", () => {
 		await writeFile(
 			join(dir, "plugin-with-sdk-dep.ts"),
 			[
-				"import { sdkMarker } from '@trumbo/shared';",
+				"import { sdkMarker } from '@trumbodev/shared';",
 				"export default {",
 				"  name: sdkMarker,",
 				"  manifest: { capabilities: ['tools'] },",
@@ -129,8 +129,8 @@ describe("plugin-loader", () => {
 		await writeFile(
 			join(copyDir, "portable-subagents.ts"),
 			[
-				"import { safeJsonStringify } from '@trumbo/shared';",
-				"import { resolveTrumboDataDir } from '@trumbo/shared/storage';",
+				"import { safeJsonStringify } from '@trumbodev/shared';",
+				"import { resolveTrumboDataDir } from '@trumbodev/shared/storage';",
 				"import YAML from 'yaml';",
 				"export default {",
 				"  name: typeof safeJsonStringify === 'function' ? YAML.stringify({ ok: !!resolveTrumboDataDir() }) : 'invalid',",
@@ -181,7 +181,7 @@ describe("plugin-loader", () => {
 		await writeFile(
 			join(packagedSdkSubpathDir, "index.ts"),
 			[
-				"import { createConfiguredTelemetryHandle } from '@trumbo/core/telemetry';",
+				"import { createConfiguredTelemetryHandle } from '@trumbodev/core/telemetry';",
 				"export default {",
 				"  name: typeof createConfiguredTelemetryHandle === 'function' ? 'sdk-subpath-ok' : 'invalid',",
 				"  manifest: { capabilities: ['tools'] },",

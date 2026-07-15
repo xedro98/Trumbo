@@ -3,7 +3,7 @@ export {
 	type WorkspaceInfo,
 	type WorkspaceManifest,
 	WorkspaceManifestSchema,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 export type {
 	WorkspaceManager,
 	WorkspaceManagerEvent,

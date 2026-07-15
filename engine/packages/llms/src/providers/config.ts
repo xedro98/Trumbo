@@ -5,7 +5,7 @@
  * This replaces the per-provider config chaos with a single structure.
  */
 
-import type { BasicLogger, ExtensionContext } from "@trumbo/shared";
+import type { BasicLogger, ExtensionContext } from "@trumbodev/shared";
 import type { ModelInfo, ProviderClient } from "../catalog/types";
 import {
 	BUILT_IN_PROVIDER,

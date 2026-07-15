@@ -17,7 +17,7 @@ import {
 	type ToolApprovalResult,
 	type ToolPolicy,
 	zodToJsonSchema,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { z } from "zod";
 import {
 	createDelegatedAgent,

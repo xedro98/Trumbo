@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import type { ITelemetryService, WorkspaceInfo } from "@trumbo/shared";
+import type { ITelemetryService, WorkspaceInfo } from "@trumbodev/shared";
 import {
 	captureWorkspaceInitError,
 	captureWorkspaceInitialized,

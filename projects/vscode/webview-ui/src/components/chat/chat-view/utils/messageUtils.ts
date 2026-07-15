@@ -10,6 +10,7 @@ import type {
 	TrumboSayTool,
 } from "@shared/ExtensionMessage"
 import { FileIcon, FolderOpenDotIcon, FolderOpenIcon, SearchIcon, ShapesIcon, WrenchIcon } from "lucide-react"
+import { isPlatformCloudAgentMessage, isPlatformSandboxMessage, parseMcpToolPayload } from "@/utils/platformMcpSession"
 
 /**
  * Low-stakes tool types that should be grouped together
@@ -240,38 +241,61 @@ function isBrowserSessionMessage(message: TrumboMessage): boolean {
 }
 
 /**
- * Group messages, combining browser session messages into arrays
+ * Messages that belong inside a platform cloud-agent MCP session group.
+ */
+function isCloudAgentSessionMessage(message: TrumboMessage): boolean {
+	if (isPlatformCloudAgentMessage(message)) return true
+	if (message.say === "mcp_server_response") return true
+	if (message.type === "say") {
+		return ["api_req_started", "text", "reasoning", "error_retry"].includes(message.say ?? "")
+	}
+	return false
+}
+
+/**
+ * Messages that belong inside a platform sandbox MCP session group.
+ */
+function isSandboxSessionMessage(message: TrumboMessage): boolean {
+	if (isPlatformSandboxMessage(message)) return true
+	if (message.say === "mcp_server_response") return true
+	if (message.type === "say") {
+		return ["api_req_started", "text", "reasoning", "error_retry"].includes(message.say ?? "")
+	}
+	return false
+}
+
+/**
+ * Group messages, combining browser / cloud-agent / sandbox session messages into arrays.
  */
 export function groupMessages(visibleMessages: TrumboMessage[]): (TrumboMessage | TrumboMessage[])[] {
 	const result: (TrumboMessage | TrumboMessage[])[] = []
 	let currentGroup: TrumboMessage[] = []
-	let isInBrowserSession = false
+	let sessionKind: "browser" | "cloud_agent" | "sandbox" | null = null
 
-	const endBrowserSession = () => {
+	const endSession = () => {
 		if (currentGroup.length > 0) {
 			result.push([...currentGroup])
 			currentGroup = []
-			isInBrowserSession = false
+			sessionKind = null
 		}
 	}
 
 	for (const message of visibleMessages) {
+		// --- Browser session (local browser tool) ---
 		if (message.ask === "browser_action_launch" || message.say === "browser_action_launch") {
-			// complete existing browser session if any
-			endBrowserSession()
-			// start new
-			isInBrowserSession = true
+			endSession()
+			sessionKind = "browser"
 			currentGroup.push(message)
-		} else if (isInBrowserSession) {
-			// end session if api_req_started is cancelled
+			continue
+		}
+
+		if (sessionKind === "browser") {
 			if (message.say === "api_req_started") {
-				// get last api_req_started in currentGroup to check if it's cancelled
 				const lastApiReqStarted = [...currentGroup].reverse().find((m) => m.say === "api_req_started")
 				if (lastApiReqStarted?.text != null) {
 					const info = JSON.parse(lastApiReqStarted.text)
-					const isCancelled = info.cancelReason != null
-					if (isCancelled) {
-						endBrowserSession()
+					if (info.cancelReason != null) {
+						endSession()
 						result.push(message)
 						continue
 					}
@@ -280,25 +304,70 @@ export function groupMessages(visibleMessages: TrumboMessage[]): (TrumboMessage 
 
 			if (isBrowserSessionMessage(message)) {
 				currentGroup.push(message)
-
-				// Check if this is a close action
 				if (message.say === "browser_action") {
 					const browserAction = JSON.parse(message.text || "{}") as TrumboSayBrowserAction
 					if (browserAction.action === "close") {
-						endBrowserSession()
+						endSession()
 					}
 				}
 			} else {
-				// complete existing browser session if any
-				endBrowserSession()
+				endSession()
 				result.push(message)
 			}
-		} else {
-			result.push(message)
+			continue
 		}
+
+		// --- Cloud Agent session (trumbo-platform agent_* MCP tools) ---
+		if (isPlatformCloudAgentMessage(message)) {
+			const payload = parseMcpToolPayload(message)
+			if (sessionKind !== "cloud_agent") {
+				endSession()
+				sessionKind = "cloud_agent"
+			}
+			currentGroup.push(message)
+			if (payload?.toolName === "agent_delete") {
+				endSession()
+			}
+			continue
+		}
+
+		if (sessionKind === "cloud_agent") {
+			if (isCloudAgentSessionMessage(message)) {
+				currentGroup.push(message)
+			} else {
+				endSession()
+				result.push(message)
+			}
+			continue
+		}
+
+		// --- Sandbox session (trumbo-platform sandbox_* MCP tools) ---
+		if (isPlatformSandboxMessage(message)) {
+			const payload = parseMcpToolPayload(message)
+			if (sessionKind !== "sandbox") {
+				endSession()
+				sessionKind = "sandbox"
+			}
+			currentGroup.push(message)
+			if (payload?.toolName === "sandbox_destroy") {
+				endSession()
+			}
+			continue
+		}
+
+		if (sessionKind === "sandbox") {
+			if (isSandboxSessionMessage(message)) {
+				currentGroup.push(message)
+			} else {
+				endSession()
+				result.push(message)
+			}
+			continue
+		}
+
+		result.push(message)
 	}
 
-	// Handle case where browser session is the last group
 	if (currentGroup.length > 0) {
 		result.push([...currentGroup])
 	}

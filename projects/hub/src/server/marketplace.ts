@@ -24,8 +24,8 @@ import {
 	resolveWorkflowsConfigSearchPaths,
 	uninstallMarketplaceEntry as uninstallCoreMarketplaceEntry,
 	uninstallPlugin as uninstallLocalPlugin,
-} from "@trumbo/core";
-import { resolveTrumboDir } from "@trumbo/shared/storage";
+} from "@trumbodev/core";
+import { resolveTrumboDir } from "@trumbodev/shared/storage";
 import { deleteMcpServer, readMcpServersResponse } from "./mcp";
 import type { JsonRecord } from "./types";
 

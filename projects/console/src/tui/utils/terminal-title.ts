@@ -1,4 +1,4 @@
-import { formatDisplayUserInput } from "@trumbo/shared";
+import { formatDisplayUserInput } from "@trumbodev/shared";
 import type { AppView, ChatEntry } from "../types";
 
 const APP_TITLE = "Trumbo";

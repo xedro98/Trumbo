@@ -1,4 +1,4 @@
-import { resolveTrumboBuildEnv } from "@trumbo/shared";
+import { resolveTrumboBuildEnv } from "@trumbodev/shared";
 import { resolveHubEndpointOptions } from "../discovery/defaults";
 import {
 	resolveProductionHubOwnerContext,

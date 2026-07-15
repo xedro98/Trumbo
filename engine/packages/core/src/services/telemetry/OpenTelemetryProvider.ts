@@ -33,7 +33,7 @@ import type {
 	OpenTelemetryClientConfig,
 	TelemetryMetadata,
 	TelemetryProperties,
-} from "@trumbo/shared";
+} from "@trumbodev/shared";
 import { isTelemetryOptedOutGlobally } from "../global-settings";
 import { resolveCoreDistinctId } from "./distinct-id";
 import {

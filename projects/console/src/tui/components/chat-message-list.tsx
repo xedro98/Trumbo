@@ -1,6 +1,6 @@
 import "opentui-spinner/react";
 import type { ScrollBoxRenderable } from "@opentui/core";
-import type { AgentMode, TrumboSubscriptionPlan } from "@trumbo/core";
+import type { AgentMode, TrumboSubscriptionPlan } from "@trumbodev/core";
 import {
 	forwardRef,
 	useCallback,

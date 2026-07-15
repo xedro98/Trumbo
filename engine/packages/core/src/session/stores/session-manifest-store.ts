@@ -7,9 +7,9 @@ import {
 } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import type * as LlmsProviders from "@trumbo/llms";
-import type { BasicLogger } from "@trumbo/shared";
-import { ensureHookLogDir } from "@trumbo/shared/storage";
+import type * as LlmsProviders from "@trumbodev/llms";
+import type { BasicLogger } from "@trumbodev/shared";
+import { ensureHookLogDir } from "@trumbodev/shared/storage";
 import { nowIso, SessionArtifacts } from "../../services/session-artifacts";
 import {
 	buildMessagesFilePayload,
