@@ -324,7 +324,11 @@ const TrumboAccountView = ({ trumboUser, userOrganizations, activeOrganization, 
 											className="w-full"
 											currentValue={dropdownValue}
 											disabled={isLoading || isLockedByRemoteConfig}
-											onChange={handleOrganizationChange}>
+											onChange={
+												handleOrganizationChange as unknown as NonNullable<
+													React.ComponentProps<typeof VSCodeDropdown>["onChange"]
+												>
+											}>
 											<VSCodeOption key="personal" value={uid}>
 												Personal
 											</VSCodeOption>
