@@ -198,7 +198,7 @@ jobs:
           echo "Publishing @trumbodev/shared@${VERSION} with tag '${CHANNEL}'..."
           cd engine/packages/shared
           TARBALL=$(bun pm pack --destination "$RUNNER_TEMP/sdk-npm-packs" --quiet)
-          npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --tag "$CHANNEL" --access public
+          npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --provenance --tag "$CHANNEL" --access public
 
       - name: Publish @trumbodev/llms
         if: steps.check_commits.outputs.skip != 'true'
@@ -209,7 +209,7 @@ jobs:
           echo "Publishing @trumbodev/llms@${VERSION} with tag '${CHANNEL}'..."
           cd engine/packages/llms
           TARBALL=$(bun pm pack --destination "$RUNNER_TEMP/sdk-npm-packs" --quiet)
-          npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --tag "$CHANNEL" --access public
+          npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --provenance --tag "$CHANNEL" --access public
 
       - name: Publish @trumbodev/agents
         if: steps.check_commits.outputs.skip != 'true'
@@ -220,7 +220,7 @@ jobs:
           echo "Publishing @trumbodev/agents@${VERSION} with tag '${CHANNEL}'..."
           cd engine/packages/agents
           TARBALL=$(bun pm pack --destination "$RUNNER_TEMP/sdk-npm-packs" --quiet)
-          npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --tag "$CHANNEL" --access public
+          npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --provenance --tag "$CHANNEL" --access public
 
       - name: Publish @trumbodev/core
         if: steps.check_commits.outputs.skip != 'true'
@@ -231,7 +231,7 @@ jobs:
           echo "Publishing @trumbodev/core@${VERSION} with tag '${CHANNEL}'..."
           cd engine/packages/core
           TARBALL=$(bun pm pack --destination "$RUNNER_TEMP/sdk-npm-packs" --quiet)
-          npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --tag "$CHANNEL" --access public
+          npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --provenance --tag "$CHANNEL" --access public
 
       - name: Publish @trumbodev/sdk
         if: steps.check_commits.outputs.skip != 'true'
@@ -242,7 +242,7 @@ jobs:
           echo "Publishing @trumbodev/sdk@${VERSION} with tag '${CHANNEL}'..."
           cd engine/packages/sdk
           TARBALL=$(bun pm pack --destination "$RUNNER_TEMP/sdk-npm-packs" --quiet)
-          npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --tag "$CHANNEL" --access public
+          npm publish "$RUNNER_TEMP/sdk-npm-packs/$(basename "$TARBALL")" --provenance --tag "$CHANNEL" --access public
 
       - name: Create package tags for production publish
         if: steps.check_commits.outputs.skip != 'true' && steps.channel.outputs.channel == 'latest'
