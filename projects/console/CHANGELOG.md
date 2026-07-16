@@ -11,6 +11,16 @@
 
 
 
+## 3.5.0
+
+Trumbo Quartz model family in the model picker.
+
+### Added
+- Trumbo Quartz model family in the Trumbo model picker: Quartz (adaptive default), Quartz Lite (fast and economical), and Quartz Hyper (flagship reasoning). Pick one like any other model; the platform adapts compute to each request. Quartz Hyper is available on Max and Ultra plans.
+- Quartz variants display friendly names in the status bar.
+
+
+
 ## 3.4.2
 
 Windows plugin install + test-suite cleanup.

@@ -47,7 +47,7 @@ export const STATIC_PAGE_SEO: Record<string, PageSEOConfig> = {
 	"/quartz": {
 		title: "Trumbo Quartz",
 		description:
-			"Quartz 1.0 introduces Hyper and Lite, two adaptive reasoning models on one architecture. Flagship depth or fast, economical routing for agent work.",
+			"Quartz 1.0 introduces Hyper and Lite, two adaptive reasoning models on one architecture. Flagship depth or fast, economical reasoning for agent work.",
 	},
 	"/cloud-agents": {
 		title: "Cloud Agents",

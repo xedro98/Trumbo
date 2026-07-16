@@ -8,7 +8,38 @@ interface TrumboRecommendedModel {
 export interface TrumboRecommendedModelsData {
 	recommended: TrumboRecommendedModel[]
 	free: TrumboRecommendedModel[]
+	/** Trumbo Quartz — the public frontier model family (three variants). */
+	quartz: TrumboRecommendedModel[]
 }
+
+/**
+ * Trumbo Quartz model family — the three variants users see as model cards.
+ * The platform routes each turn server-side; these are the always-available
+ * fallback entries for the picker's Quartz tab.
+ */
+export const TRUMBO_QUARTZ_MODELS: TrumboRecommendedModel[] = [
+	{
+		id: "quartz",
+		name: "Quartz",
+		description: "Adaptive reasoning model that scales compute to the complexity of each request.",
+		tags: ["ADAPTIVE"],
+	},
+	{
+		id: "quartz-lite",
+		name: "Quartz Lite",
+		description: "Fast and economical Quartz variant for everyday agent loops and inline edits.",
+		tags: ["FAST"],
+	},
+	{
+		id: "quartz-hyper",
+		name: "Quartz Hyper",
+		description: "Flagship Quartz variant for maximum reasoning depth on hard engineering and research. Max/Ultra plans.",
+		tags: ["FLAGSHIP"],
+	},
+]
+
+/** Public Quartz model ids. */
+export const TRUMBO_QUARTZ_MODEL_IDS: ReadonlySet<string> = new Set(TRUMBO_QUARTZ_MODELS.map((model) => model.id))
 
 /**
  * Hardcoded fallback shown when upstream recommended models are not enabled or unavailable.
@@ -54,4 +85,5 @@ export const TRUMBO_RECOMMENDED_MODELS_FALLBACK: TrumboRecommendedModelsData = {
 			tags: ["FREE"],
 		},
 	],
+	quartz: TRUMBO_QUARTZ_MODELS,
 }

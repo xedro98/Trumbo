@@ -11,6 +11,7 @@ import {
 	resolveTrumboProviderBaseUrl,
 } from "@trumbodev/shared";
 import { getGeneratedModelsForProvider } from "../catalog/catalog.generated-access";
+import { buildQuartzModelInfos } from "../catalog/catalog-trumbo-recommended";
 import type {
 	ModelCollection,
 	ModelInfo,
@@ -342,8 +343,10 @@ function buildOpenAICodexModels(): Record<string, ModelInfo> {
 
 function buildTrumboModels(): Record<string, ModelInfo> {
 	// Self-hosted Trumbo loads models from the web app's Fireworks catalog
-	// (`/api/v1/ai/trumbo/recommended-models`). No bundled OpenRouter list.
-	return {};
+	// (`/api/v1/ai/trumbo/recommended-models`) at runtime. The Quartz model
+	// family is bundled here as an always-available baseline so the three
+	// frontier-model ids are selectable even before the platform catalog loads.
+	return buildQuartzModelInfos();
 }
 
 function fallbackModelInfo(id: string, spec?: BuiltinSpec): ModelInfo {

@@ -1,9 +1,13 @@
 import { openAiModelInfoSafeDefaults } from "@shared/api"
-import { TRUMBO_RECOMMENDED_MODELS_FALLBACK } from "@shared/trumbo/recommended-models"
 import { EmptyRequest, StringRequest } from "@shared/proto/trumbo/common"
 import { type TrumboRecommendedModel, TrumboRecommendedModelsResponse } from "@shared/proto/trumbo/models"
 import { fromProtobufModelInfo } from "@shared/proto-conversions/models/typeConversion"
 import type { Mode } from "@shared/storage/types"
+import {
+	TRUMBO_QUARTZ_MODEL_IDS,
+	TRUMBO_QUARTZ_MODELS,
+	TRUMBO_RECOMMENDED_MODELS_FALLBACK,
+} from "@shared/trumbo/recommended-models"
 import { isClaudeOpusAdaptiveThinkingModel, resolveClaudeOpusAdaptiveThinking } from "@shared/utils/reasoning-support"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 import Fuse from "fuse.js"
@@ -51,7 +55,7 @@ interface TrumboModelPickerProps {
 	isPopup?: boolean
 	currentMode: Mode
 	showProviderRouting?: boolean
-	initialTab?: "recommended" | "free"
+	initialTab?: "quartz" | "recommended" | "free"
 }
 
 interface FeaturedModelCardEntry {
@@ -92,6 +96,17 @@ const FREE_MODELS_FALLBACK: FeaturedModelCardEntry[] = TRUMBO_RECOMMENDED_MODELS
 	.map((model) => toFeaturedModelCardEntry(model, "FREE"))
 	.filter((model): model is FeaturedModelCardEntry => model !== null)
 
+// Quartz — the public frontier model family. Always present (static), so the
+// Quartz tab renders even before the gRPC catalog refresh succeeds. No "mode"
+// toggles: each variant is a plain model id the platform routes per turn.
+const QUARTZ_MODEL_CARDS: FeaturedModelCardEntry[] = TRUMBO_QUARTZ_MODELS.map((model) =>
+	toFeaturedModelCardEntry(model, "QUARTZ"),
+).filter((model): model is FeaturedModelCardEntry => model !== null)
+
+function isQuartzModelId(modelId: string): boolean {
+	return TRUMBO_QUARTZ_MODEL_IDS.has(modelId.trim().toLowerCase())
+}
+
 const TrumboModelPicker: React.FC<TrumboModelPickerProps> = ({ isPopup, currentMode, showProviderRouting, initialTab }) => {
 	const { handleModeFieldsChange, handleFieldChange } = useApiConfigurationHandlers()
 	const { apiConfiguration, favoritedModelIds } = useExtensionState()
@@ -115,16 +130,21 @@ const TrumboModelPicker: React.FC<TrumboModelPickerProps> = ({ isPopup, currentM
 	const [trumboFreeModels, setTrumboFreeModels] = useState<FeaturedModelCardEntry[]>([])
 	const freeTrumboModelIds = useMemo(() => {
 		const freeModelIds =
-			trumboFreeModels.length > 0 ? trumboFreeModels.map((model) => model.id) : FREE_MODELS_FALLBACK.map((model) => model.id)
+			trumboFreeModels.length > 0
+				? trumboFreeModels.map((model) => model.id)
+				: FREE_MODELS_FALLBACK.map((model) => model.id)
 		return [...new Set(freeModelIds)]
 	}, [trumboFreeModels])
 	const freeTrumboModelIdSet = useMemo(
 		() => new Set(freeTrumboModelIds.map((modelId) => normalizeModelId(modelId))),
 		[freeTrumboModelIds],
 	)
-	const [activeTab, setActiveTab] = useState<"recommended" | "free">(initialTab ?? "recommended")
+	const [activeTab, setActiveTab] = useState<"quartz" | "recommended" | "free">(initialTab ?? "quartz")
 	const recommendedModels = useMemo(
-		() => (trumboRecommendedModels.length > 0 ? trumboRecommendedModels : RECOMMENDED_MODELS_FALLBACK),
+		() =>
+			(trumboRecommendedModels.length > 0 ? trumboRecommendedModels : RECOMMENDED_MODELS_FALLBACK).filter(
+				(model) => !isQuartzModelId(model.id),
+			),
 		[trumboRecommendedModels],
 	)
 	const freeModels = useMemo(() => (trumboFreeModels.length > 0 ? trumboFreeModels : FREE_MODELS_FALLBACK), [trumboFreeModels])
@@ -200,7 +220,14 @@ const TrumboModelPicker: React.FC<TrumboModelPickerProps> = ({ isPopup, currentM
 		if (initialTab) {
 			return
 		}
-		setActiveTab(freeTrumboModelIdSet.has(normalizeModelId(currentTrumboModelId)) ? "free" : "recommended")
+		const normalized = normalizeModelId(currentTrumboModelId)
+		if (isQuartzModelId(normalized)) {
+			setActiveTab("quartz")
+		} else if (freeTrumboModelIdSet.has(normalized)) {
+			setActiveTab("free")
+		} else {
+			setActiveTab("recommended")
+		}
 	}, [currentTrumboModelId, freeTrumboModelIdSet, initialTab])
 	const dropdownRef = useRef<HTMLDivElement>(null)
 	const itemRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -429,6 +456,9 @@ const TrumboModelPicker: React.FC<TrumboModelPickerProps> = ({ isPopup, currentM
 
 				{/* Tabs */}
 				<TabsContainer style={{ marginTop: 4 }}>
+					<Tab active={activeTab === "quartz"} onClick={() => setActiveTab("quartz")}>
+						Quartz
+					</Tab>
 					<Tab active={activeTab === "recommended"} onClick={() => setActiveTab("recommended")}>
 						Recommended
 					</Tab>
@@ -439,6 +469,20 @@ const TrumboModelPicker: React.FC<TrumboModelPickerProps> = ({ isPopup, currentM
 
 				{/* Model Cards */}
 				<div style={{ marginBottom: "6px" }}>
+					{activeTab === "quartz" &&
+						QUARTZ_MODEL_CARDS.map((model) => (
+							<FeaturedModelCard
+								description={model.description}
+								isSelected={selectedModelId === model.id}
+								key={model.id}
+								label={model.label}
+								modelId={model.id}
+								onClick={() => {
+									handleModelChange(model.id)
+									setIsDropdownVisible(false)
+								}}
+							/>
+						))}
 					{activeTab === "recommended" &&
 						recommendedModels.map((model) => (
 							<FeaturedModelCard

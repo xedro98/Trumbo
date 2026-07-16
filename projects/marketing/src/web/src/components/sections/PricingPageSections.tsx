@@ -1,8 +1,11 @@
 import { Tabs, Tooltip } from "@cloudflare/kumo";
 import { useState } from "react";
-import { marketingGridCellClass, marketingGridListRowClass } from "@/components/grid-shell-context";
-import { GridBox, GridBoxCell } from "@/components/ui/grid-box";
+import {
+	marketingGridCellClass,
+	marketingGridListRowClass,
+} from "@/components/grid-shell-context";
 import { Button } from "@/components/ui/button";
+import { GridBox, GridBoxCell } from "@/components/ui/grid-box";
 import { platformLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
@@ -28,9 +31,9 @@ export function PricingHeroSection() {
 				Rate-limited plans. No per-token bills.
 			</h1>
 			<p className="max-w-5xl text-lg leading-relaxed text-muted-foreground md:max-w-6xl md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
-				Personal plans are a flat monthly fee. Team plans bill per seat and scale with your
-				roster. No token counting, no surprise bills. Every plan ships with the full CLI and
-				210+ hosted open models.
+				Personal plans are a flat monthly fee. Team plans bill per seat and
+				scale with your roster. No token counting, no surprise bills. Every plan
+				ships with the full CLI and 210+ hosted open models.
 			</p>
 		</div>
 	);
@@ -84,7 +87,9 @@ const PLATFORM_LIMIT_TOOLTIPS = {
 		"Monthly scan credits for repository and dependency security analysis. Extra credits bill at the overage rate shown.",
 } as const;
 
-function platformQuotaRows(limits: PlatformQuotaLimits): { label: string; value: string; tooltip: string }[] {
+function platformQuotaRows(
+	limits: PlatformQuotaLimits,
+): { label: string; value: string; tooltip: string }[] {
 	return [
 		{
 			label: "Browser",
@@ -172,8 +177,6 @@ const TEAM_PLATFORM_QUOTAS = {
 	},
 } as const satisfies Record<string, PlatformQuotaLimits>;
 
-const QUARTZ_COMING_SOON = "Quartz reasoning model access";
-
 const ALL_FEATURES = [
 	"Trumbo Agent CLI with all tools",
 	"210+ open models",
@@ -181,7 +184,7 @@ const ALL_FEATURES = [
 	"Permissions and .trumborules",
 	"Trumbo Knowledge (team docs + RAG)",
 	"Trumbo Browser Run (in-agent browser tools)",
-	"Priority Quartz routing",
+	"Quartz Hyper access",
 	"Long-horizon reasoning sessions",
 	"Sub-agents and parallel workstreams",
 	"MCP tool integrations",
@@ -198,7 +201,7 @@ const PERSONAL_TIERS: Tier[] = [
 		period: "/month",
 		tagline: "For individual developers",
 		description:
-			"The CLI, Quartz, hosted models, sessions, and checkpoints. Generous limits for solo work.",
+			"The CLI, Quartz and Quartz Lite, hosted models, sessions, and checkpoints. Generous limits for solo work.",
 		features: personalFeatures(6),
 		platformLimits: platformQuotaRows(PERSONAL_PLATFORM_QUOTAS.pro),
 		limits: [
@@ -214,7 +217,7 @@ const PERSONAL_TIERS: Tier[] = [
 		period: "/month",
 		tagline: "For power users shipping every day",
 		description:
-			"Priority Quartz, sub-agents, and deeper limits for daily multi-step work.",
+			"Quartz Hyper, sub-agents, and deeper limits for daily multi-step work.",
 		featured: true,
 		features: personalFeatures(9),
 		platformLimits: platformQuotaRows(PERSONAL_PLATFORM_QUOTAS.max),
@@ -276,7 +279,10 @@ const TEAM_TIERS: Tier[] = [
 			{ label: TEAM_FEATURES[6], included: false },
 			{ label: TEAM_FEATURES[7], included: false },
 			{ label: "96K max tokens / request", included: true },
-			{ label: "Trumbo Knowledge: 100 docs, 200 MB, 200 searches/day", included: true },
+			{
+				label: "Trumbo Knowledge: 100 docs, 200 MB, 200 searches/day",
+				included: true,
+			},
 		],
 		platformLimits: platformQuotaRows(TEAM_PLATFORM_QUOTAS.scaling),
 		limits: [
@@ -298,7 +304,10 @@ const TEAM_TIERS: Tier[] = [
 		features: [
 			...TEAM_FEATURES.map((label) => ({ label, included: true })),
 			{ label: "128K max tokens / request", included: true },
-			{ label: "Trumbo Knowledge: 250 docs, 500 MB, 1,000 searches/day", included: true },
+			{
+				label: "Trumbo Knowledge: 250 docs, 500 MB, 1,000 searches/day",
+				included: true,
+			},
 		],
 		platformLimits: platformQuotaRows(TEAM_PLATFORM_QUOTAS.premium),
 		limits: [
@@ -329,10 +338,26 @@ const ENTERPRISE_TIER: Tier = {
 		{ label: "Team workspace with shared billing", included: true },
 	],
 	platformLimits: [
-		{ label: "Browser", value: "Custom", tooltip: PLATFORM_LIMIT_TOOLTIPS.Browser },
-		{ label: "Agents", value: "Custom", tooltip: PLATFORM_LIMIT_TOOLTIPS.Agents },
-		{ label: "Sandbox", value: "Custom", tooltip: PLATFORM_LIMIT_TOOLTIPS.Sandbox },
-		{ label: "Security", value: "Custom", tooltip: PLATFORM_LIMIT_TOOLTIPS.Security },
+		{
+			label: "Browser",
+			value: "Custom",
+			tooltip: PLATFORM_LIMIT_TOOLTIPS.Browser,
+		},
+		{
+			label: "Agents",
+			value: "Custom",
+			tooltip: PLATFORM_LIMIT_TOOLTIPS.Agents,
+		},
+		{
+			label: "Sandbox",
+			value: "Custom",
+			tooltip: PLATFORM_LIMIT_TOOLTIPS.Sandbox,
+		},
+		{
+			label: "Security",
+			value: "Custom",
+			tooltip: PLATFORM_LIMIT_TOOLTIPS.Security,
+		},
 	],
 	limits: [
 		{ window: "5-hour", requests: "Custom" },
@@ -342,7 +367,9 @@ const ENTERPRISE_TIER: Tier = {
 };
 
 export function PricingTiersSection() {
-	const [scope, setScope] = useState<"personal" | "team" | "enterprise">("personal");
+	const [scope, setScope] = useState<"personal" | "team" | "enterprise">(
+		"personal",
+	);
 	const tiers =
 		scope === "personal"
 			? PERSONAL_TIERS
@@ -383,9 +410,21 @@ export function PricingTiersSection() {
 				<Tabs
 					variant="segmented"
 					tabs={[
-						{ value: "personal", label: "Personal", className: "min-w-0 flex-1 justify-center" },
-						{ value: "team", label: "Team", className: "min-w-0 flex-1 justify-center" },
-						{ value: "enterprise", label: "Enterprise", className: "min-w-0 flex-1 justify-center" },
+						{
+							value: "personal",
+							label: "Personal",
+							className: "min-w-0 flex-1 justify-center",
+						},
+						{
+							value: "team",
+							label: "Team",
+							className: "min-w-0 flex-1 justify-center",
+						},
+						{
+							value: "enterprise",
+							label: "Enterprise",
+							className: "min-w-0 flex-1 justify-center",
+						},
 					]}
 					value={scope}
 					onValueChange={handleScopeChange}
@@ -437,29 +476,10 @@ export function PricingTiersSection() {
 function FeatureRow({
 	label,
 	included,
-	comingSoon,
 }: {
 	label: string;
 	included?: boolean;
-	comingSoon?: boolean;
 }) {
-	if (comingSoon) {
-		return (
-			<li className="grid grid-cols-[0.75rem_minmax(0,1fr)] items-center gap-x-2.5 text-sm leading-relaxed text-amber-700 dark:text-amber-400">
-				<span
-					className="marketing-feature-dash justify-self-center bg-amber-500/70"
-					aria-hidden="true"
-				/>
-				<span className="flex min-w-0 items-center justify-between gap-2 py-0.5">
-					<span className="min-w-0">{label}</span>
-					<span className="font-stat inline-flex h-[1.125rem] shrink-0 items-center rounded-full border border-amber-500/35 bg-amber-500/10 px-2.5 text-[0.5625rem] font-medium uppercase leading-none tracking-[0.08em] text-amber-700 dark:border-amber-400/35 dark:bg-amber-400/10 dark:text-amber-400">
-						Coming soon
-					</span>
-				</span>
-			</li>
-		);
-	}
-
 	return (
 		<li
 			className={cn(
@@ -507,7 +527,9 @@ function PlatformLimitRow({
 				{label}
 			</span>
 			<Tooltip
-				content={<span className="marketing-limit-tooltip-content">{tooltip}</span>}
+				content={
+					<span className="marketing-limit-tooltip-content">{tooltip}</span>
+				}
 				side="top"
 				align="end"
 				delay={250}
@@ -533,7 +555,8 @@ function TierColumn({ tier, isLast }: { tier: Tier; isLast: boolean }) {
 			className={cn(
 				marketingGridCellClass,
 				"flex flex-col !py-8 md:!py-10",
-				!isLast && "border-b border-b-dotted border-grid-line md:border-b-0 md:border-r md:border-r-dotted md:border-grid-line",
+				!isLast &&
+					"border-b border-b-dotted border-grid-line md:border-b-0 md:border-r md:border-r-dotted md:border-grid-line",
 			)}
 		>
 			{/* Header */}
@@ -567,7 +590,9 @@ function TierColumn({ tier, isLast }: { tier: Tier; isLast: boolean }) {
 						</span>
 					</>
 				)}
-				<span className="font-stat text-sm text-muted-foreground">{tier.period}</span>
+				<span className="font-stat text-sm text-muted-foreground">
+					{tier.period}
+				</span>
 			</div>
 
 			{tier.perSeat ? (
@@ -586,7 +611,11 @@ function TierColumn({ tier, isLast }: { tier: Tier; isLast: boolean }) {
 					Rate limits
 				</span>
 				{tier.limits.map((limit) => (
-					<LimitRow key={limit.window} label={limit.window} value={limit.requests} />
+					<LimitRow
+						key={limit.window}
+						label={limit.window}
+						value={limit.requests}
+					/>
 				))}
 
 				{tier.platformLimits?.length ? (
@@ -619,7 +648,6 @@ function TierColumn({ tier, isLast }: { tier: Tier; isLast: boolean }) {
 						included={feature.included}
 					/>
 				))}
-				{!tier.contactSales ? <FeatureRow label={QUARTZ_COMING_SOON} comingSoon /> : null}
 			</ul>
 
 			{/* CTA */}
@@ -665,9 +693,9 @@ export function PricingLimitsSection() {
 					Three windows. One quota. Resets automatically.
 				</h2>
 				<p className="mt-4 max-w-6xl text-lg leading-relaxed text-muted-foreground md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
-					Every tier has a 5-hour, daily, and weekly request budget. When a window fills,
-					requests pause until it resets. No overage fees, no per-token charges, no surprise
-					bills at the end of the month.
+					Every tier has a 5-hour, daily, and weekly request budget. When a
+					window fills, requests pause until it resets. No overage fees, no
+					per-token charges, no surprise bills at the end of the month.
 				</p>
 			</GridBoxCell>
 			<GridBoxCell className="!border-r-0 !p-0">
@@ -714,7 +742,8 @@ function LimitCard({
 			className={cn(
 				marketingGridCellClass,
 				"flex flex-col",
-				!isLast && "border-b border-b-dotted border-grid-line md:border-b-0 md:border-r md:border-r-dotted",
+				!isLast &&
+					"border-b border-b-dotted border-grid-line md:border-b-0 md:border-r md:border-r-dotted",
 			)}
 		>
 			<span className="font-stat text-[0.6875rem] tabular-nums tracking-[0.06em] text-muted-foreground/70">
@@ -748,7 +777,7 @@ const INCLUDED_CARDS: { title: string; description: string }[] = [
 	{
 		title: "210+ hosted open models",
 		description:
-			"DeepSeek, Qwen, Llama, Mistral, GLM, Kimi, and more, hosted on our inference infrastructure. Route to any of them from one CLI without reconfiguring tools.",
+			"DeepSeek, Qwen, Llama, Mistral, GLM, Kimi, and more, hosted on our inference infrastructure. Switch between any of them from one CLI without reconfiguring tools.",
 	},
 	{
 		title: "Bring your own keys",
@@ -781,10 +810,10 @@ export function PricingIncludedSection() {
 					The full toolkit, regardless of tier.
 				</h2>
 				<p className="mt-4 max-w-6xl text-lg leading-relaxed text-muted-foreground md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
-					No feature gating on the core experience. Every tier gets the same agent, the same
-					models, and the same CLI. Personal tiers differ in request limits and advanced
-					features. Team tiers add shared workspaces, per-seat billing, and collaboration
-					tools.
+					No feature gating on the core experience. Every tier gets the same
+					agent, the same models, and the same CLI. Personal tiers differ in
+					request limits and advanced features. Team tiers add shared
+					workspaces, per-seat billing, and collaboration tools.
 				</p>
 			</GridBoxCell>
 			<GridBoxCell className="!border-r-0 !p-0">
@@ -858,7 +887,7 @@ const FAQ_ITEMS = [
 	{
 		question: "Is there a free tier?",
 		answer:
-			"The Trumbo CLI is open source and free to use with your own model keys. You can install it with npm install -g @trumbodev/cli, configure it with any supported provider's API key, and run agent sessions without a subscription. A paid subscription is required only for access to the Trumbo platform: the Quartz reasoning model, 210+ hosted open models on our inference infrastructure, session persistence, team features, and the hosted model routing layer. If you only want to use the CLI with your own Anthropic or OpenAI keys, you do not need to pay anything.",
+			"The Trumbo CLI is open source and free to use with your own model keys. You can install it with npm install -g @trumbodev/cli, configure it with any supported provider's API key, and run agent sessions without a subscription. A paid subscription is required only for access to the Trumbo platform: the Quartz reasoning model, 210+ hosted open models on our inference infrastructure, session persistence, team features, and hosted open model access. If you only want to use the CLI with your own Anthropic or OpenAI keys, you do not need to pay anything.",
 	},
 	{
 		question: "Can I switch tiers mid-cycle?",
@@ -873,7 +902,7 @@ const FAQ_ITEMS = [
 	{
 		question: "Is the CLI open source?",
 		answer:
-			"Yes. The Trumbo CLI is published as @trumbodev/cli on npm and the source code is available on GitHub at github.com/xedro98/Trumbo. The CLI includes the full agent loop, tool system, MCP integration, session management, permissions, and provider routing. It is free to use, modify, and distribute. The Trumbo platform (the hosted web app at platform.trumbo.dev), the Quartz reasoning model, and hosted model routing are proprietary.",
+			"Yes. The Trumbo CLI is published as @trumbodev/cli on npm and the source code is available on GitHub at github.com/xedro98/Trumbo. The CLI includes the full agent loop, tool system, MCP integration, session management, permissions, and provider configuration. It is free to use, modify, and distribute. The Trumbo platform (the hosted web app at platform.trumbo.dev), the Quartz reasoning model, and hosted open model access are proprietary.",
 	},
 	{
 		question: "What models are included?",

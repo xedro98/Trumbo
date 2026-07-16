@@ -21,6 +21,98 @@ type ModelCapabilities = Pick<
 const TRUMBO_PASS_PROVIDER_ID = "trumbo-pass";
 const TRUMBO_PROVIDER_ID = "trumbo";
 
+/**
+ * Trumbo Quartz — the public frontier model family. Users see three model ids
+ * (`quartz` / `quartz-lite` / `quartz-hyper`); the platform routes each turn to
+ * the right backing model server-side. These stable model facts live here (per
+ * the @trumbodev/llms AGENTS rule: known-model facts belong in ModelInfo, not a
+ * new registry) and are merged into both the bundled `trumbo` provider factory
+ * baseline and the runtime-fetched recommended-models payload.
+ */
+export const QUARTZ_MODEL_FACTS: Record<string, ModelInfo> = {
+	quartz: {
+		id: "quartz",
+		name: "Quartz",
+		description:
+			"Adaptive reasoning model that scales compute to the complexity of each request.",
+		contextWindow: 256_000,
+		maxInputTokens: 256_000,
+		maxTokens: 32_768,
+		capabilities: [
+			"tools",
+			"reasoning",
+			"reasoning-effort",
+			"streaming",
+			"temperature",
+			"prompt-cache",
+		],
+		pricing: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+		metadata: { reasoningDefaultOn: true },
+	},
+	"quartz-lite": {
+		id: "quartz-lite",
+		name: "Quartz Lite",
+		description:
+			"Fast and economical Quartz variant for everyday agent loops and inline edits.",
+		contextWindow: 128_000,
+		maxInputTokens: 128_000,
+		maxTokens: 16_384,
+		capabilities: [
+			"tools",
+			"reasoning",
+			"reasoning-effort",
+			"streaming",
+			"temperature",
+			"prompt-cache",
+		],
+		pricing: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+		metadata: { reasoningDefaultOn: false },
+	},
+	"quartz-hyper": {
+		id: "quartz-hyper",
+		name: "Quartz Hyper",
+		description:
+			"Flagship Quartz variant for maximum reasoning depth on hard engineering and research. Max/Ultra plans.",
+		contextWindow: 1_000_000,
+		maxInputTokens: 1_000_000,
+		maxTokens: 65_536,
+		capabilities: [
+			"tools",
+			"reasoning",
+			"reasoning-effort",
+			"streaming",
+			"temperature",
+			"prompt-cache",
+		],
+		pricing: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+		metadata: { reasoningDefaultOn: true },
+	},
+};
+
+/** Public Quartz model ids in display order (adaptive default first). */
+export const QUARTZ_MODEL_IDS: readonly string[] = [
+	"quartz",
+	"quartz-lite",
+	"quartz-hyper",
+];
+
+export function isQuartzModelId(id: string): boolean {
+	return id in QUARTZ_MODEL_FACTS;
+}
+
+/** Bundled baseline emitted by the `trumbo` provider factory (always available,
+ * even before the platform catalog loads). */
+export function buildQuartzModelInfos(): Record<string, ModelInfo> {
+	const out: Record<string, ModelInfo> = {};
+	for (const id of QUARTZ_MODEL_IDS) {
+		const facts = QUARTZ_MODEL_FACTS[id];
+		if (facts) {
+			out[id] = { ...facts };
+		}
+	}
+	return out;
+}
+
 const TRUMBO_PASS_MODEL_DEFAULTS = {
 	contextWindow: 128_000,
 	maxInputTokens: 128_000,
@@ -81,11 +173,17 @@ function buildProviderModelsFromEntries(
 			entry,
 			openRouterModelsByName,
 		);
+		const quartzFacts = QUARTZ_MODEL_FACTS[entry.id];
 		models[entry.id] = {
 			...defaults,
+			...(quartzFacts ?? {}),
 			id: entry.id,
-			name: entry.name?.trim() || entry.id.split("/").pop() || entry.id,
-			description: entry.description,
+			name:
+				entry.name?.trim() ||
+				quartzFacts?.name ||
+				entry.id.split("/").pop() ||
+				entry.id,
+			description: entry.description ?? quartzFacts?.description,
 		};
 	});
 

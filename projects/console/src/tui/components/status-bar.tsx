@@ -95,6 +95,13 @@ function lookupModelInfo(
 	return undefined;
 }
 
+/** Quartz variants render as friendly model names even when knownModels is empty. */
+const QUARTZ_DISPLAY_NAMES: Record<string, string> = {
+	quartz: "Quartz",
+	"quartz-lite": "Quartz Lite",
+	"quartz-hyper": "Quartz Hyper",
+};
+
 export function resolveModelDisplayName(config: {
 	providerId?: string;
 	modelId: string;
@@ -104,10 +111,11 @@ export function resolveModelDisplayName(config: {
 }): string {
 	const info = lookupModelInfo(config.modelId, config.knownModels);
 	const modelIdTail = config.modelId.split("/").pop() ?? config.modelId;
+	const quartzName = QUARTZ_DISPLAY_NAMES[config.modelId];
 	const displayName =
 		config.providerId === "trumbo-pass"
 			? `TrumboPass/${modelIdTail}`
-			: (info?.name ?? modelIdTail);
+			: (info?.name ?? quartzName ?? modelIdTail);
 	if (config.thinking && config.reasoningEffort) {
 		return `${displayName} (${config.reasoningEffort})`;
 	}
