@@ -11,6 +11,16 @@
 
 
 
+## 3.5.1
+
+Quartz model family renamed to Quartz 1.0 in the model picker and status bar.
+
+### Changed
+- The Trumbo model picker now shows "Quartz 1.0", "Quartz 1.0 Lite", and "Quartz 1.0 Hyper" (was "Quartz" / "Quartz Lite" / "Quartz Hyper"). The model the platform routes to is unchanged; this is a display-name update to match the Quartz 1.0 release.
+- Status bar renders the friendly "Quartz 1.0 …" names for the quartz variants.
+
+
+
 ## 3.5.0
 
 Trumbo Quartz model family in the model picker.

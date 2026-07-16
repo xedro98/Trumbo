@@ -39,7 +39,7 @@ const QUARTZ_PICKER_ENTRIES: TrumboModelPickerItem[] = [
 		tier: "quartz",
 		model: {
 			id: "quartz",
-			name: "Quartz",
+			name: "Quartz 1.0",
 			description:
 				"Adaptive reasoning model that scales compute to the complexity of each request.",
 			tags: ["ADAPTIVE"],
@@ -50,7 +50,7 @@ const QUARTZ_PICKER_ENTRIES: TrumboModelPickerItem[] = [
 		tier: "quartz",
 		model: {
 			id: "quartz-lite",
-			name: "Quartz Lite",
+			name: "Quartz 1.0 Lite",
 			description:
 				"Fast and economical Quartz variant for everyday agent loops and inline edits.",
 			tags: ["FAST"],
@@ -61,7 +61,7 @@ const QUARTZ_PICKER_ENTRIES: TrumboModelPickerItem[] = [
 		tier: "quartz",
 		model: {
 			id: "quartz-hyper",
-			name: "Quartz Hyper",
+			name: "Quartz 1.0 Hyper",
 			description:
 				"Flagship Quartz variant for maximum reasoning depth on hard engineering and research. Max/Ultra plans.",
 			tags: ["FLAGSHIP"],

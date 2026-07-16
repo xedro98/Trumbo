@@ -32,7 +32,7 @@ const TRUMBO_PROVIDER_ID = "trumbo";
 export const QUARTZ_MODEL_FACTS: Record<string, ModelInfo> = {
 	quartz: {
 		id: "quartz",
-		name: "Quartz",
+		name: "Quartz 1.0",
 		description:
 			"Adaptive reasoning model that scales compute to the complexity of each request.",
 		contextWindow: 256_000,
@@ -51,7 +51,7 @@ export const QUARTZ_MODEL_FACTS: Record<string, ModelInfo> = {
 	},
 	"quartz-lite": {
 		id: "quartz-lite",
-		name: "Quartz Lite",
+		name: "Quartz 1.0 Lite",
 		description:
 			"Fast and economical Quartz variant for everyday agent loops and inline edits.",
 		contextWindow: 128_000,
@@ -70,7 +70,7 @@ export const QUARTZ_MODEL_FACTS: Record<string, ModelInfo> = {
 	},
 	"quartz-hyper": {
 		id: "quartz-hyper",
-		name: "Quartz Hyper",
+		name: "Quartz 1.0 Hyper",
 		description:
 			"Flagship Quartz variant for maximum reasoning depth on hard engineering and research. Max/Ultra plans.",
 		contextWindow: 1_000_000,
