@@ -192,7 +192,6 @@ jobs:
       - name: Publish @trumbodev/shared
         if: steps.check_commits.outputs.skip != 'true'
         env:
-          NPM_CONFIG_PROVENANCE: "true"
           CHANNEL: ${{ steps.channel.outputs.channel }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
@@ -204,7 +203,6 @@ jobs:
       - name: Publish @trumbodev/llms
         if: steps.check_commits.outputs.skip != 'true'
         env:
-          NPM_CONFIG_PROVENANCE: "true"
           CHANNEL: ${{ steps.channel.outputs.channel }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
@@ -216,7 +214,6 @@ jobs:
       - name: Publish @trumbodev/agents
         if: steps.check_commits.outputs.skip != 'true'
         env:
-          NPM_CONFIG_PROVENANCE: "true"
           CHANNEL: ${{ steps.channel.outputs.channel }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
@@ -228,7 +225,6 @@ jobs:
       - name: Publish @trumbodev/core
         if: steps.check_commits.outputs.skip != 'true'
         env:
-          NPM_CONFIG_PROVENANCE: "true"
           CHANNEL: ${{ steps.channel.outputs.channel }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
@@ -240,7 +236,6 @@ jobs:
       - name: Publish @trumbodev/sdk
         if: steps.check_commits.outputs.skip != 'true'
         env:
-          NPM_CONFIG_PROVENANCE: "true"
           CHANNEL: ${{ steps.channel.outputs.channel }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
