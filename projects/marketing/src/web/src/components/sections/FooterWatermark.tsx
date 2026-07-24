@@ -14,7 +14,7 @@ import { platformLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
 const FOOTER_PLATFORM_LINKS = [
-	{ label: "Documentation", href: platformLink("/docs"), external: true },
+	{ label: "Documentation", href: "https://docs.trumbo.dev", external: true },
 	{ label: "Company", href: "/company" },
 	{ label: "Blog", href: "/blog" },
 ] as const;

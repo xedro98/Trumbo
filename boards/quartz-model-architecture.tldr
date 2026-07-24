@@ -1,0 +1,4625 @@
+{
+  "tldrawFileFormatVersion": 1,
+  "schema": {
+    "schemaVersion": 2,
+    "sequences": {
+      "com.tldraw.store": 5,
+      "com.tldraw.asset": 1,
+      "com.tldraw.camera": 1,
+      "com.tldraw.document": 2,
+      "com.tldraw.instance": 26,
+      "com.tldraw.instance_page_state": 5,
+      "com.tldraw.page": 1,
+      "com.tldraw.instance_presence": 6,
+      "com.tldraw.pointer": 1,
+      "com.tldraw.shape": 4,
+      "com.tldraw.user": 1,
+      "com.tldraw.asset.image": 6,
+      "com.tldraw.asset.video": 5,
+      "com.tldraw.asset.bookmark": 2,
+      "com.tldraw.shape.group": 0,
+      "com.tldraw.shape.text": 4,
+      "com.tldraw.shape.bookmark": 2,
+      "com.tldraw.shape.draw": 4,
+      "com.tldraw.shape.geo": 11,
+      "com.tldraw.shape.note": 12,
+      "com.tldraw.shape.line": 5,
+      "com.tldraw.shape.frame": 1,
+      "com.tldraw.shape.arrow": 8,
+      "com.tldraw.shape.highlight": 3,
+      "com.tldraw.shape.embed": 4,
+      "com.tldraw.shape.image": 5,
+      "com.tldraw.shape.video": 4,
+      "com.tldraw.binding.arrow": 1
+    }
+  },
+  "records": [
+    {
+      "x": 352,
+      "y": 1551,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 17,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-verification-masking-17-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b02fHbzWG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "approved response"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 320,
+      "y": 180,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 0,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-input-identity_envelope-0-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aGeXt2eV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1752,
+      "y": 667,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 6,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-specialist_layer-glm-6-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aX6HThlV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "reasoning/code/math"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 700,
+      "y": 100,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-identity_envelope",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a2fInHUl",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "light-blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Quartz identity envelope"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "The system presents one"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "coherent model persona and"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "API surface: Quartz by"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Trumbo."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 352,
+      "y": 180,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 0,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-input-identity_envelope-0-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aH2fySbV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 13
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 1234,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 12,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-deepseek_flash-synthesis-12-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "amxiE1LV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 64
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 1048,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-deepseek_pro",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a92jqzdl",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 408,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "green",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "DeepSeek V4 Pro specialist"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Large MoE code and algorithm"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "specialist for"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "competitive/programming-heavy"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "problems."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 352,
+      "y": 193,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 0,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-input-identity_envelope-0-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aIh6vUel",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "public model surface"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 1298,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 12,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-deepseek_flash-synthesis-12-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "an6f4mDV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 1422,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "expert signal"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2282,
+      "y": 1298,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 12,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-deepseek_flash-synthesis-12-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aoLNykhV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -64
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 204,
+      "y": 1234,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 11,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-deepseek_pro-synthesis-11-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aj1wEDgV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 32
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2100,
+      "y": 1048,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-synthesis",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aChsyvyV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "light-blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Quartz synthesis layer"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Combines the selected"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "specialist signal with the"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "task plan, exact results,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "and conversation state."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2260,
+      "y": 286,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 3,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-execution_graph-depth_budget-3-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aNW3NzdG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 32
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 204,
+      "y": 1266,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 11,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-deepseek_pro-synthesis-11-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "akmAZuVV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 2056,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "expert signal"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 700,
+      "y": 1048,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-deepseek_flash",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aAvWXaJV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "orange",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "DeepSeek V4 Flash"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "specialist"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fast MoE execution path for"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "simple, latency-sensitive,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "or high-throughput turns."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2260,
+      "y": 318,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 3,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-execution_graph-depth_budget-3-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aOB369CV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -2100,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "adaptive depth"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "meta": {},
+      "id": "camera:page:page",
+      "typeName": "camera"
+    },
+    {
+      "x": 2260,
+      "y": 1266,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 11,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-deepseek_pro-synthesis-11-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "algYVmlV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -32
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 318,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 3,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-execution_graph-depth_budget-3-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aPzdg8wG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 256
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 700,
+      "y": 1458,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-masking",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aEcarCKV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "green",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Unified output layer"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Normalizes metadata and"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "wording so the user"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "receives a single Quartz"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "response."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 700,
+      "y": 574,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-exact_compute",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a6whN1JV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Deterministic compute lane"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Math-like inputs get exact"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "symbolic or arithmetic"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "results injected before"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "generation."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2282,
+      "y": 286,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 4,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-execution_graph-exact_compute-4-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aQh5EiAV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 64
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2238,
+      "y": 286,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 5,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-execution_graph-specialist_layer-5-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aTE476KV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 96
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "title",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-title",
+      "type": "text",
+      "parentId": "page:page",
+      "index": "a0usTE9V",
+      "props": {
+        "color": "black",
+        "size": "xl",
+        "font": "sans",
+        "textAlign": "start",
+        "w": 2540,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture"
+                }
+              ]
+            }
+          ]
+        },
+        "scale": 1,
+        "autoSize": false
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1720,
+      "y": 1128,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 13,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-qwen-synthesis-13-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "ap6eV19V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2282,
+      "y": 350,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 4,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-execution_graph-exact_compute-4-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aRnjnnZV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -1422,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "if computable"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2238,
+      "y": 382,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 5,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-execution_graph-specialist_layer-5-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aUaIlbaV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -678,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "expert activation"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1752,
+      "y": 1128,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 13,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-qwen-synthesis-13-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aq7SA7lV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 13
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 760,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 14,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-exact_compute-synthesis-14-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "asme0VcV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 160
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 1458,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 19,
+          "segmentIndex": 0,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-output-execution_graph-19-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b06q8qcUl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -96
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 350,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 4,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-execution_graph-exact_compute-4-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aSAwE9mV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 224
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 382,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 5,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-execution_graph-specialist_layer-5-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aVdvCw8V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 192
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1752,
+      "y": 1141,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 13,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-qwen-synthesis-13-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "arcgEasV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "expert signal"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 920,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 14,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-exact_compute-synthesis-14-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "at0hreeV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 1422,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "ground truth values"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 1362,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 19,
+          "segmentIndex": 1,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-output-execution_graph-19-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b07AWFoAV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 948,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "next-turn memory signal"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1400,
+      "y": 100,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-semantic_parse",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a34Q4gIV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "violet",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Semantic decomposition"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "The turn is parsed into"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "intent, artifacts,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "constraints, tool needs,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "and required depth."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1020,
+      "y": 1551,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 18,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-masking-output-18-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b036Gxh6V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 1458,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-verification",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aD7gUlIG",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "violet",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Verification pipeline"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Checks math results, coding"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "consistency, tool plans,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "and answer coherence before"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "delivery."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2282,
+      "y": 920,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 14,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-exact_compute-synthesis-14-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "auq9xdnV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 128
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2508,
+      "y": 1362,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 19,
+          "segmentIndex": 2,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-output-execution_graph-19-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b08E6hkMV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -948
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1052,
+      "y": 1551,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 18,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-masking-output-18-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b04ALUgrl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -13
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2508,
+      "y": 414,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 19,
+          "segmentIndex": 3,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-output-execution_graph-19-3",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b09J4iewV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -204,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1052,
+      "y": 1538,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 18,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-masking-output-18-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b05bbMh5V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "single Quartz identity"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2304,
+      "y": 414,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 19,
+          "segmentIndex": 4,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-output-execution_graph-19-4",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0AEjUOaG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -128
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2238,
+      "y": 1234,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 16,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-synthesis-verification-16-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "ayYxpDEV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 96
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2238,
+      "y": 1330,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 16,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-synthesis-verification-16-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "azUsywUO",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -2078,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "candidate answer"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 1330,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 16,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-synthesis-verification-16-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b007HHdtV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 128
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1720,
+      "y": 193,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 2,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-semantic_parse-execution_graph-2-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aLCfJcDV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1020,
+      "y": 193,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 1,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-identity_envelope-semantic_parse-1-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aJ9jv2vV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "lastActivityTimestamp": 0,
+      "meta": {},
+      "id": "pointer:MDUST-QA7fpBFiyR034VN",
+      "typeName": "pointer"
+    },
+    {
+      "x": 1400,
+      "y": 1458,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-output",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aFbdFNHV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 160,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "orange",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Quartz answer"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "The result is experienced"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "as one SOTA model, not as"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "exposed provider selection."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 574,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-depth_budget",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a513YmkV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "orange",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Depth and compute budget"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Lite, balanced, and Hyper"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "share the same pipeline but"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "differ in reflection depth"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "and active budget."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1752,
+      "y": 193,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 2,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-semantic_parse-execution_graph-2-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aMoDVy8V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "problem structure"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1052,
+      "y": 193,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 1,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-identity_envelope-semantic_parse-1-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aK7dWQBV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "turn enters model stack"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1400,
+      "y": 574,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-specialist_layer",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a7O7KpiV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "light-blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Foundation specialist layer"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Quartz draws on"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "complementary"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "frontier-model strengths as"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "internal expert substrates."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1538,
+      "y": 760,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 9,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-specialist_layer-qwen-9-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aecvliHV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 96
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2260,
+      "y": 760,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 10,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-glm-synthesis-10-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "ahtUSz78",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 128
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1538,
+      "y": 856,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 9,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-specialist_layer-qwen-9-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "afwak3XV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 22,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "factual/long context"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 760,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 7,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-specialist_layer-deepseek_pro-7-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aYUpcGWG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 32
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 856,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 9,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-specialist_layer-qwen-9-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "agLG1q8V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 192
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 792,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 7,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-specialist_layer-deepseek_pro-7-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aZWZblXV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -1356,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "algorithmic code"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2260,
+      "y": 888,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 10,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-glm-synthesis-10-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aiuUqzQO",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 160
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 204,
+      "y": 792,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 7,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-specialist_layer-deepseek_pro-7-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aaOTdr4V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 256
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2100,
+      "y": 100,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-execution_graph",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a4aR1caV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "green",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Adaptive execution graph"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Quartz builds a per-turn"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "reasoning plan instead of"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "using one fixed inference"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "path."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2100,
+      "y": 574,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-glm",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a8p9QWWV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "violet",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "GLM-5.2 specialist"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Long-horizon reasoning,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "agentic coding, terminal"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "work, tool-use planning,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "and hard math."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 760,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 15,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-depth_budget-synthesis-15-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "avEGvhbV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 192
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 952,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 15,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-depth_budget-synthesis-15-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aw2EBHMV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 2078,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "reflection budget"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1582,
+      "y": 760,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 8,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-specialist_layer-deepseek_flash-8-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "abY5rSSV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 64
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "meta": {},
+      "id": "page:page",
+      "name": "Page 1",
+      "index": "a1",
+      "typeName": "page"
+    },
+    {
+      "gridSize": 10,
+      "name": "quartz-model-architecture",
+      "meta": {},
+      "id": "document:document",
+      "typeName": "document"
+    },
+    {
+      "followingUserId": null,
+      "opacityForNextShape": 1,
+      "stylesForNextShape": {},
+      "brush": null,
+      "scribbles": [],
+      "cursor": {
+        "type": "default",
+        "rotation": 0
+      },
+      "isFocusMode": false,
+      "exportBackground": true,
+      "isDebugMode": false,
+      "isToolLocked": false,
+      "screenBounds": {
+        "x": 0,
+        "y": 0,
+        "w": 1080,
+        "h": 720
+      },
+      "insets": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "zoomBrush": null,
+      "isGridMode": false,
+      "isPenMode": false,
+      "chatMessage": "",
+      "isChatting": false,
+      "highlightedUserIds": [],
+      "isFocused": false,
+      "devicePixelRatio": 1,
+      "isCoarsePointer": false,
+      "isHoveringCanvas": null,
+      "openMenus": [],
+      "isChangingStyle": false,
+      "isReadonly": false,
+      "meta": {},
+      "duplicateProps": null,
+      "cameraState": "idle",
+      "id": "instance:instance",
+      "currentPageId": "page:page",
+      "typeName": "instance"
+    },
+    {
+      "x": 0,
+      "y": 100,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-input",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a1qgUERl",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 160,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Quartz 1.0 request"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "A user interacts with one"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "public model family: Quartz"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "1.0, Lite, or Hyper."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2238,
+      "y": 952,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 15,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-depth_budget-synthesis-15-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "axUJFMWG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 96
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1582,
+      "y": 824,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 8,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-specialist_layer-deepseek_flash-8-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aci4vpuV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -722,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "fast path"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 824,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 8,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-specialist_layer-deepseek_flash-8-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "adTYViSV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 224
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 320,
+      "y": 1551,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 17,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-verification-masking-17-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b01UZ8yAl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "editingShapeId": null,
+      "croppingShapeId": null,
+      "selectedShapeIds": [],
+      "hoveredShapeId": null,
+      "erasingShapeIds": [],
+      "hintingShapeIds": [],
+      "focusedGroupId": null,
+      "meta": {},
+      "id": "instance_page_state:NXAIq7MwY66mXNYuyu496",
+      "pageId": "page:page",
+      "typeName": "instance_page_state"
+    },
+    {
+      "x": 1720,
+      "y": 667,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 6,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-arrow-specialist_layer-glm-6-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aWqkRYJV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1400,
+      "y": 1048,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9crlw",
+          "repoName": "Quartz 1.0: Adaptive Multi-Expert Reasoning Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9crlw-qwen",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aB0obeXV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 160,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Qwen3.7 Max specialist"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Long-context factual,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "productivity, and agent-era"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "knowledge work."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    }
+  ]
+}

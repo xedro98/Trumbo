@@ -320,6 +320,7 @@ export {
 	VertexModelSchema,
 	VertexSettingsSchema,
 } from "./remote-config/schema";
+export { withRetry } from "./retry";
 export {
 	TRUMBO_DEFAULT_RPC_ADDRESS,
 	TRUMBO_DEFAULT_RPC_PORT,
@@ -499,4 +500,5 @@ export * from "./team";
 export { createTool } from "./tools/create";
 export * from "./types";
 export { AUTH_ERROR_PATTERNS, isLikelyAuthError } from "./types/auth";
+export { isUuidV7, uuidV7 } from "./uuid-v7";
 export { initVcr } from "./vcr";

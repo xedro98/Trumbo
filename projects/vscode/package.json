@@ -2,7 +2,7 @@
 	"name": "trumbo",
 	"displayName": "Trumbo",
 	"description": "Autonomous coding agent right in your IDE, capable of creating/editing files, running commands, using the browser, and more with your permission every step of the way.",
-	"version": "0.2.2",
+	"version": "0.3.0",
 	"icon": "assets/icons/icon.png",
 	"engines": {
 		"vscode": "^1.106.0"
@@ -545,7 +545,7 @@
 		"@vscode/codicons": "^0.0.36",
 		"archiver": "^7.0.1",
 		"aws4fetch": "^1.0.20",
-		"axios": "1.16.1",
+		"axios": "^1.18.0",
 		"better-sqlite3": "^12.4.1",
 		"cheerio": "^1.0.0",
 		"chokidar": "^4.0.1",
@@ -564,7 +564,7 @@
 		"ignore": "^7.0.3",
 		"image-size": "^2.0.2",
 		"isbinaryfile": "^5.0.2",
-		"js-yaml": "^4.1.1",
+		"js-yaml": "^4.3.0",
 		"jschardet": "^3.1.4",
 		"json5": "^2.2.3",
 		"jwt-decode": "^4.0.0",

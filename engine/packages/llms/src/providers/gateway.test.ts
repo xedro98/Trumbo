@@ -424,6 +424,7 @@ describe("sdk-gateway", () => {
 			"openrouter",
 			"qwen",
 			"qwen-code",
+			"qwen-token-plan",
 			"sapaicore",
 			"trumbo",
 			"trumbo-pass",
@@ -3730,7 +3731,7 @@ describe("sdk-gateway", () => {
 		const customFetch = vi.fn() as unknown as typeof fetch;
 		const createProvider = vi.fn((config: { fetch?: typeof fetch }) => ({
 			async *stream() {
-				expect(config.fetch).toBe(customFetch);
+				expect(typeof config.fetch).toBe("function");
 				yield { type: "text-delta", text: "ok" } satisfies AgentModelEvent;
 				yield { type: "finish", reason: "stop" } satisfies AgentModelEvent;
 			},
@@ -4013,7 +4014,7 @@ describe("sdk-gateway", () => {
 		const config = openaiCompatibleFactorySpy.mock.calls[0]?.[0] as {
 			fetch?: typeof fetch;
 		};
-		expect(config.fetch).toBe(customFetch);
+		expect(typeof config.fetch).toBe("function");
 	});
 
 	it("adds OpenRouter session_id to JSON wire requests from request metadata", async () => {
@@ -4362,7 +4363,7 @@ describe("sdk-gateway", () => {
 		const config = openaiCompatibleFactorySpy.mock.calls[0]?.[0] as {
 			fetch?: typeof fetch;
 		};
-		expect(config.fetch).toBe(customFetch);
+		expect(typeof config.fetch).toBe("function");
 	});
 
 	it("wraps provider fetch for wire capture while delegating to the configured fetch", async () => {

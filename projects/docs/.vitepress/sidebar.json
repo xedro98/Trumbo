@@ -1,0 +1,350 @@
+{
+	"/trumbo/": [
+		{
+			"text": "Getting Started",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Trumbo Overview",
+					"link": "/trumbo-overview"
+				},
+				{
+					"text": "Installing Trumbo",
+					"link": "/getting-started/installing-trumbo"
+				},
+				{
+					"text": "Config",
+					"link": "/getting-started/config"
+				}
+			]
+		},
+		{
+			"text": "Usage",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Tui",
+					"link": "/usage/tui"
+				}
+			]
+		},
+		{
+			"text": "Configurations",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "All Trumbo Tools",
+					"link": "/tools-reference/all-trumbo-tools"
+				},
+				{
+					"text": "Trumbo Rules",
+					"link": "/customization/trumbo-rules"
+				},
+				{
+					"text": "Skills",
+					"link": "/customization/skills"
+				},
+				{
+					"text": "Plugins",
+					"link": "/customization/plugins"
+				},
+				{
+					"text": "Mcp Overview",
+					"link": "/mcp/mcp-overview"
+				},
+				{
+					"text": "Hooks",
+					"link": "/customization/hooks"
+				},
+				{
+					"text": "Scheduling",
+					"link": "/cli/scheduling"
+				},
+				{
+					"text": "Connectors",
+					"link": "/cli/connectors"
+				},
+				{
+					"text": "Trumboignore",
+					"link": "/customization/trumboignore"
+				}
+			]
+		},
+		{
+			"text": "Features",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Plan And Act",
+					"link": "/core-workflows/plan-and-act"
+				},
+				{
+					"text": "Working With Files",
+					"link": "/core-workflows/working-with-files"
+				},
+				{
+					"text": "Using Commands",
+					"link": "/core-workflows/using-commands"
+				},
+				{
+					"text": "Checkpoints",
+					"link": "/core-workflows/checkpoints"
+				},
+				{
+					"text": "Agent Teams",
+					"link": "/cli/agent-teams"
+				},
+				{
+					"text": "Subagents",
+					"link": "/features/subagents"
+				}
+			]
+		},
+		{
+			"text": "Best Practices",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Memory Bank",
+					"link": "/best-practices/memory-bank"
+				}
+			]
+		},
+		{
+			"text": "Troubleshooting",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Networking And Proxies",
+					"link": "/troubleshooting/networking-and-proxies"
+				}
+			]
+		}
+	],
+	"/": [
+		{
+			"text": "Getting Started",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Trumbo Overview",
+					"link": "/trumbo-overview"
+				},
+				{
+					"text": "Installing Trumbo",
+					"link": "/getting-started/installing-trumbo"
+				},
+				{
+					"text": "Config",
+					"link": "/getting-started/config"
+				}
+			]
+		},
+		{
+			"text": "Usage",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Tui",
+					"link": "/usage/tui"
+				}
+			]
+		},
+		{
+			"text": "Configurations",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "All Trumbo Tools",
+					"link": "/tools-reference/all-trumbo-tools"
+				},
+				{
+					"text": "Trumbo Rules",
+					"link": "/customization/trumbo-rules"
+				},
+				{
+					"text": "Skills",
+					"link": "/customization/skills"
+				},
+				{
+					"text": "Plugins",
+					"link": "/customization/plugins"
+				},
+				{
+					"text": "Mcp Overview",
+					"link": "/mcp/mcp-overview"
+				},
+				{
+					"text": "Hooks",
+					"link": "/customization/hooks"
+				},
+				{
+					"text": "Scheduling",
+					"link": "/cli/scheduling"
+				},
+				{
+					"text": "Connectors",
+					"link": "/cli/connectors"
+				},
+				{
+					"text": "Trumboignore",
+					"link": "/customization/trumboignore"
+				}
+			]
+		},
+		{
+			"text": "Features",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Plan And Act",
+					"link": "/core-workflows/plan-and-act"
+				},
+				{
+					"text": "Working With Files",
+					"link": "/core-workflows/working-with-files"
+				},
+				{
+					"text": "Using Commands",
+					"link": "/core-workflows/using-commands"
+				},
+				{
+					"text": "Checkpoints",
+					"link": "/core-workflows/checkpoints"
+				},
+				{
+					"text": "Agent Teams",
+					"link": "/cli/agent-teams"
+				},
+				{
+					"text": "Subagents",
+					"link": "/features/subagents"
+				}
+			]
+		},
+		{
+			"text": "Best Practices",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Memory Bank",
+					"link": "/best-practices/memory-bank"
+				}
+			]
+		},
+		{
+			"text": "Troubleshooting",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Networking And Proxies",
+					"link": "/troubleshooting/networking-and-proxies"
+				}
+			]
+		}
+	],
+	"/sdk/": [
+		{
+			"text": "Start",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Overview",
+					"link": "/engine/overview"
+				},
+				{
+					"text": "Examples",
+					"link": "/engine/examples"
+				}
+			]
+		},
+		{
+			"text": "Concepts",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Scheduled Agents",
+					"link": "/engine/guides/scheduled-agents"
+				},
+				{
+					"text": "Events",
+					"link": "/engine/events"
+				},
+				{
+					"text": "Model Providers",
+					"link": "/engine/model-providers"
+				},
+				{
+					"text": "Trumbocore",
+					"link": "/engine/trumbocore"
+				}
+			]
+		},
+		{
+			"text": "Architecture",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Overview",
+					"link": "/engine/architecture/overview"
+				},
+				{
+					"text": "Hub Spoke",
+					"link": "/engine/architecture/hub-spoke"
+				}
+			]
+		},
+		{
+			"text": "Guides",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Building An Agent",
+					"link": "/engine/guides/building-an-agent"
+				},
+				{
+					"text": "Permission Handling",
+					"link": "/engine/guides/permission-handling"
+				},
+				{
+					"text": "Multi Agent Teams",
+					"link": "/engine/guides/multi-agent-teams"
+				},
+				{
+					"text": "Going To Production",
+					"link": "/engine/guides/going-to-production"
+				}
+			]
+		},
+		{
+			"text": "API Reference",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Trumbo Core",
+					"link": "/engine/reference/trumbo-core"
+				},
+				{
+					"text": "Agent",
+					"link": "/engine/reference/agent"
+				},
+				{
+					"text": "Gateway",
+					"link": "/engine/reference/gateway"
+				},
+				{
+					"text": "Tools Api",
+					"link": "/engine/reference/tools-api"
+				},
+				{
+					"text": "Events",
+					"link": "/engine/reference/events"
+				},
+				{
+					"text": "Types",
+					"link": "/engine/reference/types"
+				}
+			]
+		}
+	]
+}

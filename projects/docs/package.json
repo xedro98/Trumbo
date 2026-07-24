@@ -1,0 +1,16 @@
+{
+	"name": "trumbo-docs",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"convert": "node scripts/convert-docs.mjs",
+		"dev": "vitepress dev",
+		"build": "vitepress build",
+		"preview": "vitepress preview",
+		"deploy": "node scripts/convert-docs.mjs && vitepress build && wrangler deploy"
+	},
+	"devDependencies": {
+		"vitepress": "^1.0.0",
+		"wrangler": "^4.0.0"
+	}
+}

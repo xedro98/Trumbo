@@ -3,7 +3,10 @@ import type { MessageWithMetadata } from "@trumbodev/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { CoreCompactionContext } from "../../types/config";
 import { runBasicCompaction } from "./basic-compaction";
-import { createContextCompactionPrepareTurn } from "./compaction";
+import {
+	createContextCompactionPrepareTurn,
+	DEFAULT_COMPACTION_STRATEGY,
+} from "./compaction";
 import {
 	createTokenEstimator,
 	resolveSummarizerConfig,
@@ -34,6 +37,29 @@ function totalJsonTokens(messages: LlmsProviders.Message[]): number {
 		0,
 	);
 }
+
+describe("DEFAULT_COMPACTION_STRATEGY", () => {
+	it("defaults to agentic compaction", () => {
+		expect(DEFAULT_COMPACTION_STRATEGY).toBe("agentic");
+	});
+
+	it("arms compaction without an explicit strategy (uses the agentic default)", () => {
+		const prepareTurn = createContextCompactionPrepareTurn({
+			providerId: "anthropic",
+			modelId: "mock-model",
+			providerConfig: {
+				providerId: "anthropic",
+				modelId: "mock-model",
+			} as LlmsProviders.ProviderConfig,
+			// No strategy set — should fall back to DEFAULT_COMPACTION_STRATEGY.
+			compaction: { enabled: true },
+			logger: undefined,
+		});
+		// A defined prepare-turn means compaction is armed. The agentic path
+		// itself is exercised by the explicit strategy: "agentic" tests below.
+		expect(typeof prepareTurn).toBe("function");
+	});
+});
 
 describe("createTokenEstimator", () => {
 	it("does not treat cumulative request metrics as per-message token counts", () => {

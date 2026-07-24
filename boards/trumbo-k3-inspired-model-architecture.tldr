@@ -1,0 +1,6003 @@
+{
+  "tldrawFileFormatVersion": 1,
+  "schema": {
+    "schemaVersion": 2,
+    "sequences": {
+      "com.tldraw.store": 5,
+      "com.tldraw.asset": 1,
+      "com.tldraw.camera": 1,
+      "com.tldraw.document": 2,
+      "com.tldraw.instance": 26,
+      "com.tldraw.instance_page_state": 5,
+      "com.tldraw.page": 1,
+      "com.tldraw.instance_presence": 6,
+      "com.tldraw.pointer": 1,
+      "com.tldraw.shape": 4,
+      "com.tldraw.user": 1,
+      "com.tldraw.asset.image": 6,
+      "com.tldraw.asset.video": 5,
+      "com.tldraw.asset.bookmark": 2,
+      "com.tldraw.shape.group": 0,
+      "com.tldraw.shape.text": 4,
+      "com.tldraw.shape.bookmark": 2,
+      "com.tldraw.shape.draw": 4,
+      "com.tldraw.shape.geo": 11,
+      "com.tldraw.shape.note": 12,
+      "com.tldraw.shape.line": 5,
+      "com.tldraw.shape.frame": 1,
+      "com.tldraw.shape.arrow": 8,
+      "com.tldraw.shape.highlight": 3,
+      "com.tldraw.shape.embed": 4,
+      "com.tldraw.shape.image": 5,
+      "com.tldraw.shape.video": 4,
+      "com.tldraw.binding.arrow": 1
+    }
+  },
+  "records": [
+    {
+      "x": 882,
+      "y": 888,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 17,
+          "segmentIndex": 1,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-context_cache-synthesis-17-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b09Xo0AcV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 1690,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "long memory"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2100,
+      "y": 574,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-task_encoder",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a8HKZlnV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "violet",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Task Graph Encoder"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Builds a latent graph of"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "goals, constraints, files,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "visual signals, and tool"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "affordances."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1582,
+      "y": 1804,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 23,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-verification-output-23-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0RTifDzl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 64
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2572,
+      "y": 888,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 17,
+          "segmentIndex": 2,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-context_cache-synthesis-17-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0A5qqO2V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 538
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1582,
+      "y": 1868,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 23,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-verification-output-23-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0SO86zOl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -1422,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "approved"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2572,
+      "y": 1426,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 17,
+          "segmentIndex": 3,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-context_cache-synthesis-17-3",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0B1XI40V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -334,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 1868,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 23,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-verification-output-23-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0TNhMjGV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 160
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2238,
+      "y": 1426,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 17,
+          "segmentIndex": 4,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-context_cache-synthesis-17-4",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0CYIipBV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 192
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1400,
+      "y": 574,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-vision_encoder",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a7WJIAbV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 160,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "light-blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Native Vision Encoder"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Images, screenshots, and"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "video references join text"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "as model-native context."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2282,
+      "y": 1176,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 19,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-partial_decode-synthesis-19-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0GTumlhV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 314
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 1618,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-schema_decoder",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aD8zvgyG",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "violet",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Strict Schema Decoder"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Final answers can be"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "constrained to JSON Schema"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "while reasoning stays"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "separate."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 700,
+      "y": 1618,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-streaming",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aEf33ayV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 160,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "green",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Dual-Channel Streaming"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Streams reasoning deltas"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "separately from"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "final-answer content."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2282,
+      "y": 1490,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 19,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-partial_decode-synthesis-19-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0H3fiwyV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -66,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "continuation"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "meta": {},
+      "id": "camera:page:page",
+      "typeName": "camera"
+    },
+    {
+      "x": 2216,
+      "y": 1490,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 19,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-partial_decode-synthesis-19-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0IMHEP5V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 128
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1020,
+      "y": 1698,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 21,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-streaming-verification-21-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0MebnhWV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2282,
+      "y": 760,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 8,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-task_encoder-thinking-8-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aeDeITJV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 64
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1052,
+      "y": 1698,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 21,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-streaming-verification-21-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0NrnGLQV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 13
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2282,
+      "y": 824,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 8,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-task_encoder-thinking-8-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "af7ZUZoG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -2122,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "reasoning graph"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1052,
+      "y": 1711,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 21,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-streaming-verification-21-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0OzHBnWl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "channel check"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 824,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 8,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-task_encoder-thinking-8-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "ag91ZHAV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 192
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2100,
+      "y": 1016,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-partial_decode",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aCRMkrjV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 160,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "light-blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Partial Continuation"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Can continue from a"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "supplied assistant prefix"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "for controlled generation."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 182,
+      "y": 2028,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 24,
+          "segmentIndex": 0,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-output-context_cache-24-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0URHEC0V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -128
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 182,
+      "y": 1202,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 12,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-thinking-partial_decode-12-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "ap2qKoCV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 64
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 760,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 5,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-context_cache-task_encoder-5-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aVR5QcoV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 32
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 182,
+      "y": 1900,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 24,
+          "segmentIndex": 1,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-output-context_cache-24-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0Vjmb1gV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 2422,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "next turn"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 182,
+      "y": 1266,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 12,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-thinking-partial_decode-12-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aq1AwyLV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 2078,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "prefix control"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 792,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 5,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-context_cache-task_encoder-5-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aWdUzdZO",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 1400,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "cached state"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "lastActivityTimestamp": 0,
+      "meta": {},
+      "id": "pointer:QPJDQm-s0JvrZz2Oir-UG",
+      "typeName": "pointer"
+    },
+    {
+      "x": 2604,
+      "y": 1900,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 24,
+          "segmentIndex": 2,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-output-context_cache-24-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0WjfnuHV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -980
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2260,
+      "y": 1266,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 12,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-thinking-partial_decode-12-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "arC7LUFG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -90
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2260,
+      "y": 792,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 5,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-context_cache-task_encoder-5-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aXm435QV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -32
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 286,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 4,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-hybrid_attention-context_cache-4-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aSA9T8UG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 96
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 204,
+      "y": 1202,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 14,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-thinking-streaming-14-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "avM5t0gV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 128
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2604,
+      "y": 920,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 24,
+          "segmentIndex": 3,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-output-context_cache-24-3",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0XRGfvOV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -1766,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 382,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 4,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-hybrid_attention-context_cache-4-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aT2Lb4sV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -700,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "prefix reuse"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 204,
+      "y": 1330,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 14,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-thinking-streaming-14-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aw6FFljV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 656,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "reason/final split"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 574,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-latent_moe",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a57JLJ5V",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "orange",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Stable Latent MoE"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Sparse expert activation:"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "many private experts, few"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "active per token for"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "efficient scale."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 838,
+      "y": 920,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 24,
+          "segmentIndex": 4,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-output-context_cache-24-4",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0YmjwJuV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -160
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 320,
+      "y": 1109,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 9,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-thinking-tool_loader-9-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "ahfAUAjl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 1016,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-thinking",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a9cE5AOV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "green",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Always-On Thinking"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Reasoning mode is native;"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "effort controls depth"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "rather than switching"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "thinking on/off."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 382,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 4,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-hybrid_attention-context_cache-4-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aUIu5yHV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 192
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 1804,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 20,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-schema_decoder-verification-20-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0JRrxwRV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 32
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 1330,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 14,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-thinking-streaming-14-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "axmPI43V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 288
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 100,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-surface",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a1rtERwV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Trumbo Model Surface"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Private frontier model with"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "one coherent API, chat,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "agent, and coding"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "interface."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 1836,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 20,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-schema_decoder-verification-20-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0K4hUHGl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 1400,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "schema check"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 352,
+      "y": 1109,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 9,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-thinking-tool_loader-9-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aixhnFDV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "tool need"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 882,
+      "y": 286,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 3,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-scale_core-latent_moe-3-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aPsYJX5V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 64
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2282,
+      "y": 260,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 16,
+          "segmentIndex": 0,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-attn_residuals-synthesis-16-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b03TBvIzG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 186
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 1836,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 20,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-schema_decoder-verification-20-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0LajVgRV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -32
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1582,
+      "y": 1176,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 18,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-agent_loop-synthesis-18-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0DjafQWV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 282
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 882,
+      "y": 350,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 3,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-scale_core-latent_moe-3-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aQtGAqlV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -722,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "sparse scale"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2282,
+      "y": 446,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 16,
+          "segmentIndex": 1,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-attn_residuals-synthesis-16-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0467NBzG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 258,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "stable state"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 138,
+      "y": 1202,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 13,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-thinking-schema_decoder-13-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "asUE3TRl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 96
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1582,
+      "y": 1458,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 18,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-agent_loop-synthesis-18-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0EcurRIV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 722,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "actions"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 700,
+      "y": 100,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-scale_core",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a2luJHwV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "light-blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "3T-Scale Private Core"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Large sparse model core"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "designed for frontier"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "reasoning and long-horizon"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "work."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 350,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 3,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-scale_core-latent_moe-3-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aRFOhqMV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 224
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2540,
+      "y": 446,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 16,
+          "segmentIndex": 2,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-attn_residuals-synthesis-16-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b053ddqiV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 948
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 138,
+      "y": 1298,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 13,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-thinking-schema_decoder-13-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "atQlP7ZV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 22,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "structured target"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2304,
+      "y": 1458,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 18,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-agent_loop-synthesis-18-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0FMlluAV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 160
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 1176,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 11,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-agent_loop-thinking-11-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "amUFZgDl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 58
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2540,
+      "y": 1394,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 16,
+          "segmentIndex": 3,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-attn_residuals-synthesis-16-3",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b06PAGAfV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -258,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 1298,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 13,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-thinking-schema_decoder-13-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "auoqjX8V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 320
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 1234,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 11,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-agent_loop-thinking-11-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "anV22hGV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -1400,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "tool results"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 286,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 7,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-surface-vision_encoder-7-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "ab0uj8TV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 128
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 700,
+      "y": 574,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-context_cache",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a6v9KshV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "1M Context Cache"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Automatic reuse of"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "unchanged long prefixes,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "documents, codebases, and"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "session state."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2282,
+      "y": 1394,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 16,
+          "segmentIndex": 4,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-attn_residuals-synthesis-16-4",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b07EQhWDV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 224
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1720,
+      "y": 654,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 6,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-vision_encoder-task_encoder-6-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aYcczq4l",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 1234,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 11,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-agent_loop-thinking-11-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aoKUia2l",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -32
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 414,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 7,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-surface-vision_encoder-7-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "acKqYmlV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 1400,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "media input"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1752,
+      "y": 654,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 6,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-vision_encoder-task_encoder-6-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aZmeKIxV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 13
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1560,
+      "y": 414,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 7,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-surface-vision_encoder-7-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "adfhvjOV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 160
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2100,
+      "y": 1618,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-synthesis",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aGDx0vgV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Trumbo Synthesis Layer"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Merges sparse experts,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "context cache, vision, tool"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "traces, and verified"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "reasoning."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1752,
+      "y": 667,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 6,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-vision_encoder-task_encoder-6-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aayqPwkV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "visual tokens"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1020,
+      "y": 193,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 1,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-scale_core-hybrid_attention-1-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aK8soTTV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1400,
+      "y": 100,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-hybrid_attention",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a3XBjgEV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "violet",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Hybrid Linear Attention"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Efficient long-sequence"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "attention path for"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "million-token context and"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "deep workflows."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1400,
+      "y": 1618,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-verification",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aFfB8RTV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "orange",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Verification Layer"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Checks tool plans,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "structured outputs, visual"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "grounding, and long-context"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "consistency."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "meta": {},
+      "id": "page:page",
+      "name": "Page 1",
+      "index": "a1",
+      "typeName": "page"
+    },
+    {
+      "gridSize": 10,
+      "name": "trumbo-k3-inspired-model-architecture",
+      "meta": {},
+      "id": "document:document",
+      "typeName": "document"
+    },
+    {
+      "followingUserId": null,
+      "opacityForNextShape": 1,
+      "stylesForNextShape": {},
+      "brush": null,
+      "scribbles": [],
+      "cursor": {
+        "type": "default",
+        "rotation": 0
+      },
+      "isFocusMode": false,
+      "exportBackground": true,
+      "isDebugMode": false,
+      "isToolLocked": false,
+      "screenBounds": {
+        "x": 0,
+        "y": 0,
+        "w": 1080,
+        "h": 720
+      },
+      "insets": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "zoomBrush": null,
+      "isGridMode": false,
+      "isPenMode": false,
+      "chatMessage": "",
+      "isChatting": false,
+      "highlightedUserIds": [],
+      "isFocused": false,
+      "devicePixelRatio": 1,
+      "isCoarsePointer": false,
+      "isHoveringCanvas": null,
+      "openMenus": [],
+      "isChangingStyle": false,
+      "isReadonly": false,
+      "meta": {},
+      "duplicateProps": null,
+      "cameraState": "idle",
+      "id": "instance:instance",
+      "currentPageId": "page:page",
+      "typeName": "instance"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "title",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-title",
+      "type": "text",
+      "parentId": "page:page",
+      "index": "a0slwtBV",
+      "props": {
+        "color": "black",
+        "size": "xl",
+        "font": "sans",
+        "textAlign": "start",
+        "w": 2540,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Trumbo: Frontier Private Model Architecture"
+                }
+              ]
+            }
+          ]
+        },
+        "scale": 1,
+        "autoSize": false
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2100,
+      "y": 100,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-attn_residuals",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "a4SXbzfl",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 160,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "green",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Attention Residuals"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Stabilizes information flow"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "through deeper layers and"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "longer reasoning sequences."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2100,
+      "y": 1711,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 22,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-synthesis-verification-22-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0P8RADYV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 286,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 2,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-scale_core-attn_residuals-2-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aMzcV8Cl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 32
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1052,
+      "y": 193,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 1,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-scale_core-hybrid_attention-1-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aLknUU3t",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "long context"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 760,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 15,
+          "segmentIndex": 0,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-latent_moe-synthesis-15-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "ayZAczQG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 96
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 860,
+      "y": 318,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 2,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-scale_core-attn_residuals-2-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aNLQnL3V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 1400,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "deep signal"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1400,
+      "y": 1016,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-agent_loop",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aBHswHjV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 160,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Agent Execution Loop"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Plans tool calls, consumes"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "tool results, and continues"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "until it can answer or act."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 160,
+      "y": 856,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 15,
+          "segmentIndex": 1,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-latent_moe-synthesis-15-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "azZJcu9V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 2348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "expert activations"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 320,
+      "y": 193,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 0,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-surface-scale_core-0-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aITEnhNV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1020,
+      "y": 1109,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 10,
+          "segmentIndex": 0,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-tool_loader-agent_loop-10-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "ajHSG65V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 32,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 700,
+      "y": 1016,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-tool_loader",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aAroQ67V",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "orange",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Dynamic Tool Loading"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Tools can be introduced at"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "specific points in the"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "message history with full"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "schemas."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2068,
+      "y": 1711,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 22,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-synthesis-verification-22-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b0QgGGkhV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "candidate"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2260,
+      "y": 318,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 2,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-scale_core-attn_residuals-2-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aOhR8xmV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -58
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "editingShapeId": null,
+      "croppingShapeId": null,
+      "selectedShapeIds": [],
+      "hoveredShapeId": null,
+      "erasingShapeIds": [],
+      "hintingShapeIds": [],
+      "focusedGroupId": null,
+      "meta": {},
+      "id": "instance_page_state:Ux_z0jhZj2oV9G_riXHZG",
+      "pageId": "page:page",
+      "typeName": "instance_page_state"
+    },
+    {
+      "x": 2508,
+      "y": 856,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 15,
+          "segmentIndex": 2,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-latent_moe-synthesis-15-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b00GVthUl",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 506
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1052,
+      "y": 1109,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 10,
+          "segmentIndex": 1,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-tool_loader-agent_loop-10-1",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "akhdjB1V",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": -13
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2508,
+      "y": 1362,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 15,
+          "segmentIndex": 3,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-latent_moe-synthesis-15-3",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b01hJyTnV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": -248,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 352,
+      "y": 193,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 0,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-surface-scale_core-0-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "aJVrGSNV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "request"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 1052,
+      "y": 1096,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 10,
+          "segmentIndex": 2,
+          "segmentCount": 3
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-tool_loader-agent_loop-10-2",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "altW9nFV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 348,
+          "y": 0
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "schemas"
+                }
+              ]
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 2028,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "step",
+          "evidence": []
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-output",
+      "type": "geo",
+      "parentId": "page:page",
+      "index": "aH9qpLmV",
+      "props": {
+        "geo": "rectangle",
+        "dash": "solid",
+        "url": "",
+        "w": 320,
+        "h": 186,
+        "growY": 0,
+        "scale": 1,
+        "labelColor": "black",
+        "color": "light-blue",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Final Trumbo Response"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "One branded answer: text,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "code, tool action,"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "structured JSON, or"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "continued draft."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 882,
+      "y": 760,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 17,
+          "segmentIndex": 0,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-context_cache-synthesis-17-0",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b081sooiV",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "none",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 128
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 2260,
+      "y": 1362,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "tldrawMcp": {
+          "diagramId": "workflow-mrp9nz77",
+          "repoName": "Trumbo: Frontier Private Model Architecture",
+          "kind": "connection",
+          "evidence": [],
+          "connectionIndex": 15,
+          "segmentIndex": 4,
+          "segmentCount": 5
+        }
+      },
+      "id": "shape:workflow-mrp9nz77-arrow-latent_moe-synthesis-15-4",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "b02jUu0yG",
+      "props": {
+        "kind": "arc",
+        "labelColor": "black",
+        "color": "black",
+        "fill": "none",
+        "dash": "solid",
+        "size": "s",
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "font": "sans",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 256
+        },
+        "bend": 0,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "scale": 1,
+        "elbowMidPoint": 0.5
+      },
+      "typeName": "shape"
+    }
+  ]
+}

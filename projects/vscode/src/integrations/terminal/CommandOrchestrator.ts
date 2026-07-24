@@ -113,7 +113,15 @@ export async function orchestrateCommandExecution(
 	})
 
 	let userFeedback: { text?: string; images?: string[]; files?: string[] } | undefined
-	let didContinue = false
+	let didContinue = options.proceedWhileRunningRef?.current ?? false
+	// Propagate PWR engagement back to the shared batch ref so sibling commands
+	// in the same `run_commands` call start with PWR already active.
+	const engageProceedWhileRunning = () => {
+		didContinue = true
+		if (options.proceedWhileRunningRef) {
+			options.proceedWhileRunningRef.current = true
+		}
+	}
 	let didCancelViaUi = false
 	let backgroundTrackingResult: OrchestrationResult | null = null // Set when background tracking returns early
 
@@ -210,7 +218,7 @@ export async function orchestrateCommandExecution(
 					if (text || (images && images.length > 0) || (files && files.length > 0)) {
 						userFeedback = { text, images, files }
 					}
-					didContinue = true
+					engageProceedWhileRunning()
 
 					// Notify caller to start background command tracking
 					// Pass existing output lines so they can be written to the log file
@@ -258,7 +266,7 @@ export async function orchestrateCommandExecution(
 					// Set flags BEFORE resuming the process to prevent new lines from being processed
 					didCancelViaUi = true
 					userFeedback = undefined
-					didContinue = true
+					engageProceedWhileRunning()
 					outputBuffer = []
 					outputBufferSize = 0
 					// Send cancellation message BEFORE resuming the process
@@ -268,7 +276,7 @@ export async function orchestrateCommandExecution(
 					process.continue()
 				} else {
 					userFeedback = { text, images, files }
-					didContinue = true
+					engageProceedWhileRunning()
 					process.continue()
 					// If more output accumulated, flush again
 					if (outputBuffer.length > 0) {
@@ -485,7 +493,7 @@ export async function orchestrateCommandExecution(
 			} catch (error: any) {
 				if (error.message === "COMMAND_TIMEOUT") {
 					// Timeout triggers "Proceed While Running" behavior
-					didContinue = true
+					engageProceedWhileRunning()
 					// Release any pending command_output ask before transitioning state.
 					releaseAnyPendingCommandOutputAsk()
 

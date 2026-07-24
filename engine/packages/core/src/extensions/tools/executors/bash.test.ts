@@ -15,6 +15,30 @@ describe("createShellExecutor", () => {
 		expect(output.trim()).toBe("hello");
 	});
 
+	it("exposes session metadata as TRUMBO_* env vars to the command", async () => {
+		const shell = createShellExecutor();
+		const sessionCtx: AgentToolContext = {
+			agentId: "agent-42",
+			conversationId: "conv-42",
+			sessionId: "session-42",
+			runId: "run-42",
+			iteration: 1,
+		};
+		// Use node -e to print the injected env vars portably across shells.
+		const output = await shell(
+			{
+				command: process.execPath,
+				args: [
+					"-e",
+					"process.stdout.write([process.env.TRUMBO_SESSION_ID, process.env.TRUMBO_CONVERSATION_ID, process.env.TRUMBO_AGENT_ID, process.env.TRUMBO_RUN_ID].join(','))",
+				],
+			},
+			process.cwd(),
+			sessionCtx,
+		);
+		expect(output).toBe("session-42,conv-42,agent-42,run-42");
+	});
+
 	it("rejects on non-zero exit code", async () => {
 		const shell = createShellExecutor();
 		await expect(shell("exit 1", process.cwd(), ctx)).rejects.toThrow();

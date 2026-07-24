@@ -171,7 +171,7 @@ const FileBlock = memo<{ file: Patch; isStreaming: boolean; startLineNumber?: nu
 						ref={scrollContainerRef}>
 						<div className="font-mono text-xs w-max min-w-full">
 							{file.lines.map((line, index) => (
-								<DiffLine key={`${index}-${line.slice(0, 20)}`} line={line} lineNumber={lineNumbers?.[index]} />
+								<DiffLine key={index} line={line} lineNumber={lineNumbers?.[index]} />
 							))}
 						</div>
 					</div>

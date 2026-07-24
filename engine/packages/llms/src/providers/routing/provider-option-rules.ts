@@ -488,6 +488,52 @@ const routedGlmReasoningRule: ProviderOptionRule = {
  * Keep model/provider fact detection in `providers/model-facts.ts`; see
  * `engine/packages/llms/AGENTS.md` for the sources-of-truth boundary.
  */
+/**
+ * Constrained sampling: when the request carries a `constrained.jsonSchema`
+ * directive, compose it into the OpenAI-compatible `responseFormat` option so
+ * the provider constrains its output to the schema. Providers that don't
+ * support `responseFormat` ignore the option silently.
+ */
+const constrainedSamplingRule: ProviderOptionRule = {
+	id: "provider.constrained-sampling",
+	phase: "provider",
+	description:
+		"Composes constrained-sampling json_schema directives into the responseFormat option.",
+	applies: (input) => {
+		const constrained = (
+			input.request as { constrained?: { jsonSchema?: unknown } }
+		).constrained;
+		return !!constrained?.jsonSchema;
+	},
+	build: (input) => {
+		const constrained = (
+			input.request as {
+				constrained?: {
+					jsonSchema?: {
+						name?: string;
+						schema: Record<string, unknown>;
+						strict?: boolean;
+					};
+				};
+			}
+		).constrained;
+		if (!constrained?.jsonSchema) return {};
+		const js = constrained.jsonSchema;
+		return {
+			[input.target]: {
+				responseFormat: {
+					type: "json_schema",
+					jsonSchema: {
+						name: js.name ?? "structured_output",
+						schema: js.schema,
+						...(js.strict !== undefined ? { strict: js.strict } : {}),
+					},
+				},
+			},
+		};
+	},
+};
+
 export const PROVIDER_OPTION_RULES: ReadonlyArray<ProviderOptionRule> = [
 	directAnthropicProviderRule,
 	directGoogleProviderRule,
@@ -507,6 +553,7 @@ export const PROVIDER_OPTION_RULES: ReadonlyArray<ProviderOptionRule> = [
 	nativeZaiGlmThinkingRule,
 	miniMaxThinkingRule,
 	routedGlmReasoningRule,
+	constrainedSamplingRule,
 ];
 
 export function matchProviderOptionRules(

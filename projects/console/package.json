@@ -1,7 +1,7 @@
 {
 	"name": "@trumbodev/cli",
 	"displayName": "Trumbo",
-	"version": "3.5.1",
+	"version": "3.6.0",
 	"description": "Autonomous coding agent CLI - capable of creating/editing files, running commands, using the browser, and more",
 	"type": "module",
 	"publishConfig": {
@@ -78,8 +78,8 @@
 		"@clack/prompts": "^1.2.0",
 		"@gramio/format": "^0.7.0",
 		"@opentui-ui/dialog": "^0.1.2",
-		"@opentui/core": "0.1.102",
-		"@opentui/react": "0.1.102",
+		"@opentui/core": "^0.4.3",
+		"@opentui/react": "^0.4.3",
 		"@trumbodev/hub": "workspace:*",
 		"chat": "^4.23.0",
 		"commander": "^14.0.3",

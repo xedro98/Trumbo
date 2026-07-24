@@ -4,6 +4,7 @@
 // runtime, but VSIX packaging uses the bundled extension output.
 import { createSAPAIProvider } from "@jerome-benoit/sap-ai-provider";
 import type { GatewayResolvedProviderConfig } from "@trumbodev/shared";
+import { uuidV7 } from "@trumbodev/shared";
 import { createClaudeCode } from "ai-sdk-provider-claude-code";
 import { createCodexExec } from "ai-sdk-provider-codex-cli";
 import { createDifyProvider } from "dify-ai-provider";
@@ -36,7 +37,14 @@ export async function createClaudeCodeProviderModule(
 export async function createOpenAICodexProviderModule(
 	config: GatewayResolvedProviderConfig,
 ): Promise<ProviderFactoryResult> {
-	const provider = createCodexExec(readOptions(config));
+	// Stamp each Codex provider instance with a UUIDv7 request id so requests
+	// are time-ordered and dedupable. The id is passed via the options bag;
+	// `createCodexExec` ignores unknown keys at runtime, so the cast is safe
+	// even though the upstream type doesn't declare `requestId` yet.
+	const provider = createCodexExec({
+		...readOptions(config),
+		requestId: uuidV7(),
+	} as Parameters<typeof createCodexExec>[0]);
 	return {
 		model: (modelId) => provider(modelId),
 	};

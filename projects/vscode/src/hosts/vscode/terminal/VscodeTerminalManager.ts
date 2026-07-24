@@ -315,6 +315,9 @@ export class VscodeTerminalManager implements ITerminalManager {
 			}
 			// Check if effective shell path matches current configuration
 			if (VscodeTerminalManager.effectiveShellPath(t.shellPath) !== effectiveExpected) {
+				Logger.log(
+					`[TerminalManager] Terminal ${t.id} shell mismatch: effective=${VscodeTerminalManager.effectiveShellPath(t.shellPath)}, expected=${effectiveExpected}; creating a new terminal instead of reusing`,
+				)
 				return false
 			}
 			const terminalCwd = t.terminal.shellIntegration?.cwd // one of trumbo's commands could have changed the cwd of the terminal
@@ -489,5 +492,16 @@ export class VscodeTerminalManager implements ITerminalManager {
 	 */
 	closeAllTerminals(): number {
 		return this.closeTerminals(() => true, true)
+	}
+
+	/**
+	 * Disposes terminals that are no longer tracked by this manager — e.g.
+	 * fallback terminals that emitted `no_shell_integration` and were removed
+	 * from tracking but never had their VS Code terminal disposed. Only
+	 * closes non-busy terminals to avoid killing active commands.
+	 * @returns Number of terminals reclaimed
+	 */
+	reclaimUnobservedTerminals(): number {
+		return this.closeTerminals((t) => !this.terminalIds.has(t.id) && !t.busy, false)
 	}
 }

@@ -42,6 +42,9 @@ const DEFAULT_RETRYABLE_TOKEN_GRACE_MS = 30 * 1000;
 const DEFAULT_HTTP_TIMEOUT_MS = 30 * 1000;
 const DEFAULT_DEVICE_AUTH_EXPIRES_IN_SECONDS = 300;
 const DEFAULT_DEVICE_AUTH_INTERVAL_SECONDS = 5;
+/** Better Auth device-authorization client id for the CLI. The web app's
+ *  `deviceAuthorization` plugin `validateClient` allow-lists this id. */
+const TRUMBO_CLI_CLIENT_ID = "trumbo-cli";
 
 export type TrumboTokenResolution = {
 	forceRefresh?: boolean;
@@ -578,9 +581,9 @@ export async function loginTrumboOAuth(
 
 /**
  * Self-hosted device-authorization request. Used when `workOsClientId` is empty
- * (the default once the Trumbo web app is the identity backend). The web app's
- * `POST /api/v1/auth/device` returns the same field shape as WorkOS's device
- * authorization response, so parsing mirrors `requestWorkOSDeviceAuthorization`.
+ * (the default once the Trumbo web app is the identity backend). Hits the Better
+ * Auth `deviceAuthorization` plugin at `POST /api/auth/device/code` with the CLI
+ * client id; the response fields mirror WorkOS's device authorization response.
  */
 async function requestSelfHostedDeviceAuthorization(options: {
 	apiBaseUrl: string;
@@ -594,11 +597,11 @@ async function requestSelfHostedDeviceAuthorization(options: {
 	pollIntervalSeconds: number;
 }> {
 	const response = await fetch(
-		resolveUrl(options.apiBaseUrl, "/api/v1/auth/device"),
+		resolveUrl(options.apiBaseUrl, "/api/auth/device/code"),
 		{
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({}),
+			body: JSON.stringify({ client_id: TRUMBO_CLI_CLIENT_ID }),
 			signal: AbortSignal.timeout(
 				options.requestTimeoutMs ?? DEFAULT_HTTP_TIMEOUT_MS,
 			),
@@ -633,10 +636,75 @@ async function requestSelfHostedDeviceAuthorization(options: {
 }
 
 /**
- * Self-hosted device-code token poll. Polls the web app's
- * `POST /api/v1/auth/token` with the device-code grant; once approved it
- * returns the Trumbo token envelope directly (no separate register step).
- * pending / slow_down / expired / denied handling mirrors `pollWorkOSTokens`.
+ * Fetch the signed-in user's info (`/api/v1/users/me`) to populate `userInfo`.
+ * Better Auth's device-token response returns only the access token, so the CLI
+ * resolves subject/email/name separately. Non-fatal: returns a null-ish shape on
+ * failure so token storage still succeeds.
+ */
+async function fetchSelfHostedUserInfo(
+	apiBaseUrl: string,
+	accessToken: string,
+	requestTimeoutMs?: number,
+): Promise<TrumboAuthApiUser> {
+	try {
+		const res = await fetch(resolveUrl(apiBaseUrl, "/api/v1/users/me"), {
+			headers: { Authorization: `Bearer ${accessToken}` },
+			signal: AbortSignal.timeout(requestTimeoutMs ?? DEFAULT_HTTP_TIMEOUT_MS),
+		});
+		if (!res.ok) {
+			return {
+				subject: null,
+				email: "",
+				name: "",
+				trumboUserId: null,
+				accounts: null,
+			};
+		}
+		const json = (await res.json().catch(() => ({}))) as {
+			success?: boolean;
+			data?: {
+				id?: string;
+				email?: string;
+				displayName?: string;
+				organizations?: Array<{ id: string }>;
+			};
+		};
+		const u = json.data;
+		if (!u) {
+			return {
+				subject: null,
+				email: "",
+				name: "",
+				trumboUserId: null,
+				accounts: null,
+			};
+		}
+		return {
+			subject: u.id ?? null,
+			email: u.email ?? "",
+			name: u.displayName ?? "",
+			trumboUserId: u.id ?? null,
+			accounts: (u.organizations ?? []).map((o) => o.id),
+		};
+	} catch {
+		return {
+			subject: null,
+			email: "",
+			name: "",
+			trumboUserId: null,
+			accounts: null,
+		};
+	}
+}
+
+/**
+ * Self-hosted device-code token poll. Polls the Better Auth deviceAuthorization
+ * plugin at `POST /api/auth/device/token` with the device-code grant; once
+ * approved it returns a standard OAuth2 `{access_token, expires_in}` response
+ * (no `success` envelope). The session token is long-lived, so `refreshToken`
+ * mirrors `accessToken` and the legacy `/api/v1/auth/refresh` shim re-validates
+ * it on renewal. pending / slow_down / expired / denied handling mirrors
+ * `pollWorkOSTokens`.
  */
 async function pollSelfHostedDeviceTokens(options: {
 	apiBaseUrl: string;
@@ -653,13 +721,14 @@ async function pollSelfHostedDeviceTokens(options: {
 		let payload: Record<string, unknown>;
 		try {
 			response = await fetch(
-				resolveUrl(options.apiBaseUrl, DEFAULT_AUTH_ENDPOINTS.token),
+				resolveUrl(options.apiBaseUrl, "/api/auth/device/token"),
 				{
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({
 						grant_type: "urn:ietf:params:oauth:grant-type:device_code",
 						device_code: options.deviceCode,
+						client_id: TRUMBO_CLI_CLIENT_ID,
 					}),
 					signal: AbortSignal.timeout(options.requestTimeoutMs),
 				},
@@ -674,10 +743,30 @@ async function pollSelfHostedDeviceTokens(options: {
 			continue;
 		}
 		if (response.ok) {
-			return requireTrumboTokenResponse(
-				payload as unknown as TrumboTokenResponse,
-				"Invalid token response",
+			const tokenPayload = payload as {
+				access_token?: string;
+				token_type?: string;
+				expires_in?: number;
+			};
+			if (!tokenPayload.access_token) {
+				throw new Error("Invalid token response");
+			}
+			const accessToken = tokenPayload.access_token;
+			const expiresIn = toSeconds(tokenPayload.expires_in, 3600);
+			const userInfo = await fetchSelfHostedUserInfo(
+				options.apiBaseUrl,
+				accessToken,
+				options.requestTimeoutMs,
 			);
+			return {
+				accessToken,
+				// Better Auth sessions are the token itself — no separate refresh token.
+				// The legacy /api/v1/auth/refresh shim re-validates this on renewal.
+				refreshToken: accessToken,
+				tokenType: tokenPayload.token_type ?? "Bearer",
+				expiresAt: new Date(Date.now() + expiresIn * 1000).toISOString(),
+				userInfo,
+			};
 		}
 		const errorCode =
 			typeof payload.error === "string" ? payload.error : undefined;

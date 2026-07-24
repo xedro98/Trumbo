@@ -61,6 +61,57 @@ describe("createAnthropicProviderModule", () => {
 			}),
 		);
 	});
+
+	it("uses ANTHROPIC_BEARER_TOKEN as the Authorization header when set", async () => {
+		const previous = process.env.ANTHROPIC_BEARER_TOKEN;
+		process.env.ANTHROPIC_BEARER_TOKEN = "test-bearer-token";
+		try {
+			await createAnthropicProviderModule(
+				config({ providerId: "anthropic", apiKey: "anthropic-api-key" }),
+				context("anthropic"),
+			);
+
+			expect(createAnthropicMock).toHaveBeenCalledWith(
+				expect.objectContaining({
+					apiKey: "test-bearer-token",
+					headers: expect.objectContaining({
+						Authorization: "Bearer test-bearer-token",
+					}),
+				}),
+			);
+		} finally {
+			if (previous === undefined) {
+				delete process.env.ANTHROPIC_BEARER_TOKEN;
+			} else {
+				process.env.ANTHROPIC_BEARER_TOKEN = previous;
+			}
+		}
+	});
+
+	it("does not set Authorization when ANTHROPIC_BEARER_TOKEN is unset", async () => {
+		const previous = process.env.ANTHROPIC_BEARER_TOKEN;
+		delete process.env.ANTHROPIC_BEARER_TOKEN;
+		try {
+			await createAnthropicProviderModule(
+				config({ providerId: "anthropic", apiKey: "anthropic-api-key" }),
+				context("anthropic"),
+			);
+
+			const call = createAnthropicMock.mock.calls[0]?.[0] as Record<
+				string,
+				unknown
+			>;
+			const headers = call?.headers as Record<string, string> | undefined;
+			expect(headers?.Authorization).toBeUndefined();
+			expect(call?.apiKey).toBe("anthropic-api-key");
+		} finally {
+			if (previous === undefined) {
+				delete process.env.ANTHROPIC_BEARER_TOKEN;
+			} else {
+				process.env.ANTHROPIC_BEARER_TOKEN = previous;
+			}
+		}
+	});
 });
 
 function config(

@@ -19,27 +19,32 @@ export interface TrumboRecommendedModelsData {
  */
 export const TRUMBO_QUARTZ_MODELS: TrumboRecommendedModel[] = [
 	{
-		id: "quartz",
+		id: "quartz-1.0",
 		name: "Quartz 1.0",
 		description: "Adaptive reasoning model that scales compute to the complexity of each request.",
 		tags: ["Quartz 1.0"],
 	},
 	{
-		id: "quartz-lite",
+		id: "quartz-1.0-lite",
 		name: "Quartz 1.0 Lite",
 		description: "Fast and economical Quartz variant for everyday agent loops and inline edits.",
 		tags: ["Quartz 1.0 Lite"],
 	},
 	{
-		id: "quartz-hyper",
+		id: "quartz-1.0-hyper",
 		name: "Quartz 1.0 Hyper",
 		description: "Flagship Quartz variant for maximum reasoning depth on hard engineering and research. Max/Ultra plans.",
 		tags: ["Quartz 1.0 Hyper"],
 	},
 ]
 
-/** Public Quartz model ids. */
-export const TRUMBO_QUARTZ_MODEL_IDS: ReadonlySet<string> = new Set(TRUMBO_QUARTZ_MODELS.map((model) => model.id))
+/** Public Quartz model ids (versioned + legacy aliases for deduplication). */
+export const TRUMBO_QUARTZ_MODEL_IDS: ReadonlySet<string> = new Set([
+	...TRUMBO_QUARTZ_MODELS.map((model) => model.id),
+	"quartz",
+	"quartz-lite",
+	"quartz-hyper",
+])
 
 /**
  * Hardcoded fallback shown when upstream recommended models are not enabled or unavailable.

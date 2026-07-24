@@ -5,7 +5,7 @@
  * resolves identically across the Node and browser builds of `@trumbodev/shared`.
  * Bump this together with `engine/packages/shared/package.json` on release.
  */
-export const TRUMBO_SDK_VERSION = "0.0.58";
+export const TRUMBO_SDK_VERSION = "0.0.60";
 
 export const DEFAULT_REQUEST_HEADERS: Record<string, string> = {
 	"X-Title": "Trumbo",

@@ -319,6 +319,15 @@ export interface ProviderConfig
 	/** AbortSignal for cancelling requests */
 	abortSignal?: AbortSignal;
 
+	/**
+	 * When true, the routing layer skips prompt-cache write breakpoints for
+	 * this request. Used for one-shot requests (compaction summaries, branch
+	 * summaries) where caching the output wastes tokens — the request is never
+	 * reused, so writing a cache entry just pollutes the cache. Cache reads
+	 * from the prefix are still allowed.
+	 */
+	disableCacheWrite?: boolean;
+
 	/** Optional runtime logger for provider-level diagnostics */
 	logger?: BasicLogger;
 

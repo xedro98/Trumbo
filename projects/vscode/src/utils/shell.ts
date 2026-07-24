@@ -100,7 +100,8 @@ function getWindowsShellFromVSCode(): string | null {
 		if (profile?.path) {
 			// If there's an explicit PowerShell path, return that
 			return profile.path
-		} else if (profile?.source === "PowerShell") {
+		}
+		if (profile?.source === "PowerShell") {
 			// If the profile is sourced from PowerShell, assume the newest
 			return SHELL_PATHS.POWERSHELL_7
 		}
@@ -116,6 +117,13 @@ function getWindowsShellFromVSCode(): string | null {
 	// If the profile indicates WSL
 	if (profile?.source === "WSL" || defaultProfileName.toLowerCase().includes("wsl")) {
 		return SHELL_PATHS.WSL_BASH
+	}
+
+	// If the profile name indicates Git Bash (VS Code's "Git Bash" profile
+	// often has no explicit path in the config, so name-based detection is
+	// the reliable signal).
+	if (defaultProfileName.toLowerCase().includes("git")) {
+		return SHELL_PATHS.GIT_BASH
 	}
 
 	// If nothing special detected, we assume cmd

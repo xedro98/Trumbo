@@ -10073,6 +10073,54 @@ export const GENERATED_PROVIDER_MODELS: {
 			},
 		},
 		moonshot: {
+			// Kimi K3 — hand-curated pending models.dev listing. Regeneration
+			// (`bun -F @trumbodev/llms generate:models`) will replace these once
+			// models.dev lists K3. Specs mirror K2.7; pricing is a placeholder
+			// pending Moonshot's published K3 rates.
+			"kimi-k3": {
+				id: "kimi-k3",
+				name: "Kimi K3",
+				contextWindow: 262144,
+				maxInputTokens: 262144,
+				maxTokens: 262144,
+				capabilities: [
+					"images",
+					"tools",
+					"reasoning",
+					"structured_output",
+					"prompt-cache",
+				],
+				pricing: {
+					input: 0.95,
+					output: 4,
+					cacheRead: 0.19,
+					cacheWrite: 0,
+				},
+				releaseDate: "2026-07-25",
+				family: "kimi-k3",
+			},
+			"kimi-k3-code": {
+				id: "kimi-k3-code",
+				name: "Kimi K3 Code",
+				contextWindow: 262144,
+				maxInputTokens: 262144,
+				maxTokens: 262144,
+				capabilities: [
+					"images",
+					"tools",
+					"reasoning",
+					"structured_output",
+					"prompt-cache",
+				],
+				pricing: {
+					input: 0.95,
+					output: 4,
+					cacheRead: 0.19,
+					cacheWrite: 0,
+				},
+				releaseDate: "2026-07-25",
+				family: "kimi-k3",
+			},
 			"kimi-k2.7-code": {
 				id: "kimi-k2.7-code",
 				name: "Kimi K2.7 Code",
@@ -29855,6 +29903,55 @@ export const GENERATED_PROVIDER_MODELS: {
 					cacheWrite: 0,
 				},
 				releaseDate: "2026-03-10",
+				family: "grok",
+			},
+			// SuperGrok — consumer-tier xAI models (SuperGrok subscription).
+			// Hand-curated pending models.dev listing; regeneration will replace
+			// these once models.dev lists them. Specs mirror grok-4.20.
+			"xai/supergrok": {
+				id: "xai/supergrok",
+				name: "SuperGrok",
+				contextWindow: 2000000,
+				maxInputTokens: 2000000,
+				maxTokens: 2000000,
+				capabilities: [
+					"images",
+					"files",
+					"tools",
+					"reasoning",
+					"temperature",
+					"prompt-cache",
+				],
+				pricing: {
+					input: 1.25,
+					output: 2.5,
+					cacheRead: 0.2,
+					cacheWrite: 0,
+				},
+				releaseDate: "2026-07-25",
+				family: "grok",
+			},
+			"xai/supergrok-reasoning": {
+				id: "xai/supergrok-reasoning",
+				name: "SuperGrok Reasoning",
+				contextWindow: 2000000,
+				maxInputTokens: 2000000,
+				maxTokens: 2000000,
+				capabilities: [
+					"images",
+					"files",
+					"tools",
+					"reasoning",
+					"temperature",
+					"prompt-cache",
+				],
+				pricing: {
+					input: 1.25,
+					output: 2.5,
+					cacheRead: 0.2,
+					cacheWrite: 0,
+				},
+				releaseDate: "2026-07-25",
 				family: "grok",
 			},
 			"openai/gpt-5.4": {

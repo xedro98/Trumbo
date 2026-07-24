@@ -194,9 +194,13 @@ function parseMarkdownFrontmatter(
 	content: string,
 ): ParseMarkdownFrontmatterResult {
 	const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/;
-	const match = content.match(frontmatterRegex);
+	// Strip a leading UTF-8 BOM (U+FEFF) so the ^--- anchor still matches
+	// BOM-prefixed files (some Windows editors save rules files with a BOM).
+	const bomStripped =
+		content.charCodeAt(0) === 0xfeff ? content.slice(1) : content;
+	const match = bomStripped.match(frontmatterRegex);
 	if (!match) {
-		return { data: {}, body: content, hadFrontmatter: false };
+		return { data: {}, body: bomStripped, hadFrontmatter: false };
 	}
 
 	const [, yamlContent, body] = match;
@@ -211,7 +215,7 @@ function parseMarkdownFrontmatter(
 		const message = error instanceof Error ? error.message : String(error);
 		return {
 			data: {},
-			body: content,
+			body: bomStripped,
 			hadFrontmatter: true,
 			parseError: message,
 		};

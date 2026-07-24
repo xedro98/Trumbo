@@ -38,7 +38,7 @@ const QUARTZ_PICKER_ENTRIES: TrumboModelPickerItem[] = [
 		kind: "model",
 		tier: "quartz",
 		model: {
-			id: "quartz",
+			id: "quartz-1.0",
 			name: "Quartz 1.0",
 			description:
 				"Adaptive reasoning model that scales compute to the complexity of each request.",
@@ -49,7 +49,7 @@ const QUARTZ_PICKER_ENTRIES: TrumboModelPickerItem[] = [
 		kind: "model",
 		tier: "quartz",
 		model: {
-			id: "quartz-lite",
+			id: "quartz-1.0-lite",
 			name: "Quartz 1.0 Lite",
 			description:
 				"Fast and economical Quartz variant for everyday agent loops and inline edits.",
@@ -60,7 +60,7 @@ const QUARTZ_PICKER_ENTRIES: TrumboModelPickerItem[] = [
 		kind: "model",
 		tier: "quartz",
 		model: {
-			id: "quartz-hyper",
+			id: "quartz-1.0-hyper",
 			name: "Quartz 1.0 Hyper",
 			description:
 				"Flagship Quartz variant for maximum reasoning depth on hard engineering and research. Max/Ultra plans.",
@@ -69,9 +69,12 @@ const QUARTZ_PICKER_ENTRIES: TrumboModelPickerItem[] = [
 	},
 ];
 
-const QUARTZ_IDS: ReadonlySet<string> = new Set(
-	QUARTZ_PICKER_ENTRIES.map((entry) => entry.model.id),
-);
+const QUARTZ_IDS: ReadonlySet<string> = new Set([
+	...QUARTZ_PICKER_ENTRIES.map((entry) => entry.model.id),
+	"quartz",
+	"quartz-lite",
+	"quartz-hyper",
+]);
 
 function tagColor(tag: string): string {
 	if (tag === "FREE") return palette.success;

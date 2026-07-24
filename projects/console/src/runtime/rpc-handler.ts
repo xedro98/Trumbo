@@ -3,6 +3,7 @@ import type {
 	StartSessionInput,
 	TrumboCore,
 } from "@trumbodev/core";
+import { REASONING_EFFORT_RATIOS } from "@trumbodev/shared";
 import type { RpcRequest } from "./rpc-mode";
 
 /**
@@ -99,6 +100,15 @@ export function createRpcHandler(
 
 			case "delete": {
 				return await core.delete(requireSessionId(request));
+			}
+
+			case "get_available_thinking_levels": {
+				// Return the thinking levels the SDK supports. Callers filter by
+				// the model's capabilities — models without "reasoning" only
+				// accept "none"; reasoning models accept the full ladder.
+				return {
+					levels: Object.keys(REASONING_EFFORT_RATIOS) as readonly string[],
+				};
 			}
 
 			default:

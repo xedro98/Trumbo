@@ -35,6 +35,36 @@ export interface AgentExtensionProvider {
 	name: string;
 	description?: string;
 	metadata?: Record<string, unknown>;
+	/**
+	 * Optional gateway provider registration. When set, the host registers
+	 * this as a native LLM provider so the extension's models are available
+	 * for agent sessions. Requires the `providers` capability on the
+	 * extension manifest.
+	 *
+	 * The `manifest` describes the provider (id, name, models); `createProvider`
+	 * is the factory that builds the provider instance from a resolved config;
+	 * `loadProvider` is an async alternative for lazy loading.
+	 */
+	providerRegistration?: {
+		manifest: {
+			id: string;
+			name?: string;
+			description?: string;
+			defaultModelId?: string;
+			models?: ReadonlyArray<{
+				id: string;
+				name?: string;
+				contextWindow?: number;
+				maxInputTokens?: number;
+				maxTokens?: number;
+				capabilities?: readonly string[];
+			}>;
+		};
+		createProvider?: (config: unknown) => unknown;
+		loadProvider?: () => Promise<{
+			createProvider: (config: unknown) => unknown;
+		}>;
+	};
 }
 
 export interface AgentExtensionAutomationEventType {

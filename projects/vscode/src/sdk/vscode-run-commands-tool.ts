@@ -75,6 +75,7 @@ async function executeForeground(
 	maxOutputChars: number,
 	abortSignal?: AbortSignal,
 	options?: Pick<VscodeRunCommandsToolOptions, "getCommandExecutorCallbacks" | "onForegroundProcessStarted">,
+	pwrRef?: { current: boolean },
 ): Promise<string> {
 	const terminalCommand = formatCommandForTerminal(command)
 	const terminalInfo = await terminalManager.getOrCreateTerminal(cwd)
@@ -99,6 +100,7 @@ async function executeForeground(
 		const result = await orchestrateCommandExecution(process, terminalManager, callbacks, {
 			command: terminalCommand,
 			terminalType: "vscode",
+			...(pwrRef ? { proceedWhileRunningRef: pwrRef } : {}),
 		})
 		if (abortSignal?.aborted) {
 			throw new Error("Command execution aborted")
@@ -157,6 +159,10 @@ function createVscodeShellExecutor(options: VscodeRunCommandsToolOptions): Shell
 	let bgExecutor: ShellExecutor | undefined
 	let bgExecutorShell: string | undefined
 	let terminalManager: ITerminalManager | undefined
+	// Per-batch PWR ref: keyed by the AgentToolContext so all commands in one
+	// run_commands tool call share the same "Proceed While Running" state. The
+	// WeakMap entry is GC'd when the batch's context goes out of scope.
+	const pwrRefByContext = new WeakMap<object, { current: boolean }>()
 
 	return async (command, commandCwd, context): Promise<string> => {
 		const mode = StateManager.get().getGlobalStateKey("vscodeTerminalExecutionMode") ?? "vscodeTerminal"
@@ -181,6 +187,12 @@ function createVscodeShellExecutor(options: VscodeRunCommandsToolOptions): Shell
 		if (!terminalManager) {
 			terminalManager = getTerminalManager()
 		}
+		// Get or create the shared PWR ref for this batch (keyed by context).
+		let pwrRef = pwrRefByContext.get(context as object)
+		if (!pwrRef) {
+			pwrRef = { current: false }
+			pwrRefByContext.set(context as object, pwrRef)
+		}
 		return await executeForeground(
 			command,
 			commandCwd || cwd,
@@ -188,6 +200,7 @@ function createVscodeShellExecutor(options: VscodeRunCommandsToolOptions): Shell
 			MAX_COMMAND_OUTPUT_CHARS,
 			context.signal,
 			options,
+			pwrRef,
 		)
 	}
 }

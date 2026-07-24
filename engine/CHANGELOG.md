@@ -9,6 +9,58 @@
 
 # Trumbo SDK Changelog
 
+## Unreleased
+
+### Added
+- `TrumboInsufficientCreditsError` (with `isTrumboInsufficientCreditsError`, `isTrumboInsufficientCreditsMessage`, `extractTrumboInsufficientCreditsMessage` helpers) recognizes HTTP 402 insufficient-credits responses from the Trumbo gateway; recovery action is to add credits at the billing dashboard
+- `uuidV7()` and `isUuidV7()` time-ordered UUID generator in `@trumbodev/shared` (RFC 9562)
+- `withRetry()` abortable retry helper in `@trumbodev/shared` with exponential backoff and abort-signal awareness
+- `get_available_thinking_levels` RPC method returns the reasoning effort levels the SDK supports
+- `bash_execution_update` events: the bash executor now emits incremental stdout/stderr chunks via `context.emitUpdate` so RPC/headless consumers get live output
+- Session metadata (`TRUMBO_SESSION_ID`, `TRUMBO_CONVERSATION_ID`, `TRUMBO_AGENT_ID`, `TRUMBO_RUN_ID`) is now injected into the bash tool's environment so scripts can self-identify their session
+- `ANTHROPIC_BEARER_TOKEN` env support: Anthropic-compatible providers authenticate via `Authorization: Bearer` when the env var is set
+- `wrapFetchForDnsRetry` fetch wrapper retries transient DNS resolution failures (ENOTFOUND, EAI_AGAIN) with exponential backoff
+- `llama-cpp` built-in provider for local llama.cpp server inference
+- `qwen-token-plan` built-in provider for Alibaba Qwen subscription token-plan coding models
+- Kimi K3 and Kimi K3 Code model catalog entries under the `moonshot` provider
+- `deferKimiToolsMiddleware` trims verbose tool descriptions for Kimi/Moonshot models to reduce per-request token overhead
+- Bracketed scoped model ids (e.g. `[org/model]`) are now resolved as literals, bypassing catalog alias resolution
+- Compaction progress messages in the VS Code webview during the summarizer LLM call and transcript rebuild
+- `reclaimUnobservedTerminals()` disposes fallback terminals that lost tracking via `no_shell_integration`
+- Git Bash detection in the Windows shell resolver (`getWindowsShellFromVSCode`)
+- Shell-mismatch warning log in `VscodeTerminalManager` when a terminal's effective shell differs from the configured profile
+- "Proceed While Running" is now sticky to the command batch: clicking PWR on one command in a `run_commands` call applies to all sibling commands
+- `DEFAULT_COMPACTION_STRATEGY` exported constant; agentic compaction is now the default strategy
+
+### Changed
+- Agentic compaction is the default when no strategy is explicitly set (was `basic`)
+- Interactive TUI startup no longer blocks on the live models.dev catalog refresh (`loadLatestOnInit: false`); the bundled catalog + model picker async fetch handle the rest
+- `TRUMBO_SDK_VERSION` bumped to 0.0.59 to match the shared package version
+- `trumbo hub status` now includes `versions: { cli, sdk, hub }` in its JSON output
+- Compaction summary model calls now retry on transient failures (up to 2 retries with exponential backoff)
+- Provider `model.stream()` calls now retry on pre-stream transient failures (DNS, connection refused) with abort-signal awareness
+- Early EOF detection: if a model stream closes without a `finish` event, the run is surfaced as an error instead of silently treated as a normal stop
+- Edit preview (`DiffEditRow`) now uses stable index-based keys for diff lines so streaming updates preserve focus instead of unmounting/remounting lines
+
+### Security
+- Bump `axios` to 1.18.0 (multiple CVEs resolved)
+- Bump `js-yaml` to 4.3.0 (CVE resolved)
+- Bump `mermaid` to 11.16.0 (CVE resolved)
+- Bump `protobufjs` to 7.6.5 (CVE resolved)
+
+### Fixed
+- `parseMarkdownFrontmatter` now strips a leading UTF-8 BOM (U+FEFF) so BOM-prefixed rules/skill files parse their frontmatter correctly
+
+## 0.0.60
+
+- Bump `@trumbodev/llms` package version (catalog and provider updates accumulated since 0.0.59)
+
+## 0.0.59
+
+- Rename SDK package scope from `@trumbo` to `@trumbodev` across all published packages
+- Add the Trumbo Quartz model family (`quartz-1.0`, `quartz-1.0-lite`, `quartz-1.0-hyper`) with bundled model facts and picker entries
+- Add a fuzzy diff matching engine with NFKC Unicode normalization and line-ending preservation for the editor and apply-patch tools
+
 ## 0.0.58
 
 - Add versioned client-identity headers (`X-CLIENT-VERSION`) to Trumbo and TrumboPass provider requests so the gateway can route and feature-flag by SDK version

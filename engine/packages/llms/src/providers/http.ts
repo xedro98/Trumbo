@@ -105,7 +105,68 @@ export function compactObject<T extends Record<string, unknown>>(value: T): T {
 	) as T;
 }
 
-function readEnv(key: string): string | undefined {
+/**
+ * Returns true when an error represents a transient DNS resolution failure
+ * that is safe to retry (the request never reached the server). Matches the
+ * common Node/undici shapes: a top-level `code`, a wrapped `cause.code`, or a
+ * `getaddrinfo ENOTFOUND/EAI_AGAIN` message.
+ */
+export function isDnsTransportError(error: unknown): boolean {
+	if (!error) return false;
+	const code = (error as { code?: string } | null)?.code;
+	if (code === "ENOTFOUND" || code === "EAI_AGAIN") return true;
+	const cause = (error as { cause?: unknown } | null)?.cause;
+	if (cause && typeof cause === "object") {
+		const causeCode = (cause as { code?: string }).code;
+		if (causeCode === "ENOTFOUND" || causeCode === "EAI_AGAIN") return true;
+	}
+	const message = (error as Error | null)?.message?.toLowerCase() ?? "";
+	return (
+		message.includes("getaddrinfo enotfound") ||
+		message.includes("getaddrinfo eai_again")
+	);
+}
+
+/**
+ * Wrap a fetch implementation so transient DNS resolution failures are retried
+ * with exponential backoff. These commonly occur on flaky networks and VPN
+ * reconnects; since the request never reached the server, retrying is safe and
+ * idempotent. Non-DNS errors are rethrown immediately.
+ *
+ * @param baseFetch The fetch to wrap (defaults to `globalThis.fetch`).
+ * @param maxRetries Number of retries after the initial attempt. Default 2.
+ */
+export function wrapFetchForDnsRetry(
+	baseFetch: typeof fetch | undefined,
+	maxRetries = 2,
+): typeof fetch | undefined {
+	const delegate = baseFetch ?? globalThis.fetch;
+	if (!delegate) {
+		return baseFetch;
+	}
+
+	const wrapped = async (
+		...args: Parameters<typeof fetch>
+	): Promise<Response> => {
+		let lastError: unknown;
+		for (let attempt = 0; attempt <= maxRetries; attempt++) {
+			try {
+				return await delegate(...args);
+			} catch (error) {
+				lastError = error;
+				if (!isDnsTransportError(error) || attempt === maxRetries) {
+					throw error;
+				}
+				// Exponential backoff: 200ms, 400ms, ...
+				await new Promise((resolve) => setTimeout(resolve, 200 * 2 ** attempt));
+			}
+		}
+		throw lastError;
+	};
+	return wrapped as typeof fetch;
+}
+
+export function readEnv(key: string): string | undefined {
 	const env = globalThis.process?.env;
 	if (!env) {
 		return undefined;

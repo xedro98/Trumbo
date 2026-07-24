@@ -7,8 +7,13 @@ import {
 	resolveSharedHubOwnerContext,
 	stopLocalHubServerGracefully,
 } from "@trumbodev/core";
-import { formatUptime, resolveTrumboBuildEnv } from "@trumbodev/shared";
+import {
+	formatUptime,
+	resolveTrumboBuildEnv,
+	TRUMBO_SDK_VERSION,
+} from "@trumbodev/shared";
 import { Command } from "commander";
+import { version as cliVersion } from "../../package.json";
 
 interface HubCommandIo {
 	writeln: (text?: string) => void;
@@ -134,6 +139,11 @@ export function createHubCommand(
 					pid: health?.pid,
 					startedAt: health?.startedAt,
 					uptime,
+					versions: {
+						cli: cliVersion,
+						sdk: TRUMBO_SDK_VERSION,
+						hub: health?.coreVersion,
+					},
 				}),
 			);
 		}),

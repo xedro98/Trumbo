@@ -178,6 +178,11 @@ export function shouldApplyPromptCache(
 	request: GatewayStreamRequest,
 	context: GatewayProviderContext,
 ): boolean {
+	// One-shot requests (compaction/branch summaries) opt out of cache writes
+	// so they don't pollute the cache with entries that are never reused.
+	if (request.disableCacheWrite) {
+		return false;
+	}
 	return resolvePromptCacheRoute(request, context) !== undefined;
 }
 

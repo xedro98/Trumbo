@@ -194,6 +194,15 @@ export function truncateOversizedToolResults(
 	return { messages: result, truncated };
 }
 
+/**
+ * Default compaction strategy used when {@link CoreCompactionConfig.strategy}
+ * is not explicitly set. Agentic compaction produces higher-quality summaries
+ * (it asks the model to summarize the compacted turns) and is the recommended
+ * default; `basic` remains available as an explicit opt-in for environments
+ * that want zero additional model calls during compaction.
+ */
+export const DEFAULT_COMPACTION_STRATEGY: CoreCompactionStrategy = "agentic";
+
 const BUILTIN_COMPACTION_STRATEGIES = {
 	basic: ({ context, estimateMessageTokens, logger }) =>
 		runBasicCompaction({
@@ -374,7 +383,7 @@ export function createContextCompactionPrepareTurn(
 			modelId: config.modelId,
 		} as ProviderConfig);
 	const estimateMessageTokens = createTokenEstimator();
-	const strategy = userCompaction?.strategy ?? "basic";
+	const strategy = userCompaction?.strategy ?? DEFAULT_COMPACTION_STRATEGY;
 	const runBuiltinStrategy = BUILTIN_COMPACTION_STRATEGIES[strategy];
 	const mode = options.mode ?? "auto";
 	const telemetryStrategy: TelemetryCompactionStrategy = userCompaction?.compact

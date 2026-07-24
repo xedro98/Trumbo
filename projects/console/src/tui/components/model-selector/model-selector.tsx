@@ -3,7 +3,7 @@
 import type { ChoiceContext } from "@opentui-ui/dialog";
 import { useDialogKeyboard } from "@opentui-ui/dialog/react";
 import type { Llms } from "@trumbodev/core";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { palette } from "../../palette";
 import { ProviderRow } from "./provider-row";
 
@@ -157,15 +157,58 @@ export function ModelSelectorContent(
 	const [customModelId, setCustomModelId] = useState("");
 	const [customModelError, setCustomModelError] = useState("");
 
+	// Live Hugging Face model search: when the query looks like a llama model
+	// search, fetch matching models from the HF Hub API and merge them into the
+	// filtered list so users can discover models not in the bundled catalog.
+	const [hfResults, setHfResults] = useState<ModelOption[]>([]);
+	const hfFetchId = useRef(0);
+	useEffect(() => {
+		const q = search?.trim() ?? "";
+		if (!q || !/llama/i.test(q)) {
+			setHfResults([]);
+			return;
+		}
+		const fetchId = ++hfFetchId.current;
+		const timer = setTimeout(async () => {
+			try {
+				const url = `https://huggingface.co/api/models?search=${encodeURIComponent(q)}&limit=30&filter=llama`;
+				const response = await fetch(url, {
+					signal: AbortSignal.timeout(8_000),
+				});
+				if (!response.ok) return;
+				const data = (await response.json()) as Array<{ id: string }>;
+				// Ignore stale responses from earlier queries.
+				if (fetchId !== hfFetchId.current) return;
+				setHfResults(
+					data.map((m) => ({
+						key: `huggingface/${m.id}`,
+						name: m.id,
+						supportsReasoning: false,
+					})),
+				);
+			} catch {
+				// Non-fatal — the picker keeps working with cached entries.
+			}
+		}, 300);
+		return () => clearTimeout(timer);
+	}, [search]);
+
 	const filtered = useMemo(() => {
-		if (!search) return models;
-		const q = search.toLowerCase();
-		const scored = models
-			.map((m) => ({ model: m, score: fuzzyScore(m, q) }))
-			.filter((r) => r.score > 0);
-		scored.sort((a, b) => b.score - a.score);
-		return scored.map((r) => r.model);
-	}, [models, search]);
+		const base = !search
+			? models
+			: (() => {
+					const q = search.toLowerCase();
+					const scored = models
+						.map((m) => ({ model: m, score: fuzzyScore(m, q) }))
+						.filter((r) => r.score > 0);
+					scored.sort((a, b) => b.score - a.score);
+					return scored.map((r) => r.model);
+				})();
+		// Merge live HF results that aren't already in the cached catalog.
+		if (hfResults.length === 0) return base;
+		const existing = new Set(base.map((m) => m.key));
+		return [...base, ...hfResults.filter((m) => !existing.has(m.key))];
+	}, [models, search, hfResults]);
 
 	const optionCount = filtered.length + (showCustomModelId ? 1 : 0);
 	const safeSelected = Math.min(selected, Math.max(0, optionCount - 1));

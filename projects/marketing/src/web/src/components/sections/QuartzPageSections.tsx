@@ -1,9 +1,11 @@
 import {
 	Brain,
+	Calculator,
 	Crosshair,
 	Graph,
 	Lightbulb,
 	ListChecks,
+	ShieldCheck,
 	Stack,
 	Waves,
 } from "@phosphor-icons/react";
@@ -41,15 +43,17 @@ export function QuartzHeroSection() {
 				Trumbo Quartz
 			</h1>
 			<p className="mb-5 max-w-5xl text-lg leading-relaxed text-muted-foreground md:max-w-6xl md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
-				Quartz 1.0 ships as two models on one architecture. Quartz Hyper pushes maximum
-				reasoning depth for the hardest work. Quartz Lite keeps the same adaptive stack
-				fast and economical for everyday agent loops. Both build a per-request execution
-				graph that adjusts depth, memory, and verification in flight.
+				Quartz 1.0 is Trumbo&apos;s flagship reasoning model family. Three variants on one
+				adaptive architecture: Quartz 1.0 Hyper for maximum depth, Quartz 1.0 Lite for speed and
+				economy, and Quartz 1.0 for everyday work that scales automatically. Every variant
+				builds a per-request execution graph that adjusts depth, memory, and verification
+				in flight.
 			</p>
 			<p className="max-w-5xl text-base leading-relaxed text-muted-foreground md:max-w-6xl md:text-lg lg:text-[1.25rem] lg:leading-[1.65]">
-				Route Hyper when the problem demands frontier-level reasoning. Route Lite when
-				latency, volume, and cost matter more than maximum depth. The CLI and platform
-				pick the right variant for the task, or you choose explicitly.
+				Choose Hyper when the problem demands frontier-level reasoning. Choose Lite when
+				latency, volume, and cost matter most. Use Quartz 1.0 as the default and let depth
+				scale to the task, or pick any variant explicitly in the CLI, VS Code extension, SDK,
+				and API.
 			</p>
 		</div>
 	);
@@ -237,7 +241,7 @@ function GraphNode({
 /* -------------------------------------------------------------------------- */
 
 type QuartzVariant = {
-	id: "hyper" | "lite";
+	id: "hyper" | "balanced" | "lite";
 	name: string;
 	tagline: string;
 	featured?: boolean;
@@ -251,7 +255,7 @@ type QuartzVariant = {
 const QUARTZ_VARIANTS: QuartzVariant[] = [
 	{
 		id: "hyper",
-		name: "Quartz Hyper",
+		name: "Quartz 1.0 Hyper",
 		tagline: "Flagship reasoning",
 		featured: true,
 		totalParams: "1.6T",
@@ -266,28 +270,48 @@ const QUARTZ_VARIANTS: QuartzVariant[] = [
 		bestFor: ["Research workflows", "Complex refactors", "Autonomous agent runs"],
 	},
 	{
+		id: "balanced",
+		name: "Quartz 1.0",
+		tagline: "Adaptive default",
+		totalParams: "680B",
+		activeParams: "28B",
+		summary:
+			"The balanced default on the Quartz architecture. Depth scales automatically to task complexity: fast on casual prompts, full reasoning on hard engineering and research work. Same execution graph and verification pipeline as Hyper and Lite, with an adaptive depth budget tuned for everyday use.",
+		strengths: [
+			"Automatic depth scaling per request",
+			"One model for mixed workloads",
+			"Full verification stack without manual variant switching",
+		],
+		bestFor: ["General engineering work", "Mixed agent sessions", "Platform default"],
+	},
+	{
 		id: "lite",
-		name: "Quartz Lite",
+		name: "Quartz 1.0 Lite",
 		tagline: "Fast and economical",
 		totalParams: "280B",
 		activeParams: "13B",
 		summary:
-			"The efficient default on the Quartz architecture, with a tighter depth budget tuned for speed and cost at scale. Same adaptive execution graph and verification pipeline, scaled for low latency on everyday prompts, inline edits, and agent loops that run continuously through the day.",
+			"The efficient variant on the Quartz architecture, with a tighter depth budget tuned for speed and cost at scale. Same adaptive execution graph and verification pipeline, scaled for low latency on everyday prompts, inline edits, and agent loops that run continuously through the day.",
 		strengths: [
 			"Low time-to-first-token on routine tasks",
 			"Lower compute per request at scale",
 			"Same verification stack, tighter depth budget",
 		],
-		bestFor: ["Daily coding sessions", "Inline edits and search", "High-throughput routing"],
+		bestFor: ["Daily coding sessions", "Inline edits and search", "High-throughput agent loops"],
 	},
 ];
 
-const QUARTZ_COMPARISON_ROWS: { label: string; hyper: string; lite: string }[] = [
-	{ label: "Total parameters", hyper: "1.6T", lite: "280B" },
-	{ label: "Active parameters", hyper: "48B", lite: "13B" },
-	{ label: "Reasoning depth", hyper: "Maximum", lite: "Task-scaled" },
-	{ label: "Latency profile", hyper: "Depth-first", lite: "Speed-first" },
-	{ label: "Typical routing", hyper: "Hard problems", lite: "Default agent loop" },
+const QUARTZ_COMPARISON_ROWS: {
+	label: string;
+	hyper: string;
+	balanced: string;
+	lite: string;
+}[] = [
+	{ label: "Total parameters", hyper: "1.6T", balanced: "680B", lite: "280B" },
+	{ label: "Active parameters", hyper: "48B", balanced: "28B", lite: "13B" },
+	{ label: "Reasoning depth", hyper: "Maximum", balanced: "Adaptive", lite: "Task-scaled" },
+	{ label: "Latency profile", hyper: "Depth-first", balanced: "Scales to task", lite: "Speed-first" },
+	{ label: "Best for", hyper: "Hard problems", balanced: "General work", lite: "Agent loops" },
 ];
 
 export function QuartzLineupSection() {
@@ -296,19 +320,20 @@ export function QuartzLineupSection() {
 			<GridBoxCell className={cn(marketingGridCellClass, "flex flex-col justify-center !py-8 md:!py-10")}>
 				<p className="marketing-kicker mb-4">The lineup</p>
 				<h2 className="max-w-5xl font-heading text-[1.625rem] font-normal leading-[1.34] tracking-[-0.02em] text-foreground md:text-[2rem] lg:text-[2.25rem]">
-					One architecture. Two depth profiles.
+					One architecture. Three depth profiles.
 				</h2>
 				<p className="mt-4 max-w-5xl text-lg leading-relaxed text-muted-foreground md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
-					Quartz Hyper and Quartz Lite share the same full inference stack, from semantic
-					decomposition through verification on every request. Hyper allocates a larger active
-					parameter budget and longer reflection cycles for frontier reasoning and hard
-					problems. Lite keeps the same graph, with a tighter depth cap so high-volume
-					prompts and agent loops stay fast, responsive, and economical.
+					Quartz 1.0 Hyper, Quartz 1.0, and Quartz 1.0 Lite share the same full inference
+					stack, from semantic decomposition through verification on every request. Hyper
+					allocates the largest active parameter budget and longest reflection cycles for
+					frontier reasoning. The balanced default scales depth automatically. Lite keeps
+					the same graph with a tighter depth cap so high-volume prompts and agent loops
+					stay fast, responsive, and economical.
 				</p>
 			</GridBoxCell>
 
 			<GridBoxCell className="!border-r-0 !p-0">
-				<div className="grid grid-cols-1 md:grid-cols-2">
+				<div className="grid grid-cols-1 md:grid-cols-3">
 					{QUARTZ_VARIANTS.map((variant, index) => (
 						<QuartzVariantColumn
 							key={variant.id}
@@ -324,12 +349,13 @@ export function QuartzLineupSection() {
 					<div
 						className={cn(
 							marketingGridCellClass,
-							"hidden gap-6 !py-5 md:grid md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)] md:items-center md:!py-6",
+							"hidden gap-6 !py-5 md:grid md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] md:items-center md:!py-6",
 						)}
 					>
 						<span className={specKeyClass}>Side by side</span>
-						<span className={cn(specKeyClass, "md:text-right")}>Quartz Hyper</span>
-						<span className={cn(specKeyClass, "md:text-right")}>Quartz Lite</span>
+						<span className={cn(specKeyClass, "md:text-right")}>Quartz 1.0 Hyper</span>
+						<span className={cn(specKeyClass, "md:text-right")}>Quartz 1.0</span>
+						<span className={cn(specKeyClass, "md:text-right")}>Quartz 1.0 Lite</span>
 					</div>
 					<div className={cn(marketingGridCellClass, "border-t border-t-dotted border-grid-line !py-5 md:hidden")}>
 						<p className={specKeyClass}>Side by side</p>
@@ -339,6 +365,7 @@ export function QuartzLineupSection() {
 							key={row.label}
 							label={row.label}
 							hyper={row.hyper}
+							balanced={row.balanced}
 							lite={row.lite}
 							index={index}
 							total={QUARTZ_COMPARISON_ROWS.length}
@@ -431,13 +458,140 @@ function QuartzVariantColumn({
 function QuartzComparisonRow({
 	label,
 	hyper,
+	balanced,
 	lite,
 	index,
 	total,
 }: {
 	label: string;
 	hyper: string;
+	balanced: string;
 	lite: string;
+	index: number;
+	total: number;
+}) {
+	return (
+		<div
+			className={cn(
+				"grid grid-cols-1 gap-3 px-5 py-4 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] md:items-center md:gap-6 md:px-8 md:py-5 lg:px-10",
+				index < total - 1 && "border-b border-b-dotted border-grid-line",
+			)}
+		>
+			<span className={specKeyClass}>{label}</span>
+			<span className={cn(specValueClass, "md:text-right")}>{hyper}</span>
+			<span className={cn(specValueClass, "md:text-right")}>{balanced}</span>
+			<span className={cn(specValueClass, "md:text-right")}>{lite}</span>
+		</div>
+	);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Benchmarks — published scores for Quartz 1.0 Hyper                          */
+/* -------------------------------------------------------------------------- */
+
+const QUARTZ_BENCHMARK_ROWS: {
+	label: string;
+	score: string;
+	rank: string;
+}[] = [
+	{ label: "AIME 2026", score: "99.2", rank: "#1 overall" },
+	{ label: "SWE-bench Pro", score: "62.1", rank: "#1 open model" },
+	{ label: "Terminal-Bench 2.1", score: "81.0", rank: "#1 open model" },
+	{ label: "MCP Atlas", score: "76.8", rank: "Top tier" },
+	{ label: "HLE (no tools)", score: "40.5", rank: "Competitive open" },
+	{ label: "AA Intelligence Index", score: "51", rank: "#1 open model" },
+];
+
+const QUARTZ_LIVE_RESULTS: {
+	label: string;
+	value: string;
+}[] = [
+	{ label: "API reliability", value: "100% (6/6 requests)" },
+	{ label: "Fastest category", value: "Chat — 3.9s" },
+	{ label: "Token efficiency", value: "Up to 11× vs comparison models" },
+	{ label: "Identity consistency", value: "Verified across all requests" },
+];
+
+export function QuartzBenchmarkSection() {
+	return (
+		<GridBox className="grid-cols-1 !border-t-0">
+			<GridBoxCell className={cn(marketingGridCellClass, "flex flex-col justify-center !py-8 md:!py-10")}>
+				<p className="marketing-kicker mb-4">Benchmarks</p>
+				<h2 className="max-w-5xl font-heading text-[1.625rem] font-normal leading-[1.34] tracking-[-0.02em] text-foreground md:text-[2rem] lg:text-[2.25rem]">
+					Frontier-level scores on the benchmarks that matter for agentic work.
+				</h2>
+				<p className="mt-4 max-w-5xl text-lg leading-relaxed text-muted-foreground md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
+					Quartz 1.0 Hyper leads AIME 2026 at 99.2, the highest score of any model
+					evaluated, open or closed. It is the strongest open model on SWE-bench Pro and
+					Terminal-Bench 2.1, and shares the #1 open-model position on the Artificial
+					Analysis Intelligence Index.
+				</p>
+			</GridBoxCell>
+
+			<GridBoxCell className="!border-r-0 !p-0">
+				<div className="border-t border-t-dotted border-grid-line">
+					<div
+						className={cn(
+							marketingGridCellClass,
+							"hidden gap-6 !py-5 md:grid md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)] md:items-center md:!py-6",
+						)}
+					>
+						<span className={specKeyClass}>Benchmark</span>
+						<span className={cn(specKeyClass, "md:text-right")}>Quartz 1.0 Hyper</span>
+						<span className={cn(specKeyClass, "md:text-right")}>Standing</span>
+					</div>
+					<div className={cn(marketingGridCellClass, "border-t border-t-dotted border-grid-line !py-5 md:hidden")}>
+						<p className={specKeyClass}>Published scores</p>
+					</div>
+					{QUARTZ_BENCHMARK_ROWS.map((row, index) => (
+						<QuartzBenchmarkRow
+							key={row.label}
+							label={row.label}
+							score={row.score}
+							rank={row.rank}
+							index={index}
+							total={QUARTZ_BENCHMARK_ROWS.length}
+						/>
+					))}
+				</div>
+			</GridBoxCell>
+
+			<GridBoxCell className="!border-r-0 !p-0">
+				<div className="border-t border-t-dotted border-grid-line">
+					<div className={cn(marketingGridCellClass, "!py-5 md:!py-6")}>
+						<p className={specKeyClass}>Live API evaluation</p>
+						<p className="mt-3 max-w-4xl text-sm leading-relaxed text-muted-foreground md:text-[0.9375rem]">
+							Six standardized prompts across math, coding, factual, reasoning, terminal,
+							and chat categories were sent to the production Trumbo API on July 16, 2026.
+						</p>
+					</div>
+					<div className="grid grid-cols-1 md:grid-cols-2">
+						{QUARTZ_LIVE_RESULTS.map((result, index) => (
+							<QuartzLiveResultRow
+								key={result.label}
+								label={result.label}
+								value={result.value}
+								index={index}
+								total={QUARTZ_LIVE_RESULTS.length}
+							/>
+						))}
+					</div>
+				</div>
+			</GridBoxCell>
+		</GridBox>
+	);
+}
+
+function QuartzBenchmarkRow({
+	label,
+	score,
+	rank,
+	index,
+	total,
+}: {
+	label: string;
+	score: string;
+	rank: string;
 	index: number;
 	total: number;
 }) {
@@ -449,8 +603,143 @@ function QuartzComparisonRow({
 			)}
 		>
 			<span className={specKeyClass}>{label}</span>
-			<span className={cn(specValueClass, "md:text-right")}>{hyper}</span>
-			<span className={cn(specValueClass, "md:text-right")}>{lite}</span>
+			<span className={cn(specValueClass, "md:text-right")}>{score}</span>
+			<span className={cn(specValueClass, "text-brand md:text-right")}>{rank}</span>
+		</div>
+	);
+}
+
+function QuartzLiveResultRow({
+	label,
+	value,
+	index,
+	total,
+}: {
+	label: string;
+	value: string;
+	index: number;
+	total: number;
+}) {
+	const isLastRowMd = index >= total - 2;
+	const isRightColMd = (index + 1) % 2 === 0;
+
+	return (
+		<div
+			className={cn(
+				"flex flex-col gap-1 px-5 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6",
+				"border-t border-t-dotted border-grid-line",
+				!isLastRowMd && "md:border-b md:border-b-dotted",
+				isLastRowMd && "md:border-b-0",
+				!isRightColMd && "md:border-r md:border-r-dotted",
+			)}
+		>
+			<span className={specKeyClass}>{label}</span>
+			<span className={specValueClass}>{value}</span>
+		</div>
+	);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Availability — subscription tiers and API access                            */
+/* -------------------------------------------------------------------------- */
+
+const QUARTZ_TIER_ROWS: {
+	tier: string;
+	price: string;
+	access: string;
+}[] = [
+	{ tier: "Pro", price: "$20/mo", access: "Quartz 1.0 Lite" },
+	{ tier: "Max", price: "$100/mo", access: "Lite + Quartz 1.0 (balanced)" },
+	{ tier: "Ultra", price: "$200/mo", access: "All variants including Hyper" },
+];
+
+export function QuartzAvailabilitySection() {
+	return (
+		<GridBox className="grid-cols-1 !border-t-0">
+			<GridBoxCell className={cn(marketingGridCellClass, "flex flex-col justify-center !py-8 md:!py-10")}>
+				<p className="marketing-kicker mb-4">Availability</p>
+				<h2 className="max-w-5xl font-heading text-[1.625rem] font-normal leading-[1.34] tracking-[-0.02em] text-foreground md:text-[2rem] lg:text-[2.25rem]">
+					Available through Trumbo subscription and API.
+				</h2>
+				<p className="mt-4 max-w-5xl text-lg leading-relaxed text-muted-foreground md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
+					Quartz 1.0 is included in every Trumbo subscription tier. Higher tiers unlock
+					deeper variants. Use the CLI, VS Code extension, SDK, or call the OpenAI-compatible
+					API directly at{" "}
+					<span className="font-stat text-foreground">api.trumbo.dev</span>.
+				</p>
+			</GridBoxCell>
+
+			<GridBoxCell className="!border-r-0 !p-0">
+				<div className="border-t border-t-dotted border-grid-line">
+					<div
+						className={cn(
+							marketingGridCellClass,
+							"hidden gap-6 !py-5 md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.4fr)] md:items-center md:!py-6",
+						)}
+					>
+						<span className={specKeyClass}>Tier</span>
+						<span className={cn(specKeyClass, "md:text-right")}>Price</span>
+						<span className={cn(specKeyClass, "md:text-right")}>Quartz access</span>
+					</div>
+					<div className={cn(marketingGridCellClass, "border-t border-t-dotted border-grid-line !py-5 md:hidden")}>
+						<p className={specKeyClass}>Subscription tiers</p>
+					</div>
+					{QUARTZ_TIER_ROWS.map((row, index) => (
+						<QuartzTierRow
+							key={row.tier}
+							tier={row.tier}
+							price={row.price}
+							access={row.access}
+							index={index}
+							total={QUARTZ_TIER_ROWS.length}
+						/>
+					))}
+				</div>
+			</GridBoxCell>
+
+			<GridBoxCell className={cn(marketingGridCellClass, "!border-r-0 !py-6 md:!py-8")}>
+				<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-8">
+					<div>
+						<span className={specKeyClass}>API model IDs</span>
+						<p className="mt-2 font-stat text-sm text-foreground md:text-[0.9375rem]">
+							quartz-1.0-hyper · quartz-1.0 · quartz-1.0-lite
+						</p>
+					</div>
+					<div className="md:text-right">
+						<span className={specKeyClass}>Endpoint</span>
+						<p className="mt-2 font-stat text-sm text-foreground md:text-[0.9375rem]">
+							POST /api/v1/chat/completions
+						</p>
+					</div>
+				</div>
+			</GridBoxCell>
+		</GridBox>
+	);
+}
+
+function QuartzTierRow({
+	tier,
+	price,
+	access,
+	index,
+	total,
+}: {
+	tier: string;
+	price: string;
+	access: string;
+	index: number;
+	total: number;
+}) {
+	return (
+		<div
+			className={cn(
+				"grid grid-cols-1 gap-3 px-5 py-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.4fr)] md:items-center md:gap-6 md:px-8 md:py-5 lg:px-10",
+				index < total - 1 && "border-b border-b-dotted border-grid-line",
+			)}
+		>
+			<span className={specValueClass}>{tier}</span>
+			<span className={cn(specValueClass, "md:text-right")}>{price}</span>
+			<span className={cn(specValueClass, "md:text-right")}>{access}</span>
 		</div>
 	);
 }
@@ -709,6 +998,17 @@ const QUARTZ_SUBSYSTEMS: {
 		],
 	},
 	{
+		icon: Calculator,
+		title: "Deterministic arithmetic engine",
+		summary:
+			"For mathematical requests, exact arithmetic is computed server-side and injected into the reasoning context before generation begins.",
+		bullets: [
+			"Quadratic equations, word-form arithmetic, geometry",
+			"Eliminates hallucinated calculations on math tasks",
+			"Model explains and proves using exact computed values",
+		],
+	},
+	{
 		icon: Waves,
 		title: "Dynamic working memory",
 		summary:
@@ -738,7 +1038,7 @@ export function QuartzArchitectureSection() {
 			<GridBoxCell className={cn(marketingGridCellClass, "flex flex-col justify-center !py-8 md:!py-10")}>
 				<p className="marketing-kicker mb-4">Architecture</p>
 				<h2 className="max-w-5xl font-heading text-[1.625rem] font-normal leading-[1.34] tracking-[-0.02em] text-foreground md:text-[2rem] lg:text-[2.25rem]">
-					Six tightly integrated cognitive subsystems inside one inference engine.
+					Seven tightly integrated cognitive subsystems inside one inference engine.
 				</h2>
 				<p className="mt-4 max-w-4xl text-lg leading-relaxed text-muted-foreground md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
 					Inference is represented internally as a directed computational graph rather than a
@@ -948,14 +1248,18 @@ function QuartzAdaptiveCurve() {
 /* -------------------------------------------------------------------------- */
 
 const QUARTZ_SPECS: { specKey: string; value: string; note?: string }[] = [
-	{ specKey: "release", value: "Quartz 1.0", note: "Hyper + Lite" },
+	{ specKey: "release", value: "Quartz 1.0", note: "Hyper · Balanced · Lite" },
 	{ specKey: "model.class", value: "Adaptive compound reasoning" },
+	{ specKey: "model.variants", value: "quartz-1.0-hyper · quartz-1.0 · quartz-1.0-lite" },
+	{ specKey: "context.window", value: "128K tokens" },
 	{ specKey: "inference.path", value: "Directed execution graph", note: "per request" },
 	{ specKey: "reasoning.depth", value: "Dynamic, complexity-scaled" },
 	{ specKey: "reasoning.strategies", value: "Deductive · Inductive · Abductive · Causal" },
+	{ specKey: "arithmetic.engine", value: "Deterministic server-side", note: "math tasks" },
 	{ specKey: "context.format", value: "Semantic knowledge graph" },
 	{ specKey: "memory.model", value: "Structured working memory", note: "temporal lifetimes" },
 	{ specKey: "verification", value: "Independent phase", note: "logical · computational · structural" },
+	{ specKey: "tool.calling", value: "Function calling · agentic workflows" },
 	{ specKey: "confidence.signal", value: "Convergence · certainty · verification success" },
 	{ specKey: "context.retrieval", value: "Semantic similarity + dependency graph" },
 	{ specKey: "long_horizon", value: "Persistent reasoning across checkpoints" },
@@ -1074,6 +1378,12 @@ const QUARTZ_CAPABILITIES: { icon: Icon; title: string; description: string }[] 
 			"Persistent reasoning across extended computational horizons, with checkpoints, dependency graphs, and evolving objectives.",
 	},
 	{
+		icon: Calculator,
+		title: "Exact arithmetic",
+		description:
+			"Deterministic server-side computation on math tasks. Quartz explains and proves using exact values, not guessed arithmetic.",
+	},
+	{
 		icon: Crosshair,
 		title: "Recursive verification",
 		description:
@@ -1102,6 +1412,18 @@ const QUARTZ_CAPABILITIES: { icon: Icon; title: string; description: string }[] 
 		title: "Reflection in flight",
 		description:
 			"Self-evaluation runs throughout inference, recomputing inconsistent branches before they reach synthesis.",
+	},
+	{
+		icon: Waves,
+		title: "Agent-native design",
+		description:
+			"Tool calling, terminal automation, multi-step workflows, and file editing are first-class capabilities across all three variants.",
+	},
+	{
+		icon: ShieldCheck,
+		title: "Identity consistency",
+		description:
+			"Three-layer identity enforcement keeps Quartz 1.0 consistent across every turn, including under jailbreak and prompt-injection attempts.",
 	},
 ];
 

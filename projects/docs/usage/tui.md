@@ -1,0 +1,49 @@
+---
+title: "TUI"
+description: "Use Trumbo's terminal UI (TUI) for interactive coding workflows in your terminal."
+---
+## What is the TUI?
+
+The TUI is Trumbo's interactive terminal interface. It's built for conversational, in-terminal work: ask questions, review plans, approve actions, and iterate quickly.
+
+## Prerequisites
+
+Install the CLI:
+
+```bash
+npm install -g @trumbodev/cli
+```
+
+## Launch the TUI
+
+```bash
+# default interactive launch
+trumbo
+
+# explicit TUI mode
+trumbo -i
+```
+
+## Core TUI Actions
+
+- `Tab` to toggle Plan/Act
+- `Shift+Tab` to toggle auto-approve all
+- `Ctrl+C` to abort a running turn; press again to exit
+- `Ctrl+D` to exit when the prompt is empty and idle
+- `Ctrl+L` to clear the chat view or current conversation
+- `/settings`, `/model`, `/account`, `/mcp`, `/compact`, `/undo`, `/clear`, `/history`, `/help`, `/quit`
+- `@file` mentions for workspace context
+
+The status area shows the active model, context usage, cost, workspace/branch, git diff stats, Plan/Act state, and whether auto-approve all is enabled.
+
+## When to Use TUI vs Headless
+
+- Use **TUI** when you want collaboration and approvals.
+- Use **headless** (`--json`, piped stdin/stdout, CI scripts) for automation.
+
+See: [CLI Headless Mode](cli-overview#headless-mode)
+
+## Next Steps
+
+- [CLI Overview](cli-overview)
+- [CLI Reference](../cli/cli-reference)

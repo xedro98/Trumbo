@@ -98,8 +98,11 @@ function lookupModelInfo(
 /** Quartz variants render as friendly model names even when knownModels is empty. */
 const QUARTZ_DISPLAY_NAMES: Record<string, string> = {
 	quartz: "Quartz 1.0",
+	"quartz-1.0": "Quartz 1.0",
 	"quartz-lite": "Quartz 1.0 Lite",
+	"quartz-1.0-lite": "Quartz 1.0 Lite",
 	"quartz-hyper": "Quartz 1.0 Hyper",
+	"quartz-1.0-hyper": "Quartz 1.0 Hyper",
 };
 
 export function resolveModelDisplayName(config: {

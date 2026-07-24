@@ -7,6 +7,8 @@ import { MarketingShell } from "@/components/MarketingShell";
 import {
 	QuartzAdaptiveSection,
 	QuartzArchitectureSection,
+	QuartzAvailabilitySection,
+	QuartzBenchmarkSection,
 	QuartzCapabilitiesSection,
 	QuartzHeroDiagram,
 	QuartzHeroSection,
@@ -34,6 +36,9 @@ export function QuartzPage() {
 						<QuartzLineupSection />
 					</GridBoxStackCell>
 					<GridBoxStackCell className="!p-0">
+						<QuartzBenchmarkSection />
+					</GridBoxStackCell>
+					<GridBoxStackCell className="!p-0">
 						<QuartzPipelineSection />
 					</GridBoxStackCell>
 					<GridBoxStackCell className="!p-0">
@@ -47,6 +52,9 @@ export function QuartzPage() {
 					</GridBoxStackCell>
 					<GridBoxStackCell className="!p-0">
 						<QuartzSpecsSection />
+					</GridBoxStackCell>
+					<GridBoxStackCell className="!p-0">
+						<QuartzAvailabilitySection />
 					</GridBoxStackCell>
 					<GridBoxStackCell className="!p-0">
 						<QuartzPhilosophySection />

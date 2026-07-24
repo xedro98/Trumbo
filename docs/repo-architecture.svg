@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1460" height="940" viewBox="0 0 1460 940" role="img" aria-labelledby="title desc">
+  <title id="title">Trumbo repository architecture</title>
+  <desc id="desc">A layered architecture diagram of the Trumbo monorepo showing engine packages, host apps, supporting workspaces, external integrations, and tooling.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 14; }
+      .engine { fill: #ecfeff; stroke: #0891b2; }
+      .app { fill: #f0fdf4; stroke: #16a34a; }
+      .support { fill: #fff7ed; stroke: #ea580c; }
+      .external { fill: #f5f3ff; stroke: #7c3aed; }
+      .tooling { fill: #f1f5f9; stroke: #475569; }
+      .title { font: 700 30px Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 400 15px Arial, sans-serif; fill: #475569; }
+      .group-title { font: 700 18px Arial, sans-serif; fill: #0f172a; }
+      .label { font: 700 15px Arial, sans-serif; fill: #0f172a; }
+      .body { font: 400 12px Arial, sans-serif; fill: #334155; }
+      .edge { fill: none; stroke: #475569; stroke-width: 2; marker-end: url(#arrow); }
+      .edge-soft { fill: none; stroke: #94a3b8; stroke-width: 2; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1460" height="940"/>
+  <text class="title" x="48" y="52">Trumbo Monorepo Architecture</text>
+  <text class="subtitle" x="48" y="78">Layered runtime packages feed host apps, hub-backed sessions, samples, docs, and release tooling.</text>
+
+  <rect class="panel" x="36" y="104" width="1388" height="770"/>
+
+  <rect class="panel" x="72" y="138" width="520" height="560"/>
+  <text class="group-title" x="96" y="172">engine/packages</text>
+
+  <rect class="engine" x="116" y="584" width="390" height="74" rx="10"/>
+  <text class="label" x="136" y="610">@trumbodev/shared</text>
+  <text class="body" x="136" y="630">Types, schemas, paths, storage, remote config</text>
+
+  <rect class="engine" x="116" y="466" width="390" height="74" rx="10"/>
+  <text class="label" x="136" y="492">@trumbodev/llms</text>
+  <text class="body" x="136" y="512">Model catalog, provider settings, AI SDK handlers</text>
+
+  <rect class="engine" x="116" y="338" width="390" height="82" rx="10"/>
+  <text class="label" x="136" y="365">@trumbodev/agents</text>
+  <text class="body" x="136" y="385">Stateless agent loop, tools, hooks, teams, streaming</text>
+
+  <rect class="engine" x="116" y="196" width="390" height="96" rx="10"/>
+  <text class="label" x="136" y="224">@trumbodev/core</text>
+  <text class="body" x="136" y="246">Runtime orchestration, sessions, persistence, hub,</text>
+  <text class="body" x="136" y="264">plugins, settings, telemetry</text>
+
+  <rect class="engine" x="260" y="112" width="246" height="58" rx="10"/>
+  <text class="label" x="280" y="137">@trumbodev/sdk</text>
+  <text class="body" x="280" y="156">Public SDK alias over core</text>
+
+  <path class="edge" d="M 311 584 L 311 548"/>
+  <path class="edge" d="M 311 466 L 311 428"/>
+  <path class="edge" d="M 311 338 L 311 300"/>
+  <path class="edge" d="M 383 196 L 383 178"/>
+  <path class="edge-soft" d="M 232 584 C 208 520, 208 456, 232 420"/>
+  <path class="edge-soft" d="M 401 584 C 446 500, 446 362, 401 292"/>
+
+  <rect class="panel" x="642" y="138" width="456" height="560"/>
+  <text class="group-title" x="666" y="172">projects</text>
+
+  <rect class="app" x="676" y="196" width="184" height="82" rx="10"/>
+  <text class="label" x="696" y="223">@trumbodev/cli</text>
+  <text class="body" x="696" y="243">OpenTUI, headless JSON,</text>
+  <text class="body" x="696" y="260">RPC, connector commands</text>
+
+  <rect class="app" x="884" y="196" width="184" height="82" rx="10"/>
+  <text class="label" x="904" y="223">@trumbodev/hub</text>
+  <text class="body" x="904" y="243">Browser dashboard and</text>
+  <text class="body" x="904" y="260">shared hub UI</text>
+
+  <rect class="app" x="676" y="318" width="184" height="82" rx="10"/>
+  <text class="label" x="696" y="345">VS Code extension</text>
+  <text class="body" x="696" y="365">Sidebar/editor webviews,</text>
+  <text class="body" x="696" y="382">IDE integration</text>
+
+  <rect class="app" x="884" y="318" width="184" height="82" rx="10"/>
+  <text class="label" x="904" y="345">Marketing site</text>
+  <text class="body" x="904" y="365">Vite, React, Cloudflare</text>
+
+  <rect class="app" x="676" y="442" width="184" height="74" rx="10"/>
+  <text class="label" x="696" y="468">Docs</text>
+  <text class="body" x="696" y="488">VitePress/Mintlify sources</text>
+
+  <rect class="app" x="884" y="442" width="184" height="74" rx="10"/>
+  <text class="label" x="904" y="468">Samples</text>
+  <text class="body" x="904" y="488">Quickstarts, bots, plugins, desktop app</text>
+
+  <path class="edge" d="M 506 244 L 668 236"/>
+  <path class="edge" d="M 506 244 L 876 236"/>
+  <path class="edge" d="M 506 244 C 590 266, 610 342, 668 358"/>
+  <path class="edge" d="M 506 141 C 634 130, 766 430, 876 478"/>
+  <path class="edge-soft" d="M 860 237 L 876 237"/>
+  <path class="edge-soft" d="M 860 359 C 896 332, 920 292, 936 278"/>
+  <path class="edge-soft" d="M 976 400 C 926 438, 874 468, 868 478"/>
+  <path class="edge-soft" d="M 884 478 L 868 478"/>
+
+  <rect class="panel" x="1140" y="138" width="236" height="270"/>
+  <text class="group-title" x="1164" y="172">supporting workspaces</text>
+
+  <rect class="support" x="1168" y="196" width="180" height="56" rx="10"/>
+  <text class="label" x="1188" y="220">bench</text>
+  <text class="body" x="1188" y="238">Smoke, e2e, analysis</text>
+
+  <rect class="support" x="1168" y="274" width="180" height="56" rx="10"/>
+  <text class="label" x="1188" y="298">book</text>
+  <text class="body" x="1188" y="316">Mintlify docs</text>
+
+  <rect class="support" x="1168" y="352" width="180" height="56" rx="10"/>
+  <text class="label" x="1188" y="376">engine/examples</text>
+  <text class="body" x="1188" y="394">Hooks, cron, plugins</text>
+
+  <path class="edge-soft" d="M 1168 224 C 1008 210, 724 200, 506 238"/>
+  <path class="edge-soft" d="M 1168 224 C 958 178, 790 170, 676 210"/>
+  <path class="edge-soft" d="M 1168 302 C 1050 336, 910 412, 860 468"/>
+  <path class="edge-soft" d="M 1168 380 C 920 398, 662 300, 506 244"/>
+
+  <rect class="external" x="676" y="742" width="306" height="86" rx="12"/>
+  <text class="label" x="700" y="770">External integrations</text>
+  <text class="body" x="700" y="790">Anthropic, OpenAI, Google, Bedrock, Vertex,</text>
+  <text class="body" x="700" y="808">OpenRouter, MCP servers, OpenTelemetry</text>
+
+  <rect class="tooling" x="1018" y="742" width="306" height="86" rx="12"/>
+  <text class="label" x="1042" y="770">Root tooling</text>
+  <text class="body" x="1042" y="790">Bun workspaces, Biome, Vitest, TypeScript</text>
+
+  <path class="edge" d="M 676 784 C 500 760, 370 650, 330 548"/>
+  <path class="edge" d="M 676 784 C 528 640, 524 378, 506 244"/>
+  <path class="edge" d="M 770 742 C 774 560, 774 410, 768 286"/>
+  <path class="edge-soft" d="M 1018 784 C 806 734, 602 690, 506 632"/>
+  <path class="edge-soft" d="M 1171 742 C 1048 648, 1012 552, 976 516"/>
+  <path class="edge-soft" d="M 1171 742 C 1220 628, 1246 478, 1258 416"/>
+
+  <rect x="72" y="888" width="18" height="18" rx="4" fill="#ecfeff" stroke="#0891b2"/>
+  <text class="body" x="100" y="902">Runtime packages</text>
+  <rect x="238" y="888" width="18" height="18" rx="4" fill="#f0fdf4" stroke="#16a34a"/>
+  <text class="body" x="266" y="902">Host apps</text>
+  <rect x="370" y="888" width="18" height="18" rx="4" fill="#fff7ed" stroke="#ea580c"/>
+  <text class="body" x="398" y="902">Support</text>
+  <rect x="502" y="888" width="18" height="18" rx="4" fill="#f5f3ff" stroke="#7c3aed"/>
+  <text class="body" x="530" y="902">Integrations</text>
+</svg>

@@ -25,6 +25,7 @@ export enum BUILT_IN_PROVIDER {
 	// Local/self-hosted
 	OLLAMA = "ollama",
 	LMSTUDIO = "lmstudio",
+	LLAMACPP = "llama-cpp",
 	// OpenAI-compatible
 	DEEPSEEK = "deepseek",
 	XAI = "xai",
@@ -54,6 +55,7 @@ export enum BUILT_IN_PROVIDER {
 	// Regional/specialized
 	QWEN = "qwen",
 	QWEN_CODE = "qwen-code",
+	QWEN_TOKEN_PLAN = "qwen-token-plan",
 	DOUBAO = "doubao",
 	MISTRAL = "mistral",
 	MOONSHOT = "moonshot",

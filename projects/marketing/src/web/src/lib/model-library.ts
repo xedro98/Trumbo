@@ -3,6 +3,8 @@
  * Grouped by model family. hosted on our inference infrastructure.
  */
 
+import { TRUMBO_LOGO_MARK } from "@/lib/brand";
+
 export type ModelEntry = {
 	id: string;
 	name: string;
@@ -18,6 +20,17 @@ export type ProviderGroup = {
 const labLogo = (labId: string) => `https://models.dev/logos/labs/${labId}.svg`;
 
 export const MODEL_LIBRARY_PROVIDERS: ProviderGroup[] = [
+	{
+		name: "Trumbo",
+		labId: "trumbo",
+		description:
+			"Quartz 1.0, Trumbo's flagship reasoning model family. Hyper, balanced, and Lite variants on one adaptive architecture.",
+		models: [
+			{ id: "quartz-1.0-hyper", name: "Trumbo Quartz 1.0 Hyper" },
+			{ id: "quartz-1.0", name: "Trumbo Quartz 1.0" },
+			{ id: "quartz-1.0-lite", name: "Trumbo Quartz 1.0 Lite" },
+		],
+	},
 	{
 		name: "DeepSeek",
 		labId: "deepseek",
@@ -294,6 +307,7 @@ export const MODEL_LIBRARY_PROVIDERS: ProviderGroup[] = [
 ];
 
 export function providerLogoUrl(labId: string): string {
+	if (labId === "trumbo") return TRUMBO_LOGO_MARK;
 	return labLogo(labId);
 }
 

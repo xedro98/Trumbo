@@ -1116,9 +1116,15 @@ export async function runCli(): Promise<void> {
 					includeKnownModels: false,
 				},
 			);
+			// Interactive mode: don't block TUI startup on the live models.dev
+			// catalog refresh. The bundled/generated catalog + persisted state
+			// populate knownModels immediately; the model picker's async fetch
+			// and the on-auth private-model load bring in the rest after the
+			// TUI is interactive. Headless mode still loads eagerly since there
+			// is no TUI to defer behind.
 			const catalogOptions = isInteractive
 				? {
-						loadLatestOnInit: true,
+						loadLatestOnInit: false,
 						loadPrivateOnAuth: true,
 						failOnError: false,
 					}

@@ -133,9 +133,20 @@ function spawnAndCollect(
 	return new Promise((resolve, reject) => {
 		const isWindows = process.platform === "win32";
 
+		// Inject session metadata so bash scripts can self-identify their
+		// Trumbo session (TRUMBO_SESSION_ID, TRUMBO_CONVERSATION_ID, etc.).
+		// Placed after config.env so session identity can't be spoofed by
+		// tool/user env overrides.
+		const sessionEnv: Record<string, string> = {};
+		if (context.sessionId) sessionEnv.TRUMBO_SESSION_ID = context.sessionId;
+		if (context.conversationId)
+			sessionEnv.TRUMBO_CONVERSATION_ID = context.conversationId;
+		if (context.agentId) sessionEnv.TRUMBO_AGENT_ID = context.agentId;
+		if (context.runId) sessionEnv.TRUMBO_RUN_ID = context.runId;
+
 		const child = spawn(config.executable, config.args, {
 			cwd: config.cwd,
-			env: { ...process.env, ...config.env },
+			env: { ...process.env, ...config.env, ...sessionEnv },
 			stdio: ["pipe", "pipe", "pipe"],
 			detached: !isWindows,
 			// Prevent a console window from flashing on Windows when the
@@ -201,10 +212,22 @@ function spawnAndCollect(
 
 		child.stdout?.on("data", (data: Buffer) => {
 			stdout.append(data);
+			// Emit incremental stdout so RPC/headless consumers get live bash
+			// output instead of only the final result.
+			context.emitUpdate?.({
+				type: "bash_execution_update",
+				stream: "stdout",
+				chunk: data.toString(),
+			});
 		});
 
 		child.stderr?.on("data", (data: Buffer) => {
 			stderr.append(data);
+			context.emitUpdate?.({
+				type: "bash_execution_update",
+				stream: "stderr",
+				chunk: data.toString(),
+			});
 		});
 
 		child.on("close", (code) => {

@@ -13,7 +13,16 @@ export interface Env {
 function platformRedirect(request: Request, env: Env): Response | null {
 	const url = new URL(request.url);
 	const platformBase = env.TRUMBO_PLATFORM_URL.replace(/\/$/, "");
-	const forwardPrefixes = ["/login", "/signup", "/register", "/device", "/dashboard", "/billing", "/docs"];
+	// Docs live on a separate site (docs.trumbo.dev) — redirect all /docs paths there.
+	const docsBase = "https://docs.trumbo.dev";
+	if (url.pathname === "/docs") {
+		return Response.redirect(docsBase, 302);
+	}
+	if (url.pathname.startsWith("/docs/")) {
+		const rest = url.pathname.slice("/docs".length);
+		return Response.redirect(`${docsBase}${rest}${url.search}`, 302);
+	}
+	const forwardPrefixes = ["/login", "/signup", "/register", "/device", "/dashboard", "/billing"];
 	if (forwardPrefixes.some((prefix) => url.pathname === prefix || url.pathname.startsWith(`${prefix}/`))) {
 		return Response.redirect(`${platformBase}${url.pathname}${url.search}`, 302);
 	}

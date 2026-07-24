@@ -339,6 +339,14 @@ export interface OrchestrationOptions {
 	 * Output is still collected and included in the final result.
 	 */
 	suppressUserInteraction?: boolean
+	/**
+	 * Shared mutable ref for "Proceed While Running" state across a command
+	 * batch. When the user clicks PWR on one command in a `run_commands` batch,
+	 * this ref is set to `true` so sibling commands skip the ask and stream
+	 * output directly. Created per-batch by the run-commands tool and passed
+	 * into each `orchestrateCommandExecution` call.
+	 */
+	proceedWhileRunningRef?: { current: boolean }
 }
 
 /**

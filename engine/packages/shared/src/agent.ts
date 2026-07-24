@@ -178,6 +178,17 @@ export interface AgentToolContext {
 	metadata?: Record<string, unknown>;
 	snapshot?: AgentRuntimeStateSnapshot;
 	emitUpdate?: (update: unknown) => void;
+	/**
+	 * AgentHarness capability: lets a tool inject a message into the agent's
+	 * conversation state. This enables harness-style tools that can observe
+	 * and influence the agent's reasoning loop (e.g. sub-agent orchestration,
+	 * context injection, test harnesses). The message is appended to the
+	 * live message list and will be seen by the next model call.
+	 */
+	injectMessage?: (message: {
+		role: "user" | "assistant";
+		content: string;
+	}) => void;
 }
 
 export interface AgentTool<TInput = unknown, TOutput = unknown>

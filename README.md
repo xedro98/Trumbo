@@ -50,7 +50,7 @@
 
 <br>
 
-[Docs](https://platform.trumbo.dev/docs) &nbsp;&middot;&nbsp; [Install](#quick-start) &nbsp;&middot;&nbsp; [Issues](https://github.com/xedro98/Trumbo/issues) &nbsp;&middot;&nbsp; [Discussions](https://github.com/xedro98/Trumbo/discussions) &nbsp;&middot;&nbsp; [npm](https://www.npmjs.com/package/@trumbodev/cli) &nbsp;&middot;&nbsp; [Changelog](./projects/console/CHANGELOG.md)
+[Docs](https://docs.trumbo.dev) &nbsp;&middot;&nbsp; [Install](#quick-start) &nbsp;&middot;&nbsp; [Issues](https://github.com/xedro98/Trumbo/issues) &nbsp;&middot;&nbsp; [Discussions](https://github.com/xedro98/Trumbo/discussions) &nbsp;&middot;&nbsp; [npm](https://www.npmjs.com/package/@trumbodev/cli) &nbsp;&middot;&nbsp; [Changelog](./projects/console/CHANGELOG.md)
 
 </div>
 
@@ -73,7 +73,7 @@ Bring your own API keys (Anthropic, OpenAI, Google, OpenRouter, Bedrock, Vertex,
 |---------|-----------|------|
 | **CLI** | Terminal UI, headless mode, RPC mode, connectors, schedules, install scripts. | [`projects/console/`](./projects/console) |
 | **SDK** | Programmatic agent engine: shared contracts, LLM providers, agent loop, session lifecycle, tools, plugins, cron, hub daemon. | [`engine/`](./engine) |
-| **Docs** | Published documentation (served at `platform.trumbo.dev/docs`). | [`book/`](./book) |
+| **Docs** | Published documentation (served at `docs.trumbo.dev`). | [`book/`](./book) |
 | **VS Code** | Trumbo extension for VS Code. | [`projects/vscode/`](./projects/vscode) |
 | **Hub** | Trumbo Hub dashboard (session management, team coordination). | [`projects/hub/`](./projects/hub) |
 
@@ -282,7 +282,7 @@ echo '{"type":"start","config":{"providerId":"anthropic","modelId":"claude-sonne
 | `delete` | Delete a session |
 | `exit` | Shut down the RPC server |
 
-Events are streamed as they happen (agent events, tool calls, tool results, turn boundaries). See the [RPC docs](https://platform.trumbo.dev/docs/getting-started/installing-trumbo) for the full protocol.
+Events are streamed as they happen (agent events, tool calls, tool results, turn boundaries). See the [RPC docs](https://docs.trumbo.dev/getting-started/installing-trumbo) for the full protocol.
 
 ## Providers
 
@@ -411,7 +411,7 @@ const snapshot = await trumbo.tree.getSnapshot(sessionId)
 await trumbo.tree.switchLeaf(sessionId, entryId)
 ```
 
-The SDK exposes session lifecycle, tree navigation (`trumbo.tree`), tool orchestration, hooks, plugins, and the hub daemon. See the [SDK docs](https://platform.trumbo.dev/docs) for the full API.
+The SDK exposes session lifecycle, tree navigation (`trumbo.tree`), tool orchestration, hooks, plugins, and the hub daemon. See the [SDK docs](https://docs.trumbo.dev) for the full API.
 
 ## Interactive TUI
 
@@ -441,7 +441,7 @@ npm install -g @trumbodev/cli@latest --allow-scripts=@trumbodev/cli
 
 The `--allow-scripts=@trumbodev/cli` flag lets the postinstall cache the binary outside `node_modules` for smoother Windows upgrades. The launcher version-checks its cache on every start, so a stale cached binary can never shadow a fresh npm install.
 
-See the [upgrade guide](https://platform.trumbo.dev/docs/getting-started/installing-trumbo#upgrading) for full details.
+See the [upgrade guide](https://docs.trumbo.dev/getting-started/installing-trumbo#upgrading) for full details.
 
 ## Contributing
 

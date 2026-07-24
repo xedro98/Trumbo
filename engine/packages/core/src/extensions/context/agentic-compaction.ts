@@ -1,5 +1,6 @@
 import { createHandlerAsync } from "@trumbodev/llms";
 import type { BasicLogger } from "@trumbodev/shared";
+import { withRetry } from "@trumbodev/shared";
 import type {
 	CoreCompactionContext,
 	CoreCompactionResult,
@@ -26,40 +27,68 @@ async function generateSummary(options: {
 	logger?: BasicLogger;
 }): Promise<string> {
 	const handler = await createHandlerAsync(options.providerConfig);
-	let text = "";
-	for await (const chunk of handler.createMessage(
-		[
-			"Summarize the provided coding session into a structured continuation note.",
-			"Use the following sections, omitting any that have no relevant content:",
-			"",
-			"## Goal",
-			"What the user is trying to accomplish.",
-			"",
-			"## Progress",
-			"What has been done so far, including key code changes and tool results.",
-			"",
-			"## Key Decisions",
-			"Important decisions made and their rationale.",
-			"",
-			"## Files Touched",
-			"List of files created, modified, or read.",
-			"",
-			"## Open Questions",
-			"Unresolved issues or decisions that need attention.",
-			"",
-			"## Next Steps",
-			"Detailed next steps to continue the work.",
-		].join("\n"),
-		[{ role: "user", content: options.request }],
-	)) {
-		if (chunk.type === "text") {
-			text += chunk.text;
-			continue;
-		}
-		if (chunk.type === "done" && !chunk.success && chunk.error) {
-			throw new Error(chunk.error);
-		}
-	}
+	const summaryPrompt = [
+		"Summarize the provided coding session into a structured continuation note.",
+		"Use the following sections, omitting any that have no relevant content:",
+		"",
+		"## Goal",
+		"What the user is trying to accomplish.",
+		"",
+		"## Progress",
+		"What has been done so far, including key code changes and tool results.",
+		"",
+		"## Key Decisions",
+		"Important decisions made and their rationale.",
+		"",
+		"## Files Touched",
+		"List of files created, modified, or read.",
+		"",
+		"## Open Questions",
+		"Unresolved issues or decisions that need attention.",
+		"",
+		"## Next Steps",
+		"Detailed next steps to continue the work.",
+	].join("\n");
+	// Retry the summary model call on transient failures (DNS hiccups, early
+	// EOF, 5xx) so a flaky network doesn't fail a whole compaction. Aborts are
+	// not retried. Each attempt starts a fresh stream so partial output from a
+	// failed attempt is discarded.
+	const text = await withRetry(
+		async () => {
+			let result = "";
+			for await (const chunk of handler.createMessage(summaryPrompt, [
+				{ role: "user", content: options.request },
+			])) {
+				if (chunk.type === "text") {
+					result += chunk.text;
+					continue;
+				}
+				if (chunk.type === "done" && !chunk.success && chunk.error) {
+					throw new Error(chunk.error);
+				}
+			}
+			return result;
+		},
+		{
+			maxRetries: 2,
+			signal: options.providerConfig.abortSignal,
+			shouldRetry: (error) => {
+				const name = (error as Error | null)?.name;
+				return (
+					name !== "AbortError" && !options.providerConfig.abortSignal?.aborted
+				);
+			},
+			onRetryAttempt: (attempt, maxRetries, delayMs, error) => {
+				options.logger?.debug("Compaction summary retry", {
+					attempt,
+					maxRetries,
+					delayMs,
+					error: error instanceof Error ? error.message : String(error),
+				});
+			},
+			baseDelayMs: 500,
+		},
+	);
 	options.logger?.debug("Generated compaction summary", {
 		outputChars: text.length,
 		modelId: options.providerConfig.modelId,

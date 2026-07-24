@@ -137,6 +137,37 @@ Document rollout and rollback steps.`,
 		expect(workflow.disabled).toBe(true);
 	});
 
+	it("parses frontmatter when the file starts with a UTF-8 BOM", () => {
+		// Some Windows editors save rules/skill files with a leading UTF-8 BOM
+		// (U+FEFF). Without BOM stripping the ^--- anchor fails and the whole
+		// file is treated as body, silently losing the frontmatter.
+		const bomSkill = parseSkillConfigFromMarkdown(
+			`\uFEFF---
+name: bom-skill
+description: A skill saved with a BOM
+disabled: true
+---
+Do the thing.`,
+			"fallback",
+		);
+		expect(bomSkill.name).toBe("bom-skill");
+		expect(bomSkill.description).toBe("A skill saved with a BOM");
+		expect(bomSkill.disabled).toBe(true);
+		expect(bomSkill.instructions).toBe("Do the thing.");
+
+		// A BOM-prefixed rule file should also parse.
+		const bomRule = parseRuleConfigFromMarkdown(
+			`\uFEFF---
+name: bom-rule
+disabled: false
+---
+Run linters before commit.`,
+			"bom-rule",
+		);
+		expect(bomRule.name).toBe("bom-rule");
+		expect(bomRule.disabled).toBe(false);
+	});
+
 	it("emits typed events for skills, rules, and workflows in one watcher", async () => {
 		const tempRoot = await mkdtemp(
 			join(tmpdir(), "core-user-instructions-loader-"),

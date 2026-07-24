@@ -6,6 +6,7 @@ import type {
 } from "@trumbodev/shared";
 import { wrapLanguageModel } from "ai";
 import { ensureFetch, resolveApiKey } from "../http";
+import { deferKimiToolsMiddleware } from "../middleware/defer-kimi-tools";
 import { splitToolImagesMiddleware } from "../middleware/split-tool-images";
 import type { ProviderFactoryResult } from "./types";
 
@@ -129,6 +130,7 @@ export async function createOpenAICompatibleProviderModule(
 		...(providerFetch ? { fetch: providerFetch } : {}),
 		includeUsage: true,
 	} as never);
+	const isKimiProvider = context.provider.id === "moonshot";
 	return {
 		// Wrap each constructed model with `splitToolImagesMiddleware` so
 		// `role:"tool"` messages whose `output.type === 'content'` carries
@@ -143,10 +145,22 @@ export async function createOpenAICompatibleProviderModule(
 		// pattern that classic Trumbo used in production for years (see
 		// `convertToOpenAiMessages` in `src/core/api/transform/openai-format.ts`
 		// on origin/main).
-		model: (modelId) =>
-			wrapLanguageModel({
+		//
+		// For Kimi/Moonshot models, additionally apply `deferKimiToolsMiddleware`
+		// which trims verbose tool descriptions to reduce per-request token
+		// overhead (Kimi's openai-completions endpoint handles large tool
+		// sets poorly on the first turn).
+		model: (modelId) => {
+			const withImages = wrapLanguageModel({
 				model: provider(modelId) as LanguageModelV3,
 				middleware: splitToolImagesMiddleware,
-			}),
+			});
+			return isKimiProvider
+				? wrapLanguageModel({
+						model: withImages,
+						middleware: deferKimiToolsMiddleware,
+					})
+				: withImages;
+		},
 	};
 }

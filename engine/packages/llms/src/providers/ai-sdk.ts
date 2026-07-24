@@ -18,6 +18,7 @@ import { jsonSchema, streamText } from "ai";
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { extractErrorMessage } from "./format";
+import { wrapFetchForDnsRetry } from "./http";
 import {
 	isAnthropicCompatibleModel,
 	isCerebrasProvider,
@@ -1109,10 +1110,12 @@ function createAiSdkProvider(kind: ProviderModuleKind): GatewayProviderFactory {
 					kind,
 					{
 						...config,
-						fetch: wrapFetchForStickySession(
-							wrapFetchForProviderRequestCapture(config.fetch, request),
-							request,
-							context,
+						fetch: wrapFetchForDnsRetry(
+							wrapFetchForStickySession(
+								wrapFetchForProviderRequestCapture(config.fetch, request),
+								request,
+								context,
+							),
 						),
 					},
 					context,

@@ -102,6 +102,11 @@ export class SdkCompactionCoordinator {
 		const mode = this.getCurrentMode()
 		const config = await this.options.sessionConfigBuilder.build({ cwd, mode })
 
+		// Surface progress so the user sees the compaction is working during
+		// the (potentially slow) summarizer LLM call, not just at the end.
+		this.emitInfo("Compacting conversation...")
+		await this.options.postStateToWebview()
+
 		const result = await compactSessionMessages({
 			config: {
 				providerConfig: config.providerConfig,
@@ -126,6 +131,8 @@ export class SdkCompactionCoordinator {
 		// sessionId keeps the task identity (history item, task header) stable;
 		// replaceActiveSession waits for the old session's stop before starting
 		// the replacement (same sequencing as a mode rebuild).
+		this.emitInfo("Applying compacted transcript...")
+		await this.options.postStateToWebview()
 		config.sessionId = sessionId
 		const startInput = this.options.buildStartSessionInput(config, { cwd, mode })
 		const rebuildResult = await this.options.sessions.replaceActiveSession({

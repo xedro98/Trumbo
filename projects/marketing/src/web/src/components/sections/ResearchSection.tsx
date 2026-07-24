@@ -71,7 +71,7 @@ export function ResearchSection() {
 			))}
 
 			<GridBoxCell className={cn("flex justify-end md:col-span-3", marketingGridCellClass)}>
-				<SectionFooterLink href={platformLink("/docs")}>
+				<SectionFooterLink href="https://docs.trumbo.dev">
 					View all posts
 					<ArrowRight size={14} />
 				</SectionFooterLink>

@@ -19,9 +19,11 @@ import type {
 	ProviderProtocol,
 } from "../catalog/types";
 import {
+	isTrumboInsufficientCreditsMessage,
 	isTrumboNotSubscribedMessage,
 	isTrumboOrgIndividualInferenceSubscriptionMessage,
 	isTrumboPassLimitMessage,
+	TrumboInsufficientCreditsError,
 	TrumboNotSubscribedError,
 	TrumboOrgIndividualInferenceSubscriptionError,
 	TrumboPassLimitError,
@@ -517,6 +519,17 @@ async function handleTrumboResponseError(
 		return;
 	}
 
+	if (response.status === 402) {
+		const body = await response
+			.clone()
+			.text()
+			.catch(() => "");
+		if (isTrumboInsufficientCreditsMessage(body)) {
+			throw new TrumboInsufficientCreditsError(providerId, body);
+		}
+		return;
+	}
+
 	if (response.status !== 403) {
 		return;
 	}
@@ -599,7 +612,7 @@ const OPENAI_COMPATIBLE_SPECS: BuiltinSpec[] = [
 		name: "xAI",
 		description: "Creator of Grok AI assistant",
 		family: "openai-compatible",
-		capabilities: ["reasoning"],
+		capabilities: ["reasoning", "oauth"],
 		defaultModelId: "grok-4.20-0309-non-reasoning",
 		apiKeyEnv: ["XAI_API_KEY"],
 		defaults: { baseUrl: "https://api.x.ai/v1" },
@@ -802,6 +815,18 @@ const OPENAI_COMPATIBLE_SPECS: BuiltinSpec[] = [
 		metadata: QWEN_CACHE_ROUTING_METADATA,
 	},
 	{
+		id: "qwen-token-plan",
+		name: "Alibaba Qwen Token Plan",
+		description: "Qwen subscription token-plan coding models",
+		family: "openai-compatible",
+		capabilities: ["tools", "reasoning", "oauth"],
+		defaultModelId: "qwen3-coder-plus",
+		modelsProviderId: "qwen-code",
+		defaults: { baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1" },
+		configFields: QWEN_CONFIG_FIELDS,
+		metadata: QWEN_CACHE_ROUTING_METADATA,
+	},
+	{
 		id: "doubao",
 		name: "Doubao",
 		description: "Volcengine Ark platform models",
@@ -899,7 +924,7 @@ const OPENAI_COMPATIBLE_SPECS: BuiltinSpec[] = [
 		description: "OpenRouter AI platform",
 		family: "openai-compatible",
 		popular: 20,
-		capabilities: ["reasoning", "prompt-cache"],
+		capabilities: ["reasoning", "prompt-cache", "oauth"],
 		defaultModelId: "anthropic/claude-sonnet-4.6",
 		apiKeyEnv: ["OPENROUTER_API_KEY"],
 		modelsProviderId: "openrouter",
@@ -931,6 +956,17 @@ const OPENAI_COMPATIBLE_SPECS: BuiltinSpec[] = [
 		modelsProviderId: "lmstudio",
 		defaults: { baseUrl: "http://localhost:1234/v1" },
 		modelsSourceUrl: "http://localhost:1234/v1/models",
+	},
+	{
+		id: "llama-cpp",
+		name: "llama.cpp",
+		description: "Local llama.cpp server inference",
+		family: "openai-compatible",
+		defaultModelId: "",
+		apiKeyEnv: ["LLAMA_CPP_API_KEY"],
+		modelsProviderId: "llama-cpp",
+		defaults: { baseUrl: "http://localhost:8080/v1" },
+		modelsSourceUrl: "http://localhost:8080/v1/models",
 	},
 	{
 		id: "oca",

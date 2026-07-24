@@ -89,5 +89,15 @@ export {
 } from "./providers/billing";
 export type * from "./providers/gateway";
 export { createGateway, DefaultGateway } from "./providers/gateway";
+export {
+	type HuggingFaceModelSearchResult,
+	searchHuggingFaceModels,
+} from "./providers/hf-llama-search";
+export {
+	type DownloadOptions,
+	type DownloadProgress,
+	downloadModelFile,
+	formatBytes,
+} from "./providers/llama-download";
 export { resolveProviderModelCatalogKeys } from "./providers/provider-keys";
 export { disposeLangfuseTelemetry } from "./services/langfuse-telemetry";

@@ -31,6 +31,7 @@ import {
 	normalizeJsonLikeStringsForSchema,
 	omitUndefinedValues,
 	trimNonEmpty,
+	withRetry,
 } from "@trumbodev/shared";
 import { nanoid } from "nanoid";
 
@@ -914,7 +915,21 @@ export class AgentRuntime {
 			...summarizeModelRequest(request),
 		});
 
-		const stream = await this.config.model.stream(request);
+		const stream = await withRetry(
+			async () => await this.config.model.stream(request),
+			{
+				maxRetries: 2,
+				signal: request.signal ?? this.abortController?.signal,
+				shouldRetry: (error) => {
+					// Retry pre-stream transient failures (DNS, connection refused,
+					// 5xx). Aborts are never retried. Mid-stream failures are
+					// surfaced via the receivedFinish early-EOF check below.
+					const name = (error as Error | null)?.name;
+					return name !== "AbortError" && !this.abortController?.signal.aborted;
+				},
+				baseDelayMs: 500,
+			},
+		);
 		const content: AgentMessagePart[] = [];
 		const toolAssemblies = new Map<string, PendingToolAssembly>();
 		const invalidToolCalls: InvalidToolCall[] = [];
@@ -923,6 +938,7 @@ export class AgentRuntime {
 		> = [];
 		let nextToolIndex = 0;
 		let finishReason: AgentModelFinishReason = "stop";
+		let receivedFinish = false;
 		let accumulatedText = "";
 		let accumulatedReasoning = "";
 
@@ -1021,6 +1037,7 @@ export class AgentRuntime {
 					break;
 				}
 				case "finish": {
+					receivedFinish = true;
 					finishReason = event.reason;
 					if (event.error) {
 						this.state.lastError = event.error;
@@ -1028,6 +1045,15 @@ export class AgentRuntime {
 					break;
 				}
 			}
+		}
+
+		// Detect early EOF: if the stream closed without a finish event, the
+		// response was truncated (common with OpenAI Responses streaming on
+		// flaky networks). Surface it as an error instead of silently treating
+		// it as a normal stop, so the caller can retry or report the failure.
+		if (!receivedFinish) {
+			finishReason = "error";
+			this.state.lastError = "Stream ended prematurely (early EOF)";
 		}
 
 		for (const item of sequence) {
@@ -1418,6 +1444,15 @@ export class AgentRuntime {
 							toolCall: prepared.toolCall,
 							update,
 						});
+					},
+					// AgentHarness: let the tool inject a message into the live
+					// conversation. The injected message is seen by the next model
+					// call, enabling sub-agent orchestration and context injection.
+					injectMessage: (message) => {
+						this.state.messages.push({
+							role: message.role,
+							content: [{ type: "text", text: message.content }],
+						} as never);
 					},
 				});
 				result = { output };

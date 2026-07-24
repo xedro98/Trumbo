@@ -850,6 +850,7 @@ export function OnboardingMainMenuScreen(props: {
 			height="100%"
 			justifyContent="center"
 			alignItems="center"
+			onMouseMove={props.mouse.onMouseMove}
 		>
 			<box marginBottom={1}>
 				<text fg={palette.act}>
@@ -866,7 +867,7 @@ export function OnboardingMainMenuScreen(props: {
 				<text fg={defaultFg}>
 					<strong>Welcome to Trumbo</strong>
 				</text>
-				<text fg="gray" marginTop={1}>
+				<text fg={palette.muted}>
 					Get started by connecting a model provider.
 				</text>
 			</box>
@@ -880,30 +881,29 @@ export function OnboardingMainMenuScreen(props: {
 				{props.menuOptions.map((option, i) => {
 					const isSel = i === props.menuSelected;
 					const isDisabled = option.disabled;
+					const selected = isSel && !isDisabled;
 					return (
 						<box
 							key={option.value}
 							flexDirection="row"
-							border
-							borderStyle="rounded"
-							borderColor={
-								isDisabled
-									? palette.border
-									: isSel
-										? palette.brand
-										: palette.border
-							}
-							paddingX={1}
 							gap={1}
-							alignItems="center"
+							backgroundColor={selected ? palette.selection : undefined}
+							paddingX={1}
+							alignItems="flex-start"
 						>
 							<text
+								fg={selected ? palette.textOnSelection : palette.dim}
+								flexShrink={0}
+							>
+								{selected ? "\u276f" : " "}
+							</text>
+							<text
 								fg={
-									isDisabled
-										? palette.borderStrong
-										: isSel
-											? palette.brand
-											: palette.borderStrong
+									selected
+										? palette.textOnSelection
+										: isDisabled
+											? palette.borderStrong
+											: palette.brand
 								}
 								flexShrink={0}
 							>
@@ -912,11 +912,11 @@ export function OnboardingMainMenuScreen(props: {
 							<box flexDirection="column" flexGrow={1}>
 								<text
 									fg={
-										isDisabled
-											? palette.borderStrong
-											: isSel
-												? defaultFg
-												: palette.muted
+										selected
+											? palette.textOnSelection
+											: isDisabled
+												? palette.borderStrong
+												: defaultFg
 									}
 								>
 									{option.label}
@@ -924,21 +924,16 @@ export function OnboardingMainMenuScreen(props: {
 								</text>
 								<text
 									fg={
-										isDisabled
-											? palette.border
-											: isSel
-												? palette.muted
-												: palette.borderStrong
+										selected
+											? palette.textOnSelection
+											: isDisabled
+												? palette.border
+												: palette.muted
 									}
 								>
 									{option.detail}
 								</text>
 							</box>
-							{isSel && !isDisabled && (
-								<text fg={palette.brand} flexShrink={0}>
-									{"\u2192"}
-								</text>
-							)}
 						</box>
 					);
 				})}

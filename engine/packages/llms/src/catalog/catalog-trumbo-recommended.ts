@@ -22,16 +22,28 @@ const TRUMBO_PASS_PROVIDER_ID = "trumbo-pass";
 const TRUMBO_PROVIDER_ID = "trumbo";
 
 /**
- * Trumbo Quartz — the public frontier model family. Users see three model ids
- * (`quartz` / `quartz-lite` / `quartz-hyper`); the platform routes each turn to
- * the right backing model server-side. These stable model facts live here (per
- * the @trumbodev/llms AGENTS rule: known-model facts belong in ModelInfo, not a
- * new registry) and are merged into both the bundled `trumbo` provider factory
- * baseline and the runtime-fetched recommended-models payload.
+ * Trumbo Quartz — the public frontier model family. Users see three versioned
+ * model ids (`quartz-1.0` / `quartz-1.0-lite` / `quartz-1.0-hyper`); legacy
+ * unversioned ids remain accepted for backward compatibility.
  */
+export const QUARTZ_VERSION = "1.0";
+
+export const QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT = {
+	quartz: `quartz-${QUARTZ_VERSION}`,
+	"quartz-lite": `quartz-${QUARTZ_VERSION}-lite`,
+	"quartz-hyper": `quartz-${QUARTZ_VERSION}-hyper`,
+} as const;
+
+/** Legacy unversioned ids → canonical public id. */
+export const QUARTZ_LEGACY_MODEL_IDS: Record<string, string> = {
+	quartz: QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT.quartz,
+	"quartz-lite": QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT["quartz-lite"],
+	"quartz-hyper": QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT["quartz-hyper"],
+};
+
 export const QUARTZ_MODEL_FACTS: Record<string, ModelInfo> = {
-	quartz: {
-		id: "quartz",
+	[QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT.quartz]: {
+		id: QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT.quartz,
 		name: "Quartz 1.0",
 		description:
 			"Adaptive reasoning model that scales compute to the complexity of each request.",
@@ -49,8 +61,8 @@ export const QUARTZ_MODEL_FACTS: Record<string, ModelInfo> = {
 		pricing: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
 		metadata: { reasoningDefaultOn: true },
 	},
-	"quartz-lite": {
-		id: "quartz-lite",
+	[QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT["quartz-lite"]]: {
+		id: QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT["quartz-lite"],
 		name: "Quartz 1.0 Lite",
 		description:
 			"Fast and economical Quartz variant for everyday agent loops and inline edits.",
@@ -68,8 +80,8 @@ export const QUARTZ_MODEL_FACTS: Record<string, ModelInfo> = {
 		pricing: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
 		metadata: { reasoningDefaultOn: false },
 	},
-	"quartz-hyper": {
-		id: "quartz-hyper",
+	[QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT["quartz-hyper"]]: {
+		id: QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT["quartz-hyper"],
 		name: "Quartz 1.0 Hyper",
 		description:
 			"Flagship Quartz variant for maximum reasoning depth on hard engineering and research. Max/Ultra plans.",
@@ -91,13 +103,21 @@ export const QUARTZ_MODEL_FACTS: Record<string, ModelInfo> = {
 
 /** Public Quartz model ids in display order (adaptive default first). */
 export const QUARTZ_MODEL_IDS: readonly string[] = [
-	"quartz",
-	"quartz-lite",
-	"quartz-hyper",
+	QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT.quartz,
+	QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT["quartz-lite"],
+	QUARTZ_PUBLIC_MODEL_IDS_BY_VARIANT["quartz-hyper"],
 ];
 
+export function canonicalQuartzModelId(id: string): string | null {
+	const normalized = id.trim().toLowerCase();
+	if (normalized in QUARTZ_MODEL_FACTS) return normalized;
+	if (normalized in QUARTZ_LEGACY_MODEL_IDS)
+		return QUARTZ_LEGACY_MODEL_IDS[normalized]!;
+	return null;
+}
+
 export function isQuartzModelId(id: string): boolean {
-	return id in QUARTZ_MODEL_FACTS;
+	return canonicalQuartzModelId(id) !== null;
 }
 
 /** Bundled baseline emitted by the `trumbo` provider factory (always available,
@@ -173,16 +193,18 @@ function buildProviderModelsFromEntries(
 			entry,
 			openRouterModelsByName,
 		);
-		const quartzFacts = QUARTZ_MODEL_FACTS[entry.id];
-		models[entry.id] = {
+		const canonicalId = canonicalQuartzModelId(entry.id) ?? entry.id;
+		const quartzFacts =
+			QUARTZ_MODEL_FACTS[canonicalId] ?? QUARTZ_MODEL_FACTS[entry.id];
+		models[canonicalId] = {
 			...defaults,
 			...(quartzFacts ?? {}),
-			id: entry.id,
+			id: canonicalId,
 			name:
 				entry.name?.trim() ||
 				quartzFacts?.name ||
-				entry.id.split("/").pop() ||
-				entry.id,
+				canonicalId.split("/").pop() ||
+				canonicalId,
 			description: entry.description ?? quartzFacts?.description,
 		};
 	});

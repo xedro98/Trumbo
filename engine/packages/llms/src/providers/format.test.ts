@@ -1,12 +1,17 @@
 import { describe, expect, it } from "vitest";
 import {
+	extractTrumboInsufficientCreditsMessage,
 	extractTrumboPassLimitMessage,
+	getTrumboInsufficientCreditsMessage,
 	getTrumboNotSubscribedMessage,
 	getTrumboOrgIndividualInferenceSubscriptionMessage,
+	isTrumboInsufficientCreditsError,
+	isTrumboInsufficientCreditsMessage,
 	isTrumboNotSubscribedMessage,
 	isTrumboOrgIndividualInferenceSubscriptionMessage,
 	isTrumboPassLimitError,
 	isTrumboPassLimitMessage,
+	TrumboInsufficientCreditsError,
 	TrumboNotSubscribedError,
 	TrumboOrgIndividualInferenceSubscriptionError,
 	TrumboPassLimitError,
@@ -169,5 +174,70 @@ describe("TrumboPassLimitError", () => {
 		});
 		expect(isTrumboPassLimitError(alien)).toBe(true);
 		expect(isTrumboPassLimitError(new Error("other"))).toBe(false);
+	});
+});
+
+describe("TrumboInsufficientCreditsError", () => {
+	it("detects insufficient-credits response messages", () => {
+		expect(
+			isTrumboInsufficientCreditsMessage(
+				'{"code":"insufficient_credits","current_balance":-0.14,"message":"Not enough credits available"}',
+			),
+		).toBe(true);
+		expect(isTrumboInsufficientCreditsMessage("insufficient credits")).toBe(
+			true,
+		);
+		expect(
+			isTrumboInsufficientCreditsMessage("Not enough credits available"),
+		).toBe(true);
+		expect(isTrumboInsufficientCreditsMessage("an unrelated error")).toBe(
+			false,
+		);
+		expect(isTrumboInsufficientCreditsMessage("rate limit exceeded")).toBe(
+			false,
+		);
+	});
+
+	it("extracts the current balance from a JSON response body", () => {
+		const details = extractTrumboInsufficientCreditsMessage(
+			'{"code":"insufficient_credits","current_balance":-0.14,"message":"Not enough credits available"}',
+		);
+		expect(details.currentBalance).toBe(-0.14);
+		expect(details.raw).toContain("insufficient_credits");
+	});
+
+	it("leaves currentBalance undefined when the body is not JSON", () => {
+		const details = extractTrumboInsufficientCreditsMessage(
+			"Not enough credits available",
+		);
+		expect(details.currentBalance).toBeUndefined();
+	});
+
+	it("preserves the raw response text on the error and parses the balance", () => {
+		const raw =
+			'{"code":"insufficient_credits","current_balance":-0.5,"message":"Not enough credits available"}';
+		const error = new TrumboInsufficientCreditsError("trumbo", raw);
+		expect(error.name).toBe("TrumboInsufficientCreditsError");
+		expect(error.providerId).toBe("trumbo");
+		expect(error.rawMessage).toBe(raw);
+		// The message preserves the raw gateway text so downstream consumers
+		// (e.g. the VS Code error reshaper) can parse `code` / `current_balance`.
+		expect(error.message).toBe(raw);
+		expect(error.currentBalance).toBe(-0.5);
+		expect(isTrumboInsufficientCreditsError(error)).toBe(true);
+	});
+
+	it("detects the typed error by name even across realms", () => {
+		const alien = Object.assign(new Error("insufficient credits"), {
+			name: "TrumboInsufficientCreditsError",
+		});
+		expect(isTrumboInsufficientCreditsError(alien)).toBe(true);
+		expect(isTrumboInsufficientCreditsError(new Error("other"))).toBe(false);
+	});
+
+	it("produces a recovery message that points at the billing dashboard", () => {
+		const message = getTrumboInsufficientCreditsMessage();
+		expect(message.toLowerCase()).toContain("credits");
+		expect(message).toContain("/dashboard/billing");
 	});
 });

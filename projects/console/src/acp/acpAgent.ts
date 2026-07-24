@@ -36,6 +36,7 @@ import { createCliCore } from "../session/session";
 import { getCliBuildInfo } from "../utils/common";
 import { randomSessionId, resolveWorkspaceRoot } from "../utils/helpers";
 import type { Config } from "../utils/types";
+import { syncAcpMcpServersForSession } from "./acp-mcp-sync";
 import {
 	ACP_AUTH_METHODS,
 	type AcpAuthMethodId,
@@ -476,6 +477,11 @@ export class AcpAgent implements Agent {
 			return;
 		}
 
+		await syncAcpMcpServersForSession(session.mcpServers).catch((error) => {
+			const message = error instanceof Error ? error.message : String(error);
+			console.error(`[acp] Failed to sync session MCP servers: ${message}`);
+		});
+
 		const config = await this.buildConfig(session);
 
 		const sessionManager = await createCliCore({
@@ -520,6 +526,13 @@ export class AcpAgent implements Agent {
 			mode: session.currentMode,
 		});
 
+		const enableAgentTeams =
+			process.env.TRUMBO_ENABLE_AGENT_TEAMS === "1" ||
+			process.env.TRUMBO_ENABLE_AGENT_TEAMS === "true";
+		const enableSpawnAgent =
+			process.env.TRUMBO_ENABLE_SPAWN_AGENT !== "0" &&
+			process.env.TRUMBO_ENABLE_SPAWN_AGENT !== "false";
+
 		return {
 			providerId,
 			modelId: session.currentModelId,
@@ -533,8 +546,8 @@ export class AcpAgent implements Agent {
 			mode: session.currentMode,
 			defaultToolAutoApprove: false,
 			toolPolicies: { "*": { autoApprove: false } },
-			enableSpawnAgent: true,
-			enableAgentTeams: false,
+			enableSpawnAgent,
+			enableAgentTeams,
 			enableTools: true,
 			cwd,
 			workspaceRoot: resolveWorkspaceRoot(cwd),

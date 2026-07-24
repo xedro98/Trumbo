@@ -88,3 +88,6 @@ projects/vscode/tsconfig.test.generated.json
 
 # Commercial Trumbo web app (private — not open source; keep local only)
 projects/web/
+
+NUL.tmp
+*.tgz

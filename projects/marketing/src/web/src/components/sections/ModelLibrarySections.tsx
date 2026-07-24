@@ -19,9 +19,9 @@ export function ModelLibraryHeroSection() {
 				Every open model you can run through Trumbo today, one CLI.
 			</h1>
 			<p className="max-w-5xl text-lg leading-relaxed text-muted-foreground md:max-w-6xl md:text-xl lg:text-[1.375rem] lg:leading-[1.6]">
-				{MODEL_LIBRARY_PROVIDERS.length} model families and {TOTAL_MODEL_COUNT}+ models
-				supported by Trumbo. Search for a specific model or browse by family. Route any of
-				them from one CLI without resetting your session.
+				Trumbo Quartz 1.0 plus {MODEL_LIBRARY_PROVIDERS.length - 1} open model families and{" "}
+				{TOTAL_MODEL_COUNT}+ models supported by Trumbo. Search for a specific model or browse
+				by family. Run any of them from one CLI without resetting your session.
 			</p>
 		</div>
 	);

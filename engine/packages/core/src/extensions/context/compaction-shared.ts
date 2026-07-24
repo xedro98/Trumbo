@@ -462,6 +462,8 @@ export function resolveSummarizerConfig(options: {
 			return {
 				...rest,
 				thinking: false,
+				// Summaries are one-shot; don't write a cache entry for them.
+				disableCacheWrite: true,
 			};
 		}
 		return {
@@ -469,6 +471,8 @@ export function resolveSummarizerConfig(options: {
 			maxOutputTokens:
 				config.maxOutputTokens ?? DEFAULT_SUMMARY_MAX_OUTPUT_TOKENS,
 			thinking: false,
+			// Summaries are one-shot; don't write a cache entry for them.
+			disableCacheWrite: true,
 		};
 	};
 	if (!summarizer) {

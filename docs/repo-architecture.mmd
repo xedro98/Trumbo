@@ -1,0 +1,56 @@
+flowchart LR
+  subgraph Repo["Trumbo monorepo"]
+    subgraph Engine["engine/packages"]
+      Shared["@trumbodev/shared\nTypes, schemas, paths,\nstorage, remote config"]
+      Llms["@trumbodev/llms\nModel catalog, provider settings,\nAI SDK handlers"]
+      Agents["@trumbodev/agents\nStateless agent loop,\ntools, hooks, teams, streaming"]
+      Core["@trumbodev/core\nRuntime orchestration,\nsessions, persistence, hub,\nplugins, settings, telemetry"]
+      Sdk["@trumbodev/sdk\nPublic SDK alias over core"]
+    end
+
+    subgraph Apps["projects"]
+      Cli["@trumbodev/cli\nOpenTUI, headless JSON,\nRPC, connector commands"]
+      Hub["@trumbodev/hub\nBrowser dashboard and\nshared hub UI"]
+      Vscode["VS Code extension\nSidebar/editor webviews,\nIDE integration"]
+      Marketing["Marketing site\nVite, React, Cloudflare"]
+      Docs["Docs\nVitePress/Mintlify sources"]
+      Samples["Samples\nQuickstarts, bots,\nplugins, desktop app"]
+    end
+
+    subgraph Support["supporting workspaces"]
+      Bench["bench\nSmoke, e2e, analysis"]
+      Book["book\nMintlify docs"]
+      Examples["engine/examples\nHooks, cron, plugins"]
+    end
+  end
+
+  Shared --> Llms
+  Shared --> Agents
+  Llms --> Agents
+  Shared --> Core
+  Llms --> Core
+  Agents --> Core
+  Core --> Sdk
+
+  Core --> Cli
+  Core --> Hub
+  Core --> Vscode
+  Sdk --> Samples
+  Core --> Examples
+
+  Cli --> Hub
+  Vscode --> Hub
+  Marketing --> Docs
+  Docs --> Book
+  Bench --> Core
+  Bench --> Cli
+
+  External["External integrations\nAnthropic, OpenAI, Google,\nBedrock, Vertex, OpenRouter,\nMCP servers, OpenTelemetry"]
+  External --> Llms
+  External --> Core
+  External --> Cli
+
+  Tooling["Root tooling\nBun workspaces, Biome,\nVitest, TypeScript"]
+  Tooling --> Engine
+  Tooling --> Apps
+  Tooling --> Support

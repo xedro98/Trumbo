@@ -102,6 +102,17 @@ function createUnregisteredModel(
 	return model;
 }
 
+/**
+ * Returns true when a model id is wrapped in brackets (e.g. "[org/model]"),
+ * signalling it should be treated as a literal id: bypass catalog alias
+ * resolution and pass the verbatim string to the provider. This lets users
+ * target scoped ids that are not in the generated catalog without the
+ * resolver trying to alias or split them.
+ */
+function isBracketedScopedModelId(modelId: string): boolean {
+	return /^\[.+\]$/.test(modelId);
+}
+
 export class GatewayRegistry {
 	private readonly providers = new Map<string, ProviderRecord>();
 	private readonly providerConfigs = new Map<string, ProviderConfigRecord>();
@@ -221,9 +232,13 @@ export class GatewayRegistry {
 		}
 
 		const modelId = selection.modelId ?? provider.defaultModelId;
-		const model =
-			provider.models.find((entry) => entry.id === modelId) ??
-			createUnregisteredModel(provider, modelId);
+		// Bracketed scoped model ids (e.g. "[org/model]") are treated as
+		// literals: skip the catalog lookup so they are never aliased or
+		// split, and pass the verbatim id straight to the provider.
+		const model = isBracketedScopedModelId(modelId)
+			? createUnregisteredModel(provider, modelId)
+			: (provider.models.find((entry) => entry.id === modelId) ??
+				createUnregisteredModel(provider, modelId));
 
 		return {
 			provider,

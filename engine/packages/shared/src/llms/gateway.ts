@@ -173,6 +173,26 @@ export interface GatewayStreamRequest {
 		budgetTokens?: number;
 	};
 	signal?: AbortSignal;
+	/**
+	 * Constrained sampling directives. When set, the provider is asked to
+	 * constrain its output to match a JSON schema, a regex, or a grammar.
+	 * Providers that don't support constrained sampling ignore these silently.
+	 */
+	constrained?: {
+		jsonSchema?: {
+			name?: string;
+			schema: Record<string, unknown>;
+			strict?: boolean;
+		};
+		regex?: string;
+		grammar?: string;
+	};
+	/**
+	 * When true, the routing layer skips prompt-cache write breakpoints for
+	 * this request. Used for one-shot requests (compaction/branch summaries)
+	 * where caching the output wastes tokens.
+	 */
+	disableCacheWrite?: boolean;
 }
 
 export interface GatewayProvider {

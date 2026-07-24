@@ -184,7 +184,7 @@ const ALL_FEATURES = [
 	"Permissions and .trumborules",
 	"Trumbo Knowledge (team docs + RAG)",
 	"Trumbo Browser Run (in-agent browser tools)",
-	"Quartz Hyper access",
+	"Quartz 1.0 Hyper access",
 	"Long-horizon reasoning sessions",
 	"Sub-agents and parallel workstreams",
 	"MCP tool integrations",
@@ -201,7 +201,7 @@ const PERSONAL_TIERS: Tier[] = [
 		period: "/month",
 		tagline: "For individual developers",
 		description:
-			"The CLI, Quartz and Quartz Lite, hosted models, sessions, and checkpoints. Generous limits for solo work.",
+			"The CLI, Quartz 1.0 and Quartz 1.0 Lite, hosted models, sessions, and checkpoints. Generous limits for solo work.",
 		features: personalFeatures(6),
 		platformLimits: platformQuotaRows(PERSONAL_PLATFORM_QUOTAS.pro),
 		limits: [
@@ -217,7 +217,7 @@ const PERSONAL_TIERS: Tier[] = [
 		period: "/month",
 		tagline: "For power users shipping every day",
 		description:
-			"Quartz Hyper, sub-agents, and deeper limits for daily multi-step work.",
+			"Quartz 1.0 Hyper, sub-agents, and deeper limits for daily multi-step work.",
 		featured: true,
 		features: personalFeatures(9),
 		platformLimits: platformQuotaRows(PERSONAL_PLATFORM_QUOTAS.max),

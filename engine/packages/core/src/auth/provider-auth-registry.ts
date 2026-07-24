@@ -8,12 +8,17 @@ import type { ProviderSettings } from "../types/provider-settings";
 import { getValidOpenAICodexCredentials, loginOpenAICodex } from "./codex";
 import { getValidOcaCredentials, loginOcaOAuth } from "./oca";
 import {
+	getValidOpenRouterCredentials,
+	loginOpenRouterOAuth,
+} from "./openrouter";
+import {
 	getValidTrumboCredentials,
 	loginTrumboOAuth,
 	type TrumboOAuthCredentials,
 } from "./trumbo";
 import type { OAuthCredentials, OAuthLoginCallbacks } from "./types";
 import { decodeJwtPayload } from "./utils";
+import { getValidXaiCredentials, loginXaiOAuth } from "./xai";
 
 const WORKOS_TOKEN_PREFIX = "workos:";
 
@@ -269,6 +274,16 @@ const providerAuthHandlers = [
 			}),
 		refresh: ({ credentials, forceRefresh, telemetry }) =>
 			getValidOpenAICodexCredentials(credentials, { forceRefresh, telemetry }),
+	}),
+	createOAuthHandler({
+		providerId: "openrouter",
+		login: ({ callbacks }) => loginOpenRouterOAuth({ callbacks }),
+		refresh: ({ credentials }) => getValidOpenRouterCredentials(credentials),
+	}),
+	createOAuthHandler({
+		providerId: "xai",
+		login: ({ callbacks }) => loginXaiOAuth({ callbacks }),
+		refresh: ({ credentials }) => getValidXaiCredentials(credentials),
 	}),
 ] as const satisfies readonly ProviderAuthHandler[];
 

@@ -155,3 +155,85 @@ export function isTrumboPassLimitError(
 		(error instanceof Error && error.name === "TrumboPassLimitError")
 	);
 }
+
+/**
+ * Substrings that identify a Trumbo API "insufficient credits" response.
+ *
+ * The Trumbo gateway returns HTTP 402 with a body shaped like:
+ *   {"code":"insufficient_credits","current_balance":-0.14,"message":"Not enough credits available"}
+ * when a usage-billed account has run out of credits. The recovery action is
+ * to add credits at the billing dashboard, not to upgrade the plan (that is
+ * {@link TrumboPassLimitError}'s domain, for subscription plan request caps).
+ */
+const TRUMBO_INSUFFICIENT_CREDITS_RESPONSE_MARKERS = [
+	"insufficient_credits",
+	"insufficient credits",
+	"not enough credits",
+] as const;
+
+export function isTrumboInsufficientCreditsMessage(text: string): boolean {
+	const normalized = text.trim().toLowerCase();
+	return TRUMBO_INSUFFICIENT_CREDITS_RESPONSE_MARKERS.some((marker) =>
+		normalized.includes(marker),
+	);
+}
+
+export function getTrumboInsufficientCreditsMessage(): string {
+	return `Not enough credits available. Add credits at ${new URL(
+		"/dashboard/billing",
+		getTrumboEnvironmentConfig().appBaseUrl,
+	).toString()} to continue.`;
+}
+
+export interface TrumboInsufficientCreditsDetails {
+	/** Remaining balance parsed from the response body, when present. */
+	currentBalance?: number;
+	/** The original response body text. */
+	raw: string;
+}
+
+export function extractTrumboInsufficientCreditsMessage(
+	text: string,
+): TrumboInsufficientCreditsDetails {
+	let currentBalance: number | undefined;
+	try {
+		const parsed = JSON.parse(text) as { current_balance?: unknown };
+		if (typeof parsed.current_balance === "number") {
+			currentBalance = parsed.current_balance;
+		}
+	} catch {
+		// Body wasn't JSON; leave currentBalance undefined.
+	}
+	return { raw: text, currentBalance };
+}
+
+/**
+ * Typed error raised when a Trumbo usage-billed request hits an
+ * insufficient-credits response (HTTP 402). The recovery action is to add
+ * credits at the billing dashboard. The `message` preserves the original
+ * gateway response body so downstream consumers (e.g. the VS Code extension's
+ * error reshaper, which reads `code` / `current_balance`) keep working.
+ */
+export class TrumboInsufficientCreditsError extends Error {
+	public readonly providerId?: string;
+	public readonly currentBalance?: number;
+	public readonly rawMessage: string;
+
+	constructor(providerId: string, responseText: string) {
+		super(responseText);
+		this.name = "TrumboInsufficientCreditsError";
+		this.providerId = providerId;
+		this.rawMessage = responseText;
+		const details = extractTrumboInsufficientCreditsMessage(responseText);
+		this.currentBalance = details.currentBalance;
+	}
+}
+
+export function isTrumboInsufficientCreditsError(
+	error: unknown,
+): error is TrumboInsufficientCreditsError {
+	return (
+		error instanceof TrumboInsufficientCreditsError ||
+		(error instanceof Error && error.name === "TrumboInsufficientCreditsError")
+	);
+}

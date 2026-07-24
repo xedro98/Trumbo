@@ -47,7 +47,7 @@ export const STATIC_PAGE_SEO: Record<string, PageSEOConfig> = {
 	"/quartz": {
 		title: "Trumbo Quartz",
 		description:
-			"Quartz 1.0 introduces Hyper and Lite, two adaptive reasoning models on one architecture. Flagship depth or fast, economical reasoning for agent work.",
+			"Quartz 1.0 is Trumbo's flagship reasoning model family. Hyper, balanced, and Lite variants on one adaptive architecture for agentic engineering work.",
 	},
 	"/cloud-agents": {
 		title: "Cloud Agents",
@@ -72,7 +72,7 @@ export const STATIC_PAGE_SEO: Record<string, PageSEOConfig> = {
 	"/models": {
 		title: "Model Library",
 		description:
-			"Browse 210+ open models available through Trumbo, from DeepSeek, Qwen, Llama, Mistral, GLM, Kimi, and more. Route any model from one CLI.",
+			"Trumbo Quartz 1.0 and 210+ open models from DeepSeek, Qwen, Llama, Mistral, GLM, Kimi, and more. Browse the full catalog and run any model from one CLI.",
 	},
 	"/pricing": {
 		title: "Pricing",
