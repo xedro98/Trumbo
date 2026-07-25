@@ -2,6 +2,24 @@
 
 All notable changes to the Trumbo VS Code extension are documented here.
 
+## [0.3.0] - 2026-07-25
+
+Full parity roadmap: compaction progress, terminal lifecycle, edit preview focus, Windows shell fix, and PWR batch stickiness.
+
+### Added
+- Compaction progress messages in the webview during the summarizer LLM call and transcript rebuild ("Compacting conversation...", "Applying compacted transcript...")
+- `reclaimUnobservedTerminals()` disposes fallback terminals that lost tracking via `no_shell_integration` but were never disposed
+- Git Bash detection in the Windows shell resolver (`getWindowsShellFromVSCode`) so Git Bash profiles resolve correctly
+- Shell-mismatch warning log in `VscodeTerminalManager` when a terminal's effective shell differs from the configured profile
+- "Proceed While Running" is now sticky to the command batch: clicking PWR on one command in a `run_commands` call applies to all sibling commands (shared ref via WeakMap keyed by `AgentToolContext`)
+
+### Fixed
+- Edit preview (`DiffEditRow`) now uses stable index-based keys for diff lines so streaming updates preserve keyboard focus instead of unmounting/remounting lines
+- Windows shell mismatch: terminals with a different shell than the configured profile are now logged with a warning instead of silently skipped
+
+### Changed
+- SDK dependency bumped to `@trumbodev/core@0.0.60` (agentic compaction default, `withRetry`, `TrumboInsufficientCreditsError`, DNS retry, constrained sampling, and all other SDK 0.0.60 features)
+
 ## [0.1.3] - 2026-07-09
 
 - Default production API and MCP to `api.trumbo.dev`; platform dashboard links remain on `platform.trumbo.dev`

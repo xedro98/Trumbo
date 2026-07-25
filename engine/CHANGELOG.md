@@ -9,12 +9,13 @@
 
 # Trumbo SDK Changelog
 
-## Unreleased
+## 0.0.60
 
 ### Added
 - `TrumboInsufficientCreditsError` (with `isTrumboInsufficientCreditsError`, `isTrumboInsufficientCreditsMessage`, `extractTrumboInsufficientCreditsMessage` helpers) recognizes HTTP 402 insufficient-credits responses from the Trumbo gateway; recovery action is to add credits at the billing dashboard
-- `uuidV7()` and `isUuidV7()` time-ordered UUID generator in `@trumbodev/shared` (RFC 9562)
+- `uuidV7()` and `isUuidV7()` time-ordered UUID generator in `@trumbodev/shared` (RFC 9562); wired into the Codex provider for per-instance request IDs
 - `withRetry()` abortable retry helper in `@trumbodev/shared` with exponential backoff and abort-signal awareness
+- AgentHarness: `injectMessage` on `AgentToolContext` lets tools inject messages into the agent's live conversation, enabling sub-agent orchestration and context injection
 - `get_available_thinking_levels` RPC method returns the reasoning effort levels the SDK supports
 - `bash_execution_update` events: the bash executor now emits incremental stdout/stderr chunks via `context.emitUpdate` so RPC/headless consumers get live output
 - Session metadata (`TRUMBO_SESSION_ID`, `TRUMBO_CONVERSATION_ID`, `TRUMBO_AGENT_ID`, `TRUMBO_RUN_ID`) is now injected into the bash tool's environment so scripts can self-identify their session
@@ -23,8 +24,16 @@
 - `llama-cpp` built-in provider for local llama.cpp server inference
 - `qwen-token-plan` built-in provider for Alibaba Qwen subscription token-plan coding models
 - Kimi K3 and Kimi K3 Code model catalog entries under the `moonshot` provider
+- SuperGrok and SuperGrok Reasoning model catalog entries under the `xai` provider
 - `deferKimiToolsMiddleware` trims verbose tool descriptions for Kimi/Moonshot models to reduce per-request token overhead
 - Bracketed scoped model ids (e.g. `[org/model]`) are now resolved as literals, bypassing catalog alias resolution
+- Constrained sampling: `constrained` field on `GatewayStreamRequest` for json_schema/regex/grammar directives, with a provider-option rule that composes `responseFormat` for OpenAI-compatible providers
+- `disableCacheWrite` directive on `ProviderConfig` and `GatewayStreamRequest`: one-shot requests (compaction/branch summaries) opt out of prompt-cache writes so they don't pollute the cache
+- `searchHuggingFaceModels()` utility for live Hugging Face Hub model discovery, integrated into the TUI model picker for llama model search
+- `downloadModelFile()` streaming downloader with progress events (`DownloadProgress`) for local model downloads, plus a TUI progress dialog component
+- `AgentExtensionProvider` expanded with `providerRegistration` so extensions can declare native LLM providers with a manifest + factory
+- OpenRouter OAuth: device-code auth handler (`loginOpenRouterOAuth`) + `oauth` capability on the provider
+- xAI OAuth: device-code auth handler (`loginXaiOAuth`) + `oauth` capability on the provider
 - Compaction progress messages in the VS Code webview during the summarizer LLM call and transcript rebuild
 - `reclaimUnobservedTerminals()` disposes fallback terminals that lost tracking via `no_shell_integration`
 - Git Bash detection in the Windows shell resolver (`getWindowsShellFromVSCode`)
@@ -35,12 +44,13 @@
 ### Changed
 - Agentic compaction is the default when no strategy is explicitly set (was `basic`)
 - Interactive TUI startup no longer blocks on the live models.dev catalog refresh (`loadLatestOnInit: false`); the bundled catalog + model picker async fetch handle the rest
-- `TRUMBO_SDK_VERSION` bumped to 0.0.59 to match the shared package version
+- `TRUMBO_SDK_VERSION` bumped to 0.0.60 to match the shared package version
 - `trumbo hub status` now includes `versions: { cli, sdk, hub }` in its JSON output
 - Compaction summary model calls now retry on transient failures (up to 2 retries with exponential backoff)
 - Provider `model.stream()` calls now retry on pre-stream transient failures (DNS, connection refused) with abort-signal awareness
 - Early EOF detection: if a model stream closes without a `finish` event, the run is surfaced as an error instead of silently treated as a normal stop
 - Edit preview (`DiffEditRow`) now uses stable index-based keys for diff lines so streaming updates preserve focus instead of unmounting/remounting lines
+- opentui upgraded from 0.1.102 to 0.4.3 (zero breaking changes in the TUI code)
 
 ### Security
 - Bump `axios` to 1.18.0 (multiple CVEs resolved)
@@ -50,6 +60,7 @@
 
 ### Fixed
 - `parseMarkdownFrontmatter` now strips a leading UTF-8 BOM (U+FEFF) so BOM-prefixed rules/skill files parse their frontmatter correctly
+- Corrected `repository.url` in all SDK packages from `xedro98/trembo` to `xedro98/Trumbo` so npm provenance verification passes
 
 ## 0.0.60
 

@@ -11,6 +11,38 @@
 
 
 
+## 3.6.0
+
+Full parity roadmap: opentui 0.4.3, agentic compaction default, new providers, agent runtime improvements, and more.
+
+### Added
+- `get_available_thinking_levels` RPC method for embedding hosts to query reasoning levels
+- `bash_execution_update` events: live stdout/stderr chunks via `context.emitUpdate` for RPC/headless consumers
+- Session metadata injected into bash env (`TRUMBO_SESSION_ID`, `TRUMBO_CONVERSATION_ID`, `TRUMBO_AGENT_ID`, `TRUMBO_RUN_ID`)
+- `TrumboInsufficientCreditsError` detection for HTTP 402 credit-exhausted responses
+- Hugging Face llama search in the model picker (debounced async fetch from the HF Hub API)
+- Download progress dialog component for local model downloads
+- `llama-cpp` and `qwen-token-plan` built-in providers
+- Kimi K3 and Kimi K3 Code in the model catalog
+- SuperGrok and SuperGrok Reasoning in the model catalog
+- OpenRouter and xAI OAuth capability (`oauth` in provider capabilities)
+
+### Changed
+- opentui upgraded from 0.1.102 to 0.4.3 (zero breaking changes in TUI code)
+- Agentic compaction is now the default strategy (was `basic`)
+- Interactive TUI startup no longer blocks on the live models.dev catalog refresh
+- `trumbo hub status` now includes `versions: { cli, sdk, hub }` in its JSON output
+- `TRUMBO_SDK_VERSION` bumped to 0.0.60
+
+### Security
+- Bump `axios` to 1.18.0, `js-yaml` to 4.3.0, `mermaid` to 11.16.0, `protobufjs` to 7.6.5
+
+### Fixed
+- `parseMarkdownFrontmatter` now strips a leading UTF-8 BOM so BOM-prefixed rules/skill files parse correctly
+- Bracketed scoped model ids (e.g. `[org/model]`) resolved as literals, bypassing alias resolution
+
+
+
 ## 3.5.1
 
 Quartz model family renamed to Quartz 1.0 in the model picker and status bar.
