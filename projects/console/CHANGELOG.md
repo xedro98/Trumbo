@@ -11,6 +11,16 @@
 
 
 
+## 3.6.1
+
+Hotfix: revert opentui 0.4.3 upgrade that crashed the interactive TUI.
+
+### Fixed
+- Reverted opentui from 0.4.3 back to 0.1.102. The 0.4.3 upgrade caused a runtime crash (`undefined is not an object (evaluating '$.startsWith')`) because `@opentui-ui/dialog@0.1.2` (the latest available) is incompatible with opentui 0.4.x. The TUI framework upgrade will be re-attempted once `@opentui-ui/dialog` releases a 0.4.x-compatible version.
+- Clear stale binary cache after CLI update so the resolver picks up the new version instead of a cached old binary.
+
+
+
 ## 3.6.0
 
 opentui 0.4.3, agentic compaction default, new providers, agent runtime improvements, and more.
