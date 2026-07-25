@@ -11,6 +11,21 @@
 
 
 
+## 3.6.2
+
+opentui 0.4.x upgrade with dialog patch, Claude Opus 5, SuperGrok.
+
+### Added
+- opentui upgraded to 0.4.5 with a postinstall patch for `@opentui-ui/dialog` (the `remove()` contract changed in 0.4.x — the patch passes node references instead of IDs)
+- Claude Opus 5 in the model catalog (auto-generated from models.dev, including 1M context variants)
+- SuperGrok and SuperGrok Reasoning model catalog entries under the `xai` provider
+- Kimi K3 model catalog entries now auto-generated from models.dev (1M context, native tool calling via openai-compatible factory)
+
+### Fixed
+- `@opentui-ui/dialog` patched for opentui 0.4.x `remove()` contract — fixes the TUI crash (`undefined is not an object`)
+
+
+
 ## 3.6.1
 
 Hotfix: revert opentui 0.4.3 upgrade that crashed the interactive TUI.

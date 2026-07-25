@@ -18,6 +18,18 @@
 	},
 	"overrides": [
 		{
+			"includes": ["**/catalog.generated.ts"],
+			"linter": {
+				"enabled": false
+			},
+			"formatter": {
+				"enabled": false
+			},
+			"assist": {
+				"enabled": false
+			}
+		},
+		{
 			"includes": ["projects/vscode/**"],
 			"assist": {
 				"enabled": true,
