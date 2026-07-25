@@ -1,5 +1,7 @@
 import { type ChildProcess, spawn } from "node:child_process";
-import { realpathSync } from "node:fs";
+import { realpathSync, rmSync } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
 import {
 	clearHubDiscovery,
 	isAutoUpdateEnabledGlobally,
@@ -21,6 +23,41 @@ import {
 } from "./kanban";
 
 const DEFAULT_PACKAGE_NAME = "@trumbodev/cli";
+
+/**
+ * Clear the stable binary cache so the resolver picks up the freshly-installed
+ * npm package on the next run.
+ *
+ * The bin/trumbo resolver checks a stable cache outside node_modules (Windows:
+ * %LOCALAPPDATA%\Trumbo\bin, Unix: ~/.trumbo/bin) before falling through to the
+ * npm-installed platform package. After an update, the cached binary + version
+ * marker from the PREVIOUS version can still be present (especially on Windows
+ * where the .exe may be locked by a running process and the postinstall can't
+ * replace it). Without clearing the marker, the resolver trusts the stale cache
+ * and runs the old binary — the update appears to succeed but `trumbo --version`
+ * still shows the old version.
+ *
+ * This deletes the cached binary and version marker (best-effort; locked files
+ * are silently skipped). The resolver then falls through to the fresh
+ * npm-installed platform binary.
+ */
+function clearBinaryCache(): void {
+	const cacheDir =
+		process.platform === "win32"
+			? join(
+					process.env.LOCALAPPDATA ?? join(homedir(), "AppData", "Local"),
+					"Trumbo",
+					"bin",
+				)
+			: join(homedir(), ".trumbo", "bin");
+	for (const name of ["trumbo.exe", "trumbo", "version.txt", "current.txt"]) {
+		try {
+			rmSync(join(cacheDir, name), { force: true });
+		} catch {
+			// Best-effort — file might be locked or not exist.
+		}
+	}
+}
 
 type CliPackageName = typeof DEFAULT_PACKAGE_NAME;
 
@@ -486,6 +523,7 @@ export function autoUpdateOnStartup(): void {
 			});
 			const exitCode = await waitForProcessExit(child);
 			if (exitCode === 0) {
+				clearBinaryCache();
 				await restartHubServerIfRunning();
 			}
 		} catch {
@@ -615,6 +653,7 @@ export async function checkForUpdates(
 				try {
 					const exitCode = await runCliUpdate(manualUpdateCommand);
 					if (exitCode === 0) {
+						clearBinaryCache();
 						installedUpdates.push(`${packageName}@${latestVersion}`);
 						await restartHubServerIfRunning();
 					} else {
