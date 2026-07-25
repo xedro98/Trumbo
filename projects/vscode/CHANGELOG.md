@@ -4,7 +4,7 @@ All notable changes to the Trumbo VS Code extension are documented here.
 
 ## [0.3.0] - 2026-07-25
 
-Full parity roadmap: compaction progress, terminal lifecycle, edit preview focus, Windows shell fix, and PWR batch stickiness.
+Compaction progress, terminal lifecycle, edit preview focus, Windows shell fix, and PWR batch stickiness.
 
 ### Added
 - Compaction progress messages in the webview during the summarizer LLM call and transcript rebuild ("Compacting conversation...", "Applying compacted transcript...")

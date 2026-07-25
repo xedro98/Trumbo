@@ -17,8 +17,8 @@ over.
 
 ## [v3.6.0 / v0.3.0 / SDK v0.0.60] — 2026-07-25
 
-Full parity roadmap: 47 work items across security, TUI, SDK runtime, provider
-matrix, VS Code polish, and release. See `engine/CHANGELOG.md`,
+Security fixes, TUI upgrade, new providers, agent runtime improvements,
+VS Code polish, and more. See `engine/CHANGELOG.md`,
 `projects/console/CHANGELOG.md`, and `projects/vscode/CHANGELOG.md` for the
 complete per-package details.
 

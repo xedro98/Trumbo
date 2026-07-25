@@ -13,7 +13,7 @@
 
 ## 3.6.0
 
-Full parity roadmap: opentui 0.4.3, agentic compaction default, new providers, agent runtime improvements, and more.
+opentui 0.4.3, agentic compaction default, new providers, agent runtime improvements, and more.
 
 ### Added
 - `get_available_thinking_levels` RPC method for embedding hosts to query reasoning levels
