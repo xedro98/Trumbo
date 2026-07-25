@@ -4,7 +4,7 @@
 	"description": "Shared utilities, types, and schemas for Trumbo packages",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/xedro98/trembo",
+		"url": "https://github.com/xedro98/Trumbo",
 		"directory": "engine/packages/shared"
 	},
 	"type": "module",
