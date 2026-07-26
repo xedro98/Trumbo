@@ -60,7 +60,7 @@
 		"tabs": [
 			{
 				"tab": "Agent",
-				"icon": "robot",
+				"icon": "terminal",
 				"groups": [
 					{
 						"group": "Getting Started",
@@ -69,9 +69,7 @@
 							"trumbo-overview",
 							"getting-started/installing-trumbo",
 							"getting-started/authorizing-with-trumbo",
-							"getting-started/config",
-							"getting-started/trumbo-provider",
-							"getting-started/trumbopass"
+							"getting-started/config"
 						]
 					},
 					{
@@ -79,8 +77,6 @@
 						"pages": [
 							"usage/tui",
 							"usage/cli-overview",
-							"usage/ide",
-							"usage/kanban",
 							{
 								"group": "CLI Reference & Samples",
 								"pages": [
@@ -114,7 +110,6 @@
 											"provider-config/aws-bedrock/cli-profile"
 										]
 									},
-									"provider-config/deepseek",
 									"provider-config/google-gemini",
 									"provider-config/minimax",
 									"provider-config/openai",
@@ -139,25 +134,14 @@
 						]
 					},
 					{
-						"group": "Features",
+						"group": "Workflows",
 						"pages": [
 							"core-workflows/plan-and-act",
 							"core-workflows/working-with-files",
 							"core-workflows/using-commands",
 							"core-workflows/checkpoints",
 							"core-workflows/task-management",
-							"features/subagents",
-							"features/auto-approve",
-							"features/auto-compact",
-							"features/jupyter-notebooks",
-							"features/multiroot-workspace"
-						]
-					},
-					{
-						"group": "Kanban",
-						"pages": [
-							"kanban/core-workflow",
-							"kanban/remote-access"
+							"features/subagents"
 						]
 					},
 					{

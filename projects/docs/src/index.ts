@@ -42,6 +42,14 @@ export default {
 			}
 		}
 
+		// Avoid sticky caches of the previous VitePress shell.
+		const contentType = outHeaders.get("Content-Type") || "";
+		if (contentType.includes("text/html") || incoming.pathname === "/" || !incoming.pathname.includes(".")) {
+			outHeaders.set("Cache-Control", "private, no-cache, no-store, must-revalidate");
+			outHeaders.set("CDN-Cache-Control", "no-store");
+			outHeaders.set("Cloudflare-CDN-Cache-Control", "no-store");
+		}
+
 		return new Response(response.body, {
 			status: response.status,
 			statusText: response.statusText,
