@@ -353,7 +353,10 @@ describe("models-dev-catalog", () => {
 			fetcher as unknown as typeof fetch,
 		);
 
-		expect(fetcher).toHaveBeenCalledWith("https://models.dev/api.json");
+		expect(fetcher).toHaveBeenCalledWith(
+			"https://models.dev/api.json",
+			expect.any(Object),
+		);
 		expect(result["openai-native"]).toHaveProperty("gpt-live");
 	});
 
@@ -397,9 +400,13 @@ describe("models-dev-catalog", () => {
 			fetcher as unknown as typeof fetch,
 		);
 
-		expect(fetcher).toHaveBeenCalledWith("https://models.dev/api.json");
+		expect(fetcher).toHaveBeenCalledWith(
+			"https://models.dev/api.json",
+			expect.any(Object),
+		);
 		expect(fetcher).toHaveBeenCalledWith(
 			`${TRUMBO_ENVIRONMENTS.production.apiBaseUrl}/api/v1/ai/trumbo/recommended-models`,
+			expect.any(Object),
 		);
 		expect(result.openrouter).toHaveProperty("vendor/live-base-model");
 		expect(
@@ -493,5 +500,50 @@ describe("models-dev-catalog", () => {
 		).rejects.toThrow(
 			"Failed to load model catalog from https://models.dev/api.json: HTTP 503",
 		);
+	});
+
+	it("aborts a hanging models.dev fetch within the timeout", async () => {
+		// A fetcher that never resolves on its own but honors the abort signal,
+		// matching real fetch behavior when an endpoint is unreachable. Without
+		// a timeout this would hang for the OS TCP timeout (~60s) and block
+		// session.create past its 30s client timeout.
+		const fetcher = vi.fn(
+			(_url: string, init?: RequestInit) =>
+				new Promise<Response>((_resolve, reject) => {
+					init?.signal?.addEventListener("abort", () => {
+						reject(new Error("aborted"));
+					});
+				}),
+		);
+
+		await expect(
+			fetchModelsDevProviderModels(
+				"https://models.dev/api.json",
+				fetcher as unknown as typeof fetch,
+				25,
+			),
+		).rejects.toThrow("aborted");
+	});
+
+	it("does not hang when a live catalog endpoint is unreachable", async () => {
+		const hanging = vi.fn(
+			(_url: string, init?: RequestInit) =>
+				new Promise<Response>((_resolve, reject) => {
+					init?.signal?.addEventListener("abort", () => {
+						reject(new Error("aborted"));
+					});
+				}),
+		);
+
+		const result = await fetchLiveProviderModels(
+			"https://models.dev/api.json",
+			hanging as unknown as typeof fetch,
+			25,
+		);
+
+		// Both fetches abort and the errors are swallowed, so the merged
+		// catalog falls back to empty — session bootstrap proceeds with the
+		// bundled catalog instead of hanging.
+		expect(result).toEqual({});
 	});
 });

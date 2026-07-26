@@ -9,6 +9,11 @@
 
 # Trumbo SDK Changelog
 
+## 0.0.61
+
+### Fixed
+- `fetchLiveProviderModels`, `fetchModelsDevProviderModels`, and `fetchTrumboRecommendedModelsPayload` now apply a per-request `AbortSignal.timeout` (default 5s, configurable via a new optional `timeoutMs` argument; pass `0` or a negative value to disable). The raw `fetch` had no default timeout, so an unreachable catalog endpoint (e.g. `models.dev` or the Trumbo recommended-models API) blocked session bootstrap for ~60s and exceeded the 30s `session.create` client timeout. Failures are still swallowed and fall back to the bundled/generated catalog. Build-time catalog generators pass a 60s timeout so CI generation isn't cut short.
+
 ## 0.0.60
 
 ### Added

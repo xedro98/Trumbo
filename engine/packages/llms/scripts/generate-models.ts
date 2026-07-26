@@ -53,11 +53,15 @@ async function generate(): Promise<void> {
 				error instanceof Error ? error : new Error(String(error ?? "unknown"));
 			return {};
 		}),
-		fetchTrumboRecommendedModelsPayload(fetch).catch((error) => {
-			loadError =
-				error instanceof Error ? error : new Error(String(error ?? "unknown"));
-			return undefined;
-		}),
+		fetchTrumboRecommendedModelsPayload(fetch, undefined, 60_000).catch(
+			(error) => {
+				loadError =
+					error instanceof Error
+						? error
+						: new Error(String(error ?? "unknown"));
+				return undefined;
+			},
+		),
 	]);
 
 	Object.assign(providerModels, modelsDevResult);

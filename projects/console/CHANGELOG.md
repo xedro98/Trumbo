@@ -11,6 +11,14 @@
 
 
 
+## 3.6.3
+
+Live model-catalog refresh hotfix — `session.create` no longer hangs when the catalog endpoint is unreachable.
+
+### Fixed
+- Bound the best-effort live model-catalog fetch (`models.dev` and the Trumbo recommended-models API) to a 5s timeout. These fetches previously had no timeout, so an unreachable or slow endpoint blocked `startSession` for ~60s (the OS TCP timeout), which exceeded the 30s `session.create` client deadline and surfaced as a hub `session.create` timeout error. The catalog is best-effort with bundled Quartz defaults always available, so a timeout now falls back to the bundled catalog and the session starts within seconds instead of hanging.
+
+
 ## 3.6.2
 
 opentui 0.4.x upgrade with dialog patch, Claude Opus 5, SuperGrok.

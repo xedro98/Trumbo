@@ -19,6 +19,8 @@ export async function loadModelsDevProviderModels(): Promise<
 > {
 	const providerModels = await fetchModelsDevProviderModels(
 		"https://models.dev/api.json",
+		fetch,
+		60_000,
 	);
 	return sortObjectByKey(providerModels);
 }

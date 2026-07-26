@@ -1,4 +1,5 @@
 import { resolveTrumboApiBaseUrl } from "@trumbodev/shared";
+import { LIVE_CATALOG_REQUEST_TIMEOUT_MS } from "./catalog-live";
 import type { ModelInfo } from "./types";
 
 export interface TrumboRecommendedModelEntry {
@@ -240,9 +241,13 @@ export function normalizeTrumboRecommendedProviderModels(
 export async function fetchTrumboRecommendedModelsPayload(
 	fetcher: typeof fetch = fetch,
 	apiBaseUrl?: string,
+	timeoutMs: number = LIVE_CATALOG_REQUEST_TIMEOUT_MS,
 ): Promise<TrumboRecommendedModelsPayload> {
 	const url = `${resolveTrumboApiBaseUrl(apiBaseUrl)}/api/v1/ai/trumbo/recommended-models`;
-	const response = await fetcher(url);
+	const response = await fetcher(
+		url,
+		timeoutMs > 0 ? { signal: AbortSignal.timeout(timeoutMs) } : undefined,
+	);
 	if (!response.ok) {
 		throw new Error(
 			`Failed to load Trumbo recommended models from ${url}: HTTP ${response.status}`,

@@ -40,6 +40,22 @@ export type ModelsDevProviderKeyMap = Record<string, string>;
 const DEFAULT_MAX_INPUT_TOKENS = 4096;
 const DEFAULT_MAX_TOKENS = 4096;
 
+/**
+ * Default per-request timeout for best-effort live catalog fetches performed
+ * during session bootstrap. These fetches back the model picker and always
+ * fall back to the bundled catalog on failure, so they must never hang — but
+ * the raw `fetch` has no default timeout, and an unreachable endpoint (e.g.
+ * `models.dev` or the Trumbo API) will otherwise block on the OS TCP timeout
+ * for ~60s. That blocks `startSession`, which exceeds the 30s `session.create`
+ * client timeout and surfaces as a hub timeout error. Pass `timeoutMs: 0` (or a
+ * negative value) to disable the timeout for long-running build scripts.
+ */
+export const LIVE_CATALOG_REQUEST_TIMEOUT_MS = 5_000;
+
+function fetchInitWithTimeout(timeoutMs: number): RequestInit | undefined {
+	return timeoutMs > 0 ? { signal: AbortSignal.timeout(timeoutMs) } : undefined;
+}
+
 function parseReleaseDate(value: string | undefined): number {
 	if (!value) {
 		return Number.NEGATIVE_INFINITY;
@@ -177,8 +193,9 @@ export function normalizeModelsDevProviderModels(
 export async function fetchModelsDevProviderModels(
 	url: string,
 	fetcher: typeof fetch = fetch,
+	timeoutMs: number = LIVE_CATALOG_REQUEST_TIMEOUT_MS,
 ): Promise<Record<string, Record<string, ModelInfo>>> {
-	const response = await fetcher(url);
+	const response = await fetcher(url, fetchInitWithTimeout(timeoutMs));
 	if (!response.ok) {
 		throw new Error(
 			`Failed to load model catalog from ${url}: HTTP ${response.status}`,
@@ -192,13 +209,16 @@ export async function fetchModelsDevProviderModels(
 export async function fetchLiveProviderModels(
 	modelsDevUrl: string,
 	fetcher: typeof fetch = fetch,
+	timeoutMs: number = LIVE_CATALOG_REQUEST_TIMEOUT_MS,
 ): Promise<Record<string, Record<string, ModelInfo>>> {
 	const emptyProviderModels: Record<string, Record<string, ModelInfo>> = {};
 	const [providerModels, trumboRecommendedPayload] = await Promise.all([
-		fetchModelsDevProviderModels(modelsDevUrl, fetcher).catch(
+		fetchModelsDevProviderModels(modelsDevUrl, fetcher, timeoutMs).catch(
 			() => emptyProviderModels,
 		),
-		fetchTrumboRecommendedModelsPayload(fetcher).catch(() => undefined),
+		fetchTrumboRecommendedModelsPayload(fetcher, undefined, timeoutMs).catch(
+			() => undefined,
+		),
 	]);
 	const trumboRecommended = trumboRecommendedPayload
 		? normalizeTrumboRecommendedProviderModels(
