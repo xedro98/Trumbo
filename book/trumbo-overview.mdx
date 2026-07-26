@@ -34,13 +34,16 @@ Connect the models you want to use — cloud providers or local runtimes — wit
 
 ## Applications
 
-The end-user app built on top of Trumbo's agent core:
+The end-user surfaces built on Trumbo:
 
-<CardGroup cols={1}>
+<CardGroup cols={2}>
   <Card title="CLI" icon="terminal" href="/usage/cli-overview">
-    Run Trumbo in your terminal with interactive chat or fully headless automation for CI/CD and scripting.
+    Run Trumbo in your terminal with interactive chat or headless automation.
 
-    `npm i -g @trumbodev/cli`
+    `npm i -g @trumbodev/cli` (or `trumbo`)
+  </Card>
+  <Card title="Platform" icon="cloud" href="/platform/overview">
+    Hosted products: Cloud Agents, Sandbox, Browser Run, Security, Knowledge, Automations, and APIs at platform.trumbo.dev.
   </Card>
 </CardGroup>
 
@@ -50,10 +53,27 @@ The end-user app built on top of Trumbo's agent core:
 The SDK is Trumbo's agent core — use it to build your own applications, automations, and integrations. See the SDK section for the full functionality and architecture of the Trumbo Agent.
 
 <CardGroup cols={1}>
-  <Card title="SDK" icon="cube" href="/engine/overview">
+  <Card title="SDK" icon="cube" href="/sdk/overview">
     Build AI agents and integrations powered by the same core engine behind the CLI.
 
     `npm install @trumbo/sdk`
+  </Card>
+</CardGroup>
+
+## Platform products (quick links)
+
+<CardGroup cols={2}>
+  <Card title="Automations" href="/platform/automations">
+    Durable workflows across agents, sandboxes, security, webhooks, waits, retries, and parallel branches.
+  </Card>
+  <Card title="Cloud Agents" href="/platform/cloud-agents">
+    Hosted agents with REST, MCP, schedules, and channels.
+  </Card>
+  <Card title="Sandbox" href="/platform/sandbox">
+    Remote Linux VMs for shell, code, git, and previews.
+  </Card>
+  <Card title="Hosted MCP" href="/platform/mcp">
+    Product tools on api.trumbo.dev/v1/mcp.
   </Card>
 </CardGroup>
 

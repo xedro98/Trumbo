@@ -1,5 +1,11 @@
 /* Custom styles for Trumbo documentation */
 
+:root {
+	--primary: #2bbf77;
+	--primary-light: #3fd48a;
+	--primary-dark: #1fa866;
+}
+
 /* Import Geist Sans font from Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Geist+Sans:wght@300;400;500;600;700&display=swap");
 
@@ -56,37 +62,12 @@ main h1 {
 	font-weight: 500 !important;
 }
 
-/* JetBrains logo visibility fix for dark mode */
-/* Add a subtle background and border to ensure visibility in both light and dark modes */
-img[alt="JetBrains logo"] {
-	background-color: rgba(255, 255, 255, 0.9);
-	border: 1px solid rgba(0, 0, 0, 0.1);
-	border-radius: 8px;
-	padding: 12px;
-	transition: all 0.3s ease;
-}
-
-/* Dark mode specific styling */
-[data-theme="dark"] img[alt="JetBrains logo"],
-.dark img[alt="JetBrains logo"] {
-	background-color: rgba(255, 255, 255, 0.95);
-	border: 1px solid rgba(0, 0, 0, 0.2);
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Media query for system dark mode preference */
-@media (prefers-color-scheme: dark) {
-	img[alt="JetBrains logo"] {
-		background-color: rgba(255, 255, 255, 0.95);
-		border: 1px solid rgba(0, 0, 0, 0.2);
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	}
-}
-
-/* Hover effect for better interactivity */
-img[alt="JetBrains logo"]:hover {
-	transform: scale(1.02);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+/* Navbar logo sizing for the Trumbo mark */
+.navbar-logo img,
+nav img[alt*="logo" i],
+header img[src*="trumbo-logo"] {
+	max-height: 32px !important;
+	width: auto !important;
 }
 
 /* Reduce list margin-top */

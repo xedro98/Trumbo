@@ -1,67 +1,81 @@
 ---
 title: "Trumbo API"
 sidebarTitle: "Overview"
-description: "Programmatic access to AI models through an OpenAI-compatible Chat Completions API."
+description: "Programmatic access to Trumbo Quartz chat completions, platform products, and hosted MCP on api.trumbo.dev."
 ---
-```text
-████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
-╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
-   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
-   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
-   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
-   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
-```
 
+# Trumbo API
 
-This is the Trumbo API reference. The same models that drive the Trumbo extension and CLI are available to any client that speaks the OpenAI Chat Completions format, in any language or runtime.
+The Trumbo API is the programmatic surface for [platform.trumbo.dev](https://platform.trumbo.dev). Use it from scripts, CI, custom apps, the CLI, and the VS Code extension.
 
-## What is the Trumbo API?
+## Domains
 
-The Trumbo API exposes a single OpenAI-compatible Chat Completions endpoint. Authenticate once with a Trumbo API key and route requests to models from Anthropic, OpenAI, Google, and other providers through one base URL, without juggling a separate key per provider.
+| Host | Purpose |
+|------|---------|
+| `https://platform.trumbo.dev` | Dashboard, billing, tokens at `/tokens`, product UIs |
+| `https://api.trumbo.dev` | REST API and hosted MCP |
+| `https://docs.trumbo.dev` | This documentation site |
 
-```
-Your App  →  Trumbo API (api.example.invalid)  →  Anthropic / OpenAI / Google / etc.
-```
+## API surfaces
+
+Trumbo exposes two complementary REST layouts on `api.trumbo.dev`:
+
+| Surface | Base URL | Examples |
+|---------|----------|----------|
+| **Quartz (OpenAI-compatible)** | `https://api.trumbo.dev/v1` | `POST /chat/completions`, `GET /models` |
+| **Platform products** | `https://api.trumbo.dev/api/v1/{product}` | Agents, Sandbox, Browser, Security, Knowledge, Workflows, Users |
+| **Hosted MCP** | `https://api.trumbo.dev/v1/mcp` | Product tools for agents, sandbox, browser, and more |
 
 <CardGroup cols={2}>
   <Card title="Getting Started" icon="rocket" href="/api/getting-started">
-    Create an API key and make your first request in under a minute.
+    Create a token and make your first request in under a minute.
   </Card>
   <Card title="Authentication" icon="key" href="/api/authentication">
-    API keys, account tokens, key rotation, and security best practices.
+    Bearer tokens, scopes, org headers, and device auth.
   </Card>
   <Card title="Chat Completions" icon="message" href="/api/chat-completions">
-    Full endpoint reference with request schemas, streaming, and tool calling.
+    OpenAI-compatible Quartz endpoint reference.
   </Card>
   <Card title="Code Examples" icon="code" href="/api/sdk-examples">
-    Ready-to-copy examples for Python, Node.js, curl, and the Trumbo CLI.
+    Python, Node.js, curl, CLI, and product REST examples.
   </Card>
 </CardGroup>
 
-## Explore the Reference
+## Platform products
+
+| Product | REST base | Platform docs |
+|---------|-----------|-----------------|
+| Quartz chat completions | `/v1/chat/completions` | [Chat Completions](/platform/chat-completions) |
+| Cloud Agents | `/api/v1/agents` | [Cloud Agents](/platform/cloud-agents) |
+| Sandbox | `/api/v1/sandbox` | [Sandbox](/platform/sandbox) |
+| Browser Run | `/api/v1/browser` | [Browser Run](/platform/browser-run) |
+| Security | `/api/v1/security`, `/api/v1/repos` | [Security](/platform/security) |
+| Knowledge | `/api/v1/knowledge` | [Knowledge](/platform/knowledge) |
+| Automations | `/api/v1/workflows` | [Automations](/platform/automations) |
+| Usage and billing | `/api/v1/users/me/plan` | [Billing & Limits](/platform/billing-and-limits) |
+| Hosted MCP | `/v1/mcp` | [Hosted MCP](/platform/mcp) |
+
+See the full [Platform Overview](/platform/overview) for how products fit together.
+
+## Quick start
+
+```bash
+curl https://api.trumbo.dev/v1/models \
+  -H "Authorization: Bearer $TRUMBO_API_TOKEN"
+```
+
+Create tokens at [platform.trumbo.dev/tokens](https://platform.trumbo.dev/tokens). Team workspaces may also require `X-Org-Id`.
+
+## Explore the reference
 
 <CardGroup cols={3}>
   <Card title="Models" icon="brain" href="/api/models">
-    Browse available models, free tier options, reasoning support, and selection guidance.
+    Quartz variants, catalog models, and how to list available ids.
   </Card>
   <Card title="Errors" icon="triangle-exclamation" href="/api/errors">
-    Error codes, mid-stream errors, retry strategies, and debugging tips.
+    HTTP codes, rate limits, mid-stream errors, and retry guidance.
   </Card>
-  <Card title="Enterprise API" icon="building" href="/enterprise-solutions/api-reference">
-    Admin endpoints for managing users, organizations, billing, and API keys.
+  <Card title="Platform Overview" icon="layer-group" href="/platform/overview">
+    Dashboard routes, product matrix, and MCP tool groups.
   </Card>
 </CardGroup>
-
-## Quick Start
-
-```bash
-curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "anthropic/claude-sonnet-4-6",
-    "messages": [{"role": "user", "content": "Hello!"}]
-  }'
-```
-
-Grab an API key from [app.example.invalid](http://0.0.0.0:0) under Settings → API Keys, then continue with the [Getting Started](/api/getting-started) guide.

@@ -1,80 +1,84 @@
 ---
 title: "Models"
 sidebarTitle: "Models"
-description: "Available models, pricing tiers, free models, and how model IDs work in the Trumbo API."
+description: "Quartz model variants, catalog models, and how to list available model ids on the Trumbo API."
 ---
-```text
-████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
-╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
-   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
-   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
-   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
-   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
-```
 
+# Models
 
-The Trumbo API opens one endpoint to models from many providers. Model IDs use the `provider/model-name` format, the same convention popularized by [OpenRouter](https://openrouter.ai).
+Trumbo exposes an OpenAI-compatible models endpoint at `https://api.trumbo.dev/v1/models`. Use it to discover Quartz and other catalog models available to your account.
 
-## Model ID Format
-
-Every model is addressed by a string of the form:
-
-```
-provider/model-name
-```
-
-A few examples:
-- `anthropic/claude-sonnet-4-6` - Claude Sonnet 4.6 from Anthropic
-- `openai/gpt-4o` - GPT-4o from OpenAI
-- `google/gemini-2.5-pro` - Gemini 2.5 Pro from Google
-
-Pass that string as the `model` parameter in your [Chat Completions](/api/chat-completions) request:
+## List models
 
 ```bash
-curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
+curl https://api.trumbo.dev/v1/models \
+  -H "Authorization: Bearer $TRUMBO_API_TOKEN"
+```
+
+The response follows the OpenAI list-models shape. Each entry includes an `id` you pass to [Chat Completions](/api/chat-completions) as the `model` parameter.
+
+Admins sync the public catalog from **Admin → Models → Sync Model Catalog** on [platform.trumbo.dev/models](https://platform.trumbo.dev/models).
+
+## Quartz variants
+
+Quartz is Trumbo's flagship reasoning model family. Routing is opaque to clients: you select a Quartz id; backing infrastructure is not disclosed in product responses.
+
+| Public id (examples) | Role |
+|----------------------|------|
+| `quartz-1.0` / default | Balanced flagship |
+| Quartz Lite | Low latency, efficient default |
+| Quartz Hyper | Max reasoning depth (higher tiers) |
+
+Example request:
+
+```bash
+curl -X POST https://api.trumbo.dev/v1/chat/completions \
+  -H "Authorization: Bearer $TRUMBO_API_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "minimax/minimax-m2.5",
+    "model": "quartz-1.0",
     "messages": [{"role": "user", "content": "Hello!"}]
   }'
 ```
 
-## Reasoning Models
+## Catalog models
 
-Some models think through a problem before they answer. When you use one of these:
+Beyond Quartz, the platform may expose additional catalog models synced from the admin model catalog. Availability depends on your plan and admin configuration. Always call `GET /v1/models` rather than hard-coding ids.
 
-- Reasoning content streams through `delta.reasoning`
-- Some providers also return encrypted reasoning blocks in `delta.reasoning_details`
-- Reasoning tokens are metered separately from output tokens
-
-Reasoning-capable families include most Claude, Gemini 2.5, and Grok 3 models. Confirm support for a specific model by checking its `supportsReasoning` capability in the model catalog.
-
-## Choosing a Model
+## Choosing a model
 
 | If you need... | Consider |
 |----------------|----------|
-| Best coding performance | `anthropic/claude-sonnet-4-6` |
-| Long document analysis | `google/gemini-2.5-pro` (1M context) |
-| Fast, cheap responses | `deepseek/deepseek-chat` |
-| Free experimentation | `minimax/minimax-m2.5` |
-| Multi-modal (text + images) | `openai/gpt-4o` or `anthropic/claude-sonnet-4-6` |
-| Complex reasoning | Any model with reasoning support |
+| General coding and reasoning | `quartz-1.0` |
+| Low latency responses | Quartz Lite |
+| Deep multi-step reasoning | Quartz Hyper (Max / Ultra tiers) |
+| Specific catalog capability | Check `GET /v1/models` and the Model Catalog UI |
 
-For account and setup details, see the [Trumbo Provider guide](/getting-started/trumbo-provider).
+<Note>
+  Subscription chat completions count against the 5-hour, daily, and weekly windows shown on [platform.trumbo.dev/usage](https://platform.trumbo.dev/usage). Standalone usage may draw API credits depending on billing mode. See [Billing & Limits](/platform/billing-and-limits).
+</Note>
 
-## Image Support
+## Reasoning output
 
-Image-capable models accept base64-encoded image content inside the `messages` array:
+Quartz Hyper and other reasoning-capable routes may stream extended thinking before the final answer:
+
+- Reasoning content can appear in `delta.reasoning` during streaming
+- Some responses include encrypted reasoning blocks in `delta.reasoning_details`
+
+Inspect `finish_reason` and streaming deltas in your client. See [Chat Completions](/api/chat-completions#reasoning-models).
+
+## Multi-modal input
+
+Image-capable catalog models accept base64-encoded image content inside the `messages` array:
 
 ```json
 {
-  "model": "anthropic/claude-sonnet-4-6",
+  "model": "quartz-1.0",
   "messages": [
     {
       "role": "user",
       "content": [
-        {"type": "text", "text": "What's in this image?"},
+        {"type": "text", "text": "What is in this image?"},
         {"type": "image_url", "image_url": {"url": "data:image/png;base64,..."}}
       ]
     }
@@ -82,15 +86,18 @@ Image-capable models accept base64-encoded image content inside the `messages` a
 }
 ```
 
-Not every model accepts images. Check the model's `supportsImages` capability before sending image content.
+Not every model accepts images. Confirm capability in the Model Catalog UI or model metadata from `GET /v1/models`.
 
 ## Related
 
 <CardGroup cols={2}>
   <Card title="Chat Completions" icon="message" href="/api/chat-completions">
-    Use these models in your API requests.
+    Use model ids in completion requests.
   </Card>
-  <Card title="Trumbo Provider" icon="scale-balanced" href="/getting-started/trumbo-provider">
-    Fastest setup path with built-in authentication and billing.
+  <Card title="Platform Chat Completions" icon="sparkles" href="/platform/chat-completions">
+    Quartz API overview, streaming, and rate limits.
+  </Card>
+  <Card title="Billing & Limits" icon="gauge" href="/platform/billing-and-limits">
+    Request windows and API credits.
   </Card>
 </CardGroup>

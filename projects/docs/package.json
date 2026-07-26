@@ -3,11 +3,11 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
+		"dev": "wrangler dev",
+		"deploy": "wrangler deploy",
 		"convert": "node scripts/convert-docs.mjs",
-		"dev": "vitepress dev",
-		"build": "vitepress build",
-		"preview": "vitepress preview",
-		"deploy": "node scripts/convert-docs.mjs && vitepress build && wrangler deploy"
+		"vitepress:dev": "vitepress dev",
+		"vitepress:build": "vitepress build"
 	},
 	"devDependencies": {
 		"vitepress": "^1.0.0",

@@ -2,21 +2,18 @@
 	"$schema": "https://mintlify.com/docs.json",
 	"theme": "mint",
 	"name": "Trumbo",
-	"description": "AI-powered coding agent for complex work",
+	"description": "AI-powered coding agent, Platform products, APIs, and SDK",
 	"colors": {
-		"primary": "#9D4EDD",
-		"light": "#F0E6FF",
+		"primary": "#2BBF77",
+		"light": "#E8F8F0",
 		"dark": "#000000"
 	},
 	"logo": {
-		"light": "/assets/Trumbo_Logo-complete_black.png",
-		"dark": "/assets/Trumbo_Logo-complete_white.png",
-		"href": "https://github.com/xedro98/trembo/"
+		"light": "/assets/trumbo-logo.svg",
+		"dark": "/assets/trumbo-logo.svg",
+		"href": "https://platform.trumbo.dev"
 	},
-	"favicon": {
-		"light": "/assets/robot_panel_light.png",
-		"dark": "/assets/robot_panel_dark.png"
-	},
+	"favicon": "/assets/trumbo-logo.svg",
 	"background": {
 		"color": {
 			"light": "#fafaf9",
@@ -40,89 +37,97 @@
 			{
 				"label": "GitHub",
 				"icon": "github",
-				"href": "https://github.com/xedro98/trembo"
+				"href": "https://github.com/xedro98/Trumbo"
+			},
+			{
+				"label": "Platform",
+				"icon": "globe",
+				"href": "https://platform.trumbo.dev"
 			},
 			{
 				"label": "Discussions",
 				"icon": "comments",
-				"href": "https://github.com/xedro98/trembo/discussions"
+				"href": "https://github.com/xedro98/Trumbo/discussions"
 			}
 		],
 		"primary": {
 			"type": "button",
-			"label": "Install Trumbo",
-			"href": "https://github.com/xedro98/trembo"
+			"label": "Open Platform",
+			"href": "https://platform.trumbo.dev"
 		}
 	},
 	"navigation": {
 		"tabs": [
 			{
-				"tab": "Trumbo",
+				"tab": "Agent",
 				"icon": "robot",
 				"groups": [
 					{
 						"group": "Getting Started",
 						"pages": [
+							"index",
 							"trumbo-overview",
 							"getting-started/installing-trumbo",
-							{
-								"group": "Other Models & Providers",
-								"pages": [
-									"getting-started/authorizing-with-trumbo",
-									"running-models-locally/overview",
-									{
-										"group": "Cloud Providers",
-										"pages": [
-											"provider-config/qwen",
-											"provider-config/anthropic",
-											{
-												"group": "AWS Bedrock",
-												"pages": [
-													"provider-config/aws-bedrock/api-key",
-													"provider-config/aws-bedrock/iam-credentials",
-													"provider-config/aws-bedrock/cli-profile"
-												]
-											},
-											"provider-config/deepseek",
-											"provider-config/google-gemini",
-											"provider-config/minimax",
-											"provider-config/openai",
-											"provider-config/openai-compatible",
-											"provider-config/openrouter",
-											"provider-config/zai",
-											"provider-config/other-30-plus-providers"
-										]
-									}
-								]
-							},
-							"getting-started/config"
+							"getting-started/authorizing-with-trumbo",
+							"getting-started/config",
+							"getting-started/trumbo-provider",
+							"getting-started/trumbopass"
 						]
 					},
 					{
 						"group": "Usage",
 						"pages": [
 							"usage/tui",
+							"usage/cli-overview",
+							"usage/ide",
+							"usage/kanban",
 							{
-								"group": "CLI",
+								"group": "CLI Reference & Samples",
 								"pages": [
-									"usage/cli-overview",
 									"cli/cli-reference",
-									{
-										"group": "Examples",
-										"pages": [
-											"cli/samples/github-issue-rca",
-											"cli/samples/github-integration",
-											"cli/samples/github-pr-review",
-											"cli/samples/model-orchestration",
-											"cli/samples/supply-chain-alerts"
-										]
-									}
+									"cli/scheduling",
+									"cli/connectors",
+									"cli/agent-teams",
+									"cli/samples/github-issue-rca",
+									"cli/samples/github-integration",
+									"cli/samples/github-pr-review",
+									"cli/samples/model-orchestration",
+									"cli/samples/supply-chain-alerts"
 								]
 							}
 						]
 					},
 					{
-						"group": "Configurations",
+						"group": "Model Providers",
+						"pages": [
+							"running-models-locally/overview",
+							{
+								"group": "Cloud Providers",
+								"pages": [
+									"provider-config/qwen",
+									"provider-config/anthropic",
+									{
+										"group": "AWS Bedrock",
+										"pages": [
+											"provider-config/aws-bedrock/api-key",
+											"provider-config/aws-bedrock/iam-credentials",
+											"provider-config/aws-bedrock/cli-profile"
+										]
+									},
+									"provider-config/deepseek",
+									"provider-config/google-gemini",
+									"provider-config/minimax",
+									"provider-config/openai",
+									"provider-config/openai-compatible",
+									"provider-config/openrouter",
+									"provider-config/zai",
+									"provider-config/other-30-plus-providers"
+								]
+							}
+						]
+					},
+					{
+						"group": "Configuration",
 						"pages": [
 							"tools-reference/all-trumbo-tools",
 							"customization/trumbo-rules",
@@ -130,8 +135,6 @@
 							"customization/plugins",
 							"mcp/mcp-overview",
 							"customization/hooks",
-							"cli/scheduling",
-							"cli/connectors",
 							"customization/trumboignore"
 						]
 					},
@@ -142,8 +145,19 @@
 							"core-workflows/working-with-files",
 							"core-workflows/using-commands",
 							"core-workflows/checkpoints",
-							"cli/agent-teams",
-							"features/subagents"
+							"core-workflows/task-management",
+							"features/subagents",
+							"features/auto-approve",
+							"features/auto-compact",
+							"features/jupyter-notebooks",
+							"features/multiroot-workspace"
+						]
+					},
+					{
+						"group": "Kanban",
+						"pages": [
+							"kanban/core-workflow",
+							"kanban/remote-access"
 						]
 					},
 					{
@@ -157,12 +171,62 @@
 				]
 			},
 			{
+				"tab": "Platform",
+				"icon": "cloud",
+				"groups": [
+					{
+						"group": "Start",
+						"pages": [
+							"platform/overview",
+							"platform/authentication",
+							"platform/billing-and-limits"
+						]
+					},
+					{
+						"group": "Products",
+						"pages": [
+							"platform/cloud-agents",
+							"platform/sandbox",
+							"platform/browser-run",
+							"platform/security",
+							"platform/knowledge",
+							"platform/automations"
+						]
+					},
+					{
+						"group": "APIs",
+						"pages": [
+							"platform/chat-completions",
+							"platform/mcp"
+						]
+					}
+				]
+			},
+			{
+				"tab": "API",
+				"icon": "code",
+				"groups": [
+					{
+						"group": "Quartz API",
+						"pages": [
+							"api/overview",
+							"api/getting-started",
+							"api/authentication",
+							"api/models",
+							"api/chat-completions",
+							"api/errors",
+							"api/sdk-examples"
+						]
+					}
+				]
+			},
+			{
 				"tab": "SDK",
 				"icon": "cube",
 				"groups": [
 					{
 						"group": "Start",
-						"pages": ["engine/overview", "engine/examples"]
+						"pages": ["sdk/overview", "sdk/examples"]
 					},
 					{
 						"group": "Concepts",
@@ -170,47 +234,50 @@
 							{
 								"group": "Plugins",
 								"pages": [
-									"engine/plugins",
-									"engine/plugin-install",
-									"engine/guides/writing-plugins",
-									"engine/plugin-examples"
+									"sdk/plugins",
+									"sdk/plugin-install",
+									"sdk/guides/writing-plugins",
+									"sdk/plugin-examples"
 								]
 							},
 							{
 								"group": "Tools",
-								"pages": ["engine/tools", "engine/guides/creating-custom-tools"]
+								"pages": [
+									"sdk/tools",
+									"sdk/guides/creating-custom-tools"
+								]
 							},
-							"engine/guides/scheduled-agents",
-							"engine/events",
-							"engine/model-providers",
-							"engine/trumbocore"
+							"sdk/guides/scheduled-agents",
+							"sdk/events",
+							"sdk/model-providers",
+							"sdk/trumbocore"
 						]
 					},
 					{
 						"group": "Architecture",
 						"pages": [
-							"engine/architecture/overview",
-							"engine/architecture/hub-spoke"
+							"sdk/architecture/overview",
+							"sdk/architecture/hub-spoke"
 						]
 					},
 					{
 						"group": "Guides",
 						"pages": [
-							"engine/guides/building-an-agent",
-							"engine/guides/permission-handling",
-							"engine/guides/multi-agent-teams",
-							"engine/guides/going-to-production"
+							"sdk/guides/building-an-agent",
+							"sdk/guides/permission-handling",
+							"sdk/guides/multi-agent-teams",
+							"sdk/guides/going-to-production"
 						]
 					},
 					{
 						"group": "API Reference",
 						"pages": [
-							"engine/reference/trumbo-core",
-							"engine/reference/agent",
-							"engine/reference/gateway",
-							"engine/reference/tools-api",
-							"engine/reference/events",
-							"engine/reference/types"
+							"sdk/reference/trumbo-core",
+							"sdk/reference/agent",
+							"sdk/reference/gateway",
+							"sdk/reference/tools-api",
+							"sdk/reference/events",
+							"sdk/reference/types"
 						]
 					}
 				]
@@ -219,760 +286,83 @@
 	},
 	"footer": {
 		"socials": {
-			"github": "https://github.com/xedro98/trembo",
-			"discord": "https://github.com/xedro98/trembo/discussions"
+			"github": "https://github.com/xedro98/Trumbo",
+			"x": "https://x.com/trumbodev"
 		}
 	},
 	"anchors": [
 		{
-			"name": "Overview",
+			"name": "Home",
 			"icon": "house",
-			"url": "trumbo-overview"
+			"url": "index"
+		},
+		{
+			"name": "Platform",
+			"icon": "cloud",
+			"url": "platform/overview"
+		},
+		{
+			"name": "API",
+			"icon": "code",
+			"url": "api/overview"
+		},
+		{
+			"name": "SDK",
+			"icon": "cube",
+			"url": "sdk/overview"
 		}
 	],
 	"redirects": [
-		{
-			"source": "/enterprise-solutions/configuration/infrastructure-configuration/control-other-trumbo-features/mcp-marketplace",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/usage/cli",
-			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/getting-started/installing-trumbo-jetbrains",
-			"destination": "/getting-started/installing-trumbo"
-		},
-		{
-			"source": "/getting-started/for-new-coders",
-			"destination": "/getting-started/installing-trumbo"
-		},
-		{
-			"source": "/getting-started/overview",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/getting-started/your-first-project",
-			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/introduction",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/introduction/welcome",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/introduction/overview",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/getting-started/model-selection-guide",
-			"destination": "/getting-started/authorizing-with-trumbo"
-		},
-		{
-			"source": "/provider-config/ollama",
-			"destination": "/running-models-locally/overview#runtime-options"
-		},
-		{
-			"source": "/running-models-locally/read-me-first",
-			"destination": "/running-models-locally/overview"
-		},
-		{
-			"source": "/running-models-locally/ollama",
-			"destination": "/running-models-locally/overview#runtime-options"
-		},
-		{
-			"source": "/running-models-locally/lm-studio",
-			"destination": "/running-models-locally/overview#runtime-options"
-		},
-		{
-			"source": "/getting-started/understanding-context-management",
-			"destination": "/getting-started/authorizing-with-trumbo"
-		},
-		{
-			"source": "/best-practices/understanding-context-management",
-			"destination": "/getting-started/authorizing-with-trumbo"
-		},
-		{
-			"source": "/prompting/understanding-context-management",
-			"destination": "/getting-started/authorizing-with-trumbo"
-		},
-		{
-			"source": "/model-config/context-windows",
-			"destination": "/getting-started/authorizing-with-trumbo"
-		},
-		{
-			"source": "/core-features/model-selection-guide",
-			"destination": "/getting-started/authorizing-with-trumbo"
-		},
-		{
-			"source": "/prompting/prompt-engineering-guide",
-			"destination": "/customization/trumbo-rules"
-		},
-		{
-			"source": "/prompting/trumbo-memory-bank",
-			"destination": "/best-practices/memory-bank"
-		},
-		{
-			"source": "/customization/memory-bank",
-			"destination": "/best-practices/memory-bank"
-		},
-		{
-			"source": "/customization/overview",
-			"destination": "/getting-started/config"
-		},
-		{
-			"source": "/customization/focus-chain",
-			"destination": "/core-workflows/using-commands#deep-planning"
-		},
-		{
-			"source": "/features/deep-planning",
-			"destination": "/core-workflows/using-commands#deep-planning"
-		},
-		{
-			"source": "/customization/auto-approve",
-			"destination": "/core-workflows/plan-and-act"
-		},
-		{
-			"source": "/customization/auto-compact",
-			"destination": "/features/auto-compact"
-		},
-		{
-			"source": "/getting-started/your-first-task",
-			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/features/hooks/real-world-examples",
-			"destination": "/customization/hooks"
-		},
-		{
-			"source": "/features/hooks/index",
-			"destination": "/customization/hooks"
-		},
-		{
-			"source": "/features/hooks/hook-reference",
-			"destination": "/customization/hooks"
-		},
-		{
-			"source": "/features/hooks/samples",
-			"destination": "/customization/hooks"
-		},
-		{
-			"source": "/features/plan-and-act",
-			"destination": "/core-workflows/plan-and-act"
-		},
-		{
-			"source": "/features/checkpoints",
-			"destination": "/core-workflows/checkpoints"
-		},
-		{
-			"source": "/features/tasks/understanding-tasks",
-			"destination": "/core-workflows/task-management"
-		},
-		{
-			"source": "/features/tasks/task-management",
-			"destination": "/core-workflows/task-management"
-		},
-		{
-			"source": "/features/at-mentions/overview",
-			"destination": "/core-workflows/working-with-files"
-		},
-		{
-			"source": "/features/at-mentions/file-mentions",
-			"destination": "/core-workflows/working-with-files"
-		},
-		{
-			"source": "/features/at-mentions/folder-mentions",
-			"destination": "/core-workflows/working-with-files"
-		},
-		{
-			"source": "/features/at-mentions/terminal-mentions",
-			"destination": "/core-workflows/working-with-files"
-		},
-		{
-			"source": "/features/at-mentions/problem-mentions",
-			"destination": "/core-workflows/working-with-files"
-		},
-		{
-			"source": "/features/at-mentions/git-mentions",
-			"destination": "/core-workflows/working-with-files"
-		},
-		{
-			"source": "/features/at-mentions/url-mentions",
-			"destination": "/core-workflows/working-with-files"
-		},
-		{
-			"source": "/features/drag-and-drop",
-			"destination": "/core-workflows/working-with-files"
-		},
-		{
-			"source": "/features/yolo-mode",
-			"destination": "/core-workflows/plan-and-act"
-		},
-		{
-			"source": "/features/trumbo-rules",
-			"destination": "/customization/trumbo-rules"
-		},
-		{
-			"source": "/features/trumbo-rules/overview",
-			"destination": "/customization/trumbo-rules"
-		},
-		{
-			"source": "/features/trumbo-rules/conditional-rules",
-			"destination": "/customization/trumbo-rules"
-		},
-		{
-			"source": "/features/commands-and-shortcuts/overview",
-			"destination": "/core-workflows/using-commands"
-		},
-		{
-			"source": "/features/commands-and-shortcuts/code-commands",
-			"destination": "/core-workflows/using-commands"
-		},
-		{
-			"source": "/features/commands-and-shortcuts/terminal-integration",
-			"destination": "/core-workflows/using-commands"
-		},
-		{
-			"source": "/features/commands-and-shortcuts/git-integration",
-			"destination": "/core-workflows/using-commands"
-		},
-		{
-			"source": "/features/commands-and-shortcuts/keyboard-shortcuts",
-			"destination": "/core-workflows/using-commands"
-		},
-		{
-			"source": "/features/slash-commands/new-task",
-			"destination": "/core-workflows/using-commands"
-		},
-		{
-			"source": "/exploring-trumbos-tools/trumbo-tools-guide",
-			"destination": "/tools-reference/all-trumbo-tools"
-		},
-		{
-			"source": "/exploring-trumbos-tools/new-task-tool",
-			"destination": "/tools-reference/all-trumbo-tools"
-		},
-		{
-			"source": "/exploring-trumbos-tools/remote-browser-support",
-			"destination": "/tools-reference/all-trumbo-tools"
-		},
-		{
-			"source": "/mcp/adding-mcp-servers-from-github",
-			"destination": "/mcp/mcp-overview"
-		},
-		{
-			"source": "/mcp/configuring-mcp-servers",
-			"destination": "/mcp/mcp-overview"
-		},
-		{
-			"source": "/more-info/telemetry",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/enterprise-solutions/configure-AWS-Bedrock-Admin",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/enterprise-solutions/configure-AWS-Bedrock-Member",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/enterprise-solutions/configure-workOS-authkit",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/enterprise-solutions/Onboarding your Organization",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/enterprise-solutions/team-management/overview",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/enterprise-solutions/team-management/roles-and-permissions",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/features/customization/opening-trumbo-in-sidebar",
-			"destination": "/getting-started/installing-trumbo"
-		},
-		{
-			"source": "/prompting/prompt-engineering-guide/trumboignore-file-guide",
-			"destination": "/customization/trumboignore"
-		},
-		{
-			"source": "/getting-started/selecting-your-model",
-			"destination": "/getting-started/authorizing-with-trumbo"
-		},
-		{
-			"source": "/model-config/model-comparison",
-			"destination": "/getting-started/authorizing-with-trumbo"
-		},
-		{
-			"source": "/troubleshooting/terminal-integration-guide",
-			"destination": "/core-workflows/using-commands"
-		},
-		{
-			"source": "/features/slash-commands/deep-planning",
-			"destination": "/core-workflows/using-commands#deep-planning"
-		},
-		{
-			"source": "/features/slash-commands/smol",
-			"destination": "/core-workflows/using-commands#smol"
-		},
-		{
-			"source": "/features/slash-commands/new-rule",
-			"destination": "/core-workflows/using-commands#newrule"
-		},
-		{
-			"source": "/features/memory-bank",
-			"destination": "/best-practices/memory-bank"
-		},
-		{
-			"source": "/features/focus-chain",
-			"destination": "/core-workflows/using-commands#deep-planning"
-		},
-		{
-			"source": "/features/skills",
-			"destination": "/customization/skills"
-		},
-		{
-			"source": "/api/reference",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/cli/overview",
-			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/features/background-edit",
-			"destination": "/core-workflows/plan-and-act"
-		},
-		{
-			"source": "/features/worktrees",
-			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/cli/getting-started",
-			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/cli/installation",
-			"destination": "/getting-started/installing-trumbo"
-		},
-		{
-			"source": "/cli/three-core-flows",
-			"destination": "/usage/cli-overview#headless-mode"
-		},
-		{
-			"source": "/trumbo-cli/getting-started",
-			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/trumbo-cli/installation",
-			"destination": "/getting-started/installing-trumbo"
-		},
-		{
-			"source": "/trumbo-cli/three-core-flows",
-			"destination": "/usage/cli-overview#headless-mode"
-		},
-		{
-			"source": "/trumbo-cli/connectors",
-			"destination": "/cli/connectors"
-		},
-		{
-			"source": "/trumbo-cli/scheduling",
-			"destination": "/cli/scheduling"
-		},
-		{
-			"source": "/trumbo-cli/mcp-servers",
-			"destination": "/mcp/mcp-overview"
-		},
-		{
-			"source": "/cli/mcp-servers",
-			"destination": "/mcp/mcp-overview"
-		},
-		{
-			"source": "/trumbo-cli/agent-teams",
-			"destination": "/cli/agent-teams"
-		},
-		{
-			"source": "/trumbo-cli/cli-reference",
-			"destination": "/cli/cli-reference"
-		},
-		{
-			"source": "/trumbo-cli/configuration",
-			"destination": "/getting-started/config"
-		},
-		{
-			"source": "/provider-config/claude-code",
-			"destination": "/provider-config/anthropic"
-		},
-		{
-			"source": "/provider-config/openai-codex",
-			"destination": "/provider-config/openai"
-		},
-		{
-			"source": "/cli/configuration",
-			"destination": "/getting-started/config"
-		},
-		{
-			"source": "/trumbo-cli/acp-editor-integrations",
-			"destination": "/cli/acp-editor-integrations"
-		},
-		{
-			"source": "/trumbo-cli/samples/github-issue-rca",
-			"destination": "/cli/samples/github-issue-rca"
-		},
-		{
-			"source": "/trumbo-cli/samples/github-integration",
-			"destination": "/cli/samples/github-integration"
-		},
-		{
-			"source": "/trumbo-cli/samples/github-pr-review",
-			"destination": "/cli/samples/github-pr-review"
-		},
-		{
-			"source": "/trumbo-cli/samples/model-orchestration",
-			"destination": "/cli/samples/model-orchestration"
-		},
-		{
-			"source": "/trumbo-engine/overview",
-			"destination": "/engine/overview"
-		},
-		{
-			"source": "/trumbo-engine/quickstart",
-			"destination": "/engine/guides/building-an-agent"
-		},
-		{
-			"source": "/engine/quickstart",
-			"destination": "/engine/guides/building-an-agent"
-		},
-		{
-			"source": "/trumbo-engine/examples",
-			"destination": "/engine/guides/building-an-agent"
-		},
-		{
-			"source": "/trumbo-engine/agents",
-			"destination": "/engine/trumbocore"
-		},
-		{
-			"source": "/trumbo-engine/sessions",
-			"destination": "/engine/trumbocore"
-		},
-		{
-			"source": "/trumbo-engine/tools",
-			"destination": "/engine/tools"
-		},
-		{
-			"source": "/trumbo-engine/streaming-and-events",
-			"destination": "/engine/events"
-		},
-		{
-			"source": "/trumbo-engine/plugins",
-			"destination": "/engine/plugins"
-		},
-		{
-			"source": "/trumbo-engine/hooks",
-			"destination": "/engine/plugins"
-		},
-		{
-			"source": "/trumbo-engine/model-providers",
-			"destination": "/engine/model-providers"
-		},
-		{
-			"source": "/trumbo-engine/guides/building-an-agent",
-			"destination": "/engine/guides/building-an-agent"
-		},
-		{
-			"source": "/trumbo-engine/guides/creating-custom-tools",
-			"destination": "/engine/guides/creating-custom-tools"
-		},
-		{
-			"source": "/trumbo-engine/guides/writing-plugins",
-			"destination": "/engine/guides/writing-plugins"
-		},
-		{
-			"source": "/trumbo-engine/guides/permission-handling",
-			"destination": "/engine/guides/permission-handling"
-		},
-		{
-			"source": "/trumbo-engine/guides/scheduled-agents",
-			"destination": "/engine/guides/scheduled-agents"
-		},
-		{
-			"source": "/trumbo-engine/guides/multi-agent-teams",
-			"destination": "/engine/guides/multi-agent-teams"
-		},
-		{
-			"source": "/trumbo-engine/guides/connectors",
-			"destination": "/cli/connectors"
-		},
-		{
-			"source": "/engine/guides/connectors",
-			"destination": "/cli/connectors"
-		},
-		{
-			"source": "/trumbo-engine/guides/going-to-production",
-			"destination": "/engine/guides/going-to-production"
-		},
-		{
-			"source": "/trumbo-engine/architecture/overview",
-			"destination": "/engine/architecture/overview"
-		},
-		{
-			"source": "/trumbo-engine/architecture/hub-spoke",
-			"destination": "/engine/architecture/hub-spoke"
-		},
-		{
-			"source": "/trumbo-engine/architecture/packages",
-			"destination": "/engine/architecture/overview"
-		},
-		{
-			"source": "/trumbo-engine/reference/trumbo-core",
-			"destination": "/engine/reference/trumbo-core"
-		},
-		{
-			"source": "/trumbo-engine/reference/agent",
-			"destination": "/engine/reference/agent"
-		},
-		{
-			"source": "/trumbo-engine/reference/gateway",
-			"destination": "/engine/reference/gateway"
-		},
-		{
-			"source": "/trumbo-engine/reference/tools-api",
-			"destination": "/engine/reference/tools-api"
-		},
-		{
-			"source": "/trumbo-engine/reference/events",
-			"destination": "/engine/reference/events"
-		},
-		{
-			"source": "/trumbo-engine/reference/types",
-			"destination": "/engine/reference/types"
-		},
-		{
-			"source": "/trumbo-engine/extensions",
-			"destination": "/engine/plugins"
-		},
-		{
-			"source": "/engine/guides/writing-extensions",
-			"destination": "/engine/guides/writing-plugins"
-		},
-		{
-			"source": "/trumbo-engine/guides/writing-extensions",
-			"destination": "/engine/guides/writing-plugins"
-		},
-		{
-			"source": "/mcp/mcp-marketplace",
-			"destination": "/mcp/mcp-overview"
-		},
-		{
-			"source": "/mcp/adding-and-configuring-servers",
-			"destination": "/mcp/mcp-overview"
-		},
-		{
-			"source": "/mcp/mcp-server-development-protocol",
-			"destination": "/mcp/mcp-overview"
-		},
-		{
-			"source": "/mcp/connecting-to-a-remote-server",
-			"destination": "/mcp/mcp-overview"
-		},
-		{
-			"source": "/mcp/mcp-transport-mechanisms",
-			"destination": "/mcp/mcp-overview"
-		},
-		{
-			"source": "/engine/agents",
-			"destination": "/engine/trumbocore"
-		},
-		{
-			"source": "/engine/sessions",
-			"destination": "/engine/trumbocore"
-		},
-		{
-			"source": "/engine/streaming-and-events",
-			"destination": "/engine/events"
-		},
-		{
-			"source": "/engine/hooks",
-			"destination": "/engine/plugins"
-		},
-		{
-			"source": "/engine/extensions",
-			"destination": "/engine/plugins"
-		},
-		{
-			"source": "/engine/examples",
-			"destination": "/engine/guides/building-an-agent"
-		},
-		{
-			"source": "/trumbo-cli/interactive-mode",
-			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/trumbo-cli/overview",
-			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/trumbo-cli/samples/overview",
-			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/trumbo-cli/samples/worktree-workflows",
-			"destination": "/usage/cli-overview"
-		},
-		{
-			"source": "/contributing/doc-templates",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/contributing/documentation-guide",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/customization/workflows",
-			"destination": "/customization/trumbo-rules"
-		},
-		{
-			"source": "/features/web-tools",
-			"destination": "/tools-reference/all-trumbo-tools"
-		},
-		{
-			"source": "/getting-started/quick-start",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/getting-started/what-is-trumbo",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/home",
-			"destination": "/trumbo-overview"
-		},
-		{
-			"source": "/provider-config/aihubmix",
-			"destination": "/provider-config/other-30-plus-providers#aihubmix"
-		},
-		{
-			"source": "/provider-config/asksage",
-			"destination": "/provider-config/other-30-plus-providers#asksage"
-		},
-		{
-			"source": "/provider-config/baseten",
-			"destination": "/provider-config/other-30-plus-providers#baseten"
-		},
-		{
-			"source": "/provider-config/cerebras",
-			"destination": "/provider-config/other-30-plus-providers#cerebras"
-		},
-		{
-			"source": "/provider-config/dify",
-			"destination": "/provider-config/other-30-plus-providers#difyai"
-		},
-		{
-			"source": "/provider-config/doubao",
-			"destination": "/provider-config/other-30-plus-providers#doubao"
-		},
-		{
-			"source": "/provider-config/fireworks",
-			"destination": "/provider-config/other-30-plus-providers#fireworks-ai"
-		},
-		{
-			"source": "/provider-config/gcp-vertex-ai",
-			"destination": "/provider-config/other-30-plus-providers#gcp-vertex-ai"
-		},
-		{
-			"source": "/provider-config/groq",
-			"destination": "/provider-config/other-30-plus-providers#groq"
-		},
-		{
-			"source": "/provider-config/hicap",
-			"destination": "/provider-config/other-30-plus-providers#hicap"
-		},
-		{
-			"source": "/provider-config/huawei-cloud-maas",
-			"destination": "/provider-config/other-30-plus-providers#huawei-cloud-maas"
-		},
-		{
-			"source": "/provider-config/huggingface",
-			"destination": "/provider-config/other-30-plus-providers#hugging-face"
-		},
-		{
-			"source": "/provider-config/litellm-and-trumbo-using-codestral",
-			"destination": "/provider-config/openai-compatible"
-		},
-		{
-			"source": "/provider-config/mistral-ai",
-			"destination": "/provider-config/other-30-plus-providers#mistral"
-		},
-		{
-			"source": "/provider-config/moonshot",
-			"destination": "/provider-config/other-30-plus-providers#moonshot"
-		},
-		{
-			"source": "/provider-config/nebius",
-			"destination": "/provider-config/other-30-plus-providers#nebius-ai-studio"
-		},
-		{
-			"source": "/provider-config/nousresearch",
-			"destination": "/provider-config/other-30-plus-providers#nous-research"
-		},
-		{
-			"source": "/provider-config/oracle-code-assist",
-			"destination": "/provider-config/other-30-plus-providers#oracle-code-assist"
-		},
-		{
-			"source": "/provider-config/qwen-code",
-			"destination": "/provider-config/other-30-plus-providers#qwen-code"
-		},
-		{
-			"source": "/provider-config/requesty",
-			"destination": "/provider-config/other-30-plus-providers#requesty"
-		},
-		{
-			"source": "/provider-config/sambanova",
-			"destination": "/provider-config/other-30-plus-providers#sambanova"
-		},
-		{
-			"source": "/provider-config/sap-aicore",
-			"destination": "/provider-config/other-30-plus-providers#sap-ai-core"
-		},
-		{
-			"source": "/provider-config/together",
-			"destination": "/provider-config/other-30-plus-providers#together"
-		},
-		{
-			"source": "/provider-config/vercel-ai-gateway",
-			"destination": "/provider-config/other-30-plus-providers#vercel-ai-gateway"
-		},
-		{
-			"source": "/provider-config/vscode-language-model-api",
-			"destination": "/provider-config/other-30-plus-providers#vs-code-language-model-api"
-		},
-		{
-			"source": "/provider-config/xai-grok",
-			"destination": "/provider-config/other-30-plus-providers#xai-grok"
-		},
-		{
-			"source": "/tools-reference/browser-automation",
-			"destination": "/tools-reference/all-trumbo-tools"
-		},
-		{
-			"source": "/troubleshooting/task-history-recovery",
-			"destination": "/core-workflows/task-management"
-		},
-		{
-			"source": "/troubleshooting/terminal-quick-fixes",
-			"destination": "/core-workflows/using-commands"
-		}
+		{ "source": "/engine/overview", "destination": "/sdk/overview" },
+		{ "source": "/engine/examples", "destination": "/sdk/examples" },
+		{ "source": "/engine/plugins", "destination": "/sdk/plugins" },
+		{ "source": "/engine/plugin-install", "destination": "/sdk/plugin-install" },
+		{ "source": "/engine/plugin-examples", "destination": "/sdk/plugin-examples" },
+		{ "source": "/engine/tools", "destination": "/sdk/tools" },
+		{ "source": "/engine/events", "destination": "/sdk/events" },
+		{ "source": "/engine/model-providers", "destination": "/sdk/model-providers" },
+		{ "source": "/engine/trumbocore", "destination": "/sdk/trumbocore" },
+		{ "source": "/engine/architecture/overview", "destination": "/sdk/architecture/overview" },
+		{ "source": "/engine/architecture/hub-spoke", "destination": "/sdk/architecture/hub-spoke" },
+		{ "source": "/engine/guides/building-an-agent", "destination": "/sdk/guides/building-an-agent" },
+		{ "source": "/engine/guides/creating-custom-tools", "destination": "/sdk/guides/creating-custom-tools" },
+		{ "source": "/engine/guides/writing-plugins", "destination": "/sdk/guides/writing-plugins" },
+		{ "source": "/engine/guides/permission-handling", "destination": "/sdk/guides/permission-handling" },
+		{ "source": "/engine/guides/scheduled-agents", "destination": "/sdk/guides/scheduled-agents" },
+		{ "source": "/engine/guides/multi-agent-teams", "destination": "/sdk/guides/multi-agent-teams" },
+		{ "source": "/engine/guides/going-to-production", "destination": "/sdk/guides/going-to-production" },
+		{ "source": "/engine/reference/trumbo-core", "destination": "/sdk/reference/trumbo-core" },
+		{ "source": "/engine/reference/agent", "destination": "/sdk/reference/agent" },
+		{ "source": "/engine/reference/gateway", "destination": "/sdk/reference/gateway" },
+		{ "source": "/engine/reference/tools-api", "destination": "/sdk/reference/tools-api" },
+		{ "source": "/engine/reference/events", "destination": "/sdk/reference/events" },
+		{ "source": "/engine/reference/types", "destination": "/sdk/reference/types" },
+		{ "source": "/usage/cli", "destination": "/usage/cli-overview" },
+		{ "source": "/cli/overview", "destination": "/usage/cli-overview" },
+		{ "source": "/introduction", "destination": "/trumbo-overview" },
+		{ "source": "/home", "destination": "/trumbo-overview" },
+		{ "source": "/getting-started/overview", "destination": "/trumbo-overview" },
+		{ "source": "/getting-started/quick-start", "destination": "/trumbo-overview" },
+		{ "source": "/api/reference", "destination": "/api/overview" },
+		{ "source": "/platform/api", "destination": "/platform/chat-completions" },
+		{ "source": "/mcp/mcp-marketplace", "destination": "/mcp/mcp-overview" },
+		{ "source": "/customization/memory-bank", "destination": "/best-practices/memory-bank" },
+		{ "source": "/features/plan-and-act", "destination": "/core-workflows/plan-and-act" },
+		{ "source": "/features/checkpoints", "destination": "/core-workflows/checkpoints" },
+		{ "source": "/features/skills", "destination": "/customization/skills" },
+		{ "source": "/trumbo-cli/overview", "destination": "/usage/cli-overview" },
+		{ "source": "/trumbo-cli/cli-reference", "destination": "/cli/cli-reference" },
+		{ "source": "/trumbo-engine/overview", "destination": "/sdk/overview" },
+		{ "source": "/provider-config/claude-code", "destination": "/provider-config/anthropic" },
+		{ "source": "/provider-config/openai-codex", "destination": "/provider-config/openai" },
+		{ "source": "/provider-config/ollama", "destination": "/running-models-locally/overview" }
 	],
 	"search": {
 		"prompt": "Search Trumbo documentation..."
+	},
+	"seo": {
+		"metatags": {
+			"canonical": "https://docs.trumbo.dev"
+		}
 	}
 }

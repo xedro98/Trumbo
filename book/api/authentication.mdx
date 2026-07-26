@@ -1,117 +1,111 @@
 ---
 title: "Authentication"
 sidebarTitle: "Authentication"
-description: "How to authenticate with the Trumbo API using API keys or account tokens."
+description: "How to authenticate with the Trumbo API using Bearer tokens, scopes, org headers, and device auth."
 ---
-```text
-████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
-╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
-   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
-   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
-   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
-   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
-```
 
+# Authentication
 
-Every Trumbo API call must carry a Bearer token in the `Authorization` header. This page covers the two token types, how to manage them, and how to keep them safe.
+Every Trumbo API call must carry a Bearer token in the `Authorization` header. Dashboard sessions use cookies; CLI and VS Code typically use device-code OAuth.
 
-## Authentication Methods
-
-Two token types are accepted:
-
-| Method | Use case | How to get it |
-|--------|----------|---------------|
-| **API key** | Direct API calls, scripts, CI/CD | Create at [app.example.invalid](http://0.0.0.0:0) Settings > API Keys |
-| **Account auth token** | Trumbo extension and CLI | Generated automatically when you sign in |
-
-Both share the same header shape:
-
-```bash
-Authorization: Bearer YOUR_TOKEN
-```
-
-## API Keys
-
-API keys are the recommended credential for programmatic access.
-
-### Creating a Key
+## API tokens
 
 <Steps>
-  <Step title="Sign in">
-    Go to [app.example.invalid](http://0.0.0.0:0) and sign in.
+  <Step title="Open Tokens">
+    Go to [platform.trumbo.dev/tokens](https://platform.trumbo.dev/tokens).
   </Step>
-  <Step title="Open API Keys">
-    Navigate to **Settings** > **API Keys**.
+  <Step title="Choose scopes">
+    Select scopes for the products you need: agents, sandbox, browser, security, knowledge, workflows, and chat completions.
   </Step>
   <Step title="Create and copy">
-    Create a new key and copy it immediately. It cannot be retrieved again after you leave the page.
+    Create the token and copy it immediately. It is shown only once and looks like `trumbo_...`.
   </Step>
 </Steps>
 
-### Deleting a Key
+Default scopes for new tokens:
 
-Revoke a key at any time from the same Settings → API Keys page. Deleted keys stop working immediately.
+- `browser:run`
+- `sandbox:run`
+- `agents:run`
 
-You can also rotate keys programmatically through the [Enterprise API](/enterprise-solutions/api-reference#api-keys):
+Send the token on every request:
 
 ```bash
-# List your keys
-curl http://0.0.0.0:0/api/v1/api-keys \
-  -H "Authorization: Bearer YOUR_TOKEN"
-
-# Delete a key
-curl -X DELETE http://0.0.0.0:0/api/v1/api-keys/KEY_ID \
-  -H "Authorization: Bearer YOUR_TOKEN"
+curl https://api.trumbo.dev/v1/models \
+  -H "Authorization: Bearer $TRUMBO_API_TOKEN"
 ```
 
-## Account Auth Tokens
-
-When you sign in to the Trumbo extension (VS Code, JetBrains) or the CLI, an account auth token is issued and refreshed for you automatically. You never need to handle these tokens by hand.
-
-The Trumbo CLI picks up these tokens when you authenticate with:
+Product REST example:
 
 ```bash
-# Interactive sign-in
-trumbo auth
+curl https://api.trumbo.dev/api/v1/agents \
+  -H "Authorization: Bearer $TRUMBO_API_TOKEN"
+```
 
-# Or quick setup with an API key
-trumbo auth -p trumbo -k "YOUR_API_KEY" -m anthropic/claude-sonnet-4-6
+## Organization scope
+
+Team workspaces require an org header when the token or session can access multiple orgs:
+
+```bash
+-H "X-Org-Id: YOUR_ORG_ID"
+```
+
+The dashboard sets this automatically from the active workspace switcher. Find your org id in team settings on [platform.trumbo.dev](https://platform.trumbo.dev).
+
+## Device auth (CLI / VS Code)
+
+The CLI and VS Code extension use RFC 8628 device-code grant against `https://platform.trumbo.dev`. After you approve in the browser, they store a session and call the same APIs without manual token handling.
+
+```bash
+# Interactive sign-in (CLI)
+trumbo auth
 ```
 
 See the [CLI Reference](/cli/cli-reference#trumbo-auth) for every auth option.
 
-## Security Best Practices
+## MCP auth
 
-**Do:**
-- Store API keys in environment variables or a secrets manager
-- Use different keys for development and production
-- Rotate keys periodically
-- Delete keys you no longer use
+Connect an MCP client to:
 
-**Do not:**
-- Commit keys to version control
-- Share keys in chat or email
-- Embed keys in client-side code (browsers, mobile apps)
-- Log keys in application output
-
-### Using Environment Variables
-
-```bash
-# Set the key
-export TRUMBO_API_KEY="your_api_key_here"
-
-# Use it in requests
-curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
-  -H "Authorization: Bearer $TRUMBO_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model": "anthropic/claude-sonnet-4-6", "messages": [{"role": "user", "content": "Hello"}]}'
+```text
+https://api.trumbo.dev/v1/mcp
 ```
 
-### Using a .env File
+Use a device-auth session or a compatible Bearer token. Metered API keys meant only for chat or browser REST may be rejected by MCP; prefer a logged-in CLI session or an agents-scoped token as documented for your client. See [Hosted MCP](/platform/mcp).
+
+## Security best practices
+
+**Do:**
+
+- Store tokens in environment variables or a secrets manager
+- Use different tokens for development and production
+- Prefer least-privilege scopes
+- Rotate tokens if they leak
+- Delete tokens you no longer use
+
+**Do not:**
+
+- Commit tokens to version control
+- Share tokens in chat or email
+- Embed tokens in client-side code (browsers, mobile apps)
+- Log tokens in application output
+
+### Using environment variables
+
+```bash
+export TRUMBO_API_TOKEN="$TRUMBO_API_TOKEN_here"
+
+curl -X POST https://api.trumbo.dev/v1/chat/completions \
+  -H "Authorization: Bearer $TRUMBO_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "quartz-1.0", "messages": [{"role": "user", "content": "Hello"}]}'
+```
+
+### Using a .env file
 
 ```bash
 # .env (add to .gitignore)
-TRUMBO_API_KEY=your_api_key_here
+TRUMBO_API_TOKEN=$TRUMBO_API_TOKEN_here
 ```
 
 ```python
@@ -119,28 +113,28 @@ import os
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="http://0.0.0.0:0/api/v1",
-    api_key=os.environ["TRUMBO_API_KEY"],
+    base_url="https://api.trumbo.dev/v1",
+    api_key=os.environ["TRUMBO_API_TOKEN"],
 )
 ```
 
-## Custom Headers
-
-The Trumbo API accepts a few optional headers for tracking and identification:
-
-| Header | Description |
-|--------|-------------|
-| `HTTP-Referer` | Your application's URL. Helps with usage tracking. |
-| `X-Title` | Your application's name. Appears in usage logs. |
-| `X-Task-ID` | A unique task identifier. Used internally by the Trumbo extension. |
+<Tip>
+  All plan gates and rate limits are enforced server-side. Open-source clients cannot bypass subscription or quota checks.
+</Tip>
 
 ## Related
 
 <CardGroup cols={2}>
   <Card title="Getting Started" icon="rocket" href="/api/getting-started">
-    Create your first API key and make a request.
+    Create your first token and make a request.
   </Card>
-  <Card title="Enterprise API Keys" icon="building" href="/enterprise-solutions/api-reference#api-keys">
-    Manage API keys programmatically.
+  <Card title="Platform Authentication" icon="shield" href="/platform/authentication">
+    Full platform auth guide including Automations webhook rules.
+  </Card>
+  <Card title="Billing & Limits" icon="gauge" href="/platform/billing-and-limits">
+    Plans, usage windows, and API credits.
+  </Card>
+  <Card title="Hosted MCP" icon="plug" href="/platform/mcp">
+    MCP endpoint and tool groups.
   </Card>
 </CardGroup>

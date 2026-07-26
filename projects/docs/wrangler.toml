@@ -3,14 +3,8 @@ main = "src/index.ts"
 compatibility_date = "2026-03-24"
 compatibility_flags = ["nodejs_compat"]
 
-# Custom domain — wrangler auto-provisions DNS + SSL via Cloudflare Custom Domains.
-# Requires trumbo.dev to be in the same Cloudflare account (it is — trumbo-web + trumbo-marketing use it).
+# Custom domain: wrangler auto-provisions DNS + SSL for docs.trumbo.dev.
+# Traffic is reverse-proxied to Mintlify (trumbo.mintlify.app).
 routes = [
 	{ pattern = "docs.trumbo.dev", custom_domain = true },
 ]
-
-# Serve the VitePress static build (vitepress build → .vitepress/dist)
-[assets]
-directory = "./.vitepress/dist"
-binding = "ASSETS"
-not_found_handling = "single-page-application"

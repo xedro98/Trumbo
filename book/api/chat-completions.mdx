@@ -1,48 +1,50 @@
 ---
 title: "Chat Completions"
 sidebarTitle: "Chat Completions"
-description: "Full reference for the POST /chat/completions endpoint including all parameters, streaming, and tool calling."
+description: "OpenAI-compatible POST /chat/completions for Trumbo Quartz and catalog models at api.trumbo.dev/v1."
 ---
-```text
-████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
-╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
-   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
-   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
-   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
-   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
-```
 
+# Chat Completions
 
-The Chat Completions endpoint turns a conversation into a model response. It mirrors the [OpenAI Chat Completions](https://platform.openai.com/book/api-reference/chat/create) contract, so existing clients work with minimal changes.
+The Chat Completions endpoint turns a conversation into a model response. It mirrors the [OpenAI Chat Completions](https://platform.openai.com/docs/api-reference/chat/create) contract, so existing clients work with minimal changes.
+
+Base URL: `https://api.trumbo.dev/v1`
+
+For platform context, see [Platform Chat Completions](/platform/chat-completions).
 
 ## Endpoint
 
-```
-POST http://0.0.0.0:0/api/v1/chat/completions
+```text
+POST https://api.trumbo.dev/v1/chat/completions
 ```
 
-## Request Headers
+List models:
+
+```text
+GET https://api.trumbo.dev/v1/models
+```
+
+## Request headers
 
 | Header | Required | Description |
 |--------|----------|-------------|
-| `Authorization` | Yes | `Bearer YOUR_API_KEY` |
+| `Authorization` | Yes | `Bearer $TRUMBO_API_TOKEN` |
 | `Content-Type` | Yes | `application/json` |
-| `HTTP-Referer` | No | Your application URL (for usage tracking) |
-| `X-Title` | No | Your application name (for usage logs) |
+| `X-Org-Id` | No | Team org id when the token spans multiple workspaces |
 
-## Request Body
+## Request body
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| `model` | string | Yes | | Model ID in `provider/model` format. See [Models](/api/models). |
-| `messages` | array | Yes | | Conversation messages. Each has `role` (`system`, `user`, `assistant`) and `content`. |
-| `stream` | boolean | No | `true` | Return the response as a stream of Server-Sent Events. |
-| `tools` | array | No | | Tool/function definitions in OpenAI format. |
-| `temperature` | number | No | Model default | Sampling temperature (0.0 to 2.0). Lower values are more deterministic. |
+| `model` | string | Yes | | Model id, e.g. `quartz-1.0`. See [Models](/api/models). |
+| `messages` | array | Yes | | Conversation messages with `role` and `content`. |
+| `stream` | boolean | No | varies | Return SSE chunks when `true`. |
+| `tools` | array | No | | Tool definitions in OpenAI function-calling format. |
+| `temperature` | number | No | Model default | Sampling temperature (0.0 to 2.0). |
 
-### Message Format
+### Message format
 
-Each entry in the `messages` array looks like this:
+Each entry in `messages` looks like:
 
 ```json
 {
@@ -55,17 +57,16 @@ Each entry in the `messages` array looks like this:
 
 | Role | Purpose |
 |------|---------|
-| `system` | Sets the model's behavior and persona. Place first in the array. |
-| `user` | The human's input. |
-| `assistant` | Previous model responses (for multi-turn conversations). |
+| `system` | Sets behavior and persona. Place first when used. |
+| `user` | Human input. |
+| `assistant` | Prior model responses for multi-turn context. |
+| `tool` | Tool results after function calls. |
 
-### Multi-Turn Conversation
-
-Pass prior messages back to keep context across turns:
+### Multi-turn conversation
 
 ```json
 {
-  "model": "anthropic/claude-sonnet-4-6",
+  "model": "quartz-1.0",
   "messages": [
     {"role": "system", "content": "You are a helpful coding assistant."},
     {"role": "user", "content": "What is a closure in JavaScript?"},
@@ -75,64 +76,53 @@ Pass prior messages back to keep context across turns:
 }
 ```
 
-## Streaming Response
+## Create completion
 
-With `stream: true` (the default), the reply arrives as a sequence of [Server-Sent Events](https://developer.mozilla.org/en-US/book/Web/API/Server-Sent_Events):
-
+```bash
+curl -X POST https://api.trumbo.dev/v1/chat/completions \
+  -H "Authorization: Bearer $TRUMBO_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "quartz-1.0",
+    "messages": [
+      {"role": "user", "content": "Explain Automations in one sentence."}
+    ],
+    "stream": false
+  }'
 ```
-data: {"id":"gen-abc123","choices":[{"delta":{"role":"assistant"},"index":0}],"model":"anthropic/claude-sonnet-4-6"}
 
-data: {"id":"gen-abc123","choices":[{"delta":{"content":"The capital"},"index":0}],"model":"anthropic/claude-sonnet-4-6"}
+OpenAI-compatible clients should set `baseURL` / `base_url` to `https://api.trumbo.dev/v1`.
 
-data: {"id":"gen-abc123","choices":[{"delta":{"content":" of France"},"index":0}],"model":"anthropic/claude-sonnet-4-6"}
+## Streaming response
 
-data: {"id":"gen-abc123","choices":[{"delta":{"content":" is Paris."},"index":0,"finish_reason":"stop"}],"model":"anthropic/claude-sonnet-4-6","usage":{"prompt_tokens":14,"completion_tokens":8,"cost":0.000066}}
+With `"stream": true`, the reply arrives as [Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events):
+
+```text
+data: {"id":"gen-abc123","choices":[{"delta":{"role":"assistant"},"index":0}],"model":"quartz-1.0"}
+
+data: {"id":"gen-abc123","choices":[{"delta":{"content":"The capital"},"index":0}],"model":"quartz-1.0"}
+
+data: {"id":"gen-abc123","choices":[{"delta":{"content":" of France is Paris."},"index":0,"finish_reason":"stop"}],"model":"quartz-1.0","usage":{"prompt_tokens":14,"completion_tokens":8}}
 
 data: [DONE]
 ```
 
-Every `data:` line is a JSON chunk. The fields you'll rely on:
-
 | Field | Description |
 |-------|-------------|
-| `id` | Generation ID, consistent across all chunks |
-| `choices[0].delta.content` | The new text in this chunk |
-| `choices[0].delta.reasoning` | Reasoning/thinking content (for reasoning models) |
-| `choices[0].finish_reason` | `stop` when complete, `error` on failure |
-| `usage` | Token counts and cost (included in the final chunk) |
+| `id` | Generation id, consistent across chunks |
+| `choices[0].delta.content` | New text in this chunk |
+| `choices[0].delta.reasoning` | Reasoning content (reasoning models) |
+| `choices[0].finish_reason` | `stop` when complete, `tool_calls` for tools, `error` on failure |
+| `usage` | Token counts (often in the final chunk) |
 
-### Usage Object
+## Non-streaming response
 
-The final chunk carries token usage and cost:
-
-```json
-{
-  "usage": {
-    "prompt_tokens": 25,
-    "completion_tokens": 42,
-    "prompt_tokens_details": {
-      "cached_tokens": 0
-    },
-    "cost": 0.000315
-  }
-}
-```
-
-| Field | Description |
-|-------|-------------|
-| `prompt_tokens` | Total input tokens |
-| `completion_tokens` | Total output tokens |
-| `prompt_tokens_details.cached_tokens` | Tokens served from cache (reduces cost) |
-| `cost` | Total cost in USD for this request |
-
-## Non-Streaming Response
-
-With `stream: false`, you get a single JSON object back:
+With `"stream": false`:
 
 ```json
 {
   "id": "gen-abc123",
-  "model": "anthropic/claude-sonnet-4-6",
+  "model": "quartz-1.0",
   "choices": [
     {
       "message": {
@@ -150,13 +140,13 @@ With `stream: false`, you get a single JSON object back:
 }
 ```
 
-## Tool Calling
+## Tool calling
 
-Define tools the model can invoke using the OpenAI function-calling shape:
+Define tools the model can invoke:
 
 ```json
 {
-  "model": "anthropic/claude-sonnet-4-6",
+  "model": "quartz-1.0",
   "messages": [
     {"role": "user", "content": "What's the weather in San Francisco?"}
   ],
@@ -182,86 +172,35 @@ Define tools the model can invoke using the OpenAI function-calling shape:
 }
 ```
 
-When the model elects to call a tool, the response includes a `tool_calls` array:
+When the model calls a tool, the response includes `tool_calls`. Continue the conversation by returning a `tool` message with the result. See [SDK Examples](/api/sdk-examples#tool-calling-in-python).
 
-```json
-{
-  "choices": [
-    {
-      "message": {
-        "role": "assistant",
-        "tool_calls": [
-          {
-            "id": "call_abc123",
-            "type": "function",
-            "function": {
-              "name": "get_weather",
-              "arguments": "{\"location\": \"San Francisco, CA\"}"
-            }
-          }
-        ]
-      },
-      "finish_reason": "tool_calls"
-    }
-  ]
-}
-```
+## Reasoning models
 
-To continue the conversation after a tool call, return the tool result as a `tool` message:
-
-```json
-{
-  "messages": [
-    {"role": "user", "content": "What's the weather in San Francisco?"},
-    {"role": "assistant", "tool_calls": [{"id": "call_abc123", "type": "function", "function": {"name": "get_weather", "arguments": "{\"location\": \"San Francisco, CA\"}"}}]},
-    {"role": "tool", "tool_call_id": "call_abc123", "content": "{\"temperature\": 62, \"condition\": \"foggy\"}"},
-  ]
-}
-```
-
-## Reasoning Models
-
-Some models perform extended thinking before answering. With those models, the streaming delta can carry reasoning content alongside the main output:
+Quartz Hyper and other reasoning routes may stream thinking before the main answer:
 
 ```json
 {"choices":[{"delta":{"reasoning":"Let me think about this step by step..."}}]}
 ```
 
-Reasoning tokens are separate from the main content and surface in `delta.reasoning`. Some providers also return encrypted reasoning blocks via `delta.reasoning_details`, which you can echo back in later requests to preserve the reasoning trace.
+Reasoning tokens surface in `delta.reasoning`. Some responses also include `delta.reasoning_details` for encrypted reasoning blocks.
 
-<Note>
-  Not all models support reasoning. See [Models](/api/models) for which ones do.
-</Note>
+## Rate limits
 
-## Complete Example
-
-```bash
-curl -X POST http://0.0.0.0:0/api/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "anthropic/claude-sonnet-4-6",
-    "messages": [
-      {"role": "system", "content": "You are a concise assistant. Answer in one sentence."},
-      {"role": "user", "content": "Explain what an API is."}
-    ],
-    "stream": true
-  }'
-```
+Subscription chat completions count against the 5-hour, daily, and weekly windows on [platform.trumbo.dev/usage](https://platform.trumbo.dev/usage). Exceeding a window returns a rate-limit error until reset. See [Billing & Limits](/platform/billing-and-limits) and [Errors](/api/errors).
 
 ## Related
 
 <CardGroup cols={2}>
   <Card title="Models" icon="brain" href="/api/models">
-    Browse available models and their capabilities.
+    Quartz variants and catalog model ids.
   </Card>
   <Card title="Errors" icon="triangle-exclamation" href="/api/errors">
     Handle errors and implement retry logic.
   </Card>
   <Card title="SDK Examples" icon="code" href="/api/sdk-examples">
-    Use this endpoint from Python, Node.js, and more.
+    Python, Node.js, and curl snippets.
   </Card>
   <Card title="Authentication" icon="key" href="/api/authentication">
-    API key management and security practices.
+    Tokens, scopes, and org headers.
   </Card>
 </CardGroup>
