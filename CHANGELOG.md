@@ -15,6 +15,23 @@ All notable changes to the Trumbo monorepo are recorded here. This file was
 restarted from scratch for the Trumbo brand — earlier history is not carried
 over.
 
+## [v3.7.0 / v0.3.1 / SDK v0.0.62] — 2026-07-26
+
+Trumbo Agent Apps + Trumbo Database — Vercel-like app deployment and managed
+SQL/KV/R2/Vectorize on the Trumbo edge, sold as Agentic Cloud SKUs.
+
+### Added
+- **Agent Apps**: deploy static sites, Workers, and framework apps (Next/Remix/Astro/Vite) to `*.apps.trumbo.dev` with production + preview URLs, env vars/secrets, custom domains (Cloudflare for SaaS), per-app rate limits, deploy history + rollback, and a git webhook receiver that builds previews on push/PR.
+- **Trumbo Database** (DBaaS): provision SQL (D1), KV, R2, Vectorize, Analytics, Hyperdrive, and Edge Config instances; migrations, backups + restore, branches, and app bindings.
+- **MCP tools** (15): `app_*` and `database_*` agent tools on `api.trumbo.dev/v1/mcp`.
+- **Platform UI**: `/apps` and `/databases` pages (stats + list + create).
+- **CLI**: `trumbo apps` and `trumbo db` command groups.
+- **Docs**: `book/platform/apps.mdx` + `book/platform/database.mdx`.
+
+### Notes
+- Platform Worker deployed to `api.trumbo.dev` / `platform.trumbo.dev`; D1 migrations 0060–0063 applied.
+- Runtime prerequisites (CF API token secrets, Workers for Platforms entitlement, R2/queue bindings) are required for the CF-dependent paths; see deployment runbook.
+
 ## [v3.6.0 / v0.3.0 / SDK v0.0.60] — 2026-07-25
 
 Security fixes, TUI upgrade, new providers, agent runtime improvements,

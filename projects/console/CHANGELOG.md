@@ -11,6 +11,21 @@
 
 
 
+## 3.7.0
+
+Trumbo Agent Apps + Trumbo Database — manage deployments and managed databases from the CLI.
+
+### Added
+- `trumbo apps` command group: `create`, `list`, `inspect`, `deploy`, `deploys`, `promote`, `rollback`, `env`, `env:set`, `env:del`, `logs`, `delete`. Deploys customer apps to `*.apps.trumbo.dev` (production + preview URLs).
+- `trumbo db` command group: `create` (kinds: sql / kv / r2 / vectorize / analytics / hyperdrive / edgeconfig), `list`, `inspect`, `query`, `migrate`, `migrations`, `attach`, `backup`, `backups`, `restore`, `branch`, `config`, `delete`.
+- `--json` output and option passthrough (`--kind`, `--region`, `--framework`, `--environment`, `--source`, `--path`, `--connection-string`) across both groups.
+
+### Fixed
+- `apps` / `db` command options are now wired through to the API (previously declared but ignored).
+- `db query` / `db migrate` no longer double-encode the request body.
+
+
+
 ## 3.6.3
 
 Live model-catalog refresh hotfix — `session.create` no longer hangs when the catalog endpoint is unreachable.
@@ -221,7 +236,7 @@ Platform companion release: sandbox delete fix, MCP API token auth, expanded API
 ## 3.0.56
 
 - Interactive cloud browser sessions: `browser_session_launch`, `navigate`, `click`, `type`, `scroll`, `screenshot`, `close`, `handoff`, and `wait` MCP tools are now available automatically when you sign in with Trumbo
-- Stateful browser sessions run on Trumbo Browser Run (Cloudflare) with a live CDP connection per session, keepalive pings, and human-in-the-loop Live View URLs for logins/MFA/CAPTCHA
+- Stateful browser sessions run on Trumbo Browser Run with a live CDP connection per session, keepalive pings, and human-in-the-loop Live View URLs for logins/MFA/CAPTCHA
 - Concurrent-session and monthly-minute limits are enforced server-side per tier (no client bypass)
 - fix: MCP tool results with image content (screenshots, PDFs) are no longer silently dropped before reaching the model; `mimeType` is now normalized to `mediaType` so the AI SDK formatter passes images through
 - fix: dead browser sessions now release their concurrent slot automatically (alarm cleanup + failed-reconnect detection) so capacity never leaks
@@ -285,7 +300,7 @@ Platform companion release: sandbox delete fix, MCP API token auth, expanded API
 
 ## 3.0.41
 
-- The CLI now connects to the deployed Trumbo web app by default. The production environment points at `https://platform.trumbo.dev` (was an unconfigured placeholder), so auth, account, billing, plan, and chat-completion endpoints hit the live backend out of the box. Override with `TRUMBO_API_BASE_URL` / `TRUMBO_APP_URL`, or run against `wrangler dev` with `TRUMBO_ENVIRONMENT=local`.
+- The CLI now connects to the deployed Trumbo web app by default. The production environment points at `https://platform.trumbo.dev` (was an unconfigured placeholder), so auth, account, billing, plan, and chat-completion endpoints hit the live backend out of the box. Override with `TRUMBO_API_BASE_URL` / `TRUMBO_APP_URL`, or run the local Trumbo API (`bun run dev:api` in projects/web) with `TRUMBO_ENVIRONMENT=local`.
 - Billing/subscription + rate-limit UX in the CLI: the welcome line, status bar, and account dialog now show your plan and 5h/daily/weekly rate-limit usage instead of credits. 429 rate-limit errors render a friendly upgrade prompt linking to the billing page. The Trumbo provider is rebranded to "Trumbo" (was "Trumbo Usage-Billing").
 - Web-facing URLs (billing page, credits dashboard, TrumboPass subscription/promo links) now resolve from the active environment instead of a hardcoded placeholder, so they always match the deployed app.
 - npm publish script: `--provenance` is now applied only inside GitHub Actions (Trusted Publishing), so local dry-runs don't fail on the provenance requirement. CI behavior is unchanged.

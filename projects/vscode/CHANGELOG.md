@@ -2,6 +2,10 @@
 
 All notable changes to the Trumbo VS Code extension are documented here.
 
+## [0.3.1] - 2026-07-26
+
+Companion release for the Trumbo Agent Apps + Trumbo Database platform launch. No extension behavior changes; version bump only.
+
 ## [0.3.0] - 2026-07-25
 
 Compaction progress, terminal lifecycle, edit preview focus, Windows shell fix, and PWR batch stickiness.

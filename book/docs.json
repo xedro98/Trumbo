@@ -174,7 +174,9 @@
 							"platform/browser-run",
 							"platform/security",
 							"platform/knowledge",
-							"platform/automations"
+							"platform/automations",
+							"platform/apps",
+							"platform/database"
 						]
 					},
 					{

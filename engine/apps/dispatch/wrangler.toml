@@ -1,0 +1,42 @@
+#:schema https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/virtual-modules/schemas/config-schema.json
+
+# trumbo-apps — the dispatch Worker for Trumbo Agent Apps.
+# Routes *.apps.trumbo.dev (and Cloudflare for SaaS custom hostnames) to the
+# correct tenant User Worker via the Workers for Platforms dispatch namespace.
+name = "trumbo-apps"
+main = "src/index.ts"
+compatibility_date = "2026-03-24"
+compatibility_flags = ["nodejs_compat"]
+
+# Serve *.apps.trumbo.dev. Custom hostnames (customer domains) are added via
+# Cloudflare for SaaS on this zone at runtime.
+routes = [
+	{ pattern = "apps.trumbo.dev", custom_domain = true },
+	{ pattern = "*.apps.trumbo.dev", custom_domain = true },
+]
+
+# The trumbo-web D1 database. Route lookups (read) + per-app rate-limit
+# counters (app_rate_limit_counters, read/write).
+[[d1_databases]]
+binding = "DB"
+database_name = "trumbo-web"
+database_id = "c61ee442-a833-451b-a1d6-e0e95e259380"
+
+# Workers for Platforms dispatch namespace. Each customer app registers a User
+# Worker script here; the DISPATCHER binding routes to them by script name.
+# `namespace` is the dispatch namespace created via `wrangler dispatch-namespace
+# create trumbo-apps-namespace` (or the CF dashboard). The platform Worker
+# (trumbo-web) registers scripts into it via the WfP REST API.
+[[dispatch_namespaces]]
+binding = "DISPATCHER"
+namespace = "trumbo-apps-namespace"
+
+# KV cache of hostname → {scriptName, environment}. Warm cache in front of D1
+# for sub-10ms routing.
+[[kv_namespaces]]
+binding = "APPS_ROUTES_KV"
+id = "placeholder-kv-namespace-id"
+
+[vars]
+# No secrets here. CF_ACCOUNT_ID and CF_API_TOKEN are only needed on the
+# platform Worker (trumbo-web) that registers dispatch scripts.
