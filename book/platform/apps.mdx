@@ -6,7 +6,7 @@ description: "Deploy full-stack apps to the Trumbo edge with production URLs, pr
 
 # Agent Apps
 
-Agent Apps is Trumbo's deployment platform: ship static sites, single Worker APIs, and framework apps to the edge with a production URL on `apps.trumbo.dev`, per-deploy preview URLs, env vars/secrets, custom domains, and Trumbo Database bindings.
+Agent Apps is Trumbo's deployment platform: ship static sites, single Worker APIs, and framework apps to the edge with a production URL on `trumbo.app`, per-deploy preview URLs, env vars/secrets, custom domains, and Trumbo Database bindings.
 
 Customers never touch Cloudflare units. Auth, quotas, and billing stay on `platform.trumbo.dev` / `api.trumbo.dev`.
 
@@ -22,9 +22,9 @@ Customers never touch Cloudflare units. Auth, quotas, and billing stay on `platf
 
 | Environment | URL pattern |
 |-------------|-------------|
-| Production | `https://{slug}.apps.trumbo.dev` |
-| Preview | `https://{deploy-id}.{slug}.apps.trumbo.dev` |
-| Custom | `https://www.customer.com` (CNAME → `apps.trumbo.dev`) |
+| Production | `https://{slug}.trumbo.app` |
+| Preview | `https://{deploy-id}-{slug}.trumbo.app` |
+| Custom | `https://www.customer.com` (CNAME → `trumbo.app`) |
 
 ## CLI
 
@@ -91,7 +91,7 @@ The build plane auto-detects the framework from the repo root and applies sensib
 
 Next.js apps should use [`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare) so the build emits a Workers-compatible `worker.js` under `.open-next`. Remix apps should use the [Cloudflare adapter](https://remix.run/docs/en/main/guides/cloudflare). The build plane runs `npm run build` generically; adapters are a user-side concern — templates are provided as repo starters.
 
-Push to the default branch → production deploy; push to any other branch or open a PR → a preview deploy at `{deploy-id}.{slug}.apps.trumbo.dev`, with a comment posted on the PR once the build is live.
+Push to the default branch → production deploy; push to any other branch or open a PR → a preview deploy at `{deploy-id}-{slug}.trumbo.app`, with a comment posted on the PR once the build is live.
 
 
 

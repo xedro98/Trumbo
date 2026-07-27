@@ -5,7 +5,7 @@
  * Platforms dispatch namespace. The route table lives in D1 (`app_routes`) and
  * is cached in a KV namespace (`APPS_ROUTES_KV`) for sub-10ms lookups.
  *
- * Deployed as a separate Worker on the `*.apps.trumbo.dev` zone (Cloudflare for
+ * Deployed as a separate Worker on the `*.trumbo.app` zone (Cloudflare for
  * SaaS custom hostnames also land here). It is NOT the platform Worker.
  *
  * Bindings (wrangler.toml):

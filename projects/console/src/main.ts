@@ -317,6 +317,259 @@ export async function runCli(): Promise<void> {
 			});
 		});
 
+	const securityCmd = program
+		.command("security")
+		.description("List security findings and manage org suppressions");
+
+	const securityFindingsCmd = securityCmd
+		.command("findings")
+		.description("List Security Agent findings for the active team")
+		.option(
+			"--severity <level>",
+			"Filter by severity (critical|high|medium|low|info)",
+		)
+		.option(
+			"--status <status>",
+			"Filter by status (open|fixing|pending_review|fixed|…)",
+		)
+		.option("--repo-id <id>", "Filter by connected repo id")
+		.option("--page-size <n>", "Max rows (default 50, max 100)")
+		.option("--json", "Print JSON")
+		.option("--config <dir>", "configuration directory")
+		.option(
+			"--data-dir <dir>",
+			"Use isolated local state at <dir> instead of ~/.trumbo (enables sandbox mode)",
+		)
+		.action(async () => {
+			const opts = securityFindingsCmd.opts<{
+				severity?: string;
+				status?: string;
+				repoId?: string;
+				pageSize?: string;
+				json?: boolean;
+				config?: string;
+				dataDir?: string;
+			}>();
+			if (opts.config?.trim()) {
+				const { setTrumboDir } = await import("@trumbodev/shared/storage");
+				setTrumboDir(opts.config.trim());
+			}
+			configureSandboxEnvironment({
+				enabled: !!opts.dataDir || process.env.TRUMBO_SANDBOX?.trim() === "1",
+				cwd: process.cwd(),
+				explicitDir: opts.dataDir,
+			});
+			const { runSecurityFindingsCommand } = await import(
+				"./commands/security"
+			);
+			const providerSettingsManager = await createProviderSettingsManager();
+			ctx.exitCode = await runSecurityFindingsCommand({
+				providerSettingsManager,
+				io,
+				severity: opts.severity,
+				status: opts.status,
+				repoId: opts.repoId,
+				pageSize: opts.pageSize ? Number(opts.pageSize) : undefined,
+				json: !!opts.json,
+			});
+		});
+
+	const securitySuppressCmd = securityCmd
+		.command("suppress")
+		.description("Create an org-wide suppression from a finding id")
+		.argument("<finding-id>", "Finding UUID to suppress")
+		.option("--reason <text>", "Suppression reason")
+		.option("--json", "Print JSON")
+		.option("--config <dir>", "configuration directory")
+		.option(
+			"--data-dir <dir>",
+			"Use isolated local state at <dir> instead of ~/.trumbo (enables sandbox mode)",
+		)
+		.action(async (findingId: string) => {
+			const opts = securitySuppressCmd.opts<{
+				reason?: string;
+				json?: boolean;
+				config?: string;
+				dataDir?: string;
+			}>();
+			if (opts.config?.trim()) {
+				const { setTrumboDir } = await import("@trumbodev/shared/storage");
+				setTrumboDir(opts.config.trim());
+			}
+			configureSandboxEnvironment({
+				enabled: !!opts.dataDir || process.env.TRUMBO_SANDBOX?.trim() === "1",
+				cwd: process.cwd(),
+				explicitDir: opts.dataDir,
+			});
+			const { runSecuritySuppressCommand } = await import(
+				"./commands/security"
+			);
+			const providerSettingsManager = await createProviderSettingsManager();
+			ctx.exitCode = await runSecuritySuppressCommand({
+				providerSettingsManager,
+				io,
+				findingId,
+				reason: opts.reason,
+				json: !!opts.json,
+			});
+		});
+
+	const securitySuppressionsCmd = securityCmd
+		.command("suppressions")
+		.description("List or delete org suppressions");
+
+	const securitySuppressionsListCmd = securitySuppressionsCmd
+		.command("list")
+		.description("List org-shared suppressions")
+		.option("--json", "Print JSON")
+		.option("--config <dir>", "configuration directory")
+		.option(
+			"--data-dir <dir>",
+			"Use isolated local state at <dir> instead of ~/.trumbo (enables sandbox mode)",
+		)
+		.action(async () => {
+			const opts = securitySuppressionsListCmd.opts<{
+				json?: boolean;
+				config?: string;
+				dataDir?: string;
+			}>();
+			if (opts.config?.trim()) {
+				const { setTrumboDir } = await import("@trumbodev/shared/storage");
+				setTrumboDir(opts.config.trim());
+			}
+			configureSandboxEnvironment({
+				enabled: !!opts.dataDir || process.env.TRUMBO_SANDBOX?.trim() === "1",
+				cwd: process.cwd(),
+				explicitDir: opts.dataDir,
+			});
+			const { runSecuritySuppressionsListCommand } = await import(
+				"./commands/security"
+			);
+			const providerSettingsManager = await createProviderSettingsManager();
+			ctx.exitCode = await runSecuritySuppressionsListCommand({
+				providerSettingsManager,
+				io,
+				json: !!opts.json,
+			});
+		});
+
+	const securitySuppressionsDeleteCmd = securitySuppressionsCmd
+		.command("delete")
+		.description("Delete a suppression by id")
+		.argument("<id>", "Suppression UUID")
+		.option("--json", "Print JSON")
+		.option("--config <dir>", "configuration directory")
+		.option(
+			"--data-dir <dir>",
+			"Use isolated local state at <dir> instead of ~/.trumbo (enables sandbox mode)",
+		)
+		.action(async (id: string) => {
+			const opts = securitySuppressionsDeleteCmd.opts<{
+				json?: boolean;
+				config?: string;
+				dataDir?: string;
+			}>();
+			if (opts.config?.trim()) {
+				const { setTrumboDir } = await import("@trumbodev/shared/storage");
+				setTrumboDir(opts.config.trim());
+			}
+			configureSandboxEnvironment({
+				enabled: !!opts.dataDir || process.env.TRUMBO_SANDBOX?.trim() === "1",
+				cwd: process.cwd(),
+				explicitDir: opts.dataDir,
+			});
+			const { runSecuritySuppressionsDeleteCommand } = await import(
+				"./commands/security"
+			);
+			const providerSettingsManager = await createProviderSettingsManager();
+			ctx.exitCode = await runSecuritySuppressionsDeleteCommand({
+				providerSettingsManager,
+				io,
+				id,
+				json: !!opts.json,
+			});
+		});
+
+	const securityComplianceCmd = securityCmd
+		.command("compliance")
+		.description("Show SOC2 CC8 / PCI Req 6 compliance pack status")
+		.option("--refresh", "Recompute and persist evidence")
+		.option("--json", "Print JSON")
+		.option("--config <dir>", "configuration directory")
+		.option(
+			"--data-dir <dir>",
+			"Use isolated local state at <dir> instead of ~/.trumbo (enables sandbox mode)",
+		)
+		.action(async () => {
+			const opts = securityComplianceCmd.opts<{
+				refresh?: boolean;
+				json?: boolean;
+				config?: string;
+				dataDir?: string;
+			}>();
+			if (opts.config?.trim()) {
+				const { setTrumboDir } = await import("@trumbodev/shared/storage");
+				setTrumboDir(opts.config.trim());
+			}
+			configureSandboxEnvironment({
+				enabled: !!opts.dataDir || process.env.TRUMBO_SANDBOX?.trim() === "1",
+				cwd: process.cwd(),
+				explicitDir: opts.dataDir,
+			});
+			const { runSecurityComplianceCommand } = await import(
+				"./commands/security"
+			);
+			const providerSettingsManager = await createProviderSettingsManager();
+			ctx.exitCode = await runSecurityComplianceCommand({
+				providerSettingsManager,
+				io,
+				json: !!opts.json,
+				refresh: !!opts.refresh,
+			});
+		});
+
+	const createAppsRuntimeCommand = async () => {
+		const { createAppsCommand } = await import("./commands/apps");
+		return createAppsCommand(
+			io,
+			async () => createProviderSettingsManager(),
+			(code) => {
+				ctx.exitCode = code;
+			},
+		);
+	};
+	const createDbRuntimeCommand = async () => {
+		const { createDbCommand } = await import("./commands/databases");
+		return createDbCommand(
+			io,
+			async () => createProviderSettingsManager(),
+			(code) => {
+				ctx.exitCode = code;
+			},
+		);
+	};
+
+	program
+		.command("apps")
+		.description("Manage Trumbo Agent Apps (deploy to *.trumbo.app)")
+		.allowUnknownOption()
+		.allowExcessArguments()
+		.passThroughOptions()
+		.action(async (_opts: unknown, cmd: Command) => {
+			const appsCmd = await createAppsRuntimeCommand();
+			await appsCmd.parseAsync(cmd.args, { from: "user" });
+		});
+	program
+		.command("db")
+		.description("Manage Trumbo Database (Database-as-a-Service)")
+		.allowUnknownOption()
+		.allowExcessArguments()
+		.passThroughOptions()
+		.action(async (_opts: unknown, cmd: Command) => {
+			const dbCmd = await createDbRuntimeCommand();
+			await dbCmd.parseAsync(cmd.args, { from: "user" });
+		});
+
 	const createConfigRuntimeCommand = async () => {
 		const { createConfigCommand } = await import("./commands/config");
 		let configCmd: Command;

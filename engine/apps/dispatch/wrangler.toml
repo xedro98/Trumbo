@@ -1,20 +1,20 @@
 #:schema https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/virtual-modules/schemas/config-schema.json
 
 # trumbo-apps — the dispatch Worker for Trumbo Agent Apps.
-# Routes *.apps.trumbo.dev (and Cloudflare for SaaS custom hostnames) to the
+# Routes *.trumbo.app (and Cloudflare for SaaS custom hostnames) to the
 # correct tenant User Worker via the Workers for Platforms dispatch namespace.
 name = "trumbo-apps"
 main = "src/index.ts"
 compatibility_date = "2026-03-24"
 compatibility_flags = ["nodejs_compat"]
 
-# Routing: *.apps.trumbo.dev via zone routes on the existing trumbo.dev zone.
-# Traffic resolves once a proxied *.apps wildcard DNS record exists on the
-# trumbo.dev zone (add it in the Cloudflare dashboard — wrangler has no DNS
-# command). Customer custom domains are added via Cloudflare for SaaS at runtime.
+# Routing: *.trumbo.app via zone routes on the trumbo.app zone. Traffic resolves
+# once a proxied *.trumbo.app wildcard DNS record exists on the trumbo.app zone
+# (add it in the Cloudflare dashboard — wrangler has no DNS command). Customer
+# custom domains are added via Cloudflare for SaaS at runtime.
 routes = [
-	{ pattern = "apps.trumbo.dev/*", zone_name = "trumbo.dev" },
-	{ pattern = "*.apps.trumbo.dev/*", zone_name = "trumbo.dev" },
+	{ pattern = "trumbo.app/*", zone_name = "trumbo.app" },
+	{ pattern = "*.trumbo.app/*", zone_name = "trumbo.app" },
 ]
 
 # The trumbo-web D1 database. Route lookups (read) + per-app rate-limit
