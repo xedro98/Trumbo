@@ -8,12 +8,14 @@ main = "src/index.ts"
 compatibility_date = "2026-03-24"
 compatibility_flags = ["nodejs_compat"]
 
-# Serve *.apps.trumbo.dev. Custom hostnames (customer domains) are added via
-# Cloudflare for SaaS on this zone at runtime.
-routes = [
-	{ pattern = "apps.trumbo.dev", custom_domain = true },
-	{ pattern = "*.apps.trumbo.dev", custom_domain = true },
-]
+# Routing: *.apps.trumbo.dev is served via zone routes. The apps.trumbo.dev
+# zone (or a proxied wildcard DNS record on the trumbo.dev zone) must exist in
+# the account — add it in the Cloudflare dashboard, then re-enable:
+#   routes = [
+#     { pattern = "apps.trumbo.dev/*", zone_name = "apps.trumbo.dev" },
+#     { pattern = "*.apps.trumbo.dev/*", zone_name = "apps.trumbo.dev" },
+#   ]
+# Customer custom domains are added via Cloudflare for SaaS at runtime.
 
 # The trumbo-web D1 database. Route lookups (read) + per-app rate-limit
 # counters (app_rate_limit_counters, read/write).
@@ -35,7 +37,7 @@ namespace = "trumbo-apps-namespace"
 # for sub-10ms routing.
 [[kv_namespaces]]
 binding = "APPS_ROUTES_KV"
-id = "placeholder-kv-namespace-id"
+id = "b1a8df2151b542fdbc23f0d7e303949e"
 
 [vars]
 # No secrets here. CF_ACCOUNT_ID and CF_API_TOKEN are only needed on the
