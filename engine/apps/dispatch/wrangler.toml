@@ -8,14 +8,14 @@ main = "src/index.ts"
 compatibility_date = "2026-03-24"
 compatibility_flags = ["nodejs_compat"]
 
-# Routing: *.apps.trumbo.dev is served via zone routes. The apps.trumbo.dev
-# zone (or a proxied wildcard DNS record on the trumbo.dev zone) must exist in
-# the account — add it in the Cloudflare dashboard, then re-enable:
-#   routes = [
-#     { pattern = "apps.trumbo.dev/*", zone_name = "apps.trumbo.dev" },
-#     { pattern = "*.apps.trumbo.dev/*", zone_name = "apps.trumbo.dev" },
-#   ]
-# Customer custom domains are added via Cloudflare for SaaS at runtime.
+# Routing: *.apps.trumbo.dev via zone routes on the existing trumbo.dev zone.
+# Traffic resolves once a proxied *.apps wildcard DNS record exists on the
+# trumbo.dev zone (add it in the Cloudflare dashboard — wrangler has no DNS
+# command). Customer custom domains are added via Cloudflare for SaaS at runtime.
+routes = [
+	{ pattern = "apps.trumbo.dev/*", zone_name = "trumbo.dev" },
+	{ pattern = "*.apps.trumbo.dev/*", zone_name = "trumbo.dev" },
+]
 
 # The trumbo-web D1 database. Route lookups (read) + per-app rate-limit
 # counters (app_rate_limit_counters, read/write).
