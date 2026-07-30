@@ -1,8 +1,7 @@
 import { LogOutIcon, SettingsIcon, UserCircleIcon } from "lucide-react"
 import { memo, useCallback } from "react"
 
-import BrandMark from "@/components/brand/BrandMark"
-import { TrumboButton, TrumboIconButton, TrumboTooltip } from "@/components/trumbo"
+import { TrumboIconButton, TrumboTooltip } from "@/components/trumbo"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { handleSignOut, useTrumboAuth } from "@/context/TrumboAuthContext"
 import { useExtensionState } from "@/context/ExtensionStateContext"
