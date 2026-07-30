@@ -100,6 +100,186 @@ Artifacts land in `release/`. Outputs:
 - `build-macos.yml` — standalone macOS DMG, no gates. Use when you just need
   a macOS artifact without the full release pipeline.
 
+## Release & Deploy Runbook
+
+This is the authoritative step-by-step for cutting a new Trumbo Code desktop
+release and deploying the marketing site. Follow it in order. The agent
+should be able to execute this autonomously when asked to "build, release,
+deploy" or "cut a release".
+
+### 0. Prerequisites (check once before starting)
+
+- **Node 24+** is required (the repo targets Node 24; system Node 22 will
+  fail on `.ts` scripts). The vite-plus runtime ships a bundled Node at
+  `C:/Users/Admin/.vite-plus/js_runtime/node/24.18.1/node.exe` — use that
+  binary explicitly for `scripts/*.ts` if the system `node` is older.
+- **`gh` CLI** must be authenticated: `gh auth status` should show logged in
+  to `github.com` as `xedro98`.
+- **Git** on `main`, clean working tree (or staged changes ready to commit).
+- **Disk space**: the desktop artifact build needs ~5GB temp + ~350MB output.
+  On this machine, `D:` has limited headroom — use `E:` (400GB free) for
+  `TMPDIR`/`TEMP`/`TMP` and `TRUMBO_CODE_DESKTOP_OUTPUT_DIR`.
+- **Env vars** for the build:
+  - `TRUMBO_CODE_DESKTOP_UPDATE_REPOSITORY=xedro98/Trumbo` — so
+    electron-builder writes the GitHub update feed into `app-update.yml`
+    inside the packaged app. Without this, auto-update has no feed and the
+    update pill never fires.
+  - `TMPDIR` / `TEMP` / `TMP` — point at a drive with enough space (E:).
+  - `TRUMBO_CODE_DESKTOP_OUTPUT_DIR` — where artifacts land (E:).
+  - `TRUMBO_CODE_DESKTOP_SKIP_BUILD=false` (default) for a full clean build.
+  - `TRUMBO_CODE_DESKTOP_WSL_PREBUILD` — path to a prebuilt Linux `pty.node`
+    if you want the WSL backend to work in the packaged app. Optional for
+    Windows-only testing (missing = warning, not error).
+
+### 1. Version bump
+
+All four packages must stay in sync (the app shows a version-skew warning if
+they diverge):
+
+```bash
+cd projects/trumbo-code
+for f in apps/desktop/package.json apps/server/package.json apps/web/package.json packages/contracts/package.json; do
+  sed -i 's/"version": "<OLD>"/"version": "<NEW>"/' "$f"
+done
+```
+
+Verify: `grep '"version"' apps/desktop/package.json apps/server/package.json apps/web/package.json packages/contracts/package.json` — all four must match.
+
+### 2. Build the desktop artifact
+
+From `projects/trumbo-code`, using the vite-plus Node 24 binary:
+
+```bash
+NODE24="/c/Users/Admin/.vite-plus/js_runtime/node/24.18.1/node.exe"
+
+TMPDIR="E:/trumbo-build-temp" TEMP="E:/trumbo-build-temp" TMP="E:/trumbo-build-temp" \
+TRUMBO_CODE_DESKTOP_OUTPUT_DIR="E:/trumbo-release" \
+TRUMBO_CODE_DESKTOP_UPDATE_REPOSITORY="xedro98/Trumbo" \
+"$NODE24" scripts/build-desktop-artifact.ts --platform win --target nsis --arch x64
+```
+
+This runs the full pipeline: `vp run build:desktop` (web + server + desktop
+Electron bundles) → stages a production install → `electron-builder --win
+--x64 --publish never` → artifacts in `E:/trumbo-release/`.
+
+**Golden rules** (from the section above still apply):
+- Never put `--` between the script and flags.
+- Match the host platform (Windows→win, macOS→mac, Linux→linux).
+- Pass `--skip-build` only if you already ran `vp run build:desktop` and want
+  to re-package without rebuilding.
+- macOS builds require a Mac (CI only). Linux builds require WSL Ubuntu.
+
+Artifacts produced (Windows):
+- `Trumbo-Code-<version>-x64.exe` (the NSIS installer, ~317MB)
+- `Trumbo-Code-<version>-x64.exe.blockmap` (differential update support)
+- `latest.yml` (electron-updater manifest — version, sha512, files, releaseDate)
+
+### 3. Commit & push
+
+From the repo root (`D:/Torch/cline-full`):
+
+```bash
+git add -A
+git commit -m "feat: v<VERSION> — <short summary>" --no-verify
+git push origin main
+```
+
+Use `--no-verify` if the pre-commit `vp check --fix` hook is slow or fails on
+unrelated formatting. The CI workflow runs the full check anyway.
+
+### 4. Create the GitHub release
+
+The release **must** include `latest.yml` as an asset — that's what
+`electron-updater` fetches to discover new versions. Without it, installed
+apps won't see the update.
+
+```bash
+cd D:/Torch/cline-full
+gh release create v<VERSION> \
+  --title "Trumbo Code <VERSION>" \
+  --notes "<markdown release notes>" \
+  --target main \
+  "E:/trumbo-release/Trumbo-Code-<version>-x64.exe" \
+  "E:/trumbo-release/Trumbo-Code-<version>-x64.exe.blockmap" \
+  "E:/trumbo-release/latest.yml"
+```
+
+For macOS/Linux artifacts built in CI, download them from the CI run and
+attach to the same release, or let the `release.yml` workflow publish them
+directly.
+
+The release is public at `https://github.com/xedro98/Trumbo/releases/tag/v<VERSION>`.
+
+### 5. Deploy the marketing site
+
+From `projects/marketing`:
+
+```bash
+cd D:/Torch/cline-full/projects/marketing
+bun run deploy
+```
+
+This runs `vite build && wrangler deploy` and pushes to Cloudflare Workers.
+Domains: `trumbo.dev` + `www.trumbo.dev`. Takes ~20s. Returns a Version ID
+on success.
+
+### 6. Verify
+
+- **Release**: `gh release view v<VERSION>` — confirm assets include
+  `latest.yml` + the installer.
+- **Auto-update**: an installed older build should show the update pill in
+  the topbar within ~15s of launch (it checks the GitHub Releases
+  `latest.yml`).
+- **Marketing**: `curl -sI https://trumbo.dev` returns 200.
+- **App**: launch the new installer, confirm the version in the avatar menu
+  or settings matches.
+
+### Auto-update system (how it works)
+
+The full auto-update pipeline is already built — no code changes needed for a
+standard release:
+
+1. **Electron main** (`apps/desktop/src/updates/DesktopUpdates.ts`):
+   `electron-updater` checks GitHub Releases on startup (15s delay) + polls
+   every 4 min. `autoDownload=false` — user clicks the pill to download, then
+   install. On install: stops all backends, destroys windows,
+   `quitAndInstall({ isSilent: true, isForceRunAfter: true })`.
+2. **Feed config**: `resources/app-update.yml` (packaged) or
+   `dev-app-update.yml` (dev) tells `electron-updater` where to look:
+   `provider: github, owner: xedro98, repo: Trumbo`. electron-builder writes
+   this during packaging when `TRUMBO_CODE_DESKTOP_UPDATE_REPOSITORY` is set.
+3. **Renderer**: `state/desktopUpdate.ts` subscribes to
+   `desktopBridge.onUpdateState`; `SidebarUpdatePill.tsx` shows the pill
+   with download/install buttons + release-notes tooltip.
+4. **Channels**: `latest` (stable) and `nightly` (prereleases). Nightly
+   versions match `/-nightly\.\d{8}\.\d+$/` and enable `allowPrerelease` +
+   `allowDowngrade` + `fullChangelog`.
+5. **Disabled in dev** (`isDevelopment || !isPackaged`) unless mock updates
+   are configured (`--mock-updates` + `start:mock-update-server`).
+
+### Common pitfalls
+
+- **ENOSPC during build**: the electron-builder packaging step writes several
+  GB to temp. Always set `TMPDIR`/`TEMP`/`TMP` to a drive with >=5GB free.
+- **Missing `latest.yml` in the release**: installed apps won't see the
+  update. Always upload it as a release asset.
+- **Version skew**: if `apps/web` or `packages/contracts` lag
+  `apps/server`/`apps/desktop`, the app shows "Client and server versions
+  differ". Keep all four in sync.
+- **No `app-update.yml` in the packaged app**: if
+  `TRUMBO_CODE_DESKTOP_UPDATE_REPOSITORY` (or `GITHUB_REPOSITORY` in CI) isn't
+  set, electron-builder skips the publish config and the feed file is
+  missing — auto-update silently does nothing. Always set the env var.
+- **Cross-platform build refused**: the script throws
+  `UnsupportedCrossPlatformDesktopBuildError`. Build on the matching host.
+- **Stale Electron single-instance lock** (dev): if `dev:desktop` crash-loops
+  on Windows, kill ALL `Electron.exe` processes (`taskkill //F //IM
+  Electron.exe`), remove `C:/Users/Admin/AppData/Roaming/trumbo-dev/lockfile`,
+  and remove `~/.trumbo-code/dev/server-runtime.json` before relaunching.
+- **Pre-commit hook failures**: `--no-verify` skips the `vp check --fix`
+  hook. Use it if the hook flags unrelated formatting issues; CI will run the
+  full check anyway.
+
 ### Identity / signing prerequisites (one-time)
 
 - Legal entity: Maxfense, Inc. (Delaware, File #7070030, incorporated 2022-10-06).
