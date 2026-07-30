@@ -3,8 +3,12 @@
 	"private": true,
 	"workspaces": [
 		"engine/packages/*",
-		"projects/*",
+		"projects/console",
+		"projects/hub",
 		"projects/hub/src/webview",
+		"projects/marketing",
+		"projects/vscode",
+		"projects/docs",
 		"projects/samples/*",
 		"projects/samples/vscode/src/webview",
 		"engine/examples",
