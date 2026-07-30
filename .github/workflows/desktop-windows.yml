@@ -1,0 +1,82 @@
+name: Build Windows Desktop
+on:
+  workflow_dispatch:
+    inputs:
+      arch:
+        description: "Architecture (x64 or arm64)"
+        required: false
+        default: x64
+        type: choice
+        options:
+          - x64
+          - arm64
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Windows ${{ inputs.arch }}
+    runs-on: windows-2022
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: projects/trumbo-code
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version-file: projects/trumbo-code/package.json
+          cache: true
+          run-install: true
+
+      - name: Ensure Electron runtime
+        run: vp run --filter @trumbo-code/desktop ensure:electron
+
+      - name: Build WSL node-pty prebuild
+        shell: bash
+        run: |
+          set -euo pipefail
+          PTY_DIR="$(find node_modules/.pnpm -maxdepth 3 -type d -name "node-pty" -path "*node-pty@*" 2>/dev/null | head -1)"
+          if [ -z "$PTY_DIR" ]; then echo "node-pty not found"; exit 1; fi
+          cd "$PTY_DIR"
+          npx --yes node-gyp rebuild
+          mkdir -p ../../../../wsl-prebuild
+          cp build/Release/pty.node ../../../../wsl-prebuild/pty.node
+          file wsl-prebuild/pty.node || true
+
+      - name: Build desktop NSIS installer
+        shell: bash
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+        run: |
+          set -euo pipefail
+          vp run dist:desktop:artifact \
+            --platform win \
+            --target nsis \
+            --arch "${{ inputs.arch }}" \
+            --skip-build \
+            --wsl-prebuild ./wsl-prebuild/pty.node \
+            --verbose
+
+      - name: Collect artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release-publish
+          shopt -s nullglob
+          for f in release/*.exe release/*.yml release/*.blockmap; do
+            [ -f "$f" ] && cp "$f" release-publish/
+          done
+          ls -lh release-publish/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-win-${{ inputs.arch }}
+          path: projects/trumbo-code/release-publish/*
+          if-no-files-found: error
+          retention-days: 14
