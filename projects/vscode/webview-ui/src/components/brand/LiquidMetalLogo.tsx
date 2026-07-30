@@ -35,10 +35,8 @@ const LiquidMetalLogo = ({
 			className={cn("relative flex items-center justify-center", className)}
 			style={{ width: size, height: size }}>
 			<LiquidMetal
-				width={size}
-				height={size}
+				style={{ width: size, height: size }}
 				image={trumboLogoUrl}
-				shape={undefined}
 				colorBack="#aaaaac00"
 				colorTint={colorTint}
 				repetition={2}
