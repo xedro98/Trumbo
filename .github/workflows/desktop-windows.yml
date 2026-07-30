@@ -32,7 +32,14 @@ jobs:
         with:
           node-version-file: projects/trumbo-code/package.json
           cache: true
-          run-install: true
+
+      - name: Install trumbo-code dependencies (pnpm)
+        working-directory: projects/trumbo-code
+        shell: bash
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.10.0 --activate
+          pnpm install --frozen-lockfile
 
       - name: Ensure Electron runtime
         run: vp run --filter @trumbo-code/desktop ensure:electron
