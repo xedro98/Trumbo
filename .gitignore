@@ -89,5 +89,6 @@ projects/vscode/tsconfig.test.generated.json
 # Commercial Trumbo web app (private — not open source; keep local only)
 projects/web/
 
+# Trumbo Code desktop app — independent pnpm/Vite+ repo nested here for
 NUL.tmp
 *.tgz
