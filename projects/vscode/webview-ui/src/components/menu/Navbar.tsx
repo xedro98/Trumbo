@@ -1,8 +1,9 @@
 import { IntentEvent } from "@shared/proto/trumbo/ui"
-import { HistoryIcon, PlusIcon, PuzzleIcon, SettingsIcon, UserCircleIcon } from "lucide-react"
+import { HistoryIcon, PlusIcon, PuzzleIcon, SettingsIcon } from "lucide-react"
 import { useMemo } from "react"
 import BrandMark from "@/components/brand/BrandMark"
 import { TrumboIconButton, TrumboTooltip } from "@/components/trumbo"
+import { UserAvatarMenu } from "@/components/menu/UserAvatarMenu"
 import { TaskServiceClient, UiServiceClient } from "@/services/grpc-client"
 import { useExtensionState } from "../../context/ExtensionStateContext"
 
@@ -32,10 +33,9 @@ export const Navbar = () => {
 			},
 			{ id: "customize", tooltip: "Customize", icon: PuzzleIcon, navigate: navigateToMarketplace },
 			{ id: "history", tooltip: "History", icon: HistoryIcon, navigate: navigateToHistory },
-			{ id: "account", tooltip: "Account", icon: UserCircleIcon, navigate: navigateToAccount },
 			{ id: "settings", tooltip: "Settings", icon: SettingsIcon, navigate: navigateToSettings },
 		],
-		[navigateToAccount, navigateToChat, navigateToHistory, navigateToMarketplace, navigateToSettings],
+		[navigateToChat, navigateToHistory, navigateToMarketplace, navigateToSettings],
 	)
 
 	return (
@@ -62,6 +62,7 @@ export const Navbar = () => {
 						</TrumboIconButton>
 					</TrumboTooltip>
 				))}
+				<UserAvatarMenu />
 			</div>
 		</nav>
 	)
