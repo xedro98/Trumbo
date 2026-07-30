@@ -79,17 +79,18 @@ Artifacts land in `release/`. Outputs:
 `Trumbo-Code-<version>-x64.exe`, `Trumbo-Code-<version>-x86_64.AppImage`,
 `Trumbo-Code-<version>-arm64.dmg`.
 
-### Shipping to GitHub
+### Shipping
 
-- Desktop app repo: `https://github.com/xedro98/trembo` (public, default `main`).
-- **Push as an orphan commit** if the full history push fails with
-  `remote unpack failed: index-pack failed` (a corrupted object in history):
-  `git checkout --orphan ship && git add -A && git commit -m "..." && git push trembo ship:main --force`.
-  This avoids the broken object without repairing the repo.
-- Enable Actions after creating a new repo:
-  `gh api -X PUT repos/xedro98/trembo/actions/permissions --input -` with
-  `{"enabled":true,"allowed_actions":"all"}`.
-- `wsl-prebuild/` and `.env*` are gitignored; never commit them.
+- All apps live in the Trumbo monorepo: `https://github.com/xedro98/Trumbo`
+  (this repo, `D:/Torch/cline-full`). The desktop app is at
+  `projects/trumbo-code/` and is tracked directly by the parent repo (no
+  nested `.git`).
+- Push changes with `git push origin main` from the repo root
+  (`D:/Torch/cline-full`).
+- `wsl-prebuild/` and `.env*` are gitignored by the desktop app's own
+  `.gitignore`; never commit them.
+- The standalone `xedro98/trembo` and `xedro98/trumbo-code` repos are
+  deprecated; the canonical source is now `xedro98/Trumbo`.
 
 ### CI workflows
 
