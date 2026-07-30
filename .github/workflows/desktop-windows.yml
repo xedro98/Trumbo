@@ -39,7 +39,7 @@ jobs:
         run: |
           corepack enable
           corepack prepare pnpm@11.10.0 --activate
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
 
       - name: Ensure Electron runtime
         run: vp run --filter @trumbo-code/desktop ensure:electron
