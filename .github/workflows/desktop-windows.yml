@@ -46,15 +46,16 @@ jobs:
 
       - name: Build WSL node-pty prebuild
         shell: bash
+        working-directory: projects/trumbo-code
         run: |
           set -euo pipefail
           PTY_DIR="$(find node_modules/.pnpm -maxdepth 3 -type d -name "node-pty" -path "*node-pty@*" 2>/dev/null | head -1)"
           if [ -z "$PTY_DIR" ]; then echo "node-pty not found"; exit 1; fi
           cd "$PTY_DIR"
           npx --yes node-gyp rebuild
-          mkdir -p ../../../../wsl-prebuild
-          cp build/Release/pty.node ../../../../wsl-prebuild/pty.node
-          file wsl-prebuild/pty.node || true
+          mkdir -p "$GITHUB_WORKSPACE/projects/trumbo-code/wsl-prebuild"
+          cp build/Release/pty.node "$GITHUB_WORKSPACE/projects/trumbo-code/wsl-prebuild/pty.node"
+          file "$GITHUB_WORKSPACE/projects/trumbo-code/wsl-prebuild/pty.node" || true
 
       - name: Build desktop NSIS installer
         shell: bash
