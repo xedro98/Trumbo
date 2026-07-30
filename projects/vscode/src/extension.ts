@@ -514,6 +514,22 @@ ${ctx.cellJson || "{}"}
 		}),
 	)
 
+	// Security Agent: findings, suppressions, compliance packs
+	context.subscriptions.push(
+		vscode.commands.registerCommand(commands.SecurityFindings, async () => {
+			const { showSecurityFindingsCommand } = await import("./services/security/securityCommands")
+			await showSecurityFindingsCommand()
+		}),
+		vscode.commands.registerCommand(commands.SecuritySuppressions, async () => {
+			const { showSecuritySuppressionsCommand } = await import("./services/security/securityCommands")
+			await showSecuritySuppressionsCommand()
+		}),
+		vscode.commands.registerCommand(commands.SecurityCompliance, async () => {
+			const { showSecurityComplianceCommand } = await import("./services/security/securityCommands")
+			await showSecurityComplianceCommand()
+		}),
+	)
+
 	// Listen for secrets changes (cross-window login/logout sync).
 	// NOTE: Credentials now live in providers.json (single source of truth).
 	// This listener catches legacy secrets.json writes from older windows and

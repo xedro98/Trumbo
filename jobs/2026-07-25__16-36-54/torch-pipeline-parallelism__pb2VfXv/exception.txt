@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 351, in run
+    await self._prepare()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 385, in _prepare
+    await self._setup_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1148, in _setup_agent_environment
+    await self._start_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1154, in _start_agent_environment
+    await asyncio.wait_for(
+  File "C:\Python312\Lib\asyncio\tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 908, in start
+    await self._run_docker_compose_command(["up", "--detach", "--wait"])
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 656, in _run_docker_compose_command
+    raise RuntimeError(
+RuntimeError: Docker compose command failed for environment torch-pipeline-parallelism. Command: docker compose --project-name torch-pipeline-parallelism__pb2vfxv__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\torch-pipeline-parallelism\a01896bd8d1572bc93d061a43cc45d45d63c51c2ad6541b606a8e3452f77963a\environment -f C:\Users\Admin\AppData\Local\Temp\tmph33u_ot6\torch-pipeline-parallelism__pb2VfXv__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpfoaf3rup\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp638d95ou\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network torch-pipeline-parallelism__pb2vfxv__env_default Creating 
+ Network torch-pipeline-parallelism__pb2vfxv__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network torch-pipeline-parallelism__pb2vfxv__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 

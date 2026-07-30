@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/extract-elf",
+        "ref": "sha256:fe7aa4e037884f0b5d1dd9ea81df2b96b6c31d7d5f9184f1ef2de273614b5ecf",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "extract-elf__ZFem6DS",
+    "trials_dir": "jobs\\2026-07-25__16-36-54",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f67ac3c6-e533-46ca-8d83-91b62b29a5cf"
+}

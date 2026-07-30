@@ -1,0 +1,40 @@
+=== install-agent-runtime ===
+start:    2026-07-25T11:31:38.167391+00:00
+end:      2026-07-25T11:32:03.876065+00:00
+duration: 25.71s
+--- STDOUT ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 16631  100 16631    0     0  61820      0 --:--:-- --:--:-- --:--:-- 62055
+=> Downloading nvm from git to '/root/.nvm'
+=> Cloning into '/root/.nvm'...
+* (HEAD detached at FETCH_HEAD)
+  master
+=> Compressing and cleaning up git repository
+
+=> Appending nvm source string to /root/.bashrc
+=> Appending bash_completion source string to /root/.bashrc
+=> Close and reopen your terminal to start using nvm or run the following to use it now:
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+Downloading and installing node v22.23.1...
+Downloading https://nodejs.org/dist/v22.23.1/node-v22.23.1-linux-x64.tar.gz...
+#                                                                          1.4%###                                                                        4.2%####                                                                       6.2%######                                                                     8.4%#######                                                                    9.9%########                                                                  11.1%#########                                                                 13.3%###########                                                               16.2%##############                                                            20.6%##################                                                        25.1%####################                                                      28.5%#######################                                                   32.9%##########################                                                36.8%############################                                              39.3%###############################                                           43.2%##################################                                        47.7%####################################                                      51.4%#######################################                                   55.5%#########################################                                 58.2%###########################################                               60.8%#############################################                             63.5%###############################################                           66.1%##################################################                        69.9%###################################################                       72.2%####################################################                      73.4%######################################################                    75.2%#######################################################                   77.0%########################################################                  78.5%#########################################################                 80.0%##########################################################                81.8%############################################################              83.5%#############################################################             85.2%##############################################################            86.4%###############################################################           88.5%##################################################################        92.1%####################################################################      95.8%######################################################################    98.0%######################################################################## 100.0%
+Computing checksum with sha256sum
+Checksums matched!
+Now using node v22.23.1 (npm v10.9.8)
+Creating default alias: default -> 22 (-> v22.23.1 *)
+Now using node v22.23.1 (npm v10.9.8)
+default -> 22 (-> v22.23.1 *)
+npm warn using --force Recommended protections disabled.
+
+added 2 packages in 11s
+npm notice
+npm notice New major version of npm available! 10.9.8 -> 12.0.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.0.1
+npm notice To update run: npm install -g npm@12.0.1
+npm notice
+3.6.2
+Trumbo npm binary smoke test passed.

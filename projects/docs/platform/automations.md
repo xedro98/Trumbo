@@ -1,0 +1,137 @@
+---
+title: "Automations"
+description: "Durable multi-step workflows across agents, sandboxes, security, webhooks, waits, retries, and parallel branches."
+---
+# Automations
+
+Automations (also called workflows) are durable, metered pipelines that orchestrate Trumbo products. Unlike a single agent chat or a simple cron prompt, a definition can wait, fan out in parallel, retry, call webhooks, invoke agents, run sandbox commands, and kick off security scans.
+
+## Dashboard
+
+[platform.trumbo.dev/workflows](https://platform.trumbo.dev/workflows)
+
+- Create definitions with Steps JSON
+- Run immediately
+- Inspect run history (Copy full result JSON)
+- Cancel queued / running runs
+
+Plan gate: **AU** on Admin → Billing, plus definition and monthly run limits.
+
+## Step types
+
+| Type | Purpose | Key config |
+|------|---------|------------|
+| `invoke_agent` | Message a cloud agent | `agentId`, `prompt` |
+| `sandbox_command` | Shell in a sandbox | `sandboxId`, `command`, optional `timeout` |
+| `security_scan` | Queue a security scan | `repoId`, optional `commitSha` |
+| `http_webhook` | HTTP call to a public URL | `url`, `method`, optional `body`, `timeoutMs` |
+| `wait` | Sleep | `seconds` (max 7 days) |
+| `retry` | Retry a nested step | `attempts` (1–5), `step` |
+| `parallel` | Fan out 2–10 branches | `branches` (array of step arrays) |
+
+Templates use `&#123;&#123;input.field&#125;&#125;` substitution from the trigger payload. Dashboard **Run** sends `{ "message": "Triggered from the dashboard" }`.
+
+## REST API
+
+Base: `https://api.trumbo.dev/api/v1/workflows`
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/workflows` | List definitions |
+| `POST` | `/workflows` | Create (`name`, `description?`, `steps`) |
+| `PUT` | `/workflows/{id}` | Update |
+| `DELETE` | `/workflows/{id}` | Delete definition |
+| `POST` | `/workflows/{id}/trigger` | Start a run |
+| `GET` | `/workflows/runs/list` | List runs (`?definitionId=`) |
+| `POST` | `/workflows/runs/{runId}/cancel` | Cancel |
+
+Trigger example:
+
+```bash
+curl -X POST https://api.trumbo.dev/api/v1/workflows/DEF_ID/trigger \
+  -H "Authorization: Bearer trumbo_YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"idempotencyKey":"run-1","payload":{"message":"nightly triage"&#125;&#125;'
+```
+
+## MCP tools
+
+`workflow_create`, `workflow_list`, `workflow_trigger`, `workflow_runs`, `workflow_cancel`
+
+## Full suite example
+
+Replace ids with values from **Copy ID** on Agents, Sandbox, and Security:
+
+```json
+[
+  { "id": "warmup", "type": "wait", "config": { "seconds": 3 } },
+  {
+    "id": "fanout",
+    "type": "parallel",
+    "config": {
+      "branches": [
+        [{
+          "id": "webhook-ping",
+          "type": "http_webhook",
+          "config": { "url": "https://httpbin.org/status/200", "method": "GET" }
+        }],
+        [{
+          "id": "sandbox-probe",
+          "type": "sandbox_command",
+          "config": {
+            "sandboxId": "SANDBOX_UUID",
+            "command": "echo ok && uname -a",
+            "timeout": 60000
+          }
+        }],
+        [{
+          "id": "security-kickoff",
+          "type": "security_scan",
+          "config": { "repoId": "REPO_UUID", "commitSha": "HEAD" }
+        }]
+      ]
+    }
+  },
+  {
+    "id": "notify-retry",
+    "type": "retry",
+    "config": {
+      "attempts": 3,
+      "step": {
+        "id": "notify",
+        "type": "http_webhook",
+        "config": {
+          "url": "https://httpbin.org/post",
+          "method": "POST",
+          "body": { "message": "&#123;&#123;input.message&#125;&#125;" }
+        }
+      }
+    }
+  },
+  {
+    "id": "ask-agent",
+    "type": "invoke_agent",
+    "config": {
+      "agentId": "AGENT_UUID",
+      "prompt": "Confirm: &#123;&#123;input.message&#125;&#125;"
+    }
+  },
+  {
+    "id": "final-report",
+    "type": "http_webhook",
+    "config": {
+      "url": "https://httpbin.org/post",
+      "method": "POST",
+      "body": { "stage": "final", "ok": true }
+    }
+  }
+]
+```
+
+## Limits
+
+- Max definitions per workspace (plan)
+- Monthly runs (plan)
+- Steps: 1–50; parallel nesting depth capped
+
+Usage appears under **Automations** on `/usage`.

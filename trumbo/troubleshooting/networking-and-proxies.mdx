@@ -1,0 +1,171 @@
+---
+title: "Networking and Proxies"
+sidebarTitle: "Networking & Proxies"
+description: "Configure Trumbo to work behind firewalls and proxies"
+---
+```text
+████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
+   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
+   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
+   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
+```
+
+
+If you sit behind a corporate proxy or firewall, you'll need to point Trumbo at your proxy settings so it can reach AI providers.
+
+## CLI
+
+The Trumbo CLI honors the standard HTTP proxy environment variables. Set them before running `trumbo` commands.
+
+### Basic Configuration
+
+**Windows (Command Prompt)**
+```cmd
+set https_proxy=http://proxy.company.com:8080
+set http_proxy=http://proxy.company.com:8080
+trumbo start
+```
+
+**Windows (PowerShell)**
+```powershell
+$env:https_proxy="http://proxy.company.com:8080"
+$env:http_proxy="http://proxy.company.com:8080"
+trumbo start
+```
+
+**macOS/Linux**
+```bash
+export https_proxy=http://proxy.company.com:8080
+export http_proxy=http://proxy.company.com:8080
+trumbo start
+```
+
+### Proxy with Authentication
+
+If your proxy requires auth, include credentials in the URL:
+
+```bash
+export https_proxy=http://username:password@proxy.company.com:8080
+export http_proxy=http://username:password@proxy.company.com:8080
+```
+
+<Warning>
+Storing credentials in environment variables can be a security risk.
+</Warning>
+
+### Bypass Proxy for Localhost
+
+To keep localhost traffic off the proxy, set the `no_proxy` environment variable:
+
+**Windows**
+```cmd
+set no_proxy=localhost,127.0.0.1,.local
+```
+
+**macOS/Linux**
+```bash
+export no_proxy=localhost,127.0.0.1,.local
+```
+
+### Custom Certificate Authority
+
+If your proxy uses a custom CA certificate:
+
+**Windows**
+```cmd
+set NODE_EXTRA_CA_CERTS=C:\path\to\ca-certificate.crt
+trumbo start
+```
+
+**macOS/Linux**
+```bash
+export NODE_EXTRA_CA_CERTS=/path/to/ca-certificate.pem
+trumbo start
+```
+
+### Permanent Configuration
+
+To avoid setting these variables every time, add them to your shell profile or system environment variables.
+
+**macOS/Linux** (add to `~/.bashrc`, `~/.zshrc`, or `~/.profile`):
+```bash
+# Proxy configuration
+export https_proxy=http://proxy.company.com:8080
+export http_proxy=http://proxy.company.com:8080
+export no_proxy=localhost,127.0.0.1,.local
+export NODE_EXTRA_CA_CERTS=/path/to/ca-certificate.pem
+```
+
+**Windows** (System Environment Variables):
+1. Search for "Environment Variables" in Windows Settings
+2. Add the variables under "User variables" or "System variables"
+3. Restart your terminal or IDE
+
+### Known Limitations
+
+The Trumbo CLI supports HTTP proxies only. It does not support SOCKS proxies,
+proxy autoconfiguration (PAC) scripts, or HTTP proxies that require
+authentication beyond a basic username and password.
+
+## Troubleshooting
+
+### Connection Timeouts
+
+If you're hitting connection timeouts:
+
+1. Verify your proxy address and port are correct
+2. Check whether the proxy requires authentication
+3. Make sure the AI provider's API endpoints aren't blocked by your firewall
+
+### SSL/TLS Certificate Errors
+
+If you see certificate-related errors:
+
+1. Check that `NODE_EXTRA_CA_CERTS` points to the correct certificate file
+2. Make sure the certificate file is in PEM format
+3. Use curl to verify the certificate works, for example, `curl -x proxy.corp.example:8080 --cacert /path/to/ca-cert.pem -o - -vv http://0.0.0.0:0/`
+
+### Testing Proxy Configuration
+
+If you run into Trumbo networking problems, first confirm your proxy
+configuration works with curl:
+
+```bash
+# Linux/macOS
+export https_proxy=http://proxy.company.com:8080
+curl -vv https://api.anthropic.com
+
+# Windows PowerShell
+$env:https_proxy="http://proxy.company.com:8080"
+curl.exe -vv https://api.anthropic.com
+```
+
+Use `--cacert $NODE_EXTRA_CA_CERTS` to specify a certificate if necessary.
+
+Next, check `~/.trumbo/trumbo-core-service.log` (CLI) for log messages
+that confirm your proxy configuration and any network-related errors.
+
+## Common Proxy Patterns
+
+### Authenticated HTTPS Proxy
+
+```bash
+export https_proxy=http://username:password@proxy.company.com:8080
+export NODE_EXTRA_CA_CERTS=/path/to/ca-cert.pem
+```
+
+### Proxy with No Authentication
+
+```bash
+export https_proxy=http://proxy.company.com:8080
+export http_proxy=http://proxy.company.com:8080
+```
+
+### Proxy with Bypass Rules
+
+```bash
+export https_proxy=http://proxy.company.com:8080
+export no_proxy=localhost,127.0.0.1,.company.local,192.168.0.0/16
+```

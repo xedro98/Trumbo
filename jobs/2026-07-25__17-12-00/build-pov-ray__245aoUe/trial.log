@@ -1,0 +1,5 @@
+Trial build-pov-ray__245aoUe failed: Docker compose command failed for environment build-pov-ray. Command: docker compose --project-name build-pov-ray__245aoue__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\build-pov-ray\b64f3fd6f47dc8848fdd6ce990fbedce9577d97ea4f7fd1c489c42338229d078\environment -f C:\Users\Admin\AppData\Local\Temp\tmp7e3oprjh\build-pov-ray__245aoUe__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpwt_17xhy\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpq5lr511q\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network build-pov-ray__245aoue__env_default Creating 
+ Network build-pov-ray__245aoue__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network build-pov-ray__245aoue__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

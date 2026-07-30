@@ -39,7 +39,7 @@ on:
         type: string
 
 concurrency:
-  group: pr-review-${{ github.event.pull_request.number || inputs.pr_number }}
+  group: pr-review-$&#123;&#123; github.event.pull_request.number || inputs.pr_number &#125;&#125;
   cancel-in-progress: true
 
 jobs:
@@ -75,23 +75,23 @@ jobs:
 # and ensure the corresponding secret is set in your repo settings.
         run: |
           trumbo auth --provider anthropic \
-            --apikey "${{ secrets.ANTHROPIC_API_KEY }}" \
+            --apikey "$&#123;&#123; secrets.ANTHROPIC_API_KEY &#125;&#125;" \
             --modelid claude-opus-4-5-20251101
 
       - name: Get PR number
         id: pr
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "number=${{ inputs.pr_number }}" >> $GITHUB_OUTPUT
+          if [ "$&#123;&#123; github.event_name &#125;&#125;" == "workflow_dispatch" ]; then
+            echo "number=$&#123;&#123; inputs.pr_number &#125;&#125;" >> $GITHUB_OUTPUT
           else
-            echo "number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+            echo "number=$&#123;&#123; github.event.pull_request.number &#125;&#125;" >> $GITHUB_OUTPUT
           fi
 
       - name: Review PR with Trumbo
         env:
-          PR_NUMBER: ${{ steps.pr.outputs.number }}
-          GITHUB_REPO: ${{ github.repository }}
-          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: $&#123;&#123; steps.pr.outputs.number &#125;&#125;
+          GITHUB_REPO: $&#123;&#123; github.repository &#125;&#125;
+          GH_TOKEN: $&#123;&#123; github.token &#125;&#125;
 # Restrict Trumbo to only safe, read-only GitHub CLI commands
           TRUMBO_COMMAND_PERMISSIONS: |
             {
@@ -103,9 +103,9 @@ jobs:
                 "gh issue list *",
                 "gh issue view *",
                 "git log *",
-                "gh pr comment ${{ steps.pr.outputs.number }} *",
-                "gh api repos/${{ github.repository }}/pulls/${{ steps.pr.outputs.number }}/comments *",
-                "gh api repos/${{ github.repository }}/pulls/${{ steps.pr.outputs.number }}/reviews *"
+                "gh pr comment $&#123;&#123; steps.pr.outputs.number &#125;&#125; *",
+                "gh api repos/$&#123;&#123; github.repository &#125;&#125;/pulls/$&#123;&#123; steps.pr.outputs.number &#125;&#125;/comments *",
+                "gh api repos/$&#123;&#123; github.repository &#125;&#125;/pulls/$&#123;&#123; steps.pr.outputs.number &#125;&#125;/reviews *"
               ]
             }
         run: |

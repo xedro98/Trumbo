@@ -1,0 +1,159 @@
+---
+title: "Trumbo Database"
+sidebarTitle: "Database"
+description: "Serverless SQL (plus KV, R2, Vectorize) for your apps and agents — provision, migrate, query, back up, and bind to Agent Apps."
+---
+
+# Trumbo Database
+
+Trumbo Database is managed SQL for **applications you deploy** (and for direct programmatic use). It is not a replacement for [Memory](./overview) / Store (agent scratch state) or Knowledge (RAG) — it is durable SQL for applications, with a Postgres-like DX over a D1-compatible wire format.
+
+| | Memory / Store | Trumbo Database |
+|---|---|---|
+| Primary user | Agent runtime | App + agent provisioning |
+| API shape | Key-value, events, search | SQL, migrations, backups |
+| Isolation | Rows in platform D1 | Dedicated instance per database |
+| Binding | REST / MCP only | Worker binding + HTTP API + MCP |
+
+## Dashboard
+
+[platform.trumbo.dev/databases](https://platform.trumbo.dev/databases)
+
+- Stats: SQL instances, KV/R2/Vector counts, total instances, plan status
+- Create a database (name + kind + region)
+- List instances with kind, region, status
+
+## Kinds
+
+| Kind | Backend | Use |
+|------|---------|-----|
+| `sql` | D1 database | Relational app data, migrations, backups |
+| `kv` | KV namespace | Key-value, config, sessions |
+| `r2` | R2 bucket | Object / blob storage |
+| `vectorize` | Vectorize index | Embeddings + similarity search |
+| `edgeconfig` | KV namespace | Feature flags / edge config (key→value) |
+| `analytics` | Workers Analytics Engine | Per-app request/bandwidth dashboards |
+| `hyperdrive` | Hyperdrive (external Postgres) | Managed Postgres connection pooling (Enterprise) |
+
+## CLI
+
+```bash
+trumbo db create analytics --kind sql --region auto
+trumbo db create flags --kind edgeconfig
+trumbo db create pg --kind hyperdrive --connection-string "postgres://..."
+trumbo db list --kind sql
+trumbo db inspect <dbId>
+trumbo db query <dbId> "SELECT count(*) FROM events"
+trumbo db migrate <dbId> 1 init ./db/migrations/0001_init.sql
+trumbo db migrations <dbId>
+trumbo db attach <dbId> --app <appId> --binding TRUMBO_DB
+trumbo db backup <dbId>
+trumbo db backups <dbId>
+trumbo db restore <dbId> <backupId>
+trumbo db branch <dbId> --name analytics-preview [--with-data]
+trumbo db config <dbId> <key> [value]   # read (no value) / set a feature flag
+trumbo db delete <dbId>
+```
+
+## REST API
+
+All routes on `api.trumbo.dev`, org-scoped via `Authorization: Bearer` + `X-Org-Id`.
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/v1/databases` | List databases (optional `?kind=`) |
+| `POST` | `/api/v1/databases` | Create + provision `{ name, kind?, region? }` |
+| `GET` | `/api/v1/databases/{id}` | Database detail + binding name |
+| `DELETE` | `/api/v1/databases/{id}` | Delete (soft + resource teardown) |
+| `POST` | `/api/v1/databases/{id}/query` | Read-only SQL (parameterized) |
+| `GET/POST` | `/api/v1/databases/{id}/migrations` | List / apply versioned migrations |
+| `POST` | `/api/v1/databases/{id}/attach` | Attach to an app `{ appId, bindingName? }` |
+| `DELETE` | `/api/v1/databases/{id}/attach/{appId}` | Detach |
+| `GET/POST` | `/api/v1/databases/{id}/backups` | List / create backups |
+| `DELETE` | `/api/v1/databases/{id}/backups/{backupId}` | Delete a backup |
+| `POST` | `/api/v1/databases/{id}/backups/{backupId}/restore` | Restore from a backup (SQL) |
+| `POST` | `/api/v1/databases/{id}/branch` | Branch a SQL database `{ name, withData? }` |
+| `GET/PUT` | `/api/v1/databases/{id}/config` | Read / upsert a feature-flag key (`kind=edgeconfig`) |
+| `GET` | `/api/v1/databases/usage` | Database usage + tier limits |
+
+The query endpoint rejects mutating statements (`INSERT`/`UPDATE`/`DELETE`/`CREATE`/`ALTER`/`DROP`/`TRUNCATE`) — schema changes must go through the migrations endpoint.
+
+## MCP tools
+
+Agent tools on `api.trumbo.dev/v1/mcp` (scope: `agents:run`):
+
+| Tool | Phase | Description |
+|------|-------|-------------|
+| `database_create` | MVP | Provision a database |
+| `database_list` | MVP | List databases |
+| `database_query` | MVP | Read-only SQL |
+| `database_attach_app` | MVP | Bind to an Agent App |
+| `database_migrate` | V1 | Apply a versioned migration |
+| `database_backup` | V1 | Create an on-demand backup |
+| `database_restore` | V3 | Restore from a backup |
+| `database_branch` | V4 | Branch a SQL database |
+
+## Migrations
+
+Migrations are versioned, idempotent, and sha256-hashed. Re-applying the same version + SQL is a no-op; a different SQL for an existing version is rejected as drift. Store migration SQL in your repo under `db/migrations/` and apply with the CLI.
+
+## Bindings
+
+Attach a SQL database to an [Agent App](./apps) so it is bound (e.g. as `TRUMBO_DB`) in the app's deployed Worker:
+
+```bash
+trumbo db attach <dbId> --app <appId> --binding TRUMBO_DB
+```
+
+The deployed Worker reads/writes through the native binding; the REST and MCP surfaces use the D1 HTTP API.
+
+## Branches & restore
+
+Branch a SQL database for preview deploys — the build plane clones schema (or schema + data with `--with-data`) into a new D1 instance and records the parent link:
+
+```bash
+trumbo db branch <dbId> --name analytics-preview --with-data
+```
+
+Restore a database from a stored backup (daily or manual) on demand:
+
+```bash
+trumbo db restore <dbId> <backupId>
+```
+
+Daily backups run automatically via the platform's scheduled handler; each active SQL database gets a daily backup when its last one is older than 24h.
+
+## Edge config / feature flags
+
+An `edgeconfig` database is a KV-backed key→value store for feature flags and edge config. Read or set flags from the CLI:
+
+```bash
+trumbo db config <dbId> new_ui_enabled true
+trumbo db config <dbId> new_ui_enabled   # read
+```
+
+Bind it to an app and read the flags from your Worker via the KV binding. Plan-limited (`trumbo_edgeconfig_max_namespaces`).
+
+## Hyperdrive
+
+`kind=hyperdrive` provisions a Hyperdrive config in front of an external Postgres you own, giving the deployed Worker a low-latency pooled connection. Provide a connection string at create time:
+
+```bash
+trumbo db create pg --kind hyperdrive --connection-string "postgres://user:pass@host:5432/db"
+```
+
+Hyperdrive is an Enterprise-tier feature; the external Postgres is not hosted by Trumbo.
+
+
+## Plan limits
+
+| Limit | Pro | Max | Ultra |
+|-------|-----|-----|-------|
+| SQL instances | 1 | 10 | 50 |
+| SQL storage | 256 MB | 2 GB | 10 GB |
+| SQL rows | 250k | 2M | 25M |
+| KV namespaces | 1 | 10 | 100 |
+| R2 buckets | 1 | 10 | 100 |
+| Vectorize indexes | 0 | 5 | 50 |
+
+Overages meter via credits, same model as Browser and Security scans.

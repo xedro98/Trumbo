@@ -30,6 +30,10 @@ const TrumboCommands = {
 	GenerateCommit: prefix + ".generateGitCommitMessage",
 	AbortCommit: prefix + ".abortGitCommitMessage",
 	ReconstructTaskHistory: prefix + ".reconstructTaskHistory",
+	// Security Agent
+	SecurityFindings: prefix + ".securityFindings",
+	SecuritySuppressions: prefix + ".securitySuppressions",
+	SecurityCompliance: prefix + ".securityCompliance",
 	// Jupyter Notebook commands
 	JupyterGenerateCell: prefix + ".jupyterGenerateCell",
 	JupyterExplainCell: prefix + ".jupyterExplainCell",

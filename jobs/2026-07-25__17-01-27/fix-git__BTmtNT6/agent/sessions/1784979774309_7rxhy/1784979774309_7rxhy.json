@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "session_id": "1784979774309_7rxhy",
+  "source": "cli",
+  "pid": 1754,
+  "started_at": "2026-07-25T11:42:55.007Z",
+  "ended_at": "2026-07-25T11:44:17.286Z",
+  "exit_code": 0,
+  "status": "completed",
+  "interactive": false,
+  "provider": "trumbo",
+  "model": "quartz-1.0",
+  "cwd": "/app/personal-site",
+  "workspace_root": "/app/personal-site",
+  "team_name": "team-qaved",
+  "enable_tools": true,
+  "enable_spawn": true,
+  "enable_teams": true,
+  "prompt": "I just made some changes to my personal site and checked out master, but now I can't find those changes. Please help me find them and merge them into master.",
+  "metadata": {
+    "checkpoint": {
+      "latest": {
+        "ref": "d7d3e4ba9350f634d92d39ace2b471433ee57d50",
+        "createdAt": 1784979777215,
+        "runCount": 1,
+        "kind": "commit"
+      },
+      "history": [
+        {
+          "ref": "d7d3e4ba9350f634d92d39ace2b471433ee57d50",
+          "createdAt": 1784979777215,
+          "runCount": 1,
+          "kind": "commit"
+        }
+      ]
+    },
+    "title": "I just made some changes to my personal site and checked out master, but now I can't find those changes. Please help me",
+    "totalCost": 0,
+    "aggregatedAgentsCost": 0,
+    "usage": {
+      "inputTokens": 173382,
+      "outputTokens": 4933,
+      "cacheReadTokens": 153962,
+      "cacheWriteTokens": 0,
+      "totalCost": 0
+    },
+    "aggregateUsage": {
+      "inputTokens": 173382,
+      "outputTokens": 4933,
+      "cacheReadTokens": 153962,
+      "cacheWriteTokens": 0,
+      "totalCost": 0
+    }
+  },
+  "messages_path": "/root/.trumbo/data/sessions/1784979774309_7rxhy/1784979774309_7rxhy.messages.json"
+}

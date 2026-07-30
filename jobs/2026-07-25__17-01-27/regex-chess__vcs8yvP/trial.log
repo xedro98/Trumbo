@@ -1,0 +1,5 @@
+Trial regex-chess__vcs8yvP failed: Docker compose command failed for environment regex-chess. Command: docker compose --project-name regex-chess__vcs8yvp__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\regex-chess\b91cc4650c743c5b1a569864529335bcb7c3a1aaeb1a6920c37cda369cead9b7\environment -f C:\Users\Admin\AppData\Local\Temp\tmp5twods_m\regex-chess__vcs8yvP__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpy9re3_qp\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp3ttrlnp6\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network regex-chess__vcs8yvp__env_default Creating 
+ Network regex-chess__vcs8yvp__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network regex-chess__vcs8yvp__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

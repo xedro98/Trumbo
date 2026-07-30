@@ -1,0 +1,3 @@
+fatal: bad revision 'HEAD'
+Wrote ATIF trajectory to jobs\2026-07-25__17-12-00\dna-insert__58fMEDY\agent\trajectory.json
+No Cline session file found under jobs\2026-07-25__17-12-00\rstan-to-pystan__vLJNEyH\agent/sessions; skipping ATIF trajectory emission

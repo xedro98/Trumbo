@@ -2,7 +2,7 @@
 
 Internal strategy doc: how Trumbo can monetize Cloudflare’s AI and agent stack as **Trumbo-branded platform SKUs**, not raw Cloudflare resale.
 
-Last updated: July 2026
+Last updated: July 26, 2026
 
 ---
 
@@ -12,7 +12,47 @@ Cloudflare does **not** offer blanket white-label of its consumer products (dash
 
 This matches the open-source CLI + paid platform model: customers buy Trumbo platform capabilities (requests, agent hours, knowledge storage, browser minutes), not Cloudflare units.
 
-**Recommended posture:** build Trumbo SKUs on Cloudflare; join the Agency Program for COGS relief; pursue Alliance only when OEM contract terms or committed spend require it.
+**Recommended posture:** build Trumbo SKUs on Cloudflare; **protect the $10k Startup Program credits** (tight runway); instrument unit economics immediately; join Agency Program before credits expire; pursue Alliance only when OEM terms or committed spend require it.
+
+**Current reality (Jul 2026):** Tier-1 SKUs are largely **shipped**. Credit pool is **$10,000** (not $100k). Prioritize **R2 protection + metering** before scaling Browser/Sandbox burn.
+
+---
+
+## Cloudflare Startup Program credits ($10,000)
+
+**Status:** Trumbo has **$10,000** in Cloudflare Startup credits (valid **1 year or until exhausted**). Balance appears on **monthly invoices only**, not in the dashboard.
+
+### Program mechanics (confirmed)
+
+- Eligible usage-based features are **automatically deducted** from the credit balance (or included at no cost as a program benefit).
+- **Core security and networking** (DDoS, WAF, SSL, CDN/DNS, etc.) are included free across tiers.
+- **Credits are NOT visible in the Cloudflare dashboard.** Remaining balance and consumption appear on **monthly invoices** only.
+- **Implication for eng:** Admin “credit runway” must be fed by **invoice CSV / manual balance entry**.
+
+### Product caps at $10k total
+
+| Product | Program rule | At $10k total |
+| --- | --- | --- |
+| **General pool** | Your balance: **$10,000** | Entire runway |
+| **R2 / Cache Reserve** | Up to **$10,000** can be applied from credits | **Can consume 100% of your pool** |
+| **Workers AI** | Tier caps up to $50k (irrelevant) | Max spend is $10k total anyway |
+| **AI Gateway** | **Not covered** | Cash on card |
+| **Quartz / Fireworks** | Not Cloudflare | Always cash |
+
+### Priority at $10k (not $100k)
+
+1. **R2 lifecycle (week 1)** — sandbox backup TTL, knowledge upload limits, Admin R2 burn alert.
+2. **Credit tracking (week 1)** — invoice-driven Admin balance + runway.
+3. **Unit economics (week 2–3)** — know $/browser-min, $/sandbox-CPU before scaling usage.
+4. **SKU polish (careful burn)** — MCP browser tools, Live View; keep tier limits tight.
+5. **Defer** — Workflows product, Workers AI utilities, MCP Host, Gateway migration.
+6. **Agency Program** — apply at **~50% consumed (~$5k)** or 4 months in, whichever comes first.
+
+### Burn-rate targets
+
+- **First invoice:** record balance; if R2 >10% of pool, ship lifecycle immediately.
+- **50% (~$5k):** Agency application + plan limit review.
+- **70% (~$7k):** freeze CF experiments; lock post-credit pricing.
 
 ---
 
@@ -334,13 +374,77 @@ Because the CLI and VS Code extension are open source:
 
 ---
 
-## Practical next steps
+## Detailed execution backlog (what to do next)
 
-1. **Operationalize Knowledge** — monitor AI Search instance provisioning, failed index retries, tier limit alerts.
-2. **Apply for Agency Program** — reduce COGS on Workers AI, Browser Run, Sandboxes as usage grows.
-3. **Spec AI Gateway migration** — document which routes move first (`/api/v1/chat`, `/api/v1/ai`).
-4. **Draft Browser Run spike** — one Worker route + one MCP tool proof of concept.
-5. **Keep Quartz as hero model** — Cloudflare powers agent hosting, RAG, tools, and control plane, not the brand story.
+**Full technical spec:** [`cloudflare-technical-roadmap.md`](./cloudflare-technical-roadmap.md) (migrations, APIs, bindings, acceptance criteria).
+
+Full interactive board: Cursor canvas `cloudflare-next-steps.canvas.tsx`.
+
+### This week (start here) — **$10,000 credit pool**
+
+| ID | Task | Effort | Depends |
+| --- | --- | --- | --- |
+| **R2** | R2 lifecycle + upload/backup limits | M | — |
+| A0c | Baseline **$10,000** from first monthly invoice | S | — |
+| A0r | Admin runway: balance, R2 % of pool | M | A0c |
+| A4 | Add 6 MCP browser tools | M | — |
+| A1–A3 | LLM transport / Gateway | **Defer** | Cash; low priority |
+
+**Parallelism:** R2 + A0c + A0r first. Agency at **~$5k consumed (50%)**.
+
+### Weeks 2–4
+
+| ID | Task | Effort | Depends |
+| --- | --- | --- | --- |
+| A6 | D1 `browser_session_registry` | M | — |
+| A5 | `/browser` Live View dashboard | L | A6 |
+| A8 | Unit costs + economics | M | — |
+| B2 | Admin Economics + $10k runway | L | A8, A0r |
+| A7 | Admin Quartz console | L | — |
+
+### Weeks 5+ — only if runway healthy
+
+B5 schedules, B3/B4 email, B6 DAST — gate on revenue. **Defer:** B9 Workers AI, Workflows.
+
+### Phase A exit criteria
+
+1. R2 lifecycle live; R2 burn visible as % of $10k pool.
+2. Invoice-driven credit balance in Admin.
+3. MCP browser parity + Live View (if burn justified).
+4. Economics shows unit costs + remaining runway.
+
+---
+
+## Practical next steps (priority order)
+
+### Phase A — now (Aug–Sep 2026): credit burn + control plane
+
+1. **Confirm Startup credits** — balance, expiry, covered products, R2 $10k / Workers AI caps in dashboard.
+2. **Polish + scale shipped SKUs** — MCP browser parity, Live View on `/browser`; drive Browser/Sandbox/Agent usage while credits pay CF.
+3. **Instrument unit economics + runway** — Admin Economics: Trumbo revenue vs estimated CF COGS + weekly credit drawdown.
+4. **AI Gateway transport (optional, cash)** — only enable when reliability justifies card billing; **not Startup-credit eligible**.
+5. **Defer Agency Program** until ~90 days before credit expiry (then lock 20% discount for post-credit world).
+
+### Phase B — Oct–Dec 2026: next sellable SKUs (spend credits here)
+
+5. **Trumbo Automations** — Cloudflare Workflows + Queues for cron/PR/monitor agents (pull earlier if runway is long).
+6. **Native Email Routing** — MX for `agents.trumbo.dev` (replace webhook-only email channel).
+7. **Workers AI utility lane** — embeddings / guardrails / STT-TTS only; never brand as Trumbo models (respect Workers AI credit cap).
+8. **Trumbo MCP Host (beta)** — remote MCP + OAuth per org.
+
+### Phase C–D — 2027+ / post-credits
+
+9. Voice (Realtime SFU), Dynamic Workers / Code Mode, Agent Repos (Artifacts).
+10. **Agency Program live** before Startup credits hit zero; then Private Agent Connect / Alliance only if contracts demand.
+11. **Keep Quartz as hero** — Cloudflare powers agent hosting, RAG, tools, and control plane, not the brand story. Fireworks/Quartz remains cash COGS regardless of Startup credits.
+
+### Explicitly do not build
+
+- Per-customer Cloudflare accounts via Tenant API (default path)
+- Pass-through resale of raw Cloudflare SKUs
+- Workers AI catalog as “Trumbo models”
+- Standalone KV / Vectorize customer SKUs (D1 + AI Search suffice)
+- Replacing Pro/Max/Ultra with $99/$299/$999 credit-only tiers
 
 ---
 

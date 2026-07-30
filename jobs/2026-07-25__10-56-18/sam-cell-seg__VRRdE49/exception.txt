@@ -1,0 +1,65 @@
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 351, in run
+    await self._prepare()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 385, in _prepare
+    await self._setup_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1148, in _setup_agent_environment
+    await self._start_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1154, in _start_agent_environment
+    await asyncio.wait_for(
+  File "C:\Python312\Lib\asyncio\tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 908, in start
+    await self._run_docker_compose_command(["up", "--detach", "--wait"])
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 656, in _run_docker_compose_command
+    raise RuntimeError(
+RuntimeError: Docker compose command failed for environment sam-cell-seg. Command: docker compose --project-name sam-cell-seg__vrrde49__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\sam-cell-seg\a141c1f364a9a69e27545a062f5238a27dfde68dfa0a04921966ada2854bf1db\environment -f C:\Users\Admin\AppData\Local\Temp\tmphy2bvpjv\sam-cell-seg__VRRdE49__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpm9mnvdx0\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpqb9vc81j\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout: unable to get image 'alexgshaw/sam-cell-seg:20251031': Error response from daemon: Docker Desktop is unable to start
+bootstrapping main distribution: running wslexec: An error occurred while running the command. DockerDesktop/Wsl/ExecError: c:\windows\system32\wsl.exe -d docker-desktop -u root -e wsl-bootstrap run --base-image /c/program files/docker/docker/resources/docker-desktop.iso --cli-iso /c/program files/docker/docker/resources/wsl/docker-wsl-cli.iso --data-disk d7f2c648-39b1-2145-b581-09fd801ceb9a: exit status 0xc00000fd (stderr: [2026-07-25T05:27:04.178828970Z][wsl-bootstrap.version][W] failed to read component versions: open /opt/docker-desktop/componentsVersion.json: no such file or directory
+[2026-07-25T05:27:04.181519860Z][wsl-bootstrap] provisioning data via data disk with id: d7f2c648-39b1-2145-b581-09fd801ceb9a
+[2026-07-25T05:27:04.182324484Z][wsl-bootstrap] pre-bootstrap complete
+[2026-07-25T05:27:04.194645642Z][wsl-bootstrap] detected existing ext4 file system
+[2026-07-25T05:27:04.665008433Z][wsl-bootstrap.isocache] docker-wsl-cli.iso is present in the cache
+[2026-07-25T05:27:04.712478800Z][wsl-bootstrap.isocache] docker-desktop.iso is present in the cache
+[2026-07-25T05:27:04.729437914Z][wsl-bootstrap] no old version pack detected
+[2026-07-25T05:27:04.739272561Z][wsl-bootstrap] no traceparent to propagate
+[2026-07-25T05:27:04.739336850Z][wsl-bootstrap] Restoring existing exposed ports from the host
+[2026-07-25T05:27:04.739431840Z][wsl-bootstrap] starting linuxkit container with unshare
+[2026-07-25T05:27:04.739446740Z][wsl-bootstrap.ipc] 5069d26b-wsl-bootstrap -> /run/host-services/backend.sock BackendAPI
+[2026-07-25T05:27:04.739703008Z][wsl-bootstrap.ipc] (14a1068b-0) 5069d26b-wsl-bootstrap C->S BackendAPI GET /forwards/list
+[2026-07-25T05:27:04.742374888Z][wsl-bootstrap.ipc][W] (14a1068b-0) 5069d26b-wsl-bootstrap C<-S ConnectionClosed GET /forwards/list (2.68308ms): Get "http://ipc/forwards/list": dial unix /run/host-services/backend.sock: connect: no such file or directory
+[2026-07-25T05:27:05.741811379Z][wsl-bootstrap.ipc] (14a1068b-3) 5069d26b-wsl-bootstrap C->S BackendAPI GET /forwards/list
+[2026-07-25T05:27:05.744945706Z][wsl-bootstrap.ipc] (14a1068b-3) 5069d26b-wsl-bootstrap C<-S dd39f86e-BackendAPI GET /forwards/list (3.081727ms): &[{Annotation:docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd InIp:172.20.0.6 InPath: InPort:3002 Mode:Dual-stack OutIp:0.0.0.0 OutPath: OutPort:3002 Proto:tcp} {Annotation:docker-containers/211412531b495ef4a6c3aabe5f78623a6bc370dac01c9f651c05323eb4dc2432 InIp:172.20.0.6 InPath: InPort:8080 Mode:Dual-stack OutIp:0.0.0.0 OutPath: OutPort:8181 Proto:tcp} {Annotation:docker-containers/cdb235900a73366b44f1d0c2714d629544f8c925ebaccb7e4edda11682770cd7 InIp:172.21.0.2 InPath: InPort:8000 Mode:Dual-stack OutIp:0.0.0.0 OutPath: OutPort:8000 Proto:tcp} {Annotation:docker-containers/55c94bb9a9fe9141cff57a4fc63e3b0f630428aedf6571aa2c90399164bebf77 InIp:172.19.0.4 InPath: InPort:6443 Mode:IPv4-only OutIp:127.0.0.1 OutPath: OutPort:58644 Proto:tcp}]
+[2026-07-25T05:27:05.745241234Z][wsl-bootstrap] Exposing port 3002/tcp
+[2026-07-25T05:27:05.745258814Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.6:3002
+[2026-07-25T05:27:05.747966702Z][wsl-bootstrap] Exposing port 8080/tcp
+[2026-07-25T05:27:05.747998272Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/211412531b495ef4a6c3aabe5f78623a6bc370dac01c9f651c05323eb4dc2432 tcp forward from 0.0.0.0:8181 to 172.20.0.6:8080
+[2026-07-25T05:27:05.748074401Z][wsl-bootstrap] Exposing port 8000/tcp
+[2026-07-25T05:27:05.748104041Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/cdb235900a73366b44f1d0c2714d629544f8c925ebaccb7e4edda11682770cd7 tcp forward from 0.0.0.0:8000 to 172.21.0.2:8000
+[2026-07-25T05:27:05.748207480Z][wsl-bootstrap] Exposing port 6443/tcp
+[2026-07-25T05:27:05.748236620Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/55c94bb9a9fe9141cff57a4fc63e3b0f630428aedf6571aa2c90399164bebf77 tcp4 forward from 127.0.0.1:58644 to 172.19.0.4:6443
+[2026-07-25T05:27:05.748310849Z][wsl-bootstrap] wsl-bootstrap: starting cross-distro routing service
+[2026-07-25T05:27:05.748370569Z][wsl-bootstrap.ipc] run a2ba78e2-cross-distro for component router on /run/guest-services/wsl-cross-distro.sock
+[2026-07-25T05:27:13.001596371Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/250831a8ee24e1e096b5452e36d1b07e6ac2f8ca0034d9211788b693c2f0645c tcp4 forward from 127.0.0.1:51664 to 172.19.0.3:6443
+[2026-07-25T05:27:17.733163629Z][wsl-bootstrap.vpnkitcontrol] removing docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.6:3002
+[2026-07-25T05:27:18.135655005Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.7:3002
+[2026-07-25T05:27:23.558140484Z][wsl-bootstrap.vpnkitcontrol] removing docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.7:3002
+[2026-07-25T05:27:24.203820916Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.7:3002
+[2026-07-25T05:27:30.377632517Z][wsl-bootstrap.vpnkitcontrol] removing docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.7:3002
+[2026-07-25T05:27:30.758840702Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.7:3002
+[2026-07-25T05:27:35.616118071Z][wsl-bootstrap.vpnkitcontrol] removing docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.7:3002
+[2026-07-25T05:27:36.442098402Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.7:3002
+[2026-07-25T05:27:41.263231017Z][wsl-bootstrap.vpnkitcontrol] removing docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.7:3002
+[2026-07-25T05:27:42.791749292Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.7:3002
+[2026-07-25T05:27:48.193613030Z][wsl-bootstrap.vpnkitcontrol] removing docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.7:3002
+[2026-07-25T05:27:51.119169542Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.7:3002
+, stdout: , wslErrorCode: DockerDesktop/Wsl/ExecError)
+github.com/docker/pinata/common/pkg/errordef.helper.Wrap
+	github.com/docker/pinata/common/pkg/errordef/helper.go:52
+github.com/docker/pinata/win/backend/wsl.Config.Run.func3
+	github.com/docker/pinata/win/backend/wsl/config.go:75
+golang.org/x/sync/errgroup.(*Group).Go.func1
+	golang.org/x/sync@v0.20.0/errgroup/errgroup.go:93
+runtime.goexit
+	runtime/asm_amd64.s:1771
+. Stderr: None. 

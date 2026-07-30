@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/sanitize-git-repo",
+        "ref": "sha256:3cc99805fb56bae9db14851e0e61b75108e851cb6b8bb0a817defd39336f6b4b",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "sanitize-git-repo__v6STCst",
+    "trials_dir": "jobs\\2026-07-25__17-01-27",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f270b7e8-59ea-4f97-a3ff-307a1878e499"
+}

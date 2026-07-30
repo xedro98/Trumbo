@@ -133,17 +133,27 @@ function saveOAuthCredentials(input: {
 	formatAccessToken?: (accessToken: string) => string;
 	setLastUsed?: boolean;
 	save?: boolean;
+	/** When set, persists auth.organizationId for X-Org-Id billing scope. */
+	organizationId?: string | null;
 }): ProviderSettings {
 	const accessToken =
 		input.formatAccessToken?.(input.credentials.access) ??
 		input.credentials.access;
-	const auth = {
+	const auth: NonNullable<ProviderSettings["auth"]> = {
 		...(input.settings?.auth ?? {}),
 		accessToken,
 		refreshToken: input.credentials.refresh,
 		accountId: input.credentials.accountId,
 		expiresAt: input.credentials.expires,
 	};
+	if (input.organizationId !== undefined) {
+		const nextOrg = input.organizationId?.trim();
+		if (nextOrg) {
+			auth.organizationId = nextOrg;
+		} else {
+			delete auth.organizationId;
+		}
+	}
 
 	const merged: ProviderSettings = {
 		...(input.settings ?? {
@@ -231,8 +241,15 @@ function createTrumboAuthHandler(input: {
 	return {
 		...baseHandler,
 		saveCredentials(saveInput) {
-			return baseHandler.saveCredentials({
-				...saveInput,
+			const userInfo = (
+				saveInput.credentials as {
+					metadata?: { userInfo?: { activeOrganizationId?: string | null } };
+				}
+			).metadata?.userInfo;
+			const organizationId = userInfo?.activeOrganizationId ?? null;
+			return saveOAuthCredentials({
+				manager: saveInput.manager,
+				storageProviderId: input.storageProviderId ?? input.providerId,
 				settings: {
 					...(saveInput.settings ?? {
 						provider: (input.storageProviderId ??
@@ -240,6 +257,11 @@ function createTrumboAuthHandler(input: {
 					}),
 					baseUrl: resolveTrumboProviderBaseUrl(saveInput.settings?.baseUrl),
 				},
+				credentials: saveInput.credentials,
+				formatAccessToken: formatTrumboApiKey,
+				setLastUsed: saveInput.setLastUsed,
+				save: saveInput.save,
+				organizationId,
 			});
 		},
 	};

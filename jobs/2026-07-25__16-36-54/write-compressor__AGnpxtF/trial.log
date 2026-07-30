@@ -1,0 +1,5 @@
+Trial write-compressor__AGnpxtF failed: Docker compose command failed for environment write-compressor. Command: docker compose --project-name write-compressor__agnpxtf__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\write-compressor\102167adfe1e831e220cf1e045b4b70fb01a816351fa5cc629b61e2f745fbedc\environment -f C:\Users\Admin\AppData\Local\Temp\tmpcd4gm19c\write-compressor__AGnpxtF__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpo2abi6ue\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp583lqfr2\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network write-compressor__agnpxtf__env_default Creating 
+ Network write-compressor__agnpxtf__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network write-compressor__agnpxtf__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

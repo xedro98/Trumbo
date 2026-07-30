@@ -1,0 +1,5 @@
+Trial polyglot-c-py__vHukKGE failed: Docker compose command failed for environment polyglot-c-py. Command: docker compose --project-name polyglot-c-py__vhukkge__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\polyglot-c-py\d8a8f81772559b1c48005a34a0f5717a3cbd1f13afd3dfd68682a46f4260136d\environment -f C:\Users\Admin\AppData\Local\Temp\tmpvxxi2t8s\polyglot-c-py__vHukKGE__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmptboc2g3c\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp0ybc605h\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network polyglot-c-py__vhukkge__env_default Creating 
+ Network polyglot-c-py__vhukkge__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network polyglot-c-py__vhukkge__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

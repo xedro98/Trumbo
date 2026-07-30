@@ -1,0 +1,5 @@
+Trial video-processing__BsF4oMP failed: Docker compose command failed for environment video-processing. Command: docker compose --project-name video-processing__bsf4omp__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\video-processing\59730f0ccdc323eb45aa433d094cd7c2f29a0084d3670ce7cc93acee9b516ade\environment -f C:\Users\Admin\AppData\Local\Temp\tmp5zea91sn\video-processing__BsF4oMP__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpdt160yvj\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpwchjbt1o\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network video-processing__bsf4omp__env_default Creating 
+ Network video-processing__bsf4omp__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network video-processing__bsf4omp__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

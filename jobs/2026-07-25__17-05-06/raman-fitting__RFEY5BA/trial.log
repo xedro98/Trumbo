@@ -1,0 +1,5 @@
+Trial raman-fitting__RFEY5BA failed: Docker compose command failed for environment raman-fitting. Command: docker compose --project-name raman-fitting__rfey5ba__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\raman-fitting\6b2c34e3c5016c763bf1f2f2a7210ee711565f90b18c09b68f95c0daa9220229\environment -f C:\Users\Admin\AppData\Local\Temp\tmpjlvbnebt\raman-fitting__RFEY5BA__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp_im84ie8\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp619uczvv\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network raman-fitting__rfey5ba__env_default Creating 
+ Network raman-fitting__rfey5ba__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network raman-fitting__rfey5ba__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

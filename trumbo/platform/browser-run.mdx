@@ -1,0 +1,53 @@
+---
+title: "Browser Run"
+sidebarTitle: "Browser Run"
+description: "Headless browser screenshots, scrape, PDF, crawl, and interactive sessions."
+---
+
+# Browser Run
+
+Browser Run provides headless browsing for agents and apps: screenshots, markdown, HTML, PDF, scrape, AI JSON extract, links, accessibility trees, snapshots, crawl, and stateful sessions with Live View.
+
+## Dashboard
+
+[platform.trumbo.dev/browser](https://platform.trumbo.dev/browser)
+
+## REST API
+
+Base: `https://api.trumbo.dev/api/v1/browser`
+
+Common body field: `{ "url": "https://example.com" }`
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/browser/screenshot` | PNG screenshot |
+| `POST` | `/browser/markdown` | Page as Markdown |
+| `POST` | `/browser/content` | Rendered HTML |
+| `POST` | `/browser/pdf` | PDF bytes |
+| `POST` | `/browser/scrape` | Structured element scrape |
+| `POST` | `/browser/json` | AI JSON extract |
+| `POST` | `/browser/links` | Extract links |
+| `POST` | `/browser/accessibility-tree` | A11y tree |
+| `POST` | `/browser/snapshot` | Combined capture |
+| `POST` | `/browser/crawl` | Multi-page crawl |
+
+Example:
+
+```bash
+curl -X POST https://api.trumbo.dev/api/v1/browser/markdown \
+  -H "Authorization: Bearer $TRUMBO_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com"}'
+```
+
+Only public `http`/`https` URLs are accepted (SSRF protections block localhost and private ranges).
+
+## MCP tools
+
+Quick actions: `browser_screenshot`, `browser_markdown`, `browser_content`, `browser_pdf`, `browser_scrape`, `browser_json`, `browser_links`, `browser_accessibility_tree`, `browser_snapshot`, `browser_crawl`
+
+Sessions: `browser_session_launch`, `browser_session_navigate`, `browser_session_click`, `browser_session_type`, `browser_session_scroll`, `browser_session_screenshot`, `browser_session_handoff`, `browser_session_wait`, `browser_session_close`
+
+## Limits
+
+Monthly browser minutes and concurrent sessions are plan-gated. In-agent MCP usage and standalone API usage share the subscription window when Browser is enabled.

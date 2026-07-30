@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/polyglot-rust-c",
+        "ref": "sha256:03ff14a88776f5920f5a3c4b1a0ba6d67c391a84b3d88949d0d621a692bd1daa",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "polyglot-rust-c__RJ7vrPW",
+    "trials_dir": "jobs\\2026-07-25__17-05-06",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "20203b6b-277f-4748-9489-a82e7f917591"
+}

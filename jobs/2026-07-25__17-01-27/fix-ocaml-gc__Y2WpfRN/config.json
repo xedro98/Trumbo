@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/fix-ocaml-gc",
+        "ref": "sha256:23621755f7f4ea84bfc67a18ac20f8e9ae05a057212a1dec1a1da6ffa7586e6a",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "fix-ocaml-gc__Y2WpfRN",
+    "trials_dir": "jobs\\2026-07-25__17-01-27",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f270b7e8-59ea-4f97-a3ff-307a1878e499"
+}

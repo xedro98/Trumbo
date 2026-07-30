@@ -1,0 +1,5 @@
+Trial dna-assembly__ugpr4po failed: Docker compose command failed for environment dna-assembly. Command: docker compose --project-name dna-assembly__ugpr4po__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\dna-assembly\c197faf58db01c8cc55f372463c6d65e243b4bda563173d4b9ca7e4c3a5b4c48\environment -f C:\Users\Admin\AppData\Local\Temp\tmptu233e0w\dna-assembly__ugpr4po__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpbxox4_9k\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpn0y4kevc\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network dna-assembly__ugpr4po__env_default Creating 
+ Network dna-assembly__ugpr4po__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network dna-assembly__ugpr4po__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

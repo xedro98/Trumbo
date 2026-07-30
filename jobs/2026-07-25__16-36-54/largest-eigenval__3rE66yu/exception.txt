@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 351, in run
+    await self._prepare()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 385, in _prepare
+    await self._setup_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1148, in _setup_agent_environment
+    await self._start_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1154, in _start_agent_environment
+    await asyncio.wait_for(
+  File "C:\Python312\Lib\asyncio\tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 908, in start
+    await self._run_docker_compose_command(["up", "--detach", "--wait"])
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 656, in _run_docker_compose_command
+    raise RuntimeError(
+RuntimeError: Docker compose command failed for environment largest-eigenval. Command: docker compose --project-name largest-eigenval__3re66yu__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\largest-eigenval\89ed1e066ddb3e9fb78eae0c7d9b2fcf263af0962bd93b0ee07833248ecd0450\environment -f C:\Users\Admin\AppData\Local\Temp\tmpq1jca8wq\largest-eigenval__3rE66yu__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpdejy2k0f\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpjrvc0856\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network largest-eigenval__3re66yu__env_default Creating 
+ Network largest-eigenval__3re66yu__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network largest-eigenval__3re66yu__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 

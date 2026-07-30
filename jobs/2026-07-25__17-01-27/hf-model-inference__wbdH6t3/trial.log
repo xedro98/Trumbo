@@ -1,0 +1,3 @@
+Skipping image OS validation for alexgshaw/hf-model-inference:20251031: docker inspect returned 1
+Trial hf-model-inference__wbdH6t3 failed: Environment start timed out after 1200.0 seconds
+Collecting main service artifacts

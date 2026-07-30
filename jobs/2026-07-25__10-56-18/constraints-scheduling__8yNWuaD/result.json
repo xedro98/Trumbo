@@ -1,0 +1,117 @@
+{
+    "id": "2e33bb2e-7c01-45eb-8baa-a0c804f5ff73",
+    "task_name": "terminal-bench/constraints-scheduling",
+    "trial_name": "constraints-scheduling__8yNWuaD",
+    "trial_uri": "file:///D:/Torch/cline-full/jobs/2026-07-25__10-56-18/constraints-scheduling__8yNWuaD",
+    "task_id": {
+        "org": "terminal-bench",
+        "name": "constraints-scheduling",
+        "ref": "sha256:757c2b9672df2db1ca879878e6c13dcad20222381694a29920eb452276a69d90"
+    },
+    "source": "terminal-bench/terminal-bench-2",
+    "task_checksum": "0c770fe766caca60da162caf26132ed233af15b6fe86ad113933f870e139722a",
+    "config": {
+        "task": {
+            "path": null,
+            "git_url": null,
+            "git_commit_id": null,
+            "name": "terminal-bench/constraints-scheduling",
+            "ref": "sha256:757c2b9672df2db1ca879878e6c13dcad20222381694a29920eb452276a69d90",
+            "overwrite": false,
+            "download_dir": null,
+            "source": "terminal-bench/terminal-bench-2"
+        },
+        "trial_name": "constraints-scheduling__8yNWuaD",
+        "trials_dir": "jobs\\2026-07-25__10-56-18",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": "trumbo_agent:TrumboCli",
+            "import_path": null,
+            "model_name": "trumbo:quartz-1.0",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "cline-version": "3.6.2"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "job_id": "5777e3cc-54aa-49bc-b19d-8a91708b536b"
+    },
+    "agent_info": {
+        "name": "trumbo-cli",
+        "version": "3.6.2",
+        "model_info": {
+            "name": "trumbo:quartz-1.0",
+            "provider": null
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 135709,
+        "n_cache_tokens": 107844,
+        "n_output_tokens": 14236,
+        "cost_usd": 0.0,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 1.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-07-25T05:45:51.342966Z",
+    "finished_at": "2026-07-25T05:49:41.324990Z",
+    "environment_setup": {
+        "started_at": "2026-07-25T05:45:51.352098Z",
+        "finished_at": "2026-07-25T05:45:59.525987Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-07-25T05:45:59.525987Z",
+        "finished_at": "2026-07-25T05:46:57.720552Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-07-25T05:46:57.720552Z",
+        "finished_at": "2026-07-25T05:49:14.510825Z"
+    },
+    "verifier": {
+        "started_at": "2026-07-25T05:49:14.517881Z",
+        "finished_at": "2026-07-25T05:49:36.929347Z"
+    },
+    "step_results": null
+}

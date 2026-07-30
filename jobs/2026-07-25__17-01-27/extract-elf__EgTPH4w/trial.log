@@ -1,0 +1,5 @@
+Trial extract-elf__EgTPH4w failed: Docker compose command failed for environment extract-elf. Command: docker compose --project-name extract-elf__egtph4w__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\extract-elf\fe7aa4e037884f0b5d1dd9ea81df2b96b6c31d7d5f9184f1ef2de273614b5ecf\environment -f C:\Users\Admin\AppData\Local\Temp\tmpip45aveb\extract-elf__EgTPH4w__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpcsj90u1v\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpyy23d4v2\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network extract-elf__egtph4w__env_default Creating 
+ Network extract-elf__egtph4w__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network extract-elf__egtph4w__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

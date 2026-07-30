@@ -1,0 +1,5 @@
+Trial compile-compcert__tMJDUDY failed: Docker compose command failed for environment compile-compcert. Command: docker compose --project-name compile-compcert__tmjdudy__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\compile-compcert\59b8bdc7ad56243291afbc14cc1947d996db745a488ac018be4936643a47a999\environment -f C:\Users\Admin\AppData\Local\Temp\tmpnfe2wkkz\compile-compcert__tMJDUDY__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpubmj28ze\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp2mlmnkg7\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network compile-compcert__tmjdudy__env_default Creating 
+ Network compile-compcert__tmjdudy__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network compile-compcert__tmjdudy__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

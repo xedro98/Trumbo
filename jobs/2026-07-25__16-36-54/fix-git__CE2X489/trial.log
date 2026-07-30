@@ -1,0 +1,5 @@
+Trial fix-git__CE2X489 failed: Docker compose command failed for environment fix-git. Command: docker compose --project-name fix-git__ce2x489__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\fix-git\66be7179f07f1aa8f0d60f88800a883a68c1ffb7a349aae76aa60fa679485473\environment -f C:\Users\Admin\AppData\Local\Temp\tmpzx9ykrzz\fix-git__CE2X489__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpa_v31vxy\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp88phek8g\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network fix-git__ce2x489__env_default Creating 
+ Network fix-git__ce2x489__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network fix-git__ce2x489__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

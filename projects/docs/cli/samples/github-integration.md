@@ -88,10 +88,10 @@ jobs:
       - name: Configure Trumbo Authentication
         if: steps.detect.outputs.hit == 'true'
         env:
-          TRUMBO_DIR: ${{ runner.temp }}/trumbo
+          TRUMBO_DIR: $&#123;&#123; runner.temp &#125;&#125;/trumbo
         run: |
 # Configure API key using the auth command
-          trumbo auth --provider openrouter --apikey "${{ secrets.OPENROUTER_API_KEY }}"
+          trumbo auth --provider openrouter --apikey "$&#123;&#123; secrets.OPENROUTER_API_KEY &#125;&#125;"
 
       - name: Download analyze script
         if: steps.detect.outputs.hit == 'true'
@@ -106,8 +106,8 @@ jobs:
         if: steps.detect.outputs.hit == 'true'
         id: analyze
         env:
-          ISSUE_URL: ${{ steps.detect.outputs.issue_url }}
-          COMMENT: ${{ steps.detect.outputs.comment_body }}
+          ISSUE_URL: $&#123;&#123; steps.detect.outputs.issue_url &#125;&#125;
+          COMMENT: $&#123;&#123; steps.detect.outputs.comment_body &#125;&#125;
         run: |
           set -euo pipefail
           
@@ -120,8 +120,8 @@ jobs:
         if: steps.detect.outputs.hit == 'true'
         uses: actions/github-script@v7
         env:
-          ISSUE_NUMBER: ${{ steps.detect.outputs.issue_number }}
-          RESULT: ${{ steps.analyze.outputs.result }}
+          ISSUE_NUMBER: $&#123;&#123; steps.detect.outputs.issue_number &#125;&#125;
+          RESULT: $&#123;&#123; steps.analyze.outputs.result &#125;&#125;
         with:
           script: |
             await github.rest.issues.createComment({

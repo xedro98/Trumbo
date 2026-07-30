@@ -1,0 +1,5 @@
+Trial rstan-to-pystan__HKFGCCs failed: Docker compose command failed for environment rstan-to-pystan. Command: docker compose --project-name rstan-to-pystan__hkfgccs__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\rstan-to-pystan\c14ad3926606b96140a60b842cd875268879354512e7457ce9a6101a02d61c15\environment -f C:\Users\Admin\AppData\Local\Temp\tmpx7l8vwr1\rstan-to-pystan__HKFGCCs__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpy5lkeoxl\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpvsjb9kuu\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network rstan-to-pystan__hkfgccs__env_default Creating 
+ Network rstan-to-pystan__hkfgccs__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network rstan-to-pystan__hkfgccs__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

@@ -1,0 +1,117 @@
+{
+    "id": "fd5b0ed1-ca9d-4a74-823c-45361d4427d8",
+    "task_name": "terminal-bench/headless-terminal",
+    "trial_name": "headless-terminal__dL4ZgnE",
+    "trial_uri": "file:///D:/Torch/cline-full/jobs/2026-07-25__10-56-18/headless-terminal__dL4ZgnE",
+    "task_id": {
+        "org": "terminal-bench",
+        "name": "headless-terminal",
+        "ref": "sha256:3c85b2c55da0d404deebd0c18c676d15985d35a1b1dae4ef5221dca5a2e7b282"
+    },
+    "source": "terminal-bench/terminal-bench-2",
+    "task_checksum": "fd8154e260accd2002a3a8c7da9adb9b8ae0c0f1fa09787da2e6611f74422a70",
+    "config": {
+        "task": {
+            "path": null,
+            "git_url": null,
+            "git_commit_id": null,
+            "name": "terminal-bench/headless-terminal",
+            "ref": "sha256:3c85b2c55da0d404deebd0c18c676d15985d35a1b1dae4ef5221dca5a2e7b282",
+            "overwrite": false,
+            "download_dir": null,
+            "source": "terminal-bench/terminal-bench-2"
+        },
+        "trial_name": "headless-terminal__dL4ZgnE",
+        "trials_dir": "jobs\\2026-07-25__10-56-18",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": "trumbo_agent:TrumboCli",
+            "import_path": null,
+            "model_name": "trumbo:quartz-1.0",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "cline-version": "3.6.2"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "job_id": "5777e3cc-54aa-49bc-b19d-8a91708b536b"
+    },
+    "agent_info": {
+        "name": "trumbo-cli",
+        "version": "3.6.2",
+        "model_info": {
+            "name": "trumbo:quartz-1.0",
+            "provider": null
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 640190,
+        "n_cache_tokens": 599205,
+        "n_output_tokens": 25571,
+        "cost_usd": 0.0,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 1.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-07-25T05:39:17.375181Z",
+    "finished_at": "2026-07-25T05:45:50.773605Z",
+    "environment_setup": {
+        "started_at": "2026-07-25T05:39:17.383135Z",
+        "finished_at": "2026-07-25T05:39:25.547531Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-07-25T05:39:25.547531Z",
+        "finished_at": "2026-07-25T05:40:08.264897Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-07-25T05:40:08.264897Z",
+        "finished_at": "2026-07-25T05:45:25.369053Z"
+    },
+    "verifier": {
+        "started_at": "2026-07-25T05:45:25.375381Z",
+        "finished_at": "2026-07-25T05:45:47.905393Z"
+    },
+    "step_results": null
+}

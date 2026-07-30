@@ -1,0 +1,5 @@
+Trial build-pmars__GDKCBJa failed: Docker compose command failed for environment build-pmars. Command: docker compose --project-name build-pmars__gdkcbja__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\build-pmars\796773c1d8b991b9b936b3513308b1a4d2ea1772ae9d9b29103f58748d6e2c17\environment -f C:\Users\Admin\AppData\Local\Temp\tmp0k6apfl3\build-pmars__GDKCBJa__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpalju6rz0\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp4_omeemu\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network build-pmars__gdkcbja__env_default Creating 
+ Network build-pmars__gdkcbja__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network build-pmars__gdkcbja__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

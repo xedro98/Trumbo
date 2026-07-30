@@ -1,0 +1,5 @@
+Trial pypi-server__Uba2S4o failed: Docker compose command failed for environment pypi-server. Command: docker compose --project-name pypi-server__uba2s4o__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\pypi-server\0eeffaeb7bc3b8eb617fb9d01772353c647a63dba61b6d96745fcd13f7f1f297\environment -f C:\Users\Admin\AppData\Local\Temp\tmp4kuomt76\pypi-server__Uba2S4o__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpbou_ui69\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp7h_ldqpd\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network pypi-server__uba2s4o__env_default Creating 
+ Network pypi-server__uba2s4o__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network pypi-server__uba2s4o__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

@@ -1,0 +1,5 @@
+Trial mailman__MvEtoi9 failed: Docker compose command failed for environment mailman. Command: docker compose --project-name mailman__mvetoi9__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\mailman\b0590a96642e689fc79571934ac533d24cd6de4210a151331ff07def7e8d1d26\environment -f C:\Users\Admin\AppData\Local\Temp\tmp8jw7k6_b\mailman__MvEtoi9__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpljlnqn54\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpoo8ca5mt\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network mailman__mvetoi9__env_default Creating 
+ Network mailman__mvetoi9__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network mailman__mvetoi9__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

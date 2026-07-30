@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/password-recovery",
+        "ref": "sha256:ee9fe20f22d6f2bcf67b52571ea9ce7a8048bc49dc4f5bb3a78ff40149b0c02c",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "password-recovery__Pdzr9Cy",
+    "trials_dir": "jobs\\2026-07-25__16-36-54",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f67ac3c6-e533-46ca-8d83-91b62b29a5cf"
+}

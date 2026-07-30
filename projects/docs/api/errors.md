@@ -1,0 +1,158 @@
+---
+title: "Errors"
+description: "Error codes, error formats, rate limits, mid-stream errors, and retry strategies for the Trumbo API."
+---
+# Errors
+
+The Trumbo API reports errors in a predictable JSON shape. Limits and plan gates are enforced server-side on every request.
+
+## Error format
+
+Most errors follow the OpenAI error format:
+
+```json
+{
+  "error": {
+    "code": 401,
+    "message": "Invalid or missing token",
+    "metadata": {}
+  }
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `code` | number/string | HTTP status code or error identifier |
+| `message` | string | Human-readable description |
+| `metadata` | object | Additional context (request ids, product details) |
+
+Product REST endpoints may return their own JSON error bodies with a `message` or `error` field. Treat the HTTP status as authoritative.
+
+## HTTP error codes
+
+| Code | Name | Cause | What to do |
+|------|------|-------|------------|
+| `400` | Bad Request | Malformed body, missing required fields | Check JSON syntax and required parameters |
+| `401` | Unauthorized | Invalid or missing Bearer token | Verify token at [platform.trumbo.dev/tokens](https://platform.trumbo.dev/tokens) |
+| `403` | Forbidden | Missing scope, plan gate, or org header | Check token scopes and `X-Org-Id` for team workspaces |
+| `404` | Not Found | Invalid endpoint, resource id, or model id | Verify URL path and model id from `GET /v1/models` |
+| `429` | Too Many Requests | Rate or quota window exceeded | Wait for reset. Check [platform.trumbo.dev/usage](https://platform.trumbo.dev/usage) |
+| `500` | Internal Server Error | Server-side issue | Retry after a short delay |
+| `502` | Bad Gateway | Upstream failure | Retry with backoff |
+| `503` | Service Unavailable | Temporary outage | Retry with backoff |
+
+::: tip
+Trumbo Platform subscriptions use request windows and product quotas, not open-ended per-token billing on subscription surfaces. A `429` often means a 5-hour, daily, or weekly chat window, or a product meter (agents, sandbox, browser, etc.) is exhausted. See [Billing & Limits](../platform/billing-and-limits).
+:::
+
+## Rate limits
+
+Chat completions count against windows shown on `/usage`:
+
+- **5-hour** rolling window
+- **Daily** window
+- **Weekly** window
+
+Product APIs enforce separate meters (agent hours, sandbox CPU-seconds, browser minutes, and so on). Inspect usage programmatically:
+
+```bash
+curl https://api.trumbo.dev/api/v1/users/me/plan \
+  -H "Authorization: Bearer trumbo_YOUR_TOKEN" \
+  -H "X-Org-Id: YOUR_ORG_ID"
+```
+
+## Mid-stream errors
+
+During streaming, failures can occur after the connection already returned `200 OK`. They arrive as a chunk whose `finish_reason` is `error`:
+
+```json
+{
+  "choices": [
+    {
+      "finish_reason": "error",
+      "error": {
+        "code": "context_length_exceeded",
+        "message": "The input exceeds the model maximum context length."
+      }
+    }
+  ]
+}
+```
+
+Common mid-stream error codes:
+
+| Code | Meaning |
+|------|---------|
+| `context_length_exceeded` | Input exceeds the model context window |
+| `content_filter` | Content blocked by a safety filter |
+| `rate_limit` | Rate limit hit during generation |
+| `server_error` | Upstream failure during generation |
+
+::: warning
+Mid-stream errors do not change the HTTP status because the connection already succeeded. Always inspect `finish_reason` in your streaming handler.
+:::
+
+## Retry strategies
+
+### Exponential backoff
+
+For transient failures (`429`, `500`, `502`, `503`):
+
+```python
+import time
+import requests
+
+def call_api_with_retry(payload, max_retries=3):
+    for attempt in range(max_retries):
+        response = requests.post(
+            "https://api.trumbo.dev/v1/chat/completions",
+            headers={
+                "Authorization": "Bearer trumbo_YOUR_TOKEN",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+        )
+
+        if response.status_code == 200:
+            return response.json()
+
+        if response.status_code in (429, 500, 502, 503):
+            delay = (2 ** attempt) + 1
+            print(f"Retrying in {delay}s (attempt {attempt + 1}/{max_retries})")
+            time.sleep(delay)
+            continue
+
+        response.raise_for_status()
+
+    raise Exception("Max retries exceeded")
+```
+
+### When to retry
+
+| Error | Retry? | Strategy |
+|-------|--------|----------|
+| `401 Unauthorized` | No | Fix or rotate your token |
+| `403 Forbidden` | No | Fix scopes, plan, or org header |
+| `429 Too Many Requests` | Yes | Exponential backoff; wait for window reset |
+| `500 Internal Server Error` | Yes | Retry once after 1s |
+| `502 Bad Gateway` | Yes | Retry up to 3 times with backoff |
+| `503 Service Unavailable` | Yes | Retry up to 3 times with backoff |
+| Mid-stream `error` | Depends | Retry the full request for transient errors |
+
+## Debugging
+
+When reporting an issue, include:
+
+1. The **error code and message** from the response
+2. The **model id** or **product endpoint** you were calling
+3. The **request id** (from response headers, if available)
+4. Whether the error was **immediate** (HTTP error) or **mid-stream** (`finish_reason: error`)
+5. Your **org id** if using a team workspace
+
+## Related
+
+- **Chat Completions** — Endpoint reference with request and response schemas.
+
+  - **Authentication** — Verify tokens and org headers.
+
+  - **Billing & Limits** — Plans, meters, and usage windows.

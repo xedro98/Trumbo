@@ -1,0 +1,103 @@
+---
+title: "Models"
+sidebarTitle: "Models"
+description: "Quartz model variants, catalog models, and how to list available model ids on the Trumbo API."
+---
+
+# Models
+
+Trumbo exposes an OpenAI-compatible models endpoint at `https://api.trumbo.dev/v1/models`. Use it to discover Quartz and other catalog models available to your account.
+
+## List models
+
+```bash
+curl https://api.trumbo.dev/v1/models \
+  -H "Authorization: Bearer $TRUMBO_API_TOKEN"
+```
+
+The response follows the OpenAI list-models shape. Each entry includes an `id` you pass to [Chat Completions](/api/chat-completions) as the `model` parameter.
+
+Admins sync the public catalog from **Admin → Models → Sync Model Catalog** on [platform.trumbo.dev/models](https://platform.trumbo.dev/models).
+
+## Quartz variants
+
+Quartz is Trumbo's flagship reasoning model family. Routing is opaque to clients: you select a Quartz id; backing infrastructure is not disclosed in product responses.
+
+| Public id (examples) | Role |
+|----------------------|------|
+| `quartz-1.0` / default | Balanced flagship |
+| Quartz Lite | Low latency, efficient default |
+| Quartz Hyper | Max reasoning depth (higher tiers) |
+
+Example request:
+
+```bash
+curl -X POST https://api.trumbo.dev/v1/chat/completions \
+  -H "Authorization: Bearer $TRUMBO_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "quartz-1.0",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'
+```
+
+## Catalog models
+
+Beyond Quartz, the platform may expose additional catalog models synced from the admin model catalog. Availability depends on your plan and admin configuration. Always call `GET /v1/models` rather than hard-coding ids.
+
+## Choosing a model
+
+| If you need... | Consider |
+|----------------|----------|
+| General coding and reasoning | `quartz-1.0` |
+| Low latency responses | Quartz Lite |
+| Deep multi-step reasoning | Quartz Hyper (Max / Ultra tiers) |
+| Specific catalog capability | Check `GET /v1/models` and the Model Catalog UI |
+
+<Note>
+  Subscription chat completions count against the 5-hour, daily, and weekly windows shown on [platform.trumbo.dev/usage](https://platform.trumbo.dev/usage). Standalone usage may draw API credits depending on billing mode. See [Billing & Limits](/platform/billing-and-limits).
+</Note>
+
+## Reasoning output
+
+Quartz Hyper and other reasoning-capable routes may stream extended thinking before the final answer:
+
+- Reasoning content can appear in `delta.reasoning` during streaming
+- Some responses include encrypted reasoning blocks in `delta.reasoning_details`
+
+Inspect `finish_reason` and streaming deltas in your client. See [Chat Completions](/api/chat-completions#reasoning-models).
+
+## Multi-modal input
+
+Image-capable catalog models accept base64-encoded image content inside the `messages` array:
+
+```json
+{
+  "model": "quartz-1.0",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "What is in this image?"},
+        {"type": "image_url", "image_url": {"url": "data:image/png;base64,..."}}
+      ]
+    }
+  ]
+}
+```
+
+Not every model accepts images. Confirm capability in the Model Catalog UI or model metadata from `GET /v1/models`.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Chat Completions" icon="message" href="/api/chat-completions">
+    Use model ids in completion requests.
+  </Card>
+  <Card title="Platform Chat Completions" icon="sparkles" href="/platform/chat-completions">
+    Quartz API overview, streaming, and rate limits.
+  </Card>
+  <Card title="Billing & Limits" icon="gauge" href="/platform/billing-and-limits">
+    Request windows and API credits.
+  </Card>
+</CardGroup>

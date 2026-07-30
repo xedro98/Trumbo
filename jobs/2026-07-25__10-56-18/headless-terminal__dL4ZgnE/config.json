@@ -1,0 +1,17 @@
+{
+    "task": {
+        "name": "terminal-bench/headless-terminal",
+        "ref": "sha256:3c85b2c55da0d404deebd0c18c676d15985d35a1b1dae4ef5221dca5a2e7b282",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "headless-terminal__dL4ZgnE",
+    "trials_dir": "jobs\\2026-07-25__10-56-18",
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "5777e3cc-54aa-49bc-b19d-8a91708b536b"
+}

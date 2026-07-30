@@ -1,0 +1,5 @@
+Trial largest-eigenval__vqt5yH8 failed: Docker compose command failed for environment largest-eigenval. Command: docker compose --project-name largest-eigenval__vqt5yh8__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\largest-eigenval\89ed1e066ddb3e9fb78eae0c7d9b2fcf263af0962bd93b0ee07833248ecd0450\environment -f C:\Users\Admin\AppData\Local\Temp\tmpchdrm43h\largest-eigenval__vqt5yH8__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp_as038cv\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp4cg2ptdw\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network largest-eigenval__vqt5yh8__env_default Creating 
+ Network largest-eigenval__vqt5yh8__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network largest-eigenval__vqt5yh8__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

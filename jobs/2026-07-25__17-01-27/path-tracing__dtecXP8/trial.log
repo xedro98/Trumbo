@@ -1,0 +1,5 @@
+Trial path-tracing__dtecXP8 failed: Docker compose command failed for environment path-tracing. Command: docker compose --project-name path-tracing__dtecxp8__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\path-tracing\6cce7549c4c77218bd118924c0c1db3b0bcc0311bd8124baa6f34c69212376ef\environment -f C:\Users\Admin\AppData\Local\Temp\tmp4l6s0u9z\path-tracing__dtecXP8__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp4c01bu4r\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpsrhmr081\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network path-tracing__dtecxp8__env_default Creating 
+ Network path-tracing__dtecxp8__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network path-tracing__dtecxp8__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

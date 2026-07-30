@@ -1,0 +1,69 @@
+---
+title: "Security"
+description: "Connect repos, run scans, review findings, and remediate with Trumbo Security."
+---
+# Security
+
+Trumbo Security connects git repos, runs LLM-assisted and static scans, tracks findings, and can propose remediations / PRs depending on tier.
+
+## Dashboard
+
+[platform.trumbo.dev/security](https://platform.trumbo.dev/security)
+
+Connect a repo, then use **Copy ID** for Automations `security_scan` steps.
+
+## REST API
+
+Repos:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/v1/repos` | List connected repos |
+| `POST` | `/api/v1/repos` | Connect a repo |
+| `DELETE` | `/api/v1/repos/{id}` | Disconnect |
+| `POST` | `/api/v1/repos/{id}/scan` | Trigger a scan |
+| `PATCH` | `/api/v1/repos/{id}/auto-scan` | Toggle webhook auto-scan |
+
+Security:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/v1/security/findings` | List findings |
+| `GET` | `/api/v1/security/findings/{id}` | Finding detail |
+| `GET` | `/api/v1/security/scans` | List scans |
+| `GET` | `/api/v1/security/scans/{id}` | Scan detail |
+| `POST` | `/api/v1/security/scans/{id}/cancel` | Cancel |
+| `GET` | `/api/v1/security/stats` | Posture stats |
+| `GET` | `/api/v1/security/usage` | Monthly credits / scans |
+| `POST` | `/api/v1/security/findings/{id}/remediate` | Start remediation |
+
+Trigger scan:
+
+```bash
+curl -X POST https://api.trumbo.dev/api/v1/repos/REPO_ID/scan \
+  -H "Authorization: Bearer trumbo_YOUR_TOKEN" \
+  -H "X-Org-Id: YOUR_ORG_ID"
+```
+
+## MCP tools
+
+`security_list_repos`, `security_scan_repo`, `security_list_findings`, `security_get_finding`, `security_remediate_finding`, `security_update_finding`, `security_get_stats`
+
+## Automations
+
+```json
+{
+  "id": "security-kickoff",
+  "type": "security_scan",
+  "config": {
+    "repoId": "YOUR-REPO-UUID",
+    "commitSha": "HEAD"
+  }
+}
+```
+
+The step **submits** a scan and returns when queued. Watch progress on `/security`.
+
+## Limits
+
+Plan gates: Security enabled flag, max connected repos, monthly scan credits, remediation depth, DAST / supply-chain capabilities.

@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\single_step.py", line 77, in _run_agent
+    await self._run_agent_phase(
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 450, in _run_agent_phase
+    await asyncio.wait_for(
+  File "C:\Python312\Lib\asyncio\tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\agents\installed\base.py", line 168, in wrapper
+    return await fn(self, instruction, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\agents\installed\claude_code.py", line 1516, in run
+    await self.exec_as_agent(
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\agents\installed\base.py", line 592, in exec_as_agent
+    return await self._exec(
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\agents\installed\base.py", line 559, in _exec
+    raise self._classify_exec_error(command, result)
+harbor.agents.installed.base.AgentAuthenticationError: Command failed (exit 1): export PATH="$HOME/.local/bin:$PATH"; harbor_claude_code_instruction_5e484dd0f90a467181dc52e2fd88bbe5="$HARBOR_CLAUDE_CODE_INSTRUCTION_5E484DD0F90A467181DC52E2FD88BBE5"; unset HARBOR_CLAUDE_CODE_INSTRUCTION_5E484DD0F90A467181DC52E2FD88BBE5; printf "%s" "$harbor_claude_code_instruction_5e484dd0f90a467181dc52e2fd88bbe5" | claude --verbose --output-format=stream-json --permission-mode=bypassPermissions --print 2>&1 | tee /logs/agent/claude-code.txt
+stdout: {"type":"system","subtype":"init","cwd":"/app","session_id":"1e5a315d-90ed-49c3-8e79-c2641cfaa846","tools":["Task","Bash","CronCreate","CronDelete","CronList","Edit","EnterWorktree","ExitWorktree","NotebookEdit","Read","ReportFindings","ScheduleWakeu ... [2277 chars truncated] ... s":1,"stop_reason":"stop_sequence","session_id":"1e5a315d-90ed-49c3-8e79-c2641cfaa846","total_cost_usd":0,"usage":{"input_tokens":0,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":0,"server_tool_use":{"web_search_requests":0,"web_fetch_requests":0},"service_tier":"standard","cache_creation":{"ephemeral_1h_input_tokens":0,"ephemeral_5m_input_tokens":0},"inference_geo":"","iterations":[],"speed":"standard"},"modelUsage":{},"permission_denials":[],"terminal_reason":"api_error","fast_mode_state":"off","fast_mode_disabled_reason":"sdk_opt_in_required","subtype":"success","api_error_status":null,"result":"Not logged in · Please run /login","type":"result","duration_ms":87,"uuid":"43a47cb9-e615-4210-bb73-3e7b1c733c0b"}
+
+stderr: None

@@ -1,0 +1,40 @@
+=== install-root-prereqs ===
+start:    2026-07-25T11:42:06.069348+00:00
+end:      2026-07-25T11:42:10.953504+00:00
+duration: 4.88s
+--- STDOUT ---
+Killing background apt processes to release lock...
+Trying apt-get install without update first...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+ca-certificates is already the newest version (20230311+deb12u1).
+git is already the newest version (1:2.39.5-0+deb12u2).
+The following additional packages will be installed:
+  libcurl4
+Suggested packages:
+  zip
+The following NEW packages will be installed:
+  curl libcurl4 unzip
+0 upgraded, 3 newly installed, 0 to remove and 16 not upgraded.
+Need to get 874 kB of archives.
+After this operation, 1749 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian bookworm/main amd64 libcurl4 amd64 7.88.1-10+deb12u14 [392 kB]
+Get:2 http://deb.debian.org/debian bookworm/main amd64 curl amd64 7.88.1-10+deb12u14 [316 kB]
+Get:3 http://deb.debian.org/debian bookworm/main amd64 unzip amd64 6.0-28 [166 kB]
+Fetched 874 kB in 1s (594 kB/s)
+Selecting previously unselected package libcurl4:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 10322 files and directories currently installed.)
+Preparing to unpack .../libcurl4_7.88.1-10+deb12u14_amd64.deb ...
+Unpacking libcurl4:amd64 (7.88.1-10+deb12u14) ...
+Selecting previously unselected package curl.
+Preparing to unpack .../curl_7.88.1-10+deb12u14_amd64.deb ...
+Unpacking curl (7.88.1-10+deb12u14) ...
+Selecting previously unselected package unzip.
+Preparing to unpack .../unzip_6.0-28_amd64.deb ...
+Unpacking unzip (6.0-28) ...
+Setting up unzip (6.0-28) ...
+Setting up libcurl4:amd64 (7.88.1-10+deb12u14) ...
+Setting up curl (7.88.1-10+deb12u14) ...
+Processing triggers for libc-bin (2.36-9+deb12u10) ...
+Install succeeded without update.

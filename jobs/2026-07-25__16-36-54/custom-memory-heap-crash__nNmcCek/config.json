@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/custom-memory-heap-crash",
+        "ref": "sha256:72cdc9cf98c822a1449935ca32efc6612fe3d14928c9465c11285e95dcdf60cb",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "custom-memory-heap-crash__nNmcCek",
+    "trials_dir": "jobs\\2026-07-25__16-36-54",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f67ac3c6-e533-46ca-8d83-91b62b29a5cf"
+}

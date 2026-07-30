@@ -1,0 +1,57 @@
+---
+title: "Authentication"
+description: "API tokens, scopes, device auth, and org headers for the Trumbo Platform API."
+---
+# Authentication
+
+Trumbo Platform APIs authenticate with a Bearer token. Dashboard sessions use cookies; CLI and VS Code typically use device-code OAuth.
+
+## API tokens
+
+1. Open [platform.trumbo.dev/tokens](https://platform.trumbo.dev/tokens).
+2. Create a token with the scopes you need.
+3. Copy the token once (it is shown only at creation time).
+
+Default scopes for new tokens:
+
+- `browser:run`
+- `sandbox:run`
+- `agents:run`
+
+Send the token on every request:
+
+```bash
+curl https://api.trumbo.dev/api/v1/agents \
+  -H "Authorization: Bearer trumbo_YOUR_TOKEN"
+```
+
+## Organization scope
+
+Team workspaces require an org header when the token or session can access multiple orgs:
+
+```bash
+-H "X-Org-Id: YOUR_ORG_ID"
+```
+
+The dashboard sets this automatically from the active workspace switcher.
+
+## Device auth (CLI / VS Code)
+
+The CLI and VS Code extension use RFC 8628 device-code grant against `https://platform.trumbo.dev`. After you approve in the browser, they store a session and call the same APIs.
+
+## MCP auth
+
+Connect an MCP client to:
+
+```text
+https://api.trumbo.dev/v1/mcp
+```
+
+Use a device-auth session or a compatible Bearer. Metered API keys meant only for chat/browser REST may be rejected by MCP; prefer a logged-in CLI session or an agents-scoped token as documented for your client.
+
+## Security tips
+
+- Prefer least-privilege scopes.
+- Rotate tokens if they leak.
+- Never commit tokens to git.
+- Treat Automations webhook URLs as public targets: only allowlisted https hosts are accepted.

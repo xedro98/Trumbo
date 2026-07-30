@@ -1,0 +1,5 @@
+Trial git-multibranch__pQgkQVA failed: Docker compose command failed for environment git-multibranch. Command: docker compose --project-name git-multibranch__pqgkqva__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\git-multibranch\03d8f235cc737efc32ed92a11685f93581fe6e1fd4ad14fffaa049d2b59e381a\environment -f C:\Users\Admin\AppData\Local\Temp\tmpzhyhlund\git-multibranch__pQgkQVA__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp9i4skl4o\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmput8_085o\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network git-multibranch__pqgkqva__env_default Creating 
+ Network git-multibranch__pqgkqva__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network git-multibranch__pqgkqva__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

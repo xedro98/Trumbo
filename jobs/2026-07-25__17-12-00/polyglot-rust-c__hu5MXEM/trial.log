@@ -1,0 +1,5 @@
+Trial polyglot-rust-c__hu5MXEM failed: Docker compose command failed for environment polyglot-rust-c. Command: docker compose --project-name polyglot-rust-c__hu5mxem__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\polyglot-rust-c\03ff14a88776f5920f5a3c4b1a0ba6d67c391a84b3d88949d0d621a692bd1daa\environment -f C:\Users\Admin\AppData\Local\Temp\tmpyprck59p\polyglot-rust-c__hu5MXEM__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpyampx9iq\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp2588987n\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network polyglot-rust-c__hu5mxem__env_default Creating 
+ Network polyglot-rust-c__hu5mxem__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network polyglot-rust-c__hu5mxem__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

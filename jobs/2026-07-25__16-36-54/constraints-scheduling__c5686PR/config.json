@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/constraints-scheduling",
+        "ref": "sha256:757c2b9672df2db1ca879878e6c13dcad20222381694a29920eb452276a69d90",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "constraints-scheduling__c5686PR",
+    "trials_dir": "jobs\\2026-07-25__16-36-54",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f67ac3c6-e533-46ca-8d83-91b62b29a5cf"
+}

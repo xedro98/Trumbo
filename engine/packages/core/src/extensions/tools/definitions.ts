@@ -661,7 +661,7 @@ export function createEditorTool(
 	return createTool<EditFileInput, ToolOperationResult>({
 		name: "editor",
 		description:
-			"An editor for controlled filesystem edits on the text file at the provided path. " +
+			"Edit or create a text file. ALWAYS provide the `path` field (an absolute file path) and the `new_text` field; both are required and the call is rejected without them. " +
 			"Provide `insert_line` to insert `new_text` at a specific line number. " +
 			"Otherwise, the tool replaces `old_text` with `new_text`, or creates the file with `new_text` if file does not exist. " +
 			"Use this tool for making small, precise edits to existing files or creating new files over shell commands. If several edits to different files or non-overlapping regions are already known, emit multiple editor tool calls in the same response instead of serializing them across turns.",

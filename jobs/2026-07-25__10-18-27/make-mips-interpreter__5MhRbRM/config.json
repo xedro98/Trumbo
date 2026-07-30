@@ -1,0 +1,10 @@
+{
+    "task": {
+        "name": "terminal-bench/make-mips-interpreter",
+        "ref": "sha256:608e82ecd67ce469824a34181b580cbd0e1096cdfc05fe40edda3e6bfada9773",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "make-mips-interpreter__5MhRbRM",
+    "trials_dir": "jobs\\2026-07-25__10-18-27",
+    "job_id": "49ddaf7e-ed97-45c8-bf15-a1198f76b1eb"
+}

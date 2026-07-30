@@ -1,0 +1,62 @@
+{
+    "id": "32d1bec0-e78d-4416-95f1-26f42698a39d",
+    "started_at": "2026-07-25T17:12:06.196977",
+    "updated_at": "2026-07-25T11:53:58.994142Z",
+    "finished_at": null,
+    "n_total_trials": 89,
+    "stats": {
+        "n_completed_trials": 21,
+        "n_errored_trials": 20,
+        "n_running_trials": 1,
+        "n_pending_trials": 67,
+        "n_cancelled_trials": 0,
+        "n_retries": 62,
+        "evals": {
+            "trumbo-cli__trumbo:quartz-1.0__terminal-bench/terminal-bench-2": {
+                "n_trials": 1,
+                "n_errors": 20,
+                "metrics": [
+                    {
+                        "mean": 0.0
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "dna-insert__58fMEDY"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "RuntimeError": [
+                        "make-mips-interpreter__hJrzxdv",
+                        "circuit-fibsqrt__HV5hvCz",
+                        "build-pov-ray__245aoUe",
+                        "overfull-hbox__ViMtGsZ",
+                        "video-processing__BsF4oMP",
+                        "distribution-search__jhAaS3S",
+                        "break-filter-js-from-html__ZSpeGNE",
+                        "protein-assembly__6GzhkZq",
+                        "path-tracing__q7riNLy",
+                        "compile-compcert__puTzs9j",
+                        "dna-assembly__tyErUFD",
+                        "caffe-cifar-10__QoVJAtD",
+                        "install-windows-3-11__H2jsEhT",
+                        "log-summary-date-ranges__cyqbFd8",
+                        "vulnerable-secret__oSAG4MG",
+                        "openssl-selfsigned-cert__eyE3qbw",
+                        "crack-7z-hash__KU8LPAK",
+                        "feal-linear-cryptanalysis__YVTTYUx",
+                        "polyglot-rust-c__hu5MXEM",
+                        "cancel-async-tasks__inemHdz"
+                    ]
+                }
+            }
+        },
+        "n_input_tokens": 388547,
+        "n_cache_tokens": 338479,
+        "n_output_tokens": 32597,
+        "cost_usd": 0.0
+    }
+}

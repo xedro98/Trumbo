@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/write-compressor",
+        "ref": "sha256:102167adfe1e831e220cf1e045b4b70fb01a816351fa5cc629b61e2f745fbedc",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "write-compressor__AGnpxtF",
+    "trials_dir": "jobs\\2026-07-25__16-36-54",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f67ac3c6-e533-46ca-8d83-91b62b29a5cf"
+}

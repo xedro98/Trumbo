@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 351, in run
+    await self._prepare()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 385, in _prepare
+    await self._setup_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1148, in _setup_agent_environment
+    await self._start_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1154, in _start_agent_environment
+    await asyncio.wait_for(
+  File "C:\Python312\Lib\asyncio\tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 908, in start
+    await self._run_docker_compose_command(["up", "--detach", "--wait"])
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 656, in _run_docker_compose_command
+    raise RuntimeError(
+RuntimeError: Docker compose command failed for environment chess-best-move. Command: docker compose --project-name chess-best-move__bhshezm__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\chess-best-move\b1956d533c003b523a81fabe43de6f7c80b97fddb2c037e65b0cfc94dd1ba22a\environment -f C:\Users\Admin\AppData\Local\Temp\tmpx8ssg5s_\chess-best-move__BhshEZM__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpryw6_hj7\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpp8uno4ds\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network chess-best-move__bhshezm__env_default Creating 
+ Network chess-best-move__bhshezm__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network chess-best-move__bhshezm__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 

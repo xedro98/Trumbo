@@ -1,0 +1,245 @@
+┌───────────────────── Traceback (most recent call last) ──────────────────────┐
+│ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\cli\job │
+│ s.py:1612 in start                                                           │
+│                                                                              │
+│   1609 │   # `_run_job` itself prints the summary + invokes the upload       │
+│        finalize                                                              │
+│   1610 │   # (when --upload is set) so everything stays on one event loop.   │
+│        See                                                                   │
+│   1611 │   # the long comment in `HarborHubUploadPlugin.on_job_end` for why  │
+│        this matters.                                                         │
+│ > 1612 │   job, job_result = run_async(_run_job())                           │
+│   1613 │                                                                     │
+│   1614 │   if export_traces:                                                 │
+│   1615 │   │   from harbor.utils.traces_utils import export_traces as        │
+│        _export_traces                                                        │
+│                                                                              │
+│ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\cli\uti │
+│ ls.py:61 in run_async                                                        │
+│                                                                              │
+│    58 │   Requires Python 3.12+ (which is the minimum version for this       │
+│       project).                                                              │
+│    59 │   """                                                                │
+│    60 │   if sys.platform == "win32":                                        │
+│ >  61 │   │   return asyncio.run(coro,                                       │
+│       loop_factory=asyncio.ProactorEventLoop)                                │
+│    62 │   return asyncio.run(coro)                                           │
+│    63                                                                        │
+│    64                                                                        │
+│                                                                              │
+│ C:\Python312\Lib\asyncio\runners.py:194 in run                               │
+│                                                                              │
+│   191 │   │   │   "asyncio.run() cannot be called from a running event       │
+│       loop")                                                                 │
+│   192 │                                                                      │
+│   193 │   with Runner(debug=debug, loop_factory=loop_factory) as runner:     │
+│ > 194 │   │   return runner.run(main)                                        │
+│   195                                                                        │
+│   196                                                                        │
+│   197 def _cancel_all_tasks(loop):                                           │
+│                                                                              │
+│ C:\Python312\Lib\asyncio\runners.py:118 in run                               │
+│                                                                              │
+│   115 │   │                                                                  │
+│   116 │   │   self._interrupt_count = 0                                      │
+│   117 │   │   try:                                                           │
+│ > 118 │   │   │   return self._loop.run_until_complete(task)                 │
+│   119 │   │   except exceptions.CancelledError:                              │
+│   120 │   │   │   if self._interrupt_count > 0:                              │
+│   121 │   │   │   │   uncancel = getattr(task, "uncancel", None)             │
+│                                                                              │
+│ C:\Python312\Lib\asyncio\base_events.py:687 in run_until_complete            │
+│                                                                              │
+│    684 │   │   if not future.done():                                         │
+│    685 │   │   │   raise RuntimeError('Event loop stopped before Future      │
+│        completed.')                                                          │
+│    686 │   │                                                                 │
+│ >  687 │   │   return future.result()                                        │
+│    688 │                                                                     │
+│    689 │   def stop(self):                                                   │
+│    690 │   │   """Stop running the event loop.                               │
+│                                                                              │
+│ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\cli\job │
+│ s.py:1565 in _run_job                                                        │
+│                                                                              │
+│   1562 │   │   │   )                                                         │
+│   1563 │   │   │   await hub_plugin.on_job_start(job)                        │
+│   1564 │   │                                                                 │
+│ > 1565 │   │   job_result = await job.run()                                  │
+│   1566 │   │                                                                 │
+│   1567 │   │   # Print the run summary BEFORE plugin and Harbor Hub finalize │
+│        so users                                                              │
+│   1568 │   │   # see results even if downstream operations fail.             │
+│                                                                              │
+│ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\job.py: │
+│ 805 in run                                                                   │
+│                                                                              │
+│   802 │   │   │   │   │   │   completed=n_existing,                          │
+│   803 │   │   │   │   │   )                                                  │
+│   804 │   │   │   │   │                                                      │
+│ > 805 │   │   │   │   │   trial_results = await self._run_trials_with_queue( │
+│   806 │   │   │   │   │   │   loading_progress, progress_task,               │
+│       running_progress                                                       │
+│   807 │   │   │   │   │   )                                                  │
+│   808                                                                        │
+│                                                                              │
+│ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\job.py: │
+│ 955 in _run_trials_with_queue                                                │
+│                                                                              │
+│   952 │   │                                                                  │
+│   953 │   │   coros =                                                        │
+│       self._trial_queue.submit_batch(self._remaining_trial_configs)          │
+│   954 │   │                                                                  │
+│ > 955 │   │   async with asyncio.TaskGroup() as tg:                          │
+│   956 │   │   │   tasks = [tg.create_task(coro) for coro in coros]           │
+│   957 │   │                                                                  │
+│   958 │   │   return [t.result() for t in tasks]                             │
+│                                                                              │
+│ C:\Python312\Lib\asyncio\taskgroups.py:145 in __aexit__                      │
+│                                                                              │
+│   142 │   │   │   # a bunch of them.                                         │
+│   143 │   │   │   try:                                                       │
+│   144 │   │   │   │   me = BaseExceptionGroup('unhandled errors in a         │
+│       TaskGroup', self._errors)                                              │
+│ > 145 │   │   │   │   raise me from None                                     │
+│   146 │   │   │   finally:                                                   │
+│   147 │   │   │   │   self._errors = None                                    │
+│   148                                                                        │
+└──────────────────────────────────────────────────────────────────────────────┘
+ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+
+┌────────────────────────────── Sub-exception #1 ──────────────────────────────┐
+│ ┌─────────────────── Traceback (most recent call last) ────────────────────┐ │
+│ │ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\tri │ │
+│ │ al\queue.py:242 in _run_trial                                            │ │
+│ │                                                                          │ │
+│ │   239 │   async def _run_trial(self, trial_config: TrialConfig) ->       │ │
+│ │       TrialResult:                                                       │ │
+│ │   240 │   │   """Execute a single trial, acquiring the semaphore for     │ │
+│ │       concurrency control."""                                            │ │
+│ │   241 │   │   async with self._semaphore:                                │ │
+│ │ > 242 │   │   │   return await                                           │ │
+│ │       self._execute_trial_with_retries(trial_config)                     │ │
+│ │   243 │                                                                  │ │
+│ │   244 │   def submit(self, trial_config: TrialConfig) -> Coroutine[Any,  │ │
+│ │       Any, TrialResult]:                                                 │ │
+│ │   245 │   │   """                                                        │ │
+│ │                                                                          │ │
+│ │ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\tri │ │
+│ │ al\queue.py:201 in _execute_trial_with_retries                           │ │
+│ │                                                                          │ │
+│ │   198 │   │   from harbor.trial.trial import Trial                       │ │
+│ │   199 │   │                                                              │ │
+│ │   200 │   │   for attempt in range(self._retry_config.max_retries + 1):  │ │
+│ │ > 201 │   │   │   trial = await Trial.create(trial_config)               │ │
+│ │   202 │   │   │   self._setup_hooks(trial)                               │ │
+│ │   203 │   │   │   result = await trial.run()                             │ │
+│ │   204                                                                    │ │
+│ │                                                                          │ │
+│ │ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\tri │ │
+│ │ al\trial.py:271 in create                                                │ │
+│ │                                                                          │ │
+│ │    268 │   │                                                             │ │
+│ │    269 │   │   from harbor.trial.single_step import SingleStepTrial      │ │
+│ │    270 │   │                                                             │ │
+│ │ >  271 │   │   return SingleStepTrial(                                   │ │
+│ │    272 │   │   │   config,                                               │ │
+│ │    273 │   │   │   _task=task,                                           │ │
+│ │    274 │   │   │   _task_download_result=task_download_result,           │ │
+│ │                                                                          │ │
+│ │ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\tri │ │
+│ │ al\single_step.py:30 in __init__                                         │ │
+│ │                                                                          │ │
+│ │    27 │   ):                                                             │ │
+│ │    28 │   │   if _task is not None and _task.has_steps:                  │ │
+│ │    29 │   │   │   raise ValueError("SingleStepTrial requires a task      │ │
+│ │       without [[steps]].")                                               │ │
+│ │ >  30 │   │   super().__init__(                                          │ │
+│ │    31 │   │   │   config,                                                │ │
+│ │    32 │   │   │   _task=_task,                                           │ │
+│ │    33 │   │   │   _task_download_result=_task_download_result,           │ │
+│ │                                                                          │ │
+│ │ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\tri │ │
+│ │ al\trial.py:123 in __init__                                              │ │
+│ │                                                                          │ │
+│ │    120 │   │   try:                                                      │ │
+│ │    121 │   │   │   self._init_logger()                                   │ │
+│ │    122 │   │   │   self._init_timeouts()                                 │ │
+│ │ >  123 │   │   │   self._init_agent()                                    │ │
+│ │    124 │   │   │   self._init_agent_environment()                        │ │
+│ │    125 │   │   │   self._init_artifact_handler()                         │ │
+│ │    126 │   │   │   self._validate_network_policy_modes()                 │ │
+│ │                                                                          │ │
+│ │ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\tri │ │
+│ │ al\trial.py:801 in _init_agent                                           │ │
+│ │                                                                          │ │
+│ │    798 │   │   if self._effective_skills_dir:                            │ │
+│ │    799 │   │   │   extra_kwargs["skills_dir"] =                          │ │
+│ │        self._effective_skills_dir                                        │ │
+│ │    800 │   │                                                             │ │
+│ │ >  801 │   │   self.agent = AgentFactory.create_agent_from_config(       │ │
+│ │    802 │   │   │   self.config.agent,                                    │ │
+│ │    803 │   │   │   logs_dir=self.paths.agent_dir,                        │ │
+│ │    804 │   │   │   logger=self.logger,                                   │ │
+│ │                                                                          │ │
+│ │ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\age │ │
+│ │ nts\factory.py:190 in create_agent_from_config                           │ │
+│ │                                                                          │ │
+│ │   187 │   │   │   │   **agent_kwargs,                                    │ │
+│ │   188 │   │   │   )                                                      │ │
+│ │   189 │   │   elif import_path is not None:                              │ │
+│ │ > 190 │   │   │   return cls.create_agent_from_import_path(              │ │
+│ │   191 │   │   │   │   import_path,                                       │ │
+│ │   192 │   │   │   │   logs_dir=logs_dir,                                 │ │
+│ │   193 │   │   │   │   model_name=config.model_name,                      │ │
+│ │                                                                          │ │
+│ │ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\age │ │
+│ │ nts\factory.py:125 in create_agent_from_import_path                      │ │
+│ │                                                                          │ │
+│ │   122 │   │   Raises:                                                    │ │
+│ │   123 │   │   │   ValueError: If the import path is invalid.             │ │
+│ │   124 │   │   """                                                        │ │
+│ │ > 125 │   │   agent_class = _import_agent_class(import_path)             │ │
+│ │   126 │   │   return agent_class(logs_dir=logs_dir,                      │ │
+│ │       model_name=model_name, **kwargs)                                   │ │
+│ │   127 │                                                                  │ │
+│ │   128 │   @classmethod                                                   │ │
+│ │                                                                          │ │
+│ │ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\age │ │
+│ │ nts\factory.py:20 in _import_agent_class                                 │ │
+│ │                                                                          │ │
+│ │    17 def _import_agent_class(import_path: str) -> "type[BaseAgent]":    │ │
+│ │    18 │   return cast(                                                   │ │
+│ │    19 │   │   "type[BaseAgent]",                                         │ │
+│ │ >  20 │   │   import_class(import_path, label="agent"),                  │ │
+│ │    21 │   )                                                              │ │
+│ │    22                                                                    │ │
+│ │    23                                                                    │ │
+│ │                                                                          │ │
+│ │ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\uti │ │
+│ │ ls\import_path.py:36 in import_class                                     │ │
+│ │                                                                          │ │
+│ │   33 │   base: type | None = None,                                       │ │
+│ │   34 │   label: str = "symbol",                                          │ │
+│ │   35 ) -> type:                                                          │ │
+│ │ > 36 │   symbol = import_symbol(import_path)                             │ │
+│ │   37 │   if not isinstance(symbol, type):                                │ │
+│ │   38 │   │   raise TypeError(f"Imported {label} '{import_path}' must be  │ │
+│ │      a class")                                                           │ │
+│ │   39 │   if base is not None and not issubclass(symbol, base):           │ │
+│ │                                                                          │ │
+│ │ C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\uti │ │
+│ │ ls\import_path.py:20 in import_symbol                                    │ │
+│ │                                                                          │ │
+│ │   17 │   try:                                                            │ │
+│ │   18 │   │   module = importlib.import_module(module_path)               │ │
+│ │   19 │   except ImportError as exc:                                      │ │
+│ │ > 20 │   │   raise ValueError(f"Failed to import module '{module_path}': │ │
+│ │      {exc}") from exc                                                    │ │
+│ │   21 │                                                                   │ │
+│ │   22 │   try:                                                            │ │
+│ │   23 │   │   return getattr(module, symbol_name)                         │ │
+│ └──────────────────────────────────────────────────────────────────────────┘ │
+│ ValueError: Failed to import module 'trumbo_agent': No module named          │
+│ 'trumbo_agent'                                                               │
+└──────────────────────────────────────────────────────────────────────────────┘

@@ -7,7 +7,7 @@ export type { BlobStoreSettings } from "./types"
 
 /**
  * S3/R2/Azure blob storage implementation of TrumboStorage.
- * Uses AWS S3, Cloudflare R2, or Azure Blob Storage as the backend storage.
+ * Uses an S3-compatible or Azure Blob Storage backend.
  */
 class TrumboBlobStorage extends TrumboStorage {
 	override name = "TrumboBlobStorage"

@@ -1,0 +1,76 @@
+/* Custom styles for Trumbo documentation */
+
+:root {
+	--primary: #2bbf77;
+	--primary-light: #3fd48a;
+	--primary-dark: #1fa866;
+}
+
+/* Import Geist Sans font from Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Geist+Sans:wght@300;400;500;600;700&display=swap");
+
+/* Import Geist Mono font from Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&display=swap");
+
+/* Apply Geist Sans to body text, but not headings or code */
+body,
+p,
+li,
+td,
+th,
+span:not(code *),
+div:not(code *):not(pre *) {
+	font-family:
+		"Geist Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+		Ubuntu, Cantarell, sans-serif !important;
+}
+
+/* Ensure code blocks use Geist Mono */
+code,
+pre,
+.code,
+pre code,
+code *,
+pre * {
+	font-family: "Geist Mono", "Monaco", "Courier New", monospace !important;
+}
+
+/* Make h1 titles lighter in font weight */
+h1 {
+	font-weight: 600 !important;
+}
+
+/* Keep headings and images at full opacity */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+img {
+	opacity: 1 !important;
+	font-family:
+		"Geist Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+		Ubuntu, Cantarell, sans-serif !important;
+}
+
+/* Also apply to any h1 elements within content areas */
+.content h1,
+.markdown h1,
+article h1,
+main h1 {
+	font-weight: 500 !important;
+}
+
+/* Navbar logo sizing for the Trumbo mark */
+.navbar-logo img,
+nav img[alt*="logo" i],
+header img[src*="trumbo-logo"] {
+	max-height: 32px !important;
+	width: auto !important;
+}
+
+/* Reduce list margin-top */
+.steps {
+	margin-top: 5px !important;
+}

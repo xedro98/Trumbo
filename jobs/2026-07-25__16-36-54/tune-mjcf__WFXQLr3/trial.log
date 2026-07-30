@@ -1,0 +1,5 @@
+Trial tune-mjcf__WFXQLr3 failed: Docker compose command failed for environment tune-mjcf. Command: docker compose --project-name tune-mjcf__wfxqlr3__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\tune-mjcf\bcf3607c1d4532081055e811b66e5a466a1893ec8bd8f66d5127c8924cfcda24\environment -f C:\Users\Admin\AppData\Local\Temp\tmp3_ixapfm\tune-mjcf__WFXQLr3__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp2ghhx3g9\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpugb8_rbb\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network tune-mjcf__wfxqlr3__env_default Creating 
+ Network tune-mjcf__wfxqlr3__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network tune-mjcf__wfxqlr3__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

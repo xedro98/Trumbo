@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/torch-pipeline-parallelism",
+        "ref": "sha256:a01896bd8d1572bc93d061a43cc45d45d63c51c2ad6541b606a8e3452f77963a",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "torch-pipeline-parallelism__Vb8Ffbg",
+    "trials_dir": "jobs\\2026-07-25__17-01-27",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f270b7e8-59ea-4f97-a3ff-307a1878e499"
+}

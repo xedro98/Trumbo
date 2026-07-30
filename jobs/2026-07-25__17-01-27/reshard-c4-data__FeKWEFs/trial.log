@@ -1,0 +1,5 @@
+Trial reshard-c4-data__FeKWEFs failed: Docker compose command failed for environment reshard-c4-data. Command: docker compose --project-name reshard-c4-data__fekwefs__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\reshard-c4-data\afae733b4f83b97e0d88220fe51f8eb15adf2515a83ec67f1293a2a15eabe34e\environment -f C:\Users\Admin\AppData\Local\Temp\tmpjrth9fak\reshard-c4-data__FeKWEFs__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpp9faecrg\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp2nzvqmzz\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network reshard-c4-data__fekwefs__env_default Creating 
+ Network reshard-c4-data__fekwefs__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network reshard-c4-data__fekwefs__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

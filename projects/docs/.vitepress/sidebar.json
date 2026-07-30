@@ -1,9 +1,13 @@
 {
-	"/trumbo/": [
+	"/agent/": [
 		{
 			"text": "Getting Started",
 			"collapsed": false,
 			"items": [
+				{
+					"text": "Index",
+					"link": "/index"
+				},
 				{
 					"text": "Trumbo Overview",
 					"link": "/trumbo-overview"
@@ -13,8 +17,20 @@
 					"link": "/getting-started/installing-trumbo"
 				},
 				{
+					"text": "Authorizing With Trumbo",
+					"link": "/getting-started/authorizing-with-trumbo"
+				},
+				{
 					"text": "Config",
 					"link": "/getting-started/config"
+				},
+				{
+					"text": "Trumbo Provider",
+					"link": "/getting-started/trumbo-provider"
+				},
+				{
+					"text": "Trumbopass",
+					"link": "/getting-started/trumbopass"
 				}
 			]
 		},
@@ -25,11 +41,139 @@
 				{
 					"text": "Tui",
 					"link": "/usage/tui"
+				},
+				{
+					"text": "Cli Overview",
+					"link": "/usage/cli-overview"
+				},
+				{
+					"text": "Ide",
+					"link": "/usage/ide"
+				},
+				{
+					"text": "Kanban",
+					"link": "/usage/kanban"
+				},
+				{
+					"text": "CLI Reference & Samples",
+					"collapsed": true,
+					"items": [
+						{
+							"text": "Cli Reference",
+							"link": "/cli/cli-reference"
+						},
+						{
+							"text": "Scheduling",
+							"link": "/cli/scheduling"
+						},
+						{
+							"text": "Connectors",
+							"link": "/cli/connectors"
+						},
+						{
+							"text": "Agent Teams",
+							"link": "/cli/agent-teams"
+						},
+						{
+							"text": "Github Issue Rca",
+							"link": "/cli/samples/github-issue-rca"
+						},
+						{
+							"text": "Github Integration",
+							"link": "/cli/samples/github-integration"
+						},
+						{
+							"text": "Github Pr Review",
+							"link": "/cli/samples/github-pr-review"
+						},
+						{
+							"text": "Model Orchestration",
+							"link": "/cli/samples/model-orchestration"
+						},
+						{
+							"text": "Supply Chain Alerts",
+							"link": "/cli/samples/supply-chain-alerts"
+						}
+					]
 				}
 			]
 		},
 		{
-			"text": "Configurations",
+			"text": "Model Providers",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Overview",
+					"link": "/running-models-locally/overview"
+				},
+				{
+					"text": "Cloud Providers",
+					"collapsed": true,
+					"items": [
+						{
+							"text": "Qwen",
+							"link": "/provider-config/qwen"
+						},
+						{
+							"text": "Anthropic",
+							"link": "/provider-config/anthropic"
+						},
+						{
+							"text": "AWS Bedrock",
+							"collapsed": true,
+							"items": [
+								{
+									"text": "Api Key",
+									"link": "/provider-config/aws-bedrock/api-key"
+								},
+								{
+									"text": "Iam Credentials",
+									"link": "/provider-config/aws-bedrock/iam-credentials"
+								},
+								{
+									"text": "Cli Profile",
+									"link": "/provider-config/aws-bedrock/cli-profile"
+								}
+							]
+						},
+						{
+							"text": "Deepseek",
+							"link": "/provider-config/deepseek"
+						},
+						{
+							"text": "Google Gemini",
+							"link": "/provider-config/google-gemini"
+						},
+						{
+							"text": "Minimax",
+							"link": "/provider-config/minimax"
+						},
+						{
+							"text": "Openai",
+							"link": "/provider-config/openai"
+						},
+						{
+							"text": "Openai Compatible",
+							"link": "/provider-config/openai-compatible"
+						},
+						{
+							"text": "Openrouter",
+							"link": "/provider-config/openrouter"
+						},
+						{
+							"text": "Zai",
+							"link": "/provider-config/zai"
+						},
+						{
+							"text": "Other 30 Plus Providers",
+							"link": "/provider-config/other-30-plus-providers"
+						}
+					]
+				}
+			]
+		},
+		{
+			"text": "Configuration",
 			"collapsed": false,
 			"items": [
 				{
@@ -55,14 +199,6 @@
 				{
 					"text": "Hooks",
 					"link": "/customization/hooks"
-				},
-				{
-					"text": "Scheduling",
-					"link": "/cli/scheduling"
-				},
-				{
-					"text": "Connectors",
-					"link": "/cli/connectors"
 				},
 				{
 					"text": "Trumboignore",
@@ -91,12 +227,42 @@
 					"link": "/core-workflows/checkpoints"
 				},
 				{
-					"text": "Agent Teams",
-					"link": "/cli/agent-teams"
+					"text": "Task Management",
+					"link": "/core-workflows/task-management"
 				},
 				{
 					"text": "Subagents",
 					"link": "/features/subagents"
+				},
+				{
+					"text": "Auto Approve",
+					"link": "/features/auto-approve"
+				},
+				{
+					"text": "Auto Compact",
+					"link": "/features/auto-compact"
+				},
+				{
+					"text": "Jupyter Notebooks",
+					"link": "/features/jupyter-notebooks"
+				},
+				{
+					"text": "Multiroot Workspace",
+					"link": "/features/multiroot-workspace"
+				}
+			]
+		},
+		{
+			"text": "Kanban",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Core Workflow",
+					"link": "/kanban/core-workflow"
+				},
+				{
+					"text": "Remote Access",
+					"link": "/kanban/remote-access"
 				}
 			]
 		},
@@ -121,124 +287,102 @@
 			]
 		}
 	],
-	"/": [
+	"/platform/": [
 		{
-			"text": "Getting Started",
+			"text": "Start",
 			"collapsed": false,
 			"items": [
 				{
-					"text": "Trumbo Overview",
-					"link": "/trumbo-overview"
+					"text": "Overview",
+					"link": "/platform/overview"
 				},
 				{
-					"text": "Installing Trumbo",
-					"link": "/getting-started/installing-trumbo"
+					"text": "Authentication",
+					"link": "/platform/authentication"
 				},
 				{
-					"text": "Config",
-					"link": "/getting-started/config"
+					"text": "Billing And Limits",
+					"link": "/platform/billing-and-limits"
 				}
 			]
 		},
 		{
-			"text": "Usage",
+			"text": "Products",
 			"collapsed": false,
 			"items": [
 				{
-					"text": "Tui",
-					"link": "/usage/tui"
+					"text": "Cloud Agents",
+					"link": "/platform/cloud-agents"
+				},
+				{
+					"text": "Sandbox",
+					"link": "/platform/sandbox"
+				},
+				{
+					"text": "Browser Run",
+					"link": "/platform/browser-run"
+				},
+				{
+					"text": "Security",
+					"link": "/platform/security"
+				},
+				{
+					"text": "Knowledge",
+					"link": "/platform/knowledge"
+				},
+				{
+					"text": "Automations",
+					"link": "/platform/automations"
 				}
 			]
 		},
 		{
-			"text": "Configurations",
+			"text": "APIs",
 			"collapsed": false,
 			"items": [
 				{
-					"text": "All Trumbo Tools",
-					"link": "/tools-reference/all-trumbo-tools"
+					"text": "Chat Completions",
+					"link": "/platform/chat-completions"
 				},
 				{
-					"text": "Trumbo Rules",
-					"link": "/customization/trumbo-rules"
-				},
-				{
-					"text": "Skills",
-					"link": "/customization/skills"
-				},
-				{
-					"text": "Plugins",
-					"link": "/customization/plugins"
-				},
-				{
-					"text": "Mcp Overview",
-					"link": "/mcp/mcp-overview"
-				},
-				{
-					"text": "Hooks",
-					"link": "/customization/hooks"
-				},
-				{
-					"text": "Scheduling",
-					"link": "/cli/scheduling"
-				},
-				{
-					"text": "Connectors",
-					"link": "/cli/connectors"
-				},
-				{
-					"text": "Trumboignore",
-					"link": "/customization/trumboignore"
+					"text": "Mcp",
+					"link": "/platform/mcp"
 				}
 			]
-		},
+		}
+	],
+	"/api/": [
 		{
-			"text": "Features",
+			"text": "Quartz API",
 			"collapsed": false,
 			"items": [
 				{
-					"text": "Plan And Act",
-					"link": "/core-workflows/plan-and-act"
+					"text": "Overview",
+					"link": "/api/overview"
 				},
 				{
-					"text": "Working With Files",
-					"link": "/core-workflows/working-with-files"
+					"text": "Getting Started",
+					"link": "/api/getting-started"
 				},
 				{
-					"text": "Using Commands",
-					"link": "/core-workflows/using-commands"
+					"text": "Authentication",
+					"link": "/api/authentication"
 				},
 				{
-					"text": "Checkpoints",
-					"link": "/core-workflows/checkpoints"
+					"text": "Models",
+					"link": "/api/models"
 				},
 				{
-					"text": "Agent Teams",
-					"link": "/cli/agent-teams"
+					"text": "Chat Completions",
+					"link": "/api/chat-completions"
 				},
 				{
-					"text": "Subagents",
-					"link": "/features/subagents"
-				}
-			]
-		},
-		{
-			"text": "Best Practices",
-			"collapsed": false,
-			"items": [
+					"text": "Errors",
+					"link": "/api/errors"
+				},
 				{
-					"text": "Memory Bank",
-					"link": "/best-practices/memory-bank"
-				}
-			]
-		},
-		{
-			"text": "Troubleshooting",
-			"collapsed": false,
-			"items": [
-				{
-					"text": "Networking And Proxies",
-					"link": "/troubleshooting/networking-and-proxies"
+					"text": "Sdk Examples",
+					"link": "/api/sdk-examples"
 				}
 			]
 		}
@@ -250,11 +394,11 @@
 			"items": [
 				{
 					"text": "Overview",
-					"link": "/engine/overview"
+					"link": "/sdk/overview"
 				},
 				{
 					"text": "Examples",
-					"link": "/engine/examples"
+					"link": "/sdk/examples"
 				}
 			]
 		},
@@ -263,20 +407,56 @@
 			"collapsed": false,
 			"items": [
 				{
+					"text": "Plugins",
+					"collapsed": true,
+					"items": [
+						{
+							"text": "Plugins",
+							"link": "/sdk/plugins"
+						},
+						{
+							"text": "Plugin Install",
+							"link": "/sdk/plugin-install"
+						},
+						{
+							"text": "Writing Plugins",
+							"link": "/sdk/guides/writing-plugins"
+						},
+						{
+							"text": "Plugin Examples",
+							"link": "/sdk/plugin-examples"
+						}
+					]
+				},
+				{
+					"text": "Tools",
+					"collapsed": true,
+					"items": [
+						{
+							"text": "Tools",
+							"link": "/sdk/tools"
+						},
+						{
+							"text": "Creating Custom Tools",
+							"link": "/sdk/guides/creating-custom-tools"
+						}
+					]
+				},
+				{
 					"text": "Scheduled Agents",
-					"link": "/engine/guides/scheduled-agents"
+					"link": "/sdk/guides/scheduled-agents"
 				},
 				{
 					"text": "Events",
-					"link": "/engine/events"
+					"link": "/sdk/events"
 				},
 				{
 					"text": "Model Providers",
-					"link": "/engine/model-providers"
+					"link": "/sdk/model-providers"
 				},
 				{
 					"text": "Trumbocore",
-					"link": "/engine/trumbocore"
+					"link": "/sdk/trumbocore"
 				}
 			]
 		},
@@ -286,11 +466,11 @@
 			"items": [
 				{
 					"text": "Overview",
-					"link": "/engine/architecture/overview"
+					"link": "/sdk/architecture/overview"
 				},
 				{
 					"text": "Hub Spoke",
-					"link": "/engine/architecture/hub-spoke"
+					"link": "/sdk/architecture/hub-spoke"
 				}
 			]
 		},
@@ -300,19 +480,19 @@
 			"items": [
 				{
 					"text": "Building An Agent",
-					"link": "/engine/guides/building-an-agent"
+					"link": "/sdk/guides/building-an-agent"
 				},
 				{
 					"text": "Permission Handling",
-					"link": "/engine/guides/permission-handling"
+					"link": "/sdk/guides/permission-handling"
 				},
 				{
 					"text": "Multi Agent Teams",
-					"link": "/engine/guides/multi-agent-teams"
+					"link": "/sdk/guides/multi-agent-teams"
 				},
 				{
 					"text": "Going To Production",
-					"link": "/engine/guides/going-to-production"
+					"link": "/sdk/guides/going-to-production"
 				}
 			]
 		},
@@ -322,27 +502,167 @@
 			"items": [
 				{
 					"text": "Trumbo Core",
-					"link": "/engine/reference/trumbo-core"
+					"link": "/sdk/reference/trumbo-core"
 				},
 				{
 					"text": "Agent",
-					"link": "/engine/reference/agent"
+					"link": "/sdk/reference/agent"
 				},
 				{
 					"text": "Gateway",
-					"link": "/engine/reference/gateway"
+					"link": "/sdk/reference/gateway"
 				},
 				{
 					"text": "Tools Api",
-					"link": "/engine/reference/tools-api"
+					"link": "/sdk/reference/tools-api"
 				},
 				{
 					"text": "Events",
-					"link": "/engine/reference/events"
+					"link": "/sdk/reference/events"
 				},
 				{
 					"text": "Types",
-					"link": "/engine/reference/types"
+					"link": "/sdk/reference/types"
+				}
+			]
+		}
+	],
+	"/engine/": [
+		{
+			"text": "Start",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Overview",
+					"link": "/sdk/overview"
+				},
+				{
+					"text": "Examples",
+					"link": "/sdk/examples"
+				}
+			]
+		},
+		{
+			"text": "Concepts",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Plugins",
+					"collapsed": true,
+					"items": [
+						{
+							"text": "Plugins",
+							"link": "/sdk/plugins"
+						},
+						{
+							"text": "Plugin Install",
+							"link": "/sdk/plugin-install"
+						},
+						{
+							"text": "Writing Plugins",
+							"link": "/sdk/guides/writing-plugins"
+						},
+						{
+							"text": "Plugin Examples",
+							"link": "/sdk/plugin-examples"
+						}
+					]
+				},
+				{
+					"text": "Tools",
+					"collapsed": true,
+					"items": [
+						{
+							"text": "Tools",
+							"link": "/sdk/tools"
+						},
+						{
+							"text": "Creating Custom Tools",
+							"link": "/sdk/guides/creating-custom-tools"
+						}
+					]
+				},
+				{
+					"text": "Scheduled Agents",
+					"link": "/sdk/guides/scheduled-agents"
+				},
+				{
+					"text": "Events",
+					"link": "/sdk/events"
+				},
+				{
+					"text": "Model Providers",
+					"link": "/sdk/model-providers"
+				},
+				{
+					"text": "Trumbocore",
+					"link": "/sdk/trumbocore"
+				}
+			]
+		},
+		{
+			"text": "Architecture",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Overview",
+					"link": "/sdk/architecture/overview"
+				},
+				{
+					"text": "Hub Spoke",
+					"link": "/sdk/architecture/hub-spoke"
+				}
+			]
+		},
+		{
+			"text": "Guides",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Building An Agent",
+					"link": "/sdk/guides/building-an-agent"
+				},
+				{
+					"text": "Permission Handling",
+					"link": "/sdk/guides/permission-handling"
+				},
+				{
+					"text": "Multi Agent Teams",
+					"link": "/sdk/guides/multi-agent-teams"
+				},
+				{
+					"text": "Going To Production",
+					"link": "/sdk/guides/going-to-production"
+				}
+			]
+		},
+		{
+			"text": "API Reference",
+			"collapsed": false,
+			"items": [
+				{
+					"text": "Trumbo Core",
+					"link": "/sdk/reference/trumbo-core"
+				},
+				{
+					"text": "Agent",
+					"link": "/sdk/reference/agent"
+				},
+				{
+					"text": "Gateway",
+					"link": "/sdk/reference/gateway"
+				},
+				{
+					"text": "Tools Api",
+					"link": "/sdk/reference/tools-api"
+				},
+				{
+					"text": "Events",
+					"link": "/sdk/reference/events"
+				},
+				{
+					"text": "Types",
+					"link": "/sdk/reference/types"
 				}
 			]
 		}

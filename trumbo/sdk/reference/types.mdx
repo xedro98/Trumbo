@@ -1,0 +1,98 @@
+---
+title: "Types"
+sidebarTitle: "Types"
+description: "Common SDK type surfaces."
+---
+```text
+████████╗██████╗ ██╗   ██╗███╗   ███╗██████╗  ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔═══██╗
+   ██║   ██████╔╝██║   ██║██╔████╔██║██████╔╝██║   ██║
+   ██║   ██╔══██╗██║   ██║██║╚██╔██║██╔══██╗██║   ██║
+   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║██████╔╝╚██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝  ╚═════╝ 
+```
+
+
+Most common types are exported from `@trumbo/shared`; the runtime entry-point packages re-export selected helpers.
+
+## AgentRuntime Types
+
+```typescript
+import type {
+  AgentMessage,
+  AgentMessagePart,
+  AgentRunResult,
+  AgentRuntimeEvent,
+  AgentRuntimeStateSnapshot,
+  AgentUsage,
+} from "@trumbo/sdk"
+```
+
+`AgentRunResult` is returned by direct `AgentRuntime` / `Agent` runs:
+
+```typescript
+interface AgentRunResult {
+  agentId: string
+  agentRole?: string
+  runId: string
+  status: "completed" | "aborted" | "failed"
+  iterations: number
+  outputText: string
+  messages: readonly AgentMessage[]
+  usage: AgentUsage
+  error?: Error
+}
+```
+
+## Host-Facing Agent Types
+
+```typescript
+import type {
+  AgentConfig,
+  AgentEvent,
+  AgentResult,
+  AgentPlugin,
+  AgentTool,
+  AgentToolContext,
+  ToolPolicy,
+} from "@trumbo/sdk"
+```
+
+`AgentResult` is the host/core-facing result shape:
+
+```typescript
+interface AgentResult {
+  text: string
+  usage: LegacyAgentUsage
+  messages: MessageWithMetadata[]
+  toolCalls: ToolCallRecord[]
+  iterations: number
+  finishReason: "completed" | "max_iterations" | "aborted" | "mistake_limit" | "error"
+  model: { id: string; provider: string; info?: ModelInfo }
+  startedAt: Date
+  endedAt: Date
+  durationMs: number
+}
+```
+
+## TrumboCore Types
+
+```typescript
+import type {
+  TrumboCoreOptions,
+  TrumboCoreStartInput,
+  CoreSessionConfig,
+  SessionRecord,
+} from "@trumbo/sdk"
+```
+
+## Tool Types
+
+```typescript
+interface ToolPolicy {
+  enabled?: boolean
+  autoApprove?: boolean
+}
+```
+
+See [Tools API](/engine/reference/tools-api) for the full tool surface.

@@ -4,8 +4,8 @@ Static marketing SPA for **trumbo.dev**, separate from the authenticated platfor
 
 ## Stack
 
-- Vite + React 19 + Tailwind v4 + [@cloudflare/kumo](https://developers.cloudflare.com/kumo/)
-- Cloudflare Workers (asset binding + SPA fallback)
+- Vite + React 19 + Tailwind v4 + Kumo components
+- Trumbo edge runtime (asset binding + SPA fallback)
 - Same brand tokens as the web app (`#2BBF77`, Geist/Geist Mono)
 
 ## Layout
@@ -28,7 +28,7 @@ Opens on http://localhost:5174
 npm run deploy
 ```
 
-Requires Cloudflare credentials and `trumbo.dev` / `www.trumbo.dev` custom domains on the `trumbo-marketing` worker.
+Requires infrastructure credentials and the `trumbo.dev` / `www.trumbo.dev` custom domains.
 
 ## Redirects
 

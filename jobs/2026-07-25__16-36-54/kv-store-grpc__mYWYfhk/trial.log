@@ -1,0 +1,5 @@
+Trial kv-store-grpc__mYWYfhk failed: Docker compose command failed for environment kv-store-grpc. Command: docker compose --project-name kv-store-grpc__mywyfhk__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\kv-store-grpc\83c7ad30412cc43d9d5f3c590a9154b53a1ed37e8a802bffc45dc64f51a2b427\environment -f C:\Users\Admin\AppData\Local\Temp\tmpua_4g41x\kv-store-grpc__mYWYfhk__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp2hfcp9kb\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp8o92yqbd\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network kv-store-grpc__mywyfhk__env_default Creating 
+ Network kv-store-grpc__mywyfhk__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network kv-store-grpc__mywyfhk__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

@@ -1,0 +1,57 @@
+{
+    "id": "1dd6cdb8-e417-48f7-9fff-ffaf3d2de416",
+    "started_at": "2026-07-25T16:31:29.036794",
+    "updated_at": "2026-07-25T11:05:50.370346Z",
+    "finished_at": null,
+    "n_total_trials": 89,
+    "stats": {
+        "n_completed_trials": 8,
+        "n_errored_trials": 8,
+        "n_running_trials": 4,
+        "n_pending_trials": 77,
+        "n_cancelled_trials": 0,
+        "n_retries": 0,
+        "evals": {
+            "claude-code__claude-haiku-4-5__adhoc": {
+                "n_trials": 8,
+                "n_errors": 8,
+                "metrics": [
+                    {
+                        "mean": 0.0
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "analyze-build-cython-ext__wki28q__cSDozep",
+                            "analyze-break-filter-js-from-htm__om78NdA",
+                            "analyze-bn-fit-modify__EdcPrkq__HdcQEtP",
+                            "analyze-adaptive-rejection-sampl__XYxD59v",
+                            "analyze-build-pmars__DJdzKyW__BuxHtrY",
+                            "analyze-cancel-async-tasks__xEZX__cmBswCF",
+                            "analyze-build-pov-ray__YqHBxt9__rkfdJbs",
+                            "analyze-caffe-cifar-10__NsyE2uW__dp5BR9R"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentAuthenticationError": [
+                        "analyze-build-cython-ext__wki28q__cSDozep",
+                        "analyze-break-filter-js-from-htm__om78NdA",
+                        "analyze-bn-fit-modify__EdcPrkq__HdcQEtP",
+                        "analyze-adaptive-rejection-sampl__XYxD59v",
+                        "analyze-build-pmars__DJdzKyW__BuxHtrY",
+                        "analyze-cancel-async-tasks__xEZX__cmBswCF",
+                        "analyze-build-pov-ray__YqHBxt9__rkfdJbs",
+                        "analyze-caffe-cifar-10__NsyE2uW__dp5BR9R"
+                    ]
+                }
+            }
+        },
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null
+    }
+}

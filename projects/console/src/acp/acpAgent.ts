@@ -35,7 +35,7 @@ import { subscribeToAgentEvents } from "../runtime/session-events";
 import { createCliCore } from "../session/session";
 import { getCliBuildInfo } from "../utils/common";
 import { randomSessionId, resolveWorkspaceRoot } from "../utils/helpers";
-import type { Config } from "../utils/types";
+import type { CliReasoningEffort, Config } from "../utils/types";
 import { syncAcpMcpServersForSession } from "./acp-mcp-sync";
 import {
 	ACP_AUTH_METHODS,
@@ -51,6 +51,40 @@ import {
 	sendCurrentModeUpdate,
 	sendSessionInfoUpdate,
 } from "./session-updates";
+
+const TRUMBO_THINKING_LEVEL_ENV = "TRUMBO_THINKING_LEVEL";
+
+type ActiveThinkingLevel = Exclude<CliReasoningEffort, "none">;
+
+const ACTIVE_THINKING_LEVELS = new Set<ActiveThinkingLevel>([
+	"low",
+	"medium",
+	"high",
+	"xhigh",
+]);
+
+/**
+ * Read the thinking level chosen in the desktop GUI from the environment.
+ * Trumbo Code spawns the ACP agent with `TRUMBO_THINKING_LEVEL` set to one of
+ * the CLI's `--thinking` levels (none|low|medium|high|xhigh). Anything
+ * missing or unrecognized falls back to thinking disabled.
+ */
+function resolveThinkingFromEnv(): {
+	thinking: boolean;
+	reasoningEffort?: ActiveThinkingLevel;
+} {
+	const raw = process.env[TRUMBO_THINKING_LEVEL_ENV]?.trim().toLowerCase();
+	if (!raw || raw === "none") {
+		return { thinking: false };
+	}
+	if (ACTIVE_THINKING_LEVELS.has(raw as ActiveThinkingLevel)) {
+		return {
+			thinking: true,
+			reasoningEffort: raw as ActiveThinkingLevel,
+		};
+	}
+	return { thinking: false };
+}
 
 interface SessionState {
 	id: string;
@@ -532,6 +566,7 @@ export class AcpAgent implements Agent {
 		const enableSpawnAgent =
 			process.env.TRUMBO_ENABLE_SPAWN_AGENT !== "0" &&
 			process.env.TRUMBO_ENABLE_SPAWN_AGENT !== "false";
+		const { thinking, reasoningEffort } = resolveThinkingFromEnv();
 
 		return {
 			providerId,
@@ -541,7 +576,8 @@ export class AcpAgent implements Agent {
 			execution: undefined,
 			verbose: false,
 			sandbox: false,
-			thinking: false,
+			thinking,
+			...(reasoningEffort ? { reasoningEffort } : {}),
 			outputMode: "text",
 			mode: session.currentMode,
 			defaultToolAutoApprove: false,

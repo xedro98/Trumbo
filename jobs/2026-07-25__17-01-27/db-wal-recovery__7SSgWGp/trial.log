@@ -1,0 +1,5 @@
+Trial db-wal-recovery__7SSgWGp failed: Docker compose command failed for environment db-wal-recovery. Command: docker compose --project-name db-wal-recovery__7ssgwgp__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\db-wal-recovery\33f5d72ac836c8642d8160f4628352ca0cdf5d17838aae9c3b0db9bc78335825\environment -f C:\Users\Admin\AppData\Local\Temp\tmpsga3zjon\db-wal-recovery__7SSgWGp__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp5w_m4i4k\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpivkddxt2\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network db-wal-recovery__7ssgwgp__env_default Creating 
+ Network db-wal-recovery__7ssgwgp__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network db-wal-recovery__7ssgwgp__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

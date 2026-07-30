@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"type": "module",
-	"description": "Trumbo marketing site — static SPA for trumbo.dev on Cloudflare Workers.",
+	"description": "Trumbo marketing site for trumbo.dev.",
 	"scripts": {
 		"dev": "vite",
 		"dev:api": "wrangler dev --port 8787",

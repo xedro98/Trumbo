@@ -1,0 +1,5 @@
+Trial prove-plus-comm__cBFvhAs failed: Docker compose command failed for environment prove-plus-comm. Command: docker compose --project-name prove-plus-comm__cbfvhas__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\prove-plus-comm\2c5295786c38135ca86b4b09cab3a82408e25129841f5fc533d31b885f6d737a\environment -f C:\Users\Admin\AppData\Local\Temp\tmpje1rp1tl\prove-plus-comm__cBFvhAs__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpgbauj5m6\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpvom_867j\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network prove-plus-comm__cbfvhas__env_default Creating 
+ Network prove-plus-comm__cbfvhas__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network prove-plus-comm__cbfvhas__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

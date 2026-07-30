@@ -1,0 +1,5 @@
+Trial qemu-alpine-ssh__XEHuuZR failed: Docker compose command failed for environment qemu-alpine-ssh. Command: docker compose --project-name qemu-alpine-ssh__xehuuzr__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\qemu-alpine-ssh\5acce5eb7a7bde7918a1ccb4fd7421f4c19f7a9d1bad30b7d77951dc31e32800\environment -f C:\Users\Admin\AppData\Local\Temp\tmpdk45jxgl\qemu-alpine-ssh__XEHuuZR__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpoqobm05m\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp9y6fe6j1\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network qemu-alpine-ssh__xehuuzr__env_default Creating 
+ Network qemu-alpine-ssh__xehuuzr__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network qemu-alpine-ssh__xehuuzr__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

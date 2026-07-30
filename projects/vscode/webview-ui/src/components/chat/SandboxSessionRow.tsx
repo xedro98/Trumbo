@@ -88,7 +88,7 @@ const SandboxSessionRow = memo(({ messages, isLast }: SandboxSessionRowProps) =>
 			{expanded ? (
 				<div className="border-t border-[var(--vscode-editorGroup-border)] px-3 py-2 space-y-3">
 					<p className="text-xs text-muted-foreground">
-						Remote Linux VM on Cloudflare Containers. Commands and code run in an isolated sandbox, billed by
+						Remote Linux environment on Trumbo infrastructure. Commands and code run in an isolated sandbox, billed by
 						CPU-seconds.
 					</p>
 

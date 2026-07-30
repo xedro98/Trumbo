@@ -1,0 +1,5 @@
+Trial bn-fit-modify__jbpoDfC failed: Docker compose command failed for environment bn-fit-modify. Command: docker compose --project-name bn-fit-modify__jbpodfc__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\bn-fit-modify\48b71fbf20c4dfb661fe49d8fb6cfb91417be422c87889dd30110626a1d1f7eb\environment -f C:\Users\Admin\AppData\Local\Temp\tmpsjpu2454\bn-fit-modify__jbpoDfC__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpwyxln7py\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpy4z6971b\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network bn-fit-modify__jbpodfc__env_default Creating 
+ Network bn-fit-modify__jbpodfc__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network bn-fit-modify__jbpodfc__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

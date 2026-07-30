@@ -1,0 +1,5 @@
+Trial compile-compcert__z2cWn6a failed: Docker compose command failed for environment compile-compcert. Command: docker compose --project-name compile-compcert__z2cwn6a__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\compile-compcert\59b8bdc7ad56243291afbc14cc1947d996db745a488ac018be4936643a47a999\environment -f C:\Users\Admin\AppData\Local\Temp\tmplg2m0dr5\compile-compcert__z2cWn6a__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp5mx9e5co\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp0pa78wum\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network compile-compcert__z2cwn6a__env_default Creating 
+ Network compile-compcert__z2cwn6a__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network compile-compcert__z2cwn6a__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

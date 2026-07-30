@@ -1,0 +1,5 @@
+Trial regex-log__pDCrNkF failed: Docker compose command failed for environment regex-log. Command: docker compose --project-name regex-log__pdcrnkf__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\regex-log\72f5f52d6b523a00380cb088fcf0ba83a2e2f7b478fdad6515598ab43584e337\environment -f C:\Users\Admin\AppData\Local\Temp\tmpxeavsxmf\regex-log__pDCrNkF__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmps6naqfpq\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpgj5a2pgt\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network regex-log__pdcrnkf__env_default Creating 
+ Network regex-log__pdcrnkf__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network regex-log__pdcrnkf__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

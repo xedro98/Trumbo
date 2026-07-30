@@ -1,0 +1,102 @@
+{
+    "id": "3875cbd9-bbcd-4ea9-b0f2-7641f777a354",
+    "task_name": "terminal-bench/raman-fitting",
+    "trial_name": "raman-fitting__RFEY5BA",
+    "trial_uri": "file:///D:/Torch/cline-full/jobs/2026-07-25__17-05-06/raman-fitting__RFEY5BA",
+    "task_id": {
+        "org": "terminal-bench",
+        "name": "raman-fitting",
+        "ref": "sha256:6b2c34e3c5016c763bf1f2f2a7210ee711565f90b18c09b68f95c0daa9220229"
+    },
+    "source": "terminal-bench/terminal-bench-2",
+    "task_checksum": "cdeb5ca1b72303c5b12bcf92f038351aea479661258b714a9648bed80e05666d",
+    "config": {
+        "task": {
+            "path": null,
+            "git_url": null,
+            "git_commit_id": null,
+            "name": "terminal-bench/raman-fitting",
+            "ref": "sha256:6b2c34e3c5016c763bf1f2f2a7210ee711565f90b18c09b68f95c0daa9220229",
+            "overwrite": false,
+            "download_dir": null,
+            "source": "terminal-bench/terminal-bench-2"
+        },
+        "trial_name": "raman-fitting__RFEY5BA",
+        "trials_dir": "jobs\\2026-07-25__17-05-06",
+        "install_only": false,
+        "timeout_multiplier": 2.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": "trumbo_agent:TrumboCli",
+            "import_path": null,
+            "model_name": "trumbo:quartz-1.0",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "cline-version": "3.6.2"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "job_id": "20203b6b-277f-4748-9489-a82e7f917591"
+    },
+    "agent_info": {
+        "name": "trumbo-cli",
+        "version": "unknown",
+        "model_info": {
+            "name": "trumbo:quartz-1.0",
+            "provider": null
+        }
+    },
+    "agent_result": null,
+    "verifier_result": null,
+    "exception_info": {
+        "exception_type": "RuntimeError",
+        "exception_message": "Docker compose command failed for environment raman-fitting. Command: docker compose --project-name raman-fitting__rfey5ba__env --project-directory C:\\Users\\Admin\\.cache\\harbor\\tasks\\packages\\terminal-bench\\raman-fitting\\6b2c34e3c5016c763bf1f2f2a7210ee711565f90b18c09b68f95c0daa9220229\\environment -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmpjlvbnebt\\raman-fitting__RFEY5BA__env-docker-compose-resources.json -f C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\environments\\docker\\docker-compose-prebuilt.yaml -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmp_im84ie8\\docker-compose-environment.json -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmp619uczvv\\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network raman-fitting__rfey5ba__env_default Creating \n Network raman-fitting__rfey5ba__env_default Error Error response from daemon: all predefined address pools have been fully subnetted\nfailed to create network raman-fitting__rfey5ba__env_default: Error response from daemon: all predefined address pools have been fully subnetted\n. Stderr: None. ",
+        "exception_traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\trial\\trial.py\", line 351, in run\n    await self._prepare()\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\trial\\trial.py\", line 385, in _prepare\n    await self._setup_agent_environment()\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\trial\\trial.py\", line 1148, in _setup_agent_environment\n    await self._start_agent_environment()\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\trial\\trial.py\", line 1154, in _start_agent_environment\n    await asyncio.wait_for(\n  File \"C:\\Python312\\Lib\\asyncio\\tasks.py\", line 520, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\environments\\docker\\docker.py\", line 908, in start\n    await self._run_docker_compose_command([\"up\", \"--detach\", \"--wait\"])\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\environments\\docker\\docker.py\", line 656, in _run_docker_compose_command\n    raise RuntimeError(\nRuntimeError: Docker compose command failed for environment raman-fitting. Command: docker compose --project-name raman-fitting__rfey5ba__env --project-directory C:\\Users\\Admin\\.cache\\harbor\\tasks\\packages\\terminal-bench\\raman-fitting\\6b2c34e3c5016c763bf1f2f2a7210ee711565f90b18c09b68f95c0daa9220229\\environment -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmpjlvbnebt\\raman-fitting__RFEY5BA__env-docker-compose-resources.json -f C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\environments\\docker\\docker-compose-prebuilt.yaml -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmp_im84ie8\\docker-compose-environment.json -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmp619uczvv\\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network raman-fitting__rfey5ba__env_default Creating \n Network raman-fitting__rfey5ba__env_default Error Error response from daemon: all predefined address pools have been fully subnetted\nfailed to create network raman-fitting__rfey5ba__env_default: Error response from daemon: all predefined address pools have been fully subnetted\n. Stderr: None. \n",
+        "occurred_at": "2026-07-25T17:32:43.056625"
+    },
+    "started_at": "2026-07-25T12:02:42.007742Z",
+    "finished_at": "2026-07-25T12:02:43.435461Z",
+    "environment_setup": {
+        "started_at": "2026-07-25T12:02:42.013201Z",
+        "finished_at": "2026-07-25T12:02:43.055580Z"
+    },
+    "agent_setup": null,
+    "agent_execution": null,
+    "verifier": null,
+    "step_results": null
+}

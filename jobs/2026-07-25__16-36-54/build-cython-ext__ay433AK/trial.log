@@ -1,0 +1,5 @@
+Trial build-cython-ext__ay433AK failed: Docker compose command failed for environment build-cython-ext. Command: docker compose --project-name build-cython-ext__ay433ak__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\build-cython-ext\38e42b5662bb3c6b8610d193d5ef1b47ee3a8f4bd07eb860ceaab17e9406a368\environment -f C:\Users\Admin\AppData\Local\Temp\tmpdqpu_vlh\build-cython-ext__ay433AK__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp52pgoisp\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpky5ll20y\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network build-cython-ext__ay433ak__env_default Creating 
+ Network build-cython-ext__ay433ak__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network build-cython-ext__ay433ak__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

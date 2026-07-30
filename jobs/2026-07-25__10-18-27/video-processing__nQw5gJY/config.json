@@ -1,0 +1,10 @@
+{
+    "task": {
+        "name": "terminal-bench/video-processing",
+        "ref": "sha256:59730f0ccdc323eb45aa433d094cd7c2f29a0084d3670ce7cc93acee9b516ade",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "video-processing__nQw5gJY",
+    "trials_dir": "jobs\\2026-07-25__10-18-27",
+    "job_id": "49ddaf7e-ed97-45c8-bf15-a1198f76b1eb"
+}

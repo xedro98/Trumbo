@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/pytorch-model-recovery",
+        "ref": "sha256:3164b409d3d9706c2b9a78966f6a16775229f289f076559c1a60102db820ed95",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "pytorch-model-recovery__8Zb5WkG",
+    "trials_dir": "jobs\\2026-07-25__16-36-54",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f67ac3c6-e533-46ca-8d83-91b62b29a5cf"
+}

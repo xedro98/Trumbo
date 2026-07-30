@@ -1,0 +1,5 @@
+Trial sqlite-with-gcov__as9h48V failed: Docker compose command failed for environment sqlite-with-gcov. Command: docker compose --project-name sqlite-with-gcov__as9h48v__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\sqlite-with-gcov\b5d64900c45ffba80c48fcfaac97485662de684392f6e1b730f1cc934c28ff2b\environment -f C:\Users\Admin\AppData\Local\Temp\tmpvh1s0vz9\sqlite-with-gcov__as9h48V__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpcnc_c7et\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpdizkqkbn\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network sqlite-with-gcov__as9h48v__env_default Creating 
+ Network sqlite-with-gcov__as9h48v__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network sqlite-with-gcov__as9h48v__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

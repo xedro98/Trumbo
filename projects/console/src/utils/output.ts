@@ -17,6 +17,16 @@ export const c = {
 	gray: "\x1b[90m",
 };
 
+/**
+ * Functional color helpers — wrap text in an ANSI color and reset.
+ * Use these when interpolating; use the raw `c` constants for concatenation.
+ */
+export const cyan = (text: string): string => `${c.cyan}${text}${c.reset}`;
+export const dim = (text: string): string => `${c.dim}${text}${c.reset}`;
+export const green = (text: string): string => `${c.green}${text}${c.reset}`;
+export const yellow = (text: string): string => `${c.yellow}${text}${c.reset}`;
+export const red = (text: string): string => `${c.red}${text}${c.reset}`;
+
 // =============================================================================
 // Shared mutable state for output
 // =============================================================================

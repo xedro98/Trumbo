@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/break-filter-js-from-html",
+        "ref": "sha256:59a2641df9bca789642ad4ab3f5790de5ffed6eb4a594ca7846d26422a55c4a8",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "break-filter-js-from-html__ZSpeGNE",
+    "trials_dir": "jobs\\2026-07-25__17-12-00",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "32d1bec0-e78d-4416-95f1-26f42698a39d"
+}

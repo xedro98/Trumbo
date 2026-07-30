@@ -1,0 +1,117 @@
+{
+    "id": "c5723f30-6304-4243-8d8f-35207e1838d0",
+    "task_name": "terminal-bench/dna-insert",
+    "trial_name": "dna-insert__5nB3793",
+    "trial_uri": "file:///D:/Torch/cline-full/jobs/2026-07-25__10-56-18/dna-insert__5nB3793",
+    "task_id": {
+        "org": "terminal-bench",
+        "name": "dna-insert",
+        "ref": "sha256:6e134a226ff852d8bf20f15480c7c1d74e3911d5b458f5cca07aabd23e380f0d"
+    },
+    "source": "terminal-bench/terminal-bench-2",
+    "task_checksum": "bb56a25f994ff659c356ba706a978e7367990b77de204be2b2113b6e86d6d04f",
+    "config": {
+        "task": {
+            "path": null,
+            "git_url": null,
+            "git_commit_id": null,
+            "name": "terminal-bench/dna-insert",
+            "ref": "sha256:6e134a226ff852d8bf20f15480c7c1d74e3911d5b458f5cca07aabd23e380f0d",
+            "overwrite": false,
+            "download_dir": null,
+            "source": "terminal-bench/terminal-bench-2"
+        },
+        "trial_name": "dna-insert__5nB3793",
+        "trials_dir": "jobs\\2026-07-25__10-56-18",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": "trumbo_agent:TrumboCli",
+            "import_path": null,
+            "model_name": "trumbo:quartz-1.0",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "cline-version": "3.6.2"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "job_id": "5777e3cc-54aa-49bc-b19d-8a91708b536b"
+    },
+    "agent_info": {
+        "name": "trumbo-cli",
+        "version": "3.6.2",
+        "model_info": {
+            "name": "trumbo:quartz-1.0",
+            "provider": null
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 534331,
+        "n_cache_tokens": 451097,
+        "n_output_tokens": 63711,
+        "cost_usd": 0.0,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 1.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-07-25T05:27:07.733732Z",
+    "finished_at": "2026-07-25T05:40:40.422670Z",
+    "environment_setup": {
+        "started_at": "2026-07-25T05:27:07.749204Z",
+        "finished_at": "2026-07-25T05:27:21.068479Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-07-25T05:27:21.068986Z",
+        "finished_at": "2026-07-25T05:28:49.595739Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-07-25T05:28:49.596259Z",
+        "finished_at": "2026-07-25T05:40:26.814150Z"
+    },
+    "verifier": {
+        "started_at": "2026-07-25T05:40:26.821626Z",
+        "finished_at": "2026-07-25T05:40:37.282836Z"
+    },
+    "step_results": null
+}

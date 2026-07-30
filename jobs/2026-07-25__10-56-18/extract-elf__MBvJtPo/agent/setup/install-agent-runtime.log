@@ -1,0 +1,35 @@
+=== install-agent-runtime ===
+start:    2026-07-25T05:41:50.247378+00:00
+end:      2026-07-25T05:42:11.899540+00:00
+duration: 21.65s
+--- STDOUT ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 16631  100 16631    0     0   393k      0 --:--:-- --:--:-- --:--:--  396k
+=> Downloading nvm from git to '/root/.nvm'
+=> Cloning into '/root/.nvm'...
+* (HEAD detached at FETCH_HEAD)
+  master
+=> Compressing and cleaning up git repository
+
+=> Appending nvm source string to /root/.bashrc
+=> Appending bash_completion source string to /root/.bashrc
+=> Close and reopen your terminal to start using nvm or run the following to use it now:
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+Downloading and installing node v22.23.1...
+Downloading https://nodejs.org/dist/v22.23.1/node-v22.23.1-linux-x64.tar.xz...
+##                                                                         3.1%#########                                                                 12.9%#################                                                         24.2%#######################                                                   32.4%#############################                                             40.7%###################################                                       49.5%#######################################                                   55.3%##########################################                                58.8%#################################################                         68.5%#######################################################                   76.5%##############################################################            87.1%#######################################################################   99.2%######################################################################## 100.0%
+Computing checksum with sha256sum
+Checksums matched!
+Now using node v22.23.1 (npm v10.9.8)
+Creating default alias: default -> 22 (-> v22.23.1 *)
+Now using node v22.23.1 (npm v10.9.8)
+default -> 22 (-> v22.23.1 *)
+npm warn using --force Recommended protections disabled.
+
+added 2 packages in 9s
+3.6.2
+Trumbo npm binary smoke test passed.

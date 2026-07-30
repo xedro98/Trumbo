@@ -1,0 +1,29 @@
+  89/89 Mean: 0.045 ---------------------------------------- 0:32:05 0:00:00
+
+terminal-bench/terminal-bench-2 • trumbo-cli • trumbo:quartz-1.0
+┌────────┬────────────┬───────┐
+│ Trials │ Exceptions │  Mean │
+├────────┼────────────┼───────┤
+│     10 │         79 │ 0.045 │
+└────────┴────────────┴───────┘
+
+┌────────┬───────┐
+│ Reward │ Count │
+├────────┼───────┤
+│ 0.0    │     6 │
+│ 1.0    │     4 │
+└────────┴───────┘
+
+┌───────────────────────────┬───────┐
+│ Exception                 │ Count │
+├───────────────────────────┼───────┤
+│ NonZeroAgentExitCodeError │     7 │
+│ RuntimeError              │    72 │
+└───────────────────────────┴───────┘
+
+Job Info
+Total runtime: 32m 5s
+Results written to jobs\2026-07-25__10-56-18\result.json
+Inspect results by running `harbor view jobs`
+Share results by running `harbor upload jobs\2026-07-25__10-56-18`
+

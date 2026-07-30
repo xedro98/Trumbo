@@ -1,0 +1,3054 @@
+{
+    "schema_version": 2,
+    "created_at": "2026-07-25T11:01:30.717032Z",
+    "harbor": {
+        "version": "0.20.0",
+        "is_editable": false
+    },
+    "n_concurrent_trials": 4,
+    "retry": {
+        "max_retries": 0,
+        "exclude_exceptions": [
+            "AgentTimeoutError",
+            "ApiUsageLimitError",
+            "AgentSafetyRefusalError",
+            "RewardFileNotFoundError",
+            "ModelNotFoundError",
+            "VerifierTimeoutError",
+            "VerifierOutputParseError",
+            "RewardFileEmptyError",
+            "AgentAuthenticationError"
+        ],
+        "wait_multiplier": 1.0,
+        "min_wait_sec": 1.0,
+        "max_wait_sec": 60.0
+    },
+    "trials": [
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-adaptive-rejection-sampler__EPr2LQK",
+                "type": "local",
+                "digest": "sha256:96af45a282ea1fd728d585d2570ab27583da771da00e016841ef6b0259473c92",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-adaptive-rejection-sampler__EPr2LQK"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-bn-fit-modify__EdcPrkq",
+                "type": "local",
+                "digest": "sha256:89a853aa332fb74f48d2eba3dd3b7482afc48a2485906e2512d1554e5c1f8ef4",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-bn-fit-modify__EdcPrkq"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-break-filter-js-from-html__KUx4Hg7",
+                "type": "local",
+                "digest": "sha256:c545961d4cf9b63dc7b064da46248d45690b8ddec830409dc0591d15b4db9019",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-break-filter-js-from-html__KUx4Hg7"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-build-cython-ext__wki28qc",
+                "type": "local",
+                "digest": "sha256:f89b209aa8b0de7f382683ed7418e69c52736c75b8e57c490432f61bb9064ba0",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-build-cython-ext__wki28qc"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-build-pmars__DJdzKyW",
+                "type": "local",
+                "digest": "sha256:4159b3a390f0be24215caae130a82d9719709c3d87f97f7181f36343be0e98cc",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-build-pmars__DJdzKyW"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-build-pov-ray__YqHBxt9",
+                "type": "local",
+                "digest": "sha256:17c18635087e1b3aac2488b17407e07bb8b144aae4e364343a4026ced9d2ce8a",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-build-pov-ray__YqHBxt9"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-caffe-cifar-10__NsyE2uW",
+                "type": "local",
+                "digest": "sha256:a8aae1a24c1b49aa9dd54e98ab9fcb0478f7d444d84373c287ebff909ff45617",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-caffe-cifar-10__NsyE2uW"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-cancel-async-tasks__xEZXSRQ",
+                "type": "local",
+                "digest": "sha256:268fc6ef8aeada564ba25841e9d82244bb7f19f12ec083fa7496e192fbb9f1f7",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-cancel-async-tasks__xEZXSRQ"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-chess-best-move__ZaHL6q8",
+                "type": "local",
+                "digest": "sha256:018bab9782fab4efe17055c244c4cbbf0ef78b5093b50828cfdf3af907a70078",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-chess-best-move__ZaHL6q8"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-circuit-fibsqrt__CSASazq",
+                "type": "local",
+                "digest": "sha256:28704c840013b8e6516db67c36d3c35796a9197fcb7ca9c583460a8f9f9f3ff0",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-circuit-fibsqrt__CSASazq"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-cobol-modernization__rzXuYAW",
+                "type": "local",
+                "digest": "sha256:a18217c8a1bc8c82c33f13b76d634113b5a35df7473667bf2b3e3cf745e9dc74",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-cobol-modernization__rzXuYAW"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-code-from-image__Z8wh5Rx",
+                "type": "local",
+                "digest": "sha256:0b16e6dd7f3fbb89a59d1f580694b940fdfbe1445c2a7e70a6e95b4def3238d1",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-code-from-image__Z8wh5Rx"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-compile-compcert__THbGQAQ",
+                "type": "local",
+                "digest": "sha256:6fed20a96c4bce4e4d2c2003c5153ded51eed1bb47c9f57a1545a3b86dfdcca2",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-compile-compcert__THbGQAQ"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-configure-git-webserver__gkyVVEq",
+                "type": "local",
+                "digest": "sha256:9cdc28e157cf26f04f76567e8e2606863bb410143aadf8af7102b9f30a32c9b7",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-configure-git-webserver__gkyVVEq"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-constraints-scheduling__8yNWuaD",
+                "type": "local",
+                "digest": "sha256:d3370d20ac7f7bbf306291edc790cd9fe9e5cb50a1a4ca88b3ba981acd5d9c07",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-constraints-scheduling__8yNWuaD"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-count-dataset-tokens__yGV9HUF",
+                "type": "local",
+                "digest": "sha256:f3f18c92a1a05ce55a1078eb9cedb0063b8792fdcc9bb2151d7d0aca5daf91f6",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-count-dataset-tokens__yGV9HUF"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-crack-7z-hash__94XUSgP",
+                "type": "local",
+                "digest": "sha256:265b151e4dace56cb01bca2032f71be42b4665e07a06a43192365bb0db98796d",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-crack-7z-hash__94XUSgP"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-custom-memory-heap-crash__eVVocxq",
+                "type": "local",
+                "digest": "sha256:19a3958944379b486a64c8a8a3fbeb7d8597219b7db5fdabffbdd3ac5cc60e63",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-custom-memory-heap-crash__eVVocxq"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-db-wal-recovery__T5z8fDm",
+                "type": "local",
+                "digest": "sha256:a39d98e8d0034a7db5dc33bfdbd794f27559f1d45716b0a17e69e0fd03e2c6ac",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-db-wal-recovery__T5z8fDm"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-distribution-search__e2Gp7Ln",
+                "type": "local",
+                "digest": "sha256:14d69961979971854bb66cb1a76c81611c00022828400f623e47d261c01fe098",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-distribution-search__e2Gp7Ln"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-dna-assembly__t6zY8q5",
+                "type": "local",
+                "digest": "sha256:b7364837b59401ebe26fd675e8d232af35718c8802bb5d714d73fb8d0d9804cb",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-dna-assembly__t6zY8q5"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-dna-insert__5nB3793",
+                "type": "local",
+                "digest": "sha256:4c2f207e9eea27d8fc24169909cb7de088717583f0e25a797b28fd6c71a85898",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-dna-insert__5nB3793"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-extract-elf__MBvJtPo",
+                "type": "local",
+                "digest": "sha256:065f02bbb8986aa57f498b18cd48f0955eae144d097f02f64a1a046b56d221f0",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-extract-elf__MBvJtPo"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-extract-moves-from-video__S5CEBLV",
+                "type": "local",
+                "digest": "sha256:f069bb183aed6f73ee9b5931a0744788f05dcc605b4f0c5c25b840a094734753",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-extract-moves-from-video__S5CEBLV"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-feal-differential-cryptanalysis__oW7xDzQ",
+                "type": "local",
+                "digest": "sha256:937a250857677bdc09ad96ee57e707d7146a90256ac15a736a8f832ae8977d8e",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-feal-differential-cryptanalysis__oW7xDzQ"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-feal-linear-cryptanalysis__a2vdXHS",
+                "type": "local",
+                "digest": "sha256:e3806396326ab92c40b98dc54586b536eb946c2432f9afd44551daeae95f272a",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-feal-linear-cryptanalysis__a2vdXHS"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-filter-js-from-html__ek7uxkC",
+                "type": "local",
+                "digest": "sha256:f1e837bbc5154c39e9eb0ed78b130ce74140ef6ed538b775600a0ce95e1fdb07",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-filter-js-from-html__ek7uxkC"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-financial-document-processor__orgm2WL",
+                "type": "local",
+                "digest": "sha256:feb48b20404077bf8a30bcb06839c47282467021627db9aa366f7742c0ce8579",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-financial-document-processor__orgm2WL"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-fix-code-vulnerability__VucuAnc",
+                "type": "local",
+                "digest": "sha256:90b10550b3226685ea9330296506edd296cdec53992cee70fa4c3535e0e8d24a",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-fix-code-vulnerability__VucuAnc"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-fix-git__a5q8XPz",
+                "type": "local",
+                "digest": "sha256:741adb0bf7753285fd42baf3e1a890872406ca101ca0b6713145f836a56a36eb",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-fix-git__a5q8XPz"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-fix-ocaml-gc__ocPaKJE",
+                "type": "local",
+                "digest": "sha256:fa83d36849cd4db37623562631c5337d29758dad69b26b110dd79a6f51f0c4dc",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-fix-ocaml-gc__ocPaKJE"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-gcode-to-text__oS7XzKr",
+                "type": "local",
+                "digest": "sha256:59288083520be1a2e8f3b43aba8e452c41c2c4c74ee872cb5176324ec343109f",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-gcode-to-text__oS7XzKr"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-git-leak-recovery__4pVbbeV",
+                "type": "local",
+                "digest": "sha256:6d0d5ed40fdb3b6298ade65e2320d8769967dc7021e631d415b569625df9fa52",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-git-leak-recovery__4pVbbeV"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-git-multibranch__D93AYYh",
+                "type": "local",
+                "digest": "sha256:33ae34770dbf840be1d2e904952296adba84c6ffd13d4667ca61d3949e8040b5",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-git-multibranch__D93AYYh"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-gpt2-codegolf__qFzvryp",
+                "type": "local",
+                "digest": "sha256:4739fc84c61bf59a4cfb755add2be4fce408e00fb60f3d6c12c5104125ed3e5f",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-gpt2-codegolf__qFzvryp"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-headless-terminal__dL4ZgnE",
+                "type": "local",
+                "digest": "sha256:e66aba343cc212918ffb2d49d12206d168b6cf0e5296c4534923e9c07a985834",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-headless-terminal__dL4ZgnE"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-hf-model-inference__GadCHjS",
+                "type": "local",
+                "digest": "sha256:26f9558d620214ca58d47ff71ff51ada5b8ec7e8fea177a587fff4b5b0c5b26f",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-hf-model-inference__GadCHjS"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-install-windows-3-11__suDuopL",
+                "type": "local",
+                "digest": "sha256:35e13638cbf2359ffdcc7d45b913a228677bd9d206bdb2eec1d3a748119a9d7f",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-install-windows-3-11__suDuopL"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-kv-store-grpc__stjVPKU",
+                "type": "local",
+                "digest": "sha256:1c20dae2bce9e3dc3af814f4f0341cf28c596148a4fdfb4c761ae989b6515a36",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-kv-store-grpc__stjVPKU"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-large-scale-text-editing__5rDV9eZ",
+                "type": "local",
+                "digest": "sha256:d3f7b9a77b72527a3d9e79f6d5f2a96ab887a34f238e446f4bf115754bd84053",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-large-scale-text-editing__5rDV9eZ"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-largest-eigenval__t2NQdrp",
+                "type": "local",
+                "digest": "sha256:a14d59c4dc248b8fa7951845120f1a70b260b549f20ad7b8611578fa232f2666",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-largest-eigenval__t2NQdrp"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-llm-inference-batching-scheduler__s89iP2S",
+                "type": "local",
+                "digest": "sha256:9b3b1724574dee1a2e551db9d192716ca0a3f877a9c064d312f10405c019c08a",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-llm-inference-batching-scheduler__s89iP2S"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-log-summary-date-ranges__qwMhPaU",
+                "type": "local",
+                "digest": "sha256:ba213844d6ebbd0db82927eef33c8549c1cf980825793deeb838c7d0416c4aff",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-log-summary-date-ranges__qwMhPaU"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-mailman__5T7rrBu",
+                "type": "local",
+                "digest": "sha256:f73bc178297e6297e2c9eea20843ed1c0795080db6131958df5c5a0dad3a5733",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-mailman__5T7rrBu"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-make-doom-for-mips__4vfj2Ps",
+                "type": "local",
+                "digest": "sha256:7c390e58e24f36c145eeab464e8321303b22793b1fab34742b63c5ce247b2690",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-make-doom-for-mips__4vfj2Ps"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-make-mips-interpreter__RpzFwZ6",
+                "type": "local",
+                "digest": "sha256:5a98fc215d2109b8314f794a9c022fc639d8ff89ae8b9a52ec03332039a30866",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-make-mips-interpreter__RpzFwZ6"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-mcmc-sampling-stan__AHZcfST",
+                "type": "local",
+                "digest": "sha256:fe4884443191c80bdd0236920fd17df89f62fa12a99ab0e006ae3230634fd4bf",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-mcmc-sampling-stan__AHZcfST"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-merge-diff-arc-agi-task__eokpdnc",
+                "type": "local",
+                "digest": "sha256:94f4b51f6ef2416c8c321912211ede4415a9685a421424905983d8822a2ece7c",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-merge-diff-arc-agi-task__eokpdnc"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-model-extraction-relu-logits__fVizRnx",
+                "type": "local",
+                "digest": "sha256:56096a6189c7b38cdae5970975ddff4995937c667a32f70c93f0af2ab5baa517",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-model-extraction-relu-logits__fVizRnx"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-modernize-scientific-stack__dHZx9fc",
+                "type": "local",
+                "digest": "sha256:18aae55750c7c6c4d97fc10bf64302f82e9d788ff55f1f6072277a10728c34f4",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-modernize-scientific-stack__dHZx9fc"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-mteb-leaderboard__CRTjTWn",
+                "type": "local",
+                "digest": "sha256:012391d35864ad997e2dd24264c884d0b928b179f945bc6def3a1dbf324bd1c4",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-mteb-leaderboard__CRTjTWn"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-mteb-retrieve__7dFrte5",
+                "type": "local",
+                "digest": "sha256:fef0de1afecaa16c15148feba1a73b51b485b986ab8cb801734a85860c5369bf",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-mteb-retrieve__7dFrte5"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-multi-source-data-merger__mJfMGTM",
+                "type": "local",
+                "digest": "sha256:8c9cb849521e976c5e9c322bdc3f71398154cf27cbe6831575df890cf9adcbcc",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-multi-source-data-merger__mJfMGTM"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-nginx-request-logging__PBZtizc",
+                "type": "local",
+                "digest": "sha256:e741f1a832c0dcd91dfabb6ee2ff5c6e3d8c90e521b7c3ce4ace71c71c47c1df",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-nginx-request-logging__PBZtizc"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-openssl-selfsigned-cert__jxFq33F",
+                "type": "local",
+                "digest": "sha256:1f58ff211c6c49dac7660c6c6b68451e9140ab5873168fdf3cfbae6bf3d8f5ce",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-openssl-selfsigned-cert__jxFq33F"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-overfull-hbox__eZ2Co42",
+                "type": "local",
+                "digest": "sha256:80379a1bc0babee3e2ab78c99eea94cc2497be693ae9a5b57df4e7b00c7c10c4",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-overfull-hbox__eZ2Co42"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-password-recovery__cVHryyH",
+                "type": "local",
+                "digest": "sha256:f0e5c2d3d2faf65c14429a5c87b4919e461c084ec348b4866602c3af380ef0d9",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-password-recovery__cVHryyH"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-path-tracing-reverse__iRZCiyU",
+                "type": "local",
+                "digest": "sha256:3fabe3853496e343dea77b480e0c841d31484a78519e6b4cb5c295dfd26dbeeb",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-path-tracing-reverse__iRZCiyU"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-path-tracing__M2JzP8a",
+                "type": "local",
+                "digest": "sha256:cfc7851e385dac8b40ef875a34eba1c33d716699d00873d3865c15cd4224bcdc",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-path-tracing__M2JzP8a"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-polyglot-c-py__z5H8vYP",
+                "type": "local",
+                "digest": "sha256:3e7da7df9e9cc2812d03089e9764a35493b60987cd8a72a27a062278bf5fe9aa",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-polyglot-c-py__z5H8vYP"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-polyglot-rust-c__jfxZGtn",
+                "type": "local",
+                "digest": "sha256:c32b1ad811691bb9a3d2beb62076761e2fa0bf42ec9a4466cba3aee3945329ce",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-polyglot-rust-c__jfxZGtn"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-portfolio-optimization__sfMXxJW",
+                "type": "local",
+                "digest": "sha256:1044c00721b2f1909d678f1c179564565f2cb1742cf3fde1adeef622b4d7cae3",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-portfolio-optimization__sfMXxJW"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-protein-assembly__XkCiVim",
+                "type": "local",
+                "digest": "sha256:76d6ea04c5a3d02618d8dc862159a4dc27be7bda4050ec11620866bd67b9d1db",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-protein-assembly__XkCiVim"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-prove-plus-comm__HTi7DKD",
+                "type": "local",
+                "digest": "sha256:59ccec5a7c6455c8cedade7464e4b8740da6e1e27770e63f8dd8a3893f9fa8fe",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-prove-plus-comm__HTi7DKD"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-pypi-server__iZosxTU",
+                "type": "local",
+                "digest": "sha256:6273e83d34e6a9d3ec3420baa6b2e436a1efd430f18d22b365de6ae0746fa124",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-pypi-server__iZosxTU"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-pytorch-model-cli__GnUhNPv",
+                "type": "local",
+                "digest": "sha256:c0ec70f71fbfa4e02554c4f44b8b3870d06935eee8a450c279ac3bd1d23651c1",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-pytorch-model-cli__GnUhNPv"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-pytorch-model-recovery__hKMaaDj",
+                "type": "local",
+                "digest": "sha256:2ded125801abce892a07bfd1e01e25c245bdeb5091c034e298821d9a306e3bd6",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-pytorch-model-recovery__hKMaaDj"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-qemu-alpine-ssh__nhKegtC",
+                "type": "local",
+                "digest": "sha256:1e74d397528ab6b68b1b9419613585b0681c67efd96d39573b59f872770f53b5",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-qemu-alpine-ssh__nhKegtC"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-qemu-startup__ihvD58b",
+                "type": "local",
+                "digest": "sha256:5ca93339d199683c5cc06f8374668f0b316cc61abfebe506e0cbad04380334fb",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-qemu-startup__ihvD58b"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-query-optimize__hbhK98T",
+                "type": "local",
+                "digest": "sha256:8e5ec224cd205fbd65d53dc516176a4eedf07b91ef48fe51d3aba80b49785c04",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-query-optimize__hbhK98T"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-raman-fitting__8C2qzbY",
+                "type": "local",
+                "digest": "sha256:87fcadd8a03cad11f16bc75eb44d180dd475790c87ca4fd2061059e7fd47a8db",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-raman-fitting__8C2qzbY"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-regex-chess__nRaK6jW",
+                "type": "local",
+                "digest": "sha256:ea2e9153914f1fbb33b2223aa236ec03c84615d8c36445fdcd12666acf1f98a3",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-regex-chess__nRaK6jW"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-regex-log__8qDxL2P",
+                "type": "local",
+                "digest": "sha256:c9c79e8420c3165f28c5748695abd36ed8550b5b527a684903de7d499ed04aac",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-regex-log__8qDxL2P"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-reshard-c4-data__waRGxAk",
+                "type": "local",
+                "digest": "sha256:6cff27f0818232fa244ff8731bbb30b93217acd1258513a58a43b4753a2cd2e0",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-reshard-c4-data__waRGxAk"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-rstan-to-pystan__8UXP8U8",
+                "type": "local",
+                "digest": "sha256:ab5fa08aff0cdae4bc82ad980ebe512d356e928777b957da4a188d87e216947b",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-rstan-to-pystan__8UXP8U8"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-sam-cell-seg__VRRdE49",
+                "type": "local",
+                "digest": "sha256:506985edef7d7bccb751c9a581cb71fefd28f1a25c6df5a095c14e4ff97014b5",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-sam-cell-seg__VRRdE49"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-sanitize-git-repo__7NRn837",
+                "type": "local",
+                "digest": "sha256:73a55d2ef95da264e60f25ce3d18798be11c9f00635a7a81b03814fc884f35d3",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-sanitize-git-repo__7NRn837"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-schemelike-metacircular-eval__8QzF3js",
+                "type": "local",
+                "digest": "sha256:55ed7e5f18e8cd5380851bd1238cab8e829e0a863294ece6bcc50966f8150b53",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-schemelike-metacircular-eval__8QzF3js"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-sparql-university__8k44s6x",
+                "type": "local",
+                "digest": "sha256:8f42255c6c4f529123942cf9f0adf5645e2bb38c30b8888d9048d67db7c6fe93",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-sparql-university__8k44s6x"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-sqlite-db-truncate__htmnksc",
+                "type": "local",
+                "digest": "sha256:ae3bc75e88ff4d3b475d25390bf6a5c3942198b3b5658bd193898c1115daf459",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-sqlite-db-truncate__htmnksc"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-sqlite-with-gcov__EePc6Ww",
+                "type": "local",
+                "digest": "sha256:b0afdf759e89af032546d0be472f422051be15749d87c78fdf250a61d61caaaf",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-sqlite-with-gcov__EePc6Ww"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-torch-pipeline-parallelism__Ce3XqAe",
+                "type": "local",
+                "digest": "sha256:dcd4ec03e79f8faf1721dd9ae4927a159559526194cd3424ee82dee7e65a6c6a",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-torch-pipeline-parallelism__Ce3XqAe"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-torch-tensor-parallelism__4DKdwHY",
+                "type": "local",
+                "digest": "sha256:a30ab22dc5a8c0ba9de3fad798284073b12b5f0a985785f8ab1ffd64ab3d64f5",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-torch-tensor-parallelism__4DKdwHY"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-train-fasttext__k9ooumG",
+                "type": "local",
+                "digest": "sha256:25b7e1ae3655642e9d7ec8b12ffecbd4be13492087be8ce715d75f505d646b60",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-train-fasttext__k9ooumG"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-tune-mjcf__dmzHrut",
+                "type": "local",
+                "digest": "sha256:71cb0e84e68ffcce437a5568a41548d98b9fea701e29471b597afc1573f4f07d",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-tune-mjcf__dmzHrut"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-video-processing__jjk5Ck9",
+                "type": "local",
+                "digest": "sha256:09f60a499b6ca37f79a7af93fa74448310c3c7d9f49b49f75dd04e6d6154be44",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-video-processing__jjk5Ck9"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-vulnerable-secret__XikjgED",
+                "type": "local",
+                "digest": "sha256:5594b3c3d370ad85f2f5c13612e663383749331be00d946fa64c6c66ef6f91bc",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-vulnerable-secret__XikjgED"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-winning-avg-corewars__3VSsEBj",
+                "type": "local",
+                "digest": "sha256:b37f502c1a7edfbd60ec1ebc25182afd3d4226d5e3c451ed174a001900b0c430",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-winning-avg-corewars__3VSsEBj"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        },
+        {
+            "schema_version": 1,
+            "task": {
+                "name": "analyze-write-compressor__GTwDN5x",
+                "type": "local",
+                "digest": "sha256:5464f8fcc4d3d416e258b67cba535ae6f6d024152b1b8e6a8d75fb6830a3c437",
+                "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-write-compressor__GTwDN5x"
+            },
+            "install_only": false,
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "claude-code",
+                "model_name": "claude-haiku-4-5",
+                "skills": [],
+                "resume_trajectory": false,
+                "extra_allowed_hosts": [],
+                "kwargs": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "extra_docker_compose": [],
+                "kwargs": {},
+                "extra_allowed_hosts": []
+            },
+            "verifier": {
+                "disable": false
+            }
+        }
+    ]
+}

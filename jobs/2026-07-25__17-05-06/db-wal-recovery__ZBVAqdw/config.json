@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/db-wal-recovery",
+        "ref": "sha256:33f5d72ac836c8642d8160f4628352ca0cdf5d17838aae9c3b0db9bc78335825",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "db-wal-recovery__ZBVAqdw",
+    "trials_dir": "jobs\\2026-07-25__17-05-06",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "20203b6b-277f-4748-9489-a82e7f917591"
+}

@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/distribution-search",
+        "ref": "sha256:0212a95c28e26008f035e4cf39fc45cc69a20b621ae4ef83c1a27c4a0f20ecff",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "distribution-search__jhAaS3S",
+    "trials_dir": "jobs\\2026-07-25__17-12-00",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "32d1bec0-e78d-4416-95f1-26f42698a39d"
+}

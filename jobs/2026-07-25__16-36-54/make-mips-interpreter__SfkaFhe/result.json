@@ -1,0 +1,117 @@
+{
+    "id": "267c2995-1938-4cf8-97a1-42097443c4f7",
+    "task_name": "terminal-bench/make-mips-interpreter",
+    "trial_name": "make-mips-interpreter__SfkaFhe",
+    "trial_uri": "file:///D:/Torch/cline-full/jobs/2026-07-25__16-36-54/make-mips-interpreter__SfkaFhe",
+    "task_id": {
+        "org": "terminal-bench",
+        "name": "make-mips-interpreter",
+        "ref": "sha256:608e82ecd67ce469824a34181b580cbd0e1096cdfc05fe40edda3e6bfada9773"
+    },
+    "source": "terminal-bench/terminal-bench-2",
+    "task_checksum": "f7e68fab72321eeaf465b53a98a4c3aaf7b66d57a3d3465708a15ed2c9f55f70",
+    "config": {
+        "task": {
+            "path": null,
+            "git_url": null,
+            "git_commit_id": null,
+            "name": "terminal-bench/make-mips-interpreter",
+            "ref": "sha256:608e82ecd67ce469824a34181b580cbd0e1096cdfc05fe40edda3e6bfada9773",
+            "overwrite": false,
+            "download_dir": null,
+            "source": "terminal-bench/terminal-bench-2"
+        },
+        "trial_name": "make-mips-interpreter__SfkaFhe",
+        "trials_dir": "jobs\\2026-07-25__16-36-54",
+        "install_only": false,
+        "timeout_multiplier": 2.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": "trumbo_agent:TrumboCli",
+            "import_path": null,
+            "model_name": "trumbo:quartz-1.0",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "cline-version": "3.6.2"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "job_id": "f67ac3c6-e533-46ca-8d83-91b62b29a5cf"
+    },
+    "agent_info": {
+        "name": "trumbo-cli",
+        "version": "3.6.2",
+        "model_info": {
+            "name": "trumbo:quartz-1.0",
+            "provider": null
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 3324895,
+        "n_cache_tokens": 2772428,
+        "n_output_tokens": 85954,
+        "cost_usd": 0.0,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 0.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-07-25T11:07:02.314818Z",
+    "finished_at": "2026-07-25T11:26:09.110543Z",
+    "environment_setup": {
+        "started_at": "2026-07-25T11:07:02.860436Z",
+        "finished_at": "2026-07-25T11:07:09.344454Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-07-25T11:07:09.344454Z",
+        "finished_at": "2026-07-25T11:07:48.335456Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-07-25T11:07:48.335456Z",
+        "finished_at": "2026-07-25T11:25:18.819088Z"
+    },
+    "verifier": {
+        "started_at": "2026-07-25T11:25:19.140674Z",
+        "finished_at": "2026-07-25T11:26:05.907655Z"
+    },
+    "step_results": null
+}

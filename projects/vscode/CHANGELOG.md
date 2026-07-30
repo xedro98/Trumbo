@@ -2,6 +2,10 @@
 
 All notable changes to the Trumbo VS Code extension are documented here.
 
+## [0.3.2] - 2026-07-30
+
+Desktop app folded into the Trumbo monorepo. Version bump to stay in sync with the CLI 3.7.1 release.
+
 ## [0.3.1] - 2026-07-26
 
 Companion release for the Trumbo Agent Apps + Trumbo Database platform launch. No extension behavior changes; version bump only.

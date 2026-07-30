@@ -1,0 +1,12 @@
+{
+    "task": {
+        "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-build-cython-ext__wki28qc"
+    },
+    "trial_name": "analyze-build-cython-ext__wki28q__cSDozep",
+    "trials_dir": "jobs\\2026-07-25__16-31-28",
+    "agent": {
+        "name": "claude-code",
+        "model_name": "claude-haiku-4-5"
+    },
+    "job_id": "1dd6cdb8-e417-48f7-9fff-ffaf3d2de416"
+}

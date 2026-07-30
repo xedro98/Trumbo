@@ -15,6 +15,7 @@ export default defineConfig({
 	ignoreDeadLinks: true,
 	head: [
 		["meta", { name: "theme-color", content: "#2BBF77" }],
+		["link", { rel: "icon", href: "/trumbo-logo.svg", type: "image/svg+xml" }],
 		["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
 		["link", { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" }],
 		[
@@ -27,14 +28,17 @@ export default defineConfig({
 	],
 	themeConfig: {
 		siteTitle: "Trumbo Docs",
+		logo: {
+			light: "/trumbo-logo.svg",
+			dark: "/trumbo-logo.svg",
+			alt: "Trumbo",
+		},
 		nav: [
+			{ text: "Platform", link: "/platform/overview" },
+			{ text: "API", link: "/api/overview" },
+			{ text: "SDK", link: "/sdk/overview" },
 			{ text: "GitHub", link: "https://github.com/xedro98/Trumbo" },
-			{ text: "Discussions", link: "https://github.com/xedro98/Trumbo/discussions" },
-			{
-				text: "Install",
-				link: "https://github.com/xedro98/Trumbo",
-				target: "_self",
-			},
+			{ text: "Open Platform", link: "https://platform.trumbo.dev" },
 		],
 		sidebar: sidebar,
 		socialLinks: [{ icon: "github", link: "https://github.com/xedro98/Trumbo" }],

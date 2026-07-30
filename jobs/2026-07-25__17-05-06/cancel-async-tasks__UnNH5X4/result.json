@@ -1,0 +1,102 @@
+{
+    "id": "492b05a2-493e-487c-ab9a-2fecc09f2bb2",
+    "task_name": "terminal-bench/cancel-async-tasks",
+    "trial_name": "cancel-async-tasks__UnNH5X4",
+    "trial_uri": "file:///D:/Torch/cline-full/jobs/2026-07-25__17-05-06/cancel-async-tasks__UnNH5X4",
+    "task_id": {
+        "org": "terminal-bench",
+        "name": "cancel-async-tasks",
+        "ref": "sha256:7c230a29f27c49c2fff88f4721165f4241e456bd87a94cd525be05ae98c6cbbb"
+    },
+    "source": "terminal-bench/terminal-bench-2",
+    "task_checksum": "accc19bf83c18b56ef638f2fba155cfefc1219e72cd3a59ab326748ae5c5c547",
+    "config": {
+        "task": {
+            "path": null,
+            "git_url": null,
+            "git_commit_id": null,
+            "name": "terminal-bench/cancel-async-tasks",
+            "ref": "sha256:7c230a29f27c49c2fff88f4721165f4241e456bd87a94cd525be05ae98c6cbbb",
+            "overwrite": false,
+            "download_dir": null,
+            "source": "terminal-bench/terminal-bench-2"
+        },
+        "trial_name": "cancel-async-tasks__UnNH5X4",
+        "trials_dir": "jobs\\2026-07-25__17-05-06",
+        "install_only": false,
+        "timeout_multiplier": 2.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": "trumbo_agent:TrumboCli",
+            "import_path": null,
+            "model_name": "trumbo:quartz-1.0",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "cline-version": "3.6.2"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "job_id": "20203b6b-277f-4748-9489-a82e7f917591"
+    },
+    "agent_info": {
+        "name": "trumbo-cli",
+        "version": "unknown",
+        "model_info": {
+            "name": "trumbo:quartz-1.0",
+            "provider": null
+        }
+    },
+    "agent_result": null,
+    "verifier_result": null,
+    "exception_info": {
+        "exception_type": "RuntimeError",
+        "exception_message": "Docker compose command failed for environment cancel-async-tasks. Command: docker compose --project-name cancel-async-tasks__unnh5x4__env --project-directory C:\\Users\\Admin\\.cache\\harbor\\tasks\\packages\\terminal-bench\\cancel-async-tasks\\7c230a29f27c49c2fff88f4721165f4241e456bd87a94cd525be05ae98c6cbbb\\environment -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmpifffqkco\\cancel-async-tasks__UnNH5X4__env-docker-compose-resources.json -f C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\environments\\docker\\docker-compose-prebuilt.yaml -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmp3tablkqi\\docker-compose-environment.json -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmpgvzazgi5\\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network cancel-async-tasks__unnh5x4__env_default Creating \n Network cancel-async-tasks__unnh5x4__env_default Error Error response from daemon: all predefined address pools have been fully subnetted\nfailed to create network cancel-async-tasks__unnh5x4__env_default: Error response from daemon: all predefined address pools have been fully subnetted\n. Stderr: None. ",
+        "exception_traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\trial\\trial.py\", line 351, in run\n    await self._prepare()\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\trial\\trial.py\", line 385, in _prepare\n    await self._setup_agent_environment()\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\trial\\trial.py\", line 1148, in _setup_agent_environment\n    await self._start_agent_environment()\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\trial\\trial.py\", line 1154, in _start_agent_environment\n    await asyncio.wait_for(\n  File \"C:\\Python312\\Lib\\asyncio\\tasks.py\", line 520, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\environments\\docker\\docker.py\", line 908, in start\n    await self._run_docker_compose_command([\"up\", \"--detach\", \"--wait\"])\n  File \"C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\environments\\docker\\docker.py\", line 656, in _run_docker_compose_command\n    raise RuntimeError(\nRuntimeError: Docker compose command failed for environment cancel-async-tasks. Command: docker compose --project-name cancel-async-tasks__unnh5x4__env --project-directory C:\\Users\\Admin\\.cache\\harbor\\tasks\\packages\\terminal-bench\\cancel-async-tasks\\7c230a29f27c49c2fff88f4721165f4241e456bd87a94cd525be05ae98c6cbbb\\environment -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmpifffqkco\\cancel-async-tasks__UnNH5X4__env-docker-compose-resources.json -f C:\\Users\\Admin\\AppData\\Roaming\\Python\\Python312\\site-packages\\harbor\\environments\\docker\\docker-compose-prebuilt.yaml -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmp3tablkqi\\docker-compose-environment.json -f C:\\Users\\Admin\\AppData\\Local\\Temp\\tmpgvzazgi5\\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network cancel-async-tasks__unnh5x4__env_default Creating \n Network cancel-async-tasks__unnh5x4__env_default Error Error response from daemon: all predefined address pools have been fully subnetted\nfailed to create network cancel-async-tasks__unnh5x4__env_default: Error response from daemon: all predefined address pools have been fully subnetted\n. Stderr: None. \n",
+        "occurred_at": "2026-07-25T17:09:11.435103"
+    },
+    "started_at": "2026-07-25T11:39:10.416506Z",
+    "finished_at": "2026-07-25T11:39:11.720327Z",
+    "environment_setup": {
+        "started_at": "2026-07-25T11:39:10.423288Z",
+        "finished_at": "2026-07-25T11:39:11.434567Z"
+    },
+    "agent_setup": null,
+    "agent_execution": null,
+    "verifier": null,
+    "step_results": null
+}

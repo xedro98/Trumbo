@@ -84,6 +84,59 @@ export interface PlatformInfrastructureRpcResponse {
 	sandboxUsageJson?: string
 }
 
+export interface SecurityFindingSummary {
+	id: string
+	severity: string
+	status: string
+	title: string
+	file_path: string
+	line_start: number | null
+	repo_id: string
+	category: string
+	rule_id?: string | null
+}
+
+export interface SecurityFindingsList {
+	findings: SecurityFindingSummary[]
+	total: number
+	page?: number
+	pageSize?: number
+}
+
+export interface SecuritySuppression {
+	id: string
+	fingerprint: string
+	ruleId: string | null
+	filePath: string | null
+	reason: string | null
+	createdAt: number
+}
+
+export interface SecuritySuppressionsList {
+	suppressions: SecuritySuppression[]
+}
+
+export interface SecurityComplianceControl {
+	id: string
+	title: string
+	status: string
+	summary: string
+}
+
+export interface SecurityComplianceReport {
+	id: string
+	name: string
+	overallStatus: string
+	controlsMet: number
+	controlsTotal: number
+	controls: SecurityComplianceControl[]
+}
+
+export interface SecurityCompliancePacksResponse {
+	packs?: Array<{ id: string; name: string; framework: string; summary: string }>
+	reports: SecurityComplianceReport[]
+}
+
 export class TrumboAccountService {
 	private static instance: TrumboAccountService
 	private _authService: AuthService
@@ -264,6 +317,104 @@ export class TrumboAccountService {
 			})
 		} catch (error) {
 			Logger.error("Failed to submit limit increase request (RPC):", error)
+			throw error
+		}
+	}
+
+	/**
+	 * Security Agent: list findings for the active org/personal scope.
+	 */
+	async listSecurityFindings(input?: {
+		severity?: string
+		status?: string
+		repoId?: string
+		pageSize?: number
+	}): Promise<SecurityFindingsList | undefined> {
+		try {
+			const params = new URLSearchParams()
+			params.set("page", "1")
+			params.set("pageSize", String(Math.min(input?.pageSize ?? 50, 100)))
+			if (input?.severity) params.set("severity", input.severity)
+			if (input?.status) params.set("status", input.status)
+			if (input?.repoId) params.set("repoId", input.repoId)
+			return await this.authenticatedRequest<SecurityFindingsList>(
+				`/api/v1/security/findings?${params.toString()}`,
+			)
+		} catch (error) {
+			Logger.error("Failed to list security findings:", error)
+			return undefined
+		}
+	}
+
+	/**
+	 * Security Agent: list org-shared suppressions.
+	 */
+	async listSecuritySuppressions(): Promise<SecuritySuppressionsList | undefined> {
+		try {
+			return await this.authenticatedRequest<SecuritySuppressionsList>("/api/v1/security/suppressions")
+		} catch (error) {
+			Logger.error("Failed to list security suppressions:", error)
+			return undefined
+		}
+	}
+
+	/**
+	 * Security Agent: create a suppression from a finding id or fingerprint.
+	 */
+	async createSecuritySuppression(input: {
+		findingId?: string
+		fingerprint?: string
+		reason?: string
+	}): Promise<{ id: string; fingerprint?: string } | undefined> {
+		try {
+			return await this.authenticatedRequest<{ id: string; fingerprint?: string }>("/api/v1/security/suppressions", {
+				method: "POST",
+				data: input,
+			})
+		} catch (error) {
+			Logger.error("Failed to create security suppression:", error)
+			throw error
+		}
+	}
+
+	/**
+	 * Security Agent: delete a suppression by id.
+	 */
+	async deleteSecuritySuppression(id: string): Promise<{ deleted: boolean } | undefined> {
+		try {
+			return await this.authenticatedRequest<{ deleted: boolean }>(
+				`/api/v1/security/suppressions/${encodeURIComponent(id)}`,
+				{ method: "DELETE" },
+			)
+		} catch (error) {
+			Logger.error("Failed to delete security suppression:", error)
+			throw error
+		}
+	}
+
+	/**
+	 * Security Agent: SOC2 CC8 / PCI Req 6 compliance pack reports.
+	 */
+	async getSecurityCompliancePacks(): Promise<SecurityCompliancePacksResponse | undefined> {
+		try {
+			return await this.authenticatedRequest<SecurityCompliancePacksResponse>("/api/v1/security/compliance/packs")
+		} catch (error) {
+			Logger.error("Failed to fetch security compliance packs:", error)
+			return undefined
+		}
+	}
+
+	/**
+	 * Security Agent: recompute and persist compliance evidence.
+	 */
+	async refreshSecurityCompliance(): Promise<{ reports: SecurityComplianceReport[]; persisted?: boolean } | undefined> {
+		try {
+			return await this.authenticatedRequest<{ reports: SecurityComplianceReport[]; persisted?: boolean }>(
+				"/api/v1/security/compliance/refresh",
+				{ method: "POST", data: {} },
+			)
+		} catch (error) {
+			Logger.error("Failed to refresh security compliance:", error)
 			throw error
 		}
 	}

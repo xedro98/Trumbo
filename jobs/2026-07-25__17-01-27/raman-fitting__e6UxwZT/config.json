@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/raman-fitting",
+        "ref": "sha256:6b2c34e3c5016c763bf1f2f2a7210ee711565f90b18c09b68f95c0daa9220229",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "raman-fitting__e6UxwZT",
+    "trials_dir": "jobs\\2026-07-25__17-01-27",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f270b7e8-59ea-4f97-a3ff-307a1878e499"
+}

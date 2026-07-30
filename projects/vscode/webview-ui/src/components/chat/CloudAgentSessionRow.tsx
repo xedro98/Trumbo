@@ -88,7 +88,7 @@ const CloudAgentSessionRow = memo(({ messages, isLast }: CloudAgentSessionRowPro
 			{expanded ? (
 				<div className="border-t border-[var(--vscode-editorGroup-border)] px-3 py-2 space-y-3">
 					<p className="text-xs text-muted-foreground">
-						Persistent agent on Trumbo&apos;s Cloudflare-hosted platform. Workspace tools, scheduling, and channels
+						Persistent agent on Trumbo&apos;s managed platform. Workspace tools, scheduling, and channels
 						run server-side.
 					</p>
 

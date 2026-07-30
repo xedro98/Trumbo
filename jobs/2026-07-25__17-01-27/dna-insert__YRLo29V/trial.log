@@ -1,0 +1,5 @@
+Trial dna-insert__YRLo29V failed: Docker compose command failed for environment dna-insert. Command: docker compose --project-name dna-insert__yrlo29v__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\dna-insert\6e134a226ff852d8bf20f15480c7c1d74e3911d5b458f5cca07aabd23e380f0d\environment -f C:\Users\Admin\AppData\Local\Temp\tmpm8xx93m1\dna-insert__YRLo29V__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp8js6250x\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpdle9o73q\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network dna-insert__yrlo29v__env_default Creating 
+ Network dna-insert__yrlo29v__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network dna-insert__yrlo29v__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

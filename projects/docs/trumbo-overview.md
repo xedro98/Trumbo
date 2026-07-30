@@ -18,15 +18,27 @@ Connect the models you want to use — cloud providers or local runtimes — wit
 
 ## Applications
 
-The end-user app built on top of Trumbo's agent core:
+The end-user surfaces built on Trumbo:
 
-- **CLI** — Run Trumbo in your terminal with interactive chat or fully headless automation for CI/CD and scripting.     `npm i -g @trumbodev/cli`
+- **CLI** — Run Trumbo in your terminal with interactive chat or headless automation.     `npm i -g @trumbodev/cli` (or `trumbo`)
+
+  - **Platform** — Hosted products: Cloud Agents, Sandbox, Browser Run, Security, Knowledge, Automations, and APIs at platform.trumbo.dev.
 
 ## Agent Core (SDK)
 
 The SDK is Trumbo's agent core — use it to build your own applications, automations, and integrations. See the SDK section for the full functionality and architecture of the Trumbo Agent.
 
 - **SDK** — Build AI agents and integrations powered by the same core engine behind the CLI.     `npm install @trumbo/sdk`
+
+## Platform products (quick links)
+
+- **Automations** — Durable workflows across agents, sandboxes, security, webhooks, waits, retries, and parallel branches.
+
+  - **Cloud Agents** — Hosted agents with REST, MCP, schedules, and channels.
+
+  - **Sandbox** — Remote Linux VMs for shell, code, git, and previews.
+
+  - **Hosted MCP** — Product tools on api.trumbo.dev/v1/mcp.
 
 ## Editor integration
 

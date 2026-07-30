@@ -1,0 +1,278 @@
+{
+    "job_name": "2026-07-25__16-31-28",
+    "agents": [
+        {
+            "name": "claude-code",
+            "model_name": "claude-haiku-4-5"
+        }
+    ],
+    "tasks": [
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-adaptive-rejection-sampler__EPr2LQK"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-bn-fit-modify__EdcPrkq"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-break-filter-js-from-html__KUx4Hg7"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-build-cython-ext__wki28qc"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-build-pmars__DJdzKyW"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-build-pov-ray__YqHBxt9"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-caffe-cifar-10__NsyE2uW"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-cancel-async-tasks__xEZXSRQ"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-chess-best-move__ZaHL6q8"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-circuit-fibsqrt__CSASazq"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-cobol-modernization__rzXuYAW"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-code-from-image__Z8wh5Rx"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-compile-compcert__THbGQAQ"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-configure-git-webserver__gkyVVEq"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-constraints-scheduling__8yNWuaD"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-count-dataset-tokens__yGV9HUF"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-crack-7z-hash__94XUSgP"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-custom-memory-heap-crash__eVVocxq"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-db-wal-recovery__T5z8fDm"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-distribution-search__e2Gp7Ln"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-dna-assembly__t6zY8q5"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-dna-insert__5nB3793"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-extract-elf__MBvJtPo"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-extract-moves-from-video__S5CEBLV"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-feal-differential-cryptanalysis__oW7xDzQ"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-feal-linear-cryptanalysis__a2vdXHS"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-filter-js-from-html__ek7uxkC"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-financial-document-processor__orgm2WL"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-fix-code-vulnerability__VucuAnc"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-fix-git__a5q8XPz"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-fix-ocaml-gc__ocPaKJE"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-gcode-to-text__oS7XzKr"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-git-leak-recovery__4pVbbeV"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-git-multibranch__D93AYYh"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-gpt2-codegolf__qFzvryp"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-headless-terminal__dL4ZgnE"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-hf-model-inference__GadCHjS"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-install-windows-3-11__suDuopL"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-kv-store-grpc__stjVPKU"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-large-scale-text-editing__5rDV9eZ"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-largest-eigenval__t2NQdrp"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-llm-inference-batching-scheduler__s89iP2S"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-log-summary-date-ranges__qwMhPaU"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-mailman__5T7rrBu"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-make-doom-for-mips__4vfj2Ps"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-make-mips-interpreter__RpzFwZ6"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-mcmc-sampling-stan__AHZcfST"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-merge-diff-arc-agi-task__eokpdnc"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-model-extraction-relu-logits__fVizRnx"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-modernize-scientific-stack__dHZx9fc"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-mteb-leaderboard__CRTjTWn"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-mteb-retrieve__7dFrte5"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-multi-source-data-merger__mJfMGTM"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-nginx-request-logging__PBZtizc"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-openssl-selfsigned-cert__jxFq33F"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-overfull-hbox__eZ2Co42"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-password-recovery__cVHryyH"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-path-tracing-reverse__iRZCiyU"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-path-tracing__M2JzP8a"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-polyglot-c-py__z5H8vYP"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-polyglot-rust-c__jfxZGtn"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-portfolio-optimization__sfMXxJW"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-protein-assembly__XkCiVim"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-prove-plus-comm__HTi7DKD"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-pypi-server__iZosxTU"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-pytorch-model-cli__GnUhNPv"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-pytorch-model-recovery__hKMaaDj"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-qemu-alpine-ssh__nhKegtC"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-qemu-startup__ihvD58b"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-query-optimize__hbhK98T"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-raman-fitting__8C2qzbY"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-regex-chess__nRaK6jW"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-regex-log__8qDxL2P"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-reshard-c4-data__waRGxAk"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-rstan-to-pystan__8UXP8U8"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-sam-cell-seg__VRRdE49"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-sanitize-git-repo__7NRn837"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-schemelike-metacircular-eval__8QzF3js"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-sparql-university__8k44s6x"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-sqlite-db-truncate__htmnksc"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-sqlite-with-gcov__EePc6Ww"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-torch-pipeline-parallelism__Ce3XqAe"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-torch-tensor-parallelism__4DKdwHY"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-train-fasttext__k9ooumG"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-tune-mjcf__dmzHrut"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-video-processing__jjk5Ck9"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-vulnerable-secret__XikjgED"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-winning-avg-corewars__3VSsEBj"
+        },
+        {
+            "path": "C:\\Users\\Admin\\AppData\\Local\\Temp\\harbor-analyze-bzscuu29\\analyze-write-compressor__GTwDN5x"
+        }
+    ]
+}

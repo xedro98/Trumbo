@@ -1,0 +1,5 @@
+Trial fix-ocaml-gc__Y2WpfRN failed: Docker compose command failed for environment fix-ocaml-gc. Command: docker compose --project-name fix-ocaml-gc__y2wpfrn__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\fix-ocaml-gc\23621755f7f4ea84bfc67a18ac20f8e9ae05a057212a1dec1a1da6ffa7586e6a\environment -f C:\Users\Admin\AppData\Local\Temp\tmpz7h0ndym\fix-ocaml-gc__Y2WpfRN__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpx5lecexa\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpn3rj9fs6\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network fix-ocaml-gc__y2wpfrn__env_default Creating 
+ Network fix-ocaml-gc__y2wpfrn__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network fix-ocaml-gc__y2wpfrn__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

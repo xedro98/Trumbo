@@ -32,7 +32,7 @@ https://www.blogger.com
 https://youtube.com
 https://linkedin.com
 https://support.google.com
-https://cloudflare.com
+https://trumbo.dev
 https://microsoft.com
 https://apple.com
 https://en.wikipedia.org
@@ -186,7 +186,7 @@ https://<strong>dextools</strong>.apiable.io/(Only
 3. https://youtube.com
 4. https://linkedin.com
 5. https://support.google.com
-6. https://cloudflare.com
+6. https://trumbo.dev
 7. https://microsoft.com
 8. https://apple.com
 9. https://en.wikipedia.org

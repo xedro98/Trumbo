@@ -57,7 +57,7 @@ function formatNonJsonAccountResponse(
 		return (
 			`Trumbo account API at ${requestUrl} returned a web page instead of JSON. ` +
 			"Point TRUMBO_API_BASE_URL (or the Trumbo provider baseUrl) at the Trumbo web app " +
-			"Worker — e.g. http://localhost:8787 for local dev — not the Vite dev server."
+			"Trumbo API server — e.g. http://localhost:8787 for local dev — not the Vite dev server."
 		);
 	}
 	const preview =
@@ -277,6 +277,21 @@ export class TrumboAccountService {
 			);
 		}
 		return resolved;
+	}
+
+	/**
+	 * Authenticated platform API helper for account-scoped endpoints
+	 * (e.g. /api/v1/security/*). Returns envelope `data` when present.
+	 */
+	async platformRequest<T>(
+		endpoint: string,
+		input?: {
+			method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+			body?: unknown;
+			expectNoContent?: boolean;
+		},
+	): Promise<T> {
+		return this.request<T>(endpoint, input);
 	}
 
 	private async request<T>(

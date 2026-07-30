@@ -1,0 +1,22 @@
+=== install-root-prereqs.failed ===
+start:    2026-07-25T05:26:32.284921+00:00
+end:      2026-07-25T05:26:45.853940+00:00
+duration: 13.57s
+--- STDOUT ---
+
+--- STDERR ---
+Command failed (exit 1): if command -v git &> /dev/null && command -v curl &> /dev/null && command -v unzip &> /dev/null; then  echo 'git, curl, and unzip already installed, skipping apt-get...'; else  echo 'Killing background apt processes to release lock...';  pkill -9 -x unattended-upgrades 2>/dev/null || true;  pkill -9 -x apt-get 2>/dev/null || true;  pkill -9 -x dpkg 2>/dev/null || true;  sleep 1;  rm -f /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend /var/cache/apt/archives/lock 2>/dev/null || true;  dpkg --configure -a 2>/dev/null || true;  echo 'Trying apt-get install without update first...';  if apt-get install -y curl ca-certificates git unzip 2>/dev/null; then    echo 'Install succeeded without update.';  else    echo 'Falling back to apt-get update + install...';    apt-get update && apt-get install -y curl ca-certificates git unzip;  fi; fi
+stdout: Killing background apt processes to release lock...
+Trying apt-get install without update first...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Package ca-certificates is not available, but is referred to by anoth ... [461 chars truncated] ...  http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:6 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]
+Get:7 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [50.0 kB]
+Get:8 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1520 kB]
+Get:9 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1544 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]
+request returned 500 Internal Server Error for API route and version http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.54/exec/ebbb05cfa74fbc005e60bc0f376a402b170e53c621f963ff702b1eb316cab03a/json, check if the server supports the requested API version
+
+stderr: None

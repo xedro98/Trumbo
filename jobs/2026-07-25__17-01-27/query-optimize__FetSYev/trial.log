@@ -1,0 +1,5 @@
+Trial query-optimize__FetSYev failed: Docker compose command failed for environment query-optimize. Command: docker compose --project-name query-optimize__fetsyev__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\query-optimize\a4802d5a0182e4a648bdab02c37f611dd100aeae6772cffa05b5d9e7072250b3\environment -f C:\Users\Admin\AppData\Local\Temp\tmpeywex_co\query-optimize__FetSYev__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp8gutu3c5\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmphv91hjm7\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network query-optimize__fetsyev__env_default Creating 
+ Network query-optimize__fetsyev__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network query-optimize__fetsyev__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

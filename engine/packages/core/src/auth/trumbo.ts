@@ -58,6 +58,8 @@ interface TrumboAuthApiUser {
 	name: string;
 	trumboUserId: string | null;
 	accounts: string[] | null;
+	/** Active organization id from `/users/me` after device auth. */
+	activeOrganizationId?: string | null;
 }
 
 interface TrumboAuthResponseData {
@@ -658,6 +660,7 @@ async function fetchSelfHostedUserInfo(
 				name: "",
 				trumboUserId: null,
 				accounts: null,
+				activeOrganizationId: null,
 			};
 		}
 		const json = (await res.json().catch(() => ({}))) as {
@@ -666,7 +669,12 @@ async function fetchSelfHostedUserInfo(
 				id?: string;
 				email?: string;
 				displayName?: string;
-				organizations?: Array<{ id: string }>;
+				organizations?: Array<{
+					id?: string;
+					organizationId?: string;
+					active?: boolean;
+					kind?: string;
+				}>;
 			};
 		};
 		const u = json.data;
@@ -677,14 +685,25 @@ async function fetchSelfHostedUserInfo(
 				name: "",
 				trumboUserId: null,
 				accounts: null,
+				activeOrganizationId: null,
 			};
 		}
+		const organizations = u.organizations ?? [];
+		const activeOrg =
+			organizations.find((o) => o.active) ??
+			organizations.find((o) => o.kind === "personal") ??
+			organizations[0];
+		const activeOrganizationId =
+			activeOrg?.organizationId?.trim() || activeOrg?.id?.trim() || null;
 		return {
 			subject: u.id ?? null,
 			email: u.email ?? "",
 			name: u.displayName ?? "",
 			trumboUserId: u.id ?? null,
-			accounts: (u.organizations ?? []).map((o) => o.id),
+			accounts: organizations
+				.map((o) => o.organizationId?.trim() || o.id?.trim() || "")
+				.filter(Boolean),
+			activeOrganizationId,
 		};
 	} catch {
 		return {
@@ -693,6 +712,7 @@ async function fetchSelfHostedUserInfo(
 			name: "",
 			trumboUserId: null,
 			accounts: null,
+			activeOrganizationId: null,
 		};
 	}
 }

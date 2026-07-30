@@ -1,0 +1,117 @@
+{
+    "id": "95dc2375-c4f7-4c1d-b2c3-dd5fded18fe6",
+    "task_name": "terminal-bench/polyglot-rust-c",
+    "trial_name": "polyglot-rust-c__jfxZGtn",
+    "trial_uri": "file:///D:/Torch/cline-full/jobs/2026-07-25__10-56-18/polyglot-rust-c__jfxZGtn",
+    "task_id": {
+        "org": "terminal-bench",
+        "name": "polyglot-rust-c",
+        "ref": "sha256:03ff14a88776f5920f5a3c4b1a0ba6d67c391a84b3d88949d0d621a692bd1daa"
+    },
+    "source": "terminal-bench/terminal-bench-2",
+    "task_checksum": "eae09cf67fe39cbb74542bac9a54a8c53abeb0e791667e827d22b1eebb5d032b",
+    "config": {
+        "task": {
+            "path": null,
+            "git_url": null,
+            "git_commit_id": null,
+            "name": "terminal-bench/polyglot-rust-c",
+            "ref": "sha256:03ff14a88776f5920f5a3c4b1a0ba6d67c391a84b3d88949d0d621a692bd1daa",
+            "overwrite": false,
+            "download_dir": null,
+            "source": "terminal-bench/terminal-bench-2"
+        },
+        "trial_name": "polyglot-rust-c__jfxZGtn",
+        "trials_dir": "jobs\\2026-07-25__10-56-18",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": "trumbo_agent:TrumboCli",
+            "import_path": null,
+            "model_name": "trumbo:quartz-1.0",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "cline-version": "3.6.2"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "job_id": "5777e3cc-54aa-49bc-b19d-8a91708b536b"
+    },
+    "agent_info": {
+        "name": "trumbo-cli",
+        "version": "3.6.2",
+        "model_info": {
+            "name": "trumbo:quartz-1.0",
+            "provider": null
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 791302,
+        "n_cache_tokens": 727039,
+        "n_output_tokens": 48746,
+        "cost_usd": 0.0,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 0.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-07-25T05:26:57.672674Z",
+    "finished_at": "2026-07-25T05:38:09.339530Z",
+    "environment_setup": {
+        "started_at": "2026-07-25T05:26:57.695583Z",
+        "finished_at": "2026-07-25T05:28:07.673751Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-07-25T05:28:07.673751Z",
+        "finished_at": "2026-07-25T05:29:13.048217Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-07-25T05:29:13.048217Z",
+        "finished_at": "2026-07-25T05:37:55.537838Z"
+    },
+    "verifier": {
+        "started_at": "2026-07-25T05:37:55.545842Z",
+        "finished_at": "2026-07-25T05:38:06.207449Z"
+    },
+    "step_results": null
+}

@@ -1,0 +1,117 @@
+{
+    "id": "59ef95cf-f9a2-4783-a968-b40eefbe6a10",
+    "task_name": "terminal-bench/rstan-to-pystan",
+    "trial_name": "rstan-to-pystan__8UXP8U8",
+    "trial_uri": "file:///D:/Torch/cline-full/jobs/2026-07-25__10-56-18/rstan-to-pystan__8UXP8U8",
+    "task_id": {
+        "org": "terminal-bench",
+        "name": "rstan-to-pystan",
+        "ref": "sha256:c14ad3926606b96140a60b842cd875268879354512e7457ce9a6101a02d61c15"
+    },
+    "source": "terminal-bench/terminal-bench-2",
+    "task_checksum": "fe76dc3c7a53f948ae76c05677178e666966c6253f2a48dcbfb6d5f7eeb60529",
+    "config": {
+        "task": {
+            "path": null,
+            "git_url": null,
+            "git_commit_id": null,
+            "name": "terminal-bench/rstan-to-pystan",
+            "ref": "sha256:c14ad3926606b96140a60b842cd875268879354512e7457ce9a6101a02d61c15",
+            "overwrite": false,
+            "download_dir": null,
+            "source": "terminal-bench/terminal-bench-2"
+        },
+        "trial_name": "rstan-to-pystan__8UXP8U8",
+        "trials_dir": "jobs\\2026-07-25__10-56-18",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": "trumbo_agent:TrumboCli",
+            "import_path": null,
+            "model_name": "trumbo:quartz-1.0",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "cline-version": "3.6.2"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "job_id": "5777e3cc-54aa-49bc-b19d-8a91708b536b"
+    },
+    "agent_info": {
+        "name": "trumbo-cli",
+        "version": "3.6.2",
+        "model_info": {
+            "name": "trumbo:quartz-1.0",
+            "provider": null
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 2560778,
+        "n_cache_tokens": 2463298,
+        "n_output_tokens": 57771,
+        "cost_usd": 0.0,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 0.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-07-25T05:34:03.066691Z",
+    "finished_at": "2026-07-25T05:52:11.393652Z",
+    "environment_setup": {
+        "started_at": "2026-07-25T05:34:03.080993Z",
+        "finished_at": "2026-07-25T05:34:11.400691Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-07-25T05:34:11.400691Z",
+        "finished_at": "2026-07-25T05:34:53.513620Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-07-25T05:34:53.513620Z",
+        "finished_at": "2026-07-25T05:51:40.195557Z"
+    },
+    "verifier": {
+        "started_at": "2026-07-25T05:51:40.290118Z",
+        "finished_at": "2026-07-25T05:52:05.159502Z"
+    },
+    "step_results": null
+}

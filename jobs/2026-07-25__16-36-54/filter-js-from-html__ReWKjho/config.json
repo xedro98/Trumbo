@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/filter-js-from-html",
+        "ref": "sha256:18470eb1fd5611b7c27f69a1ec0f66cfbf95f93c2c295d55709381cf8b7cb3cd",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "filter-js-from-html__ReWKjho",
+    "trials_dir": "jobs\\2026-07-25__16-36-54",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f67ac3c6-e533-46ca-8d83-91b62b29a5cf"
+}

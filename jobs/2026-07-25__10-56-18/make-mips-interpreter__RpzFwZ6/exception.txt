@@ -1,0 +1,40 @@
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 351, in run
+    await self._prepare()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 389, in _prepare
+    await self._setup_agent()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1180, in _setup_agent
+    await asyncio.wait_for(
+  File "C:\Python312\Lib\asyncio\tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\agents\installed\base.py", line 622, in setup
+    await self.install(environment)
+  File "D:\Torch\cline-full\trumbo_agent.py", line 153, in install
+    await self._exec_with_setup_retries(
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\agents\installed\cline\cline.py", line 545, in _exec_with_setup_retries
+    result = await asyncio.wait_for(coro, timeout=effective_timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\agents\installed\base.py", line 592, in exec_as_agent
+    return await self._exec(
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\agents\installed\base.py", line 559, in _exec
+    raise self._classify_exec_error(command, result)
+harbor.agents.installed.base.NonZeroAgentExitCodeError: Command failed (exit 1): set -e; if command -v node &> /dev/null && node --version | grep -qE '^v2[2-9]|^v[3-9]'; then  echo 'Node.js already installed, skipping nvm setup...'; else  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash &&  export NVM_DIR="$HOME/.nvm" &&  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" &&  nvm install 22 && nvm use 22 && nvm alias default 22; fi && export NVM_DIR="$HOME/.nvm" && { [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || true; } && npm install -g --allow-scripts=@trumbodev/cli @trumbodev/cli@3.6.2 --force && sleep 0.5 && if trumbo --version; then echo 'Trumbo npm binary smoke test passed.'; else status="$?"; echo "Trumbo npm binary smoke test failed with exit ${status}."; exit ${status}; fi
+stdout: Error response from daemon: Docker Desktop is unable to start
+bootstrapping main distribution: running wslexec: An error occurred while running the command. DockerDesktop/Wsl/ExecError: c:\windows\system32\wsl.exe -d docker-desktop -u root -e wsl-boo ... [5804 chars truncated] ... er-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.6:3002
+[2026-07-18T05:45:54.833568918Z][wsl-bootstrap.vpnkitcontrol] adding docker-containers/f58825a12f4a2f539c97b4d2616aaa7c0b80499a7a0692dbccd9b586c6d5afcd tcp forward from 0.0.0.0:3002 to 172.20.0.6:3002
+, stdout: , wslErrorCode: DockerDesktop/Wsl/ExecError)
+github.com/docker/pinata/common/pkg/errordef.helper.Wrap
+	github.com/docker/pinata/common/pkg/errordef/helper.go:52
+github.com/docker/pinata/win/backend/wsl.Config.Run.func3
+	github.com/docker/pinata/win/backend/wsl/config.go:75
+golang.org/x/sync/errgroup.(*Group).Go.func1
+	golang.org/x/sync@v0.20.0/errgroup/errgroup.go:93
+runtime.goexit
+	runtime/asm_amd64.s:1771
+
+stderr: None

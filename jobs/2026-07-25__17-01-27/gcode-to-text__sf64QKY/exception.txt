@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 351, in run
+    await self._prepare()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 385, in _prepare
+    await self._setup_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1148, in _setup_agent_environment
+    await self._start_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1154, in _start_agent_environment
+    await asyncio.wait_for(
+  File "C:\Python312\Lib\asyncio\tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 908, in start
+    await self._run_docker_compose_command(["up", "--detach", "--wait"])
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 656, in _run_docker_compose_command
+    raise RuntimeError(
+RuntimeError: Docker compose command failed for environment gcode-to-text. Command: docker compose --project-name gcode-to-text__sf64qky__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\gcode-to-text\a7a2024eee33eba07f9b8fb137c1921c2892ef0a683b87b5984c18f62083fa5d\environment -f C:\Users\Admin\AppData\Local\Temp\tmpmnq0llvg\gcode-to-text__sf64QKY__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpzc01tgs9\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpt8waifek\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network gcode-to-text__sf64qky__env_default Creating 
+ Network gcode-to-text__sf64qky__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network gcode-to-text__sf64qky__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 

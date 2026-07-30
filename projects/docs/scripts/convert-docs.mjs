@@ -96,6 +96,9 @@ function convertComponents(source) {
 	);
 	// Strip any remaining unknown JSX tags
 	text = text.replace(/<\/?[A-Z][a-zA-Z]*[^>]*>/g, "");
+	// Escape Vue mustaches so VitePress SSR does not evaluate {{...}} in docs
+	// (Automations templates, GitHub Actions samples, etc.).
+	text = text.replace(/\{\{/g, "&#123;&#123;").replace(/\}\}/g, "&#125;&#125;");
 	return text;
 }
 
@@ -182,21 +185,50 @@ function walkMdx(dir) {
 	return results;
 }
 
-// --- build sidebar from docs.json ---
+// --- build sidebar from docs.json (supports nested groups) ---
+function mapNavSlug(slug) {
+	return `/${String(slug).replace(/^engine\//, "sdk/")}`;
+}
+
+function pageEntry(page) {
+	if (typeof page === "string") {
+		return { text: slugToTitle(page), link: mapNavSlug(page) };
+	}
+	if (page && typeof page === "object" && page.slug) {
+		return { text: page.title || slugToTitle(page.slug), link: mapNavSlug(page.slug) };
+	}
+	return null;
+}
+
+function collectGroupPages(group) {
+	const items = [];
+	for (const page of group.pages || []) {
+		if (typeof page === "string" || page?.slug) {
+			const entry = pageEntry(page);
+			if (entry) items.push(entry);
+			continue;
+		}
+		if (page && typeof page === "object" && Array.isArray(page.pages)) {
+			const nested = collectGroupPages(page);
+			if (nested.length) {
+				items.push({
+					text: page.group || "More",
+					collapsed: true,
+					items: nested,
+				});
+			}
+		}
+	}
+	return items;
+}
+
 function buildSidebar(docsJson) {
 	const sidebar = {};
 	for (const tab of docsJson.navigation?.tabs || []) {
 		const tabName = tab.tab;
 		const items = [];
 		for (const group of tab.groups || []) {
-			const groupItems = [];
-			for (const page of group.pages || []) {
-				if (typeof page === "string") {
-					groupItems.push({ text: slugToTitle(page), link: `/${page}` });
-				} else if (page.slug) {
-					groupItems.push({ text: page.title || slugToTitle(page.slug), link: `/${page.slug}` });
-				}
-			}
+			const groupItems = collectGroupPages(group);
 			if (groupItems.length) {
 				items.push({
 					text: group.group || tabName,
@@ -205,17 +237,19 @@ function buildSidebar(docsJson) {
 				});
 			}
 		}
-		// Also handle top-level pages (not in a group)
 		for (const page of tab.pages || []) {
-			if (typeof page === "string") {
-				items.unshift({ text: slugToTitle(page), link: `/${page}` });
-			} else if (page.slug) {
-				items.unshift({ text: page.title || slugToTitle(page.slug), link: `/${page.slug}` });
-			}
+			const entry = pageEntry(page);
+			if (entry) items.unshift(entry);
 		}
-		sidebar[`/${tabName.toLowerCase()}/`] = items;
-		// Also use as the default sidebar
+		const key = `/${tabName.toLowerCase()}/`;
+		sidebar[key] = items;
 		if (tabName === "Trumbo") sidebar["/"] = items;
+		if (tabName === "Platform") sidebar["/platform/"] = items;
+		if (tabName === "API") sidebar["/api/"] = items;
+		if (tabName === "SDK") {
+			sidebar["/sdk/"] = items;
+			sidebar["/engine/"] = items;
+		}
 	}
 	return sidebar;
 }
@@ -233,7 +267,7 @@ const docsJson = JSON.parse(fs.readFileSync(path.join(BOOK_DIR, "docs.json"), "u
 const mdxFiles = walkMdx(BOOK_DIR);
 
 // Pages excluded from the shipped product (matches build-docs.mjs exclusion list).
-const EXCLUDED_PREFIXES = ["enterprise-solutions/", "api/", "kanban/"];
+const EXCLUDED_PREFIXES = ["enterprise-solutions/", "kanban/"];
 const EXCLUDED_SLUGS = new Set([
 	"getting-started/trumbopass",
 	"getting-started/trumbo-provider",

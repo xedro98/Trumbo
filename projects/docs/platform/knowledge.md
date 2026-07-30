@@ -1,0 +1,51 @@
+---
+title: "Knowledge"
+description: "Team document upload, indexing, and RAG search for agents and apps."
+---
+# Knowledge
+
+Knowledge is per-workspace RAG: upload documents, index them, and search from the dashboard, REST API, or MCP (`search_knowledge`).
+
+## Dashboard
+
+[platform.trumbo.dev/knowledge](https://platform.trumbo.dev/knowledge)
+
+Upload files or paste notes. Indexed docs are shared across CLI, VS Code, and cloud agents for that workspace.
+
+## REST API
+
+Base: `https://api.trumbo.dev/api/v1/knowledge`
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/knowledge` | Status, limits, usage |
+| `GET` | `/knowledge/documents` | List documents |
+| `POST` | `/knowledge/documents` | Upload (multipart) or paste (JSON) |
+| `DELETE` | `/knowledge/documents/{id}` | Remove |
+| `POST` | `/knowledge/documents/{id}/reindex` | Retry indexing |
+| `POST` | `/knowledge/search` | RAG search |
+
+Search example:
+
+```bash
+curl -X POST https://api.trumbo.dev/api/v1/knowledge/search \
+  -H "Authorization: Bearer trumbo_YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"query":"How do we deploy?","limit":5}'
+```
+
+## MCP
+
+```text
+search_knowledge
+```
+
+Arguments: `query` (required), optional `limit` (1–10).
+
+## Limits
+
+- Max documents
+- Max storage (MB)
+- Daily search count (resets UTC midnight)
+
+See `/usage` and [Billing & Limits](billing-and-limits).

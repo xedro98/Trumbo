@@ -72,7 +72,7 @@ const CloudAgentsPanel = memo(() => {
 				<div>
 					<h2 className="text-sm font-semibold text-foreground">Platform Infrastructure</h2>
 					<p className="mt-1 text-xs text-muted-foreground max-w-xl">
-						Cloud Agents and Sandbox run on Trumbo&apos;s Cloudflare-hosted platform. Sessions sync automatically when
+						Cloud Agents and Sandbox run on Trumbo&apos;s managed platform. Sessions sync automatically when
 						the agent uses trumbo-platform MCP tools in chat.
 					</p>
 				</div>

@@ -1,0 +1,5 @@
+Trial mteb-leaderboard__Ejf69XT failed: Docker compose command failed for environment mteb-leaderboard. Command: docker compose --project-name mteb-leaderboard__ejf69xt__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\mteb-leaderboard\244bc0c349b5d84b1545620f121056033022caeabea35f7f324a90b84593a43f\environment -f C:\Users\Admin\AppData\Local\Temp\tmpoxbd623p\mteb-leaderboard__Ejf69XT__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpvifhwz4a\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpgvq443ux\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network mteb-leaderboard__ejf69xt__env_default Creating 
+ Network mteb-leaderboard__ejf69xt__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network mteb-leaderboard__ejf69xt__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

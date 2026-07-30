@@ -1,0 +1,13 @@
+=== install-agent-runtime.failed ===
+start:    2026-07-25T05:26:35.341529+00:00
+end:      2026-07-25T05:26:45.859010+00:00
+duration: 10.52s
+--- STDOUT ---
+
+--- STDERR ---
+Command failed (exit 1): set -e; if command -v node &> /dev/null && node --version | grep -qE '^v2[2-9]|^v[3-9]'; then  echo 'Node.js already installed, skipping nvm setup...'; else  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash &&  export NVM_DIR="$HOME/.nvm" &&  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" &&  nvm install 22 && nvm use 22 && nvm alias default 22; fi && export NVM_DIR="$HOME/.nvm" && { [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || true; } && npm install -g --allow-scripts=@trumbodev/cli @trumbodev/cli@3.6.2 --force && sleep 0.5 && if trumbo --version; then echo 'Trumbo npm binary smoke test passed.'; else status="$?"; echo "Trumbo npm binary smoke test failed with exit ${status}."; exit ${status}; fi
+stdout:   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0request returned 500 Internal Server Error for API route and version http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.54/exec/1ccf170386ea28e2257d4e60d96d5c91f7ad3bc2abb06dcb5f877ab98f02ca00/json, check if the server supports the requested API version
+
+stderr: None

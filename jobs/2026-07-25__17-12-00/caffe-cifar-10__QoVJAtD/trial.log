@@ -1,0 +1,5 @@
+Trial caffe-cifar-10__QoVJAtD failed: Docker compose command failed for environment caffe-cifar-10. Command: docker compose --project-name caffe-cifar-10__qovjatd__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\caffe-cifar-10\d41ec2d7249c3142f0db4f80b04a41c7e8fad1688c78ba3f5e09a7d6671d2697\environment -f C:\Users\Admin\AppData\Local\Temp\tmp19jorro0\caffe-cifar-10__QoVJAtD__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp_d92ww_1\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmpr2dnj2n2\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network caffe-cifar-10__qovjatd__env_default Creating 
+ Network caffe-cifar-10__qovjatd__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network caffe-cifar-10__qovjatd__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

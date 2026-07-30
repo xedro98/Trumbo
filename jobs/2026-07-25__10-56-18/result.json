@@ -1,0 +1,134 @@
+{
+    "id": "5777e3cc-54aa-49bc-b19d-8a91708b536b",
+    "started_at": "2026-07-25T10:56:23.355111",
+    "updated_at": "2026-07-25T11:28:29.139376",
+    "finished_at": "2026-07-25T11:28:29.139376",
+    "n_total_trials": 89,
+    "stats": {
+        "n_completed_trials": 89,
+        "n_errored_trials": 79,
+        "n_running_trials": 0,
+        "n_pending_trials": 0,
+        "n_cancelled_trials": 0,
+        "n_retries": 0,
+        "evals": {
+            "trumbo-cli__trumbo:quartz-1.0__terminal-bench/terminal-bench-2": {
+                "n_trials": 10,
+                "n_errors": 79,
+                "metrics": [
+                    {
+                        "mean": 0.0449438202247191
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.0": [
+                            "feal-linear-cryptanalysis__a2vdXHS",
+                            "polyglot-rust-c__jfxZGtn",
+                            "cancel-async-tasks__xEZXSRQ",
+                            "rstan-to-pystan__8UXP8U8",
+                            "db-wal-recovery__T5z8fDm",
+                            "extract-elf__MBvJtPo"
+                        ],
+                        "1.0": [
+                            "dna-insert__5nB3793",
+                            "git-leak-recovery__4pVbbeV",
+                            "headless-terminal__dL4ZgnE",
+                            "constraints-scheduling__8yNWuaD"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "NonZeroAgentExitCodeError": [
+                        "make-mips-interpreter__RpzFwZ6",
+                        "circuit-fibsqrt__CSASazq",
+                        "build-pov-ray__YqHBxt9",
+                        "overfull-hbox__eZ2Co42",
+                        "winning-avg-corewars__3VSsEBj",
+                        "custom-memory-heap-crash__eVVocxq",
+                        "build-cython-ext__wki28qc"
+                    ],
+                    "RuntimeError": [
+                        "video-processing__jjk5Ck9",
+                        "distribution-search__e2Gp7Ln",
+                        "break-filter-js-from-html__KUx4Hg7",
+                        "protein-assembly__XkCiVim",
+                        "path-tracing__M2JzP8a",
+                        "compile-compcert__THbGQAQ",
+                        "dna-assembly__t6zY8q5",
+                        "caffe-cifar-10__NsyE2uW",
+                        "install-windows-3-11__suDuopL",
+                        "log-summary-date-ranges__qwMhPaU",
+                        "vulnerable-secret__XikjgED",
+                        "openssl-selfsigned-cert__jxFq33F",
+                        "crack-7z-hash__94XUSgP",
+                        "mteb-leaderboard__CRTjTWn",
+                        "fix-git__a5q8XPz",
+                        "regex-chess__nRaK6jW",
+                        "prove-plus-comm__HTi7DKD",
+                        "pytorch-model-recovery__hKMaaDj",
+                        "mailman__5T7rrBu",
+                        "write-compressor__GTwDN5x",
+                        "chess-best-move__ZaHL6q8",
+                        "extract-moves-from-video__S5CEBLV",
+                        "gcode-to-text__oS7XzKr",
+                        "multi-source-data-merger__mJfMGTM",
+                        "merge-diff-arc-agi-task__eokpdnc",
+                        "kv-store-grpc__stjVPKU",
+                        "git-multibranch__D93AYYh",
+                        "qemu-alpine-ssh__nhKegtC",
+                        "regex-log__8qDxL2P",
+                        "nginx-request-logging__PBZtizc",
+                        "tune-mjcf__dmzHrut",
+                        "build-pmars__DJdzKyW",
+                        "sqlite-with-gcov__EePc6Ww",
+                        "sanitize-git-repo__7NRn837",
+                        "reshard-c4-data__waRGxAk",
+                        "train-fasttext__k9ooumG",
+                        "torch-tensor-parallelism__4DKdwHY",
+                        "schemelike-metacircular-eval__8QzF3js",
+                        "torch-pipeline-parallelism__Ce3XqAe",
+                        "count-dataset-tokens__yGV9HUF",
+                        "cobol-modernization__rzXuYAW",
+                        "raman-fitting__8C2qzbY",
+                        "pypi-server__iZosxTU",
+                        "model-extraction-relu-logits__fVizRnx",
+                        "hf-model-inference__GadCHjS",
+                        "sparql-university__8k44s6x",
+                        "filter-js-from-html__ek7uxkC",
+                        "largest-eigenval__t2NQdrp",
+                        "polyglot-c-py__z5H8vYP",
+                        "query-optimize__hbhK98T",
+                        "fix-ocaml-gc__ocPaKJE",
+                        "pytorch-model-cli__GnUhNPv",
+                        "bn-fit-modify__EdcPrkq",
+                        "password-recovery__cVHryyH",
+                        "feal-differential-cryptanalysis__oW7xDzQ",
+                        "sam-cell-seg__VRRdE49",
+                        "sqlite-db-truncate__htmnksc",
+                        "fix-code-vulnerability__VucuAnc",
+                        "make-doom-for-mips__4vfj2Ps",
+                        "modernize-scientific-stack__dHZx9fc",
+                        "adaptive-rejection-sampler__EPr2LQK",
+                        "gpt2-codegolf__qFzvryp",
+                        "mcmc-sampling-stan__AHZcfST",
+                        "financial-document-processor__orgm2WL",
+                        "mteb-retrieve__7dFrte5",
+                        "large-scale-text-editing__5rDV9eZ",
+                        "code-from-image__Z8wh5Rx",
+                        "portfolio-optimization__sfMXxJW",
+                        "path-tracing-reverse__iRZCiyU",
+                        "llm-inference-batching-scheduler__s89iP2S",
+                        "qemu-startup__ihvD58b",
+                        "configure-git-webserver__gkyVVEq"
+                    ]
+                }
+            }
+        },
+        "n_input_tokens": 6314480,
+        "n_cache_tokens": 5799197,
+        "n_output_tokens": 399964,
+        "cost_usd": 0.0
+    }
+}

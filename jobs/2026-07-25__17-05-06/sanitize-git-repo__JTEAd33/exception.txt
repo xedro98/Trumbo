@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 351, in run
+    await self._prepare()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 385, in _prepare
+    await self._setup_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1148, in _setup_agent_environment
+    await self._start_agent_environment()
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\trial\trial.py", line 1154, in _start_agent_environment
+    await asyncio.wait_for(
+  File "C:\Python312\Lib\asyncio\tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 908, in start
+    await self._run_docker_compose_command(["up", "--detach", "--wait"])
+  File "C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker.py", line 656, in _run_docker_compose_command
+    raise RuntimeError(
+RuntimeError: Docker compose command failed for environment sanitize-git-repo. Command: docker compose --project-name sanitize-git-repo__jtead33__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\sanitize-git-repo\3cc99805fb56bae9db14851e0e61b75108e851cb6b8bb0a817defd39336f6b4b\environment -f C:\Users\Admin\AppData\Local\Temp\tmp_t2ww5d9\sanitize-git-repo__JTEAd33__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpd9m566mv\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmps5ijyx16\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network sanitize-git-repo__jtead33__env_default Creating 
+ Network sanitize-git-repo__jtead33__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network sanitize-git-repo__jtead33__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 

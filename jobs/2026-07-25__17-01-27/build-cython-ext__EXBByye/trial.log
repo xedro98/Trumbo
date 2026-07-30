@@ -1,0 +1,5 @@
+Trial build-cython-ext__EXBByye failed: Docker compose command failed for environment build-cython-ext. Command: docker compose --project-name build-cython-ext__exbbyye__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\build-cython-ext\38e42b5662bb3c6b8610d193d5ef1b47ee3a8f4bd07eb860ceaab17e9406a368\environment -f C:\Users\Admin\AppData\Local\Temp\tmp01r39d4f\build-cython-ext__EXBByye__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpno0h7vrx\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp3se4jsqb\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network build-cython-ext__exbbyye__env_default Creating 
+ Network build-cython-ext__exbbyye__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network build-cython-ext__exbbyye__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

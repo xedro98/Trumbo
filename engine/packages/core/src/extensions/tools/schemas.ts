@@ -207,7 +207,9 @@ export const EditFileInputSchema = z
 		path: z
 			.string()
 			.min(1)
-			.describe("The absolute file path for the action to be performed on"),
+			.describe(
+				"Required. The absolute file path of the text file to edit or create. Every editor call must include this field.",
+			),
 		old_text: z
 			.string()
 			.nullable()
@@ -230,7 +232,7 @@ export const EditFileInputSchema = z
 			),
 	})
 	.describe(
-		"Edit a text file by replacing old_text with new_text, create the file with new_text if it does not exist, or insert new_text at insert_line when insert_line is provided. Prefer using this tool for file edits over shell commands. IMPORTANT: large edits can time out, so use small chunks and multiple calls when possible.",
+		"Edit a text file. The `path` (absolute file path) and `new_text` fields are required on every call. The tool replaces `old_text` with `new_text`, creates the file with `new_text` if it does not exist, or inserts `new_text` at `insert_line` when `insert_line` is provided. Prefer using this tool for file edits over shell commands. IMPORTANT: large edits can time out, so use small chunks and multiple calls when possible.",
 	);
 
 /**

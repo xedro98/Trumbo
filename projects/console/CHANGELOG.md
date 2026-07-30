@@ -11,6 +11,14 @@
 
 
 
+## 3.7.1
+
+Apps domain switched to trumbo.app. Folded desktop app into the monorepo.
+
+### Changed
+- `trumbo apps` deploys now target `*.apps.trumbo.dev` (was trumbo.dev/apps).
+- Desktop app (Trumbo Code) is now tracked in the Trumbo monorepo at `projects/trumbo-code/`.
+
 ## 3.7.0
 
 Trumbo Agent Apps + Trumbo Database — manage deployments and managed databases from the CLI.

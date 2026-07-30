@@ -1,0 +1,119 @@
+---
+title: "Agent Apps"
+sidebarTitle: "Agent Apps"
+description: "Deploy full-stack apps to the Trumbo edge with production URLs, preview deploys, custom domains, and managed database bindings."
+---
+
+# Agent Apps
+
+Agent Apps is Trumbo's deployment platform: ship static sites, single Worker APIs, and framework apps to the edge with a production URL on `trumbo.app`, per-deploy preview URLs, env vars/secrets, custom domains, and Trumbo Database bindings.
+
+Customers never touch Cloudflare units. Auth, quotas, and billing stay on `platform.trumbo.dev` / `api.trumbo.dev`.
+
+## Dashboard
+
+[platform.trumbo.dev/apps](https://platform.trumbo.dev/apps)
+
+- Stats: apps count, deploys today, build minutes used, plan status
+- Create an app (name + framework hint)
+- List apps with production URL + deploy status
+
+## URLs
+
+| Environment | URL pattern |
+|-------------|-------------|
+| Production | `https://{slug}.trumbo.app` |
+| Preview | `https://{deploy-id}-{slug}.trumbo.app` |
+| Custom | `https://www.customer.com` (CNAME → `trumbo.app`) |
+
+## CLI
+
+```bash
+trumbo apps create my-site --framework static
+trumbo apps deploy <appId> --source upload --path ./site.tar.gz
+trumbo apps deploys <appId>
+trumbo apps promote <appId> <deployId>
+trumbo apps rollback <appId> <deployId>
+trumbo apps env:set <appId> API_URL https://api.example.com
+trumbo apps env:set <appId> SECRET_KEY ***** --secret
+trumbo apps env <appId>
+trumbo apps delete <appId>
+```
+
+## REST API
+
+All routes on `api.trumbo.dev`, org-scoped via `Authorization: Bearer` + `X-Org-Id`.
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/v1/apps` | List apps for the org |
+| `POST` | `/api/v1/apps` | Create app `{ name, framework? }` |
+| `GET` | `/api/v1/apps/{id}` | App detail + latest production deploy |
+| `PATCH` | `/api/v1/apps/{id}` | Update build settings |
+| `DELETE` | `/api/v1/apps/{id}` | Delete app + undeploy scripts |
+| `POST` | `/api/v1/apps/{id}/deploys` | Create + run a deploy (upload or git) |
+| `GET` | `/api/v1/apps/{id}/deploys` | Deploy history |
+| `POST` | `/api/v1/apps/{id}/deploys/{d}/promote` | Promote preview → production |
+| `POST` | `/api/v1/apps/{id}/deploys/{d}/rollback` | Rollback prod to a prior deploy |
+| `GET/PUT/DELETE` | `/api/v1/apps/{id}/env` | Env vars / secrets (encrypted at rest) |
+| `GET/POST/DELETE` | `/api/v1/apps/{id}/domains` | Custom hostnames (Cloudflare for SaaS) |
+| `POST` | `/api/v1/apps/{id}/domains/{host}/refresh` | Poll SSL + verification status |
+| `GET/POST/DELETE` | `/api/v1/apps/{id}/bindings` | Resource bindings (Database, KV, R2, …) |
+| `GET` | `/api/v1/apps/{id}/logs` | Build log + recent deploy statuses |
+| `POST` | `/api/v1/apps/{id}/git/connect` | Link a git repo (auto-deploy Phase 2) |
+| `GET` | `/api/v1/apps/usage` | Apps usage + tier limits |
+
+## MCP tools
+
+Agent tools on `api.trumbo.dev/v1/mcp` (scope: `agents:run`):
+
+| Tool | Phase | Description |
+|------|-------|-------------|
+| `app_create` | MVP | Create an app |
+| `app_deploy` | MVP | Deploy (upload or git) |
+| `app_list` | MVP | List apps |
+| `app_get_deploy_status` | MVP | Deploy status + URL |
+| `app_set_env` | V1 | Set an env var / secret |
+| `app_add_domain` | V1 | Attach a custom domain |
+
+## Frameworks
+
+The build plane auto-detects the framework from the repo root and applies sensible defaults; you can override them in the app config or `trumbo.json`.
+
+| Framework | Detected from | Build command | Output dir | Worker entry |
+|-----------|---------------|---------------|------------|--------------|
+| `next` | `next.config.*` | `npm run build` | `.open-next` | `worker.js` |
+| `remix` | `remix.config.*` / `remix.init.js` | `npm run build` | `build` | `worker.js` |
+| `astro` | `astro.config.*` | `npm run build` | `dist` | — (static) |
+| `vite` | `vite.config.*` | `npm run build` | `dist` | — (static) |
+| `worker` | `wrangler.toml` / `src/index.ts` / `worker.js` | — | — | `src/index.ts` |
+| `static` | (fallback) | — | `dist` | — |
+
+Next.js apps should use [`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare) so the build emits a Workers-compatible `worker.js` under `.open-next`. Remix apps should use the [Cloudflare adapter](https://remix.run/docs/en/main/guides/cloudflare). The build plane runs `npm run build` generically; adapters are a user-side concern — templates are provided as repo starters.
+
+Push to the default branch → production deploy; push to any other branch or open a PR → a preview deploy at `{deploy-id}-{slug}.trumbo.app`, with a comment posted on the PR once the build is live.
+
+
+
+Env vars are per app × environment (`production` / `preview`). Secrets are AES-GCM encrypted at rest and injected into the deployed Worker; they are never returned by the API after being set. Non-secret values are stored plaintext and surfaced masked in list responses.
+
+## Database bindings
+
+Attach a [Trumbo Database](./database) to an app so it is bound in the deployed Worker:
+
+```bash
+trumbo db attach <dbId> --app <appId> --binding TRUMBO_DB
+```
+
+The binding is recorded per environment and injected on the next deploy.
+
+## Plan limits
+
+| Limit | Pro | Max | Ultra |
+|-------|-----|-----|-------|
+| Apps | 3 | 25 | 100 |
+| Deploys / day | 10 | 100 | 500 |
+| Build minutes / mo | 100 | 1,000 | 5,000 |
+| Custom domains | 0 | 5 | 25 |
+
+Overages meter via credits, same model as Browser and Security scans.

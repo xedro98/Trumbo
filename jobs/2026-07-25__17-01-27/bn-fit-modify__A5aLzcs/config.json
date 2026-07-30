@@ -1,0 +1,18 @@
+{
+    "task": {
+        "name": "terminal-bench/bn-fit-modify",
+        "ref": "sha256:48b71fbf20c4dfb661fe49d8fb6cfb91417be422c87889dd30110626a1d1f7eb",
+        "source": "terminal-bench/terminal-bench-2"
+    },
+    "trial_name": "bn-fit-modify__A5aLzcs",
+    "trials_dir": "jobs\\2026-07-25__17-01-27",
+    "timeout_multiplier": 2.0,
+    "agent": {
+        "name": "trumbo_agent:TrumboCli",
+        "model_name": "trumbo:quartz-1.0",
+        "kwargs": {
+            "cline-version": "3.6.2"
+        }
+    },
+    "job_id": "f270b7e8-59ea-4f97-a3ff-307a1878e499"
+}

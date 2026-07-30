@@ -1,0 +1,26 @@
+=== install-root-prereqs.failed ===
+start:    2026-07-25T05:26:33.137024+00:00
+end:      2026-07-25T05:26:45.855945+00:00
+duration: 12.72s
+--- STDOUT ---
+
+--- STDERR ---
+Command failed (exit 1): if command -v git &> /dev/null && command -v curl &> /dev/null && command -v unzip &> /dev/null; then  echo 'git, curl, and unzip already installed, skipping apt-get...'; else  echo 'Killing background apt processes to release lock...';  pkill -9 -x unattended-upgrades 2>/dev/null || true;  pkill -9 -x apt-get 2>/dev/null || true;  pkill -9 -x dpkg 2>/dev/null || true;  sleep 1;  rm -f /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend /var/cache/apt/archives/lock 2>/dev/null || true;  dpkg --configure -a 2>/dev/null || true;  echo 'Trying apt-get install without update first...';  if apt-get install -y curl ca-certificates git unzip 2>/dev/null; then    echo 'Install succeeded without update.';  else    echo 'Falling back to apt-get update + install...';    apt-get update && apt-get install -y curl ca-certificates git unzip;  fi; fi
+stdout: Killing background apt processes to release lock...
+Trying apt-get install without update first...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+ca-certificates is already the newest version (20230311+deb12u1).
+The ... [341 chars truncated] ...   perl-modules-5.36 publicsuffix xauth
+Suggested packages:
+  gettext-base git-daemon-run | git-daemon-sysvinit git-doc git-email git-gui
+  gitk gitweb git-cvs git-mediawiki git-svn sensible-utils
+  libsasl2-modules-gssapi-mit | libsasl2-modules-gssapi-heimdal
+  libsasl2-modules-ldap libsasl2-modules-otp libsasl2-modules-sql keychain
+  libpam-ssh monkeysphere ssh-askpass ed diffutils-doc perl-doc
+  libterm-readline-gnu-perl | libterm-readline-perl-perl make
+  libtap-harness-archive-perl zip
+request returned 500 Internal Server Error for API route and version http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.54/exec/ef800db9ba8e0fabb7d845dadf4dd9c0c3fb6b6037c537304fe4c04f225f172e/json, check if the server supports the requested API version
+
+stderr: None

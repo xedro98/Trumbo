@@ -1,0 +1,5 @@
+Trial overfull-hbox__VjvEswz failed: Docker compose command failed for environment overfull-hbox. Command: docker compose --project-name overfull-hbox__vjveswz__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\overfull-hbox\984d672ae34ada00db17a8c024110fb3527fbb5bce0844e8c0fd9b4e4d4fdacf\environment -f C:\Users\Admin\AppData\Local\Temp\tmpvtuqrvuw\overfull-hbox__VjvEswz__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmp0v39dxz3\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmprvdnw26u\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network overfull-hbox__vjveswz__env_default Creating 
+ Network overfull-hbox__vjveswz__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network overfull-hbox__vjveswz__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

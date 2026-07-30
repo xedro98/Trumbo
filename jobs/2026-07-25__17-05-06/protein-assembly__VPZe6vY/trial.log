@@ -1,0 +1,5 @@
+Trial protein-assembly__VPZe6vY failed: Docker compose command failed for environment protein-assembly. Command: docker compose --project-name protein-assembly__vpze6vy__env --project-directory C:\Users\Admin\.cache\harbor\tasks\packages\terminal-bench\protein-assembly\eae346d9f193dd962d66c94e218281f37165a9e7524ec0a7a617c0c68bf136bb\environment -f C:\Users\Admin\AppData\Local\Temp\tmpfu4o_0dp\protein-assembly__VPZe6vY__env-docker-compose-resources.json -f C:\Users\Admin\AppData\Roaming\Python\Python312\site-packages\harbor\environments\docker\docker-compose-prebuilt.yaml -f C:\Users\Admin\AppData\Local\Temp\tmpnjil6p00\docker-compose-environment.json -f C:\Users\Admin\AppData\Local\Temp\tmp_zxf5xlt\docker-compose-mounts.json up --detach --wait. Return code: 1. Stdout:  Network protein-assembly__vpze6vy__env_default Creating 
+ Network protein-assembly__vpze6vy__env_default Error Error response from daemon: all predefined address pools have been fully subnetted
+failed to create network protein-assembly__vpze6vy__env_default: Error response from daemon: all predefined address pools have been fully subnetted
+. Stderr: None. 
+Collecting main service artifacts

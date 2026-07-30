@@ -1,0 +1,18 @@
+Skipping image OS validation for alexgshaw/make-mips-interpreter:20251031: docker inspect returned 1
+Collecting main service artifacts
+Skipping image OS validation for alexgshaw/circuit-fibsqrt:20251031: docker inspect returned 1
+Collecting main service artifacts
+Skipping image OS validation for alexgshaw/build-pov-ray:20251031: docker inspect returned 1
+Collecting main service artifacts
+Skipping image OS validation for alexgshaw/overfull-hbox:20251031: docker inspect returned 1
+Collecting main service artifacts
+Skipping image OS validation for alexgshaw/video-processing:20251031: docker inspect returned 1
+Collecting main service artifacts
+Skipping image OS validation for alexgshaw/distribution-search:20251031: docker inspect returned 1
+Collecting main service artifacts
+Skipping image OS validation for alexgshaw/break-filter-js-from-html:20251031: docker inspect returned 1
+Collecting main service artifacts
+Skipping image OS validation for alexgshaw/protein-assembly:20251031: docker inspect returned 1
+Collecting main service artifacts
+Skipping image OS validation for alexgshaw/path-tracing:20251031: docker inspect returned 1
+Collecting main service artifacts

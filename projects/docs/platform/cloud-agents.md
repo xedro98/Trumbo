@@ -1,0 +1,67 @@
+---
+title: "Cloud Agents"
+description: "Hosted Trumbo agents with chat, schedules, channels, and API access."
+---
+# Cloud Agents
+
+Cloud Agents are persistent hosted agents on the Trumbo Platform. Use them from the dashboard, REST API, or MCP.
+
+## Dashboard
+
+- **Cloud Agents list:** [platform.trumbo.dev/agents/api](https://platform.trumbo.dev/agents/api)
+- **Engineering workspace:** [platform.trumbo.dev/agents](https://platform.trumbo.dev/agents)
+
+Copy an agent id with **Copy ID** on `/agents/api` (needed for Automations `invoke_agent` steps).
+
+## REST API
+
+Base: `https://api.trumbo.dev/api/v1/agents`
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/agents` | List agents |
+| `POST` | `/agents` | Create agent (`name`, `model`, `prompt`) |
+| `GET` | `/agents/{id}` | Agent state |
+| `DELETE` | `/agents/{id}` | Delete agent and settle usage |
+| `POST` | `/agents/{id}/messages` | Send a message |
+| `POST` | `/agents/{id}/stop` | Stop the current turn |
+| `POST` | `/agents/{id}/channels` | Add Slack / email / webhook / voice |
+| `GET` | `/agents/{id}/channels` | List channels |
+| `POST` | `/agents/{id}/edge-token` | Mint short-lived WebSocket auth |
+
+Create example:
+
+```bash
+curl -X POST https://api.trumbo.dev/api/v1/agents \
+  -H "Authorization: Bearer trumbo_YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-Org-Id: YOUR_ORG_ID" \
+  -d '{"name":"Triage bot","model":"glm-5p2","prompt":"Say hello"}'
+```
+
+## MCP tools
+
+`agent_create`, `agent_list`, `agent_send_message`, `agent_get_state`, `agent_stop`, `agent_delete`, `agent_add_channel`, `agent_list_channels`, `agent_remove_channel`, `agent_schedule_create`, `agent_schedule_list`, `agent_schedule_update`, `agent_schedule_delete`
+
+## Schedules
+
+Create recurring prompts with cron (UTC). Minute schedules must be `*/N` with `N >= 15`. Prefer MCP `agent_schedule_*` or the dashboard schedule UI when available.
+
+## Limits
+
+Metered by plan: monthly agent hours and concurrent agents. See [Billing & Limits](billing-and-limits) and `/usage`.
+
+## Automations
+
+Point an Automations step at a real agent id:
+
+```json
+{
+  "id": "ask-agent",
+  "type": "invoke_agent",
+  "config": {
+    "agentId": "YOUR-AGENT-UUID",
+    "prompt": "Confirm you received: &#123;&#123;input.message&#125;&#125;"
+  }
+}
+```

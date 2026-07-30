@@ -103,12 +103,12 @@ const SANDBOX_SPECS = [
 	},
 	{
 		specKey: "Persistence",
-		value: "Auto-sleep plus R2-backed backup and restore",
+		value: "Auto-sleep plus managed backup and restore",
 		note: "Sandboxes sleep when idle (no CPU billing) and restore workspace state in ~2s on wake.",
 	},
 	{
 		specKey: "Ports and preview URLs",
-		value: "Expose any port as a public trycloudflare.com URL",
+		value: "Expose any port with a branded Trumbo Preview URL",
 		note: "Agents start a dev server and share a live preview link without leaving the chat.",
 	},
 	{

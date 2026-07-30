@@ -1,0 +1,48 @@
+{
+    "id": "49ddaf7e-ed97-45c8-bf15-a1198f76b1eb",
+    "started_at": "2026-07-25T10:18:39.493352",
+    "updated_at": "2026-07-25T05:03:51.811381Z",
+    "finished_at": null,
+    "n_total_trials": 89,
+    "stats": {
+        "n_completed_trials": 8,
+        "n_errored_trials": 0,
+        "n_running_trials": 1,
+        "n_pending_trials": 80,
+        "n_cancelled_trials": 0,
+        "n_retries": 0,
+        "evals": {
+            "oracle__terminal-bench/terminal-bench-2": {
+                "n_trials": 8,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 0.875
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "make-mips-interpreter__5MhRbRM",
+                            "circuit-fibsqrt__ZcK79u4",
+                            "build-pov-ray__Ppz9dTW",
+                            "overfull-hbox__BnKTsET",
+                            "video-processing__nQw5gJY",
+                            "distribution-search__iiVoH9T",
+                            "break-filter-js-from-html__FqDbBqv"
+                        ],
+                        "0.0": [
+                            "protein-assembly__jYotY9A"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            }
+        },
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null
+    }
+}

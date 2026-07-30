@@ -71,5 +71,7 @@ for (const file of candidates) {
 }
 
 if (patched === 0) {
-	console.log("[patch-opentui-dialog] no files needed patching (already patched or not found)");
+	console.log(
+		"[patch-opentui-dialog] no files needed patching (already patched or not found)",
+	);
 }

@@ -131,7 +131,7 @@ message PlanRateLimitWindow {
   int64 resets_at_sec = 3;
 }
 
-// Platform Cloud Agents + Sandbox dashboard data (hosted on Cloudflare Workers).
+// Platform Cloud Agents + Sandbox dashboard data (hosted on Trumbo infrastructure).
 message PlatformInfrastructureResponse {
   optional string agents_json = 1;
   optional string sandboxes_json = 2;
