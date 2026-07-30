@@ -121,7 +121,7 @@ function ActiveProjectPanel({
   );
 }
 
-export function ProjectPickerMenu() {
+export function ProjectPickerMenu({ className }: { readonly className?: string }) {
   const navigate = useNavigate();
   const handleNewThread = useNewThreadHandler();
   const { projectGroups, activeProject, activeProjectKey, threadCountByProjectKey, threads } =
@@ -169,6 +169,7 @@ export function ProjectPickerMenu() {
             className={cn(
               "input-surface h-8 max-w-60 shrink-0 gap-2 rounded-md px-2.5 [-webkit-app-region:no-drag]",
               "text-foreground hover:text-foreground",
+              className,
             )}
             aria-label="Switch project"
             data-testid="project-picker-trigger"

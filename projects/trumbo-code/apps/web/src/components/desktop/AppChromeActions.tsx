@@ -1,12 +1,11 @@
-import { PlusIcon, SearchIcon, SettingsIcon } from "lucide-react";
+import { PlusIcon, SearchIcon } from "lucide-react";
 import { memo, useCallback } from "react";
 
 import { openCommandPalette } from "~/commandPaletteBus";
-import { openSettingsModal } from "~/settingsModalBus";
 import { useHandleNewThread } from "~/hooks/useHandleNewThread";
 import { startNewThreadFromContext } from "~/lib/chatThreadActions";
 import { cn } from "~/lib/utils";
-import { TrumboSidebarHeaderAuth } from "~/components/trumbo-auth/TrumboSidebarHeaderAuth";
+import { UserAvatarMenu } from "~/components/desktop/UserAvatarMenu";
 import { Button } from "~/components/ui/button";
 import { Tooltip, TooltipPopup, TooltipTrigger } from "~/components/ui/tooltip";
 
@@ -22,10 +21,6 @@ export const AppChromeActions = memo(function AppChromeActions() {
       handleNewThread,
     });
   }, [activeDraftThread, activeThread, defaultProjectRef, handleNewThread]);
-
-  const handleSettingsClick = useCallback(() => {
-    openSettingsModal();
-  }, []);
 
   return (
     <div
@@ -65,23 +60,8 @@ export const AppChromeActions = memo(function AppChromeActions() {
         </TooltipTrigger>
         <TooltipPopup side="bottom">Search</TooltipPopup>
       </Tooltip>
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <Button
-              variant="ghost"
-              size="icon-xs"
-              aria-label="Settings"
-              onClick={handleSettingsClick}
-            />
-          }
-        >
-          <SettingsIcon />
-        </TooltipTrigger>
-        <TooltipPopup side="bottom">Settings</TooltipPopup>
-      </Tooltip>
       <div className="ms-1 flex items-center gap-1">
-        <TrumboSidebarHeaderAuth />
+        <UserAvatarMenu />
       </div>
     </div>
   );

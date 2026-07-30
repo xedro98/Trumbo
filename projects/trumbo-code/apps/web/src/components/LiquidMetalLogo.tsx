@@ -1,19 +1,12 @@
 import { LiquidMetal } from "@paper-design/shaders-react";
 import { Component, Suspense, useMemo, useState, type ReactNode } from "react";
 
-import { cn } from "../../lib/utils";
-import { TrumboWordmark } from "../TrumboWordmark";
+import { cn } from "~/lib/utils";
+import { TrumboLogoSvg } from "./TrumboLogoSvg";
 
-const HERO_PX = 512;
 const DIAMOND_MASK_URL = "https://shaders.paper.design/images/logos/diamond.svg";
 
-const heroFrameClassName =
-  "ready-to-build-hero relative mx-auto aspect-square w-[min(92vw,28rem)] sm:w-[min(84vw,32rem)]";
-
-const liquidMetalProps = {
-  className: "relative isolate block size-full min-h-full",
-  width: HERO_PX,
-  height: HERO_PX,
+const baseLiquidMetalProps = {
   colorBack: "#aaaaac00",
   colorTint: "#3adf55",
   repetition: 2,
@@ -33,7 +26,6 @@ function resolveTrumboMaskUrl(): string {
   if (typeof window === "undefined") {
     return DIAMOND_MASK_URL;
   }
-
   try {
     return new URL("trumbo-logo.svg", window.location.href).href;
   } catch {
@@ -41,16 +33,14 @@ function resolveTrumboMaskUrl(): string {
   }
 }
 
-function HeroFallback() {
-  return (
-    <div className="flex size-full items-center justify-center">
-      <TrumboWordmark className="size-24 text-brand" />
-    </div>
-  );
+function LogoFallback({ size }: { readonly size: number }) {
+  return <TrumboLogoSvg className={cn("text-[#2BBF77]")} style={{ width: size, height: size }} />;
 }
 
-function LiquidMetalHero({ maskUrl }: { readonly maskUrl: string }) {
-  return <LiquidMetal {...liquidMetalProps} image={maskUrl} />;
+function LiquidMetalLogoInner({ maskUrl, size }: { readonly maskUrl: string; readonly size: number }) {
+  return (
+    <LiquidMetal {...baseLiquidMetalProps} width={size} height={size} image={maskUrl} className="block" />
+  );
 }
 
 class ShaderErrorBoundary extends Component<
@@ -74,39 +64,41 @@ class ShaderErrorBoundary extends Component<
 
 type MaskTier = "trumbo" | "diamond" | "static";
 
-function ReadyToBuildHeroShader() {
+/**
+ * LiquidMetalLogo — the Trumbo "T" lettermark rendered as a futuristic liquid
+ * metal material via @paper-design/shaders-react. The official trumbo-logo.svg
+ * (transparent background) is the shader mask, tinted with the Trumbo brand
+ * green. Falls back to the static SVG mark if WebGL/shader init fails.
+ */
+export function LiquidMetalLogo({
+  size = 64,
+  className,
+}: {
+  readonly size?: number;
+  readonly className?: string;
+}) {
   const trumboMaskUrl = useMemo(() => resolveTrumboMaskUrl(), []);
   const [maskTier, setMaskTier] = useState<MaskTier>("trumbo");
 
   if (maskTier === "static") {
-    return <HeroFallback />;
+    return <LogoFallback size={size} />;
   }
 
   const maskUrl = maskTier === "trumbo" ? trumboMaskUrl : DIAMOND_MASK_URL;
 
   return (
-    <ShaderErrorBoundary
-      key={maskTier}
-      fallback={<HeroFallback />}
-      onError={() => {
-        setMaskTier((current) => (current === "trumbo" ? "diamond" : "static"));
-      }}
-    >
-      <Suspense fallback={<HeroFallback />}>
-        <LiquidMetalHero maskUrl={maskUrl} />
-      </Suspense>
-    </ShaderErrorBoundary>
-  );
-}
-
-export function ReadyToBuildHero(props: { readonly className?: string }) {
-  if (typeof window === "undefined") {
-    return <div className={cn(heroFrameClassName, props.className)} aria-hidden />;
-  }
-
-  return (
-    <div className={cn(heroFrameClassName, props.className)} aria-hidden>
-      <ReadyToBuildHeroShader />
+    <div className={cn("relative flex items-center justify-center", className)} style={{ width: size, height: size }}>
+      <ShaderErrorBoundary
+        key={maskTier}
+        fallback={<LogoFallback size={size} />}
+        onError={() => {
+          setMaskTier((current) => (current === "trumbo" ? "diamond" : "static"));
+        }}
+      >
+        <Suspense fallback={<LogoFallback size={size} />}>
+          <LiquidMetalLogoInner maskUrl={maskUrl} size={size} />
+        </Suspense>
+      </ShaderErrorBoundary>
     </div>
   );
 }

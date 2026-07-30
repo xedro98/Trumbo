@@ -1,7 +1,7 @@
 import { EmptyRequest } from "@shared/proto/trumbo/common"
 import { PlayIcon } from "lucide-react"
 import TrumboLogoSanta from "@/assets/TrumboLogoSanta"
-import trumboLogoUrl from "@/assets/trumbo-logo.svg?url"
+import LiquidMetalLogo from "@/components/brand/LiquidMetalLogo"
 import { TrumboButton } from "@/components/trumbo"
 import { UiServiceClient } from "@/services/grpc-client"
 
@@ -26,7 +26,7 @@ const HomeHeader = ({ shouldShowQuickWins = false }: HomeHeaderProps) => {
 				{isDecember ? (
 					<TrumboLogoSanta className="size-20" />
 				) : (
-					<img alt="" aria-hidden className="size-20" src={trumboLogoUrl} />
+					<LiquidMetalLogo size={80} />
 				)}
 			</div>
 			<div className="flex items-center justify-center px-4 text-center">

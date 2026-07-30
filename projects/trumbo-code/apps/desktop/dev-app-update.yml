@@ -1,0 +1,9 @@
+# Development auto-update feed for electron-updater.
+# Points at the GitHub Releases of xedro98/Trumbo so `trembo run start:desktop`
+# in development can exercise the update check/download flow without a packaged
+# build. electron-builder writes the production app-update.yml into resources/
+# during `dist:desktop:*`; this file is only used when isPackaged === false.
+owner: xedro98
+repo: Trumbo
+provider: github
+releaseType: release

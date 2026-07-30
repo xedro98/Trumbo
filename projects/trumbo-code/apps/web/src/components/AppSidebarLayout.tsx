@@ -6,6 +6,7 @@ import { isElectron } from "../env";
 import { cn, isMacPlatform } from "../lib/utils";
 import { TrumboWordmark } from "./TrumboWordmark";
 import { AppChromeActions } from "./desktop/AppChromeActions";
+import { ProjectSidebar } from "./desktop/ProjectSidebar";
 import { ProjectPickerMenu } from "./desktop/ProjectPickerMenu";
 import { ThreadTabBar } from "./desktop/ThreadTabBar";
 import { SidebarProviderUpdatePill } from "./sidebar/SidebarProviderUpdatePill";
@@ -99,14 +100,17 @@ export function AppTabsLayout({ children }: { children: ReactNode }) {
       >
         <div className="flex min-w-0 shrink-0 items-center gap-2 [-webkit-app-region:no-drag]">
           <AppBrand />
-          <ProjectPickerMenu />
+          <ProjectPickerMenu className="md:hidden" />
           <SidebarProviderUpdatePill />
           <SidebarUpdatePill />
         </div>
         <ThreadTabBar />
         <AppChromeActions />
       </header>
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">{children}</div>
+      <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden">
+        <ProjectSidebar className="hidden md:flex" />
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">{children}</div>
+      </div>
     </div>
   );
 }

@@ -607,6 +607,10 @@ export const make = Effect.gen(function* () {
       yield* registerIpcHandlers;
       yield* hydrateFromStore;
 
+      // If the stored session has no user/subscription (e.g. written by an
+      // older build that only persisted the token), refresh immediately so
+      // the renderer gets the full account details without waiting for the
+      // 30s plan-refresh timer.
       const refreshSignedInSubscription = () => {
         if (!store) return;
         const stored = store.load();
@@ -633,6 +637,10 @@ export const make = Effect.gen(function* () {
       if (typeof planRefreshTimer === "object" && "unref" in planRefreshTimer) {
         planRefreshTimer.unref();
       }
+
+      // Fire an immediate refresh so the renderer sees the user's profile and
+      // subscription right away (the stored session may only have the token).
+      refreshSignedInSubscription();
     }).pipe(
       Effect.withSpan("desktop.trumboAuth.configure"),
       Effect.asVoid,

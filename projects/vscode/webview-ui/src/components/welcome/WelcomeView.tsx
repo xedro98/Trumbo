@@ -1,6 +1,6 @@
 import { BooleanRequest } from "@shared/proto/trumbo/common"
 import { memo, useEffect, useState } from "react"
-import BrandMark from "@/components/brand/BrandMark"
+import LiquidMetalLogo from "@/components/brand/LiquidMetalLogo"
 import { TrumboButton } from "@/components/trumbo"
 import ApiOptions from "@/components/settings/ApiOptions"
 import { useExtensionState } from "@/context/ExtensionStateContext"
@@ -40,7 +40,7 @@ const WelcomeView = memo(() => {
 									"radial-gradient(circle, color-mix(in srgb, var(--brand) 40%, transparent) 0%, transparent 70%)",
 							}}
 						/>
-						<BrandMark gradient glow className="relative size-16" />
+						<LiquidMetalLogo size={64} className="relative" />
 					</div>
 					<div className="flex flex-col items-center gap-1.5 text-center">
 						<h2 className="m-0 font-heading text-lg font-semibold tracking-[-0.02em]">Your AI coding partner</h2>
