@@ -1,5 +1,6 @@
 import type { TrumboAuthState } from "@trumbo-code/contracts";
 import {
+  hasActiveTrumboModelSubscription,
   resolveTrumboModelAccessMessage,
   TRUMBO_SIGN_IN_FOR_MODELS_MESSAGE,
   TRUMBO_SUBSCRIBE_FOR_MODELS_MESSAGE,
@@ -24,6 +25,15 @@ export function resolveTrumboThreadAccessBlock(input: {
 
   if (authState.status !== "signed-in") {
     return { kind: "sign-in" };
+  }
+
+  // If the renderer's auth state confirms an active paid subscription, trust it
+  // and never show the subscribe screen — even if the server/provider sends a
+  // stale "subscribe" message (e.g. the server's subscription cache hasn't
+  // refreshed yet, or a transient network error caused the server's fetch to
+  // return null). The user is subscribed; blocking them is a false negative.
+  if (hasActiveTrumboModelSubscription(authState.subscription)) {
+    return { kind: "none" };
   }
 
   const accessMessage = resolveTrumboModelAccessMessage(authState);
