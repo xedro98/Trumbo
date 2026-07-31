@@ -496,6 +496,20 @@ export function closeThreadTabsToRight(state: UiState, threadKey: ThreadTabKey):
   });
 }
 
+export function reorderThreadTabs(
+  state: UiState,
+  fromKey: ThreadTabKey,
+  toKey: ThreadTabKey,
+): UiState {
+  const keys = [...state.openThreadTabKeys];
+  const fromIndex = keys.indexOf(fromKey);
+  const toIndex = keys.indexOf(toKey);
+  if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return state;
+  keys.splice(fromIndex, 1);
+  keys.splice(toIndex, 0, fromKey);
+  return { ...state, openThreadTabKeys: keys };
+}
+
 export function closeAllThreadTabs(state: UiState): UiState {
   if (state.openThreadTabKeys.length === 0) {
     return state;
@@ -696,6 +710,7 @@ interface UiStateStore extends UiState {
   closeOtherThreadTabs: (threadKey: ThreadTabKey) => void;
   closeThreadTabsToRight: (threadKey: ThreadTabKey) => void;
   closeAllThreadTabs: () => void;
+  reorderThreadTabs: (fromKey: ThreadTabKey, toKey: ThreadTabKey) => void;
   createThreadTabGroup: (input?: {
     tabKey?: ThreadTabKey;
     name?: string;
@@ -730,6 +745,7 @@ export const useUiStateStore = create<UiStateStore>((set) => ({
   closeOtherThreadTabs: (threadKey) => set((state) => closeOtherThreadTabs(state, threadKey)),
   closeThreadTabsToRight: (threadKey) => set((state) => closeThreadTabsToRight(state, threadKey)),
   closeAllThreadTabs: () => set((state) => closeAllThreadTabs(state)),
+  reorderThreadTabs: (fromKey, toKey) => set((state) => reorderThreadTabs(state, fromKey, toKey)),
   createThreadTabGroup: (input) => set((state) => createThreadTabGroup(state, input)),
   updateThreadTabGroup: (groupId, patch) =>
     set((state) => updateThreadTabGroup(state, groupId, patch)),

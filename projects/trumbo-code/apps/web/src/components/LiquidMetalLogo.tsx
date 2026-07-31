@@ -37,9 +37,21 @@ function LogoFallback({ size }: { readonly size: number }) {
   return <TrumboLogoSvg className={cn("text-[#2BBF77]")} style={{ width: size, height: size }} />;
 }
 
-function LiquidMetalLogoInner({ maskUrl, size }: { readonly maskUrl: string; readonly size: number }) {
+function LiquidMetalLogoInner({
+  maskUrl,
+  size,
+}: {
+  readonly maskUrl: string;
+  readonly size: number;
+}) {
   return (
-    <LiquidMetal {...baseLiquidMetalProps} width={size} height={size} image={maskUrl} className="block" />
+    <LiquidMetal
+      {...baseLiquidMetalProps}
+      width={size}
+      height={size}
+      image={maskUrl}
+      className="block"
+    />
   );
 }
 
@@ -87,7 +99,10 @@ export function LiquidMetalLogo({
   const maskUrl = maskTier === "trumbo" ? trumboMaskUrl : DIAMOND_MASK_URL;
 
   return (
-    <div className={cn("relative flex items-center justify-center", className)} style={{ width: size, height: size }}>
+    <div
+      className={cn("relative flex items-center justify-center", className)}
+      style={{ width: size, height: size }}
+    >
       <ShaderErrorBoundary
         key={maskTier}
         fallback={<LogoFallback size={size} />}

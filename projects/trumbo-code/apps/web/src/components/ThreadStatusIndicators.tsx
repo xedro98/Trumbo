@@ -17,6 +17,7 @@ import { resolveThreadStatusPill, type ThreadStatusPill } from "./Sidebar.logic"
 import type { SidebarThreadSummary } from "../types";
 import { formatWorktreePathForDisplay } from "../worktreeCleanup";
 import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
+import { Dotm3x3_19 } from "./ui/dotm-3x3-19";
 
 export interface PrStatusIndicator {
   label: string;
@@ -136,7 +137,34 @@ export function ThreadStatusLabel({
   status: ThreadStatusPill;
   compact?: boolean;
 }) {
+  // "Working" and "Connecting" are the pulsing (running) states — render
+  // the dotmatrix loader instead of the legacy blinking dot.
+  const isRunning = status.pulse;
+
   if (compact) {
+    if (isRunning) {
+      return (
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span
+                aria-label={status.label}
+                className={`inline-flex size-3.5 shrink-0 items-center justify-center ${status.colorClass}`}
+              />
+            }
+          >
+            <Dotm3x3_19
+              size={14}
+              dotSize={2}
+              cellPadding={1}
+              speed={1.2}
+              ariaLabel={status.label}
+            />
+          </TooltipTrigger>
+          <TooltipPopup side="top">{status.label}</TooltipPopup>
+        </Tooltip>
+      );
+    }
     return (
       <Tooltip>
         <TooltipTrigger
@@ -147,11 +175,26 @@ export function ThreadStatusLabel({
             />
           }
         >
-          <span
-            className={`size-[9px] rounded-full ${status.dotClass} ${
-              status.pulse ? "animate-status-pulse" : ""
-            }`}
-          />
+          <span className={`size-[9px] rounded-full ${status.dotClass}`} />
+        </TooltipTrigger>
+        <TooltipPopup side="top">{status.label}</TooltipPopup>
+      </Tooltip>
+    );
+  }
+
+  if (isRunning) {
+    return (
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <span
+              aria-label={status.label}
+              className={`inline-flex items-center gap-1 text-[10px] ${status.colorClass}`}
+            />
+          }
+        >
+          <Dotm3x3_19 size={14} dotSize={2} cellPadding={1} speed={1.2} ariaLabel={status.label} />
+          <span className="hidden md:inline">{status.label}</span>
         </TooltipTrigger>
         <TooltipPopup side="top">{status.label}</TooltipPopup>
       </Tooltip>
@@ -168,11 +211,7 @@ export function ThreadStatusLabel({
           />
         }
       >
-        <span
-          className={`h-1.5 w-1.5 rounded-full ${status.dotClass} ${
-            status.pulse ? "animate-status-pulse" : ""
-          }`}
-        />
+        <span className={`h-1.5 w-1.5 rounded-full ${status.dotClass}`} />
         <span className="hidden md:inline">{status.label}</span>
       </TooltipTrigger>
       <TooltipPopup side="top">{status.label}</TooltipPopup>

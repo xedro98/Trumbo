@@ -291,7 +291,7 @@
 
 :root {
   color-scheme: light;
-  --radius: 0.5rem;
+  --radius: 0.25rem;
   --brand: #2bbf77;
   --brand-hover: #25a968;
   --brand-foreground: #fff;

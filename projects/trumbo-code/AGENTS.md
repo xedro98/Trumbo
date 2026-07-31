@@ -163,6 +163,7 @@ Electron bundles) → stages a production install → `electron-builder --win
 --x64 --publish never` → artifacts in `E:/trumbo-release/`.
 
 **Golden rules** (from the section above still apply):
+
 - Never put `--` between the script and flags.
 - Match the host platform (Windows→win, macOS→mac, Linux→linux).
 - Pass `--skip-build` only if you already ran `vp run build:desktop` and want
@@ -170,6 +171,7 @@ Electron bundles) → stages a production install → `electron-builder --win
 - macOS builds require a Mac (CI only). Linux builds require WSL Ubuntu.
 
 Artifacts produced (Windows):
+
 - `Trumbo-Code-<version>-x64.exe` (the NSIS installer, ~317MB)
 - `Trumbo-Code-<version>-x64.exe.blockmap` (differential update support)
 - `latest.yml` (electron-updater manifest — version, sha512, files, releaseDate)
@@ -274,7 +276,7 @@ standard release:
   `UnsupportedCrossPlatformDesktopBuildError`. Build on the matching host.
 - **Stale Electron single-instance lock** (dev): if `dev:desktop` crash-loops
   on Windows, kill ALL `Electron.exe` processes (`taskkill //F //IM
-  Electron.exe`), remove `C:/Users/Admin/AppData/Roaming/trumbo-dev/lockfile`,
+Electron.exe`), remove `C:/Users/Admin/AppData/Roaming/trumbo-dev/lockfile`,
   and remove `~/.trumbo-code/dev/server-runtime.json` before relaunching.
 - **Pre-commit hook failures**: `--no-verify` skips the `vp check --fix`
   hook. Use it if the hook flags unrelated formatting issues; CI will run the
