@@ -2,7 +2,6 @@ import { ArrowRight } from "@phosphor-icons/react";
 import { SectionFooterLink } from "@/components/sections/MarketingSectionHeader";
 import { marketingGridCellClass } from "@/components/grid-shell-context";
 import { GridBox, GridBoxCell } from "@/components/ui/grid-box";
-import { platformLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 const FEATURED = {
 	category: "Engineering",

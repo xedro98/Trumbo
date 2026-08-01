@@ -10,7 +10,6 @@ import {
 } from "@/components/MarketingSidebar";
 import { GridBox, GridBoxCell } from "@/components/ui/grid-box";
 import { MARKETING_EXPLORE_ITEMS, isMarketingExploreGroup } from "@/lib/marketing-sections";
-import { platformLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
 const FOOTER_PLATFORM_LINKS = [
