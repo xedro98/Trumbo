@@ -15,6 +15,43 @@ All notable changes to the Trumbo monorepo are recorded here. This file was
 restarted from scratch for the Trumbo brand — earlier history is not carried
 over.
 
+## [v3.8.0 / v0.0.33 / SDK v0.0.62] — 2026-08-01
+
+Subscription spend controls, a server-backed free model tier, per-server MCP
+timeouts, and new SDK session APIs.
+
+### Added
+- **Subscription spend caps**: plans can carry a monthly USD budget, enforced on
+  the inference gateway before the upstream call — blocked requests return
+  `SPEND_LIMIT_EXCEEDED` (429) with spend/limit/reset; the VS Code
+  "Request Increase" card now persists a budget-increase request instead of
+  failing; admins can set a per-plan budget.
+- **Free model tier**: the hosted recommended-models endpoint now serves the
+  `free` bucket, so the Free tier in the model pickers (VS Code, CLI, desktop)
+  is populated from the platform — not just the offline fallback.
+- **Buy credits (usage-based)**: secondary "Buy credits" actions in the VS Code
+  plan-limit card + Account view, the CLI account dialog, and the desktop
+  Subscription settings panel.
+- **Per-server MCP timeouts**: the core MCP client honors each server's
+  `timeout` (seconds) for initialize / tools/list / tools/call, matching the
+  VS Code config; timeout-only config edits apply live without reconnecting.
+- **SDK session APIs**: `TrumboCore.readLiveMessages()` (a resident session's
+  in-memory transcript with persisted fallback) and `TrumboCore.forkSession()`
+  (a new session seeded from a source's live transcript with fork lineage
+  metadata).
+- **Stdin-based shell scripting**: `getShellInvocation()` pipes scripts via
+  stdin for PowerShell/bash so command text never traverses the OS argv; the
+  bash executor uses it.
+
+### Fixed
+- SDK billing/subscription handoff URLs now point at `/billing` (were stale
+  `/dashboard/...`).
+
+### Platform
+- New `POST /api/v1/users/me/budget/request` endpoint; spend-limit enforcement
+  in `routes/chat.ts`; D1 migration 0065 (`budget_cents`/`budget_period` +
+  `budget_increase_requests`).
+
 ## [v3.7.0 / v0.3.1 / SDK v0.0.62] — 2026-07-26
 
 Trumbo Agent Apps + Trumbo Database — Vercel-like app deployment and managed

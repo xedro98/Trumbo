@@ -238,6 +238,6 @@ describe("TrumboInsufficientCreditsError", () => {
 	it("produces a recovery message that points at the billing dashboard", () => {
 		const message = getTrumboInsufficientCreditsMessage();
 		expect(message.toLowerCase()).toContain("credits");
-		expect(message).toContain("/dashboard/billing");
+		expect(message).toContain("/billing");
 	});
 });

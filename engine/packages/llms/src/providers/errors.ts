@@ -9,7 +9,7 @@ export const TRUMBO_ORG_INDIVIDUAL_INFERENCE_SUBSCRIPTION_RESPONSE_MESSAGE =
 
 export function getTrumboPassSubscriptionUrl(): string {
 	return `${new URL(
-		"/dashboard/subscription?personal=true",
+		"/billing?personal=true",
 		getTrumboEnvironmentConfig().appBaseUrl,
 	).toString()}`;
 }
@@ -180,7 +180,7 @@ export function isTrumboInsufficientCreditsMessage(text: string): boolean {
 
 export function getTrumboInsufficientCreditsMessage(): string {
 	return `Not enough credits available. Add credits at ${new URL(
-		"/dashboard/billing",
+		"/billing",
 		getTrumboEnvironmentConfig().appBaseUrl,
 	).toString()} to continue.`;
 }

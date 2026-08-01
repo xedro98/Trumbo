@@ -370,6 +370,14 @@ const TrumboAccountView = ({ trumboUser, userOrganizations, activeOrganization, 
 					</VSCodeButton>
 				</div>
 
+				<VSCodeButtonLink
+					appearance="secondary"
+					className="w-full mt-2"
+					href={getTrumboUris(trumboUrl, "billing").href}>
+					<span className="codicon codicon-credit-card mr-1.5" />
+					Buy credits (usage-based)
+				</VSCodeButtonLink>
+
 				<VSCodeDivider className="w-full my-6" />
 
 				<PlanUsage

@@ -38,6 +38,7 @@ import {
 } from "../utils/output";
 import { createWorkspaceChatCommandHost } from "../utils/plugin-chat-commands";
 import { readRepoStatus } from "../utils/repo-status";
+import { getCliTelemetryService } from "../utils/telemetry";
 import type { Config } from "../utils/types";
 import {
 	clearAbortInProgress,
@@ -145,6 +146,7 @@ export async function runInteractive(
 			cwd: config.cwd,
 			workspaceRoot: config.workspaceRoot,
 			logger: config.logger,
+			telemetry: getCliTelemetryService(config.logger),
 		})
 			.then(({ host, pluginSlashCommands, pluginViews, shutdown }) => {
 				interactiveChatCommandHost = host;

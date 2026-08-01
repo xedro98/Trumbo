@@ -2,6 +2,21 @@
 
 All notable changes to the Trumbo VS Code extension are documented here.
 
+## [0.0.33] - 2026-08-01
+
+Subscription UX parity (ClinePass-style) + core engine MCP timeout support.
+
+### Added
+- **Buy credits (usage-based)** secondary action in the plan-limit error card
+  and the Account view — the prepaid-credits top-up path alongside plan upgrade.
+- Bundles SDK 0.0.62: per-server MCP `timeout` is now honored by the core
+  engine client for initialize / tools/list / tools/call within this extension,
+  matching the UI's Request Timeout setting.
+
+### Fixed
+- The free-model tier stays populated from the hosted catalog (server-side
+  `free` bucket) so the picker's Free tab reflects platform availability.
+
 ## [0.3.2] - 2026-07-30
 
 Desktop app folded into the Trumbo monorepo. Version bump to stay in sync with the CLI 3.7.1 release.

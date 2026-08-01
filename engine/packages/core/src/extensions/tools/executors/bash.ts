@@ -9,7 +9,7 @@ import { StringDecoder } from "node:string_decoder";
 import {
 	type AgentToolContext,
 	getDefaultShell,
-	getShellArgs,
+	getShellInvocation,
 } from "@trumbodev/shared";
 import { TimeoutError } from "../helpers";
 import type { ShellExecutor } from "../types";
@@ -77,6 +77,8 @@ interface SpawnConfig {
 	args: string[];
 	cwd: string;
 	env: Record<string, string>;
+	/** Optional script text to pipe to the child's stdin (e.g. `pwsh -Command -`). */
+	stdin?: string;
 }
 
 /**
@@ -155,6 +157,14 @@ function spawnAndCollect(
 			windowsHide: true,
 		});
 		const childPid = child.pid;
+
+		// Pipe the script via stdin where the shell was launched in stdin-read
+		// mode (`pwsh -Command -`, `bash -s`) so the command text never traverses
+		// the OS command line (avoids argv limits + quoting bugs).
+		if (config.stdin) {
+			child.stdin?.write(config.stdin);
+			child.stdin?.end();
+		}
 
 		const stdout = createRollingCollector(maxOutputChars);
 		const stderr = createRollingCollector(maxOutputChars);
@@ -313,12 +323,14 @@ export function createShellExecutor(
 
 	return (command, cwd, context) => {
 		const isStructured = typeof command !== "string";
+		const invocation = isStructured
+			? { args: command.args ?? [], stdin: undefined as string | undefined }
+			: getShellInvocation(shell, command);
 		return spawnAndCollect(
 			{
 				executable: isStructured ? command.command : shell,
-				args: isStructured
-					? (command.args ?? [])
-					: getShellArgs(shell, command),
+				args: invocation.args,
+				stdin: invocation.stdin,
 				cwd,
 				env,
 			},

@@ -9,6 +9,28 @@
 
 # Trumbo SDK Changelog
 
+## 0.0.62
+
+### Added
+- **Per-server MCP timeouts**: `McpServerRegistration.timeout` (seconds) is now
+  parsed by the config loader and honored by the MCP client — stdio
+  `initialize`/`tools/list`/`tools/call` and the SDK URL client. Timeout-only
+  config edits propagate to a connected client via `updateRegistration` without
+  reconnecting. New `resolveMcpTimeoutMs()` helper.
+- **`TrumboCore.readLiveMessages()`**: reads a resident session's current
+  in-memory transcript (mid-turn edits included) with a persisted fallback.
+- **`TrumboCore.forkSession()`**: starts a new session seeded from a source
+  session's live transcript, recording fork lineage metadata
+  (`fork.forkedFromSessionId` / `forkedAt`).
+- **`getShellInvocation()`** in `@trumbodev/shared`: returns argv + stdin so
+  PowerShell/bash scripts are piped via stdin instead of passed on the OS
+  command line (avoids argv limits and quoting bugs). The bash executor uses it.
+  `getShellArgs` is unchanged for backward compatibility.
+
+### Fixed
+- `getTrumboPassSubscriptionUrl` / `getTrumboInsufficientCreditsMessage` now
+  produce `/billing` handoff URLs (were stale `/dashboard/...`).
+
 ## 0.0.61
 
 ### Fixed

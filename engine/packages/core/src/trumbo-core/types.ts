@@ -132,6 +132,16 @@ export interface TrumboCoreStartInput
 	localRuntime?: LocalRuntimeStartOptions;
 }
 
+export interface TrumboCoreForkInput {
+	/** Source session to branch from — its live transcript becomes the fork's initial messages. */
+	sourceSessionId: string;
+	/**
+	 * Start overrides for the new session. `config` is required. `initialMessages`
+	 * is ignored and populated from the source transcript.
+	 */
+	start: TrumboCoreStartInput;
+}
+
 export interface RestoreOptions {
 	/**
 	 * Restore the message history by starting a new session fork trimmed to

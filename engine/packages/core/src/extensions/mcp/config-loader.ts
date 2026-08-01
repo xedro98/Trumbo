@@ -67,6 +67,8 @@ const nestedRegistrationBodySchema = z.object({
 	disabled: z.boolean().optional(),
 	metadata: metadataSchema.optional(),
 	oauth: oauthStateSchema.optional(),
+	/** Per-server timeout in seconds (optional). Written by the VS Code MCP UI. */
+	timeout: z.number().int().positive().optional(),
 });
 
 const legacyTransportTypeSchema = z
@@ -79,6 +81,7 @@ const legacyRegistrationBaseSchema = z.object({
 	disabled: z.boolean().optional(),
 	metadata: metadataSchema.optional(),
 	oauth: oauthStateSchema.optional(),
+	timeout: z.number().int().positive().optional(),
 });
 
 function mapLegacyTransportType(
@@ -122,6 +125,7 @@ const legacyStdioRegistrationSchema = legacyRegistrationBaseSchema
 		disabled: value.disabled,
 		metadata: value.metadata,
 		oauth: value.oauth,
+		timeout: value.timeout,
 	}));
 
 const legacyUrlRegistrationSchema = legacyRegistrationBaseSchema
@@ -154,6 +158,7 @@ const legacyUrlRegistrationSchema = legacyRegistrationBaseSchema
 				disabled: value.disabled,
 				metadata: value.metadata,
 				oauth: value.oauth,
+				timeout: value.timeout,
 			};
 		}
 		return {
@@ -165,6 +170,7 @@ const legacyUrlRegistrationSchema = legacyRegistrationBaseSchema
 			disabled: value.disabled,
 			metadata: value.metadata,
 			oauth: value.oauth,
+			timeout: value.timeout,
 		};
 	});
 
@@ -686,6 +692,7 @@ export function resolveMcpServerRegistrations(
 		disabled: value.disabled,
 		metadata: value.metadata,
 		oauth: value.oauth,
+		timeout: value.timeout,
 	}));
 }
 

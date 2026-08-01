@@ -46,6 +46,7 @@ import type {
 	StartSessionBootstrap,
 	TrumboCoreAutomationApi,
 	TrumboCoreAutomationOptions,
+	TrumboCoreForkInput,
 	TrumboCoreListHistoryOptions,
 	TrumboCoreOptions,
 	TrumboCoreSettingsApi,
@@ -510,6 +511,70 @@ export class TrumboCore {
 	 */
 	readMessages: RuntimeHost["readSessionMessages"] = (...args) =>
 		this.host.readSessionMessages(...args);
+	/**
+	 * Reads a session's CURRENT in-memory transcript (mid-turn updates included),
+	 * falling back to the persisted message file when the session is not resident.
+	 *
+	 * @example
+	 * ```ts
+	 * const live = await trumbo.readLiveMessages(sessionId);
+	 * console.log(`Session has ${live.length} messages so far this turn`);
+	 * ```
+	 */
+	readLiveMessages = async (
+		sessionId: string,
+	): Promise<Awaited<ReturnType<RuntimeHost["readSessionMessages"]>>> => {
+		const liveRead = (this.host as RuntimeHost).readLiveMessages as
+			| ((
+					sessionId: string,
+			  ) => Promise<Awaited<ReturnType<RuntimeHost["readSessionMessages"]>>>)
+			| undefined;
+		return liveRead
+			? liveRead(sessionId)
+			: this.host.readSessionMessages(sessionId);
+	};
+	/**
+	 * Forks a new session from an existing one.
+	 *
+	 * Reads the source session's CURRENT transcript (`readLiveMessages`), then
+	 * starts a brand-new session seeded with those messages and a `fork`
+	 * metadata link (`{ forkedFromSessionId, forkedAt }`). Fork lineage is
+	 * metadata-only — each session keeps its own independent conversation id.
+	 *
+	 * @example
+	 * ```ts
+	 * const fork = await trumbo.forkSession({
+	 *   sourceSessionId: originalId,
+	 *   start: { config: myConfig, cwd },
+	 * });
+	 * console.log(`Forked ${originalId} → ${fork.sessionId}`);
+	 * ```
+	 */
+	async forkSession(input: TrumboCoreForkInput): Promise<StartSessionResult> {
+		const sourceSessionId = input.sourceSessionId.trim();
+		if (!sourceSessionId) {
+			throw new Error("forkSession: sourceSessionId is required");
+		}
+		const source = await this.host.getSession(sourceSessionId);
+		if (!source) {
+			throw new Error(`forkSession: session ${sourceSessionId} not found`);
+		}
+		const messages = await this.readLiveMessages(sourceSessionId);
+		const { start } = input;
+		return this.start({
+			...start,
+			// The source transcript becomes the fork's initial history; any
+			// caller-supplied initialMessages is intentionally ignored.
+			initialMessages: messages,
+			sessionMetadata: {
+				...(start.sessionMetadata ?? {}),
+				fork: {
+					forkedFromSessionId: sourceSessionId,
+					forkedAt: new Date().toISOString(),
+				},
+			},
+		});
+	}
 
 	async restore(input: RestoreInput): Promise<RestoreResult> {
 		const normalizedStart = input.start

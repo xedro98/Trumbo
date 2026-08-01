@@ -85,6 +85,10 @@ export async function createWorkspaceChatCommandHost(input: {
 	cwd: string;
 	workspaceRoot?: string;
 	logger?: BasicLogger;
+	/** Optional telemetry service forwarded to plugins (PluginSetupContext.telemetry). */
+	telemetry?: NonNullable<
+		Parameters<typeof resolveAndLoadAgentPlugins>[0]
+	>["telemetry"];
 }): Promise<WorkspaceChatCommandHostResult> {
 	const workspaceRoot = input.workspaceRoot?.trim() || input.cwd;
 	let loaded: Awaited<ReturnType<typeof resolveAndLoadAgentPlugins>>;
@@ -92,6 +96,7 @@ export async function createWorkspaceChatCommandHost(input: {
 		loaded = await resolveAndLoadAgentPlugins({
 			cwd: input.cwd,
 			workspacePath: workspaceRoot,
+			telemetry: input.telemetry,
 		});
 	} catch (error) {
 		const message = error instanceof Error ? error.message : String(error);

@@ -63,6 +63,8 @@ export class InMemoryMcpManager implements McpManager {
 			const didTransportChange =
 				JSON.stringify(existing.registration.transport) !==
 				JSON.stringify(registration.transport);
+			const didTimeoutChange =
+				existing.registration.timeout !== registration.timeout;
 			existing.registration = { ...registration };
 			existing.updatedAt = nowMs();
 
@@ -71,6 +73,11 @@ export class InMemoryMcpManager implements McpManager {
 				existing.client = undefined;
 				existing.toolCache = undefined;
 				existing.toolCacheUpdatedAt = undefined;
+			} else if (didTimeoutChange && existing.client) {
+				// Timeout-only edit: push the new registration to the connected
+				// client so the per-server timeout is honored live at request time
+				// WITHOUT tearing down the connection.
+				existing.client.updateRegistration?.(existing.registration);
 			}
 		});
 	}

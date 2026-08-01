@@ -257,6 +257,81 @@ describe("TrumboCore", () => {
 		expect(dispose).toHaveBeenCalledTimes(1);
 	});
 
+	it("readLiveMessages falls back to readSessionMessages when the host lacks it", async () => {
+		const persisted = [{ id: "m1", role: "user", content: "hi" }];
+		const readSessionMessages = vi.fn(async () => persisted);
+		const host = {
+			runtimeAddress: undefined,
+			startSession: vi.fn(),
+			runTurn: vi.fn(),
+			restoreSession: vi.fn(),
+			getAccumulatedUsage: vi.fn(),
+			abort: vi.fn(),
+			stopSession: vi.fn(),
+			dispose: vi.fn(),
+			getSession: vi.fn(),
+			listSessions: vi.fn(),
+			deleteSession: vi.fn(),
+			updateSession: vi.fn(),
+			readSessionMessages,
+			dispatchHookEvent: vi.fn(),
+			subscribe: vi.fn(() => () => {}),
+			updateSessionModel: vi.fn(),
+		};
+		createRuntimeHostMock.mockResolvedValue(host);
+
+		const core = await TrumboCore.create();
+		const messages = await core.readLiveMessages("session-1");
+		expect(readSessionMessages).toHaveBeenCalledWith("session-1");
+		expect(messages).toEqual(persisted);
+	});
+
+	it("forkSession seeds the new session from the source transcript and records fork lineage", async () => {
+		const sourceMessages = [{ id: "m1", role: "user", content: "hello" }];
+		const host = {
+			runtimeAddress: undefined,
+			startSession: vi.fn(async (_input: StartSessionInput) =>
+				createStartResult("fork-1"),
+			),
+			runTurn: vi.fn(),
+			restoreSession: vi.fn(),
+			getAccumulatedUsage: vi.fn(),
+			abort: vi.fn(),
+			stopSession: vi.fn(),
+			dispose: vi.fn(),
+			getSession: vi.fn(async () => ({
+				sessionId: "source-1",
+				cwd: "/tmp/workspace",
+				workspaceRoot: "/tmp/workspace",
+			})),
+			listSessions: vi.fn(),
+			deleteSession: vi.fn(),
+			updateSession: vi.fn(),
+			readSessionMessages: vi.fn(),
+			readLiveMessages: vi.fn(async () => sourceMessages),
+			dispatchHookEvent: vi.fn(),
+			subscribe: vi.fn(() => () => {}),
+			updateSessionModel: vi.fn(),
+		};
+		createRuntimeHostMock.mockResolvedValue(host);
+
+		const core = await TrumboCore.create();
+		const result = await core.forkSession({
+			sourceSessionId: "source-1",
+			start: createStartInput(),
+		});
+		expect(result.sessionId).toBe("fork-1");
+		expect(host.readLiveMessages).toHaveBeenCalledWith("source-1");
+
+		const startInput = vi.mocked(host.startSession).mock.calls.at(-1)?.[0] as
+			| StartSessionInput
+			| undefined;
+		expect(startInput?.initialMessages).toEqual(sourceMessages);
+		expect(startInput?.sessionMetadata?.fork).toEqual(
+			expect.objectContaining({ forkedFromSessionId: "source-1" }),
+		);
+	});
+
 	it("emits session.started telemetry when a new session is started", async () => {
 		const host = {
 			runtimeAddress: undefined,

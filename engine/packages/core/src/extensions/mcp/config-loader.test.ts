@@ -85,6 +85,7 @@ describe("mcp config loader", () => {
 				disabled: undefined,
 				metadata: undefined,
 				oauth: undefined,
+				timeout: undefined,
 			},
 			{
 				name: "search",
@@ -95,6 +96,7 @@ describe("mcp config loader", () => {
 				disabled: true,
 				metadata: undefined,
 				oauth: undefined,
+				timeout: undefined,
 			},
 		]);
 	});
@@ -140,6 +142,7 @@ describe("mcp config loader", () => {
 				disabled: undefined,
 				metadata: undefined,
 				oauth: undefined,
+				timeout: undefined,
 			},
 		]);
 	});
@@ -205,6 +208,7 @@ describe("mcp config loader", () => {
 				disabled: undefined,
 				metadata: undefined,
 				oauth: undefined,
+				timeout: undefined,
 			},
 		]);
 	});
@@ -244,6 +248,7 @@ describe("mcp config loader", () => {
 				disabled: undefined,
 				metadata: undefined,
 				oauth: undefined,
+				timeout: undefined,
 			},
 			{
 				name: "legacyHttp",
@@ -254,8 +259,50 @@ describe("mcp config loader", () => {
 				disabled: undefined,
 				metadata: undefined,
 				oauth: undefined,
+				timeout: undefined,
 			},
 		]);
+	});
+
+	it("round-trips a per-server timeout in nested and legacy formats", async () => {
+		const tempRoot = await mkdtemp(join(tmpdir(), "core-mcp-config-loader-"));
+		tempRoots.push(tempRoot);
+		const filePath = join(tempRoot, "trumbo_mcp_settings.json");
+		await writeFile(
+			filePath,
+			JSON.stringify(
+				{
+					mcpServers: {
+						nested: {
+							transport: { type: "stdio", command: "npx" },
+							timeout: 30,
+						},
+						legacyStdio: {
+							command: "node",
+							args: ["server.js"],
+							timeout: 7,
+						},
+						legacyUrl: {
+							url: "https://mcp.example.com",
+							timeout: 15,
+						},
+						unset: {
+							transport: { type: "stdio", command: "npx" },
+						},
+					},
+				},
+				null,
+				2,
+			),
+			"utf8",
+		);
+
+		const registrations = resolveMcpServerRegistrations({ filePath });
+		const byName = Object.fromEntries(registrations.map((r) => [r.name, r]));
+		expect(byName.nested?.timeout).toBe(30);
+		expect(byName.legacyStdio?.timeout).toBe(7);
+		expect(byName.legacyUrl?.timeout).toBe(15);
+		expect(byName.unset?.timeout).toBeUndefined();
 	});
 
 	it("updates disabled state while preserving legacy server shape and top-level settings", async () => {

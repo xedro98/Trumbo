@@ -40,6 +40,18 @@ type StdioProtocolMode = "newline" | "framed";
 const MCP_PROTOCOL_VERSION = "2024-11-05";
 const MCP_REQUEST_TIMEOUT_MS = 5_000;
 const MCP_CONNECT_TIMEOUT_MS = 1_500;
+
+/**
+ * Resolve a registration's per-server timeout into milliseconds.
+ * Timeouts are stored in SECONDS (matching the VS Code UI / McpHub settings);
+ * undefined / non-positive values mean "use the default".
+ */
+export function resolveMcpTimeoutMs(
+	registration: Pick<McpServerRegistration, "timeout">,
+): number | undefined {
+	const seconds = registration.timeout;
+	return seconds != null && seconds > 0 ? seconds * 1000 : undefined;
+}
 const DEFAULT_HTTP_MCP_REDIRECT_URL =
 	"http://127.0.0.1:1456/mcp/oauth/callback";
 
@@ -124,7 +136,7 @@ class NewlineMessageParser {
 }
 
 class StdioMcpClient implements McpServerClient {
-	private readonly registration: McpServerRegistration;
+	private registration: McpServerRegistration;
 	private process?: ChildProcessWithoutNullStreams;
 	private nextRequestId = 1;
 	private readonly pending = new Map<
@@ -172,7 +184,7 @@ class StdioMcpClient implements McpServerClient {
 							version: "0.0.0",
 						},
 					},
-					MCP_CONNECT_TIMEOUT_MS,
+					this.resolveTimeoutMs(MCP_CONNECT_TIMEOUT_MS),
 				);
 				this.notify("notifications/initialized");
 				this.connected = true;
@@ -203,7 +215,11 @@ class StdioMcpClient implements McpServerClient {
 	}
 
 	async listTools(): Promise<readonly McpToolDescriptor[]> {
-		const result = (await this.request("tools/list")) as {
+		const result = (await this.request(
+			"tools/list",
+			undefined,
+			this.resolveTimeoutMs(MCP_REQUEST_TIMEOUT_MS),
+		)) as {
 			tools?: Array<{
 				name?: string;
 				description?: string;
@@ -234,10 +250,23 @@ class StdioMcpClient implements McpServerClient {
 		name: string;
 		arguments?: Record<string, unknown>;
 	}): Promise<McpToolCallResult> {
-		return this.request("tools/call", {
-			name: request.name,
-			arguments: request.arguments ?? {},
-		});
+		return this.request(
+			"tools/call",
+			{
+				name: request.name,
+				arguments: request.arguments ?? {},
+			},
+			this.resolveTimeoutMs(MCP_REQUEST_TIMEOUT_MS),
+		);
+	}
+
+	/** Per-server timeout in ms, falling back to `fallbackMs` when unset. */
+	private resolveTimeoutMs(fallbackMs: number): number {
+		return resolveMcpTimeoutMs(this.registration) ?? fallbackMs;
+	}
+
+	updateRegistration(registration: McpServerRegistration): void {
+		this.registration = registration;
 	}
 
 	private spawnProcess(protocolMode: StdioProtocolMode): void {
@@ -445,9 +474,14 @@ class SdkUrlMcpClient implements McpServerClient {
 	private authContext?: McpOAuthProviderContext;
 
 	constructor(
-		private readonly registration: McpServerRegistration,
+		private registration: McpServerRegistration,
 		private readonly options: DefaultMcpServerClientFactoryOptions,
 	) {}
+
+	/** Per-server timeout in ms, or undefined to use the SDK default. */
+	private timeoutMs(): number | undefined {
+		return resolveMcpTimeoutMs(this.registration);
+	}
 
 	async connect(): Promise<void> {
 		if (this.client) {
@@ -476,7 +510,11 @@ class SdkUrlMcpClient implements McpServerClient {
 				oauthProvider: authContext.provider,
 				fetch: this.options.fetch,
 			});
-			await client.connect(transport);
+			const connectOptions = this.timeoutMs();
+			await client.connect(
+				transport,
+				connectOptions !== undefined ? { timeout: connectOptions } : undefined,
+			);
 			await authContext.clearError();
 			this.client = client;
 		} catch (error) {
@@ -500,7 +538,11 @@ class SdkUrlMcpClient implements McpServerClient {
 	async listTools(): Promise<readonly McpToolDescriptor[]> {
 		const client = await this.ensureConnectedClient();
 		try {
-			const result = await client.listTools();
+			const timeout = this.timeoutMs();
+			const result = await client.listTools(
+				undefined,
+				timeout !== undefined ? { timeout } : undefined,
+			);
 			return result.tools.map((tool) => ({
 				name: tool.name,
 				description: tool.description,
@@ -522,13 +564,22 @@ class SdkUrlMcpClient implements McpServerClient {
 	}): Promise<McpToolCallResult> {
 		const client = await this.ensureConnectedClient();
 		try {
-			return await client.callTool({
-				name: request.name,
-				arguments: request.arguments ?? {},
-			});
+			const timeout = this.timeoutMs();
+			return await client.callTool(
+				{
+					name: request.name,
+					arguments: request.arguments ?? {},
+				},
+				undefined,
+				timeout !== undefined ? { timeout } : undefined,
+			);
 		} catch (error) {
 			return await this.handleOperationError(error);
 		}
+	}
+
+	updateRegistration(registration: McpServerRegistration): void {
+		this.registration = registration;
 	}
 
 	private async ensureConnectedClient(): Promise<Client> {

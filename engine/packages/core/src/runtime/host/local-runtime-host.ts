@@ -948,6 +948,22 @@ export class LocalRuntimeHost implements RuntimeHost {
 		return readPersistedMessagesFile(manifest?.messages_path);
 	}
 
+	/**
+	 * Reads the CURRENT in-memory transcript for a resident session (mid-turn
+	 * edits and tool results already appended), falling back to the persisted
+	 * message file when the session is not resident.
+	 */
+	async readLiveMessages(sessionId: string): Promise<LlmsProviders.Message[]> {
+		const target = sessionId.trim();
+		if (!target) return [];
+		const liveSession = this.sessions.get(target);
+		const messages = liveSession?.agent.getMessages();
+		if (messages && messages.length > 0) {
+			return messages;
+		}
+		return this.readSessionMessages(target);
+	}
+
 	async readSessionTree(sessionId: string): Promise<ReadSessionTreeResult> {
 		const target = sessionId.trim();
 		if (!target) return { messages: [] };

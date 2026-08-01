@@ -238,7 +238,12 @@ export {
 	safeJsonStringify,
 } from "./parse/json";
 export { type OmitUndefinedValues, omitUndefinedValues } from "./parse/object";
-export { getDefaultShell, getShellArgs } from "./parse/shell";
+export {
+	getDefaultShell,
+	getShellArgs,
+	getShellInvocation,
+	type ShellInvocation,
+} from "./parse/shell";
 export {
 	maskSecret,
 	sanitizeFileName,

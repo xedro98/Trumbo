@@ -1311,6 +1311,17 @@ export class HubRuntimeHost implements RuntimeHost {
 			: [];
 	}
 
+	/**
+	 * Hub-hosted sessions run inside the daemon, whose `session.messages` handler
+	 * already reads the live resident transcript — so live and persisted reads
+	 * collapse to the same remote command here.
+	 */
+	readLiveMessages(
+		sessionId: string,
+	): Promise<import("@trumbodev/llms").Message[]> {
+		return this.readSessionMessages(sessionId);
+	}
+
 	async dispatchHookEvent(_payload: HookEventPayload): Promise<void> {
 		await this.client.command("session.hook", { payload: _payload });
 	}

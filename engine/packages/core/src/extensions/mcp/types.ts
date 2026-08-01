@@ -77,6 +77,9 @@ export interface McpServerRegistration {
 	disabled?: boolean;
 	metadata?: Record<string, unknown>;
 	oauth?: McpServerOAuthState;
+	/** Per-server request timeout in SECONDS (migration from the VS Code UI /
+	 *  McpHub settings). Undefined = use the client's default timeouts. */
+	timeout?: number;
 }
 
 export interface McpServerSnapshot {
@@ -98,6 +101,12 @@ export interface McpServerClient {
 		arguments?: Record<string, unknown>;
 		context?: AgentToolContext;
 	}): Promise<McpToolCallResult>;
+	/**
+	 * Push a changed registration (e.g. a timeout-only config edit) to an already
+	 * connected client so request-time settings are honored WITHOUT a reconnect.
+	 * Per-server timeout is read live at request time from the registration.
+	 */
+	updateRegistration?(registration: McpServerRegistration): void;
 }
 
 export type McpServerClientFactory = (

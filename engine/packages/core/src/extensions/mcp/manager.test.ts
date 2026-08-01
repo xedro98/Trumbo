@@ -102,4 +102,42 @@ describe("InMemoryMcpManager", () => {
 			}),
 		).rejects.toThrow(/disabled/i);
 	});
+
+	it("pushes a timeout-only edit to a connected client without reconnecting", async () => {
+		const updateRegistration = vi.fn();
+		const connect = vi.fn(async () => {});
+		const disconnect = vi.fn(async () => {});
+		const client = createClient({ updateRegistration, connect, disconnect });
+		const manager = new InMemoryMcpManager({
+			clientFactory: async () => client,
+		});
+
+		await manager.registerServer({
+			name: "docs",
+			transport: { type: "streamableHttp", url: "https://mcp.example.test" },
+		});
+		await manager.listTools("docs"); // triggers connectState
+		expect(connect).toHaveBeenCalledTimes(1);
+
+		// Timeout-only edit → live update, no reconnect.
+		await manager.registerServer({
+			name: "docs",
+			transport: { type: "streamableHttp", url: "https://mcp.example.test" },
+			timeout: 30,
+		});
+		expect(updateRegistration).toHaveBeenCalledTimes(1);
+		expect(updateRegistration).toHaveBeenCalledWith(
+			expect.objectContaining({ name: "docs", timeout: 30 }),
+		);
+		expect(disconnect).not.toHaveBeenCalled();
+		expect(connect).toHaveBeenCalledTimes(1);
+
+		// Transport change still tears the connection down.
+		await manager.registerServer({
+			name: "docs",
+			transport: { type: "streamableHttp", url: "https://other.example.test" },
+			timeout: 30,
+		});
+		expect(disconnect).toHaveBeenCalled();
+	});
 });

@@ -11,6 +11,24 @@
 
 
 
+## 3.8.0
+
+Subscription spend controls + free model tier + per-server MCP timeouts.
+
+### Added
+- **Buy credits** action in the account dialog (opens `/billing`) — the
+  usage-based top-up path alongside plan upgrades.
+- Plugin-loaded chat commands now forward the CLI telemetry service
+  (`PluginSetupContext.telemetry`).
+
+### Changed
+- Ships on SDK 0.0.62 (per-server MCP timeouts, `readLiveMessages`,
+  `forkSession`, stdin-based shell scripting).
+
+### Fixed
+- Billing/subscription handoff URLs now point at `/billing` instead of stale
+  `/dashboard/...` paths.
+
 ## 3.7.1
 
 Apps domain switched to trumbo.app. Folded desktop app into the monorepo.

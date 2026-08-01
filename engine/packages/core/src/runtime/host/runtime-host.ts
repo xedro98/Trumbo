@@ -309,6 +309,13 @@ export interface RuntimeHost {
 		},
 	): Promise<{ updated: boolean }>;
 	readSessionMessages(sessionId: string): Promise<LlmsProviders.Message[]>;
+	/**
+	 * Read a session's CURRENT in-memory transcript (mid-turn edits, tool
+	 * results already appended) with a fallback to the persisted file when the
+	 * session is not resident. Optional for backward compatibility — hosts that
+	 * do not implement it fall back to `readSessionMessages`.
+	 */
+	readLiveMessages?(sessionId: string): Promise<LlmsProviders.Message[]>;
 	dispatchHookEvent(payload: HookEventPayload): Promise<void>;
 	subscribe(
 		listener: (event: CoreSessionEvent) => void,

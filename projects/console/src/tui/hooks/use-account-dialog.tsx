@@ -65,6 +65,15 @@ export function useAccountDialog(opts: {
 			refocusTextarea();
 			return;
 		}
+		if (action === "buy-credits") {
+			const appUrl = getTrumboEnvironmentConfig().appBaseUrl;
+			if (appUrl && !appUrl.startsWith("http://0.0.0.0")) {
+				const billingUrl = `${appUrl.replace(/\/$/, "")}/billing`;
+				await open(billingUrl, { wait: false }).catch(() => {});
+			}
+			refocusTextarea();
+			return;
+		}
 		if (action === "login") {
 			const saved = await dialog.choice<boolean>({
 				style: { maxHeight: termHeight - 2 },

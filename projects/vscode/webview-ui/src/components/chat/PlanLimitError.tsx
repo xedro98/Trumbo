@@ -37,11 +37,12 @@ function formatDuration(seconds: number): string {
 	return `${Math.max(1, Math.floor(seconds))}s`
 }
 
-// Subscription/rate-limit error card. Replaces the legacy "Buy Credits" card:
-// Trumbo has no credit balance, only per-seat subscription plans (Pro/Max/Ultra)
-// with 5h / daily / weekly request caps. Shown when the platform returns
-// `subscription_required` (403), `rate_limit_exceeded` (429), or a legacy
-// `insufficient_credits` shape that we map to "upgrade your plan".
+// Subscription/rate-limit error card. Trumbo subscriptions are per-seat plans
+// (Pro/Max/Ultra) with 5h / daily / weekly request caps, shown when the platform
+// returns `subscription_required` (403), `rate_limit_exceeded` (429), or a
+// legacy `insufficient_credits` shape that we map to "upgrade your plan".
+// Prepaid credits are the usage-based billing analogue — users can "top up"
+// (Buy credits) for metered/API-token traffic without changing plans.
 const PlanLimitError: React.FC<PlanLimitErrorProps> = ({
 	message,
 	window: windowName,
@@ -124,6 +125,16 @@ const PlanLimitError: React.FC<PlanLimitErrorProps> = ({
 				<VSCodeButtonLink className="w-full mb-2" href={fullUpgradeUrl}>
 					<span className="codicon codicon-arrow-up mr-[6px] text-[14px]" />
 					Upgrade Plan
+				</VSCodeButtonLink>
+			)}
+
+			{!hideUpgrade && (
+				<VSCodeButtonLink
+					className="w-full mb-2"
+					appearance="secondary"
+					href={baseUpgradeUrl}>
+					<span className="codicon codicon-credit-card mr-[6px] text-[14px]" />
+					Buy credits (usage-based)
 				</VSCodeButtonLink>
 			)}
 

@@ -14,6 +14,7 @@ export type AccountDialogAction =
 	| "change-model"
 	| "change-provider"
 	| "learn-more"
+	| "buy-credits"
 	| "login";
 
 type AccountView = "overview" | "organizations";
@@ -38,6 +39,7 @@ interface AccountAction {
 		| "change-account"
 		| "change-provider"
 		| "learn-more"
+		| "buy-credits"
 		| "login";
 	label: string;
 	description: string;
@@ -61,6 +63,13 @@ const LOADED_ACTIONS: AccountAction[] = [
 		id: "change-provider",
 		label: "Change provider",
 		description: "Open provider picker",
+		enabled: true,
+	},
+	{
+		id: "buy-credits",
+		label: "Buy credits",
+		description:
+			"Top up prepaid credits for usage-based traffic (opens billing)",
 		enabled: true,
 	},
 ];
@@ -358,6 +367,10 @@ export function AccountDialogContent(
 			}
 			if (action.id === "learn-more") {
 				resolve("learn-more");
+				return;
+			}
+			if (action.id === "buy-credits") {
+				resolve("buy-credits");
 				return;
 			}
 			if (action.id === "change-provider") {
