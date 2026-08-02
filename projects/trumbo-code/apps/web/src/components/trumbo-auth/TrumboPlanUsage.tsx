@@ -1,5 +1,6 @@
 import type { TrumboPlanRateLimitWindow, TrumboSubscription } from "@trumbo-code/contracts";
-import { BarChart3Icon, RefreshCwIcon } from "lucide-react";
+import { TRUMBO_PLATFORM_BILLING_URL } from "@trumbo-code/shared/trumboSubscription";
+import { BarChart3Icon, CreditCardIcon, RefreshCwIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 import { cn } from "../../lib/utils";
@@ -227,6 +228,20 @@ export function TrumboPlanUsagePanel() {
                 : "Usage data is unavailable right now. Try refreshing in a moment."}
             </p>
           )}
+        </div>
+
+        <div className="border-t border-border/60 px-4 py-3 sm:px-5">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full"
+            onClick={() => {
+              window.open(TRUMBO_PLATFORM_BILLING_URL, "_blank", "noopener,noreferrer");
+            }}
+          >
+            <CreditCardIcon className="mr-2 size-3.5" />
+            Buy credits (usage-based)
+          </Button>
         </div>
       </SettingsSection>
     </div>

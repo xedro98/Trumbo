@@ -24,6 +24,10 @@ export function createEcosystemEnvironmentAtoms<R, E>(
       label: "environment-data:platform:infrastructure",
       tag: WS_METHODS.platformGetInfrastructure,
     }),
+    platformGetAgent: createEnvironmentRpcQueryAtomFamily(runtime, {
+      label: "environment-data:platform:agent-detail",
+      tag: WS_METHODS.platformGetAgent,
+    }),
     scheduleCreate: createEnvironmentRpcCommand(runtime, {
       label: "environment-data:schedule:create",
       tag: WS_METHODS.scheduleCreate,
@@ -59,6 +63,22 @@ export function createEcosystemEnvironmentAtoms<R, E>(
     mcpStartOAuth: createEnvironmentRpcCommand(runtime, {
       label: "environment-data:mcp:oauth",
       tag: WS_METHODS.mcpStartOAuth,
+    }),
+    platformCreateAgent: createEnvironmentRpcCommand(runtime, {
+      label: "environment-data:platform:create-agent",
+      tag: WS_METHODS.platformCreateAgent,
+    }),
+    platformSendAgentMessage: createEnvironmentRpcCommand(runtime, {
+      label: "environment-data:platform:send-agent-message",
+      tag: WS_METHODS.platformSendAgentMessage,
+    }),
+    platformStopAgent: createEnvironmentRpcCommand(runtime, {
+      label: "environment-data:platform:stop-agent",
+      tag: WS_METHODS.platformStopAgent,
+    }),
+    platformDeleteAgent: createEnvironmentRpcCommand(runtime, {
+      label: "environment-data:platform:delete-agent",
+      tag: WS_METHODS.platformDeleteAgent,
     }),
   };
 }

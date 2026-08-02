@@ -131,6 +131,15 @@ import {
   ScheduleRecord,
   ScheduleStatsResult,
   PlatformInfrastructureResult,
+  PlatformCreateAgentInput,
+  PlatformCreateAgentResult,
+  PlatformAgentDetailInput,
+  PlatformAgentDetailResult,
+  PlatformSendAgentMessageInput,
+  PlatformSendAgentMessageResult,
+  PlatformAgentIdInput,
+  PlatformDeleteAgentResult,
+  PlatformStopAgentResult,
 } from "./platformEcosystem.ts";
 import {
   ServerConfigStreamEvent,
@@ -253,6 +262,11 @@ export const WS_METHODS = {
   mcpDeleteServer: PLATFORM_ECOSYSTEM_WS_METHODS.mcpDeleteServer,
   mcpStartOAuth: PLATFORM_ECOSYSTEM_WS_METHODS.mcpStartOAuth,
   platformGetInfrastructure: PLATFORM_ECOSYSTEM_WS_METHODS.platformGetInfrastructure,
+  platformCreateAgent: PLATFORM_ECOSYSTEM_WS_METHODS.platformCreateAgent,
+  platformGetAgent: PLATFORM_ECOSYSTEM_WS_METHODS.platformGetAgent,
+  platformSendAgentMessage: PLATFORM_ECOSYSTEM_WS_METHODS.platformSendAgentMessage,
+  platformStopAgent: PLATFORM_ECOSYSTEM_WS_METHODS.platformStopAgent,
+  platformDeleteAgent: PLATFORM_ECOSYSTEM_WS_METHODS.platformDeleteAgent,
 
   // Source control methods
   sourceControlLookupRepository: "sourceControl.lookupRepository",
@@ -810,6 +824,36 @@ export const WsPlatformGetInfrastructureRpc = Rpc.make(WS_METHODS.platformGetInf
   error: Schema.Union([PlatformEcosystemError, EnvironmentAuthorizationError]),
 });
 
+export const WsPlatformCreateAgentRpc = Rpc.make(WS_METHODS.platformCreateAgent, {
+  payload: PlatformCreateAgentInput,
+  success: PlatformCreateAgentResult,
+  error: Schema.Union([PlatformEcosystemError, EnvironmentAuthorizationError]),
+});
+
+export const WsPlatformGetAgentRpc = Rpc.make(WS_METHODS.platformGetAgent, {
+  payload: PlatformAgentDetailInput,
+  success: PlatformAgentDetailResult,
+  error: Schema.Union([PlatformEcosystemError, EnvironmentAuthorizationError]),
+});
+
+export const WsPlatformSendAgentMessageRpc = Rpc.make(WS_METHODS.platformSendAgentMessage, {
+  payload: PlatformSendAgentMessageInput,
+  success: PlatformSendAgentMessageResult,
+  error: Schema.Union([PlatformEcosystemError, EnvironmentAuthorizationError]),
+});
+
+export const WsPlatformStopAgentRpc = Rpc.make(WS_METHODS.platformStopAgent, {
+  payload: PlatformAgentIdInput,
+  success: PlatformStopAgentResult,
+  error: Schema.Union([PlatformEcosystemError, EnvironmentAuthorizationError]),
+});
+
+export const WsPlatformDeleteAgentRpc = Rpc.make(WS_METHODS.platformDeleteAgent, {
+  payload: PlatformAgentIdInput,
+  success: PlatformDeleteAgentResult,
+  error: Schema.Union([PlatformEcosystemError, EnvironmentAuthorizationError]),
+});
+
 export const WsRpcGroup = RpcGroup.make(
   WsServerGetConfigRpc,
   WsServerRefreshProvidersRpc,
@@ -894,4 +938,9 @@ export const WsRpcGroup = RpcGroup.make(
   WsMcpDeleteServerRpc,
   WsMcpStartOAuthRpc,
   WsPlatformGetInfrastructureRpc,
+  WsPlatformCreateAgentRpc,
+  WsPlatformGetAgentRpc,
+  WsPlatformSendAgentMessageRpc,
+  WsPlatformStopAgentRpc,
+  WsPlatformDeleteAgentRpc,
 );

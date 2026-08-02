@@ -799,6 +799,13 @@ const make = Effect.gen(function* () {
       return;
     }
 
+    // Cloud threads are proxied to the Trumbo Cloud Agent (see ws.ts
+    // proxyCloudAgentTurn / runCloudTurnProxy) instead of the local provider,
+    // so skip spawning a local provider session for them.
+    if (thread.cloudAgentId) {
+      return;
+    }
+
     const message = thread.messages.find((entry) => entry.id === event.payload.messageId);
     if (!message || message.role !== "user") {
       yield* appendProviderFailureActivity({

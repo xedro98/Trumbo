@@ -8,12 +8,21 @@ import {
 	ArrowUpIcon,
 	ChevronsDownUpIcon,
 	ChevronsUpDownIcon,
+	CopyIcon,
 	DownloadIcon,
+	ExternalLinkIcon,
 	StarIcon,
 	TrashIcon,
 } from "lucide-react"
 import { memo, useCallback, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
+import {
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuSeparator,
+	ContextMenuTrigger,
+} from "@/components/ui/context-menu"
 import { cn } from "@/lib/utils"
 import { TaskServiceClient } from "@/services/grpc-client"
 import { formatLargeNumber, formatSize } from "@/utils/format"
@@ -75,8 +84,17 @@ const HistoryViewItem = ({
 			.replace(" at", ",")
 	}, [])
 
+	const handleCopyTask = useCallback(() => {
+		const text = item.task ?? ""
+		if (text) {
+			navigator.clipboard?.writeText(text).catch(() => {})
+		}
+	}, [item.task])
+
 	return (
-		<div className="history-item cursor-pointer flex group mb-1 hover:bg-list-hover border-b border-accent/10" key={item.id}>
+		<ContextMenu>
+			<ContextMenuTrigger asChild>
+				<div className="history-item cursor-pointer flex group mb-1 hover:bg-list-hover border-b border-accent/10" key={item.id}>
 			<VSCodeCheckbox
 				checked={selectedItems.includes(item.id)}
 				className="pl-3 pr-1 py-auto self-start mt-3"
@@ -221,7 +239,42 @@ const HistoryViewItem = ({
 					</Button>
 				)}
 			</div>
-		</div>
+			</div>
+			</ContextMenuTrigger>
+			<ContextMenuContent>
+				<ContextMenuItem onSelect={() => handleShowTaskWithId(item.id)}>
+					<ExternalLinkIcon />
+					Open task
+				</ContextMenuItem>
+				<ContextMenuItem onSelect={handleCopyTask}>
+					<CopyIcon />
+					Copy task text
+				</ContextMenuItem>
+				<ContextMenuItem
+					disabled={pendingFavoriteToggles[item.id] !== undefined}
+					onSelect={() => toggleFavorite(item.id, isFavoritedItem)}>
+					<StarIcon className={cn({ "fill-current": isFavoritedItem })} />
+					{isFavoritedItem ? "Remove from favorites" : "Add to favorites"}
+				</ContextMenuItem>
+				<ContextMenuItem
+					onSelect={() =>
+						TaskServiceClient.exportTaskWithId(StringRequest.create({ value: item.id })).catch((err) =>
+							console.error("Failed to export task:", err),
+						)
+					}>
+					<DownloadIcon />
+					Export task
+				</ContextMenuItem>
+				<ContextMenuSeparator />
+				<ContextMenuItem
+					variant="destructive"
+					disabled={isFavoritedItem}
+					onSelect={() => handleDeleteHistoryItem(item.id)}>
+					<TrashIcon />
+					Delete task
+				</ContextMenuItem>
+			</ContextMenuContent>
+		</ContextMenu>
 	)
 }
 

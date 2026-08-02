@@ -18,6 +18,7 @@ import {
   ProviderItemId,
   ThreadId,
   TrimmedNonEmptyString,
+  TrimmedString,
   TurnId,
 } from "./baseSchemas.ts";
 import { ProviderInstanceId } from "./providerInstance.ts";
@@ -352,6 +353,7 @@ export const OrchestrationThread = Schema.Struct({
   ),
   branch: Schema.NullOr(TrimmedNonEmptyString),
   worktreePath: Schema.NullOr(TrimmedNonEmptyString),
+  cloudAgentId: Schema.optionalKey(TrimmedString),
   latestTurn: Schema.NullOr(OrchestrationLatestTurn),
   createdAt: IsoDateTime,
   updatedAt: IsoDateTime,
@@ -398,6 +400,7 @@ export const OrchestrationThreadShell = Schema.Struct({
   ),
   branch: Schema.NullOr(TrimmedNonEmptyString),
   worktreePath: Schema.NullOr(TrimmedNonEmptyString),
+  cloudAgentId: Schema.optionalKey(TrimmedString),
   latestTurn: Schema.NullOr(OrchestrationLatestTurn),
   createdAt: IsoDateTime,
   updatedAt: IsoDateTime,
@@ -524,6 +527,14 @@ const ThreadCreateCommand = Schema.Struct({
   ),
   branch: Schema.NullOr(TrimmedNonEmptyString),
   worktreePath: Schema.NullOr(TrimmedNonEmptyString),
+  /** When set, the thread is backed by a Trumbo Cloud Agent (platform.trumbo.dev)
+   *  with its own sandbox. Turn execution is proxied to the cloud agent instead
+   *  of the local provider process, so the agent keeps working after the desktop
+   *  app closes. Absent for ordinary local threads. */
+  cloudAgentId: Schema.optionalKey(TrimmedString),
+  /** When true, the server creates a cloud agent + clones the project repo
+   *  into a sandbox before persisting the thread. */
+  cloud: Schema.optionalKey(Schema.Boolean),
   createdAt: IsoDateTime,
 });
 
@@ -554,6 +565,8 @@ const ThreadMetaUpdateCommand = Schema.Struct({
   branch: Schema.optional(Schema.NullOr(TrimmedNonEmptyString)),
   expectedBranch: Schema.optional(Schema.NullOr(TrimmedNonEmptyString)),
   worktreePath: Schema.optional(Schema.NullOr(TrimmedNonEmptyString)),
+  /** When set, marks the thread as favorited (IsoDateTime) / unfavorited (null). */
+  favoritedAt: Schema.optional(Schema.NullOr(IsoDateTime)),
 });
 
 const ThreadRuntimeModeSetCommand = Schema.Struct({
@@ -580,6 +593,13 @@ const ThreadTurnStartBootstrapCreateThread = Schema.Struct({
   interactionMode: ProviderInteractionMode,
   branch: Schema.NullOr(TrimmedNonEmptyString),
   worktreePath: Schema.NullOr(TrimmedNonEmptyString),
+  /** When set, the thread is backed by a Trumbo Cloud Agent with its own
+   *  sandbox. The server clones the project into the sandbox and proxies
+   *  turns to the cloud agent. */
+  cloudAgentId: Schema.optionalKey(TrimmedString),
+  /** When true, the server creates a cloud agent + clones the project repo
+   *  into a sandbox at bootstrap time, then links the thread via cloudAgentId. */
+  cloud: Schema.optionalKey(Schema.Boolean),
   createdAt: IsoDateTime,
 });
 
@@ -869,6 +889,7 @@ export const ThreadCreatedPayload = Schema.Struct({
   ),
   branch: Schema.NullOr(TrimmedNonEmptyString),
   worktreePath: Schema.NullOr(TrimmedNonEmptyString),
+  cloudAgentId: Schema.optionalKey(TrimmedString),
   createdAt: IsoDateTime,
   updatedAt: IsoDateTime,
 });
@@ -895,6 +916,7 @@ export const ThreadMetaUpdatedPayload = Schema.Struct({
   modelSelection: Schema.optional(ModelSelection),
   branch: Schema.optional(Schema.NullOr(TrimmedNonEmptyString)),
   worktreePath: Schema.optional(Schema.NullOr(TrimmedNonEmptyString)),
+  favoritedAt: Schema.optional(Schema.NullOr(IsoDateTime)),
   updatedAt: IsoDateTime,
 });
 

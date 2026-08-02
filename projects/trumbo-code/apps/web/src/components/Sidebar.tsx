@@ -741,6 +741,7 @@ export const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThr
               </TooltipPopup>
             </Tooltip>
           )}
+
         </div>
         <div className="ml-auto flex shrink-0 items-center gap-1.5">
           {discoveredPorts.length > 0 && (

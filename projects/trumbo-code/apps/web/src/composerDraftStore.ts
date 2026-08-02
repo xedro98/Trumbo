@@ -57,7 +57,7 @@ const isProviderDriverKind = Schema.is(ProviderDriverKind);
 const isReviewCommentContext = Schema.is(ReviewCommentContextSchema);
 
 export const COMPOSER_DRAFT_STORAGE_KEY = "trumbo-code:composer-drafts:v1";
-const COMPOSER_DRAFT_STORAGE_VERSION = 8;
+const COMPOSER_DRAFT_STORAGE_VERSION = 9;
 const DraftThreadEnvModeSchema = Schema.Literals(["local", "worktree"]);
 export type DraftThreadEnvMode = typeof DraftThreadEnvModeSchema.Type;
 
@@ -216,6 +216,7 @@ const PersistedDraftThreadState = Schema.Struct({
   worktreePath: Schema.NullOr(Schema.String),
   envMode: DraftThreadEnvModeSchema,
   startFromOrigin: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(false))),
+  cloud: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(false))),
   promotedTo: Schema.optionalKey(
     Schema.NullOr(
       Schema.Struct({
@@ -295,6 +296,9 @@ export interface DraftSessionState {
   worktreePath: string | null;
   envMode: DraftThreadEnvMode;
   startFromOrigin: boolean;
+  /** When true, the thread is backed by a Trumbo Cloud Agent with its own
+   *  sandbox. The server clones the project into the sandbox on first send. */
+  cloud: boolean;
   promotedTo?: ScopedThreadRef | null;
 }
 
@@ -359,6 +363,7 @@ interface ComposerDraftStoreState {
       startFromOrigin?: boolean;
       runtimeMode?: RuntimeMode;
       interactionMode?: ProviderInteractionMode;
+      cloud?: boolean;
     },
   ) => void;
   /** Creates or updates the draft session tracked for a concrete project ref. */
@@ -374,6 +379,7 @@ interface ComposerDraftStoreState {
       startFromOrigin?: boolean;
       runtimeMode?: RuntimeMode;
       interactionMode?: ProviderInteractionMode;
+      cloud?: boolean;
     },
   ) => void;
   /** Updates mutable draft-session metadata without touching composer content. */
@@ -388,6 +394,7 @@ interface ComposerDraftStoreState {
       startFromOrigin?: boolean;
       runtimeMode?: RuntimeMode;
       interactionMode?: ProviderInteractionMode;
+      cloud?: boolean;
     },
   ) => void;
   clearProjectDraftThreadId: (projectRef: ScopedProjectRef) => void;
@@ -1322,6 +1329,7 @@ function createDraftThreadState(
     startFromOrigin?: boolean;
     runtimeMode?: RuntimeMode;
     interactionMode?: ProviderInteractionMode;
+    cloud?: boolean;
   },
 ): DraftThreadState {
   const projectChanged =
@@ -1365,6 +1373,7 @@ function createDraftThreadState(
           ? "local"
           : (existingThread?.envMode ?? "local")),
     startFromOrigin: nextStartFromOrigin,
+    cloud: options?.cloud ?? existingThread?.cloud ?? false,
     promotedTo: null,
   };
 }
@@ -1540,6 +1549,7 @@ function normalizePersistedDraftThreads(
         worktreePath: normalizedWorktreePath,
         envMode: normalizeDraftThreadEnvMode(candidateDraftThread.envMode, normalizedWorktreePath),
         startFromOrigin,
+        cloud: candidateDraftThread.cloud === true,
         promotedTo,
       };
     }
@@ -1586,6 +1596,7 @@ function normalizePersistedDraftThreads(
           worktreePath: null,
           envMode: "local",
           startFromOrigin: false,
+          cloud: false,
           promotedTo: null,
         };
       } else if (
@@ -2157,6 +2168,7 @@ function toHydratedDraftThreadState(
     worktreePath: persistedDraftThread.worktreePath,
     envMode: persistedDraftThread.envMode,
     startFromOrigin: persistedDraftThread.startFromOrigin,
+    cloud: persistedDraftThread.cloud,
     promotedTo: persistedDraftThread.promotedTo
       ? scopeThreadRef(
           persistedDraftThread.promotedTo.environmentId as EnvironmentId,
@@ -2369,6 +2381,7 @@ const composerDraftStore = create<ComposerDraftStoreState>()(
                     ? "local"
                     : (existing.envMode ?? "local")),
               startFromOrigin: nextStartFromOrigin,
+              cloud: options.cloud ?? existing.cloud,
               promotedTo: existing.promotedTo ?? null,
             };
             const isUnchanged =
@@ -2382,6 +2395,7 @@ const composerDraftStore = create<ComposerDraftStoreState>()(
               nextDraftThread.worktreePath === existing.worktreePath &&
               nextDraftThread.envMode === existing.envMode &&
               nextDraftThread.startFromOrigin === existing.startFromOrigin &&
+              nextDraftThread.cloud === existing.cloud &&
               scopedThreadRefsEqual(nextDraftThread.promotedTo, existing.promotedTo);
             if (isUnchanged) {
               return state;

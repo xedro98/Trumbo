@@ -282,6 +282,7 @@ export function projectEvent(
             interactionMode: payload.interactionMode,
             branch: payload.branch,
             worktreePath: payload.worktreePath,
+            ...(payload.cloudAgentId !== undefined ? { cloudAgentId: payload.cloudAgentId } : {}),
             latestTurn: null,
             createdAt: payload.createdAt,
             updatedAt: payload.updatedAt,

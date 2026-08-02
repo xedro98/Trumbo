@@ -14,7 +14,7 @@ import {
   PlusIcon,
   SearchIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { useNavigate, useParams } from "@tanstack/react-router";
 
 import { openCommandPalette } from "~/commandPaletteBus";
@@ -36,6 +36,17 @@ import { resolveThreadStatusPill } from "~/components/Sidebar.logic";
 import { Dotm3x3_19 } from "~/components/ui/dotm-3x3-19";
 import { Button } from "~/components/ui/button";
 import { Menu, MenuItem, MenuPopup, MenuSeparator, MenuTrigger } from "~/components/ui/menu";
+import type { ContextMenuItem } from "@trumbo-code/contracts";
+import {
+  isAtomCommandInterrupted,
+  settlePromise,
+  squashAtomCommandFailure,
+} from "@trumbo-code/client-runtime/state/runtime";
+import { readLocalApi } from "~/localApi";
+import { useAtomCommand } from "~/state/use-atom-command";
+import { threadEnvironment } from "~/state/threads";
+import { useCopyToClipboard } from "~/hooks/useCopyToClipboard";
+import { stackedThreadToast, toastManager } from "~/components/ui/toast";
 
 function representativeProjectMember(project: SidebarProjectSnapshot) {
   return project.memberProjects[0] ?? project;
@@ -331,6 +342,7 @@ function ThreadCard({
   owningProject,
   onNavigate,
   onTogglePin,
+  onContextMenu,
 }: {
   readonly thread: SidebarThreadSummary;
   readonly isCurrent: boolean;
@@ -339,6 +351,7 @@ function ThreadCard({
   readonly owningProject: SidebarProjectSnapshot | null;
   readonly onNavigate: (thread: SidebarThreadSummary) => void;
   readonly onTogglePin: () => void;
+  readonly onContextMenu: (event: ReactMouseEvent) => void;
 }) {
   const threadKey = scopedThreadKey(scopeThreadRef(thread.environmentId, thread.id));
   const running = isThreadRunning(thread);
@@ -352,6 +365,7 @@ function ThreadCard({
     <button
       type="button"
       onClick={() => onNavigate(thread)}
+      onContextMenu={onContextMenu}
       data-testid={`project-sidebar-thread-${threadKey}`}
       data-active={isCurrent ? "true" : undefined}
       className={cn(
@@ -649,6 +663,148 @@ export function ProjectSidebar({ className }: { readonly className?: string }) {
     });
   }, []);
 
+  // --- Thread context menu (right-click) -------------------------------
+  const archiveThread = useAtomCommand(threadEnvironment.archive, { reportFailure: false });
+  const interruptThreadTurn = useAtomCommand(threadEnvironment.interruptTurn, {
+    reportFailure: false,
+  });
+  const appSettingsConfirmThreadArchive = useClientSettings<boolean>(
+    (settings) => settings.confirmThreadArchive,
+  );
+  const { copyToClipboard: copyThreadIdToClipboard } = useCopyToClipboard<{ threadId: string }>({
+    onCopy: (ctx) => {
+      toastManager.add({ type: "success", title: "Thread ID copied", description: ctx.threadId });
+    },
+    onError: (error) => {
+      toastManager.add(
+        stackedThreadToast({
+          type: "error",
+          title: "Failed to copy thread ID",
+          description: error instanceof Error ? error.message : "An error occurred.",
+        }),
+      );
+    },
+  });
+  const { copyToClipboard: copyPathToClipboard } = useCopyToClipboard<{ path: string }>({
+    onCopy: (ctx) => {
+      toastManager.add({ type: "success", title: "Path copied", description: ctx.path });
+    },
+    onError: (error) => {
+      toastManager.add(
+        stackedThreadToast({
+          type: "error",
+          title: "Failed to copy path",
+          description: error instanceof Error ? error.message : "An error occurred.",
+        }),
+      );
+    },
+  });
+
+  const handleThreadContextMenu = useCallback(
+    async (
+      thread: SidebarThreadSummary,
+      owningProject: SidebarProjectSnapshot | null,
+      isPinned: boolean,
+      event: ReactMouseEvent,
+    ) => {
+      event.preventDefault();
+      const api = readLocalApi();
+      if (!api) return;
+      const threadRef = scopeThreadRef(thread.environmentId, thread.id);
+      const threadKey = scopedThreadKey(threadRef);
+      const workspacePath = owningProject?.workspaceRoot ?? null;
+
+      const isRunning = isThreadRunning(thread);
+      const items: ContextMenuItem<string>[] = [
+        { id: "toggle-pin", label: isPinned ? "Unpin thread" : "Pin thread" },
+        { id: "archive", label: "Archive" },
+        ...(isRunning ? [{ id: "force-stop", label: "Force stop" }] : []),
+        { id: "copy-path", label: "Copy Path" },
+        { id: "copy-thread-id", label: "Copy Thread ID" },
+      ];
+
+      const clicked = await api.contextMenu.show(items, {
+        x: event.clientX,
+        y: event.clientY,
+      });
+
+      if (clicked === "toggle-pin") {
+        togglePinThread(threadKey);
+        return;
+      }
+      if (clicked === "archive") {
+        if (appSettingsConfirmThreadArchive) {
+          const confirmed = await api.dialogs.confirm(`Archive thread "${thread.title}"?`);
+          if (!confirmed) return;
+        }
+        const result = await settlePromise(() =>
+          archiveThread({ environmentId: thread.environmentId, input: { threadId: thread.id } }),
+        );
+        if (result._tag === "Failure" && !isAtomCommandInterrupted(result)) {
+          const error = squashAtomCommandFailure(result);
+          toastManager.add(
+            stackedThreadToast({
+              type: "error",
+              title: "Failed to archive thread",
+              description: error instanceof Error ? error.message : "An error occurred.",
+            }),
+          );
+        }
+        return;
+      }
+      if (clicked === "copy-path") {
+        if (!workspacePath) {
+          toastManager.add(
+            stackedThreadToast({
+              type: "error",
+              title: "Path unavailable",
+              description: "This thread does not have a workspace path to copy.",
+            }),
+          );
+          return;
+        }
+        copyPathToClipboard(workspacePath, { path: workspacePath });
+        return;
+      }
+      if (clicked === "copy-thread-id") {
+        copyThreadIdToClipboard(thread.id, { threadId: thread.id });
+        return;
+      }
+      if (clicked === "force-stop") {
+        const runningTurnId =
+          thread.session?.status === "running" ? thread.session.activeTurnId : null;
+        const result = await settlePromise(() =>
+          interruptThreadTurn({
+            environmentId: thread.environmentId,
+            input: {
+              threadId: thread.id,
+              ...(runningTurnId !== null ? { turnId: runningTurnId } : {}),
+            },
+          }),
+        );
+        if (result._tag === "Failure" && !isAtomCommandInterrupted(result)) {
+          const error = squashAtomCommandFailure(result);
+          toastManager.add(
+            stackedThreadToast({
+              type: "error",
+              title: "Failed to stop thread",
+              description: error instanceof Error ? error.message : "An error occurred.",
+            }),
+          );
+        }
+        return;
+      }
+    },
+    [
+      appSettingsConfirmThreadArchive,
+      archiveThread,
+      copyPathToClipboard,
+      copyThreadIdToClipboard,
+      interruptThreadTurn,
+      togglePinThread,
+    ],
+  );
+
   // --- Keyboard navigation (ArrowUp/ArrowDown to move through threads) ---
   const [keyboardIndex, setKeyboardIndex] = useState<number | null>(null);
 
@@ -799,6 +955,14 @@ export function ProjectSidebar({ className }: { readonly className?: string }) {
                           isCurrent={isCurrent}
                           isPinned={pinnedThreads.has(threadKey)}
                           onTogglePin={() => togglePinThread(threadKey)}
+                          onContextMenu={(event) =>
+                            void handleThreadContextMenu(
+                              thread,
+                              owningProject,
+                              pinnedThreads.has(threadKey),
+                              event,
+                            )
+                          }
                           isKeyboardFocused={(() => {
                             let fi = 0;
                             for (const b of TIMELINE_BUCKET_ORDER) {

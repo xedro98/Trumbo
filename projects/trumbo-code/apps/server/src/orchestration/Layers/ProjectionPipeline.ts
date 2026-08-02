@@ -612,6 +612,7 @@ const makeOrchestrationProjectionPipeline = Effect.fn("makeOrchestrationProjecti
             pendingUserInputCount: 0,
             hasActionableProposedPlan: 0,
             deletedAt: null,
+            cloudAgentId: event.payload.cloudAgentId ?? null,
           });
           return;
 
@@ -661,6 +662,9 @@ const makeOrchestrationProjectionPipeline = Effect.fn("makeOrchestrationProjecti
             ...(event.payload.branch !== undefined ? { branch: event.payload.branch } : {}),
             ...(event.payload.worktreePath !== undefined
               ? { worktreePath: event.payload.worktreePath }
+              : {}),
+            ...(event.payload.favoritedAt !== undefined
+              ? { favoritedAt: event.payload.favoritedAt }
               : {}),
             updatedAt: event.payload.updatedAt,
           });

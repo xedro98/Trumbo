@@ -42,6 +42,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuSeparator,
+	ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
@@ -918,10 +925,14 @@ function SessionsView({
 						const isEditing = editingSessionId === session.sessionId;
 						const title = session.title || shortId(session.sessionId);
 						return (
-							<div
-								className="grid min-h-14 w-full grid-cols-[minmax(12rem,1.35fr)_minmax(7rem,0.85fr)_minmax(10rem,1.1fr)_5rem_5rem_4.5rem_5.5rem_2rem] items-center gap-x-4 border-b px-4 py-3 text-left text-[15px] transition-colors hover:bg-accent/40"
-								key={session.sessionId}
-							>
+							<ContextMenu>
+								<ContextMenuTrigger
+									render={
+										<div
+											className="grid min-h-14 w-full grid-cols-[minmax(12rem,1.35fr)_minmax(7rem,0.85fr)_minmax(10rem,1.1fr)_5rem_5rem_4.5rem_5.5rem_2rem] items-center gap-x-4 border-b px-4 py-3 text-left text-[15px] transition-colors hover:bg-accent/40"
+										/>
+									}
+								>
 								{isEditing ? (
 									<form
 										className="col-span-7 grid grid-cols-[minmax(12rem,1.35fr)_minmax(7rem,0.85fr)_minmax(10rem,1.1fr)_5rem_5rem_4.5rem_5.5rem] items-center gap-x-4"
@@ -1051,7 +1062,36 @@ function SessionsView({
 										</DropdownMenuItem>
 									</DropdownMenuContent>
 								</DropdownMenu>
-							</div>
+								<ContextMenuContent>
+									<ContextMenuItem
+										onClick={() => onOpenSession(session.sessionId)}
+									>
+										<MessageSquareIcon className="size-4" />
+										Open
+									</ContextMenuItem>
+									<ContextMenuItem
+										onClick={(event) => {
+											event.stopPropagation();
+											startRenameSession(session);
+										}}
+									>
+										<PencilIcon className="size-4" />
+										Rename
+									</ContextMenuItem>
+									<ContextMenuSeparator />
+									<ContextMenuItem
+										className="text-destructive"
+										onClick={(event) => {
+											event.stopPropagation();
+											setDeleteSessionCandidate(session);
+										}}
+									>
+										<Trash2Icon className="size-4" />
+										Delete
+									</ContextMenuItem>
+								</ContextMenuContent>
+							</ContextMenuTrigger>
+							</ContextMenu>
 						);
 					})}
 				</div>

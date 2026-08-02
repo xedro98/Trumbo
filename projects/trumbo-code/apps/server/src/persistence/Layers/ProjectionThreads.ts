@@ -47,7 +47,9 @@ const makeProjectionThreadRepository = Effect.gen(function* () {
           pending_approval_count,
           pending_user_input_count,
           has_actionable_proposed_plan,
-          deleted_at
+          deleted_at,
+          favorited_at,
+          cloud_agent_id
         )
         VALUES (
           ${row.threadId},
@@ -66,7 +68,9 @@ const makeProjectionThreadRepository = Effect.gen(function* () {
           ${row.pendingApprovalCount},
           ${row.pendingUserInputCount},
           ${row.hasActionableProposedPlan},
-          ${row.deletedAt}
+          ${row.deletedAt},
+          ${row.favoritedAt},
+          ${row.cloudAgentId}
         )
         ON CONFLICT (thread_id)
         DO UPDATE SET
@@ -85,7 +89,9 @@ const makeProjectionThreadRepository = Effect.gen(function* () {
           pending_approval_count = excluded.pending_approval_count,
           pending_user_input_count = excluded.pending_user_input_count,
           has_actionable_proposed_plan = excluded.has_actionable_proposed_plan,
-          deleted_at = excluded.deleted_at
+          deleted_at = excluded.deleted_at,
+          favorited_at = excluded.favorited_at,
+          cloud_agent_id = excluded.cloud_agent_id
       `,
   });
 
@@ -111,7 +117,9 @@ const makeProjectionThreadRepository = Effect.gen(function* () {
           pending_approval_count AS "pendingApprovalCount",
           pending_user_input_count AS "pendingUserInputCount",
           has_actionable_proposed_plan AS "hasActionableProposedPlan",
-          deleted_at AS "deletedAt"
+          deleted_at AS "deletedAt",
+          favorited_at AS "favoritedAt",
+          cloud_agent_id AS "cloudAgentId"
         FROM projection_threads
         WHERE thread_id = ${threadId}
       `,
@@ -139,7 +147,9 @@ const makeProjectionThreadRepository = Effect.gen(function* () {
           pending_approval_count AS "pendingApprovalCount",
           pending_user_input_count AS "pendingUserInputCount",
           has_actionable_proposed_plan AS "hasActionableProposedPlan",
-          deleted_at AS "deletedAt"
+          deleted_at AS "deletedAt",
+          favorited_at AS "favoritedAt",
+          cloud_agent_id AS "cloudAgentId"
         FROM projection_threads
         WHERE project_id = ${projectId}
         ORDER BY created_at ASC, thread_id ASC

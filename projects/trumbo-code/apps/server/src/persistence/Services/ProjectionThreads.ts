@@ -41,6 +41,14 @@ export const ProjectionThread = Schema.Struct({
   pendingUserInputCount: NonNegativeInt,
   hasActionableProposedPlan: NonNegativeInt,
   deletedAt: Schema.NullOr(IsoDateTime),
+  /** When set, the thread is bookmarked at the top of the sidebar
+   *  (IsoDateTime of the favorite). Optional so SELECT sites that don't
+   *  project the column don't fail decoding. */
+  favoritedAt: Schema.optionalKey(Schema.NullOr(IsoDateTime)),
+  /** When set, the thread is backed by a Trumbo Cloud Agent with its own
+   *  sandbox; turn execution is proxied to the cloud agent. Optional so that
+   *  SELECT sites that don't project the column don't fail decoding. */
+  cloudAgentId: Schema.optionalKey(Schema.NullOr(Schema.String)),
 });
 export type ProjectionThread = typeof ProjectionThread.Type;
 

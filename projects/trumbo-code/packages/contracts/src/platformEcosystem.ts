@@ -192,6 +192,95 @@ export const PlatformInfrastructureResult = Schema.Struct({
 });
 export type PlatformInfrastructureResult = typeof PlatformInfrastructureResult.Type;
 
+// --- Cloud agent threads (create / detail / message / delete) ------------
+// These mirror the platform.trumbo.dev REST API at /api/v1/agents and let the
+// desktop app spawn a cloud-hosted agent with its own sandbox. The agent keeps
+// running after the desktop app closes; teammates in the same org can reopen
+// the same thread.
+
+export const PlatformAgentKind = Schema.Literals(["chat", "engineering"]);
+export type PlatformAgentKind = typeof PlatformAgentKind.Type;
+
+export const PlatformCreateAgentInput = Schema.Struct({
+  name: Schema.optionalKey(TrimmedString),
+  model: Schema.optionalKey(TrimmedString),
+  prompt: TrimmedNonEmptyString,
+  /** Connected platform repo id for an engineering run. When omitted, a
+   *  chat-only cloud agent is created (no sandbox clone). */
+  repoId: Schema.optionalKey(TrimmedString),
+  kind: Schema.optionalKey(PlatformAgentKind),
+});
+export type PlatformCreateAgentInput = typeof PlatformCreateAgentInput.Type;
+
+export const PlatformCreateAgentResult = Schema.Struct({
+  agentId: TrimmedNonEmptyString,
+  name: TrimmedString,
+  model: TrimmedString,
+  status: TrimmedString,
+  kind: TrimmedString,
+  doName: TrimmedString,
+  websocketUrl: TrimmedString,
+  needsProvision: Schema.optionalKey(Schema.Boolean),
+  sandboxId: Schema.optionalKey(TrimmedString),
+  branch: Schema.optionalKey(TrimmedString),
+  repoId: Schema.optionalKey(TrimmedString),
+});
+export type PlatformCreateAgentResult = typeof PlatformCreateAgentResult.Type;
+
+export const PlatformAgentMessage = Schema.Struct({
+  role: Schema.Literals(["user", "assistant", "system", "tool"]),
+  content: Schema.String,
+  /** Stable id the platform assigns (may be absent for streaming deltas). */
+  id: Schema.optionalKey(Schema.String),
+});
+export type PlatformAgentMessage = typeof PlatformAgentMessage.Type;
+
+export const PlatformAgentDetailInput = Schema.Struct({
+  agentId: TrimmedNonEmptyString,
+});
+export type PlatformAgentDetailInput = typeof PlatformAgentDetailInput.Type;
+
+export const PlatformAgentDetailResult = Schema.Struct({
+  agentId: TrimmedNonEmptyString,
+  status: TrimmedString,
+  model: Schema.optionalKey(TrimmedString),
+  mode: Schema.optionalKey(TrimmedString),
+  sandboxId: Schema.optionalKey(TrimmedString),
+  branch: Schema.optionalKey(TrimmedString),
+  msUsedRaw: Schema.optionalKey(Schema.Number),
+  messages: Schema.Array(PlatformAgentMessage),
+});
+export type PlatformAgentDetailResult = typeof PlatformAgentDetailResult.Type;
+
+export const PlatformSendAgentMessageInput = Schema.Struct({
+  agentId: TrimmedNonEmptyString,
+  message: TrimmedNonEmptyString,
+  model: Schema.optionalKey(TrimmedString),
+});
+export type PlatformSendAgentMessageInput = typeof PlatformSendAgentMessageInput.Type;
+
+export const PlatformSendAgentMessageResult = Schema.Struct({
+  agentId: TrimmedNonEmptyString,
+  status: TrimmedString,
+});
+export type PlatformSendAgentMessageResult = typeof PlatformSendAgentMessageResult.Type;
+
+export const PlatformAgentIdInput = Schema.Struct({
+  agentId: TrimmedNonEmptyString,
+});
+export type PlatformAgentIdInput = typeof PlatformAgentIdInput.Type;
+
+export const PlatformDeleteAgentResult = Schema.Struct({
+  deleted: Schema.Boolean,
+  msUsed: Schema.Number,
+});
+export type PlatformDeleteAgentResult = typeof PlatformDeleteAgentResult.Type;
+
+export const PlatformStopAgentResult = Schema.Struct({
+  stopped: Schema.Boolean,
+});
+export type PlatformStopAgentResult = typeof PlatformStopAgentResult.Type;
+
 export class PlatformEcosystemError extends Schema.TaggedErrorClass<PlatformEcosystemError>()(
   "PlatformEcosystemError",
   {
@@ -216,4 +305,9 @@ export const PLATFORM_ECOSYSTEM_WS_METHODS = {
   mcpDeleteServer: "mcp.deleteServer",
   mcpStartOAuth: "mcp.startOAuth",
   platformGetInfrastructure: "platform.getInfrastructure",
+  platformCreateAgent: "platform.createAgent",
+  platformGetAgent: "platform.getAgent",
+  platformSendAgentMessage: "platform.sendAgentMessage",
+  platformStopAgent: "platform.stopAgent",
+  platformDeleteAgent: "platform.deleteAgent",
 } as const;

@@ -94,3 +94,6 @@ NUL.tmp
 *.tgz
 projects/samples/desktop-app/src-tauri/target/
 projects/samples/desktop-app/webview/.next/
+
+# sandbox/ for throwaway test repos (not part of the app)
+sandbox/

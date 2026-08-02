@@ -338,7 +338,8 @@ const makeProjectionSnapshotQuery = Effect.gen(function* () {
           pending_approval_count AS "pendingApprovalCount",
           pending_user_input_count AS "pendingUserInputCount",
           has_actionable_proposed_plan AS "hasActionableProposedPlan",
-          deleted_at AS "deletedAt"
+          deleted_at AS "deletedAt",
+          cloud_agent_id AS "cloudAgentId"
         FROM projection_threads
         ORDER BY created_at ASC, thread_id ASC
       `,
@@ -366,7 +367,8 @@ const makeProjectionSnapshotQuery = Effect.gen(function* () {
           pending_approval_count AS "pendingApprovalCount",
           pending_user_input_count AS "pendingUserInputCount",
           has_actionable_proposed_plan AS "hasActionableProposedPlan",
-          deleted_at AS "deletedAt"
+          deleted_at AS "deletedAt",
+          cloud_agent_id AS "cloudAgentId"
         FROM projection_threads
         WHERE deleted_at IS NULL
           AND archived_at IS NULL
@@ -396,7 +398,8 @@ const makeProjectionSnapshotQuery = Effect.gen(function* () {
           pending_approval_count AS "pendingApprovalCount",
           pending_user_input_count AS "pendingUserInputCount",
           has_actionable_proposed_plan AS "hasActionableProposedPlan",
-          deleted_at AS "deletedAt"
+          deleted_at AS "deletedAt",
+          cloud_agent_id AS "cloudAgentId"
         FROM projection_threads
         WHERE deleted_at IS NULL
           AND archived_at IS NOT NULL
@@ -758,7 +761,8 @@ const makeProjectionSnapshotQuery = Effect.gen(function* () {
           pending_approval_count AS "pendingApprovalCount",
           pending_user_input_count AS "pendingUserInputCount",
           has_actionable_proposed_plan AS "hasActionableProposedPlan",
-          deleted_at AS "deletedAt"
+          deleted_at AS "deletedAt",
+          cloud_agent_id AS "cloudAgentId"
         FROM projection_threads
         WHERE thread_id = ${threadId}
           AND deleted_at IS NULL
@@ -1643,6 +1647,7 @@ const makeProjectionSnapshotQuery = Effect.gen(function* () {
                   interactionMode: row.interactionMode,
                   branch: row.branch,
                   worktreePath: row.worktreePath,
+                  ...(row.cloudAgentId ? { cloudAgentId: row.cloudAgentId } : {}),
                   latestTurn: latestTurnByThread.get(row.threadId) ?? null,
                   createdAt: row.createdAt,
                   updatedAt: row.updatedAt,
@@ -1883,6 +1888,9 @@ const makeProjectionSnapshotQuery = Effect.gen(function* () {
         interactionMode: threadRow.value.interactionMode,
         branch: threadRow.value.branch,
         worktreePath: threadRow.value.worktreePath,
+        ...(threadRow.value.cloudAgentId
+          ? { cloudAgentId: threadRow.value.cloudAgentId }
+          : {}),
         latestTurn: Option.isSome(latestTurnRow) ? mapLatestTurn(latestTurnRow.value) : null,
         createdAt: threadRow.value.createdAt,
         updatedAt: threadRow.value.updatedAt,
@@ -1977,6 +1985,9 @@ const makeProjectionSnapshotQuery = Effect.gen(function* () {
         interactionMode: threadRow.value.interactionMode,
         branch: threadRow.value.branch,
         worktreePath: threadRow.value.worktreePath,
+        ...(threadRow.value.cloudAgentId
+          ? { cloudAgentId: threadRow.value.cloudAgentId }
+          : {}),
         latestTurn: Option.isSome(latestTurnRow) ? mapLatestTurn(latestTurnRow.value) : null,
         createdAt: threadRow.value.createdAt,
         updatedAt: threadRow.value.updatedAt,

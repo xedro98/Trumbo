@@ -1,3 +1,4 @@
+// @effect-diagnostics globalDate:off globalDateInEffect:off
 import * as Cause from "effect/Cause";
 import * as Crypto from "effect/Crypto";
 import * as DateTime from "effect/DateTime";
@@ -53,6 +54,7 @@ import {
   EnvironmentAuthorizationError,
   PlatformEcosystemError,
   ServerSettingsError,
+  MessageId,
   ThreadId,
   type TerminalAttachStreamEvent,
   type TerminalError,
@@ -82,9 +84,11 @@ import * as ProviderMaintenanceRunner from "./provider/providerMaintenanceRunner
 import * as ServerLifecycleEvents from "./serverLifecycleEvents.ts";
 import { makeMcpSettingsService } from "./platform/McpSettingsService.ts";
 import { makePlatformInfrastructureService } from "./platform/PlatformInfrastructureService.ts";
+import { makePlatformAgentService } from "./platform/PlatformAgentService.ts";
 import { makeScheduleService } from "./platform/ScheduleService.ts";
 import type { TrumboCliRunnerOptions } from "./platform/trumboCliRunner.ts";
 import * as ServerRuntimeStartup from "./serverRuntimeStartup.ts";
+import * as TrumboPlatformTokenManager from "./auth/TrumboPlatformTokenManager.ts";
 import * as ServerSettings from "./serverSettings.ts";
 import * as TerminalManager from "./terminal/Manager.ts";
 import * as PreviewAutomationBroker from "./mcp/PreviewAutomationBroker.ts";
@@ -319,6 +323,11 @@ const RPC_REQUIRED_SCOPE = new Map<string, AuthEnvironmentScope>([
   [WS_METHODS.mcpDeleteServer, AuthOrchestrationOperateScope],
   [WS_METHODS.mcpStartOAuth, AuthOrchestrationOperateScope],
   [WS_METHODS.platformGetInfrastructure, AuthOrchestrationReadScope],
+  [WS_METHODS.platformCreateAgent, AuthOrchestrationOperateScope],
+  [WS_METHODS.platformGetAgent, AuthOrchestrationReadScope],
+  [WS_METHODS.platformSendAgentMessage, AuthOrchestrationOperateScope],
+  [WS_METHODS.platformStopAgent, AuthOrchestrationOperateScope],
+  [WS_METHODS.platformDeleteAgent, AuthOrchestrationOperateScope],
   [WS_METHODS.sourceControlLookupRepository, AuthOrchestrationReadScope],
   [WS_METHODS.sourceControlCloneRepository, AuthOrchestrationOperateScope],
   [WS_METHODS.sourceControlPublishRepository, AuthOrchestrationOperateScope],
@@ -435,6 +444,8 @@ const makeWsRpcLayer = (
       const serverSettings = yield* ServerSettings.ServerSettingsService;
       const mcpSettingsService = makeMcpSettingsService();
       const platformInfrastructureService = makePlatformInfrastructureService();
+      const platformAgentService = makePlatformAgentService();
+      const trumboPlatformTokenManager = yield* TrumboPlatformTokenManager.TrumboPlatformTokenManager;
       const resolveTrumboCliOptions = serverSettings.getSettings.pipe(
         Effect.map((settings) => {
           const trumbo = settings.providers.trumbo;
@@ -718,6 +729,284 @@ const makeWsRpcLayer = (
         }
       };
 
+      const appendCloudSetupActivity = (input: {
+        readonly kind: string;
+        readonly summary: string;
+        readonly tone: "info" | "error";
+        readonly threadId: ThreadId;
+      }) =>
+        Effect.all({
+          commandId: serverCommandId("cloud-setup-activity"),
+          activityId: serverEventId,
+        }).pipe(
+          Effect.flatMap(({ commandId, activityId }) =>
+            orchestrationEngine.dispatch({
+              type: "thread.activity.append",
+              commandId,
+              threadId: input.threadId,
+              activity: {
+                id: activityId,
+                tone: input.tone,
+                kind: input.kind,
+                summary: input.summary,
+                payload: {},
+                turnId: null,
+                createdAt: new Date().toISOString(),
+              },
+              createdAt: new Date().toISOString(),
+            }),
+          ),
+        );
+
+      /** Logs a cloud proxy fiber failure to the server log AND surfaces it to the
+       *  user as an error activity, instead of silently swallowing it. */
+      const logCloudProxyFailure = (threadId: ThreadId, label: string) =>
+        (cause: Cause.Cause<unknown>) =>
+          appendCloudSetupActivity({
+            threadId,
+            kind: "cloud.proxy.error",
+            summary: `${label}: ${Cause.pretty(cause).split("\n")[0]?.slice(0, 180) ?? "unknown error"}`,
+            tone: "error",
+          }).pipe(
+            Effect.catch(() => Effect.void),
+            Effect.andThen(
+              Effect.logError("cloud proxy fiber failed", {
+                threadId,
+                cause: Cause.pretty(cause),
+              }),
+            ),
+          );
+
+      /** Sends a user message to the cloud agent and streams its response back
+       *  into the thread as real assistant messages (delta + complete). Runs as
+       *  a detached fiber; errors are surfaced as error activities. */
+      const runCloudTurnProxy = (threadId: ThreadId, agentId: string, messageText: string) =>
+        Effect.gen(function* () {
+          yield* Effect.logInfo("cloud turn proxy started", { threadId, agentId });
+          const sendResult = yield* platformAgentService
+            .sendMessage({ agentId, message: messageText })
+            .pipe(
+              Effect.provideService(
+                TrumboPlatformTokenManager.TrumboPlatformTokenManager,
+                trumboPlatformTokenManager,
+              ),
+              Effect.option,
+            );
+          yield* Effect.logInfo("cloud turn proxy send result", {
+            agentId,
+            sent: Option.isSome(sendResult),
+          });
+          if (Option.isNone(sendResult)) {
+            yield* appendCloudSetupActivity({
+              threadId,
+              kind: "cloud.turn.failed",
+              summary: "Failed to send message to cloud agent. Check your Trumbo sign-in and plan.",
+              tone: "error",
+            });
+            return;
+          }
+
+          const msgId = yield* randomUUID.pipe(Effect.map(MessageId.make));
+          let deliveredAssistant = "";
+          let stablePolls = 0;
+          const pollDeadline = Date.now() + 5 * 60_000;
+          while (Date.now() < pollDeadline) {
+            const detail = yield* platformAgentService
+              .getAgent(agentId)
+              .pipe(
+                Effect.provideService(
+                  TrumboPlatformTokenManager.TrumboPlatformTokenManager,
+                  trumboPlatformTokenManager,
+                ),
+                Effect.option,
+              );
+            if (Option.isNone(detail)) break;
+            const messages = detail.value.messages ?? [];
+
+            // Aggregate the latest assistant response (UIMessage parts → text).
+            const assistantMessages = messages.filter((m) => m.role === "assistant");
+            const latestAssistant = assistantMessages[assistantMessages.length - 1];
+            const assistantText = latestAssistant?.content ?? "";
+            yield* Effect.logInfo("cloud proxy poll", {
+              agentId,
+              status: detail.value.status,
+              messageCount: messages.length,
+              assistantCount: assistantMessages.length,
+              assistantTextLen: assistantText.length,
+              roles: messages.map((m) => m.role).join(","),
+            });
+
+            if (assistantText && assistantText !== deliveredAssistant) {
+              // Stream the newly-available portion as a delta.
+              const newText = assistantText.startsWith(deliveredAssistant)
+                ? assistantText.slice(deliveredAssistant.length)
+                : assistantText;
+              deliveredAssistant = assistantText;
+              stablePolls = 0;
+              if (newText) {
+                yield* orchestrationEngine.dispatch({
+                  type: "thread.message.assistant.delta",
+                  commandId: yield* serverCommandId("cloud-turn-assistant-delta"),
+                  threadId,
+                  messageId: msgId,
+                  delta: newText,
+                  createdAt: new Date().toISOString(),
+                });
+              }
+            } else {
+              stablePolls++;
+            }
+
+            // Turn is done once we have a response that has been stable for a few
+            // consecutive polls (the agent state has no reliable running/idle flag).
+            if (deliveredAssistant && stablePolls >= 4) break;
+            yield* Effect.sleep(Duration.millis(1200));
+          }
+
+          // Finalize the assistant message and mark the session ready.
+          if (deliveredAssistant) {
+            yield* orchestrationEngine.dispatch({
+              type: "thread.message.assistant.complete",
+              commandId: yield* serverCommandId("cloud-turn-assistant-complete"),
+              threadId,
+              messageId: msgId,
+              createdAt: new Date().toISOString(),
+            });
+          } else {
+            yield* appendCloudSetupActivity({
+              threadId,
+              kind: "cloud.turn.no-response",
+              summary: "The cloud agent did not respond. It may still be working — check platform.trumbo.dev.",
+              tone: "info",
+            });
+          }
+          yield* orchestrationEngine.dispatch({
+            type: "thread.session.set",
+            commandId: yield* serverCommandId("cloud-turn-session-ready"),
+            threadId,
+            session: {
+              threadId,
+              status: "ready",
+              providerName: "trumbo-cloud",
+              runtimeMode: "full-access",
+              activeTurnId: null,
+              lastError: null,
+              updatedAt: new Date().toISOString(),
+            },
+            createdAt: new Date().toISOString(),
+          });
+        });
+
+      /** Provision the sandbox (clone repo, set up codebase, install deps), stream
+       *  a live setup log to the user, wait for it to be fully ready, THEN process
+       *  the chat request on the sandbox. Runs as a detached fiber. */
+      const provisionThenChat = (
+        threadId: ThreadId,
+        agentId: string,
+        repoId: string,
+        repoName: string | undefined,
+        messageText: string,
+      ) =>
+        Effect.gen(function* () {
+          yield* Effect.logInfo("cloud provisionThenChat started", { threadId, agentId, repoId });
+          // Kick off async provisioning on the platform.
+          const provOutcome = yield* platformAgentService
+            .provisionAgent(agentId, { repoId })
+            .pipe(
+              Effect.provideService(
+                TrumboPlatformTokenManager.TrumboPlatformTokenManager,
+                trumboPlatformTokenManager,
+              ),
+              Effect.match({
+                onFailure: (error) => ({ ok: false as const, message: error.message }),
+                onSuccess: () => ({ ok: true as const }),
+              }),
+            );
+          if (!provOutcome.ok) {
+            yield* appendCloudSetupActivity({
+              threadId,
+              kind: "cloud.provision.failed",
+              summary: provOutcome.message,
+              tone: "error",
+            });
+            return;
+          }
+          yield* Effect.logInfo("cloud provisioning started, polling setup-progress", { agentId });
+
+          // Poll live setup progress and stream each phase to the user.
+          let lastMessage = "";
+          let ready = false;
+          let failed = false;
+          const deadline = Date.now() + 10 * 60_000;
+          while (Date.now() < deadline) {
+            const progress = yield* platformAgentService
+              .getSetupProgress(agentId)
+              .pipe(
+                Effect.provideService(
+                  TrumboPlatformTokenManager.TrumboPlatformTokenManager,
+                  trumboPlatformTokenManager,
+                ),
+                Effect.option,
+              );
+            if (Option.isNone(progress)) break;
+            const p = progress.value;
+            const message = (p.message ?? "").trim();
+            if (message && message !== lastMessage) {
+              lastMessage = message;
+              yield* appendCloudSetupActivity({
+                threadId,
+                kind: `cloud.setup.${p.phase ?? "progress"}`,
+                summary: message,
+                tone: "info",
+              });
+            }
+            if (p.phase === "failed" || p.status === "failed") {
+              failed = true;
+              yield* appendCloudSetupActivity({
+                threadId,
+                kind: "cloud.setup.failed",
+                summary: p.error ?? "Sandbox setup failed.",
+                tone: "error",
+              });
+              break;
+            }
+            if ((p.status === "running" || p.status === "idle") && p.sandboxId) {
+              ready = true;
+              break;
+            }
+            if (p.phase === "ready") {
+              ready = true;
+              break;
+            }
+            yield* Effect.sleep(Duration.millis(1500));
+          }
+
+          if (!ready) {
+            if (!failed) {
+              yield* appendCloudSetupActivity({
+                threadId,
+                kind: "cloud.setup.timeout",
+                summary:
+                  "Sandbox setup is taking longer than expected. The agent continues on platform.trumbo.dev and will reply when ready.",
+                tone: "info",
+              });
+            }
+            return;
+          }
+
+          yield* appendCloudSetupActivity({
+            threadId,
+            kind: "cloud.setup.ready",
+            summary: repoName
+              ? `Sandbox ready with ${repoName} set up. Processing your message in the cloud…`
+              : "Sandbox ready. Processing your message in the cloud…",
+            tone: "info",
+          });
+
+          // Sandbox is fully ready — now process the chat request on it.
+          yield* runCloudTurnProxy(threadId, agentId, messageText);
+        });
+
       const dispatchBootstrapTurnStart = (
         command: Extract<OrchestrationCommand, { type: "thread.turn.start" }>,
       ): Effect.Effect<{ readonly sequence: number }, OrchestrationDispatchCommandError> =>
@@ -859,7 +1148,157 @@ const makeWsRpcLayer = (
             });
 
           const bootstrapProgram = Effect.gen(function* () {
+            let cloudAgentId: string | undefined;
+            let cloudRepoId: string | null = null;
+            let cloudRepoName: string | undefined;
+            const pendingCloudActivities: Array<{ kind: string; summary: string; tone: "info" | "error" }> = [];
             if (bootstrap?.createThread) {
+              cloudAgentId = bootstrap.createThread.cloudAgentId;
+              // Cloud thread: create a cloud agent + clone the project repo into a sandbox.
+              // Setup activities are buffered and flushed AFTER thread.create so the
+              // thread exists before any thread.activity.append dispatch.
+              if (cloudAgentId === undefined && bootstrap.createThread.cloud === true) {
+                const projectShell = yield* projectionSnapshotQuery
+                  .getProjectShellById(bootstrap.createThread.projectId)
+                  .pipe(
+                    Effect.catch(() => Effect.succeed(Option.none() as Option.Option<unknown>)),
+                  );
+                interface RepoIdentityShape {
+                  provider?: string;
+                  owner?: string;
+                  name?: string;
+                  locator?: { remoteUrl?: string };
+                }
+                const repoIdentity = Option.match(
+                  projectShell as Option.Option<{ repositoryIdentity?: RepoIdentityShape }>,
+                  {
+                    onNone: () => null,
+                    onSome: (project) => project.repositoryIdentity ?? null,
+                  },
+                );
+
+                // Parse owner/name (and provider) from the repo identity or its remote URL.
+                const parseRepo = (): { provider: string; owner: string; name: string } | null => {
+                  if (!repoIdentity) return null;
+                  if (repoIdentity.owner && repoIdentity.name) {
+                    return {
+                      provider: repoIdentity.provider ?? "github",
+                      owner: repoIdentity.owner,
+                      name: repoIdentity.name,
+                    };
+                  }
+                  const remoteUrl = repoIdentity.locator?.remoteUrl ?? "";
+                  const m =
+                    remoteUrl.match(/[:/]([^/]+)\/([^/]+?)\.git$/) ??
+                    remoteUrl.match(/[:/]([^/]+)\/([^/]+?)$/);
+                  if (!m) return null;
+                  const provider = remoteUrl.includes("gitlab")
+                    ? "gitlab"
+                    : remoteUrl.includes("bitbucket")
+                      ? "bitbucket"
+                      : "github";
+                  return { provider, owner: m[1]!, name: m[2]! };
+                };
+                const repo = parseRepo();
+
+                pendingCloudActivities.push({
+                  kind: "cloud.sandbox.starting",
+                  summary: "Spinning up isolated cloud sandbox…",
+                  tone: "info",
+                });
+
+                // Find (or connect) the platform repo so the sandbox can clone it.
+                let repoId: string | null = null;
+                if (repo) {
+                  cloudRepoName = repo.name;
+                  repoId = yield* platformAgentService
+                    .findConnectedRepoId({ owner: repo.owner, name: repo.name })
+                    .pipe(
+                      Effect.provideService(
+                        TrumboPlatformTokenManager.TrumboPlatformTokenManager,
+                        trumboPlatformTokenManager,
+                      ),
+                      Effect.catch(() => Effect.succeed(null)),
+                    );
+                  if (!repoId) {
+                    pendingCloudActivities.push({
+                      kind: "cloud.repo.connecting",
+                      summary: `Connecting ${repo.owner}/${repo.name} to Trumbo Cloud…`,
+                      tone: "info",
+                    });
+                    repoId = yield* platformAgentService
+                      .connectRepo({
+                        provider: repo.provider,
+                        owner: repo.owner,
+                        name: repo.name,
+                      })
+                      .pipe(
+                        Effect.provideService(
+                          TrumboPlatformTokenManager.TrumboPlatformTokenManager,
+                          trumboPlatformTokenManager,
+                        ),
+                        Effect.catch(() => Effect.succeed(null)),
+                      );
+                  }
+                }
+
+                cloudRepoId = repoId;
+                const agentOutcome = yield* platformAgentService
+                  .createAgent({
+                    prompt: bootstrap.createThread.title,
+                    model: bootstrap.createThread.modelSelection.model,
+                    provisionSync: false,
+                    ...(repoId ? { repoId } : {}),
+                  })
+                  .pipe(
+                    Effect.provideService(
+                      TrumboPlatformTokenManager.TrumboPlatformTokenManager,
+                      trumboPlatformTokenManager,
+                    ),
+                    Effect.match({
+                      onFailure: (error) => ({ ok: false as const, message: error.message }),
+                      onSuccess: (agent) => ({ ok: true as const, agent }),
+                    }),
+                  );
+                const agentOption = agentOutcome.ok ? Option.some(agentOutcome.agent) : Option.none();
+
+                if (Option.isSome(agentOption)) {
+                  cloudAgentId = agentOption.value.agentId;
+                  if (repoId && repo) {
+                    pendingCloudActivities.push({
+                      kind: "cloud.agent.created",
+                      summary: `Cloud agent created. Provisioning sandbox and cloning ${repo.owner}/${repo.name}…`,
+                      tone: "info",
+                    });
+                  } else if (repo && !repoId) {
+                    pendingCloudActivities.push({
+                      kind: "cloud.repo.not-connected",
+                      summary: `${repo.owner}/${repo.name} is not connected to Trumbo Cloud, so the sandbox is empty. Connect it on platform.trumbo.dev to get code pre-installed.`,
+                      tone: "info",
+                    });
+                    pendingCloudActivities.push({
+                      kind: "cloud.agent.created",
+                      summary: "Cloud agent created.",
+                      tone: "info",
+                    });
+                  } else {
+                    pendingCloudActivities.push({
+                      kind: "cloud.agent.created",
+                      summary: "Cloud agent created.",
+                      tone: "info",
+                    });
+                  }
+                } else {
+                  const failureReason = agentOutcome.ok
+                    ? "Failed to start the cloud agent."
+                    : agentOutcome.message;
+                  pendingCloudActivities.push({
+                    kind: "cloud.sandbox.failed",
+                    summary: failureReason,
+                    tone: "error",
+                  });
+                }
+              }
               yield* orchestrationEngine.dispatch({
                 type: "thread.create",
                 commandId: yield* serverCommandId("bootstrap-thread-create"),
@@ -871,9 +1310,20 @@ const makeWsRpcLayer = (
                 interactionMode: bootstrap.createThread.interactionMode,
                 branch: bootstrap.createThread.branch,
                 worktreePath: bootstrap.createThread.worktreePath,
+                ...(cloudAgentId !== undefined ? { cloudAgentId } : {}),
                 createdAt: bootstrap.createThread.createdAt,
               });
               createdThread = true;
+
+              // Flush buffered cloud setup activities now that the thread exists.
+              for (const activity of pendingCloudActivities) {
+                yield* appendCloudSetupActivity({
+                  threadId: command.threadId,
+                  kind: activity.kind,
+                  summary: activity.summary,
+                  tone: activity.tone,
+                });
+              }
             }
 
             if (bootstrap?.prepareWorktree) {
@@ -910,7 +1360,28 @@ const makeWsRpcLayer = (
 
             yield* runSetupProgram();
 
-            return yield* orchestrationEngine.dispatch(finalTurnStartCommand);
+            const turnStartResult = yield* orchestrationEngine.dispatch(finalTurnStartCommand);
+
+            // Cloud thread: provision the sandbox fully (clone, set up, install
+            // deps), then process the first message on it. No repo → no
+            // provisioning needed, process the message right away.
+            if (cloudAgentId !== undefined && command.type === "thread.turn.start") {
+              const proxy = cloudRepoId
+                ? provisionThenChat(
+                    command.threadId,
+                    cloudAgentId,
+                    cloudRepoId,
+                    cloudRepoName,
+                    command.message.text,
+                  )
+                : runCloudTurnProxy(command.threadId, cloudAgentId, command.message.text);
+              yield* proxy.pipe(
+                Effect.catchCause(logCloudProxyFailure(command.threadId, "Cloud setup failed")),
+                Effect.forkDetach,
+              );
+            }
+
+            return turnStartResult;
           });
 
           return yield* bootstrapProgram.pipe(
@@ -924,19 +1395,60 @@ const makeWsRpcLayer = (
           );
         });
 
+      const proxyCloudAgentTurn = (
+        command: Extract<OrchestrationCommand, { type: "thread.turn.start" }>,
+      ): Effect.Effect<{ readonly sequence: number }, OrchestrationDispatchCommandError> =>
+        Effect.gen(function* () {
+          // Look up the thread's cloudAgentId from the projection.
+          const threadShell = yield* projectionSnapshotQuery
+            .getThreadShellById(command.threadId)
+            .pipe(
+              Effect.mapError((cause) =>
+                toDispatchCommandError(cause, "Failed to resolve thread for cloud proxy"),
+              ),
+            );
+          if (Option.isNone(threadShell) || !threadShell.value.cloudAgentId) {
+            // Not a cloud thread — fall through to normal dispatch.
+            return yield* orchestrationEngine.dispatch(command).pipe(
+              Effect.mapError((cause) =>
+                toDispatchCommandError(cause, "Failed to dispatch orchestration command"),
+              ),
+            );
+          }
+          const cloudAgentId = threadShell.value.cloudAgentId;
+          const messageText = command.message.text;
+
+          // Dispatch the turn start to update the read model (user message + turn tracking).
+          const turnStartResult = yield* orchestrationEngine.dispatch(command).pipe(
+            Effect.mapError((cause) =>
+              toDispatchCommandError(cause, "Failed to dispatch orchestration command"),
+            ),
+          );
+
+          // Send to the cloud agent in the background and stream its response.
+          yield* runCloudTurnProxy(command.threadId, cloudAgentId, messageText).pipe(
+            Effect.catchCause(logCloudProxyFailure(command.threadId, "Cloud agent turn failed")),
+            Effect.forkDetach,
+          );
+
+          return turnStartResult;
+        });
+
       const dispatchNormalizedCommand = (
         normalizedCommand: OrchestrationCommand,
       ): Effect.Effect<{ readonly sequence: number }, OrchestrationDispatchCommandError> => {
         const dispatchEffect =
           normalizedCommand.type === "thread.turn.start" && normalizedCommand.bootstrap
             ? dispatchBootstrapTurnStart(normalizedCommand)
-            : orchestrationEngine
-                .dispatch(normalizedCommand)
-                .pipe(
-                  Effect.mapError((cause) =>
-                    toDispatchCommandError(cause, "Failed to dispatch orchestration command"),
-                  ),
-                );
+            : normalizedCommand.type === "thread.turn.start"
+              ? proxyCloudAgentTurn(normalizedCommand)
+              : orchestrationEngine
+                  .dispatch(normalizedCommand)
+                  .pipe(
+                    Effect.mapError((cause) =>
+                      toDispatchCommandError(cause, "Failed to dispatch orchestration command"),
+                    ),
+                  );
 
         return startup
           .enqueueCommand(dispatchEffect)
@@ -1487,6 +1999,36 @@ const makeWsRpcLayer = (
           observeRpcEffect(
             WS_METHODS.platformGetInfrastructure,
             platformInfrastructureService.getInfrastructure,
+            { "rpc.aggregate": "platform" },
+          ),
+        [WS_METHODS.platformCreateAgent]: (input) =>
+          observeRpcEffect(
+            WS_METHODS.platformCreateAgent,
+            platformAgentService.createAgent(input),
+            { "rpc.aggregate": "platform" },
+          ),
+        [WS_METHODS.platformGetAgent]: (input) =>
+          observeRpcEffect(
+            WS_METHODS.platformGetAgent,
+            platformAgentService.getAgent(input.agentId),
+            { "rpc.aggregate": "platform" },
+          ),
+        [WS_METHODS.platformSendAgentMessage]: (input) =>
+          observeRpcEffect(
+            WS_METHODS.platformSendAgentMessage,
+            platformAgentService.sendMessage(input),
+            { "rpc.aggregate": "platform" },
+          ),
+        [WS_METHODS.platformStopAgent]: (input) =>
+          observeRpcEffect(
+            WS_METHODS.platformStopAgent,
+            platformAgentService.stopAgent(input.agentId),
+            { "rpc.aggregate": "platform" },
+          ),
+        [WS_METHODS.platformDeleteAgent]: (input) =>
+          observeRpcEffect(
+            WS_METHODS.platformDeleteAgent,
+            platformAgentService.deleteAgent(input.agentId),
             { "rpc.aggregate": "platform" },
           ),
         [WS_METHODS.cloudGetRelayClientStatus]: (_input) =>

@@ -4181,6 +4181,7 @@ function ChatViewContent(props: ChatViewProps) {
                       interactionMode,
                       branch: activeThreadBranch,
                       worktreePath: activeThread.worktreePath,
+
                       createdAt: activeThread.createdAt,
                     },
                   }
