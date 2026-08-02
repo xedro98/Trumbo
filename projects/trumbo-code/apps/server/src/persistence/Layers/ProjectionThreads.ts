@@ -166,7 +166,15 @@ const makeProjectionThreadRepository = Effect.gen(function* () {
   });
 
   const upsert: ProjectionThreadRepositoryShape["upsert"] = (row) =>
-    upsertProjectionThreadRow(row).pipe(
+    upsertProjectionThreadRow({
+      ...row,
+      // favoritedAt / cloudAgentId are optional on the ProjectionThread schema;
+      // an absent value encodes to `undefined`, which node:sqlite rejects as a
+      // SQL parameter ("Failed to execute ... upsert:query"). Coerce to null
+      // here so every upsert call site is safe without each having to guard.
+      favoritedAt: row.favoritedAt ?? null,
+      cloudAgentId: row.cloudAgentId ?? null,
+    }).pipe(
       Effect.mapError(toPersistenceSqlError("ProjectionThreadRepository.upsert:query")),
     );
 

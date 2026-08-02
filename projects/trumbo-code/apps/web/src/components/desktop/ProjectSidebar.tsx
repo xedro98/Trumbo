@@ -39,7 +39,6 @@ import { Menu, MenuItem, MenuPopup, MenuSeparator, MenuTrigger } from "~/compone
 import type { ContextMenuItem } from "@trumbo-code/contracts";
 import {
   isAtomCommandInterrupted,
-  settlePromise,
   squashAtomCommandFailure,
 } from "@trumbo-code/client-runtime/state/runtime";
 import { readLocalApi } from "~/localApi";
@@ -737,9 +736,10 @@ export function ProjectSidebar({ className }: { readonly className?: string }) {
           const confirmed = await api.dialogs.confirm(`Archive thread "${thread.title}"?`);
           if (!confirmed) return;
         }
-        const result = await settlePromise(() =>
-          archiveThread({ environmentId: thread.environmentId, input: { threadId: thread.id } }),
-        );
+        const result = await archiveThread({
+          environmentId: thread.environmentId,
+          input: { threadId: thread.id },
+        });
         if (result._tag === "Failure" && !isAtomCommandInterrupted(result)) {
           const error = squashAtomCommandFailure(result);
           toastManager.add(
@@ -773,15 +773,13 @@ export function ProjectSidebar({ className }: { readonly className?: string }) {
       if (clicked === "force-stop") {
         const runningTurnId =
           thread.session?.status === "running" ? thread.session.activeTurnId : null;
-        const result = await settlePromise(() =>
-          interruptThreadTurn({
-            environmentId: thread.environmentId,
-            input: {
-              threadId: thread.id,
-              ...(runningTurnId !== null ? { turnId: runningTurnId } : {}),
-            },
-          }),
-        );
+        const result = await interruptThreadTurn({
+          environmentId: thread.environmentId,
+          input: {
+            threadId: thread.id,
+            ...(runningTurnId !== null ? { turnId: runningTurnId } : {}),
+          },
+        });
         if (result._tag === "Failure" && !isAtomCommandInterrupted(result)) {
           const error = squashAtomCommandFailure(result);
           toastManager.add(

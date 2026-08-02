@@ -1,4 +1,4 @@
-const REPO = "xedro98/trumbo-code";
+const REPO = "xedro98/Trumbo";
 
 export const RELEASES_URL = `https://github.com/${REPO}/releases`;
 

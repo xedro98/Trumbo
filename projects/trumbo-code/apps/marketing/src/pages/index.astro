@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { GITHUB_REPOSITORY_URL, MARKETING_STATS } from "../lib/site";
+import { GITHUB_REPOSITORY_URL, MARKETING_STATS, VSCODE_MARKETPLACE_URL } from "../lib/site";
 import { tweets } from "../lib/tweets";
 
 const desktopEndorsementRows = [
@@ -363,6 +363,7 @@ const mobileEndorsementRows = [
           <span id="cta-download-label">Download for macOS</span>
         </a>
         <a class="btn btn-ghost btn-lg" href="/download">Windows · Linux · other</a>
+        <a class="btn btn-ghost btn-lg" href={VSCODE_MARKETPLACE_URL} target="_blank" rel="noopener noreferrer">Get the VS Code Extension</a>
       </div>
     </div>
   </section>
