@@ -71,12 +71,12 @@ impl ThemeKind {
         }
     }
 
-    /// Human-readable display name.
+    /// Human-readable display name (also the persisted config value).
     pub fn display_name(self) -> &'static str {
         match self {
-            Self::GrokNight => "groknight",
+            Self::GrokNight => "trumbo",
             Self::TokyoNight => "tokyonight",
-            Self::GrokDay => "grokday",
+            Self::GrokDay => "trumboday",
             Self::RosePineMoon => "rosepine-moon",
             Self::OscuraMidnight => "oscura-midnight",
             Self::Auto => "auto",
@@ -144,8 +144,8 @@ pub fn canonical_name(value: &str) -> Option<&'static str> {
 pub fn display_name_for_canonical(value: &str) -> &str {
     match value {
         "auto" => "Auto",
-        "groknight" => "Trumbo",
-        "grokday" => "Trumbo Day",
+        "groknight" | "trumbo" => "Trumbo",
+        "grokday" | "trumboday" => "Trumbo Day",
         "tokyonight" => "Tokyo Night",
         "rosepine-moon" => "Rose Pine Moon",
         other => other,

@@ -45,12 +45,12 @@ const THEME_CHOICES: &[EnumChoice] = &[
         description: "Follow system dark/light appearance.",
     },
     EnumChoice {
-        canonical: "groknight",
+        canonical: "trumbo",
         display: "Trumbo",
         description: "Neutral dark with magenta accent.",
     },
     EnumChoice {
-        canonical: "grokday",
+        canonical: "trumboday",
         display: "Trumbo Day",
         description: "Light theme for bright environments.",
     },
@@ -478,12 +478,12 @@ const VOICE_STT_LANGUAGE_CHOICES: &[EnumChoice] = &[
 /// the user can pair any theme with any system-appearance bucket.
 const CONCRETE_THEME_CHOICES: &[EnumChoice] = &[
     EnumChoice {
-        canonical: "groknight",
+        canonical: "trumbo",
         display: "Trumbo",
         description: "Neutral dark with magenta accent.",
     },
     EnumChoice {
-        canonical: "grokday",
+        canonical: "trumboday",
         display: "Trumbo Day",
         description: "Light theme for bright environments.",
     },
@@ -718,7 +718,7 @@ pub fn default_settings() -> Vec<SettingMeta> {
             ],
             kind: SettingKind::Enum {
                 // `Option<String>` — `None` resolved to "groknight".
-                default: "groknight",
+                default: "trumbo",
                 choices: THEME_CHOICES,
                 supports_preview: true,
             },
@@ -734,7 +734,7 @@ pub fn default_settings() -> Vec<SettingMeta> {
             keywords: &["auto", "dark", "theme", "system", "appearance", "night"],
             kind: SettingKind::Enum {
                 // `Option<String>` — `None` falls back to "groknight".
-                default: "groknight",
+                default: "trumbo",
                 choices: CONCRETE_THEME_CHOICES,
                 supports_preview: true,
             },
@@ -750,7 +750,7 @@ pub fn default_settings() -> Vec<SettingMeta> {
             keywords: &["auto", "light", "theme", "system", "appearance", "day"],
             kind: SettingKind::Enum {
                 // `Option<String>` — `None` falls back to "grokday".
-                default: "grokday",
+                default: "trumboday",
                 choices: CONCRETE_THEME_CHOICES,
                 supports_preview: true,
             },
