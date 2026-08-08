@@ -89,7 +89,7 @@ const SPAWN_POLL_INTERVAL: Duration = Duration::from_millis(100);
 const CLIENT_LEADER_VERSION: &str = xai_grok_version::VERSION;
 /// Max wait for an evicted leader to exit before force-killing (relaunch drain ~5s).
 const EVICT_WAIT_TIMEOUT: Duration = Duration::from_secs(8);
-/// How long the SAME live grok flock-holder may stay unconnectable before
+/// How long the SAME live trumbo flock-holder may stay unconnectable before
 /// `connect_or_spawn` treats it as a "zombie leader" and evicts it.
 const ZOMBIE_EVICT_DEADLINE: Duration = Duration::from_secs(30);
 /// Whether `leader_version` is a strictly-older parseable semver than `baseline`.
@@ -113,7 +113,7 @@ fn should_evict(leader_version: Option<&str>, client_version: &str) -> bool {
 const RECONNECT_BASE_DELAY: Duration = Duration::from_secs(1);
 /// Maximum delay between reconnection attempts (caps exponential backoff).
 const RECONNECT_MAX_DELAY: Duration = Duration::from_secs(30);
-/// Maximum reconnection attempts for bounded mode (headless/`grok -p`).
+/// Maximum reconnection attempts for bounded mode (headless/`trumbo -p`).
 /// TUI mode uses unlimited retries controlled by a cancellation token.
 const RECONNECT_MAX_ATTEMPTS_BOUNDED: u32 = 5;
 /// Environment URLs to pass to the leader subprocess.
@@ -900,7 +900,7 @@ pub enum ReconnectPolicy {
     /// Suitable for interactive TUI sessions where the user expects persistence.
     Unbounded,
     /// Retry up to a fixed number of attempts, then fail.
-    /// Suitable for headless/`grok -p` where hanging forever is unacceptable.
+    /// Suitable for headless/`trumbo -p` where hanging forever is unacceptable.
     Bounded { max_attempts: u32 },
 }
 impl ReconnectPolicy {
@@ -1224,7 +1224,7 @@ type ZombieTimer = Option<(u32, Instant)>;
 enum ZombieAction {
     /// Not a zombie candidate this round; timer cleared.
     Clear,
-    /// A live grok holder is still unconnectable; timer (re)armed, keep waiting.
+    /// A live trumbo holder is still unconnectable; timer (re)armed, keep waiting.
     Wait,
     /// The SAME holder PID has been unconnectable for the full deadline — evict.
     Evict { pid: u32, waited: Duration },
@@ -1258,11 +1258,11 @@ fn zombie_evict_decision(
     }
 }
 /// The live *grok* PID that ACTUALLY holds the flock on the lock file, if any.
-/// `None` for a dead / non-grok PID, OR when the file PID can't be confirmed to be
+/// `None` for a dead / non-trumbo PID, OR when the file PID can't be confirmed to be
 /// the real flock holder — so the auto-kill zombie net never SIGKILLs a process
 /// that does not hold the flock (a stale-but-live PID left in `leader.lock`, or a
 /// brief spawner that held the flock without rewriting the file). Uses the
-/// stricter (name-matching) grok check since this drives the auto-kill path.
+/// stricter (name-matching) trumbo check since this drives the auto-kill path.
 ///
 /// Linux confirms the holder via `/proc/locks`. macOS/BSD have no `/proc/locks`,
 /// so the holder is unconfirmable and this returns `None` (eviction skipped),
@@ -1632,7 +1632,7 @@ pub async fn connect_or_spawn(
 ///
 /// For a **managed install** — the running binary lives under `grok_home`
 /// (e.g. `~/.grok/...`) — prefer the managed `~/.grok/bin/grok` symlink. After an
-/// auto-update or `grok update` atomically swaps that symlink, `current_exe()`
+/// auto-update or `trumbo update` atomically swaps that symlink, `current_exe()`
 /// still resolves (via `/proc/self/exe` on Linux) to the *old* versioned target,
 /// so spawning it would relaunch the stale binary. The symlink always points to
 /// the freshly-installed version. This mirrors
@@ -1649,9 +1649,9 @@ fn resolve_exe_for_spawn() -> Result<std::path::PathBuf, ConnectionError> {
 fn resolve_binary_with_home(grok_home: &Path) -> Result<std::path::PathBuf, ConnectionError> {
     resolve_binary_impl(grok_home, std::env::current_exe().ok())
 }
-/// Binary file name for the managed grok install (`grok` / `grok.exe`).
+/// Binary file name for the managed trumbo install (`grok` / `trumbo.exe`).
 fn managed_grok_bin_name() -> &'static str {
-    if cfg!(windows) { "grok.exe" } else { "grok" }
+    if cfg!(windows) { "trumbo.exe" } else { "trumbo" }
 }
 /// Core leader-binary resolution with the current-exe path injected, for testability.
 fn resolve_binary_impl(
@@ -1790,7 +1790,7 @@ mod tests {
     use std::fs;
     use tempfile::TempDir;
     const TEST_DEADLINE: Duration = Duration::from_secs(30);
-    /// No live grok holder → `Clear`, and any pending timer is reset.
+    /// No live trumbo holder → `Clear`, and any pending timer is reset.
     #[test]
     fn zombie_decision_clears_when_no_holder() {
         let mut timer: ZombieTimer = Some((100, Instant::now()));
@@ -2566,7 +2566,7 @@ mod tests {
         let temp = TempDir::new().unwrap();
         let bin_dir = temp.path().join("bin");
         std::fs::create_dir_all(&bin_dir).unwrap();
-        std::fs::write(bin_dir.join("grok"), "fake-binary").unwrap();
+        std::fs::write(bin_dir.join("trumbo"), "fake-binary").unwrap();
         let result = resolve_binary_with_home(temp.path()).unwrap();
         let current = std::env::current_exe().unwrap();
         assert_eq!(result, current);
@@ -2585,7 +2585,7 @@ mod tests {
         std::fs::create_dir_all(&bin_dir).unwrap();
         let target_v2 = bin_dir.join("grok-v2");
         std::fs::write(&target_v2, "new-binary").unwrap();
-        std::os::unix::fs::symlink(&target_v2, bin_dir.join("grok")).unwrap();
+        std::os::unix::fs::symlink(&target_v2, bin_dir.join("trumbo")).unwrap();
         let result = resolve_binary_with_home(temp.path()).unwrap();
         let current = std::env::current_exe().unwrap();
         assert_eq!(result, current);
@@ -2598,7 +2598,7 @@ mod tests {
         std::fs::create_dir_all(&bin_dir).unwrap();
         let new_target = bin_dir.join("grok-v2");
         std::fs::write(&new_target, "new-binary").unwrap();
-        let managed = bin_dir.join("grok");
+        let managed = bin_dir.join("trumbo");
         std::os::unix::fs::symlink(&new_target, &managed).unwrap();
         let stale_target = bin_dir.join("grok-v1");
         std::fs::write(&stale_target, "old-binary").unwrap();

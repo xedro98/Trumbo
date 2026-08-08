@@ -4087,13 +4087,13 @@ mod tests {
         assert_no_tool_placeholders(&cursor);
 
         // grok-build explicit render: no leftover placeholder either.
-        let grok = RoleToolNames::from_summary(&summary_with(&[
+        let trumbo = RoleToolNames::from_summary(&summary_with(&[
             (xai_grok_tools::types::tool::ToolKind::Read, "read_file"),
             (xai_grok_tools::types::tool::ToolKind::ListDir, "list_dir"),
             (xai_grok_tools::types::tool::ToolKind::Search, "grep"),
         ]))
         .apply(GOAL_VERIFIER_PROMPT_TEMPLATE);
-        assert_no_tool_placeholders(&grok);
+        assert_no_tool_placeholders(&trumbo);
 
         // Fallback path (e.g. `describe_subagent_type` ⇒ `Unavailable`): the
         // parent-toolset defaults render and no placeholder survives.

@@ -281,7 +281,7 @@ fn lock_path_for_args_buckets_grok_build_and_compat_to_same_lock_for_same_file()
     // path. file_path takes precedence over path when both are present,
     // but neither tool emits both keys today, so this asserts the
     // cross-toolset key normalization works in practice.
-    let grok = serde_json::json!({
+    let trumbo = serde_json::json!({
         "file_path": "/repo/src/main.rs",
         "old_string": "a",
         "new_string": "b",
@@ -291,7 +291,7 @@ fn lock_path_for_args_buckets_grok_build_and_compat_to_same_lock_for_same_file()
         "old_string": "c",
         "new_string": "d",
     });
-    assert_eq!(lock_path_for_args(&grok), lock_path_for_args(&compat));
+    assert_eq!(lock_path_for_args(&trumbo), lock_path_for_args(&compat));
 }
 
 /// Regression: skill-discovery reminders must land after all tool results, not mid-batch.

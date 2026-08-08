@@ -529,7 +529,7 @@ fn worktrees_dominate_at_half_of_total() {
     ];
     for case in cases {
         let report = DiskUsageReport {
-            grok_home: "/home/user/.grok".into(),
+            grok_home: "/home/user/.trumbo".into(),
             total_bytes: case.total_bytes,
             top_level_dirs: vec![DirUsage {
                 name: WORKTREES_DIR.to_owned(),
@@ -547,7 +547,7 @@ fn worktrees_dominate_at_half_of_total() {
 fn json_shape_is_frozen() {
     let report = DiskUsageReport {
         schema_version: SCHEMA_VERSION,
-        grok_home: "/home/user/.grok".into(),
+        grok_home: "/home/user/.trumbo".into(),
         total_bytes: 100,
         volume_capacity_bytes: Some(1_000),
         volume_available_bytes: Some(600),
@@ -588,7 +588,7 @@ fn json_shape_is_frozen() {
         serde_json::to_value(&report).unwrap(),
         serde_json::json!({
             "schema_version": 1,
-            "grok_home": "/home/user/.grok",
+            "grok_home": "/home/user/.trumbo",
             "total_bytes": 100,
             "volume_capacity_bytes": 1_000,
             "volume_available_bytes": 600,
@@ -664,7 +664,7 @@ fn json_shape_is_frozen() {
 fn missing_home_json_is_valid_and_empty() {
     let mut out = Vec::new();
     write_report(
-        &empty_report(Path::new("/nonexistent/.grok")),
+        &empty_report(Path::new("/nonexistent/.trumbo")),
         /*json*/ true,
         &mut out,
     )
@@ -877,8 +877,8 @@ fn print_report_renders_registry_notices() {
 // the pass only walks registry records.
 #[test]
 fn reclaim_hint_names_a_sequence_that_frees_space() {
-    const AGE: &str = "run `grok worktree gc --max-age 7d --dry-run`";
-    const RM: &str = "Remove one with `grok worktree rm --dry-run <path>`";
+    const AGE: &str = "run `trumbo worktree gc --max-age 7d --dry-run`";
+    const RM: &str = "Remove one with `trumbo worktree rm --dry-run <path>`";
     let tracked = tracked_row(60, record("wt-1", 0));
 
     let text = render_report(&worktrees_report(vec![tracked], 100), 0);
@@ -999,14 +999,14 @@ fn symlinked_default_home_keeps_home_label() {
     let real_grok = tmp.path().join("grok-on-disk");
     std::fs::create_dir_all(&fake_home).unwrap();
     std::fs::create_dir_all(&real_grok).unwrap();
-    std::os::unix::fs::symlink(&real_grok, fake_home.join(".grok")).unwrap();
+    std::os::unix::fs::symlink(&real_grok, fake_home.join(".trumbo")).unwrap();
     let _home = crate::test_util::EnvVarGuard::set("HOME", &fake_home);
 
-    let resolved = dunce::canonicalize(&fake_home).unwrap().join(".grok");
+    let resolved = dunce::canonicalize(&fake_home).unwrap().join(".trumbo");
     let canonical = dunce::canonicalize(&resolved).unwrap();
     assert_ne!(canonical, resolved, "the symlink must actually resolve");
     assert_eq!(
         crate::util::display_grok_home_prefix_for(&canonical),
-        "~/.grok"
+        "~/.trumbo"
     );
 }

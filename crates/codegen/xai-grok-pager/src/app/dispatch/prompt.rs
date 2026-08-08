@@ -38,7 +38,7 @@ pub(super) fn consume_chat_kind(app: &mut AppView) -> bool {
 /// The prompt is always pushed to the queue first. If the agent is idle
 /// (and has a session), `maybe_drain_queue` pops the front prompt and
 /// sends it in the same dispatch call — no deferred ticks.
-/// Start (if needed) and submit the initial prompt from `grok "<prompt>"`.
+/// Start (if needed) and submit the initial prompt from `trumbo "<prompt>"`.
 ///
 /// Shared by the TUI startup path (already authenticated) and the post-login
 /// `AuthComplete` path (deferred via `deferred_startup.prompt`). It does nothing
@@ -1432,7 +1432,7 @@ pub(super) fn handle_prompt_response(
                 // title into the body automatically.
                 let notif_title = session_name
                     .map(|s| s.to_string())
-                    .unwrap_or_else(|| "Grok".into());
+                    .unwrap_or_else(|| "Trumbo".into());
 
                 app.deferred_notification = Some((
                     NotificationEvent {

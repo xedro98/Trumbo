@@ -50,7 +50,7 @@ fn default_team_oauth2_scopes() -> Vec<String> {
 pub enum PreferredAuthMethod {
     /// `XAI_API_KEY` / auth.json `xai::api_key` / per-model BYOK (`xai.api_key`).
     ApiKey,
-    /// OIDC / OAuth2 session (`cached_token`, interactive `grok.com` / `oidc`,
+    /// OIDC / OAuth2 session (`cached_token`, interactive `trumbo.com` / `oidc`,
     /// including devbox-minted OIDC).
     Oidc,
 }
@@ -189,7 +189,7 @@ pub fn xai_oauth2_issuer() -> &'static str {
 pub fn is_xai_oauth2_issuer(issuer: &str) -> bool {
     issuer == XAI_OAUTH2_ISSUER || issuer == XAI_OAUTH2_LOCAL_ISSUER
 }
-/// auth.json scope key used by the pre-OIDC `grok login --legacy` flow.
+/// auth.json scope key used by the pre-OIDC `trumbo login --legacy` flow.
 /// Matches the key format produced by the original `accounts.x.ai` relay auth.
 pub(crate) const LEGACY_AUTH_SCOPE: &str = "https://accounts.x.ai/sign-in";
 impl GrokComConfig {
@@ -208,7 +208,7 @@ impl GrokComConfig {
     }
     /// When `preferred_method = api_key`, automatic OIDC paths (devbox mint,
     /// interactive browser login, external auth provider) must not run — the
-    /// pin is fail-closed. Explicit `grok login --devbox` / `--api-key` bypass
+    /// pin is fail-closed. Explicit `trumbo login --devbox` / `--api-key` bypass
     /// this by not consulting automatic flow helpers.
     pub(crate) fn blocks_automatic_oidc(&self) -> bool {
         matches!(self.preferred_method, Some(PreferredAuthMethod::ApiKey))
@@ -305,7 +305,7 @@ impl Default for GrokComConfig {
         }
     }
 }
-/// Parse a boolean env-var value for grok's on/off flags. A bare presence
+/// Parse a boolean env-var value for trumbo's on/off flags. A bare presence
 /// enables the flag, but the common falsy spellings (`0`, `false`, `off`,
 /// `no`, empty) count as disabled — so e.g. `GROK_DISABLE_API_KEY_AUTH=false`
 /// does NOT turn the kill switch on.

@@ -51,14 +51,14 @@ pub(crate) fn discover_hook_source_paths(
     git_root: Option<&Path>,
     compat: &xai_grok_tools::types::compat::CompatConfig,
 ) -> HookSourcePaths {
-    let grok = xai_grok_config::user_grok_home();
+    let trumbo = xai_grok_config::user_grok_home();
     let home = dirs::home_dir();
     let include_claude = include_claude_hooks(compat);
     let include_cursor = include_cursor_hooks(compat);
 
     // Soft hooks-paths I/O keeps fixed slots; hard resolve omits Grok globals.
     let mut global: Vec<PathBuf> =
-        match resolve_global_hook_sources(grok.as_deref(), /* reject_symlinks */ false) {
+        match resolve_global_hook_sources(trumbo.as_deref(), /* reject_symlinks */ false) {
             Ok(resolved) => {
                 if let Some(e) = &resolved.configured_error {
                     tracing::warn!(
@@ -96,7 +96,7 @@ pub(crate) fn discover_hook_source_paths(
             project.push(root.join(".claude").join("settings.json"));
             project.push(root.join(".claude").join("settings.local.json"));
         }
-        project.push(root.join(".grok").join("hooks"));
+        project.push(root.join(".trumbo").join("hooks"));
         if include_cursor {
             project.push(root.join(".cursor").join("hooks.json"));
         }

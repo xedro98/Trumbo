@@ -167,7 +167,7 @@ impl SessionSearchIndex {
             .unwrap_or(None);
 
         // One-way ratchet: drop only on UPGRADE (stored < current). Multiple
-        // grok generations share this DB (stable vs alpha); an equality check
+        // trumbo generations share this DB (stable vs alpha); an equality check
         // made each binary wipe the other's index in a ping-pong that left
         // search empty mid-rebootstrap. A newer index is safe to read: bumps
         // regenerate content only (table schema is column-identical), and the
@@ -484,7 +484,7 @@ impl SessionSearchIndex {
     /// Session-id-shaped queries (full UUID or hyphenated hex prefix) match
     /// `session_docs.session_id` directly. FTS only indexes title+content, and
     /// a hyphenated UUID `MATCH` looks for tokens that were never indexed —
-    /// so `/resume` search by id returned nothing while `grok --resume <id>`
+    /// so `/resume` search by id returned nothing while `trumbo --resume <id>`
     /// still loaded the session.
     pub fn query(
         &self,
@@ -983,7 +983,7 @@ mod tests {
             index
                 .upsert_doc(&test_doc("s1", "Rust debugging", "borrow checker"))
                 .unwrap();
-            // Simulate an index owned by a newer grok generation that has
+            // Simulate an index owned by a newer trumbo generation that has
             // completed a bootstrap.
             index.set_meta(META_KEY_SCHEMA_VERSION, "5").unwrap();
             index.set_meta("last_bootstrap_at", "1700000000").unwrap();

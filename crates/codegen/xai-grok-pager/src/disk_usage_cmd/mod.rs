@@ -1,4 +1,4 @@
-//! `grok du`: what the user grok home uses on disk. It creates no grok home,
+//! `trumbo du`: what the user trumbo home uses on disk. It creates no trumbo home,
 //! registry file, or schema, but a read-only open of a WAL database leaves
 //! `-shm` and `-wal` sidecars, so sizes are collected before it opens.
 
@@ -26,9 +26,9 @@ const SCHEMA_VERSION: u32 = 1;
 
 #[derive(Clone, Debug, clap::Args)]
 #[command(
-    after_help = "Lists every top-level directory in the grok home, largest first, then every \
+    after_help = "Lists every top-level directory in the trumbo home, largest first, then every \
 worktree under `worktrees/` and `worktree_pool/` with its size, age, and label. To reclaim space, preview a sweep with \
-`grok worktree gc --max-age 7d --dry-run`: without `--max-age`, gc expires nothing, and it \
+`trumbo worktree gc --max-age 7d --dry-run`: without `--max-age`, gc expires nothing, and it \
 visits only worktrees the registry tracks."
 )]
 pub struct DiskUsageArgs {

@@ -259,7 +259,7 @@ pub enum SourceFilter {
 impl SourceFilter {
     pub fn label(self) -> &'static str {
         match self {
-            Self::Grok => "Grok",
+            Self::Grok => "Trumbo",
             Self::Local => "Local",
             Self::Remote => "Remote",
             Self::External => "External",
@@ -284,7 +284,7 @@ impl SourceFilter {
 
     /// Returns `true` if a session with the given `source` string passes the filter.
     ///
-    /// grok.com conversations carry `source == "conversation"` and live remotely,
+    /// trumbo.com conversations carry `source == "conversation"` and live remotely,
     /// so they pass the `Remote` filter (and `Grok` / `All`) but not `Local`.
     /// Foreign sources (`claude` / `codex` / `cursor`) only pass `External` and
     /// `All`.
@@ -1462,7 +1462,7 @@ mod tests {
         assert!(!SourceFilter::Remote.matches("local"));
         assert!(!SourceFilter::Remote.matches("cursor"));
 
-        // grok.com conversations are remote: visible under Grok + All + Remote, not Local.
+        // trumbo.com conversations are remote: visible under Grok + All + Remote, not Local.
         assert!(SourceFilter::All.matches("conversation"));
         assert!(SourceFilter::Remote.matches("conversation"));
         assert!(!SourceFilter::Local.matches("conversation"));
@@ -1484,7 +1484,7 @@ mod tests {
         assert_eq!(SourceFilter::All.next(), SourceFilter::Local);
         assert_eq!(SourceFilter::Local.next(), SourceFilter::Remote);
         assert_eq!(SourceFilter::Remote.next(), SourceFilter::Grok);
-        assert_eq!(SourceFilter::Grok.label(), "Grok");
+        assert_eq!(SourceFilter::Grok.label(), "Trumbo");
         assert_eq!(SourceFilter::External.label(), "External");
         assert_eq!(SourceFilter::default(), SourceFilter::Grok);
     }
@@ -1505,8 +1505,8 @@ mod tests {
             entry_with_source("s5", "cursor"),
         ];
 
-        let grok = filter_session_entries(Some(&entries), "", SourceFilter::Grok);
-        assert_eq!(grok, vec![0, 1, 2]); // local + remote + both, no foreign
+        let trumbo = filter_session_entries(Some(&entries), "", SourceFilter::Grok);
+        assert_eq!(trumbo, vec![0, 1, 2]); // local + remote + both, no foreign
 
         let all = filter_session_entries(Some(&entries), "", SourceFilter::All);
         assert_eq!(all, vec![0, 1, 2, 3, 4, 5]);

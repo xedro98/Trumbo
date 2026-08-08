@@ -228,7 +228,7 @@ pub(crate) fn record_for_test(cwd: &Path, allowed: bool) {
 /// `allow_prompt` must be `true` ONLY where a blocking stdin y/N read is safe —
 /// i.e. agent `initialize` for the launch directory, before the TUI takes over
 /// the terminal. Every other call site (per-session cwd, leader-served sessions
-/// whose cwd differs from the launch dir, `grok mcp doctor`) passes `false`, so
+/// whose cwd differs from the launch dir, `trumbo mcp doctor`) passes `false`, so
 /// an unresolved interactive-but-untrusted workspace resolves **fail-closed**
 /// (untrusted, no prompt) — only the launch dir is ever prompted for.
 pub(crate) fn resolve_and_record(
@@ -296,7 +296,7 @@ pub(crate) fn resolve_launch_dir_trust(cwd: &Path, remote: Option<&RemoteSetting
 /// - A cached **grant** (`Some(true)`) is durable and short-circuits — neither
 ///   `store_trusted` nor `recompute` runs.
 /// - A cached **untrusted** verdict (`Some(false)`) is re-checked via
-///   `store_trusted`: a `grok --trust` grant issued AFTER this workspace was
+///   `store_trusted`: a `trumbo --trust` grant issued AFTER this workspace was
 ///   first resolved writes the store, so honor it on the next session without a
 ///   restart. Without this re-read a long-lived leader would mask the grant.
 /// - An **unrecorded** key (`None`) does a full `recompute`, which reports
@@ -395,7 +395,7 @@ fn compute_from_inputs(
 /// merged server list when the workspace is untrusted.
 ///
 /// SINGLE SOURCE OF TRUTH for "project-scoped MCP names" across ALL gate sites
-/// (session merge, the session-less agent pool, `grok mcp doctor`). It MUST
+/// (session merge, the session-less agent pool, `trumbo mcp doctor`). It MUST
 /// enumerate every project MCP source the loaders read; adding a new repo-local
 /// MCP source without extending this fn silently re-opens the gate (guarded by
 /// `project_scoped_mcp_names_cover_every_source`).
@@ -678,7 +678,7 @@ mod tests {
         git2::Repository::init(home.path()).unwrap();
         // Repo-local code-exec config, so the final allow is the unrecordable-key
         // rule at work (a recordable key with configs + empty store would deny).
-        std::fs::create_dir_all(home.path().join(".grok").join("hooks")).unwrap();
+        std::fs::create_dir_all(home.path().join(".trumbo").join("hooks")).unwrap();
 
         assert!(
             !revoke_folder_trust(home.path()),
@@ -835,7 +835,7 @@ mod tests {
         let _env = EnvGuard::set("GROK_HOME", home.path());
         let _flag = EnvGuard::unset("GROK_FOLDER_TRUST");
         let tmp = repo_tmp();
-        let agents = tmp.path().join(".grok").join("agents");
+        let agents = tmp.path().join(".trumbo").join("agents");
         std::fs::create_dir_all(&agents).unwrap();
         // Shadows the built-in `explore` subagent and carries a command hook.
         std::fs::write(
@@ -889,7 +889,7 @@ mod tests {
         let _env = EnvGuard::set("GROK_HOME", home.path());
         let _flag = EnvGuard::unset("GROK_FOLDER_TRUST");
         let tmp = repo_tmp();
-        std::fs::create_dir_all(tmp.path().join(".grok").join("hooks")).unwrap();
+        std::fs::create_dir_all(tmp.path().join(".trumbo").join("hooks")).unwrap();
         assert!(
             !project_scope_allowed(tmp.path()),
             "untrusted folder with repo configs must be denied (fail-closed)"
@@ -927,7 +927,7 @@ mod tests {
         let _env = EnvGuard::set("GROK_HOME", home.path());
         let _flag = EnvGuard::unset("GROK_FOLDER_TRUST");
         let tmp = repo_tmp();
-        std::fs::create_dir_all(tmp.path().join(".grok").join("hooks")).unwrap();
+        std::fs::create_dir_all(tmp.path().join(".trumbo").join("hooks")).unwrap();
         let mut store = TrustStore::load();
         store.set_trusted(&workspace_key(tmp.path())).unwrap();
         assert!(
@@ -950,7 +950,7 @@ mod tests {
         let home = tempfile::tempdir().unwrap();
         let _env = EnvGuard::set("GROK_HOME", home.path());
         let tmp = repo_tmp();
-        std::fs::create_dir_all(tmp.path().join(".grok").join("hooks")).unwrap();
+        std::fs::create_dir_all(tmp.path().join(".trumbo").join("hooks")).unwrap();
         assert!(
             project_scope_allowed(tmp.path()),
             "inert local/dev build must allow project scope even with configs"
@@ -970,7 +970,7 @@ mod tests {
         let _env = EnvGuard::set("GROK_HOME", home.path());
         let _flag = EnvGuard::unset("GROK_FOLDER_TRUST");
         let tmp = repo_tmp();
-        std::fs::create_dir_all(tmp.path().join(".grok").join("plugins").join("evil")).unwrap();
+        std::fs::create_dir_all(tmp.path().join(".trumbo").join("plugins").join("evil")).unwrap();
         assert!(
             !project_scope_allowed(tmp.path()),
             "plugin-only untrusted repo must be denied"
@@ -990,10 +990,10 @@ mod tests {
         let _env = EnvGuard::set("GROK_HOME", home.path());
         let _flag = EnvGuard::unset("GROK_FOLDER_TRUST");
         let tmp = repo_tmp();
-        let grok = tmp.path().join(".grok");
-        std::fs::create_dir_all(&grok).unwrap();
+        let trumbo = tmp.path().join(".trumbo");
+        std::fs::create_dir_all(&trumbo).unwrap();
         std::fs::write(
-            grok.join("config.toml"),
+            trumbo.join("config.toml"),
             "[permission]\nallow = [\"Bash(*)\"]\n",
         )
         .unwrap();
@@ -1024,7 +1024,7 @@ mod tests {
         };
 
         let tmp = repo_tmp();
-        std::fs::create_dir_all(tmp.path().join(".grok").join("hooks")).unwrap();
+        std::fs::create_dir_all(tmp.path().join(".trumbo").join("hooks")).unwrap();
         assert!(
             resolve_and_record(tmp.path(), Some(&remote), false),
             "kill-switch (feature off) must resolve trusted even with repo configs"
@@ -1038,7 +1038,7 @@ mod tests {
         // misses the kill-switch and denies the same scenario — the exact gap the
         // up-front spawn resolve closes for chat/load sessions.
         let cold = repo_tmp();
-        std::fs::create_dir_all(cold.path().join(".grok").join("hooks")).unwrap();
+        std::fs::create_dir_all(cold.path().join(".trumbo").join("hooks")).unwrap();
         assert!(
             !project_scope_allowed(cold.path()),
             "cold remote=None gate read denies a kill-switched folder (regression contrast)"
@@ -1067,7 +1067,7 @@ mod tests {
         let tmp = repo_tmp();
         // A project plugin. Project scope is default-disabled, so name it in the
         // `enabled` list to isolate the TRUST gate (not the enable gate).
-        let plugin = tmp.path().join(".grok").join("plugins").join("trustgate");
+        let plugin = tmp.path().join(".trumbo").join("plugins").join("trustgate");
         std::fs::create_dir_all(&plugin).unwrap();
         std::fs::write(plugin.join("plugin.json"), r#"{"name":"trustgate"}"#).unwrap();
         let cfg = DiscoveryConfig {
@@ -1120,7 +1120,7 @@ mod tests {
         let _env = EnvGuard::set("GROK_HOME", home.path());
         let _flag = EnvGuard::unset("GROK_FOLDER_TRUST");
         let tmp = repo_tmp();
-        let hooks_dir = tmp.path().join(".grok").join("hooks");
+        let hooks_dir = tmp.path().join(".trumbo").join("hooks");
         std::fs::create_dir_all(&hooks_dir).unwrap();
         // Top-level `{"hooks":{...}}` wrapper; no matcher => match-all. The parsed
         // spec name is `<file_stem>:PreToolUse[..]`, so the file stem identifies it.
@@ -1225,9 +1225,9 @@ mod tests {
         // can distinguish it from user/plugin servers. Asserts on the specific
         // key, so any real `~/.grok/lsp.json` on the test host is irrelevant.
         let tmp = repo_tmp();
-        let grok = tmp.path().join(".grok");
-        std::fs::create_dir_all(&grok).unwrap();
-        std::fs::write(grok.join("lsp.json"), r#"{"projlsp": {"command": "true"}}"#).unwrap();
+        let trumbo = tmp.path().join(".trumbo");
+        std::fs::create_dir_all(&trumbo).unwrap();
+        std::fs::write(trumbo.join("lsp.json"), r#"{"projlsp": {"command": "true"}}"#).unwrap();
 
         let sourced = load_servers_with_plugins_sourced(tmp.path(), &[], &[], &[], &[]);
         let (_, source) = sourced.get("projlsp").expect("project server present");
@@ -1244,9 +1244,9 @@ mod tests {
         // End-to-end of the load-site gate (Sites A/B): a project server loaded
         // from `<cwd>/.grok/lsp.json` is dropped once the workspace is untrusted.
         let tmp = repo_tmp();
-        let grok = tmp.path().join(".grok");
-        std::fs::create_dir_all(&grok).unwrap();
-        std::fs::write(grok.join("lsp.json"), r#"{"projlsp": {"command": "true"}}"#).unwrap();
+        let trumbo = tmp.path().join(".trumbo");
+        std::fs::create_dir_all(&trumbo).unwrap();
+        std::fs::write(trumbo.join("lsp.json"), r#"{"projlsp": {"command": "true"}}"#).unwrap();
 
         let sourced = load_servers_with_plugins_sourced(tmp.path(), &[], &[], &[], &[]);
         assert!(
@@ -1278,10 +1278,10 @@ mod tests {
             r#"{"mcpServers": {"projjson": {"url": "https://proj.example.com/mcp"}}}"#,
         )
         .unwrap();
-        let grok = tmp.path().join(".grok");
-        std::fs::create_dir_all(&grok).unwrap();
+        let trumbo = tmp.path().join(".trumbo");
+        std::fs::create_dir_all(&trumbo).unwrap();
         std::fs::write(
-            grok.join("config.toml"),
+            trumbo.join("config.toml"),
             "[mcp_servers.projtoml]\nurl = \"https://projtoml.example.com/mcp\"\n",
         )
         .unwrap();
@@ -1299,10 +1299,10 @@ mod tests {
     #[test]
     fn project_scoped_mcp_names_cover_every_source() {
         let tmp = repo_tmp();
-        let grok = tmp.path().join(".grok");
-        std::fs::create_dir_all(&grok).unwrap();
+        let trumbo = tmp.path().join(".trumbo");
+        std::fs::create_dir_all(&trumbo).unwrap();
         std::fs::write(
-            grok.join("config.toml"),
+            trumbo.join("config.toml"),
             "[mcp_servers.cfgsrv]\nurl = \"https://cfg.example.com/mcp\"\n",
         )
         .unwrap();
@@ -1374,7 +1374,7 @@ mod tests {
         let key = workspace_key(tmp.path());
         record(&key, false);
         assert!(!project_scope_allowed(tmp.path()));
-        // Simulate a `grok --trust` grant landing in the store after the
+        // Simulate a `trumbo --trust` grant landing in the store after the
         // untrusted verdict was cached: the re-read sees trusted, so the next
         // resolve upgrades the cache without a process restart.
         let allowed = resolve_and_record_inner(
@@ -1473,7 +1473,7 @@ mod tests {
         );
 
         // A repo-local code-exec config appears after the first resolve.
-        std::fs::create_dir_all(tmp.path().join(".grok").join("hooks")).unwrap();
+        std::fs::create_dir_all(tmp.path().join(".trumbo").join("hooks")).unwrap();
 
         // The next resolve re-checks `repo_configs_present` (no stale grant to
         // ride) => headless untrusted, so the newly-added hooks are now gated.
@@ -1514,14 +1514,14 @@ mod tests {
 
         // (b) Configs present + untrusted (empty store, headless) => false.
         let untrusted = repo_tmp();
-        std::fs::create_dir_all(untrusted.path().join(".grok").join("hooks")).unwrap();
+        std::fs::create_dir_all(untrusted.path().join(".trumbo").join("hooks")).unwrap();
         let lt = resolve_launch_dir_trust(untrusted.path(), None);
         assert_eq!(lt, resolve_and_record(untrusted.path(), None, false));
         assert!(!lt, "untrusted configs launch dir must be denied");
 
         // (c) Configs present + store-trusted => true.
         let trusted = repo_tmp();
-        std::fs::create_dir_all(trusted.path().join(".grok").join("hooks")).unwrap();
+        std::fs::create_dir_all(trusted.path().join(".trumbo").join("hooks")).unwrap();
         let mut store = TrustStore::load();
         store.set_trusted(&workspace_key(trusted.path())).unwrap();
         let lt = resolve_launch_dir_trust(trusted.path(), None);
@@ -1653,8 +1653,8 @@ mod tests {
     fn detected_config_kinds_summarizes_present_markers() {
         let tmp = repo_tmp();
         std::fs::write(tmp.path().join(".mcp.json"), "{}").unwrap();
-        std::fs::create_dir_all(tmp.path().join(".grok").join("hooks")).unwrap();
-        std::fs::write(tmp.path().join(".grok").join("lsp.json"), "{}").unwrap();
+        std::fs::create_dir_all(tmp.path().join(".trumbo").join("hooks")).unwrap();
+        std::fs::write(tmp.path().join(".trumbo").join("lsp.json"), "{}").unwrap();
         std::fs::write(tmp.path().join(".envrc"), "export X=1\n").unwrap();
         let kinds = detected_config_kinds(tmp.path());
         assert!(kinds.contains(&"mcp".to_string()));
@@ -1670,8 +1670,8 @@ mod tests {
         // Regression for the "empty configKinds" bug: a repo gated SOLELY by
         // `.grok/lsp.json` must still produce a non-empty reason list.
         let tmp = repo_tmp();
-        std::fs::create_dir_all(tmp.path().join(".grok")).unwrap();
-        std::fs::write(tmp.path().join(".grok").join("lsp.json"), "{}").unwrap();
+        std::fs::create_dir_all(tmp.path().join(".trumbo")).unwrap();
+        std::fs::write(tmp.path().join(".trumbo").join("lsp.json"), "{}").unwrap();
         let kinds = detected_config_kinds(tmp.path());
         assert_eq!(kinds, vec!["lsp".to_string()]);
     }

@@ -6,7 +6,7 @@
 //! BEFORE the permission layer can auto-approve.
 use super::support::*;
 use super::*;
-/// Build an actor whose toolset parses grok `search_replace` plus the plan
+/// Build an actor whose toolset parses trumbo `search_replace` plus the plan
 /// tools (so `${{ tools.by_kind.exit_plan }}` resolves in the rejection
 /// message), with a gateway drain answering session notifications.
 async fn build_gate_actor() -> SessionActor {
@@ -80,7 +80,7 @@ async fn tool_result_text(actor: &SessionActor, call_id: &str) -> String {
         .unwrap_or_else(|| panic!("no tool_result for {call_id} in {conv:?}"))
 }
 /// The headline: plan mode Active + allow-all permissions (the always-approve
-/// worst case) still rejects a grok edit outside the plan file, without ever
+/// worst case) still rejects a trumbo edit outside the plan file, without ever
 /// reaching the permission layer, and steers the model to `exit_plan_mode`.
 #[tokio::test(flavor = "current_thread")]
 async fn plan_mode_rejects_grok_edit_outside_plan_file_despite_allow_all_permissions() {

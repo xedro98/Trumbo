@@ -3423,11 +3423,11 @@ mod inline_auto_compact_flow_tests {
             SuppressReason::CreditBlock
         );
         assert_eq!(
-            classify("API error (status 402 Payment Required): Grok Build usage balance exhausted"),
+            classify("API error (status 402 Payment Required): Trumbo usage balance exhausted"),
             SuppressReason::CreditBlock
         );
         assert_eq!(
-            classify("Grok Build usage limit reached"),
+            classify("Trumbo usage limit reached"),
             SuppressReason::CreditBlock
         );
         assert_eq!(

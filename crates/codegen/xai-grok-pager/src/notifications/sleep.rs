@@ -102,7 +102,7 @@ impl SleepInhibitor {
         let mut cmd = std::process::Command::new("systemd-inhibit");
         cmd.args([
             "--what=idle",
-            "--who=grok",
+            "--who=trumbo",
             "--why=agent turn in progress",
             "sleep",
             "infinity",
@@ -114,7 +114,7 @@ impl SleepInhibitor {
         // The spawned process is the lock holder: `systemd-inhibit` keeps
         // the idle-inhibit fd itself and runs `sleep infinity` as its child
         // — it is the same pid `release()` SIGTERMs on a clean turn end.
-        // Bind that pid to us so a crashed/killed grok (SIGKILL,
+        // Bind that pid to us so a crashed/killed trumbo (SIGKILL,
         // `panic=abort` SIGABRT — no Drop runs) can't leave an immortal
         // inhibitor holding the lock and pid slots on shared hosts.
         xai_tty_utils::kill_on_parent_death_std(&mut cmd);

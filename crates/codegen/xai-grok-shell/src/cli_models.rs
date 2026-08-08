@@ -1,4 +1,4 @@
-//! Data APIs for `grok models`. Clients own display.
+//! Data APIs for `trumbo models`. Clients own display.
 
 use agent_client_protocol as acp;
 use anyhow::Result;
@@ -6,7 +6,7 @@ use xai_acp_lib::{AcpAgentTx, acp_send};
 
 use crate::agent::config::Config as AgentConfig;
 
-/// Status for the `grok models` banner (display order ≠ sampling priority; see [`AuthStatus::resolve`]).
+/// Status for the `trumbo models` banner (display order ≠ sampling priority; see [`AuthStatus::resolve`]).
 #[derive(Debug, PartialEq, Eq)]
 pub enum AuthStatus {
     ApiKey,
@@ -165,7 +165,7 @@ mod tests {
 
         assert_eq!(
             AuthStatus::resolve(&Config::default()),
-            AuthStatus::LoggedIn("grok.com".to_owned())
+            AuthStatus::LoggedIn("trumbo.com".to_owned())
         );
     }
 
@@ -259,7 +259,7 @@ mod tests {
         let cfg = config_from_toml(&byok_and_deployment_toml(dm));
         assert_eq!(
             AuthStatus::resolve(&cfg),
-            AuthStatus::LoggedIn("grok.com".to_owned())
+            AuthStatus::LoggedIn("trumbo.com".to_owned())
         );
     }
 

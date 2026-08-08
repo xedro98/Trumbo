@@ -1704,7 +1704,7 @@ fn make_entry_config_with_id(
 fn build_prefetched_map_distinct_ids_same_slug() {
     let entries = vec![
         make_entry_config_with_id(Some("auto"), "grok-build", Some("Auto")),
-        make_entry_config_with_id(Some("grok-build"), "grok-build", Some("Grok Build")),
+        make_entry_config_with_id(Some("grok-build"), "grok-build", Some("Trumbo")),
         make_entry_config_with_id(
             Some("experimental-fast"),
             "experimental-fast",
@@ -1770,7 +1770,7 @@ fn build_prefetched_map_none_id_falls_back_to_slug() {
     let entries = vec![make_entry_config_with_id(
         None,
         "grok-build",
-        Some("Grok Build"),
+        Some("Trumbo"),
     )];
     let map = build_prefetched_map(entries, None);
 

@@ -104,7 +104,7 @@ fn legacy_scope_fallback_reads_old_auth_json() {
     let auth_path = dir.path().join("auth.json");
 
     // Write auth.json with the legacy scope key (as `x setup` copies from
-    // a machine that was authenticated with an older grok version).
+    // a machine that was authenticated with an older trumbo version).
     let legacy_auth = make_auth(Some(Utc::now() + Duration::hours(1)), Utc::now());
     let mut store = AuthStore::new();
     store.insert(LEGACY_SCOPE.to_string(), legacy_auth);
@@ -1108,7 +1108,7 @@ async fn auth_returns_expired_api_key_consistently_with_current() {
 
     // Async path: must NOT clone the stale key for downstream
     // consumers. Surface `TokenExpiredNoRefresh` so callers can
-    // funnel the user back through `grok login`.
+    // funnel the user back through `trumbo login`.
     let err = mgr.auth().await.unwrap_err();
     assert!(
         matches!(err, AuthError::TokenExpiredNoRefresh),
@@ -1476,7 +1476,7 @@ async fn refresh_chain_demotes_when_attributed_tried_rt_differs_from_disk() {
     assert!(
         mgr.permanent_failure().is_none(),
         "demotion must not record a sticky verdict that locks out every \
-         sibling process until the user re-runs `grok login`",
+         sibling process until the user re-runs `trumbo login`",
     );
 }
 
@@ -1856,11 +1856,11 @@ async fn permanent_failure_reads_absent_after_clear_so_auth_reports_not_logged_i
     );
     assert!(mgr.permanent_failure().is_some());
 
-    // User runs `grok logout` which calls clear().
+    // User runs `trumbo logout` which calls clear().
     mgr.clear().unwrap();
 
     // The diagnostic the user now sees on the next request should be
-    // "Not logged in. Run `grok login`.", not the stale invalid_grant.
+    // "Not logged in. Run `trumbo login`.", not the stale invalid_grant.
     let err = mgr.auth().await.unwrap_err();
     assert!(
         matches!(err, AuthError::NotLoggedIn),

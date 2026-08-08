@@ -22,7 +22,7 @@ pub const RATE_LIMITED_ERROR_CODE: i32 = -32003;
 pub const RATE_LIMITED_USER_MESSAGE_OAUTH: &str =
     "You\u{2019}ve hit the rate limit for your plan. Upgrade your account or try again later.";
 
-/// API key / team rate-limit copy. Personal grok.com upgrades do not raise API
+/// API key / team rate-limit copy. Personal trumbo.com upgrades do not raise API
 /// team limits; admins purchase credits or a higher spend-based tier.
 /// See https://docs.x.ai/developers/rate-limits#rate-limit-tiers
 pub const RATE_LIMITED_USER_MESSAGE_API_KEY: &str = "You\u{2019}ve hit your team\u{2019}s API rate limit. Ask a team admin to purchase more credits for higher limits, or try again later. See https://docs.x.ai/developers/rate-limits#rate-limit-tiers";
@@ -35,7 +35,7 @@ pub const FREE_USAGE_EXHAUSTED_ERROR_CODE: &str = "subscription:free-usage-exhau
 
 /// User-facing free-usage exhaustion copy (paywall). Deliberately promises no
 /// reset duration — the quota window is backend-config-driven.
-pub const FREE_USAGE_USER_MESSAGE: &str = "You\u{2019}ve reached your free Grok Build usage limit for now. Get SuperGrok for much higher limits, or try again later: https://grok.com/supergrok?referrer=grok-build";
+pub const FREE_USAGE_USER_MESSAGE: &str = "You\u{2019}ve reached your free Trumbo usage limit for now. Get SuperGrok for much higher limits, or try again later: https://trumbo.com/supergrok?referrer=grok-build";
 
 /// Whether flattened server detail is free-usage-quota exhaustion (paywall),
 /// not transient throttling. Sniffs the well-known code embedded by
@@ -88,12 +88,12 @@ fn strip_sampling_api_error_prefix(detail: &str) -> &str {
 }
 
 /// IC sometimes reuses OAuth free-tier upsell copy on 429s ("upgrade to a Grok
-/// subscription" / grok.com/supergrok). That is wrong for API-key / team auth:
+/// subscription" / trumbo.com/supergrok). That is wrong for API-key / team auth:
 /// higher limits come from credits and spend-based rate-limit tiers, not a
 /// personal SuperGrok plan.
 fn pushes_consumer_subscription_upsell(detail: &str) -> bool {
     let d = detail.to_ascii_lowercase();
-    d.contains("grok.com/supergrok") || d.contains("upgrade to a grok subscription")
+    d.contains("trumbo.com/supergrok") || d.contains("upgrade to a trumbo subscription")
 }
 
 /// User-facing copy for capacity/overload failures (stream `overloaded_error`,
@@ -137,7 +137,7 @@ pub(crate) fn map_sampling_err_to_acp(err: SamplingError) -> acp::Error {
                     format!(
                         "{message}\n\nYou have an API key set (XAI_API_KEY). \
                          Your cached OAuth session is being used instead. \
-                         To use your API key, run `grok logout` or type /logout in the TUI."
+                         To use your API key, run `trumbo logout` or type /logout in the TUI."
                     )
                 } else {
                     message
@@ -437,11 +437,11 @@ mod tests {
     fn format_rate_limited_api_key_rewrites_consumer_subscription_upsell() {
         let body = "Some resource has been exhausted: You are sending requests too quickly. \
              Please slow down, or upgrade to a Grok subscription for higher limits: \
-             https://grok.com/supergrok";
+             https://trumbo.com/supergrok";
         let wire = format!("API error (status 429 Too Many Requests): {body}");
         // OAuth keeps the IC body (personal plan upgrade is correct).
         assert_eq!(format_rate_limited_user_message(Some(&wire), false), body);
-        // API key must not push grok.com SuperGrok — team credits / rate-limit tiers.
+        // API key must not push trumbo.com SuperGrok — team credits / rate-limit tiers.
         assert_eq!(
             format_rate_limited_user_message(Some(&wire), true),
             RATE_LIMITED_USER_MESSAGE_API_KEY
@@ -692,8 +692,8 @@ mod tests {
             let data = acp_err.data.unwrap();
             let msg = data.as_str().unwrap();
             assert!(
-                msg.contains("grok logout"),
-                "should suggest grok logout when API key is available: {msg}"
+                msg.contains("trumbo logout"),
+                "should suggest trumbo logout when API key is available: {msg}"
             );
             assert!(
                 msg.contains("/logout"),
@@ -717,7 +717,7 @@ mod tests {
             let data = acp_err.data.unwrap();
             let msg = data.as_str().unwrap();
             assert!(
-                !msg.contains("grok logout"),
+                !msg.contains("trumbo logout"),
                 "should NOT suggest logout when no API key is available: {msg}"
             );
         });
@@ -738,7 +738,7 @@ mod tests {
             let data = acp_err.data.unwrap();
             let msg = data.as_str().unwrap();
             assert!(
-                !msg.contains("grok logout"),
+                !msg.contains("trumbo logout"),
                 "should NOT suggest logout for non-subscription 403: {msg}"
             );
         });

@@ -149,7 +149,7 @@ mod partition_rules_by_scope_tests {
         let vendor_homes = vec![(Path::new("/repo/.claude").to_path_buf(), true)];
         let (workspace, user) = partition_rules_by_scope(
             files,
-            Path::new("/other/grok"),
+            Path::new("/other/trumbo"),
             &vendor_homes,
             Some(Path::new("/repo")),
         );
@@ -174,7 +174,7 @@ mod partition_rules_by_scope_tests {
         ];
         let (workspace, user) = partition_rules_by_scope(
             files,
-            Path::new("/custom/grok"),
+            Path::new("/custom/trumbo"),
             &[],
             Some(Path::new("/custom/grok/worktrees/repo")),
         );
@@ -403,7 +403,7 @@ pub(super) fn build_truncated_prompt_message(
 }
 /// Replace the file-referencing offload `notice` embedded in `message` with the
 /// no-file [`OFFLOAD_FAILED_NOTICE`]. Position-independent (the notice sits at the
-/// end for grok ordering), so a failed offload never
+/// end for trumbo ordering), so a failed offload never
 /// leaves the model chasing a "read this file" pointer to a file that does not
 /// exist. Returns `message` unchanged if the notice is absent (defensive).
 pub(super) fn strip_offload_notice(message: &str, notice: &str) -> String {

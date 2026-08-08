@@ -394,7 +394,7 @@ impl SubagentsConfig {
     /// Each file defines a single `SubagentPersona`. The file stem becomes
     /// the persona name. Inline config takes precedence.
     pub(crate) fn discover_personas(&mut self, cwd: &std::path::Path) {
-        let dir = cwd.join(".grok").join("personas");
+        let dir = cwd.join(".trumbo").join("personas");
         self.discover_personas_in_dir(&dir);
     }
     /// Validate all role definitions. Returns a list of (role_name, error_message)
@@ -437,7 +437,7 @@ impl SubagentsConfig {
     ///
     /// Precedence: inline config roles override file-based roles with the same name.
     pub(crate) fn discover_roles(&mut self, cwd: &std::path::Path) {
-        let roles_dir = cwd.join(".grok").join("roles");
+        let roles_dir = cwd.join(".trumbo").join("roles");
         self.discover_roles_in_dir(&roles_dir);
     }
     pub const ENV_MAX_DEPTH: &'static str = "GROK_SUBAGENTS_MAX_DEPTH";
@@ -991,7 +991,7 @@ impl StorageMode {
         Self::Local
     }
     /// Resolve from remote settings, enforcing the rule that `Writeback`
-    /// requires grok.com auth (it syncs to grok-code-backend). This is the
+    /// requires trumbo.com auth (it syncs to grok-code-backend). This is the
     /// single home for that gate, used at boot ([`crate::agent::init`]) and by
     /// the post-readiness self-heal (`MvpAgent::reapply_storage_mode`).
     pub(crate) fn from_remote_gated(
@@ -1064,7 +1064,7 @@ fn walk_toml(
     }
 }
 /// The `[skills]` table from an effective config, shared by the reload
-/// dispatch and `grok inspect`.
+/// dispatch and `trumbo inspect`.
 pub(crate) use crate::config::reloader::parse_skills_config;
 /// Effective config: layers + campaign overlay (remote cache + `GROK_CAMPAIGNS_OVERRIDE`).
 pub use crate::util::config::load_effective_config;

@@ -352,7 +352,7 @@ impl acp::Agent for MvpAgent {
             tracing::info!(
                 label = ?login_label,
                 has_auth_provider,
-                "auth: advertising grok.com auth method",
+                "auth: advertising trumbo.com auth method",
             );
         }
         let preferred_method = preferred_method_early;
@@ -883,9 +883,9 @@ impl acp::Agent for MvpAgent {
                 {
                     let mut sampling_config = self.sampling_config.borrow_mut();
                     sampling_config.api_key = Some(auth.key.clone());
-                    tracing::debug!("auth: grok.com/oidc handler set api_key (SessionToken)");
+                    tracing::debug!("auth: trumbo.com/oidc handler set api_key (SessionToken)");
                     xai_grok_telemetry::unified_log::debug(
-                        "auth: grok.com/oidc handler set api_key (SessionToken)",
+                        "auth: trumbo.com/oidc handler set api_key (SessionToken)",
                         None,
                         None,
                     );
@@ -2253,7 +2253,7 @@ impl acp::Agent for MvpAgent {
                 crate::extensions::auth_gate::require_xai_auth(
                     &self.auth_manager,
                     "Authentication required",
-                    "Run `grok login` to authenticate.",
+                    "Run `trumbo login` to authenticate.",
                 )?;
                 let params: serde_json::Value = serde_json::from_str(args.params.get())
                     .map_err(|e| acp::Error::invalid_params().data(e.to_string()))?;
@@ -2285,7 +2285,7 @@ impl acp::Agent for MvpAgent {
                 crate::extensions::auth_gate::require_xai_auth(
                     &self.auth_manager,
                     "Authentication required",
-                    "Run `grok login` to authenticate.",
+                    "Run `trumbo login` to authenticate.",
                 )?;
                 let sandbox_client = crate::remote::SandboxClient::new(
                     self.cli_chat_proxy_base_url(),
@@ -2310,7 +2310,7 @@ impl acp::Agent for MvpAgent {
                 crate::extensions::auth_gate::require_xai_auth(
                     &self.auth_manager,
                     "Authentication required",
-                    "Run `grok login` to authenticate.",
+                    "Run `trumbo login` to authenticate.",
                 )?;
                 let params: serde_json::Value = serde_json::from_str(args.params.get())
                     .map_err(|e| acp::Error::invalid_params().data(e.to_string()))?;
@@ -2367,7 +2367,7 @@ impl acp::Agent for MvpAgent {
                 crate::extensions::auth_gate::require_xai_auth(
                     &self.auth_manager,
                     "Authentication required",
-                    "Run `grok login` to authenticate.",
+                    "Run `trumbo login` to authenticate.",
                 )?;
                 let params: serde_json::Value = serde_json::from_str(args.params.get())
                     .map_err(|e| acp::Error::invalid_params().data(e.to_string()))?;
@@ -2427,7 +2427,7 @@ impl acp::Agent for MvpAgent {
                 crate::extensions::auth_gate::require_xai_auth(
                     &self.auth_manager,
                     "Authentication required",
-                    "Run `grok login` to authenticate.",
+                    "Run `trumbo login` to authenticate.",
                 )?;
                 let params: serde_json::Value = serde_json::from_str(args.params.get())
                     .map_err(|e| acp::Error::invalid_params().data(e.to_string()))?;

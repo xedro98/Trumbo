@@ -436,8 +436,8 @@ mod max_mcp_output_bytes_tests {
         // Make it a git repo so the chain walks subdir → root.
         git2::Repository::init(root).unwrap();
         let sub = root.join("crates").join("thing");
-        std::fs::create_dir_all(sub.join(".grok")).unwrap();
-        std::fs::create_dir_all(root.join(".grok")).unwrap();
+        std::fs::create_dir_all(sub.join(".trumbo")).unwrap();
+        std::fs::create_dir_all(root.join(".trumbo")).unwrap();
         std::fs::write(
             root.join(".grok/config.toml"),
             "[mcp]\nmax_output_bytes = 30000\n",
@@ -459,7 +459,7 @@ mod max_mcp_output_bytes_tests {
         std::fs::write(sub.join(".grok/config.toml"), "[ui]\nvim_mode = true\n").unwrap();
         assert_eq!(super::project_max_mcp_output_bytes(&sub), Some(30_000));
 
-        // No .grok files with the key anywhere → None.
+        // No .trumbo files with the key anywhere → None.
         std::fs::remove_file(root.join(".grok/config.toml")).unwrap();
         assert_eq!(super::project_max_mcp_output_bytes(&sub), None);
     }

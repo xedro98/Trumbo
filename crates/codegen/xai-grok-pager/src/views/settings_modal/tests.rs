@@ -1591,7 +1591,7 @@ fn editor_render_fixture(buffer: &str, cursor_byte: usize) -> SettingsModalState
 /// buffers that fit entirely within the visible window.
 #[test]
 fn render_editing_value_cursor_at_logical_position_when_buffer_fits() {
-    let mut s = editor_render_fixture("Grok Test", 4); // cursor between "Grok" and " Test"
+    let mut s = editor_render_fixture("Grok Test", 4); // cursor between "Trumbo" and " Test"
     let area = Rect {
         x: 0,
         y: 0,

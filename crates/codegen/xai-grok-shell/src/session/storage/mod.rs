@@ -1465,9 +1465,9 @@ pub fn strip_context_wrappers(update: acp::SessionUpdate) -> acp::SessionUpdate 
 
 // Replay-loader family, all resolving through `replay_updates_path_in_dir` and
 // reading through `for_each_replay_update_in_file`. Pick by need:
-//   - production, current grok home:   `load_updates_for_replay`
+//   - production, current trumbo home:   `load_updates_for_replay`
 //   - production, streaming (bounded): `stream_replay_updates_at`
-//   - tests, explicit grok home:       `load_updates_for_replay_at` (typed reference)
+//   - tests, explicit trumbo home:       `load_updates_for_replay_at` (typed reference)
 
 /// Load replay-ready typed ACP updates for a session, or `None` when the
 /// session or its `updates.jsonl` is missing.
@@ -1486,7 +1486,7 @@ pub fn load_updates_for_replay(
 }
 
 /// Like [`load_updates_for_replay`], but resolves the session under a specific
-/// grok home. Typed, materialize-all replay reader: collects every update into
+/// trumbo home. Typed, materialize-all replay reader: collects every update into
 /// owned `Vec`s. Production forwards replay through [`stream_replay_updates_at`]
 /// to bound peak memory, so this has no production caller and is compiled only
 /// for tests: the `testkit_synth_roundtrip` and `session_load_perf` parity

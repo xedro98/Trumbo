@@ -738,7 +738,7 @@ pub(crate) fn execute(
                         "x.ai/facetFilters": { "kind": kinds },
                     });
                         tracing::info!(
-                        target: "grok.pager.workspace_mode",
+                        target: "trumbo.pager.workspace_mode",
                         event = "session_list_fetch",
                         kind_filter = ?kinds,
                         query = ?query,
@@ -4557,7 +4557,7 @@ fn format_auth_lines(is_api_key_auth: bool, api_key_env_set: bool) -> String {
             "  Auth method: API key\n"
         };
         return format!(
-            "{method}  Run `grok login` to use your SuperGrok subscription instead.\n"
+            "{method}  Run `trumbo login` to use your SuperGrok subscription instead.\n"
         );
     }
     String::from("  Auth method: OAuth\n")

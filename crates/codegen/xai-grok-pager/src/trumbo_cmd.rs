@@ -1,4 +1,4 @@
-//! `grok trumbo` subcommand — Trumbo device auth + subscription status.
+//! `trumbo trumbo` subcommand — Trumbo device auth + subscription status.
 
 use anyhow::Result;
 use clap::{Args, Subcommand};

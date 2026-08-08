@@ -121,7 +121,7 @@ const RECAP_BUDGET_HEADROOM_TOKENS: u64 = 4_000;
 /// that unlikely for normal grok-build sessions).
 ///
 /// * Fast path — if the whole snapshot already fits, returns
-///   `build_instruction_items(...)` verbatim (keeps the grok prefix KV cache
+///   `build_instruction_items(...)` verbatim (keeps the trumbo prefix KV cache
 ///   warm; honors the caller's `strip_reasoning`).
 /// * Over budget — strip reasoning (the prefix cache is lost once we trim),
 ///   normalize the trailing boundary ([`pop_trailing_tool_run`]),
@@ -160,7 +160,7 @@ pub(crate) fn budget_instruction_items(
     let snapshot_budget = prompt_budget.saturating_sub(estimate_item_tokens(&instruction_item));
 
     // Un-stripped estimate is a safe upper bound (stripping only shrinks); the
-    // verbatim path keeps the grok prefix cache warm.
+    // verbatim path keeps the trumbo prefix cache warm.
     let pre_tokens = estimate_conversation_tokens(&conversation);
     if pre_tokens <= snapshot_budget {
         return build_instruction_items(conversation, instruction, strip_reasoning);
@@ -779,7 +779,7 @@ mod tests {
             ConversationItem::assistant("did stuff"),
             ConversationItem::user("z".repeat(40_000)),
         ];
-        // grok backend => strip_reasoning=false, but the over-budget branch must
+        // trumbo backend => strip_reasoning=false, but the over-budget branch must
         // strip reasoning anyway (the prefix cache is already lost once trimmed).
         let out = budget_recap_items(conv, "system-reminder", false, 8_000);
         assert!(
@@ -796,13 +796,13 @@ mod tests {
             ConversationItem::assistant("did stuff"),
             ConversationItem::user("small"),
         ];
-        // Fits under a large window on grok (strip_reasoning=false) => verbatim,
+        // Fits under a large window on trumbo (strip_reasoning=false) => verbatim,
         // reasoning kept so the prefix KV cache stays warm.
         let out = budget_recap_items(conv, "system-reminder", false, 256_000);
         assert!(
             out.iter()
                 .any(|i| matches!(i, ConversationItem::Reasoning(_))),
-            "fits path on grok must keep reasoning verbatim"
+            "fits path on trumbo must keep reasoning verbatim"
         );
     }
 

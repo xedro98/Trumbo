@@ -220,7 +220,7 @@ pub(super) enum PlanEditGate {
 ///   file is editable in plan mode (plan docs are written with these
 ///   same tools); everything else is rejected. Pre-existing behavior.
 /// - **Compat-toolset `Delete`** is **not** on the markdown carve-out: it maps to
-///   `AccessKind::Edit` and is plan-file-only (same as grok edits). Deleting
+///   `AccessKind::Edit` and is plan-file-only (same as trumbo edits). Deleting
 ///   an arbitrary `.md` in plan mode must not pass.
 /// - **Every other edit tool** (`AccessKind::Edit`) is restricted to the plan
 ///   file itself, via the same predicate that auto-approves plan-file edits
@@ -3131,7 +3131,7 @@ mod plan_mode_edit_gate_tests {
         assert_eq!(
             gate(&t, &write("/tmp/README.md")),
             PlanEditGate::RejectNonPlanFile,
-            "grok tools get no markdown exception — plan file only"
+            "trumbo tools get no markdown exception — plan file only"
         );
     }
     /// The carve-out and the permission bypass share `should_auto_approve_edit`,

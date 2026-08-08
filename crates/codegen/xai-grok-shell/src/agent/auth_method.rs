@@ -30,7 +30,7 @@ pub const XAI_API_KEY_ENV_VAR: &str = "XAI_API_KEY";
 pub const LEGACY_XAI_API_KEY_ENV_VAR: &str = "GROK_CODE_XAI_API_KEY";
 
 /// Read the API key from the environment, falling back to the stored Trumbo
-/// token in `auth.json` (written by `grok trumbo login`) and `TRUMBO_TOKEN`.
+/// token in `auth.json` (written by `trumbo trumbo login`) and `TRUMBO_TOKEN`.
 ///
 /// Checks `XAI_API_KEY` first, then the legacy `GROK_CODE_XAI_API_KEY`, then
 /// the stored token.
@@ -112,14 +112,14 @@ pub struct AuthMethodsBuildInputs<'a> {
     /// or recovered via silent refresh).
     pub has_cached_token: bool,
     /// True if enterprise OIDC is configured. Mutually exclusive with the
-    /// default `grok.com` method.
+    /// default `trumbo.com` method.
     pub has_enterprise_oidc: bool,
     /// Required when `has_enterprise_oidc` is true; ignored otherwise.
     pub enterprise_oidc_issuer: Option<&'a str>,
-    /// Optional display label for the login method (`grok.com` or `oidc`).
+    /// Optional display label for the login method (`trumbo.com` or `oidc`).
     pub login_label: Option<&'a str>,
     /// True if `grok_com_config.auth_provider_command` is configured (sets
-    /// `meta.external_provider = true` on the `grok.com` method).
+    /// `meta.external_provider = true` on the `trumbo.com` method).
     pub has_auth_provider_command: bool,
     /// Config pin (`[auth] preferred_method`). `None` keeps multi-method
     /// fallthrough; `Some` is fail-closed (only that method family).
@@ -152,7 +152,7 @@ pub struct BuiltAuthMethods {
 /// 2. `cached_token`    (if `has_cached_token`)
 /// 3. exactly one of:
 ///    - `oidc`          (if `has_enterprise_oidc`)
-///    - `grok.com`      (otherwise)
+///    - `trumbo.com`      (otherwise)
 ///
 /// Unpinned `default_auth_method_id`:
 /// - `cached_token` if `has_cached_token`
@@ -337,7 +337,7 @@ impl AuthMethodKind {
         matches!(self, Self::XaiApiKey)
     }
 
-    /// `true` for session-based methods (cached_token, grok.com, oidc).
+    /// `true` for session-based methods (cached_token, trumbo.com, oidc).
     pub(crate) fn is_session_based(self) -> bool {
         matches!(self, Self::CachedToken | Self::GrokCom | Self::Oidc)
     }
@@ -348,7 +348,7 @@ impl AuthMethodKind {
     }
 }
 
-/// `true` for session-based ACP methods (cached_token, grok.com, oidc).
+/// `true` for session-based ACP methods (cached_token, trumbo.com, oidc).
 pub(crate) fn is_session_based_method(method_id: &acp::AuthMethodId) -> bool {
     AuthMethodKind::from_id(method_id).is_session_based()
 }
@@ -407,15 +407,15 @@ pub(crate) fn session_token_auth_gate(
 }
 
 pub const AUTH_ERROR_SESSION_EXPIRED: &str =
-    "Session expired. Run `grok login` to re-authenticate.";
+    "Session expired. Run `trumbo login` to re-authenticate.";
 
-pub const AUTH_ERROR_API_KEY: &str = "Authentication failed. Run `grok login`, set XAI_API_KEY, or add api_key to ~/.grok/config.toml.";
+pub const AUTH_ERROR_API_KEY: &str = "Authentication failed. Run `trumbo login`, set XAI_API_KEY, or add api_key to ~/.grok/config.toml.";
 
 /// Next ACP method id when `cached_token` cannot proceed (missing / expired /
 /// legacy WebLogin), or `None` when fallthrough is forbidden.
 ///
 /// Unpinned: prefer non-interactive `xai.api_key` when advertiseable, else
-/// interactive `grok.com`.
+/// interactive `trumbo.com`.
 ///
 /// Pinned `oidc`: **no** fallthrough to api_key — return `None` so the caller
 /// fails auth. Pinned `api_key` should not reach this path (cached_token is
@@ -439,7 +439,7 @@ pub const PREFERRED_API_KEY_UNAVAILABLE: &str = "preferred_method=api_key but no
 
 /// Error when `preferred_method=oidc` but the session path cannot proceed.
 pub const PREFERRED_OIDC_UNAVAILABLE: &str =
-    "preferred_method=oidc but no session is available. Run `grok login` to authenticate.";
+    "preferred_method=oidc but no session is available. Run `trumbo login` to authenticate.";
 
 pub const XAI_API_KEY_METHOD_ID: &str = "xai.api_key";
 pub(crate) fn xai_api_key_auth_method() -> acp::AuthMethod {
@@ -465,14 +465,14 @@ pub(crate) fn cached_token_auth_method() -> acp::AuthMethod {
     )
 }
 
-pub const GROK_COM_METHOD_ID: &str = "grok.com";
+pub const GROK_COM_METHOD_ID: &str = "trumbo.com";
 
-/// xAI OAuth2/OIDC auth. Method id `"grok.com"` kept for ACP wire-compat.
+/// xAI OAuth2/OIDC auth. Method id `"trumbo.com"` kept for ACP wire-compat.
 pub(crate) fn grok_com_auth_method(
     label: Option<&str>,
     has_auth_provider_command: bool,
 ) -> acp::AuthMethod {
-    let name = label.unwrap_or("Grok");
+    let name = label.unwrap_or("Trumbo");
     let meta = if has_auth_provider_command {
         let mut m = acp::Meta::new();
         m.insert("external_provider".to_owned(), serde_json::json!(true));
@@ -519,7 +519,7 @@ mod tests {
         );
     }
 
-    /// No advertiseable API-key credentials → interactive `grok.com`.
+    /// No advertiseable API-key credentials → interactive `trumbo.com`.
     #[test]
     fn after_cached_token_unavailable_falls_to_grok_com_without_api_key() {
         assert_eq!(
@@ -676,7 +676,7 @@ mod tests {
     }
 
     /// Session-only user (no API key anywhere): cached_token first, then
-    /// `grok.com` — `auth_methods.first()` does NOT need interactive login,
+    /// `trumbo.com` — `auth_methods.first()` does NOT need interactive login,
     /// so this user also skips the login screen at startup.
     #[test]
     fn session_only_user_first_method_is_cached_token() {
@@ -700,7 +700,7 @@ mod tests {
         );
     }
 
-    /// Brand-new user (no API key, no cached token): only `grok.com` is
+    /// Brand-new user (no API key, no cached token): only `trumbo.com` is
     /// advertised, and the pager will (correctly) show the login screen.
     /// `default_auth_method_id` is None so the pager falls back to the
     /// advertised login method.
@@ -713,7 +713,7 @@ mod tests {
         assert_eq!(built.methods.len(), 1);
     }
 
-    /// Enterprise OIDC replaces `grok.com` (mutually exclusive). xai.api_key,
+    /// Enterprise OIDC replaces `trumbo.com` (mutually exclusive). xai.api_key,
     /// when present, still leads.
     #[test]
     fn enterprise_oidc_replaces_grok_com_but_xai_api_key_still_first() {
@@ -739,11 +739,11 @@ mod tests {
                 .methods
                 .iter()
                 .any(|m| AuthMethodKind::from_id(m.id()) == AuthMethodKind::GrokCom),
-            "grok.com and oidc are mutually exclusive",
+            "trumbo.com and oidc are mutually exclusive",
         );
     }
 
-    /// `has_auth_provider_command` is plumbed through to the `grok.com` method
+    /// `has_auth_provider_command` is plumbed through to the `trumbo.com` method
     /// as `meta.external_provider = true`. Pinning this here so the pager's
     /// `AuthStartMode::Command` path keeps working.
     #[test]
@@ -755,13 +755,13 @@ mod tests {
         };
         let built = build_auth_methods(inputs);
 
-        let grok = built
+        let trumbo = built
             .methods
             .iter()
             .find(|m| AuthMethodKind::from_id(m.id()) == AuthMethodKind::GrokCom)
-            .expect("grok.com must be advertised");
-        assert_eq!(grok.name(), "Acme Corp");
-        let meta = grok.meta().expect("meta should be set");
+            .expect("trumbo.com must be advertised");
+        assert_eq!(trumbo.name(), "Acme Corp");
+        let meta = trumbo.meta().expect("meta should be set");
         assert_eq!(
             meta.get("external_provider").and_then(|v| v.as_bool()),
             Some(true),
@@ -837,7 +837,7 @@ mod tests {
             let built = build_auth_methods(AuthMethodsBuildInputs {
                 has_external_api_key,
                 // Realistic enterprise user: no cached session token, default
-                // grok.com login (no enterprise OIDC).
+                // trumbo.com login (no enterprise OIDC).
                 has_cached_token: false,
                 ..default_inputs()
             });
@@ -1000,9 +1000,9 @@ mod tests {
         assert_eq!(read_xai_api_key_env().unwrap(), "new-key");
     }
 
-    // -- grok login --legacy regression coverage ------------------------
+    // -- trumbo login --legacy regression coverage ------------------------
     //
-    // `grok login --legacy` produces a GrokAuth with `auth_mode: WebLogin`,
+    // `trumbo login --legacy` produces a GrokAuth with `auth_mode: WebLogin`,
     // `oidc_issuer: None`, and no `expires_at` (30-day hardcoded TTL).
     // When this token is present via the `GROK_AUTH` env var (or via legacy
     // scope fallback in auth.json), `AuthManager::new` returns it from
@@ -1030,7 +1030,7 @@ mod tests {
         let _g1 = EnvGuard::unset("GROK_AUTH_PATH");
         let _g2 = EnvGuard::unset(XAI_API_KEY_ENV_VAR);
 
-        // Construct a legacy-style token exactly as `grok login --legacy`
+        // Construct a legacy-style token exactly as `trumbo login --legacy`
         // produces: WebLogin mode, no OIDC fields, no refresh_token, no
         // expires_at (is_expired falls back to 30-day age check).
         let legacy_token = GrokAuth {
@@ -1127,7 +1127,7 @@ mod tests {
         assert_eq!(
             first_kind(&built.methods),
             Some(AuthMethodKind::GrokCom),
-            "no cached token AND no api key: pager must show login (grok.com first)",
+            "no cached token AND no api key: pager must show login (trumbo.com first)",
         );
     }
 

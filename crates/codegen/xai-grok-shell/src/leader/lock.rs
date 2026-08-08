@@ -148,7 +148,7 @@ pub struct LeaderLock {
 }
 
 impl LeaderLock {
-    /// Create a new LeaderLock using the default paths in grok home.
+    /// Create a new LeaderLock using the default paths in trumbo home.
     /// If ws_url differs from the default production URL, a hash suffix is added
     /// to the lock and socket file names to differentiate leader instances.
     pub fn new(ws_url: &str) -> Self {
@@ -329,7 +329,7 @@ mod tests {
 
     #[test]
     fn override_socket_path_wins_over_ws_url_derivation() {
-        let root = Path::new("/home/u/.grok");
+        let root = Path::new("/home/u/.trumbo");
         let override_sock = PathBuf::from("/home/u/.grok/leader-branch.sock");
 
         // With an override, the path is taken verbatim and the WS-URL suffix is
@@ -347,7 +347,7 @@ mod tests {
 
     #[test]
     fn no_override_falls_back_to_ws_url_derivation() {
-        let root = Path::new("/home/u/.grok");
+        let root = Path::new("/home/u/.trumbo");
         // Default (empty) ws_url → bare leader.sock / leader.lock under root.
         assert_eq!(
             resolve_socket_path(None, root, ""),

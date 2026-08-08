@@ -1,4 +1,4 @@
-//! `grok inspect` — configuration introspection.
+//! `trumbo inspect` — configuration introspection.
 //!
 //! Shows everything Grok discovers in the current directory: project
 //! instructions, permissions, hooks, skills, agents, plugins, MCP servers,
@@ -273,7 +273,7 @@ pub(crate) struct ConfigSources {
     pub layers: Vec<ConfigLayer>,
 }
 
-/// A single config layer entry for `grok inspect`.
+/// A single config layer entry for `trumbo inspect`.
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct ConfigLayer {
@@ -478,7 +478,7 @@ fn instruction_file_type(
     if path
         .parent()
         .is_some_and(|parent| parent == grok_home.join("rules"))
-        || has_rules_directory(file_path, ".grok")
+        || has_rules_directory(file_path, ".trumbo")
         || has_rules_directory(file_path, ".cursor")
         || (!claude_imported && has_rules_directory(file_path, ".claude"))
         || extra_rule_prefixes
@@ -1025,7 +1025,7 @@ fn list_lsp_servers(
     // Folder-trust gate (display-only): inspect never spawns servers, but mark the
     // repo-local (project-scoped) entries a session would skip in an untrusted
     // clone so the listing matches the live gate. `remote = None` mirrors
-    // `grok mcp doctor` (no loaded RemoteSettings in a standalone command).
+    // `trumbo mcp doctor` (no loaded RemoteSettings in a standalone command).
     crate::agent::folder_trust::resolve_and_record(cwd, None, false);
     let project_allowed = crate::agent::folder_trust::project_scope_allowed(cwd);
 
@@ -1509,7 +1509,7 @@ fn print_human(r: &InspectReport) {
     if r.mcp_servers.is_empty() {
         println!();
         println!("  MCP Servers (0)");
-        println!("  {TREE} (none) \u{2014} see `grok mcp add --help`");
+        println!("  {TREE} (none) \u{2014} see `trumbo mcp add --help`");
     } else {
         print_columns(
             "MCP Servers",
@@ -1687,7 +1687,7 @@ mod tests {
             ("claude", "/repo/.claude/rules/team.md"),
             ("claude", r"C:\repo\.claude\rules\team.md"),
         ] {
-            let file_type = instruction_file_type(path, Path::new("/home/user/.grok"), false, &[]);
+            let file_type = instruction_file_type(path, Path::new("/home/user/.trumbo"), false, &[]);
             assert_eq!(file_type, "rules");
             assert_eq!(
                 instruction_compat_status(&Some(vendor.to_owned()), file_type, &report),
@@ -1697,7 +1697,7 @@ mod tests {
 
         for path in ["/repo/.grok/rules/team.md", r"C:\repo\.grok\rules\team.md"] {
             assert_eq!(
-                instruction_file_type(path, Path::new("/home/user/.grok"), false, &[]),
+                instruction_file_type(path, Path::new("/home/user/.trumbo"), false, &[]),
                 "rules"
             );
         }
@@ -1706,7 +1706,7 @@ mod tests {
             r"C:\repo\.cursor\rules\team.md",
         ] {
             assert_eq!(
-                instruction_file_type(path, Path::new("/home/user/.grok"), true, &[]),
+                instruction_file_type(path, Path::new("/home/user/.trumbo"), true, &[]),
                 "rules"
             );
         }
@@ -1714,7 +1714,7 @@ mod tests {
             "/repo/.claude/rules/team.md",
             r"C:\repo\.claude\rules\team.md",
         ] {
-            let file_type = instruction_file_type(path, Path::new("/home/user/.grok"), true, &[]);
+            let file_type = instruction_file_type(path, Path::new("/home/user/.trumbo"), true, &[]);
             assert_eq!(file_type, "agents_md");
             assert_eq!(
                 instruction_compat_status(&Some("claude".to_owned()), file_type, &report),
@@ -1726,7 +1726,7 @@ mod tests {
             r"C:\repo\.cursor\ruleset\team.md",
         ] {
             assert_eq!(
-                instruction_file_type(path, Path::new("/home/user/.grok"), false, &[]),
+                instruction_file_type(path, Path::new("/home/user/.trumbo"), false, &[]),
                 "agents_md"
             );
         }
@@ -1759,7 +1759,7 @@ mod tests {
         let workspace = Path::new("/repo");
         for path in ["/repo/.claude/rules/global.md", "/repo/.claude/CLAUDE.md"] {
             assert!(matches!(
-                instruction_scope(path, Path::new("/other/grok"), &vendor_homes, workspace),
+                instruction_scope(path, Path::new("/other/trumbo"), &vendor_homes, workspace),
                 Scope::Global
             ));
         }
@@ -1768,7 +1768,7 @@ mod tests {
             "/repo/.claude/src/AGENTS.md",
         ] {
             assert!(matches!(
-                instruction_scope(path, Path::new("/other/grok"), &vendor_homes, workspace),
+                instruction_scope(path, Path::new("/other/trumbo"), &vendor_homes, workspace),
                 Scope::Project
             ));
         }
@@ -1776,7 +1776,7 @@ mod tests {
 
     #[test]
     fn workspace_scope_wins_inside_grok_home() {
-        let grok_home = Path::new("/custom/grok");
+        let grok_home = Path::new("/custom/trumbo");
         let workspace = Path::new("/custom/grok/worktrees/repo");
         for path in [
             "/custom/grok/worktrees/repo/.cursor/rules/project.md",
@@ -2132,7 +2132,7 @@ mod tests {
             )
             .unwrap();
         };
-        // Test-unique names: discovery also reads this machine's real ~/.grok dirs.
+        // Test-unique names: discovery also reads this machine's real ~/.trumbo dirs.
         let extra = tempfile::tempdir().unwrap();
         write(&extra.path().join("inspect-cfg-extra"), "inspect-cfg-extra");
         write(

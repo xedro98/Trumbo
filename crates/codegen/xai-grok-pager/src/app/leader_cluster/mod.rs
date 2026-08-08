@@ -67,7 +67,7 @@ async fn bounded<T>(what: &str, fut: impl std::future::Future<Output = T>) -> T 
         .unwrap_or_else(|_| panic!("leader-cluster bring-up timed out: {what}"))
 }
 
-/// The grok home the agent actually persisted under: `grok_home()` is
+/// The trumbo home the agent actually persisted under: `grok_home()` is
 /// process-cached, so an earlier test in this binary may have pinned it.
 fn effective_grok_home() -> PathBuf {
     xai_grok_config::grok_home()

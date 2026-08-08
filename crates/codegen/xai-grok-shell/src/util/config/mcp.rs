@@ -1687,7 +1687,7 @@ pub fn load_mcp_server_configs_with_project(
 }
 
 /// MCP config problems across the same layers as
-/// [`load_mcp_server_configs_with_project`], for `grok inspect`.
+/// [`load_mcp_server_configs_with_project`], for `trumbo inspect`.
 pub(crate) fn load_mcp_server_problems_with_project(
     cwd: &std::path::Path,
 ) -> Vec<McpServerConfigProblem> {
@@ -1725,7 +1725,7 @@ pub fn disabled_mcp_server_names(cwd: &std::path::Path) -> std::collections::Has
     disabled
 }
 
-/// Names `grok mcp enable`/`disable` may target: user/project TOML (including
+/// Names `trumbo mcp enable`/`disable` may target: user/project TOML (including
 /// setup-required/invalid entries that session merge drops), the user
 /// `disabled_mcp_servers` list, compat JSON (`.mcp.json`, Claude, Cursor),
 /// **plugin** MCP servers (same discovery as doctor/`/mcps`), and legacy
@@ -1790,7 +1790,7 @@ pub fn user_config_path() -> PathBuf {
 
 /// Path to a project-level config file (`<dir>/.grok/config.toml`).
 pub fn project_config_path(dir: &std::path::Path) -> PathBuf {
-    dir.join(".grok").join("config.toml")
+    dir.join(".trumbo").join("config.toml")
 }
 
 /// True when the config file at `path` defines `[mcp_servers.<name>]`.
@@ -2579,7 +2579,7 @@ expose_image_base64 = true
     #[test]
     fn mcp_json_all_toml_names_includes_disabled() {
         let tmp = tempfile::tempdir().unwrap();
-        let grok_dir = tmp.path().join(".grok");
+        let grok_dir = tmp.path().join(".trumbo");
         std::fs::create_dir_all(&grok_dir).unwrap();
         std::fs::write(
             grok_dir.join("config.toml"),
@@ -2763,8 +2763,8 @@ enabled = false
         let tmp = tempfile::tempdir().unwrap();
         git2::Repository::init(tmp.path()).unwrap();
         let nested = tmp.path().join("pkg");
-        std::fs::create_dir_all(nested.join(".grok")).unwrap();
-        std::fs::create_dir_all(tmp.path().join(".grok")).unwrap();
+        std::fs::create_dir_all(nested.join(".trumbo")).unwrap();
+        std::fs::create_dir_all(tmp.path().join(".trumbo")).unwrap();
 
         let sticky = r#"
 # keep me
@@ -2772,8 +2772,8 @@ enabled = false
 command = "npx"
 enabled = false
 "#;
-        let ancestor = tmp.path().join(".grok").join("config.toml");
-        let nearer = nested.join(".grok").join("config.toml");
+        let ancestor = tmp.path().join(".trumbo").join("config.toml");
+        let nearer = nested.join(".trumbo").join("config.toml");
         std::fs::write(&ancestor, sticky).unwrap();
         std::fs::write(&nearer, sticky).unwrap();
 

@@ -1438,7 +1438,7 @@ impl MvpAgent {
     /// Returns `SessionToken` when EITHER:
     ///   - `auth_manager` currently has a live (non-expired) credential, OR
     ///   - the active auth method is session-based (`cached_token`,
-    ///     `grok.com`, `oidc`) -- even if the in-memory token is currently
+    ///     `trumbo.com`, `oidc`) -- even if the in-memory token is currently
     ///     expired or missing.
     ///
     /// Returns `ApiKey` only when the auth method is BYOK (`xai.api_key`) or
@@ -1454,7 +1454,7 @@ impl MvpAgent {
         }
     }
     /// Fall through to `xai.api_key` if the startup probe still allows it,
-    /// else `grok.com`. `None` when `preferred_method` is pinned.
+    /// else `trumbo.com`. `None` when `preferred_method` is pinned.
     pub(super) fn cached_token_fallthrough_method_id(
         &self,
     ) -> Option<acp::AuthMethodId> {
@@ -1470,7 +1470,7 @@ impl MvpAgent {
         Some(acp::AuthMethodId::new(id))
     }
     /// Shared exit for missing/expired/legacy `cached_token`: fall through with
-    /// `use_oauth` only when the target is interactive `grok.com`. When
+    /// `use_oauth` only when the target is interactive `trumbo.com`. When
     /// `preferred_method` is pinned, fail instead of falling through.
     pub(super) async fn authenticate_after_cached_token_unavailable(
         &self,
@@ -2225,7 +2225,7 @@ impl MvpAgent {
         );
         (id.clone(), new_config)
     }
-    /// Whether the current session is a personal grok.com account on a gated
+    /// Whether the current session is a personal trumbo.com account on a gated
     /// tier (free / X Basic). The Imagine tools stay advertised to the model but
     /// are flagged tier-restricted so they short-circuit at call time with the
     /// SuperGrok upsell prose (see `ImageGenConfig`/`VideoGenConfig`'s
@@ -2474,9 +2474,9 @@ impl MvpAgent {
             "WORKTREE_CONFIG_SHELL: resolved worktree type at agent startup"
         );
         if relay_sync_enabled {
-            tracing::info!("[grok] Relay sync: ENABLED");
+            tracing::info!("[trumbo] Relay sync: ENABLED");
         } else if tui_mode && relay_config_enabled && !has_xai_auth {
-            tracing::info!("[grok] Relay sync: DISABLED (no auth - run 'grok login' first)");
+            tracing::info!("[trumbo] Relay sync: DISABLED (no auth - run 'trumbo login' first)");
         } else if tui_mode && !relay_config_enabled {
             tracing::debug!("Relay sync: DISABLED (not configured in config.toml or env)");
         } else {
@@ -4433,7 +4433,7 @@ impl MvpAgent {
             if servers.is_empty() {
                 let user_path = xai_grok_tools::util::grok_home::grok_home()
                     .join("lsp.json");
-                let project_path = tool_ctx.cwd.as_path().join(".grok").join("lsp.json");
+                let project_path = tool_ctx.cwd.as_path().join(".trumbo").join("lsp.json");
                 tracing::debug!(
                     cwd = %tool_ctx.cwd,
                     user_lsp_path = %user_path.display(),

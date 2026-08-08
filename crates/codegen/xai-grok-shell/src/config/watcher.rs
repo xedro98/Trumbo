@@ -71,7 +71,7 @@ pub enum ConfigChangeEvent {
     AuthChanged,
     GlobalConfigChanged,
     /// `~/.grok/models_cache.json` changed — the on-disk `/v1/models`
-    /// catalog cache was rewritten, possibly by **another** grok process
+    /// catalog cache was rewritten, possibly by **another** trumbo process
     /// sharing the same `~/.grok` (the writer may also be this process;
     /// the [`ModelsManager`](crate::agent::models::ModelsManager) dedupes
     /// by content before applying).
@@ -112,7 +112,7 @@ pub enum ConfigChangeEvent {
 /// comparison) skips the update when nothing actually changed, so the
 /// redundant read is harmless. This avoids a class of bugs where an
 /// optimistic suppression window accidentally swallows writes from external
-/// processes (e.g. `grok login` in another terminal).
+/// processes (e.g. `trumbo login` in another terminal).
 ///
 /// Adds two **non-recursive** watches per `cwd` argument:
 /// `<cwd>/` (catches `.mcp.json` and `.claude.json` at the project root) and
@@ -229,7 +229,7 @@ impl ConfigFileWatcher {
                 tracing::warn!(
                     path = %grok_home.display(),
                     error = %e,
-                    "failed to watch grok home directory"
+                    "failed to watch trumbo home directory"
                 )
             })
             .ok()?;
@@ -357,14 +357,14 @@ fn watch_cwd_dirs(debouncer: &mut Debouncer<AccessFilteredWatcher>, cwd: &Path) 
     if let Err(e) = debouncer.watcher().watch(cwd, RecursiveMode::NonRecursive) {
         log_watch_error(&e, "failed to watch project cwd (non-recursive)");
     }
-    let grok_dir = cwd.join(".grok");
+    let grok_dir = cwd.join(".trumbo");
     if let Err(e) = debouncer
         .watcher()
         .watch(&grok_dir, RecursiveMode::NonRecursive)
     {
         log_watch_error(
             &e,
-            "failed to watch project .grok directory (non-recursive)",
+            "failed to watch project .trumbo directory (non-recursive)",
         );
     }
 }
@@ -376,9 +376,9 @@ fn unwatch_cwd_dirs(debouncer: &mut Debouncer<AccessFilteredWatcher>, cwd: &Path
     if let Err(e) = debouncer.watcher().unwatch(cwd) {
         tracing::debug!(error = %e, "failed to unwatch project cwd");
     }
-    let grok_dir = cwd.join(".grok");
+    let grok_dir = cwd.join(".trumbo");
     if let Err(e) = debouncer.watcher().unwatch(&grok_dir) {
-        tracing::debug!(error = %e, "failed to unwatch project .grok directory");
+        tracing::debug!(error = %e, "failed to unwatch project .trumbo directory");
     }
 }
 
@@ -434,7 +434,7 @@ fn discovery_change_for_path(path: &Path) -> Option<DiscoveryChange> {
 }
 
 /// Known vendor config root basenames; kept in sync with `collect_skill_config_dirs`.
-const VENDOR_CONFIG_ROOT_NAMES: &[&str] = &[".grok", ".agents", ".claude", ".cursor"];
+const VENDOR_CONFIG_ROOT_NAMES: &[&str] = &[".trumbo", ".agents", ".claude", ".cursor"];
 
 /// Vendor roots (by name or `grok_home`) must use scoped watches — they can
 /// contain large non-skill trees (`worktrees/`, etc.).
@@ -472,7 +472,7 @@ fn vendor_skill_refresh_dirs(config_dir: &Path) -> [(PathBuf, RecursiveMode); 3]
 }
 
 fn project_grok_refresh_dirs(project_root: &Path) -> Vec<(PathBuf, RecursiveMode)> {
-    let project_grok = project_root.join(".grok");
+    let project_grok = project_root.join(".trumbo");
     let mut dirs = vec![(project_grok.clone(), RecursiveMode::NonRecursive)];
     dirs.extend(vendor_skill_refresh_dirs(&project_grok));
     dirs
@@ -594,7 +594,7 @@ pub(crate) struct ProjectDiscoveryWatcher {
 impl ProjectDiscoveryWatcher {
     pub(crate) fn start(cwd: &Path) -> Option<(Self, mpsc::UnboundedReceiver<DiscoveryChange>)> {
         let project_root = crate::session::workflow::registry::project_root(cwd);
-        let project_grok = project_root.join(".grok");
+        let project_grok = project_root.join(".trumbo");
         let (tx, rx) = mpsc::unbounded_channel();
         let project_grok_for_events = project_grok.clone();
         let mut debouncer =
@@ -806,14 +806,14 @@ mod tests {
     fn is_vendor_config_root_matches_known_names_at_any_tier() {
         let home = TempDir::new().unwrap();
         let home = home.path();
-        let grok_home = home.join(".grok");
+        let grok_home = home.join(".trumbo");
 
         assert!(is_vendor_config_root(&grok_home, &grok_home));
         assert!(is_vendor_config_root(&home.join(".claude"), &grok_home));
         assert!(is_vendor_config_root(&home.join(".cursor"), &grok_home));
         assert!(is_vendor_config_root(&home.join(".agents"), &grok_home));
         assert!(is_vendor_config_root(
-            &home.join("repo").join(".grok"),
+            &home.join("repo").join(".trumbo"),
             &grok_home
         ));
         assert!(is_vendor_config_root(
@@ -848,20 +848,20 @@ mod tests {
     #[test]
     fn project_grok_refresh_dirs_matches_vendor_layout() {
         let project = Path::new("/tmp/repo");
-        let grok = project.join(".grok");
+        let trumbo = project.join(".trumbo");
         let dirs = project_grok_refresh_dirs(project);
 
         assert_eq!(dirs.len(), 4);
-        assert_eq!(dirs[0], (grok.clone(), RecursiveMode::NonRecursive));
+        assert_eq!(dirs[0], (trumbo.clone(), RecursiveMode::NonRecursive));
         assert_eq!(
             &dirs[1..],
             [
-                (grok.join("skills"), RecursiveMode::Recursive),
-                (grok.join("commands"), RecursiveMode::NonRecursive),
-                (grok.join("workflows"), RecursiveMode::NonRecursive),
+                (trumbo.join("skills"), RecursiveMode::Recursive),
+                (trumbo.join("commands"), RecursiveMode::NonRecursive),
+                (trumbo.join("workflows"), RecursiveMode::NonRecursive),
             ]
         );
-        assert_eq!(dirs[1..], vendor_skill_refresh_dirs(&grok));
+        assert_eq!(dirs[1..], vendor_skill_refresh_dirs(&trumbo));
     }
 
     #[test]
@@ -958,7 +958,7 @@ mod tests {
     fn start_with_dirs_keeps_parent_only_watch() {
         let tmp = TempDir::new().unwrap();
         let project = tmp.path();
-        let grok_home = project.join("home-grok");
+        let grok_home = project.join("home-trumbo");
         fs::create_dir_all(&grok_home).unwrap();
 
         let plan = plan_skills_watch_targets(&[], &grok_home, Some(project));
@@ -982,9 +982,9 @@ mod tests {
     fn plan_skills_watch_targets_scopes_vendors_and_seeds_refresh() {
         let tmp = TempDir::new().unwrap();
         let project = tmp.path();
-        let grok_home = project.join("home-grok");
+        let grok_home = project.join("home-trumbo");
         let project_claude = project.join(".claude");
-        let project_grok = project.join(".grok");
+        let project_grok = project.join(".trumbo");
         let custom = project.join("my-skills");
         fs::create_dir_all(&project_claude).unwrap();
         fs::create_dir_all(&project_grok).unwrap();
@@ -1015,7 +1015,7 @@ mod tests {
 
     #[test]
     fn plan_skills_watch_targets_multi_vendor_refresh_fanout() {
-        let grok_home = PathBuf::from("/home/u/.grok");
+        let grok_home = PathBuf::from("/home/u/.trumbo");
         let a = PathBuf::from("/repo/.claude");
         let b = PathBuf::from("/repo/.agents");
         let plan = plan_skills_watch_targets(&[a.clone(), b.clone()], &grok_home, None);
@@ -1044,7 +1044,7 @@ mod tests {
     fn plan_skills_watch_targets_seeds_all_missing_project_vendor_roots() {
         let tmp = TempDir::new().unwrap();
         let project = tmp.path();
-        let grok_home = project.join("elsewhere").join(".grok");
+        let grok_home = project.join("elsewhere").join(".trumbo");
         let plan = plan_skills_watch_targets(&[], &grok_home, Some(project));
 
         assert_eq!(plan.project_parent_watch.as_deref(), Some(project));
@@ -1074,7 +1074,7 @@ mod tests {
     fn plan_skills_watch_targets_does_not_double_seed_present_vendor_roots() {
         let tmp = TempDir::new().unwrap();
         let project = tmp.path();
-        let grok_home = project.join("home-grok");
+        let grok_home = project.join("home-trumbo");
         let present: Vec<PathBuf> = VENDOR_CONFIG_ROOT_NAMES
             .iter()
             .map(|name| project.join(name))
@@ -1115,7 +1115,7 @@ mod tests {
     fn plan_skills_watch_targets_partial_vendors_seed_only_missing() {
         let tmp = TempDir::new().unwrap();
         let project = tmp.path();
-        let grok_home = project.join("home-grok");
+        let grok_home = project.join("home-trumbo");
         let project_claude = project.join(".claude");
         fs::create_dir_all(&project_claude).unwrap();
 
@@ -1129,7 +1129,7 @@ mod tests {
         assert_eq!(plan.project_parent_watch.as_deref(), Some(project));
 
         let mut expected = vendor_skill_refresh_dirs(&project_claude).to_vec();
-        for name in [".grok", ".agents", ".cursor"] {
+        for name in [".trumbo", ".agents", ".cursor"] {
             let root = project.join(name);
             expected.push((root.clone(), RecursiveMode::NonRecursive));
             expected.extend(vendor_skill_refresh_dirs(&root));
@@ -1146,8 +1146,8 @@ mod tests {
     fn plan_skills_watch_targets_parent_watches_project_when_grok_present_siblings_missing() {
         let tmp = TempDir::new().unwrap();
         let project = tmp.path();
-        let grok_home = project.join("home-grok");
-        let project_grok = project.join(".grok");
+        let grok_home = project.join("home-trumbo");
+        let project_grok = project.join(".trumbo");
         fs::create_dir_all(&project_grok).unwrap();
 
         let plan = plan_skills_watch_targets(
@@ -1192,7 +1192,7 @@ mod tests {
         let wt_skill = global
             .join("worktrees")
             .join("wt1")
-            .join(".grok")
+            .join(".trumbo")
             .join("skills")
             .join("beta");
         fs::create_dir_all(&wt_skill).unwrap();
@@ -1251,7 +1251,7 @@ mod tests {
 
         assert!(is_vendor_config_root(
             &project_claude,
-            &tmp.path().join(".grok")
+            &tmp.path().join(".trumbo")
         ));
 
         let (tx, mut rx) = mpsc::unbounded_channel();
@@ -1291,9 +1291,9 @@ mod tests {
 
     #[test]
     fn workflow_change_classifies_missing_directory_creation() {
-        let grok = Path::new("/tmp/project/.grok");
+        let trumbo = Path::new("/tmp/project/.trumbo");
         assert_eq!(
-            discovery_change_for_path(grok),
+            discovery_change_for_path(trumbo),
             Some(DiscoveryChange::Skills)
         );
         assert_eq!(
@@ -1301,23 +1301,23 @@ mod tests {
             Some(DiscoveryChange::Skills)
         );
         assert_eq!(
-            discovery_change_for_path(&grok.join("skills")),
+            discovery_change_for_path(&trumbo.join("skills")),
             Some(DiscoveryChange::Skills)
         );
         assert_eq!(
-            discovery_change_for_path(&grok.join("commands")),
+            discovery_change_for_path(&trumbo.join("commands")),
             Some(DiscoveryChange::Skills)
         );
         assert_eq!(
-            discovery_change_for_path(&grok.join("workflows")),
+            discovery_change_for_path(&trumbo.join("workflows")),
             Some(DiscoveryChange::Workflows)
         );
         assert_eq!(
-            discovery_change_for_path(&grok.join("workflows/review.rhai")),
+            discovery_change_for_path(&trumbo.join("workflows/review.rhai")),
             Some(DiscoveryChange::Workflows)
         );
         assert_eq!(
-            discovery_change_for_path(&grok.join("skills/review/SKILL.md")),
+            discovery_change_for_path(&trumbo.join("skills/review/SKILL.md")),
             Some(DiscoveryChange::Skills)
         );
     }
@@ -1552,7 +1552,7 @@ mod tests {
 
     /// A write to `<grok_home>/models_cache.json` must surface as
     /// `ConfigChangeEvent::ModelsCacheChanged` so a long-running leader can
-    /// hot-load a catalog fetched by another grok process.
+    /// hot-load a catalog fetched by another trumbo process.
     #[test]
     #[cfg_attr(
         target_os = "macos",
@@ -1645,7 +1645,7 @@ mod tests {
     fn project_cwd_toml_triggers_reload() {
         let grok_home = TempDir::new().unwrap();
         let cwd = TempDir::new().unwrap();
-        let project_grok = cwd.path().join(".grok");
+        let project_grok = cwd.path().join(".trumbo");
         fs::create_dir_all(&project_grok).unwrap();
         // Seed the file before the watcher starts so we observe the
         // modification rather than the creation event.
@@ -1783,7 +1783,7 @@ mod tests {
     fn watch_path_dynamic_registration() {
         let grok_home = TempDir::new().unwrap();
         let new_cwd = TempDir::new().unwrap();
-        let project_grok = new_cwd.path().join(".grok");
+        let project_grok = new_cwd.path().join(".trumbo");
         fs::create_dir_all(&project_grok).unwrap();
         fs::write(project_grok.join("config.toml"), "").unwrap();
 

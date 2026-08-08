@@ -701,7 +701,7 @@ pub struct AppView {
     /// unless [`Self::has_external_auth_provider`].
     pub usage_visible: bool,
     /// External `auth_provider_command` deployment.
-    /// No grok.com billing session exists; `/usage` and credit UI stay off.
+    /// No trumbo.com billing session exists; `/usage` and credit UI stay off.
     pub has_external_auth_provider: bool,
     /// Slash commands denied for the current subscription tier
     /// ([`TIER_RESTRICTED_COMMANDS`] when the user is on the free / X Basic
@@ -710,7 +710,7 @@ pub struct AppView {
     /// dashboard); deny wins over all other visibility gates.
     pub tier_restricted_commands: Vec<String>,
     /// Whether the pager is connected via a leader (leader mode). The Agent
-    /// Dashboard entry points (`/dashboard`, `Ctrl+\`, `grok dashboard`, the
+    /// Dashboard entry points (`/dashboard`, `Ctrl+\`, `trumbo dashboard`, the
     /// startup hook) are only meaningful when a leader is coordinating a
     /// fleet of sessions, so they are gated on this flag. Set in
     /// `event_loop::run` from `connection.leader_status_rx.is_some()`;
@@ -1017,7 +1017,7 @@ pub struct AppView {
     /// first evaluation at a stable agent-view draw (regardless of outcome),
     /// so later resizes can never re-trigger the tip within this run.
     pub small_screen_tip_evaluated: bool,
-    /// One-shot gate for the SSH `grok wrap` tip: set after the first
+    /// One-shot gate for the SSH `trumbo wrap` tip: set after the first
     /// evaluation at a stable agent-view draw (the environment gates are
     /// process-constant, so one evaluation decides the run).
     pub ssh_wrap_tip_evaluated: bool,
@@ -1061,7 +1061,7 @@ pub struct AppView {
     /// when `Pending`, the welcome screen shows the trust question and session
     /// creation is deferred (gated after auth) until it is answered.
     pub trust_state: TrustState,
-    /// Login button label from `AuthMethod.name` (e.g., "grok.com", "Acme Corp").
+    /// Login button label from `AuthMethod.name` (e.g., "trumbo.com", "Acme Corp").
     pub login_label: Option<String>,
     /// The auth method ID to use for login.
     pub login_method_id: Option<acp::AuthMethodId>,
@@ -5178,7 +5178,7 @@ impl AppView {
         self.small_screen_tip_evaluated = true;
         super::dispatch::show_small_screen_tip(self);
     }
-    /// One-shot SSH `grok wrap` tip trigger, run at the top of every `draw`
+    /// One-shot SSH `trumbo wrap` tip trigger, run at the top of every `draw`
     /// right after [`Self::maybe_trigger_small_screen_tip`]. The welcome
     /// screen has no ephemeral-tip row, so the first stable agent-view draw
     /// is the earliest surface that can paint a session-load tip. Reads the
@@ -7600,8 +7600,8 @@ pub(crate) mod tests {
     fn apply_auth_meta_clears_gate_on_subscription() {
         let mut app = test_app();
         app.gate = Some(xai_grok_shell::auth::GateInfo {
-            message: "Subscribe to use Grok Build".into(),
-            url: Some("https://grok.com/supergrok?referrer=grok-build".into()),
+            message: "Subscribe to use Trumbo".into(),
+            url: Some("https://trumbo.com/supergrok?referrer=grok-build".into()),
             label: None,
         });
         assert!(app.is_access_blocked());

@@ -1487,7 +1487,7 @@ fn make_version_mismatch_notification(
                 "leaderVersion": leader_version,
                 "message": format!(
                     "Client version {client_version} differs from leader version \
-                     {leader_version}. Restart the grok binary to use the same version."
+                     {leader_version}. Restart the trumbo binary to use the same version."
                 )
             }
         })
@@ -1534,7 +1534,7 @@ fn make_version_mismatch_notification(
 /// * `ready_rx` - Watch receiver; ACP forwarding is gated until this is `true`
 /// * `relay_demand_tx` - Watch sender flipped to `true` when the first
 ///   [`ClientMode::Headless`] client registers. `run_leader` defers starting the
-///   grok.com WebSocket relay until this fires, so a leader serving only
+///   trumbo.com WebSocket relay until this fires, so a leader serving only
 ///   interactive clients (TUI dashboard, IDE) never duplicates its ACP stream
 ///   onto the relay. Headless registration is the devbox-flow marker: those
 ///   clients are driven remotely *through* the relay.
@@ -3003,8 +3003,8 @@ mod tests {
     }
     /// Relay demand gate (relay-on-demand): Stdio registrations must NOT
     /// signal relay demand — a leader serving only interactive clients (TUI
-    /// dashboard, IDE) keeps the grok.com relay off. The first Headless
-    /// registration (devbox / `grok agent headless` flow) flips the watch so
+    /// dashboard, IDE) keeps the trumbo.com relay off. The first Headless
+    /// registration (devbox / `trumbo agent headless` flow) flips the watch so
     /// `run_leader` starts the deferred relay connection.
     #[tokio::test]
     async fn relay_demand_signals_only_on_headless_registration() {

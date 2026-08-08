@@ -44,7 +44,7 @@ pub enum ConfigUpdate {
     /// Strictly additive to [`Self::McpServersChanged`] — the unit
     /// variant continues to fire for global-config edits. The two
     /// cases are split so per-project reloads don't
-    /// grok process sharing the home dir). The agent should consult the cache
+    /// trumbo process sharing the home dir). The agent should consult the cache
     /// thrash unrelated sessions.
     ProjectMcpServersChanged {
         /// The project root whose `.grok/`, `.mcp.json`, or
@@ -494,7 +494,7 @@ pub(crate) fn hash_auth_key(key: &str) -> u64 {
 /// Extract the `[skills]` table from an effective config.
 ///
 /// Consumers: the reload dispatch above (change detection →
-/// `ConfigUpdate::Skills`) and `grok inspect` (via the `crate::config`
+/// `ConfigUpdate::Skills`) and `trumbo inspect` (via the `crate::config`
 /// re-export), so both honor the same paths/ignore/disabled as a live
 /// session. Session spawn parses the same table separately through the typed
 /// `Config.skills` (agent/config.rs) — keep these in sync rather than adding
@@ -839,8 +839,8 @@ mod tests {
         let h2 = hash_project_mcp_config(&child).expect("readable");
         assert_ne!(h1, h2, "ancestor .mcp.json edit must change the hash");
 
-        std::fs::create_dir_all(tmp.path().join(".grok")).unwrap();
-        std::fs::write(tmp.path().join(".grok").join("config.toml"), "x = 1").unwrap();
+        std::fs::create_dir_all(tmp.path().join(".trumbo")).unwrap();
+        std::fs::write(tmp.path().join(".trumbo").join("config.toml"), "x = 1").unwrap();
         let h3 = hash_project_mcp_config(&child).expect("readable");
         assert_ne!(
             h2, h3,

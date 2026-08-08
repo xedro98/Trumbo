@@ -621,7 +621,7 @@ pub enum ButtonAction {
     ReloadSkills,
     /// Refresh MCP server list (re-fetch from shell).
     RefreshMcpList,
-    /// Open grok.com connectors page (MCP tab: press `o`).
+    /// Open trumbo.com connectors page (MCP tab: press `o`).
     OpenManagedConnectors,
     /// Update (fetch latest from source) the selected plugin.
     UpdateSelectedPlugin,
@@ -2264,9 +2264,9 @@ pub fn derive_source_label(source_dir: &str) -> (String, bool) {
 
 /// Classify a hooks `source_dir` into a display label and stable kind rank.
 fn classify_hook_source(source_dir: &str) -> HookSourceMeta {
-    let grok = xai_grok_config::grok_home();
+    let trumbo = xai_grok_config::grok_home();
     let source_path = std::path::Path::new(source_dir);
-    // Plugin / installed-plugin dirs, under the user grok home (GROK_HOME-aware)
+    // Plugin / installed-plugin dirs, under the user trumbo home (GROK_HOME-aware)
     // or a project-scoped `{cwd}/.grok/<subdir>/`. Returns the first path
     // component after the subdir (the plugin's install directory name).
     let plugin_name = |subdir: &str| -> Option<String> {
@@ -2276,8 +2276,8 @@ fn classify_hook_source(source_dir: &str) -> HookSourceMeta {
                 .map(|c| c.as_os_str().to_string_lossy().into_owned())
                 .filter(|s| !s.is_empty())
         };
-        // User grok home (GROK_HOME-aware).
-        if let Ok(rest) = source_path.strip_prefix(grok.join(subdir))
+        // User trumbo home (GROK_HOME-aware).
+        if let Ok(rest) = source_path.strip_prefix(trumbo.join(subdir))
             && let Some(name) = first_comp(rest)
         {
             return Some(name);
@@ -2290,7 +2290,7 @@ fn classify_hook_source(source_dir: &str) -> HookSourceMeta {
             .collect();
         comps
             .windows(3)
-            .find(|w| w[0] == ".grok" && w[1] == subdir && !w[2].is_empty())
+            .find(|w| w[0] == ".trumbo" && w[1] == subdir && !w[2].is_empty())
             .map(|w| w[2].clone())
     };
     if let Some(name) = plugin_name("plugins").or_else(|| plugin_name("installed-plugins")) {
@@ -2300,7 +2300,7 @@ fn classify_hook_source(source_dir: &str) -> HookSourceMeta {
         };
     }
     // Global hooks under $GROK_HOME/hooks
-    let global_hooks = grok.join("hooks");
+    let global_hooks = trumbo.join("hooks");
     let global_str = global_hooks.display().to_string();
     if source_dir == global_str || source_dir.starts_with(&format!("{global_str}/")) {
         return HookSourceMeta {
@@ -2324,7 +2324,7 @@ fn classify_hook_source(source_dir: &str) -> HookSourceMeta {
     }
     // Custom directory — removable
     let display = {
-        if let Ok(rest) = source_path.strip_prefix(&grok) {
+        if let Ok(rest) = source_path.strip_prefix(&trumbo) {
             let prefix = crate::util::display_grok_home_prefix();
             let rest_str = rest.to_string_lossy();
             let rest_trimmed = rest_str.strip_prefix('/').unwrap_or(&rest_str);
@@ -4499,7 +4499,7 @@ mod tests {
         assert!(
             rows.labels
                 .iter()
-                .any(|l| l.starts_with("Managed by grok.com")),
+                .any(|l| l.starts_with("Managed by trumbo.com")),
             "managed section header must appear"
         );
         assert!(

@@ -1,6 +1,6 @@
 //! `x.ai/billing` extension handler.
 //!
-//! Fetches the authenticated user's Grok Build billing configuration
+//! Fetches the authenticated user's Trumbo billing configuration
 //! (credit limit, usage, on-demand cap, billing period, history) from
 //! the backend. Used by the pager/desktop to display credits and usage.
 
@@ -57,7 +57,7 @@ pub struct BillingPeriodUsage {
     pub total_used: Option<Cent>,
 }
 
-/// Current billing configuration for Grok Build coding credits.
+/// Current billing configuration for Trumbo coding credits.
 ///
 /// Carries both the newer credits-config fields (`credit_usage_percent`,
 /// `current_period`) and the deprecated `GrokBuildBillingConfig` fields
@@ -201,7 +201,7 @@ async fn handle_get_billing(agent: &MvpAgent) -> ExtResult {
     let auth = super::auth_gate::require_xai_auth(
         &agent.auth_manager,
         "Authentication required to fetch billing data",
-        "Billing data requires auth with grok.com. Run `grok login` to authenticate.",
+        "Billing data requires auth with trumbo.com. Run `trumbo login` to authenticate.",
     )?;
 
     let proxy_base = agent.cli_chat_proxy_base_url();
@@ -292,7 +292,7 @@ async fn handle_get_auto_topup_rule(agent: &MvpAgent) -> ExtResult {
     let auth = super::auth_gate::require_xai_auth(
         &agent.auth_manager,
         "Authentication required to fetch auto top-up rule",
-        "Auto top-up data requires auth with grok.com. Run `grok login` to authenticate.",
+        "Auto top-up data requires auth with trumbo.com. Run `trumbo login` to authenticate.",
     )?;
 
     let proxy_base = agent.cli_chat_proxy_base_url();

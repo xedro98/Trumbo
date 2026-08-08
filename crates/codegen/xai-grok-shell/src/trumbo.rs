@@ -6,8 +6,8 @@
 //!   - `POST {root}/api/v1/auth/refresh` → refresh
 //!   - `GET  {root}/api/v1/users/me/plan` → subscription + rate-limit windows
 //!
-//! The bearer token is stored in grok's `auth.json` under the `xai::api_key`
-//! scope, so grok's existing BYOK/API-key auth path sends
+//! The bearer token is stored in trumbo's `auth.json` under the `xai::api_key`
+//! scope, so trumbo's existing BYOK/API-key auth path sends
 //! `Authorization: Bearer <token>` to the Trumbo OpenAI-compatible endpoint.
 
 use anyhow::{anyhow, bail, Context, Result};
@@ -268,7 +268,7 @@ pub async fn status() -> Result<()> {
             }
         }
         None => {
-            println!("Not signed in to Trumbo. Run `grok trumbo login`.");
+            println!("Not signed in to Trumbo. Run `trumbo trumbo login`.");
             Ok(())
         }
     }

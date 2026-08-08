@@ -2299,7 +2299,7 @@ fn validate_roles_accepts_valid_prompt_file() {
 #[test]
 fn discover_roles_loads_from_directory() {
     let tmp = tempfile::TempDir::new().unwrap();
-    let roles_dir = tmp.path().join(".grok").join("roles");
+    let roles_dir = tmp.path().join(".trumbo").join("roles");
     std::fs::create_dir_all(&roles_dir).unwrap();
     std::fs::write(
             roles_dir.join("reviewer.toml"),
@@ -2318,7 +2318,7 @@ fn discover_roles_loads_from_directory() {
 #[test]
 fn discover_roles_inline_takes_precedence() {
     let tmp = tempfile::TempDir::new().unwrap();
-    let roles_dir = tmp.path().join(".grok").join("roles");
+    let roles_dir = tmp.path().join(".trumbo").join("roles");
     std::fs::create_dir_all(&roles_dir).unwrap();
     std::fs::write(
             roles_dir.join("researcher.toml"),
@@ -2342,7 +2342,7 @@ fn discover_roles_inline_takes_precedence() {
 #[test]
 fn discover_roles_ignores_non_toml_files() {
     let tmp = tempfile::TempDir::new().unwrap();
-    let roles_dir = tmp.path().join(".grok").join("roles");
+    let roles_dir = tmp.path().join(".trumbo").join("roles");
     std::fs::create_dir_all(&roles_dir).unwrap();
     std::fs::write(roles_dir.join("readme.md"), "This is not a role definition")
         .unwrap();
@@ -2395,7 +2395,7 @@ fn persona_lookup_returns_none_for_unknown() {
 #[test]
 fn discover_personas_loads_from_directory() {
     let tmp = tempfile::TempDir::new().unwrap();
-    let dir = tmp.path().join(".grok").join("personas");
+    let dir = tmp.path().join(".trumbo").join("personas");
     std::fs::create_dir_all(&dir).unwrap();
     std::fs::write(
             dir.join("friendly.toml"),
@@ -2410,7 +2410,7 @@ fn discover_personas_loads_from_directory() {
 #[test]
 fn discover_personas_inline_takes_precedence() {
     let tmp = tempfile::TempDir::new().unwrap();
-    let dir = tmp.path().join(".grok").join("personas");
+    let dir = tmp.path().join(".trumbo").join("personas");
     std::fs::create_dir_all(&dir).unwrap();
     std::fs::write(dir.join("strict.toml"), r#"instructions = "File-based strict""#)
         .unwrap();
@@ -2452,7 +2452,7 @@ fn project_overlay_preserves_source_precedence() {
     let home = tmp.path().join("home");
     let bundled = tmp.path().join("bundled");
     write_subagent_definitions(
-        &project.join(".grok"),
+        &project.join(".trumbo"),
         &[
             ("shadowed", "Project"),
             ("bundled-shadowed", "Project"),
@@ -2461,7 +2461,7 @@ fn project_overlay_preserves_source_precedence() {
         ],
     );
     write_subagent_definitions(
-        &home.join(".grok"),
+        &home.join(".trumbo"),
         &[("shadowed", "User"), ("user-only", "User")],
     );
     write_subagent_definitions(
@@ -2486,7 +2486,7 @@ fn project_overlay_preserves_source_precedence() {
     let base = SubagentsConfig::resolve_base_with_sources(
         false,
         &config,
-        Some(&home.join(".grok")),
+        Some(&home.join(".trumbo")),
         &bundled,
     );
     let resolve = |project_trusted| {
@@ -2572,11 +2572,11 @@ fn bundled_personas_and_roles_have_lowest_priority_in_resolve_order() {
     let tmp = tempfile::TempDir::new().unwrap();
     let home = tmp.path().join("home");
     let workspace = tmp.path().join("workspace");
-    let bundled = home.join(".grok").join("bundled");
-    std::fs::create_dir_all(workspace.join(".grok").join("roles")).unwrap();
-    std::fs::create_dir_all(workspace.join(".grok").join("personas")).unwrap();
-    std::fs::create_dir_all(home.join(".grok").join("roles")).unwrap();
-    std::fs::create_dir_all(home.join(".grok").join("personas")).unwrap();
+    let bundled = home.join(".trumbo").join("bundled");
+    std::fs::create_dir_all(workspace.join(".trumbo").join("roles")).unwrap();
+    std::fs::create_dir_all(workspace.join(".trumbo").join("personas")).unwrap();
+    std::fs::create_dir_all(home.join(".trumbo").join("roles")).unwrap();
+    std::fs::create_dir_all(home.join(".trumbo").join("personas")).unwrap();
     std::fs::create_dir_all(bundled.join("roles")).unwrap();
     std::fs::create_dir_all(bundled.join("personas")).unwrap();
     std::fs::write(
@@ -2627,7 +2627,7 @@ fn bundled_personas_and_roles_have_lowest_priority_in_resolve_order() {
     let base = SubagentsConfig::resolve_base_with_sources(
         true,
         &config,
-        Some(&home.join(".grok")),
+        Some(&home.join(".trumbo")),
         &bundled,
     );
     let (roles, personas) = SubagentsConfig::effective_definition_maps(
@@ -2665,7 +2665,7 @@ fn bundled_personas_and_roles_have_lowest_priority_in_resolve_order() {
     let base = SubagentsConfig::resolve_base_with_sources(
         true,
         &config,
-        Some(&home.join(".grok")),
+        Some(&home.join(".trumbo")),
         &bundled,
     );
     let (roles, personas) = SubagentsConfig::effective_definition_maps(
@@ -2703,7 +2703,7 @@ fn bundled_personas_and_roles_have_lowest_priority_in_resolve_order() {
     let base = SubagentsConfig::resolve_base_with_sources(
         true,
         &config,
-        Some(&home.join(".grok")),
+        Some(&home.join(".trumbo")),
         &bundled,
     );
     let (roles, personas) = SubagentsConfig::effective_definition_maps(
@@ -2986,7 +2986,7 @@ fn enterprise_two_file_merge_routes_deployment_key_to_proxy() {
             r#"
 [endpoints]
 xai_api_base_url = "https://inference.acme-corp.example/xai/v1"
-cli_chat_proxy_base_url = "https://cli-chat-proxy.grok.com/v1"
+cli_chat_proxy_base_url = "https://cli-chat-proxy.trumbo.com/v1"
 
 [model.grok-build]
 base_url = "https://inference.acme-corp.example/xai/v1"
@@ -3027,7 +3027,7 @@ trace_upload_endpoint_url = "https://s3.acme-corp.example"
         .unwrap();
     assert_eq!(
             cfg.endpoints.resolve_managed_config_url(),
-            "https://cli-chat-proxy.grok.com/v1/deployment/config"
+            "https://cli-chat-proxy.trumbo.com/v1/deployment/config"
         );
     assert!(
             !cfg.endpoints
@@ -3047,7 +3047,7 @@ fn managed_config_feedback_user_reaches_resolved_config() {
     let managed = toml::from_str(
             r#"
 [endpoints]
-cli_chat_proxy_base_url = "https://cli-chat-proxy.grok.com/v1"
+cli_chat_proxy_base_url = "https://cli-chat-proxy.trumbo.com/v1"
 
 [feedback.user]
 name = ["os_user"]
@@ -3090,10 +3090,10 @@ fn project_config_never_sources_feedback_user() {
     let _sim = simulate_release_build();
     let repo = tempfile::tempdir().unwrap();
     git2::Repository::init(repo.path()).unwrap();
-    let grok = repo.path().join(".grok");
-    std::fs::create_dir_all(&grok).unwrap();
+    let trumbo = repo.path().join(".trumbo");
+    std::fs::create_dir_all(&trumbo).unwrap();
     std::fs::write(
-            grok.join("config.toml"),
+            trumbo.join("config.toml"),
             "[plugins]\npaths = [\"./p\"]\n\n[feedback.user]\ncommand = \"/evil\"\n",
         )
         .unwrap();
@@ -3436,7 +3436,7 @@ fn managed_settings_disables_features_and_requirements_overrides() {
     assert!(cfg.ui.yolo);
 }
 /// REGRESSION: external managed-settings.json is advisory, not authoritative.
-/// disableBypassPermissionsMode (-> features.disable_yolo) must NOT clamp the user's own grok yolo.
+/// disableBypassPermissionsMode (-> features.disable_yolo) must NOT clamp the user's own trumbo yolo.
 #[test]
 fn managed_settings_does_not_override_user_yolo() {
     use xai_grok_workspace::permission::resolution::ManagedSettingsFeatures;
@@ -3475,7 +3475,7 @@ fn project_overlay_tracks_authoritative_trust_transitions() {
     let repo = tempfile::tempdir().unwrap();
     git2::Repository::init(repo.path()).unwrap();
     write_subagent_definitions(
-        &repo.path().join(".grok"),
+        &repo.path().join(".trumbo"),
         &[("shared", "Project"), ("project-only", "Project")],
     );
     let mut base = SubagentsConfig::default();
@@ -3527,7 +3527,7 @@ fn project_overlay_tracks_authoritative_trust_transitions() {
 #[test]
 fn base_resolver_without_project_cwd_keeps_project_files_out() {
     let tmp = tempfile::tempdir().unwrap();
-    write_subagent_definitions(&tmp.path().join(".grok"), &[("project", "Project")]);
+    write_subagent_definitions(&tmp.path().join(".trumbo"), &[("project", "Project")]);
     let base = SubagentsConfig::resolve_base_with_sources(
         false,
         &toml::Value::Table(Default::default()),
@@ -3540,7 +3540,7 @@ fn base_resolver_without_project_cwd_keeps_project_files_out() {
 #[test]
 fn explicit_grok_root_is_the_only_user_source() {
     let tmp = tempfile::tempdir().unwrap();
-    let ambient = tmp.path().join("ambient-home/.grok");
+    let ambient = tmp.path().join("ambient-home/.trumbo");
     let configured = tmp.path().join("configured-grok-home");
     write_subagent_definitions(&ambient, &[("ambient", "Ambient")]);
     write_subagent_definitions(&configured, &[("configured", "Configured")]);
@@ -3577,10 +3577,10 @@ fn resolve_effective_plugins_config_gates_project_paths_on_folder_trust() {
     let _sim = simulate_release_build();
     let repo = tempfile::tempdir().unwrap();
     git2::Repository::init(repo.path()).unwrap();
-    let grok = repo.path().join(".grok");
-    std::fs::create_dir_all(&grok).unwrap();
+    let trumbo = repo.path().join(".trumbo");
+    std::fs::create_dir_all(&trumbo).unwrap();
     std::fs::write(
-            grok.join("config.toml"),
+            trumbo.join("config.toml"),
             "[plugins]\npaths = [\"./proj-plugin\"]\ndisabled = [\"proj-bad\"]\n",
         )
         .unwrap();
@@ -3643,10 +3643,10 @@ fn discover_plugins_excludes_untrusted_configpath_plugin_end_to_end() {
     std::fs::create_dir_all(&plugin_dir).unwrap();
     std::fs::write(plugin_dir.join("plugin.json"), r#"{"name":"cfgpath-probe"}"#)
         .unwrap();
-    let grok = cwd.join(".grok");
-    std::fs::create_dir_all(&grok).unwrap();
+    let trumbo = cwd.join(".trumbo");
+    std::fs::create_dir_all(&trumbo).unwrap();
     std::fs::write(
-            grok.join("config.toml"),
+            trumbo.join("config.toml"),
             format!("[plugins]\npaths = ['{}']\n", plugin_dir.display()),
         )
         .unwrap();
@@ -3712,9 +3712,9 @@ fn kill_switched_cold_cwd_stays_allowed_through_plugins_config_read() {
     let _sim = simulate_release_build();
     let repo = tempfile::tempdir().unwrap();
     git2::Repository::init(repo.path()).unwrap();
-    let grok = repo.path().join(".grok");
-    std::fs::create_dir_all(&grok).unwrap();
-    std::fs::write(grok.join("config.toml"), "[plugins]\npaths = [\"./proj-plugin\"]\n")
+    let trumbo = repo.path().join(".trumbo");
+    std::fs::create_dir_all(&trumbo).unwrap();
+    std::fs::write(trumbo.join("config.toml"), "[plugins]\npaths = [\"./proj-plugin\"]\n")
         .unwrap();
     let cwd = repo.path();
     let remote = crate::util::config::RemoteSettings {
@@ -3735,7 +3735,7 @@ fn kill_switched_cold_cwd_stays_allowed_through_plugins_config_read() {
             "gate must still allow the kill-switched folder after the config read"
         );
 }
-/// Writeback requires grok.com auth: remote may advertise it, but a non-xai
+/// Writeback requires trumbo.com auth: remote may advertise it, but a non-xai
 /// credential is downgraded to `Local`.
 #[test]
 #[serial_test::serial]

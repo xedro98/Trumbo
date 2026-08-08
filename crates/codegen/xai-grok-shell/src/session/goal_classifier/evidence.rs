@@ -1400,7 +1400,7 @@ mod tests {
 
     #[test]
     fn evidence_packet_plan_path_with_spaces_and_unicode_round_trips() {
-        let plan = "/tmp/grok sessions/✓ goal/plan.md";
+        let plan = "/tmp/trumbo sessions/✓ goal/plan.md";
         let packet = build_classifier_evidence_packet(
             "obj",
             ChangesRef::Unavailable,

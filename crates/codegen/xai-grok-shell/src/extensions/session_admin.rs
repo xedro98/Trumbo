@@ -282,7 +282,7 @@ async fn handle_session_delete(agent: &MvpAgent, args: &acp::ExtRequest) -> ExtR
     }
 
     // Shared delete: remote-first, then local disk + FTS eviction.
-    // Mirrored by the `grok sessions delete <id>` CLI path.
+    // Mirrored by the `trumbo sessions delete <id>` CLI path.
     crate::session::persistence::delete_session_history(
         &req.session_id,
         req.cwd.as_deref(),

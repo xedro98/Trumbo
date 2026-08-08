@@ -128,14 +128,14 @@ fn doctor_planning_opens_refuses_remote_and_rejects_stale_identity() {
         TaskResult::DoctorFixPlanned {
             target: target.clone(),
             result: Ok(crate::app::actions::DoctorPlanningOutcome::RunLocally(
-                "grok doctor fix ssh-wrap".to_owned(),
+                "trumbo doctor fix ssh-wrap".to_owned(),
             )),
         },
         &mut app,
     );
     assert!(
         last_system_text(&app, id)
-            .contains("On your local computer, run: grok doctor fix ssh-wrap")
+            .contains("On your local computer, run: trumbo doctor fix ssh-wrap")
     );
 
     app.agents
@@ -274,7 +274,7 @@ fn stale_auth_copy_timeout_does_not_clear_newer_feedback() {
     app.auth_state = AuthState::Authenticating {
         request_seq: 1,
         handle: None,
-        auth_url: Some("https://grok.com/auth".to_owned()),
+        auth_url: Some("https://trumbo.com/auth".to_owned()),
         mode: AuthMode::Command,
     };
 
@@ -525,7 +525,7 @@ fn wrap_host_image_request_eligible_covers_full_miss_and_attachment_error_only()
     use crate::app::actions::{ClipboardPasteCompletion, ClipboardPasteFailure};
 
     // A clean empty miss and a remote read *error* both fall through to the wrap
-    // host-image request — the headless-SSH `grok wrap` image-paste fix.
+    // host-image request — the headless-SSH `trumbo wrap` image-paste fix.
     assert!(wrap_host_image_request_eligible(
         ClipboardPasteCompletion::FullMiss
     ));
@@ -1167,7 +1167,7 @@ fn switch_to_non_reasoning_model_clears_persisted_effort() {
         .available
         .insert(
             model_id.clone(),
-            acp::ModelInfo::new(model_id.clone(), "Grok Build".to_string()),
+            acp::ModelInfo::new(model_id.clone(), "Trumbo".to_string()),
         );
     app.agents
         .get_mut(&id)
@@ -1407,12 +1407,12 @@ fn same_agent_type_switch_no_modal() {
     let agent = app.agents.get_mut(&id).unwrap();
     agent.session.models.available.insert(
         model_a.clone(),
-        acp::ModelInfo::new(model_a.clone(), "Grok Build A".to_string()),
+        acp::ModelInfo::new(model_a.clone(), "Trumbo A".to_string()),
     );
     agent.session.models.set_current(model_a, None);
     agent.session.models.available.insert(
         model_b.clone(),
-        acp::ModelInfo::new(model_b.clone(), "Grok Build B".to_string()),
+        acp::ModelInfo::new(model_b.clone(), "Trumbo B".to_string()),
     );
     agent.session.model_switch_pending = true;
 
@@ -1995,7 +1995,7 @@ fn gate_refreshed_emits_check_subscription_on_gate_lift() {
     // User starts gated (no subscription).
     app.gate = Some(xai_grok_shell::auth::GateInfo {
         message: "SuperGrok subscription required".into(),
-        url: Some("https://grok.com/supergrok".into()),
+        url: Some("https://trumbo.com/supergrok".into()),
         label: Some("Subscribe".into()),
     });
     assert!(!app.has_access());

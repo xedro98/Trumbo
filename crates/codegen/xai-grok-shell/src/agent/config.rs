@@ -352,7 +352,7 @@ impl EndpointsConfig {
     pub(crate) fn resolve_trace_upload_url(&self) -> String {
         blank_as_unset(&self.trace_upload_url).unwrap_or_else(|| self.proxy_url())
     }
-    /// Managed deployment-config URL (`grok setup`): explicit `managed_config_url`,
+    /// Managed deployment-config URL (`trumbo setup`): explicit `managed_config_url`,
     /// else `proxy_url` + `/deployment/config`. Never `xai_api_base_url`, so the
     /// deployment key reaches the proxy, not the inference host.
     pub(crate) fn resolve_managed_config_url(&self) -> String {
@@ -1148,7 +1148,7 @@ pub struct RelayConfig {
 /// `[hub]` section from config.toml.
 ///
 /// Optional default Computer Hub URL for **workspace provider** exposure
-/// (`grok workspace` / leader `with_default_hub_url`). Does **not** enable
+/// (`trumbo workspace` / leader `with_default_hub_url`). Does **not** enable
 /// agent-side harness/client connections or alter local session behavior.
 ///
 /// ```toml
@@ -1159,7 +1159,7 @@ pub struct RelayConfig {
 #[serde(default)]
 pub struct HubConfig {
     /// Hub WebSocket URL (`ws://` or `wss://`) used as the leader default for
-    /// `grok workspace start` when the CLI does not pass `--hub-url`.
+    /// `trumbo workspace start` when the CLI does not pass `--hub-url`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
 }
@@ -1930,7 +1930,7 @@ const NON_SERDE_CONFIG_PATHS: &[&str] = &[
     crate::util::config::SLASH_COMMAND_TAGS_CONFIG_PATH,
 ];
 /// Parse `[auth_provider.<name>]` tables leniently: a malformed entry warns
-/// (surfaced by `grok inspect`) and is skipped, so it fails closed for the
+/// (surfaced by `trumbo inspect`) and is skipped, so it fails closed for the
 /// models referencing it instead of failing the whole config.
 fn parse_auth_providers(
     raw_config: &toml::Value,
@@ -3098,7 +3098,7 @@ impl Config {
             .default(true)
             .resolve()
     }
-    /// Resolve whether to use grok's default OAuth2 (xAI auth.x.ai).
+    /// Resolve whether to use trumbo's default OAuth2 (xAI auth.x.ai).
     ///
     /// Enterprise OIDC (`oidc` in config.toml) always wins — this only gates
     /// the default xAI OAuth2 fallback when no enterprise OIDC is configured.
@@ -3419,7 +3419,7 @@ pub(crate) fn external_otel_master_switch_from(
 /// Layering follows `resolve_telemetry_mode`: **requirement > env > config >
 /// remote > default**, where the `[telemetry]` `otel_*` keys from the
 /// effective config (which already includes managed-config layers distributed
-/// by `grok setup`) sit under the env vars, requirements pins are applied on
+/// by `trumbo setup`) sit under the env vars, requirements pins are applied on
 /// top, and the remote layer is restrictive-only + asynchronous
 /// ([`apply_external_otel_remote_policy`]).
 pub fn resolve_external_otel_config(
@@ -4221,7 +4221,7 @@ pub struct ModelInfo {
     pub id: Option<String>,
     /// The routing slug sent in API requests.
     pub model: String,
-    /// The base URL of the model (session endpoint). e.g. "https://cli-chat-proxy.grok.com/v1"
+    /// The base URL of the model (session endpoint). e.g. "https://cli-chat-proxy.trumbo.com/v1"
     pub base_url: String,
     /// Human-readable name of the model. Honored by both the picker
     /// (`/model`) and `/session-info` -- when set, that's the label shown
@@ -7107,7 +7107,7 @@ reasoning_effort = "low"
         assert_eq!(model.api_key, Some("user-custom-api-key".to_string()));
         assert_eq!(model.info.model, dm);
         assert_eq!(
-            model.info.base_url, "https://cli-chat-proxy.grok.com/v1",
+            model.info.base_url, "https://cli-chat-proxy.trumbo.com/v1",
             "base_url should inherit from default, not be stale"
         );
     }
@@ -8503,7 +8503,7 @@ reasoning_effort = "low"
     fn config_models_default_custom_model_is_in_resolved_model_list() {
         let (_, models) = resolve_models_from_toml(
             r#"
-            [model.acme-grok]
+            [model.acme-trumbo]
             model = "grok-4.5"
             base_url = "https://inference.example.com/v1"
             context_window = 256000
@@ -8512,10 +8512,10 @@ reasoning_effort = "low"
             None,
         );
         assert!(
-            models.contains_key("acme-grok"),
+            models.contains_key("acme-trumbo"),
             "user-defined model must be in the resolved model list"
         );
-        let model = models.get("acme-grok").unwrap();
+        let model = models.get("acme-trumbo").unwrap();
         assert_eq!(model.info.model, "grok-4.5");
         assert_eq!(model.info.base_url, "https://inference.example.com/v1");
     }
@@ -8528,7 +8528,7 @@ reasoning_effort = "low"
         let sampling = resolve_sampling(model, Some("session-token-123"));
         assert_eq!(sampling.api_key.as_deref(), Some("session-token-123"));
         assert_eq!(
-            sampling.base_url, "https://cli-chat-proxy.grok.com/v1",
+            sampling.base_url, "https://cli-chat-proxy.trumbo.com/v1",
             "session auth should route to cli-chat-proxy, not api.x.ai"
         );
     }
@@ -8554,7 +8554,7 @@ reasoning_effort = "low"
         let mut prefetched = IndexMap::new();
         prefetched.insert(
             dm.to_string(),
-            test_model_entry(dm, "https://cli-chat-proxy.grok.com/v1", None, None, None),
+            test_model_entry(dm, "https://cli-chat-proxy.trumbo.com/v1", None, None, None),
         );
         let (_, models) = resolve_models_from_toml(
             &format!(
@@ -8642,7 +8642,7 @@ reasoning_effort = "low"
         let (_, models) = resolve_models_from_toml(
             &format!(
                 r#"
-            [model.acme-grok]
+            [model.acme-trumbo]
             model = "{dm}"
             base_url = "https://inference.example.com/v1"
             context_window = 200000
@@ -8653,11 +8653,11 @@ reasoning_effort = "low"
         );
         assert!(models.contains_key(dm), "default entry should still exist");
         assert!(
-            models.contains_key("acme-grok"),
+            models.contains_key("acme-trumbo"),
             "user entry with different key should also exist"
         );
         let default = models.get(dm).unwrap();
-        let user = models.get("acme-grok").unwrap();
+        let user = models.get("acme-trumbo").unwrap();
         assert_eq!(default.info.model, user.info.model, "same model field");
         assert_ne!(
             default.info.base_url, user.info.base_url,
@@ -8668,7 +8668,7 @@ reasoning_effort = "low"
         assert_eq!(sampling.base_url, "https://inference.example.com/v1");
         let sampling = resolve_sampling(default, Some("session-key"));
         assert_eq!(sampling.api_key.as_deref(), Some("session-key"));
-        assert_eq!(sampling.base_url, "https://cli-chat-proxy.grok.com/v1",);
+        assert_eq!(sampling.base_url, "https://cli-chat-proxy.trumbo.com/v1",);
     }
     #[test]
     fn e2e_enterprise_custom_endpoint_skips_xai_defaults() {
@@ -8709,17 +8709,17 @@ reasoning_effort = "low"
     fn e2e_acp_model_info_no_dedup_on_model_field() {
         let mut models = IndexMap::new();
         models.insert(
-            "default-grok".to_string(),
+            "default-trumbo".to_string(),
             test_model_entry(
                 crate::models::default_model(),
-                "https://cli-chat-proxy.grok.com/v1",
+                "https://cli-chat-proxy.trumbo.com/v1",
                 None,
                 None,
                 Some("https://api.x.ai/v1"),
             ),
         );
         models.insert(
-            "acme-grok".to_string(),
+            "acme-trumbo".to_string(),
             test_model_entry(
                 crate::models::default_model(),
                 "https://inference.example.com/v1",
@@ -8735,11 +8735,11 @@ reasoning_effort = "low"
             "both entries should survive in ACP model list"
         );
         assert!(
-            acp_models.contains_key(&acp::ModelId::new("default-grok")),
+            acp_models.contains_key(&acp::ModelId::new("default-trumbo")),
             "default entry should be addressable by map key"
         );
         assert!(
-            acp_models.contains_key(&acp::ModelId::new("acme-grok")),
+            acp_models.contains_key(&acp::ModelId::new("acme-trumbo")),
             "user entry should be addressable by map key"
         );
     }

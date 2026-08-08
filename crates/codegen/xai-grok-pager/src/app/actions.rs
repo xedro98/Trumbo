@@ -61,7 +61,7 @@ pub enum Action {
     DeleteCurrentSessionAnswered {
         confirmed: bool,
     },
-    /// Open grok.com in the browser for SuperGrok subscription upsell.
+    /// Open trumbo.com in the browser for SuperGrok subscription upsell.
     OpenSupergrokUrl,
     /// Re-check subscription status via the shell's `x.ai/auth/check_subscription`.
     CheckSubscription,
@@ -69,7 +69,7 @@ pub enum Action {
     OpenUrl(String),
     /// Open a semantic scrollback link.
     OpenLink(crate::render::osc8::LinkTarget),
-    /// Open grok.com managed connectors, appending session teamId when set.
+    /// Open trumbo.com managed connectors, appending session teamId when set.
     OpenManagedConnectors,
     /// Cycle to the next visible link (or highlight the first if none selected).
     OpenNextLink,
@@ -340,7 +340,7 @@ pub enum Action {
     /// duration. The dispatch handler renders + writes the file and arms
     /// `AppView::pending_pager_path`; the event loop does the suspend/restore.
     OpenTranscriptPager,
-    /// Minimal mode (`grok --minimal`): re-print the most-recently committed
+    /// Minimal mode (`trumbo --minimal`): re-print the most-recently committed
     /// folded block (collapsed reasoning / truncated tool output) into native
     /// scrollback, fully expanded, below the conversation (design decision K10).
     /// Bound to `Ctrl+E` and the `/expand` command. No-op outside minimal mode
@@ -789,7 +789,7 @@ pub enum Action {
     DoctorFixCancelled(DoctorFixTarget),
     /// Persist the memory modal fullscreen preference to config.toml.
     PersistMemoryFullscreen(bool),
-    /// Open the Agent Dashboard view (`/dashboard`, `Ctrl+\`, `grok dashboard`).
+    /// Open the Agent Dashboard view (`/dashboard`, `Ctrl+\`, `trumbo dashboard`).
     OpenDashboard,
     /// Close the dashboard, returning to the previous `ActiveView`.
     ExitDashboard,

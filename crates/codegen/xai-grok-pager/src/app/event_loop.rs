@@ -957,11 +957,11 @@ pub(crate) async fn run(
                 crate::acp::AuthStartMode::Command => super::app_view::AuthMode::Command,
             };
         } else {
-            // --force-login: find the grok.com method from the advertised list
+            // --force-login: find the trumbo.com method from the advertised list
             let grok_com = connection
                 .auth_methods
                 .iter()
-                .find(|m| m.id().0.as_ref() == "grok.com");
+                .find(|m| m.id().0.as_ref() == "trumbo.com");
             if let Some(method) = grok_com {
                 app.login_label = Some(method.name().to_string());
                 app.login_method_id = Some(method.id().clone());
@@ -977,7 +977,7 @@ pub(crate) async fn run(
                     super::app_view::AuthMode::Pending
                 };
             } else {
-                // No grok.com method available, use the first method as fallback
+                // No trumbo.com method available, use the first method as fallback
                 let first = &connection.auth_methods[0];
                 app.login_label = Some(first.name().to_string());
                 app.login_method_id = Some(first.id().clone());
@@ -989,7 +989,7 @@ pub(crate) async fn run(
         // by reusing dispatch_login. Effects are stashed and drained after
         // the initial render so the user sees the auth UI right away.
         // Empty auth_methods (preferred_method pin with no credentials) is
-        // fail-closed: do not invent grok.com / auto-start OIDC.
+        // fail-closed: do not invent trumbo.com / auto-start OIDC.
         tracing::info!(
             method_id = ?app.login_method_id,
             methods_empty = connection.auth_methods.is_empty(),
@@ -1739,7 +1739,7 @@ pub(crate) async fn run(
         xai_grok_telemetry::startup::report_total(xai_grok_telemetry::startup::StartupOutcome::Ok);
     }
 
-    // Initial prompt from the CLI positional (`grok "fix the bug"`). When
+    // Initial prompt from the CLI positional (`trumbo "fix the bug"`). When
     // already authenticated, hand it to the shared dispatcher helper (same
     // `NewSession`/`SendPrompt` path the welcome screen uses). ZDR-blocked
     // accounts cannot start a session, so drop the prompt — this mirrors the
@@ -1762,7 +1762,7 @@ pub(crate) async fn run(
         }
     }
 
-    // `grok dashboard` startup: open the dashboard view immediately. The
+    // `trumbo dashboard` startup: open the dashboard view immediately. The
     // CLI subcommand wrote a `GROK_OPEN_DASHBOARD_AT_STARTUP=1` env var
     // so we don't have to thread a flag through every arg struct.
     if std::env::var("GROK_OPEN_DASHBOARD_AT_STARTUP").as_deref() == Ok("1") {

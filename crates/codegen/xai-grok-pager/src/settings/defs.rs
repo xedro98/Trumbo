@@ -306,12 +306,12 @@ const SCREEN_MODE_CHOICES: &[EnumChoice] = &[
     EnumChoice {
         canonical: "fullscreen",
         display: "Fullscreen",
-        description: "Open plain grok in the standard fullscreen TUI. Default when unset.",
+        description: "Open plain trumbo in the standard fullscreen TUI. Default when unset.",
     },
     EnumChoice {
         canonical: "minimal",
         display: "Minimal",
-        description: "Open plain grok in scrollback-native (minimal) mode.",
+        description: "Open plain trumbo in scrollback-native (minimal) mode.",
     },
 ];
 
@@ -547,7 +547,7 @@ pub fn default_settings() -> Vec<SettingMeta> {
             category: SettingCategory::Appearance,
             owner: SettingOwner::Shell,
             label: "Default screen mode",
-            description: "How plain grok opens next time: Fullscreen (default when unset) or \
+            description: "How plain trumbo opens next time: Fullscreen (default when unset) or \
                           Minimal. Writes [ui] screen_mode in config.toml. Restart required. \
                           Switch this session only with /minimal or /fullscreen.",
             keywords: &[
@@ -868,7 +868,7 @@ pub fn default_settings() -> Vec<SettingMeta> {
             owner: SettingOwner::Shell,
             label: "Default model",
             description: "Model used for new sessions. Changing this also switches the active session. Pick `(no override)` to clear.",
-            keywords: &["model", "default", "agent", "llm", "grok", "switch"],
+            keywords: &["model", "default", "agent", "llm", "trumbo", "switch"],
             kind: SettingKind::DynamicEnum {
                 default: "",
                 source: DynamicEnumSource::ActiveModelCatalog,
@@ -1562,7 +1562,7 @@ pub fn default_settings() -> Vec<SettingMeta> {
             category: SettingCategory::Advanced,
             owner: SettingOwner::Shell,
             label: "SSH wrap",
-            description: "Show a `/doctor` tip when an SSH session is not using `grok wrap`.",
+            description: "Show a `/doctor` tip when an SSH session is not using `trumbo wrap`.",
             keywords: &[
                 "ssh",
                 "wrap",

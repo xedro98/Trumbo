@@ -1180,7 +1180,7 @@ pub enum RetryState {
 /// again. Drives the actionable re-auth banner.
 ///
 /// `legacy_auth` is intentionally excluded: those failures carry their own
-/// detailed migration guidance (`grok update` / `grok logout` / `grok login`)
+/// detailed migration guidance (`trumbo update` / `trumbo logout` / `trumbo login`)
 /// in the message, so we surface that verbatim instead of the generic prompt.
 ///
 /// `auth_transient` is excluded for the opposite reason: the shell emits it
@@ -1490,7 +1490,7 @@ mod tests {
             created_at: "2026-06-15T00:00:00Z".into(),
             trigger: "auto".into(),
             prompt_variant: "detailed".into(),
-            model: "grok".into(),
+            model: "trumbo".into(),
             user_context: None,
             chat_history: vec![],
             tools: vec![],
@@ -1539,7 +1539,7 @@ mod tests {
             "created_at": "2026-06-01T00:00:00Z",
             "trigger": "manual",
             "prompt_variant": "detailed",
-            "model": "grok",
+            "model": "trumbo",
             "user_context": null,
             "chat_history": [],
             "summary": "ok",

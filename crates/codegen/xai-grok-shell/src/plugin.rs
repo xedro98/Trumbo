@@ -96,7 +96,7 @@ impl std::fmt::Display for UninstallError {
                 write!(
                     f,
                     "Plugin \"{name}\" not found.\n\
-                     Run `grok plugin list` to see installed plugins."
+                     Run `trumbo plugin list` to see installed plugins."
                 )
             }
             Self::NeedsConfirm {
@@ -218,7 +218,7 @@ impl std::fmt::Display for UpdateError {
                 write!(
                     f,
                     "Plugin \"{name}\" not found.\n\
-                     Run `grok plugin list` to see installed plugins."
+                     Run `trumbo plugin list` to see installed plugins."
                 )
             }
         }
@@ -611,7 +611,7 @@ impl std::fmt::Display for MarketplaceInstallError {
                     write!(
                         f,
                         "Unknown marketplace \"{qualifier}\". No marketplaces are registered; \
-                         add one with `grok plugin marketplace add`."
+                         add one with `trumbo plugin marketplace add`."
                     )
                 } else {
                     let list = bullet_list(registered);
@@ -648,8 +648,8 @@ impl std::fmt::Display for MarketplaceInstallError {
                 write!(
                     f,
                     "No marketplace plugin named \"{name}\" in any registered marketplace.\n\
-                     Install a local directory with `grok plugin install ./{name}`, or add a \
-                     source with `grok plugin marketplace add`."
+                     Install a local directory with `trumbo plugin install ./{name}`, or add a \
+                     source with `trumbo plugin marketplace add`."
                 )?;
                 if !skipped_sources.is_empty() {
                     write!(
@@ -666,7 +666,7 @@ impl std::fmt::Display for MarketplaceInstallError {
                 write!(
                     f,
                     "Multiple marketplaces provide a plugin named \"{name}\":\n{list}\n\
-                     Pin one with `grok plugin install {name}@<qualifier>`."
+                     Pin one with `trumbo plugin install {name}@<qualifier>`."
                 )
             }
             Self::PartialScan {
@@ -678,7 +678,7 @@ impl std::fmt::Display for MarketplaceInstallError {
                     f,
                     "Couldn't scan every marketplace while resolving \"{name}\", so it can't be \
                      resolved safely. Unscanned source(s):\n{list}\n\
-                     Retry, or pin the source explicitly with `grok plugin install {name}@<qualifier>`."
+                     Retry, or pin the source explicitly with `trumbo plugin install {name}@<qualifier>`."
                 )
             }
             Self::Sync {
@@ -1191,16 +1191,16 @@ pub fn remove_toml_marketplace_block(content: &str, source_identity: &str) -> Op
 /// Try removing a source from `settings.json` / `known_marketplaces.json` under
 /// `~/.grok/` and `~/.claude/`. Returns `true` if removed from at least one file.
 pub fn try_remove_source_from_json_files(source_url_or_path: &str) -> bool {
-    // Resolve user grok via user_grok_home() (None when no home resolves) and
+    // Resolve user trumbo via user_grok_home() (None when no home resolves) and
     // home separately, so removal still runs from $GROK_HOME when no home dir
-    // exists, and never touches a cwd-relative .grok.
+    // exists, and never touches a cwd-relative .trumbo.
     let home = dirs::home_dir();
-    let grok = xai_grok_config::user_grok_home();
+    let trumbo = xai_grok_config::user_grok_home();
 
     let mut settings_candidates: Vec<std::path::PathBuf> = Vec::new();
-    if let Some(ref grok) = grok {
-        settings_candidates.push(grok.join("settings.local.json"));
-        settings_candidates.push(grok.join("settings.json"));
+    if let Some(ref trumbo) = trumbo {
+        settings_candidates.push(trumbo.join("settings.local.json"));
+        settings_candidates.push(trumbo.join("settings.json"));
     }
     if let Some(ref home) = home {
         settings_candidates.push(home.join(".claude").join("settings.local.json"));
@@ -1208,8 +1208,8 @@ pub fn try_remove_source_from_json_files(source_url_or_path: &str) -> bool {
     }
 
     let mut known_candidates: Vec<std::path::PathBuf> = Vec::new();
-    if let Some(ref grok) = grok {
-        known_candidates.push(grok.join("plugins").join("known_marketplaces.json"));
+    if let Some(ref trumbo) = trumbo {
+        known_candidates.push(trumbo.join("plugins").join("known_marketplaces.json"));
     }
     if let Some(ref home) = home {
         known_candidates.push(
@@ -1662,8 +1662,8 @@ mod tests {
             skipped_sources: vec![],
         };
         let msg = err.to_string();
-        assert!(msg.contains("grok plugin install ./sentry"), "{msg}");
-        assert!(msg.contains("grok plugin marketplace add"), "{msg}");
+        assert!(msg.contains("trumbo plugin install ./sentry"), "{msg}");
+        assert!(msg.contains("trumbo plugin marketplace add"), "{msg}");
         assert!(!msg.contains("could not be synced"), "{msg}");
     }
 
@@ -1696,7 +1696,7 @@ mod tests {
             "{msg}"
         );
         assert!(
-            msg.contains("grok plugin install sentry@<qualifier>"),
+            msg.contains("trumbo plugin install sentry@<qualifier>"),
             "{msg}"
         );
     }
