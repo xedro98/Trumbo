@@ -86,7 +86,8 @@ pub fn overlay_cycle_order(
 ///
 /// `var_os` avoids the per-call allocation of `var`.
 pub fn dashboard_enabled() -> bool {
-    if std::env::var_os("GROK_AGENT_DASHBOARD")
+    if std::env::var_os("TRUMBO_AGENT_DASHBOARD")
+        .or_else(|| std::env::var_os("GROK_AGENT_DASHBOARD"))
         .as_deref()
         .is_some_and(|v| v == std::ffi::OsStr::new("0"))
     {
