@@ -30,11 +30,11 @@ export PROTOC="/d/Torch/protoc-win/bin/protoc.exe"
 cargo build -p xai-grok-pager-bin --release   # target/release/xai-grok-pager
 ```
 
-> **Windows note:** `cargo check -p xai-grok-pager-bin` passes, but the full
-> link produces `STATUS_STACK_BUFFER_OVERRUN` in rustc 1.94 while codegenning
-> huge dependency crates (`aws-sdk-s3`, `reqwest`, `tonic`, `write-fonts`) on
-> this machine — a host toolchain issue independent of these changes. Build on
-> Linux/macOS (or in WSL/Docker) where grok-build is tested/supported.
+> **Windows note:** the **release** build works on Windows (verified — it
+> finished in ~13 min on this box and the resulting binary runs). The **debug**
+> build may crash rustc 1.94 with `STATUS_STACK_BUFFER_OVERRUN` while
+> codegenning large dependency crates (an unrelated host toolchain issue from
+> the debug profile's `codegen-units = 128`); use `--release`.
 
 ## Usage
 
