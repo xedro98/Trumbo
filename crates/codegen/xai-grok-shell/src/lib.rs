@@ -38,6 +38,7 @@ pub mod remote;
 pub mod sampling;
 pub mod session;
 pub mod terminal;
+pub mod trumbo;
 #[cfg(test)]
 pub(crate) mod test_support;
 pub mod tier;

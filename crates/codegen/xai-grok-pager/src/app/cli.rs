@@ -64,6 +64,8 @@ pub enum Command {
     /// Share a session and print the share URL
     #[command(hide = true)]
     Share(crate::share_cmd::ShareArgs),
+    /// Authenticate with Trumbo (device auth) and check subscription
+    Trumbo(crate::trumbo_cmd::TrumboCmd),
     /// Run any command with local clipboard support (OSC 52 → system clipboard).
     #[cfg_attr(not(any(unix, windows)), command(hide = true))]
     #[command(long_about = "\

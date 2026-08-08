@@ -46,9 +46,44 @@ pub(crate) fn default_agent_type() -> String {
     DEFAULT_AGENT_TYPE.to_owned()
 }
 /// Default base URL for the cli chat proxy.
-pub const CLI_CHAT_PROXY_BASE_URL_DEFAULT: &str = "https://cli-chat-proxy.grok.com/v1";
+pub const CLI_CHAT_PROXY_BASE_URL_DEFAULT: &str = "https://api.trumbo.dev/api/v1";
 /// Default base URL for the public xAI API.
-pub const XAI_API_BASE_URL_DEFAULT: &str = "https://api.x.ai/v1";
+pub const XAI_API_BASE_URL_DEFAULT: &str = "https://api.trumbo.dev/api/v1";
+
+/// Resolve the OpenAI-compatible API base for Trumbo from the environment.
+///
+/// - `TRUMBO_API_BASE_URL` overrides (accepts a root `https://api.trumbo.dev`
+///   or an already-suffixed `.../api/v1` URL).
+/// - `TRUMBO_ENVIRONMENT=local` → `http://localhost:8787` (wrangler dev).
+/// - Default → `https://api.trumbo.dev`.
+///
+/// The returned URL always ends in `/api/v1` (Trumbo's OpenAI-compatible
+/// endpoint prefix).
+pub(crate) fn trumbo_provider_base_url() -> String {
+    let mut base = if std::env::var("TRUMBO_ENVIRONMENT")
+        .map(|v| v.trim().eq_ignore_ascii_case("local"))
+        .unwrap_or(false)
+    {
+        "http://localhost:8787"
+    } else {
+        "https://api.trumbo.dev"
+    }
+    .to_owned();
+
+    if let Ok(url) = std::env::var("TRUMBO_API_BASE_URL") {
+        let trimmed = url.trim().trim_end_matches('/').to_owned();
+        if !trimmed.is_empty() {
+            base = trimmed;
+        }
+    }
+
+    // Normalize to the provider base (strip a /api/v1 suffix, then re-append).
+    let root = base
+        .trim_end_matches('/')
+        .trim_end_matches("/api/v1")
+        .trim_end_matches('/');
+    format!("{root}/api/v1")
+}
 /// One or more environment variable names that may hold a model API key.
 ///
 /// Serde `untagged`: accepts a string or an array in TOML/JSON.
@@ -536,9 +571,11 @@ impl EndpointsConfig {
 impl Default for EndpointsConfig {
     fn default() -> Self {
         Self {
-            cli_chat_proxy_base_url: std::env::var("GROK_CLI_CHAT_PROXY_BASE_URL").ok(),
+            cli_chat_proxy_base_url: std::env::var("GROK_CLI_CHAT_PROXY_BASE_URL")
+                .ok()
+                .or_else(|| Some(trumbo_provider_base_url())),
             xai_api_base_url: std::env::var("GROK_XAI_API_BASE_URL")
-                .unwrap_or_else(|_| XAI_API_BASE_URL_DEFAULT.to_owned()),
+                .unwrap_or_else(|_| trumbo_provider_base_url()),
             alpha_test_key: None,
             models_base_url: env_string("GROK_MODELS_BASE_URL"),
             models_list_url: env_string("GROK_MODELS_LIST_URL"),

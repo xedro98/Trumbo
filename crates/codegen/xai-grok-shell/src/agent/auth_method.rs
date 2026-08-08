@@ -29,12 +29,18 @@ pub const XAI_API_KEY_ENV_VAR: &str = "XAI_API_KEY";
 /// so existing deployments that use the old name keep working.
 pub const LEGACY_XAI_API_KEY_ENV_VAR: &str = "GROK_CODE_XAI_API_KEY";
 
-/// Read the API key from the environment.
+/// Read the API key from the environment, falling back to the stored Trumbo
+/// token in `auth.json` (written by `grok trumbo login`) and `TRUMBO_TOKEN`.
 ///
-/// Checks `XAI_API_KEY` first, then falls back to the legacy
-/// `GROK_CODE_XAI_API_KEY` for backward compatibility.
+/// Checks `XAI_API_KEY` first, then the legacy `GROK_CODE_XAI_API_KEY`, then
+/// the stored token.
 pub(crate) fn read_xai_api_key_env() -> Result<String, std::env::VarError> {
-    std::env::var(XAI_API_KEY_ENV_VAR).or_else(|_| std::env::var(LEGACY_XAI_API_KEY_ENV_VAR))
+    std::env::var(XAI_API_KEY_ENV_VAR).or_else(|_| {
+        std::env::var(LEGACY_XAI_API_KEY_ENV_VAR).or_else(|_| {
+            crate::auth::read_api_key(&xai_grok_config::grok_home()).ok_or(std::env::VarError::NotPresent)
+                .or_else(|_| std::env::var("TRUMBO_TOKEN"))
+        })
+    })
 }
 
 /// Returns `true` if either `XAI_API_KEY` or `GROK_CODE_XAI_API_KEY` is set.
