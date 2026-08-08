@@ -729,6 +729,12 @@ impl ListModelsEndpoint {
         endpoints: &crate::agent::config::EndpointsConfig,
         fetch_auth: crate::agent::models::ModelFetchAuth,
     ) -> Self {
+        if is_trumbo_endpoint(endpoints) {
+            return Self {
+                url: format!("{}/ai/trumbo/recommended-models", crate::trumbo::provider_base()),
+                auth: EndpointAuth::ApiKey,
+            };
+        }
         if endpoints.has_custom_endpoint() {
             Self {
                 url: endpoints.resolve_models_list_url(),
@@ -758,6 +764,9 @@ pub(crate) fn fetch_models_blocking(
     auth: Option<&GrokAuth>,
     fetch_auth: crate::agent::models::ModelFetchAuth,
 ) -> Result<FetchModelsResult, BackendError> {
+    if is_trumbo_endpoint(endpoints) {
+        return fetch_trumbo_models_blocking(endpoints, auth);
+    }
     let client = crate::http::shared_startup_blocking_client();
     let source = ListModelsEndpoint::from_endpoints(endpoints, fetch_auth);
     let inference_base_url = endpoints.resolve_inference_base_url();
@@ -827,6 +836,86 @@ pub(crate) fn fetch_models_blocking(
     }
     Ok(FetchModelsResult { models, etag })
 }
+/// True when the active endpoints point at Trumbo (the API-key path should
+/// then pull the live subscription catalog instead of `/v1/models`).
+pub(crate) fn is_trumbo_endpoint(endpoints: &crate::agent::config::EndpointsConfig) -> bool {
+    let base = endpoints.xai_api_base_url.trim_end_matches('/');
+    let trumbo = crate::trumbo::provider_base();
+    base == trumbo
+        || base.ends_with(".trumbo.dev/api/v1")
+        || base.ends_with("localhost:8787/api/v1")
+}
+
+/// Fetch the live Trumbo subscription catalog from
+/// `GET {provider_base}/ai/trumbo/recommended-models` and map its
+/// `{trumbo, trumboPass}` arrays into model configs (chat_completions backend,
+/// base_url = Trumbo's OpenAI-compatible endpoint).
+pub(crate) fn fetch_trumbo_models_blocking(
+    endpoints: &crate::agent::config::EndpointsConfig,
+    auth: Option<&GrokAuth>,
+) -> Result<FetchModelsResult, BackendError> {
+    let client = crate::http::shared_startup_blocking_client();
+    let base = crate::trumbo::provider_base();
+    let url = format!("{base}/ai/trumbo/recommended-models");
+    let api_key = crate::agent::auth_method::read_xai_api_key_env()
+        .or_else(|_| {
+            auth.map(|a| a.key.clone())
+                .ok_or(std::env::VarError::NotPresent)
+        })
+        .map_err(|_| {
+            BackendError::Auth(
+                "No Trumbo token for the model catalog. Run `grok trumbo login`.".into(),
+            )
+        })?;
+    tracing::info!("Fetching Trumbo subscription models from {url}");
+    let response = client
+        .get(&url)
+        .header("Authorization", format!("Bearer {api_key}"))
+        .send()?;
+    if !response.status().is_success() {
+        let status = response.status().as_u16();
+        let body = response.text().unwrap_or_default();
+        tracing::warn!("Failed to fetch Trumbo models: {status} - {body}");
+        return Err(BackendError::RequestFailed { status, body });
+    }
+    let payload: serde_json::Value = response.json()?;
+
+    let mut models = Vec::new();
+    for key in ["trumbo", "trumboPass"] {
+        let list = match payload.get(key).and_then(serde_json::Value::as_array) {
+            Some(list) => list,
+            None => continue,
+        };
+        for entry in list {
+            let obj = match entry.as_object() {
+                Some(o) => o,
+                None => continue,
+            };
+            let id = match obj.get("id").and_then(serde_json::Value::as_str) {
+                Some(id) if !id.is_empty() => id,
+                _ => continue,
+            };
+            let value = serde_json::json!({
+                "id": id,
+                "model": id,
+                "name": obj.get("name").and_then(serde_json::Value::as_str).unwrap_or(id),
+                "description": obj.get("description").and_then(serde_json::Value::as_str),
+                "baseUrl": base,
+                "apiBaseUrl": base,
+                "contextWindow": 128000,
+                "maxCompletionTokens": 32768,
+                "apiBackend": "chat_completions",
+                "systemPromptType": crate::agent::config::default_agent_type(),
+            });
+            if let Some(model) = parse_remote_model_value(&value, &base) {
+                models.push(model);
+            }
+        }
+    }
+    tracing::info!("Fetched {} Trumbo subscription models", models.len());
+    Ok(FetchModelsResult { models, etag: None })
+}
+
 /// Parse a single model entry from the /models-v2 response.
 /// Used by both initial model fetch and session-resume metadata refresh.
 pub(crate) fn parse_remote_model_value(

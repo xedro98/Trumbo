@@ -31,30 +31,12 @@ pub async fn list_available_models(agent_config: &AgentConfig) -> Result<()> {
 
     println!("Default model: {}", state.current_model_id.0);
     println!();
-    println!("Available models:");
+    println!("Available models (Trumbo subscription):");
     for m in state.available_models {
         if m.model_id == state.current_model_id {
             println!("  * {} (default)", m.model_id.0);
         } else {
             println!("  - {}", m.model_id.0);
-        }
-    }
-
-    // Trumbo subscription models — the live catalog for the signed-in account.
-    match xai_grok_shell::trumbo::recommended_models().await {
-        Ok(catalog) if !catalog.is_empty() => {
-            println!();
-            println!("Trumbo subscription models:");
-            for m in &catalog {
-                let is_default = m.id.ends_with("quartz-1.0");
-                let marker = if is_default { "  * (default)" } else { "" };
-                let family = if m.family == "trumbo-pass" { " (rollout)" } else { "" };
-                println!("  - {}{}{}", m.id, family, marker);
-            }
-        }
-        _ => {
-            // Not signed in, or the catalog is unavailable — the embedded
-            // defaults already printed above.
         }
     }
 
