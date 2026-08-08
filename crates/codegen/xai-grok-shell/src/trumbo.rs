@@ -279,3 +279,60 @@ pub fn logout() -> Result<()> {
     clear_api_key(&xai_grok_config::grok_home())
         .map_err(|e| anyhow!("failed to clear Trumbo token: {e}"))
 }
+
+/// A model entry from Trumbo's recommended-models catalog.
+#[derive(Debug, Clone)]
+pub struct TrumboCatalogModel {
+    /// `trumbo` or `trumbo-pass`.
+    pub family: String,
+    /// Catalog-model id, e.g. `quartz-1.0` (or e.g. `zai/glm-5.2` for pass).
+    pub id: String,
+    pub name: String,
+    pub description: Option<String>,
+}
+
+const RECOMMENDED_MODELS_PATH: &str = "/ai/trumbo/recommended-models";
+
+/// Fetch the models available to the signed-in Trumbo subscription from
+/// `GET {provider_base}/ai/trumbo/recommended-models` (`{trumbo, trumboPass}`).
+pub async fn recommended_models() -> Result<Vec<TrumboCatalogModel>> {
+    let Some(token) = current_token() else {
+        bail!("Not signed in to Trumbo. Run `grok trumbo login`.");
+    };
+    let client = reqwest::Client::new();
+    let url = format!("{}{RECOMMENDED_MODELS_PATH}", provider_base());
+    let resp = client
+        .get(&url)
+        .header(AUTHORIZATION, format!("Bearer {token}"))
+        .timeout(Duration::from_secs(20))
+        .send()
+        .await
+        .context("failed to fetch Trumbo model catalog")?;
+    let status = resp.status();
+    let body: Value = resp
+        .json()
+        .await
+        .context("invalid Trumbo model catalog response")?;
+    if !status.is_success() {
+        bail!("Failed to fetch Trumbo models: HTTP {status}");
+    }
+
+    let mut out = Vec::new();
+    for (family, key) in [("trumbo", "trumbo"), ("trumbo-pass", "trumboPass")] {
+        if let Some(list) = body[key].as_array() {
+            for entry in list {
+                let id = entry["id"].as_str().unwrap_or_default();
+                if id.is_empty() {
+                    continue;
+                }
+                out.push(TrumboCatalogModel {
+                    family: family.into(),
+                    id: id.into(),
+                    name: entry["name"].as_str().unwrap_or(id).into(),
+                    description: entry["description"].as_str().map(str::to_owned),
+                });
+            }
+        }
+    }
+    Ok(out)
+}
