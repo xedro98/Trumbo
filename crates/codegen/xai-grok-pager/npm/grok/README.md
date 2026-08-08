@@ -1,6 +1,6 @@
-# Grok
+# Trumbo
 
-Bring Grok into your terminal. Fast, flicker-free CLI built for plans, subagents, and parallel work.
+Bring Trumbo into your terminal. Fast, flicker-free CLI built for plans, subagents, and parallel work.
 
 **[Homepage](https://x.ai/cli)** | **[Documentation](https://docs.x.ai/build/overview)**
 
@@ -20,13 +20,13 @@ npm i -g @xai-official/grok
 
 ```bash
 # Launch the interactive TUI
-grok
+trumbo
 
 # Run a single task
-grok -p "Explain this codebase"
+trumbo -p "Explain this codebase"
 ```
 
-On first launch, Grok opens your browser to authenticate. For CI or headless environments, use an API key from [console.x.ai](https://console.x.ai):
+On first launch, Trumbo opens your browser to authenticate. For CI or headless environments, use an API key from [console.x.ai](https://console.x.ai):
 
 ```bash
 export XAI_API_KEY="xai-..."
@@ -35,7 +35,7 @@ export XAI_API_KEY="xai-..."
 ## Update
 
 ```bash
-grok update
+trumbo update
 ```
 
 Or if installed via npm:
@@ -58,4 +58,4 @@ For full documentation including configuration, MCP servers, custom models, head
 
 ## Feedback
 
-Run `/feedback` inside Grok to report issues or send feedback directly.
+Run `/feedback` inside Trumbo to report issues or send feedback directly.

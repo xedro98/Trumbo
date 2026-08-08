@@ -1,6 +1,6 @@
 # Custom Hooks Guide
 
-Hooks let you run custom scripts or HTTP requests at key moments during a Grok session — for example, before or after a tool runs, when a session starts or ends, or when the agent sends a notification.
+Hooks let you run custom scripts or HTTP requests at key moments during a Trumbo session — for example, before or after a tool runs, when a session starts or ends, or when the agent sends a notification.
 
 They are perfect for automation, safety checks, logging, notifications, and integrating with your own tools.
 
@@ -19,17 +19,17 @@ Common use cases:
 
 1. Create the hooks directory:
    ```sh
-   mkdir -p ~/.grok/hooks
+   mkdir -p ~/.trumbo/hooks
    ```
 
-2. Create a simple hook file, e.g. `~/.grok/hooks/session-start.json`:
+2. Create a simple hook file, e.g. `~/.trumbo/hooks/session-start.json`:
    ```json
    {
      "hooks": {
        "SessionStart": [
          {
            "hooks": [
-            { "type": "command", "command": "echo \"🚀 Grok session started in $(pwd)\"" }
+            { "type": "command", "command": "echo \"🚀 Trumbo session started in $(pwd)\"" }
            ]
          }
        ]
@@ -37,7 +37,7 @@ Common use cases:
    }
    ```
 
-3. Start (or restart) a Grok session. The hook runs automatically on `SessionStart`.
+3. Start (or restart) a Trumbo session. The hook runs automatically on `SessionStart`.
 
    Try it: press `Ctrl+L` on non–VS Code family (or run `/hooks` anywhere — preferred on VS Code / Cursor / Windsurf / Zed) and check the Hooks tab to confirm it's loaded.
 
@@ -47,7 +47,7 @@ Hooks are discovered from several places (all are merged):
 
 | Scope     | Path                              | Trusted?     | Notes |
 |-----------|-----------------------------------|--------------|-------|
-| Global    | `~/.grok/hooks/*.json`            | Always       | Best for personal hooks |
+| Global    | `~/.trumbo/hooks/*.json`            | Always       | Best for personal hooks |
 | Global    | `~/.claude/settings.json`         | Always       | Claude Code compatibility |
 | Project   | `<project>/.grok/hooks/*.json`    | Requires trust | Per-repo automation |
 | Project   | `<project>/.claude/settings.json` | Requires trust | Claude compatibility |
@@ -56,7 +56,7 @@ Hooks are discovered from several places (all are merged):
 
 Config-file hooks use the same schema in TOML form; see the [Hooks user guide](user-guide/10-hooks.md#hooks-in-config-files) for details.
 
-**Trusting a project**: Open the hooks modal (`Ctrl+L` on non–VS Code family, or `/hooks` on any terminal including VS Code family) or run `/hooks-trust` (the same folder-trust gate as `--trust`, recorded in `~/.grok/trusted_folders.toml`) the first time you open a project with hooks. This prevents untrusted repos from running arbitrary code.
+**Trusting a project**: Open the hooks modal (`Ctrl+L` on non–VS Code family, or `/hooks` on any terminal including VS Code family) or run `/hooks-trust` (the same folder-trust gate as `--trust`, recorded in `~/.trumbo/trusted_folders.toml`) the first time you open a project with hooks. This prevents untrusted repos from running arbitrary code.
 
 ## The Hook JSON Format
 
@@ -92,7 +92,7 @@ Key fields:
 - **command**: Path to executable (relative to the JSON file) or inline shell command.
 - **timeout**: Seconds before killing the hook (default: 5, or 600 for `Stop`/`SubagentStop` gates). Hooks fail open on timeout.
 
-**Tool name aliases**: Claude-style names like `Bash`, `Edit`, `Read` automatically match Grok's internal names (`run_terminal_cmd`, `search_replace`, `read_file`).
+**Tool name aliases**: Claude-style names like `Bash`, `Edit`, `Read` automatically match Trumbo's internal names (`run_terminal_cmd`, `search_replace`, `read_file`).
 
 ## Writing Hook Scripts
 
@@ -127,19 +127,19 @@ For events like `SessionStart` or `PostToolUse`, stdout is ignored. Just exit 0 
 
 ### Useful Environment Variables
 
-Grok injects the following variables into every hook process:
+Trumbo injects the following variables into every hook process:
 
-- `GROK_HOOK_EVENT` — the event name (e.g. `pre_tool_use`, `session_start`, `post_tool_use`)
-- `GROK_HOOK_NAME` — the full configured name of this hook
-- `GROK_SESSION_ID` — the current session identifier
-- `GROK_WORKSPACE_ROOT` — absolute path to the workspace root
+- `TRUMBO_HOOK_EVENT` — the event name (e.g. `pre_tool_use`, `session_start`, `post_tool_use`)
+- `TRUMBO_HOOK_NAME` — the full configured name of this hook
+- `TRUMBO_SESSION_ID` — the current session identifier
+- `TRUMBO_WORKSPACE_ROOT` — absolute path to the workspace root
 
 For hooks provided by plugins, the following are also set:
 
-- `GROK_PLUGIN_ROOT` — absolute path to the plugin's installation directory
-- `GROK_PLUGIN_DATA` — absolute path to the plugin's writable data directory
+- `TRUMBO_PLUGIN_ROOT` — absolute path to the plugin's installation directory
+- `TRUMBO_PLUGIN_DATA` — absolute path to the plugin's writable data directory
 
-These runner- and plugin-injected variables always take precedence. Attempts to override the reserved runner keys via the `env` field are stripped at load time (with a warning logged). For plugin hooks, `GROK_PLUGIN_ROOT` and `GROK_PLUGIN_DATA` similarly override any user-supplied values for those keys.
+These runner- and plugin-injected variables always take precedence. Attempts to override the reserved runner keys via the `env` field are stripped at load time (with a warning logged). For plugin hooks, `TRUMBO_PLUGIN_ROOT` and `TRUMBO_PLUGIN_DATA` similarly override any user-supplied values for those keys.
 
 ### Custom Environment Variables (`env` field)
 
@@ -160,7 +160,7 @@ Values must be **strings** — JSON numbers and bools currently fail to parse
 (wrap them in quotes if you need them).
 
 For plugin hooks, the plugin adapter additionally injects
-`GROK_PLUGIN_ROOT` and `GROK_PLUGIN_DATA`. These keys override any user-declared
+`TRUMBO_PLUGIN_ROOT` and `TRUMBO_PLUGIN_DATA`. These keys override any user-declared
 values for the same names (the plugin contract is non-negotiable).
 
 ### Variable Substitution
@@ -177,7 +177,7 @@ config-load time:
 
 Lookup order for each reference:
 1. The handler's own `env` map.
-2. The current process environment (the env Grok itself sees).
+2. The current process environment (the env Trumbo itself sees).
 
 If a reference is unset in both, it's **preserved verbatim** (e.g. `${UNSET}`
 stays as the literal string). The runtime `sh -c` branch may resolve it later
@@ -186,7 +186,7 @@ if the var becomes set; otherwise the runner refuses to spawn with a clear
 
 For HTTP hooks specifically, `url` is also re-expanded **at request time**
 (immediately before SSRF validation), so plugin-injected vars like
-`${GROK_PLUGIN_ROOT}/check` resolve against the plugin's actual path.
+`${TRUMBO_PLUGIN_ROOT}/check` resolve against the plugin's actual path.
 
 #### Parameter-expansion modifiers
 
@@ -226,7 +226,7 @@ In the **Hooks** tab you can:
 - `r` — Remove
 - `Space` — Expand groups
 
-Hooks from `~/.grok/hooks/` appear under **Global**, project ones under **Project**, etc.
+Hooks from `~/.trumbo/hooks/` appear under **Global**, project ones under **Project**, etc.
 
 ## HTTP Hooks
 
@@ -248,7 +248,7 @@ The full event envelope is POSTed as JSON. Useful for webhooks, analytics, or se
 
 ## Security Notes
 
-- Global hooks (`~/.grok/...`) run with your user permissions — treat them like shell scripts.
+- Global hooks (`~/.trumbo/...`) run with your user permissions — treat them like shell scripts.
 - Project hooks require explicit trust (run `/hooks-trust` or use the modal) to prevent supply-chain attacks from malicious repos.
 - HTTP hooks send session data — only use trusted endpoints.
 
@@ -257,7 +257,7 @@ The full event envelope is POSTed as JSON. Useful for webhooks, analytics, or se
 - **Hook not running?** → Press `Ctrl+L` on non–VS Code family (or run `/hooks` anywhere) to see if it's loaded and matched.
 - **Project hooks ignored?** → Trust the project first.
 - **Script not found?** → Check the path is relative to the `.json` file and executable (`chmod +x`).
-- **See errors?** → Check the pager logs (usually in the tracing pane or `~/.grok/logs`).
+- **See errors?** → Check the pager logs (usually in the tracing pane or `~/.trumbo/logs`).
 
 ## More Examples
 
@@ -268,7 +268,7 @@ See the built-in examples in the `xai-grok-hooks` crate:
 - [Session Audit Log](../../../xai-grok-hooks/examples/hooks/session-log.json)
 - [Tool Activity Logger](../../../xai-grok-hooks/examples/hooks/tool-logger.json)
 
-Copy them to `~/.grok/hooks/` and customize.
+Copy them to `~/.trumbo/hooks/` and customize.
 
 ## Full Reference
 
