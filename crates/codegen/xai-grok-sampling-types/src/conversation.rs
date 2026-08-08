@@ -291,11 +291,16 @@ pub struct AssistantItem {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub tool_calls: Vec<ToolCall>,
     /// The model that generated this response
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    // Trumbo (OpenAI-compatible) rejects this extra per-message field
+    // ("extra inputs are not permitted, field: messages[].model_id"), so it is
+    // never serialized onto the wire; deserialization still works.
+    #[serde(skip_serializing, default)]
     pub model_id: Option<String>,
+    // Trumbo (OpenAI-compatible) also rejects these xAI-specific response
+    // echoes on per-message input, so they are never serialized either.
     #[serde(
+        skip_serializing,
         default,
-        skip_serializing_if = "Option::is_none",
         alias = "system_fingerprint",
         deserialize_with = "crate::serde_helpers::empty_string_as_none"
     )]
@@ -305,7 +310,7 @@ pub struct AssistantItem {
     /// `model_id`/`model_fingerprint` so per-response effort survives
     /// mid-session model/effort switches. `None` for synthetic items and
     /// backends that don't echo it.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing, default)]
     pub reasoning_effort: Option<crate::ReasoningEffort>,
 }
 
