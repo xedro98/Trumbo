@@ -46,7 +46,7 @@ const THEME_CHOICES: &[EnumChoice] = &[
     },
     EnumChoice {
         canonical: "groknight",
-        display: "Trumbo Night",
+        display: "Trumbo",
         description: "Neutral dark with magenta accent.",
     },
     EnumChoice {
@@ -479,7 +479,7 @@ const VOICE_STT_LANGUAGE_CHOICES: &[EnumChoice] = &[
 const CONCRETE_THEME_CHOICES: &[EnumChoice] = &[
     EnumChoice {
         canonical: "groknight",
-        display: "Trumbo Night",
+        display: "Trumbo",
         description: "Neutral dark with magenta accent.",
     },
     EnumChoice {

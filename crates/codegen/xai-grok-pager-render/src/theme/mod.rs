@@ -106,9 +106,9 @@ impl ThemeKind {
         let lower = name.to_lowercase();
         match lower.as_str() {
             "auto" | "system" => Some(Self::Auto),
-            "groknight" | "grok-night" | "dark" => Some(Self::GrokNight),
+            "groknight" | "grok-night" | "trumbo" | "trumbo-night" | "dark" => Some(Self::GrokNight),
             "tokyonight" | "tokyo-night" | "tokyo" => Some(Self::TokyoNight),
-            "grokday" | "grok-day" | "light" | "day" => Some(Self::GrokDay),
+            "grokday" | "grok-day" | "trumbo-day" | "light" | "day" => Some(Self::GrokDay),
             "rosepine" | "rose-pine" | "rosepine-moon" | "rose-pine-moon" => {
                 Some(Self::RosePineMoon)
             }
@@ -144,8 +144,8 @@ pub fn canonical_name(value: &str) -> Option<&'static str> {
 pub fn display_name_for_canonical(value: &str) -> &str {
     match value {
         "auto" => "Auto",
-        "groknight" => "Grok Night",
-        "grokday" => "Grok Day",
+        "groknight" => "Trumbo",
+        "grokday" => "Trumbo Day",
         "tokyonight" => "Tokyo Night",
         "rosepine-moon" => "Rose Pine Moon",
         other => other,

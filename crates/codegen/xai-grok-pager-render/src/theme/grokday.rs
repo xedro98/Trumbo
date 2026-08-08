@@ -46,6 +46,9 @@ mod palette {
     pub const TEAL: Color = rgb(10, 142, 112); // #0A8E70
     pub const YELLOW: Color = rgb(162, 118, 18); // #A27612
 
+    pub const BRAND: Color = rgb(21, 128, 61); // #15803D — Trumbo green (light)
+    pub const BRAND_BRIGHT: Color = rgb(22, 163, 74); // #16A34A
+
     pub const RED_LIGHT: Color = rgb(245, 218, 222); // #F5DADE — diff delete bg
     pub const GREEN_LIGHT: Color = rgb(218, 242, 220); // #DAF2DC — diff insert bg
 }
@@ -61,14 +64,14 @@ impl Theme {
             bg_hover: rgb(208, 208, 208),
             bg_terminal: BG,
 
-            accent_user: FG_DARK,
-            accent_assistant: MAGENTA,
-            accent_thinking: MAGENTA,
+            accent_user: BRAND_BRIGHT,
+            accent_assistant: BRAND,
+            accent_thinking: BRAND,
             accent_tool: DARK5,
             accent_system: BLUE,
             accent_error: RED,
             accent_success: GREEN,
-            accent_running: MAGENTA,
+            accent_running: BRAND,
             accent_skill: BLUE,
 
             text_primary: FG,

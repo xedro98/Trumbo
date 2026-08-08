@@ -39,14 +39,17 @@ mod palette {
     pub const DARK3: Color = rgb(90, 90, 90); //  #5a5a5a — medium gray
     pub const DARK5: Color = rgb(120, 120, 120); // #787878 — bright gray
 
-    // ── Accent colors (TokyoNight Night) ─────────────────────────────────
+    // ── Trumbo brand accents ─────────────────────────────────────────────
+    pub const BRAND: Color = rgb(43, 191, 119); // #2BBF77 — Trumbo green
+    pub const BRAND_BRIGHT: Color = rgb(61, 214, 134); // #3DD686
+
+    // ── Secondary accent colors (TokyoNight Night) ────────────────────────
     pub const BLUE: Color = rgb(122, 162, 247); // #7aa2f7
     pub const BLUE0: Color = rgb(61, 89, 161); // #3d59a1
     pub const BLUE1: Color = rgb(58, 149, 171); // #3A95AB
     pub const CYAN: Color = rgb(125, 207, 255); // #7dcfff
     pub const GREEN: Color = rgb(158, 206, 106); // #9ece6a
     pub const GREEN1: Color = rgb(115, 218, 202); // #73daca
-    pub const MAGENTA: Color = rgb(187, 154, 247); // #bb9af7
     pub const ORANGE: Color = rgb(255, 158, 100); // #ff9e64
     pub const PURPLE: Color = rgb(157, 124, 216); // #9d7cd8
     pub const RED: Color = rgb(247, 118, 142); // #f7768e
@@ -60,7 +63,7 @@ mod palette {
 use palette::*;
 
 impl Theme {
-    /// GrokNight theme — neutral gray base with TokyoNight accents.
+    /// Trumbo theme — neutral gray base with Trumbo green accents (default).
     ///
     /// Colors are defined in RGB. Call [`Theme::quantized`] to downgrade
     /// them to the terminal's supported color level before rendering.
@@ -73,14 +76,14 @@ impl Theme {
             bg_hover: rgb(44, 44, 44),
             bg_terminal: BG,
 
-            accent_user: FG_DARK,
-            accent_assistant: MAGENTA,
-            accent_thinking: MAGENTA,
+            accent_user: BRAND_BRIGHT,
+            accent_assistant: BRAND,
+            accent_thinking: BRAND,
             accent_tool: DARK5,
             accent_system: BLUE,
             accent_error: RED,
             accent_success: GREEN,
-            accent_running: MAGENTA,
+            accent_running: BRAND,
             accent_skill: BLUE,
 
             text_primary: FG,
