@@ -123,7 +123,8 @@ fn render_into(area: Rect, buf: &mut Buffer, theme: &Theme, logo: &str) {
     // that land on the same blended color share one Span to hold down the
     // per-frame allocation.
     let base = theme.gray;
-    let hilite = theme.text_primary;
+    // Shimmer highlights in Trumbo green so the mark reads on-brand.
+    let hilite = theme.accent_assistant;
     let logo_lines: Vec<Line> = lines
         .iter()
         .enumerate()

@@ -3424,6 +3424,12 @@ impl PromptWidget {
             left_spans.push(Span::styled(warning.to_owned(), warning_style));
             left_spans.push(Span::styled(" · ", sep_style));
         }
+        // Trumbo brand tag — a green "◆ Trumbo" before the model name so the
+        // prompt reads "◆ Trumbo · quartz-1.0" (distinct from other agents).
+        let brand_style = Style::default().fg(theme.accent_assistant).bg(bg);
+        left_spans.push(Span::styled("◆ ", brand_style));
+        left_spans.push(Span::styled("Trumbo", brand_style));
+        left_spans.push(Span::styled(" · ", sep_style));
         left_spans.push(Span::styled(info.model_name, model_style));
         for flag in info.flags {
             left_spans.push(Span::styled(" · ", sep_style));
