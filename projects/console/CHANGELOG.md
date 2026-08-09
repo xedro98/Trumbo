@@ -11,6 +11,26 @@
 
 
 
+## 3.8.1
+
+macOS compatibility fixes — the darwin binaries now actually run on a Mac.
+
+### Fixed
+- The published macOS CLI no longer fails to launch when the installed
+  binary's architecture doesn't match the Mac (arm64 vs x64): the launcher now
+  detects the failed exec and prints a clear hint pointing at the right package
+  (or Rosetta) instead of an opaque ENOEXEC/EBADARCH error.
+- `trumbo doctor --fix` now finds and kills stale instances of the compiled
+  binary (`~/.trumbo/bin/trumbo` and the per-platform npm package), not just the
+  source checkout — so port conflicts are cleared after a version bump.
+- Launching `$EDITOR` from the CLI now works on macOS/Linux when the editor is a
+  shell wrapper (e.g. VS Code's `code`) instead of failing to exec.
+
+### Changed
+- macOS release builds are now compiled and smoke-tested on native macOS runners
+  before publishing. Previously the darwin binaries were cross-compiled on
+  Ubuntu and could never be executed, so broken packages shipped silently.
+
 ## 3.8.0
 
 Subscription spend controls + free model tier + per-server MCP timeouts.

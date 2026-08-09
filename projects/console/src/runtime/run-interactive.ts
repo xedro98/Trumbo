@@ -935,7 +935,11 @@ export async function runInteractive(
 					const args = [...parts.slice(1), tmpFile];
 					const child = spawn(cmd, args, {
 						stdio: "inherit",
-						shell: process.platform === "win32",
+						// Always route through a shell: on Windows this is required
+						// to resolve .cmd scripts, and on macOS/Linux $EDITOR often
+						// points at a shell-wrapped binary (e.g. VSCode's `code`),
+						// which spawn() would otherwise fail to exec.
+						shell: true,
 					});
 					child.on("exit", (code) => {
 						if (code === 0) resolve();

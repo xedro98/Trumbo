@@ -137,9 +137,17 @@ function listListeningPids(port: number | undefined): number[] {
 
 function listStaleCliPids(): number[] {
 	const patterns = [
+		// Dev checkout: running via bun/node from source.
 		"/projects/console/src/index.ts",
 		"/projects/console/dist/index.js",
+		// Compiled binary paths. These must also match where the CLI runs from
+		// an npm install on a user machine (not just this checkout): the stable
+		// cache binary at ~/.trumbo/bin/trumbo and the platform package at
+		// node_modules/@trumbodev/cli-<os>-<arch>/bin/trumbo. On macOS/Linux
+		// pgrep -fal reports the full command line, so a `bin/trumbo` suffix
+		// matches all of them.
 		"/dist/trumbo",
+		"/bin/trumbo",
 	];
 	const records = new Map<number, ProcessRecord>();
 	for (const pattern of patterns) {

@@ -86,6 +86,24 @@ function run(target) {
 	const result = childProcess.spawnSync(target, args, spawnOptions);
 	if (result.error) {
 		console.error(result.error.message);
+		// Darwin binaries can fail to exec with ENOEXEC when the binary
+		// architecture does not match the macOS host (e.g. an arm64 Mac trying
+		// to run an x64 build without Rosetta, or an x64 terminal under
+		// Rosetta resolving an arm64 package). Point the user at the cause.
+		if (
+			process.platform === "darwin" &&
+			result.error.code &&
+			["ENOEXEC", "EACCES", "EBADARCH", "EBADMACHO"].includes(result.error.code)
+		) {
+			console.error(
+				"The Trumbo binary could not be executed. This usually means the installed " +
+					"binary's architecture does not match this Mac (arm64 vs x64). Check the " +
+					"binary with: file " +
+					target +
+					"  — if it is x86-64 and your Mac is arm64, install the arm64 " +
+					"package (or enable Rosetta): npm install -g @trumbodev/cli@latest",
+			);
+		}
 		process.exit(1);
 	}
 	if (typeof result.status === "number") {

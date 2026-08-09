@@ -1,5 +1,10 @@
 name: Build macOS Desktop
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "projects/trumbo-code/**"
   workflow_dispatch:
     inputs:
       arch:
@@ -16,9 +21,13 @@ permissions:
 
 jobs:
   build:
-    name: macOS ${{ inputs.arch }}
-    runs-on: ${{ inputs.arch == 'arm64' && 'macos-14' || 'macos-13' }}
+    # On `workflow_dispatch` uses the chosen arch; on `push` inputs.arch is empty
+    # (the input default only applies to manual dispatch), so fall back to arm64.
+    name: macOS ${{ inputs.arch || 'arm64' }}
+    runs-on: ${{ inputs.arch == 'x64' && 'macos-13' || 'macos-14' }}
     timeout-minutes: 45
+    env:
+      DESKTOP_ARCH: ${{ inputs.arch || 'arm64' }}
     defaults:
       run:
         working-directory: projects/trumbo-code
@@ -51,8 +60,19 @@ jobs:
           vp run dist:desktop:artifact \
             --platform mac \
             --target dmg \
-            --arch "${{ inputs.arch }}" \
+            --arch "${{ env.DESKTOP_ARCH }}" \
             --verbose
+
+      # Launch the built Electron main process headlessly and fail if it crashes
+      # at startup (MODULE_NOT_FOUND, Uncaught Error, etc.). Previously the macOS
+      # app was only ever hand-built and never executed in CI, so main-process
+      # crashes shipped in every DMG.
+      - name: Smoke-test Electron main process
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+        run: |
+          set -euo pipefail
+          vp run --filter @trumbo-code/desktop smoke-test
 
       - name: Collect artifacts
         run: |
@@ -66,7 +86,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: desktop-mac-${{ inputs.arch }}
+          name: desktop-mac-${{ env.DESKTOP_ARCH }}
           path: projects/trumbo-code/release-publish/*
           if-no-files-found: error
           retention-days: 14
