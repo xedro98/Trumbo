@@ -424,6 +424,35 @@ impl AgentView {
         registry: &ActionRegistry,
         prompt_paging: bool,
     ) -> InputOutcome {
+        // Trumbo tabbed layout: Ctrl+1/2/3 open Models / Settings / Sessions
+        // windows; Esc closes any of them and returns to Chat.
+        if let Event::Key(key) = ev
+            && key.kind != KeyEventKind::Release
+        {
+            if key!('1', CONTROL).matches(key) {
+                return self.handle_agent_action_with_registry(ActionId::ModelPicker, registry);
+            }
+            if key!('2', CONTROL).matches(key) {
+                return InputOutcome::Action(Action::OpenSettings);
+            }
+            if key!('3', CONTROL).matches(key) {
+                self.active_modal = Some(crate::views::modal::ActiveModal::SessionPicker {
+                    state: crate::views::picker::PickerState::default(),
+                    entries: None,
+                    loading: true,
+                    lanes: Default::default(),
+                    previous_palette: None,
+                    window: crate::views::modal_window::ModalWindowState::new(),
+                    content_results: None,
+                    content_loading: false,
+                    deep_search_seq: 0,
+                    entries_query: None,
+                    source_filter: crate::views::session_picker::SourceFilter::default(),
+                    pending_delete: None,
+                });
+                return InputOutcome::Action(Action::FetchSessionList);
+            }
+        }
         if self.scrollback_drag_latched() {
             let live_drag_event = matches!(
                 ev,

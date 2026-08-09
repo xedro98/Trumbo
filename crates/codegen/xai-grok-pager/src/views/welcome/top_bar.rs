@@ -57,6 +57,11 @@ pub(crate) fn location_line_at(theme: &Theme, cwd: &Path) -> Line<'static> {
     let info = git_info::cwd_git_info_lazy(cwd);
 
     let mut parts: Vec<Span> = Vec::new();
+    // Trumbo brand marker: a green ◆ at the start of the top bar.
+    parts.push(Span::styled(
+        "◆ ",
+        Style::default().fg(theme.accent_assistant).add_modifier(Modifier::BOLD),
+    ));
     if let Some(branch) = info.as_ref().and_then(|i| i.branch.as_deref()) {
         let icon = git_info::branch_icon();
         let git_text = if branch.is_empty() {
@@ -64,9 +69,7 @@ pub(crate) fn location_line_at(theme: &Theme, cwd: &Path) -> Line<'static> {
         } else {
             format!("{icon} {branch}")
         };
-        let git_style = Style::default()
-            .fg(theme.text_primary)
-            .add_modifier(Modifier::DIM);
+        let git_style = Style::default().fg(theme.accent_assistant);
         parts.push(Span::styled(git_text, git_style));
         parts.push(Span::styled(" ", info_style));
     }

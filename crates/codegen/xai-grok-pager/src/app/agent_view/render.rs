@@ -566,6 +566,11 @@ impl AgentView {
         let layout_cfg = &appearance.scrollback.layout;
         let compact = appearance.prompt.compact;
         agent::fill_background(buf, area, layout_cfg, compact, theme);
+        // Trumbo tabbed layout: a persistent tab strip above the conversation.
+        // Drawn in the top vertical padding row so it never overlaps content.
+        if layout_cfg.eff_outer_vpad(compact) >= 1 && area.width >= 40 {
+            self.draw_tab_bar(buf, Rect { x: area.x, y: area.y, width: area.width, height: 1 }, theme);
+        }
         let padded = Rect {
             x: area.x + layout_cfg.eff_hpad_left(compact),
             y: area.y + layout_cfg.eff_outer_vpad(compact),
@@ -4988,6 +4993,42 @@ mod feedback_input_tests {
                 bottom + 1 < rows.len(),
                 "box must leave room below the panel (height {height})\n{screen}"
             );
+        }
+    }
+}
+
+// ── Trumbo tabbed layout ─────────────────────────────────────────────────
+pub(super) const TAB_LABELS: [&str; 4] = ["Chat", "Sessions", "Models", "Settings"];
+
+impl AgentView {
+    /// The tab that is conceptually active, derived from whichever picker/modal
+    /// is open (Sessions picker, the /model picker) — Chat otherwise.
+    pub(super) fn active_tab(&self) -> usize {
+        match &self.active_modal {
+            Some(crate::views::modal::ActiveModal::SessionPicker { .. }) => 1,
+            Some(crate::views::modal::ActiveModal::ArgPicker { command, .. }) if command == "model" => 2,
+            _ => 0,
+        }
+    }
+
+    /// Draws the persistent tab strip (green active pill, dim inactive pills).
+    pub(super) fn draw_tab_bar(&self, buf: &mut ratatui::buffer::Buffer, area: ratatui::layout::Rect, theme: &Theme) {
+        let active = self.active_tab();
+        let style_active = ratatui::style::Style::default()
+            .fg(theme.bg_base)
+            .bg(theme.accent_assistant)
+            .add_modifier(ratatui::style::Modifier::BOLD);
+        let style_idle = ratatui::style::Style::default()
+            .fg(theme.gray_bright)
+            .bg(theme.bg_highlight);
+        let mut x = area.x;
+        for (i, label) in TAB_LABELS.iter().enumerate() {
+            if i > 0 {
+                x += 1; // gap between tabs
+            }
+            let text = format!(" {label} ");
+            buf.set_stringn(x, area.y, &text, text.len() + 1, if i == active { style_active } else { style_idle });
+            x += text.len() as u16 + 1;
         }
     }
 }

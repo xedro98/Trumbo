@@ -24,20 +24,20 @@ const fn rgb(r: u8, g: u8, b: u8) -> Color {
 mod palette {
     use super::*;
 
-    // ── Backgrounds ─────────────────────────────────────────────────────
-    pub const BG: Color = rgb(10, 10, 10); //  #0a0a0a — Night (terminal bg)
-    pub const BG_DARK: Color = rgb(12, 12, 12); //  #0c0c0c — darkest
-    pub const BG_STORM_DARK: Color = rgb(17, 17, 17); //  #111111 — dark bg
-    pub const BG_STORM: Color = rgb(20, 20, 20); //  #141414 — main bg
-    pub const BG_HIGHLIGHT: Color = rgb(36, 36, 36); //  #242424 — highlight bg
+    // ── Backgrounds (Trumbo green-tinted surfaces) ──────────────────────
+    pub const BG: Color = rgb(10, 14, 12); //  #0a0e0c — terminal bg (green-black)
+    pub const BG_DARK: Color = rgb(11, 16, 13); //  #0b100d — darkest
+    pub const BG_STORM_DARK: Color = rgb(15, 21, 18); //  #0f1512 — dark bg
+    pub const BG_STORM: Color = rgb(18, 30, 24); //  #121e18 — main bg (dark green)
+    pub const BG_HIGHLIGHT: Color = rgb(28, 43, 34); //  #1c2b22 — highlight bg
 
     // ── Text / grays ────────────────────────────────────────────────────
-    pub const FG: Color = rgb(225, 225, 225); // #e1e1e1 — primary text
-    pub const FG_DARK: Color = rgb(200, 200, 200); // #c8c8c8 — secondary text
-    pub const FG_GUTTER: Color = rgb(65, 65, 65); //  #414141 — dim
-    pub const COMMENT: Color = rgb(108, 108, 108); //  #6c6c6c — muted
-    pub const DARK3: Color = rgb(90, 90, 90); //  #5a5a5a — medium gray
-    pub const DARK5: Color = rgb(120, 120, 120); // #787878 — bright gray
+    pub const FG: Color = rgb(226, 230, 227); // #e2e6e3 — primary text (slight green)
+    pub const FG_DARK: Color = rgb(200, 206, 202); // #c8ceca — secondary text
+    pub const FG_GUTTER: Color = rgb(94, 108, 99); //  #5e6c63 — dim
+    pub const COMMENT: Color = rgb(117, 128, 122); //  #75807a — muted
+    pub const DARK3: Color = rgb(90, 102, 95); //  #5a665f — medium gray-green
+    pub const DARK5: Color = rgb(127, 138, 132); // #7f8a84 — bright gray-green
 
     // ── Trumbo brand accents ─────────────────────────────────────────────
     pub const BRAND: Color = rgb(43, 191, 119); // #2BBF77 — Trumbo green
@@ -71,9 +71,9 @@ impl Theme {
         Self {
             bg_base: BG_STORM,
             bg_light: BG_HIGHLIGHT,
-            bg_dark: rgb(28, 28, 28), // lighter than bg_base for visible code blocks
+            bg_dark: rgb(25, 38, 30), // #19261e — lighter green for code blocks
             bg_highlight: BG_HIGHLIGHT,
-            bg_hover: rgb(44, 44, 44),
+            bg_hover: rgb(35, 51, 41), // #233329
             bg_terminal: BG,
 
             accent_user: BRAND_BRIGHT,
@@ -106,15 +106,15 @@ impl Theme {
 
             accent_remember: Color::Rgb(139, 195, 74), // #8BC34A — Material Design light green
 
-            selection_border: rgb(60, 60, 65),
-            prompt_border: rgb(50, 50, 55), // #323237 — dimmer prompt chrome
-            prompt_border_active: rgb(80, 80, 88), // #505058 — brighter when focused
-            hover_border: rgb(30, 30, 34),
+            selection_border: rgb(38, 82, 60),
+            prompt_border: rgb(28, 56, 43), // #1c382b — dim green prompt chrome
+            prompt_border_active: rgb(43, 191, 119), // #2BBF77 — Trumbo green when focused
+            hover_border: rgb(23, 44, 33),
 
             accent_model: TEAL,
 
             scrollbar_bg: BG_STORM_DARK,
-            scrollbar_fg: BG_HIGHLIGHT,
+            scrollbar_fg: rgb(60, 96, 76), // green-tinted scrollbar thumb
 
             diff_delete_bg: RED_DARK,
             diff_delete_fg: RED,
