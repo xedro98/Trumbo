@@ -69,11 +69,10 @@ jobs:
       matrix:
         include:
           - { name: darwin-arm64,  os: macos-14,       artifact: trumbo-darwin-arm64, bin: target/release/xai-grok-pager,                          exe: "",  protoc: brew,                    required: true  }
-          - { name: darwin-x64,    os: macos-13,       artifact: trumbo-darwin-x64,   bin: target/release/xai-grok-pager,                          exe: "",  protoc: brew,                    required: false }
           - { name: linux-x64,     os: ubuntu-latest,  artifact: trumbo-linux-x64,    bin: target/release/xai-grok-pager,                          exe: "",  protoc: apt,                     required: true  }
           - { name: linux-arm64,   os: ubuntu-latest,  artifact: trumbo-linux-arm64,  bin: target/aarch64-unknown-linux-gnu/release/xai-grok-pager,  exe: "",  protoc: apt,                     required: false }
           - { name: win32-x64,     os: windows-latest, artifact: trumbo-win32-x64,    bin: target/release/xai-grok-pager.exe,                       exe: .exe, protoc: win,                    required: true  }
-          - { name: win32-arm64,   os: windows-latest, artifact: trumbo-win32-arm64,  bin: target/aarch64-pc-windows-msvc/release/xai-grok-pager.exe, exe: .exe, protoc: win, required: false }
+          - { name: win32-arm64,   os: windows-latest, artifact: trumbo-win32-arm64,  bin: target/aarch64-pc-windows-msvc/release/xai-grok-pager.exe, exe: .exe, protoc: win,                    required: false }
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ !matrix.required }}
     env:
@@ -160,6 +159,68 @@ jobs:
         with:
           name: ${{ matrix.artifact }}
           path: projects/trumbo-cli/staging/${{ matrix.artifact }}
+          if-no-files-found: error
+          retention-days: 1
+
+  # Best-effort native Intel (x64) macOS build. NOT a dependency of the publish
+  # jobs: macos-13 runners are often saturated for hours, so a missing x64
+  # binary must not block a release. When the artifact IS produced in time,
+  # publish-main's assemble picks it up; otherwise that platform is skipped
+  # (TRUMBO_ALLOW_MISSING=1).
+  build-macos-x64:
+    name: Build trumbo (darwin-x64, best-effort)
+    if: github.repository == 'xedro98/Trumbo'
+    continue-on-error: true
+    runs-on: macos-13
+    env:
+      CARGO_PROFILE_RELEASE_INCREMENTAL: "false"
+      CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Resolve version
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            V="${GITHUB_REF_NAME#cli-v}"
+          else
+            V="$(node -p "require('./projects/console/package.json').version")"
+          fi
+          echo "GROK_VERSION=$V" >> "$GITHUB_ENV"
+          echo "Building version $V"
+
+      - name: Install protoc (macOS)
+        run: brew install protobuf
+
+      - name: Setup Rust 1.94.0
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: 1.94.0
+          components: rustfmt, clippy
+
+      - name: Build release binary
+        working-directory: projects/trumbo-cli
+        env:
+          RUST_MIN_STACK: "33554432"
+        run: cargo build --release -p xai-grok-pager-bin
+
+      - name: Stage binary
+        working-directory: projects/trumbo-cli
+        run: |
+          set -euo pipefail
+          test -f target/release/xai-grok-pager || { echo "missing binary"; exit 1; }
+          mkdir -p staging/trumbo-darwin-x64
+          cp target/release/xai-grok-pager staging/trumbo-darwin-x64/trumbo
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trumbo-darwin-x64
+          path: projects/trumbo-cli/staging/trumbo-darwin-x64
           if-no-files-found: error
           retention-days: 1
 
