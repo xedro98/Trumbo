@@ -8,7 +8,7 @@ Use it interactively as a TUI, or integrate it into your own apps via headless m
 
 ```bash
 # Install
-curl -fsSL https://x.ai/cli/install.sh | bash
+curl -fsSL https://docs.trumbo.dev/getting-started/installing-trumbo | bash
 
 # Interactive TUI
 trumbo
@@ -59,10 +59,10 @@ trumbo agent stdio
 
 ```bash
 # Install latest stable
-curl -fsSL https://x.ai/cli/install.sh | bash
+curl -fsSL https://docs.trumbo.dev/getting-started/installing-trumbo | bash
 
 # Install a specific version
-curl -fsSL https://x.ai/cli/install.sh | bash -s 0.1.42
+curl -fsSL https://docs.trumbo.dev/getting-started/installing-trumbo | bash -s 0.1.42
 ```
 
 Verify installation:
@@ -101,7 +101,7 @@ trumbo login
 
 ### API Key
 
-For CI/CD, automation, or environments without browser access, use an API key from [console.x.ai](https://console.x.ai):
+For CI/CD, automation, or environments without browser access, use an API key from [authorize with Trumbo](https://docs.trumbo.dev/getting-started/authorizing-with-trumbo):
 
 ```bash
 export XAI_API_KEY="xai-..."
@@ -2498,7 +2498,7 @@ The agent persists all session updates automatically. Clients can reconnect and 
 
 | Variable                         | Description                                                                                              |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `XAI_API_KEY`         | API key from [console.x.ai](https://console.x.ai). Used for custom endpoint auth and API key login      |
+| `XAI_API_KEY`         | API key from [authorize with Trumbo](https://docs.trumbo.dev/getting-started/authorizing-with-trumbo). Used for custom endpoint auth and API key login      |
 | `TRUMBO_CLI_CHAT_PROXY_BASE_URL`  | Override the cli-chat-proxy URL (default: `https://cli-chat-proxy.grok.com/v1`)                          |
 | `TRUMBO_MODELS_BASE_URL`          | Custom base URL for inference. Model list auto-fetched from `{base_url}/models` (see [Custom Models Endpoint](#custom-models-endpoint)) |
 | `TRUMBO_MODELS_LIST_URL`          | Override the model list URL if it differs from `{TRUMBO_MODELS_BASE_URL}/models`                                              |

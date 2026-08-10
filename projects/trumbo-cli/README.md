@@ -7,7 +7,7 @@
     <img alt="SpaceXAI logo" src="https://media.x.ai/v1/website/spacexai-symbol-black-transparent-6435cf42.png" width="96">
   </picture>
   <br>
-  Grok Build (<code>grok</code>)
+  Trumbo (<code>trumbo</code>)
 </h1>
 
 **Trumbo CLI** is the terminal-based AI coding agent for the Trumbo platform
@@ -82,7 +82,7 @@ The binary artifact is named `xai-grok-pager`; official installs ship it as
 ## Documentation
 
 Full online documentation is available at
-[docs.x.ai/build/overview](https://docs.x.ai/build/overview).
+[docs.trumbo.dev](https://docs.trumbo.dev/usage/cli-overview).
 
 The user guide ships with the pager crate:
 [`crates/codegen/xai-grok-pager/docs/user-guide/`](crates/codegen/xai-grok-pager/docs/user-guide/)

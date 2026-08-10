@@ -1,0 +1,128 @@
+⠋ checking for broken links...
+[2K[1A[2K[G⠙ checking for broken links...
+[2K[1A[2K[G⠹ checking for broken links...
+[2K[1A[2K[G⠸ checking for broken links...
+[2K[1A[2K[G⠼ checking for broken links...
+[2K[1A[2K[G⠴ checking for broken links...
+[2K[1A[2K[G⠦ checking for broken links...
+[2K[1A[2K[G⠧ checking for broken links...
+[2K[1A[2K[G⠇ checking for broken links...
+[2K[1A[2K[G⠏ checking for broken links...
+[2K[1A[2K[G⠋ checking for broken links...
+[2K[1A[2K[G⠙ checking for broken links...
+[2K[1A[2K[G⠹ checking for broken links...
+[2K[1A[2K[G⠸ checking for broken links...
+[2K[1A[2K[G⠼ checking for broken links...
+[2K[1A[2K[Gfound 59 broken links in 21 files
+
+best-practices\memory-bank.mdx
+ ⎿  /assets/memory-bank-hierarchy.png
+
+cli\samples\github-integration.mdx
+ ⎿  /assets/ss0a-comment.png
+ ⎿  /assets/ss0b-final.png
+ ⎿  /assets/ss01-environment.png
+ ⎿  /assets/ss02-api-key.png
+ ⎿  /assets/ss03-ready.png
+
+cli\samples\github-issue-rca.mdx
+ ⎿  /assets/cli-rca.gif
+
+cli\samples\model-orchestration.mdx
+ ⎿  /cli/samples/github-integration
+
+enterprise-solutions\api-reference.mdx
+ ⎿  /enterprise-solutions/team-management/managing-members
+ ⎿  /enterprise-solutions/monitoring/overview
+ ⎿  /enterprise-solutions/monitoring/telemetry
+ ⎿  /enterprise-solutions/team-management/managing-members
+ ⎿  /enterprise-solutions/monitoring/overview
+
+enterprise-solutions\configuration\infrastructure-configuration\control-other-tr
+umbo-features\mcp-server-controls.mdx
+ ⎿  /enterprise-solutions/configuration/remote-configuration/overview
+ ⎿  /enterprise-solutions/configuration/remote-configuration/overview
+
+enterprise-solutions\configuration\infrastructure-configuration\control-other-tr
+umbo-features\yolo-mode.mdx
+ ⎿  /features/yolo-mode
+ ⎿  /enterprise-solutions/configuration/remote-configuration/overview
+ ⎿  /features/yolo-mode
+
+enterprise-solutions\configuration\remote-configuration\overview.mdx
+ ⎿  /enterprise-solutions/configuration/remote-configuration/openai-compatible/a
+dmin-configuration
+ ⎿  /enterprise-solutions/configuration/remote-configuration/aws-bedrock/admin-c
+onfiguration
+ ⎿  /enterprise-solutions/configuration/remote-configuration/google-vertex/admin
+-configuration
+ ⎿  /enterprise-solutions/configuration/remote-configuration/openai-compatible/a
+dmin-configuration
+ ⎿  /enterprise-solutions/configuration/remote-configuration/anthropic/admin-con
+figuration
+ ⎿  /enterprise-solutions/configuration/remote-configuration/litellm/admin-confi
+guration
+
+enterprise-solutions\monitoring\opentelemetry-events.mdx
+ ⎿  /enterprise-solutions/monitoring/opentelemetry
+ ⎿  /enterprise-solutions/monitoring/opentelemetry
+ ⎿  /enterprise-solutions/monitoring/prompt-storage
+ ⎿  /enterprise-solutions/monitoring/telemetry
+
+enterprise-solutions\monitoring\opentelemetry.mdx
+ ⎿  /enterprise-solutions/configuration/remote-configuration/overview#how-remote
+-configuration-works
+ ⎿  /enterprise-solutions/configuration/remote-configuration/overview#how-remote
+-configuration-works
+ ⎿  /enterprise-solutions/monitoring/opentelemetry-events
+ ⎿  /enterprise-solutions/monitoring/telemetry
+
+enterprise-solutions\monitoring\opentelemetry_override.mdx
+ ⎿  /enterprise-solutions/monitoring/opentelemetry
+ ⎿  /enterprise-solutions/monitoring/opentelemetry
+ ⎿  /enterprise-solutions/configuration/remote-configuration/overview
+
+enterprise-solutions\monitoring\overview.mdx
+ ⎿  /enterprise-solutions/monitoring/telemetry
+ ⎿  /enterprise-solutions/monitoring/prompt-storage
+ ⎿  /enterprise-solutions/monitoring/opentelemetry
+ ⎿  /enterprise-solutions/monitoring/opentelemetry_override
+ ⎿  /enterprise-solutions/monitoring/telemetry
+ ⎿  /enterprise-solutions/monitoring/opentelemetry
+ ⎿  /enterprise-solutions/monitoring/telemetry
+ ⎿  /enterprise-solutions/monitoring/opentelemetry
+
+enterprise-solutions\monitoring\prompt-storage.mdx
+ ⎿  /enterprise-solutions/monitoring/opentelemetry
+ ⎿  /enterprise-solutions/monitoring/opentelemetry
+ ⎿  /enterprise-solutions/monitoring/telemetry
+ ⎿  /enterprise-solutions/configuration/remote-configuration/overview
+
+enterprise-solutions\monitoring\telemetry.mdx
+ ⎿  /enterprise-solutions/monitoring/prompt-storage
+ ⎿  /enterprise-solutions/monitoring/opentelemetry
+ ⎿  /enterprise-solutions/monitoring/opentelemetry
+ ⎿  /enterprise-solutions/monitoring/opentelemetry-events
+
+enterprise-solutions\onboarding.mdx
+ ⎿  /enterprise-solutions/team-management/managing-members
+
+enterprise-solutions\overview.mdx
+ ⎿  /provider-config/aws-bedrock/api-key
+
+enterprise-solutions\team-management\managing-members.mdx
+ ⎿  /enterprise-solutions/configuration/remote-configuration/overview
+ ⎿  /enterprise-solutions/monitoring/overview
+
+features\auto-compact.mdx
+ ⎿  /assets/condensing.png
+
+getting-started\authorizing-with-trumbo.mdx
+ ⎿  /provider-config/aws-bedrock/api-key
+
+provider-config\aws-bedrock\cli-profile.mdx
+ ⎿  /assets/trumbo-aws-setup.png
+
+provider-config\zai.mdx
+ ⎿  /assets/zai-provider.png
+

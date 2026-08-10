@@ -215,7 +215,7 @@ export class KanbanEc2Stack extends cdk.Stack {
             "sudo dnf install -y nodejs",
 
             // 4) Clone and build the app
-            "git clone -b main https://github.com/xedro98/trembo.git /opt/kanban",
+            "git clone -b main https://github.com/xedro98/Trumbo.git /opt/kanban",
 
             // 5) Create systemd service for the kanban app
             `cat > /etc/systemd/system/kanban.service << 'UNIT'

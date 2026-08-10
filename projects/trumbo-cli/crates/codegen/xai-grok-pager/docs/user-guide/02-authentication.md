@@ -43,7 +43,7 @@ To sign out, run `trumbo logout`. It takes no flags and clears your cached crede
 
 ## API Key
 
-For CI/CD, automation, or environments without browser access, use an API key from [console.x.ai](https://console.x.ai):
+For CI/CD, automation, or environments without browser access, use an API key from [authorize with Trumbo](https://docs.trumbo.dev/getting-started/authorizing-with-trumbo):
 
 ```bash
 export XAI_API_KEY="xai-..."
@@ -313,7 +313,7 @@ which `/privacy` opens — does not change these config knobs:
 
 On team accounts, only a team admin can change coding-data sharing.
 Team admins can also enable or disable Zero Data Retention (ZDR) for their team.
-See [How to enable ZDR](https://docs.x.ai/developers/faq/security#how-to-enable-zdr).
+See [How to enable ZDR](https://docs.trumbo.dev/platform/security#how-to-enable-zdr).
 When ZDR is on, coding-data sharing cannot be changed at all — the settings
 row shows `ZDR` in place of the value.
 

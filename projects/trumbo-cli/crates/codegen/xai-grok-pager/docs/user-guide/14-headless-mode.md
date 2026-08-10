@@ -547,7 +547,7 @@ Key environment variables that affect headless mode:
 | `TRUMBO_LOG_FILE`                | Path to a log file (used verbatim as the path; works in headless and TUI, honors `RUST_LOG`) |
 | `RUST_LOG`                     | Log level filter (e.g. `debug`). Headless logs to stderr.     |
 
-For CI environments without browser access, set `XAI_API_KEY` with an API key from [console.x.ai](https://console.x.ai):
+For CI environments without browser access, set `XAI_API_KEY` with an API key from [authorize with Trumbo](https://docs.trumbo.dev/getting-started/authorizing-with-trumbo):
 
 ```bash
 export XAI_API_KEY="xai-..."
