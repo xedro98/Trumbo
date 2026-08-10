@@ -389,13 +389,13 @@ jobs:
                 continue
               fi
               echo "publishing $name@$VERSION"
-              npm publish "$dir" --access public --tag latest --provenance
+              npm publish "./$dir" --access public --tag latest --provenance
             fi
           done
           # Wrapper last so the optionalDependencies resolve to already-published packages.
           if ! npm view "@trumbodev/cli@$VERSION" version >/dev/null 2>&1; then
             echo "publishing @trumbodev/cli@$VERSION"
-            npm publish cli --access public --tag latest --provenance
+            npm publish ./cli --access public --tag latest --provenance
           else
             echo "already published: @trumbodev/cli@$VERSION (skip)"
           fi
@@ -566,11 +566,11 @@ jobs:
                 echo "already published: $name@$VERSION (skip)"
                 continue
               fi
-              npm publish "$dir" --access public --tag nightly --provenance
+              npm publish "./$dir" --access public --tag nightly --provenance
             fi
           done
           if ! npm view "@trumbodev/cli@$VERSION" version >/dev/null 2>&1; then
-            npm publish cli --access public --tag nightly --provenance
+            npm publish ./cli --access public --tag nightly --provenance
           else
             echo "already published: @trumbodev/cli@$VERSION (skip)"
           fi
