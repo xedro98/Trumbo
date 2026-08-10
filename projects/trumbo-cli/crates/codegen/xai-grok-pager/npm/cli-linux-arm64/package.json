@@ -15,5 +15,10 @@
     ],
     "publishConfig": {
         "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/xedro98/Trumbo.git",
+        "directory": "projects/trumbo-cli"
     }
 }
