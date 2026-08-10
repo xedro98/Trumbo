@@ -46,24 +46,23 @@ jobs:
   # Native macOS build + smoke-test gate. The Ubuntu publish job cross-compiles
   # the darwin binaries but can never execute them, so a broken darwin artifact
   # (arch mismatch, MODULE_NOT_FOUND at startup, missing native prebuild) used
-  # to ship silently and crash on every Mac. This job builds the darwin binary
-  # natively on a macOS runner and runs it; the publish jobs below wait on it.
+  # to ship silently and crash on every Mac. This job builds the arm64 macOS
+  # binary natively on an Apple Silicon runner and runs it; the publish jobs
+  # below depend on it.
+  #
+  # The x64 (Intel) macOS binary is built by the separate best-effort
+  # build-macos-x64 job below and is *preferred but not required*: GitHub's
+  # Intel macOS (macos-13) hosted runners have been unavailable for long
+  # stretches, so the x64 build must not block releases. publish-main replaces
+  # the cross-compiled darwin-x64 package with the native one only when the
+  # best-effort job produced it in time.
   build-macos:
-    name: Build & smoke-test macOS binary (${{ matrix.arch }})
+    name: Build & smoke-test macOS binary (arm64)
     permissions:
       contents: read
       id-token: write
     if: github.repository == 'xedro98/Trumbo'
-    strategy:
-      matrix:
-        include:
-          - runner: macos-14
-            arch: arm64
-            dir_arch: arm64
-          - runner: macos-13
-            arch: x64
-            dir_arch: x64
-    runs-on: ${{ matrix.runner }}
+    runs-on: macos-14
     env:
       TELEMETRY_SERVICE_API_KEY: ${{ secrets.TELEMETRY_SERVICE_API_KEY }}
       ERROR_SERVICE_API_KEY: ${{ secrets.ERROR_SERVICE_API_KEY }}
@@ -111,7 +110,7 @@ jobs:
         working-directory: projects/console
         run: |
           set -euo pipefail
-          BIN="dist/cli-darwin-${{ matrix.dir_arch }}/bin/trumbo"
+          BIN="dist/cli-darwin-arm64/bin/trumbo"
           test -x "$BIN" || { echo "binary not executable: $BIN"; exit 1; }
           echo "--- file ---"
           file "$BIN"
@@ -132,8 +131,87 @@ jobs:
       - name: Upload native macOS package
         uses: actions/upload-artifact@v4
         with:
-          name: cli-darwin-${{ matrix.arch }}
-          path: projects/console/dist/cli-darwin-${{ matrix.arch }}
+          name: cli-darwin-arm64
+          path: projects/console/dist/cli-darwin-arm64
+          if-no-files-found: error
+          retention-days: 1
+
+  # Best-effort native x64 (Intel) macOS build + smoke test. Same build as
+  # build-macos but on a macos-13 Intel runner. Not a publish dependency — the
+  # hosted Intel macOS fleet is often saturated for hours, so releases must not
+  # wait on it. When this job does complete in time, publish-main replaces the
+  # cross-compiled darwin-x64 package with this native one.
+  build-macos-x64:
+    name: Build & smoke-test macOS binary (x64)
+    permissions:
+      contents: read
+      id-token: write
+    if: github.repository == 'xedro98/Trumbo'
+    runs-on: macos-13
+    env:
+      TELEMETRY_SERVICE_API_KEY: ${{ secrets.TELEMETRY_SERVICE_API_KEY }}
+      ERROR_SERVICE_API_KEY: ${{ secrets.ERROR_SERVICE_API_KEY }}
+      OTEL_TELEMETRY_ENABLED: ${{ secrets.OTEL_TELEMETRY_ENABLED }}
+      OTEL_LOGS_EXPORTER: otlp
+      OTEL_METRICS_EXPORTER: otlp
+      OTEL_EXPORTER_OTLP_PROTOCOL: ${{ secrets.OTEL_EXPORTER_OTLP_PROTOCOL }}
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
+      OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.13"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.x"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: bun install
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build SDK packages
+        run: bun run build:sdk
+
+      - name: Build macOS binary (native)
+        run: bun script/build.ts --single --skip-sdk-build
+        working-directory: projects/console
+
+      - name: Smoke-test macOS binary
+        working-directory: projects/console
+        run: |
+          set -euo pipefail
+          BIN="dist/cli-darwin-x64/bin/trumbo"
+          test -x "$BIN" || { echo "binary not executable: $BIN"; exit 1; }
+          echo "--- file ---"
+          file "$BIN"
+          file "$BIN" | grep -q "Mach-O" || { echo "not a Mach-O binary"; exit 1; }
+          echo "--- version ---"
+          VERSION="$(node -p "require('./package.json').version")"
+          OUT="$(./"$BIN" --version)"
+          printf '%s\n' "$OUT"
+          test "$(printf '%s' "$OUT" | tail -n 1)" = "$VERSION" \
+            || { echo "version mismatch (expected $VERSION)"; exit 1; }
+          echo "--- help ---"
+          ./"$BIN" --help >/dev/null
+          echo "macOS x64 smoke-test passed."
+
+      - name: Upload native macOS package (x64)
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-darwin-x64
+          path: projects/console/dist/cli-darwin-x64
           if-no-files-found: error
           retention-days: 1
 
@@ -300,8 +378,11 @@ jobs:
 
       # Replace the cross-compiled darwin packages (built on Ubuntu, never
       # executed) with the natively built + smoke-tested macOS packages produced
-      # by the build-macos job. This is what makes `trumbo` actually start on a
-      # Mac: the shipped default is a real Mach-O binary built on macOS.
+      # by the build-macos / build-macos-x64 jobs. This is what makes `trumbo`
+      # actually start on a Mac: the shipped default is a real Mach-O binary
+      # built on macOS. The arm64 native package is required; the x64 one is
+      # used only when the best-effort Intel job produced it in time, otherwise
+      # the cross-compiled darwin-x64 package is kept.
       - name: Download native macOS packages
         uses: actions/download-artifact@v4
         with:
@@ -310,15 +391,26 @@ jobs:
       - name: Merge native macOS packages into dist
         run: |
           set -euo pipefail
-          for arch in arm64 x64; do
-            src=".macos-artifacts/cli-darwin-$arch"
-            dst="projects/console/dist/cli-darwin-$arch"
-            test -d "$src" || { echo "missing native darwin artifact for $arch"; exit 1; }
+          # arm64 — required gate.
+          src=".macos-artifacts/cli-darwin-arm64"
+          dst="projects/console/dist/cli-darwin-arm64"
+          test -d "$src" || { echo "missing native darwin-arm64 artifact"; exit 1; }
+          rm -rf "$dst"
+          cp -R "$src" "$dst"
+          chmod 755 "$dst/bin/trumbo"
+          node -p "require('./$dst/package.json').name + '@' + require('./$dst/package.json').version"
+          # x64 — preferred when available, else keep the cross-compiled package.
+          src=".macos-artifacts/cli-darwin-x64"
+          dst="projects/console/dist/cli-darwin-x64"
+          if [ -d "$src" ]; then
+            echo "using natively built darwin-x64"
             rm -rf "$dst"
             cp -R "$src" "$dst"
             chmod 755 "$dst/bin/trumbo"
             node -p "require('./$dst/package.json').name + '@' + require('./$dst/package.json').version"
-          done
+          else
+            echo "no native darwin-x64 artifact (Intel runner unavailable); keeping cross-compiled package"
+          fi
 
       - name: Publish to NPM with latest tag
         # Trusted Publishing: auth via GitHub OIDC (--provenance in publish-npm.ts).
