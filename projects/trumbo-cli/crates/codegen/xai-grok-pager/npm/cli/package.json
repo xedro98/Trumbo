@@ -35,8 +35,8 @@
         "@trumbodev/cli-darwin-x64": "3.9.0",
         "@trumbodev/cli-linux-arm64": "3.9.0",
         "@trumbodev/cli-linux-x64": "3.9.0",
-        "@trumbodev/cli-win32-arm64": "3.9.0",
-        "@trumbodev/cli-win32-x64": "3.9.0"
+        "@trumbodev/cli-windows-arm64": "3.9.0",
+        "@trumbodev/cli-windows-x64": "3.9.0"
     },
     "repository": {
         "type": "git",
