@@ -101,3 +101,6 @@ sandbox/
 # Native Rust CLI (trumbo) build artifacts
 projects/trumbo-cli/target/
 projects/trumbo-cli/**/target/
+
+# Mintlify scratch
+book/.bl.txt
