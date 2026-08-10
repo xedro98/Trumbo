@@ -40,11 +40,7 @@ function ensureDir(p) { fs.mkdirSync(path.dirname(p), { recursive: true }); }
 const ALLOW_MISSING = process.env.TRUMBO_ALLOW_MISSING === '1';
 
 async function packPlatform({ platform, arch, envVar, defaultSource, binName }) {
-    // The published package uses the product name "windows" for the win32 OS
-    // (matching the legacy Bun CLI's @trumbodev/cli-windows-* packages); npm's
-    // `os` field stays "win32", only the package name/dir differ.
-    const display = platform === 'win32' ? 'windows' : platform;
-    const pkgDir = path.join(npmRoot, `cli-${display}-${arch}`);
+    const pkgDir = path.join(npmRoot, `cli-${platform}-${arch}`);
     const pkgJsonPath = path.join(pkgDir, 'package.json');
 
     if (!fs.existsSync(pkgJsonPath)) {
@@ -83,7 +79,7 @@ async function packPlatform({ platform, arch, envVar, defaultSource, binName }) 
     });
     fs.writeFileSync(outBr, compressed);
     console.log(
-        `[assemble] cli-${display}-${arch}@${VERSION}: ` +
+        `[assemble] cli-${platform}-${arch}@${VERSION}: ` +
         `${(raw.length / 1048576).toFixed(1)} MB -> ${(compressed.length / 1048576).toFixed(1)} MB ` +
         `(${path.relative(npmRoot, outBr)})`
     );

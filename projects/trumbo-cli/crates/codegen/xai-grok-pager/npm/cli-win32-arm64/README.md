@@ -1,6 +1,6 @@
-# @trumbodev/cli-windows-x64
+# @trumbodev/cli-win32-arm64
 
-Platform-specific binary for [`@trumbodev/cli`](https://www.npmjs.com/package/@trumbodev/cli) on win32-x64.
+Platform-specific binary for [`@trumbodev/cli`](https://www.npmjs.com/package/@trumbodev/cli) on win32-arm64.
 
 Do not install this package directly. Install the main package instead:
 
