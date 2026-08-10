@@ -133,6 +133,7 @@ jobs:
         run: rustup target add aarch64-pc-windows-msvc
 
       - name: Build release binary
+        working-directory: projects/trumbo-cli
         env:
           RUST_MIN_STACK: "33554432"
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
@@ -147,6 +148,7 @@ jobs:
           fi
 
       - name: Stage binary
+        working-directory: projects/trumbo-cli
         run: |
           set -euo pipefail
           test -f "${{ matrix.bin }}" || { echo "missing ${{ matrix.bin }}"; exit 1; }
@@ -157,7 +159,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
-          path: staging/${{ matrix.artifact }}
+          path: projects/trumbo-cli/staging/${{ matrix.artifact }}
           if-no-files-found: error
           retention-days: 1
 
