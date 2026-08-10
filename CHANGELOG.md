@@ -15,6 +15,33 @@ All notable changes to the Trumbo monorepo are recorded here. This file was
 restarted from scratch for the Trumbo brand — earlier history is not carried
 over.
 
+## [v3.9.0] — 2026-08-10
+
+The CLI is now the **native Rust TUI** — a fast, flicker-free terminal agent
+shipped as `@trumbodev/cli` on npm for Windows, macOS, and Linux.
+
+### Added
+- **Native CLI**: `npm install -g @trumbodev/cli` installs a prebuilt Rust
+  binary (no Node runtime) exposing the `trumbo` command.
+- **Cross-platform**: packaged for macOS (arm64/x64), Linux (x64/arm64), and
+  Windows (x64) via npm platform `optionalDependencies`.
+- **TUI + headless agent**: interactive TUI plus `trumbo agent` (stdio/serve),
+  `login`, `logout`, `models`, `mcp`, `plugin`, `memory`, `sessions`,
+  `worktree`, `doctor`, `update`, `completions`, and more.
+- **Trumbo auth + subscription**: device-code login and plan/rate-limit
+  enforcement against the Trumbo platform.
+
+### Changed
+- `@trumbodev/cli` now publishes the native binary (previously the Bun/Node
+  CLI). The Node CLI stays in the repo (`projects/console`) as the SDK-backed
+  backend for the VS Code extension and Trumbo Code desktop app — both are
+  unaffected by this swap (they consume `@trumbodev/core`, not the CLI npm
+  package).
+- Platform-only subcommands (`apps`, `databases`, `program`, `schedule`,
+  `security`, `team`, `skill`, `kanban`, `hook`, `history`, `connect`) are not
+  yet present in the native CLI; those remain available in the sandboxed web
+  console / source CLI.
+
 ## [v3.8.0 / v0.0.33 / SDK v0.0.62] — 2026-08-01
 
 Subscription spend controls, a server-backed free model tier, per-server MCP

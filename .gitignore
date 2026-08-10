@@ -97,3 +97,7 @@ projects/samples/desktop-app/webview/.next/
 
 # sandbox/ for throwaway test repos (not part of the app)
 sandbox/
+
+# Native Rust CLI (trumbo) build artifacts
+projects/trumbo-cli/target/
+projects/trumbo-cli/**/target/

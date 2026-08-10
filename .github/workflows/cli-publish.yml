@@ -1,5 +1,18 @@
 name: cli-publish
 
+# Publishes the native Rust Trumbo CLI (@trumbodev/cli) to npm.
+#
+# The CLI is the Rust TUI at projects/trumbo-cli (fork of grok-build → Trumbo
+# provider). On a `cli-vX.Y.Z` tag (or a confirmed dispatch) CI builds the
+# release binary natively per platform, packages it with the grok-style npm
+# wrapper + platform packages (see projects/trumbo-cli/crates/codegen/xai-grok-pager/npm/),
+# and publishes the 7 `@trumbodev/cli*` packages with Trusted Publishing.
+#
+# Compatibility with the VS Code extension and Trumbo Code desktop app: those
+# apps consume @trumbodev/core (the SDK), not @trumbodev/cli. A guard in
+# publish-main asserts they never import the CLI package so the native swap
+# cannot break them.
+
 on:
   schedule:
     - cron: "0 12 * * *"
@@ -17,7 +30,7 @@ on:
           - main
           - nightly
       git_tag:
-        description: "Existing release tag to publish when publish_target=main, for example cli-v0.1.0"
+        description: "Existing release tag to publish when publish_target=main, for example cli-v3.9.0"
         required: false
         type: string
       confirm_publish:
@@ -40,38 +53,32 @@ concurrency:
 
 defaults:
   run:
+    shell: bash
     working-directory: .
 
 jobs:
-  # Native macOS build + smoke-test gate. The Ubuntu publish job cross-compiles
-  # the darwin binaries but can never execute them, so a broken darwin artifact
-  # (arch mismatch, MODULE_NOT_FOUND at startup, missing native prebuild) used
-  # to ship silently and crash on every Mac. This job builds the arm64 macOS
-  # binary natively on an Apple Silicon runner and runs it; the publish jobs
-  # below depend on it.
-  #
-  # The x64 (Intel) macOS binary is built by the separate best-effort
-  # build-macos-x64 job below and is *preferred but not required*: GitHub's
-  # Intel macOS (macos-13) hosted runners have been unavailable for long
-  # stretches, so the x64 build must not block releases. publish-main replaces
-  # the cross-compiled darwin-x64 package with the native one only when the
-  # best-effort job produced it in time.
-  build-macos:
-    name: Build & smoke-test macOS binary (arm64)
-    permissions:
-      contents: read
-      id-token: write
+  # Native Rust release build per platform. ARM rows (linux-arm64, win32-arm64)
+  # and the Intel mac row are best-effort: the required macos-arm64 build is the
+  # publish gate (the only OS whose binary we cannot execute from Ubuntu), and
+  # missing best-effort artifacts are simply skipped at assemble time.
+  build:
+    name: Build trumbo (${{ matrix.name }})
     if: github.repository == 'xedro98/Trumbo'
-    runs-on: macos-14
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: darwin-arm64,  os: macos-14,       artifact: trumbo-darwin-arm64, bin: target/release/xai-grok-pager,                          exe: "",  protoc: brew,                    required: true  }
+          - { name: darwin-x64,    os: macos-13,       artifact: trumbo-darwin-x64,   bin: target/release/xai-grok-pager,                          exe: "",  protoc: brew,                    required: false }
+          - { name: linux-x64,     os: ubuntu-latest,  artifact: trumbo-linux-x64,    bin: target/release/xai-grok-pager,                          exe: "",  protoc: apt,                     required: true  }
+          - { name: linux-arm64,   os: ubuntu-latest,  artifact: trumbo-linux-arm64,  bin: target/aarch64-unknown-linux-gnu/release/xai-grok-pager,  exe: "",  protoc: apt,                     required: false }
+          - { name: win32-x64,     os: windows-latest, artifact: trumbo-win32-x64,    bin: target/release/xai-grok-pager.exe,                       exe: .exe, protoc: win,                    required: true  }
+          - { name: win32-arm64,   os: windows-latest, artifact: trumbo-win32-arm64,  bin: target/aarch64-pc-windows-msvc/release/xai-grok-pager.exe, exe: .exe, protoc: win, required: false }
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ !matrix.required }}
     env:
-      TELEMETRY_SERVICE_API_KEY: ${{ secrets.TELEMETRY_SERVICE_API_KEY }}
-      ERROR_SERVICE_API_KEY: ${{ secrets.ERROR_SERVICE_API_KEY }}
-      OTEL_TELEMETRY_ENABLED: ${{ secrets.OTEL_TELEMETRY_ENABLED }}
-      OTEL_LOGS_EXPORTER: otlp
-      OTEL_METRICS_EXPORTER: otlp
-      OTEL_EXPORTER_OTLP_PROTOCOL: ${{ secrets.OTEL_EXPORTER_OTLP_PROTOCOL }}
-      OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
-      OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
+      CARGO_PROFILE_RELEASE_INCREMENTAL: "false"
+      CARGO_NET_GIT_FETCH_WITH_CLI: "true"
 
     steps:
       - name: Checkout code
@@ -80,147 +87,86 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: "1.3.13"
+      - name: Resolve version
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            V="${GITHUB_REF_NAME#cli-v}"
+          else
+            V="$(node -p "require('./projects/console/package.json').version")"
+          fi
+          echo "GROK_VERSION=$V" >> "$GITHUB_ENV"
+          echo "Building version $V"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "24.x"
-          registry-url: "https://registry.npmjs.org"
+      - name: Install protoc (linux)
+        if: matrix.protoc == 'apt'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler pkg-config libsystemd-dev gcc-aarch64-linux-gnu
 
-      - name: Install dependencies
-        run: bun install
+      - name: Install protoc (macOS)
+        if: matrix.protoc == 'brew'
+        run: brew install protobuf
+
+      - name: Install protoc (Windows)
+        if: matrix.protoc == 'win'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Invoke-WebRequest -Uri "https://github.com/protocolbuffers/protobuf/releases/download/v29.3/protoc-29.3-win64.zip" -OutFile "$env:RUNNER_TEMP/protoc.zip"
+          Expand-Archive -Path "$env:RUNNER_TEMP/protoc.zip" -DestinationPath "$env:RUNNER_TEMP/protoc" -Force
+          echo "PROTOC=$env:RUNNER_TEMP\protoc\bin\protoc.exe" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          echo "$env:RUNNER_TEMP\protoc\bin" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Setup Rust 1.94.0
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: 1.94.0
+          components: rustfmt, clippy
+
+      - name: Add cross target
+        if: runner.os == 'Linux' && matrix.name == 'linux-arm64'
+        run: rustup target add aarch64-unknown-linux-gnu
+
+      - name: Add cross target
+        if: runner.os == 'Windows' && matrix.name == 'win32-arm64'
+        shell: pwsh
+        run: rustup target add aarch64-pc-windows-msvc
+
+      - name: Build release binary
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build SDK packages
-        run: bun run build:sdk
-
-      # --single builds only the native darwin target (see script/build.ts), so
-      # the on-host @opentui/core optional dependency is used and the in-script
-      # smoke test runs `trumbo --version` automatically.
-      - name: Build macOS binary (native)
-        run: bun script/build.ts --single --skip-sdk-build
-        working-directory: projects/console
-
-      - name: Smoke-test macOS binary
-        working-directory: projects/console
+          RUST_MIN_STACK: "33554432"
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
         run: |
           set -euo pipefail
-          BIN="dist/cli-darwin-arm64/bin/trumbo"
-          test -x "$BIN" || { echo "binary not executable: $BIN"; exit 1; }
-          echo "--- file ---"
-          file "$BIN"
-          file "$BIN" | grep -q "Mach-O" || { echo "not a Mach-O binary"; exit 1; }
-          echo "--- version ---"
-          VERSION="$(node -p "require('./package.json').version")"
-          OUT="$(./"$BIN" --version)"
-          printf '%s\n' "$OUT"
-          test "$(printf '%s' "$OUT" | tail -n 1)" = "$VERSION" \
-            || { echo "version mismatch (expected $VERSION)"; exit 1; }
-          echo "--- help ---"
-          ./"$BIN" --help >/dev/null
-          echo "macOS smoke-test passed."
+          if [ "${{ matrix.name }}" = "linux-arm64" ]; then
+            cargo build --release --target aarch64-unknown-linux-gnu -p xai-grok-pager-bin
+          elif [ "${{ matrix.name }}" = "win32-arm64" ]; then
+            cargo build --release --target aarch64-pc-windows-msvc -p xai-grok-pager-bin
+          else
+            cargo build --release -p xai-grok-pager-bin
+          fi
 
-      # Ship the natively built Darwin package (not the cross-compiled one from
-      # the Ubuntu job, which can never be executed before publish). publish-main
-      # downloads these and replaces its own darwin dirs before publishing.
-      - name: Upload native macOS package
-        uses: actions/upload-artifact@v4
-        with:
-          name: cli-darwin-arm64
-          path: projects/console/dist/cli-darwin-arm64
-          if-no-files-found: error
-          retention-days: 1
-
-  # Best-effort native x64 (Intel) macOS build + smoke test. Same build as
-  # build-macos but on a macos-13 Intel runner. Not a publish dependency — the
-  # hosted Intel macOS fleet is often saturated for hours, so releases must not
-  # wait on it. When this job does complete in time, publish-main replaces the
-  # cross-compiled darwin-x64 package with this native one.
-  build-macos-x64:
-    name: Build & smoke-test macOS binary (x64)
-    permissions:
-      contents: read
-      id-token: write
-    if: github.repository == 'xedro98/Trumbo'
-    runs-on: macos-13
-    env:
-      TELEMETRY_SERVICE_API_KEY: ${{ secrets.TELEMETRY_SERVICE_API_KEY }}
-      ERROR_SERVICE_API_KEY: ${{ secrets.ERROR_SERVICE_API_KEY }}
-      OTEL_TELEMETRY_ENABLED: ${{ secrets.OTEL_TELEMETRY_ENABLED }}
-      OTEL_LOGS_EXPORTER: otlp
-      OTEL_METRICS_EXPORTER: otlp
-      OTEL_EXPORTER_OTLP_PROTOCOL: ${{ secrets.OTEL_EXPORTER_OTLP_PROTOCOL }}
-      OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
-      OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          fetch-tags: true
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: "1.3.13"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "24.x"
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Install dependencies
-        run: bun install
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build SDK packages
-        run: bun run build:sdk
-
-      - name: Build macOS binary (native)
-        run: bun script/build.ts --single --skip-sdk-build
-        working-directory: projects/console
-
-      - name: Smoke-test macOS binary
-        working-directory: projects/console
+      - name: Stage binary
         run: |
           set -euo pipefail
-          BIN="dist/cli-darwin-x64/bin/trumbo"
-          test -x "$BIN" || { echo "binary not executable: $BIN"; exit 1; }
-          echo "--- file ---"
-          file "$BIN"
-          file "$BIN" | grep -q "Mach-O" || { echo "not a Mach-O binary"; exit 1; }
-          echo "--- version ---"
-          VERSION="$(node -p "require('./package.json').version")"
-          OUT="$(./"$BIN" --version)"
-          printf '%s\n' "$OUT"
-          test "$(printf '%s' "$OUT" | tail -n 1)" = "$VERSION" \
-            || { echo "version mismatch (expected $VERSION)"; exit 1; }
-          echo "--- help ---"
-          ./"$BIN" --help >/dev/null
-          echo "macOS x64 smoke-test passed."
+          test -f "${{ matrix.bin }}" || { echo "missing ${{ matrix.bin }}"; exit 1; }
+          mkdir -p "staging/${{ matrix.artifact }}"
+          cp "${{ matrix.bin }}" "staging/${{ matrix.artifact }}/trumbo${{ matrix.exe }}"
 
-      - name: Upload native macOS package (x64)
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: cli-darwin-x64
-          path: projects/console/dist/cli-darwin-x64
+          name: ${{ matrix.artifact }}
+          path: staging/${{ matrix.artifact }}
           if-no-files-found: error
           retention-days: 1
 
   publish-main:
-    name: Publish trumbo
+    name: Publish trumbo (main)
     permissions:
       contents: write
       id-token: write
-    needs: build-macos
+    needs: build
     if: |
       github.repository == 'xedro98/Trumbo' &&
       !endsWith(github.actor, '[bot]') &&
@@ -248,11 +194,6 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: "1.3.13"
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -263,11 +204,6 @@ jobs:
         run: |
           npm install -g npm@latest
           npm install -g sigstore
-
-      - name: Install dependencies
-        run: bun install
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Validate release tag
         id: version
@@ -313,111 +249,93 @@ jobs:
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
 
-      - name: Build SDK packages
-        run: bun run build:sdk
-        env:
-          TELEMETRY_SERVICE_API_KEY: ${{ secrets.TELEMETRY_SERVICE_API_KEY }}
-          ERROR_SERVICE_API_KEY: ${{ secrets.ERROR_SERVICE_API_KEY }}
-          OTEL_TELEMETRY_ENABLED: ${{ secrets.OTEL_TELEMETRY_ENABLED }}
-          OTEL_LOGS_EXPORTER: otlp
-          OTEL_METRICS_EXPORTER: otlp
-          OTEL_EXPORTER_OTLP_PROTOCOL: ${{ secrets.OTEL_EXPORTER_OTLP_PROTOCOL }}
-          OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
-          OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
+      - name: Compatibility guard (extension/desktop must not import @trumbodev/cli)
+        run: |
+          set -euo pipefail
+          HITS=$(grep -rn 'from "@trumbodev/cli"\|require("@trumbodev/cli")' \
+            projects/vscode/src projects/trumbo-code/apps \
+            --include="*.ts" --include="*.tsx" 2>/dev/null || true)
+          if [ -n "$HITS" ]; then
+            printf '%s\n' "$HITS"
+            echo "Found @trumbodev/cli usage in the extension/desktop — the native swap would break them."
+            exit 1
+          fi
+          echo "OK: VS Code extension and desktop app consume the SDK, not @trumbodev/cli."
 
-      - name: Run tests (non-blocking)
-        # Pre-existing rebrand test debt (cron node:sqlite, disabled TremboPass auth) must not gate CLI binary releases.
-        # The binary itself is smoke-tested in build.ts and verified in the next step.
-        continue-on-error: true
-        run: bun run test
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
 
-      - name: Build platform binaries
-        run: bun script/build.ts --install-native-variants --skip-sdk-build
-        working-directory: projects/console
-        env:
-          TELEMETRY_SERVICE_API_KEY: ${{ secrets.TELEMETRY_SERVICE_API_KEY }}
-          ERROR_SERVICE_API_KEY: ${{ secrets.ERROR_SERVICE_API_KEY }}
-          OTEL_TELEMETRY_ENABLED: ${{ secrets.OTEL_TELEMETRY_ENABLED }}
-          OTEL_LOGS_EXPORTER: otlp
-          OTEL_METRICS_EXPORTER: otlp
-          OTEL_EXPORTER_OTLP_PROTOCOL: ${{ secrets.OTEL_EXPORTER_OTLP_PROTOCOL }}
-          OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
-          OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
-
-      - name: Verify build output
+      - name: Set wrapper version + optionalDependencies
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          EXPECTED=(
-            "@trumbodev/cli-darwin-arm64"
-            "@trumbodev/cli-darwin-x64"
-            "@trumbodev/cli-linux-arm64"
-            "@trumbodev/cli-linux-x64"
-            "@trumbodev/cli-windows-arm64"
-            "@trumbodev/cli-windows-x64"
-          )
+          node -e '
+            const fs = require("fs");
+            const p = "projects/trumbo-cli/crates/codegen/xai-grok-pager/npm/cli/package.json";
+            const pkg = JSON.parse(fs.readFileSync(p, "utf8"));
+            pkg.version = process.env.VERSION;
+            for (const k of Object.keys(pkg.optionalDependencies || {})) pkg.optionalDependencies[k] = process.env.VERSION;
+            fs.writeFileSync(p, JSON.stringify(pkg, null, 4) + "\n");
+          '
+          echo "wrapper -> version ${{ steps.version.outputs.version }}"
 
-          for package_name in "${EXPECTED[@]}"; do
-            dir="projects/console/dist/${package_name#@*/}"
-            if [ ! -f "$dir/package.json" ]; then
-              echo "Missing package manifest: $dir/package.json"
-              exit 1
-            fi
-            actual_name=$(node -p "require('./$dir/package.json').name")
-            actual_version=$(node -p "require('./$dir/package.json').version")
-            if [ "$actual_name" != "$package_name" ]; then
-              echo "Expected $package_name, got $actual_name"
-              exit 1
-            fi
-            if [ "$actual_version" != "$VERSION" ]; then
-              echo "Expected $package_name@$VERSION, got $actual_version"
-              exit 1
-            fi
-            ls -lh "$dir/bin/"
-          done
-
-      # Replace the cross-compiled darwin packages (built on Ubuntu, never
-      # executed) with the natively built + smoke-tested macOS packages produced
-      # by the build-macos / build-macos-x64 jobs. This is what makes `trumbo`
-      # actually start on a Mac: the shipped default is a real Mach-O binary
-      # built on macOS. The arm64 native package is required; the x64 one is
-      # used only when the best-effort Intel job produced it in time, otherwise
-      # the cross-compiled darwin-x64 package is kept.
-      - name: Download native macOS packages
-        uses: actions/download-artifact@v4
-        with:
-          path: .macos-artifacts
-
-      - name: Merge native macOS packages into dist
+      - name: Assemble platform packages
+        env:
+          TRUMBO_ALLOW_MISSING: "1"
+          XAI_ROOT: ${{ github.workspace }}/projects/trumbo-cli
+          TRUMBO_DARWIN_ARM64: artifacts/trumbo-darwin-arm64/trumbo
+          TRUMBO_DARWIN_X64: artifacts/trumbo-darwin-x64/trumbo
+          TRUMBO_LINUX_X64: artifacts/trumbo-linux-x64/trumbo
+          TRUMBO_LINUX_ARM64: artifacts/trumbo-linux-arm64/trumbo
+          TRUMBO_WIN32_X64: artifacts/trumbo-win32-x64/trumbo.exe
+          TRUMBO_WIN32_ARM64: artifacts/trumbo-win32-arm64/trumbo.exe
         run: |
           set -euo pipefail
-          # arm64 — required gate.
-          src=".macos-artifacts/cli-darwin-arm64"
-          dst="projects/console/dist/cli-darwin-arm64"
-          test -d "$src" || { echo "missing native darwin-arm64 artifact"; exit 1; }
-          rm -rf "$dst"
-          cp -R "$src" "$dst"
-          chmod 755 "$dst/bin/trumbo"
-          node -p "require('./$dst/package.json').name + '@' + require('./$dst/package.json').version"
-          # x64 — preferred when available, else keep the cross-compiled package.
-          src=".macos-artifacts/cli-darwin-x64"
-          dst="projects/console/dist/cli-darwin-x64"
-          if [ -d "$src" ]; then
-            echo "using natively built darwin-x64"
-            rm -rf "$dst"
-            cp -R "$src" "$dst"
-            chmod 755 "$dst/bin/trumbo"
-            node -p "require('./$dst/package.json').name + '@' + require('./$dst/package.json').version"
-          else
-            echo "no native darwin-x64 artifact (Intel runner unavailable); keeping cross-compiled package"
-          fi
+          ls -la artifacts
+          node projects/trumbo-cli/crates/codegen/xai-grok-pager/npm/cli/scripts/assemble-platform-packages.js
+
+      - name: Verify assembled packages
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          cd projects/trumbo-cli/crates/codegen/xai-grok-pager/npm
+          for dir in cli-*; do
+            if [ -f "$dir/package.json" ]; then
+              name=$(node -p "require('./$dir/package.json').name")
+              ver=$(node -p "require('./$dir/package.json').version")
+              br=$(ls "$dir"/bin/*.br 2>/dev/null || true)
+              echo "$name@$ver  br=$br"
+              test "$ver" = "$VERSION" || { echo "version mismatch in $dir"; exit 1; }
+            fi
+          done
 
       - name: Publish to NPM with latest tag
-        # Trusted Publishing: auth via GitHub OIDC (--provenance in publish-npm.ts).
-        # Requires id-token: write (set on the job) and a trusted publisher configured
-        # per package on npm for xedro98/Trumbo + .github/workflows/cli-publish.yml.
-        run: bun script/publish-npm.ts --tag latest
-        working-directory: projects/console
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          cd projects/trumbo-cli/crates/codegen/xai-grok-pager/npm
+          for dir in cli-*; do
+            if [ -f "$dir/package.json" ] && ls "$dir"/bin/*.br >/dev/null 2>&1; then
+              name=$(node -p "require('./$dir/package.json').name")
+              if npm view "$name@$VERSION" version >/dev/null 2>&1; then
+                echo "already published: $name@$VERSION (skip)"
+                continue
+              fi
+              echo "publishing $name@$VERSION"
+              npm publish "$dir" --access public --tag latest --provenance
+            fi
+          done
+          # Wrapper last so the optionalDependencies resolve to already-published packages.
+          if ! npm view "@trumbodev/cli@$VERSION" version >/dev/null 2>&1; then
+            echo "publishing @trumbodev/cli@$VERSION"
+            npm publish cli --access public --tag latest --provenance
+          else
+            echo "already published: @trumbodev/cli@$VERSION (skip)"
+          fi
 
       - name: Get Previous CLI Tag
         id: prev_tag
@@ -430,8 +348,8 @@ jobs:
       - name: Get Changelog Entry
         id: changelog
         run: |
-          # Grab content between the first "## " header and the next one in projects/console/CHANGELOG.md
-          CONTENT=$(awk '/^## [0-9]/{if(found) exit; found=1; next} found{print}' projects/console/CHANGELOG.md)
+          CONTENT=$(awk '/^## [0-9]/{if(found) exit; found=1; next} found{print}' projects/trumbo-cli/CHANGELOG.md)
+          if [ -z "$CONTENT" ]; then CONTENT="Release notes for @trumbodev/cli."; fi
           echo "content<<EOF" >> $GITHUB_OUTPUT
           echo "$CONTENT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -452,8 +370,9 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "Published @trumbodev/cli@${VERSION} to npm with dist-tag 'latest'"
+          echo "Published @trumbodev/cli@${VERSION} (native Rust TUI) to npm with dist-tag 'latest'"
           echo "Install with: npm install -g @trumbodev/cli"
+          echo "Platforms: Windows / macOS / Linux"
 
       - name: Post release to Slack
         if: ${{ env.SLACK_RELEASE_BOT_TOKEN != '' }}
@@ -463,12 +382,12 @@ jobs:
           token: ${{ secrets.SLACK_RELEASE_BOT_TOKEN }}
           payload: |
             channel: "C0APVKGGZFC"
-            text: "Trumbo CLI v${{ steps.version.outputs.version }}"
+            text: "Trumbo CLI v${{ steps.version.outputs.version }} (native Rust TUI)"
             blocks:
               - type: "section"
                 text:
                   type: "mrkdwn"
-                  text: "Trumbo CLI v${{ steps.version.outputs.version }}"
+                  text: "Trumbo CLI v${{ steps.version.outputs.version }} — native Rust TUI"
               - type: "section"
                 text:
                   type: "mrkdwn"
@@ -479,11 +398,11 @@ jobs:
                     text: "<https://www.npmjs.com/package/@trumbodev/cli/v/${{ steps.version.outputs.version }}|View on npm>${{ steps.prev_tag.outputs.prev_tag != '' && format(' | Full Changelog: https://github.com/{0}/compare/{1}...{2}', github.repository, steps.prev_tag.outputs.prev_tag, steps.version.outputs.tag) || '' }}"
 
   publish-nightly:
-    name: Publish trumbo nightly
+    name: Publish trumbo (nightly)
     permissions:
       contents: read
       id-token: write
-    needs: build-macos
+    needs: build
     if: |
       github.repository == 'xedro98/Trumbo' &&
       github.ref == 'refs/heads/main' &&
@@ -512,7 +431,6 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-
           if [ "$(git rev-list --count HEAD --since='24 hours ago')" -eq 0 ]; then
             echo "No commits in last 24 hours, skipping publish"
             echo "skip=true" >> "$GITHUB_OUTPUT"
@@ -521,12 +439,6 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Setup Bun
-        if: steps.check_commits.outputs.skip != 'true'
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: "1.3.13"
-
       - name: Setup Node.js
         if: steps.check_commits.outputs.skip != 'true'
         uses: actions/setup-node@v4
@@ -534,107 +446,71 @@ jobs:
           node-version: "24.x"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Install dependencies
+      - name: Download build artifacts
         if: steps.check_commits.outputs.skip != 'true'
-        run: bun install
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build SDK packages
-        if: steps.check_commits.outputs.skip != 'true'
-        run: bun run build:sdk
-        env:
-          TELEMETRY_SERVICE_API_KEY: ${{ secrets.TELEMETRY_SERVICE_API_KEY }}
-          ERROR_SERVICE_API_KEY: ${{ secrets.ERROR_SERVICE_API_KEY }}
-          OTEL_TELEMETRY_ENABLED: ${{ secrets.OTEL_TELEMETRY_ENABLED }}
-          OTEL_LOGS_EXPORTER: otlp
-          OTEL_METRICS_EXPORTER: otlp
-          OTEL_EXPORTER_OTLP_PROTOCOL: ${{ secrets.OTEL_EXPORTER_OTLP_PROTOCOL }}
-          OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
-          OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
-
-      - name: Run tests
-        if: steps.check_commits.outputs.skip != 'true'
-        run: bun run test
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
 
       - name: Generate nightly version
         if: steps.check_commits.outputs.skip != 'true'
         id: version
         run: |
           BASE_VERSION=$(node -p "require('./projects/console/package.json').version")
-          TIMESTAMP=$(date +%s)
-          VERSION="${BASE_VERSION}-nightly.${TIMESTAMP}"
-
-          echo "Base version: ${BASE_VERSION}"
-          echo "Generated nightly version: ${VERSION}"
-          echo "base_version=${BASE_VERSION}" >> "$GITHUB_OUTPUT"
+          VERSION="${BASE_VERSION}-nightly.$(date +%s)"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Generated nightly version ${VERSION}"
 
-      - name: Update nightly package version
+      - name: Set wrapper version + optionalDependencies
         if: steps.check_commits.outputs.skip != 'true'
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           node -e '
-            const fs = require("node:fs");
-            const path = "projects/console/package.json";
-            const pkg = JSON.parse(fs.readFileSync(path, "utf8"));
+            const fs = require("fs");
+            const p = "projects/trumbo-cli/crates/codegen/xai-grok-pager/npm/cli/package.json";
+            const pkg = JSON.parse(fs.readFileSync(p, "utf8"));
             pkg.version = process.env.VERSION;
-            fs.writeFileSync(path, `${JSON.stringify(pkg, null, "\t")}\n`);
+            for (const k of Object.keys(pkg.optionalDependencies || {})) pkg.optionalDependencies[k] = process.env.VERSION;
+            fs.writeFileSync(p, JSON.stringify(pkg, null, 4) + "\n");
           '
-          cat projects/console/package.json | grep '"version"'
 
-      - name: Build platform binaries
+      - name: Assemble platform packages
         if: steps.check_commits.outputs.skip != 'true'
-        run: bun script/build.ts --install-native-variants --skip-sdk-build
-        working-directory: projects/console
         env:
-          TELEMETRY_SERVICE_API_KEY: ${{ secrets.TELEMETRY_SERVICE_API_KEY }}
-          ERROR_SERVICE_API_KEY: ${{ secrets.ERROR_SERVICE_API_KEY }}
-          OTEL_TELEMETRY_ENABLED: ${{ secrets.OTEL_TELEMETRY_ENABLED }}
-          OTEL_LOGS_EXPORTER: otlp
-          OTEL_METRICS_EXPORTER: otlp
-          OTEL_EXPORTER_OTLP_PROTOCOL: ${{ secrets.OTEL_EXPORTER_OTLP_PROTOCOL }}
-          OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
-          OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
+          TRUMBO_ALLOW_MISSING: "1"
+          XAI_ROOT: ${{ github.workspace }}/projects/trumbo-cli
+          TRUMBO_DARWIN_ARM64: artifacts/trumbo-darwin-arm64/trumbo
+          TRUMBO_DARWIN_X64: artifacts/trumbo-darwin-x64/trumbo
+          TRUMBO_LINUX_X64: artifacts/trumbo-linux-x64/trumbo
+          TRUMBO_LINUX_ARM64: artifacts/trumbo-linux-arm64/trumbo
+          TRUMBO_WIN32_X64: artifacts/trumbo-win32-x64/trumbo.exe
+          TRUMBO_WIN32_ARM64: artifacts/trumbo-win32-arm64/trumbo.exe
+        run: |
+          node projects/trumbo-cli/crates/codegen/xai-grok-pager/npm/cli/scripts/assemble-platform-packages.js
 
-      - name: Verify build output
+      - name: Publish to NPM with nightly tag
         if: steps.check_commits.outputs.skip != 'true'
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          EXPECTED=(
-            "@trumbodev/cli-darwin-arm64"
-            "@trumbodev/cli-darwin-x64"
-            "@trumbodev/cli-linux-arm64"
-            "@trumbodev/cli-linux-x64"
-            "@trumbodev/cli-windows-arm64"
-            "@trumbodev/cli-windows-x64"
-          )
-
-          for package_name in "${EXPECTED[@]}"; do
-            dir="projects/console/dist/${package_name#@*/}"
-            if [ ! -f "$dir/package.json" ]; then
-              echo "Missing package manifest: $dir/package.json"
-              exit 1
+          set -euo pipefail
+          cd projects/trumbo-cli/crates/codegen/xai-grok-pager/npm
+          for dir in cli-*; do
+            if [ -f "$dir/package.json" ] && ls "$dir"/bin/*.br >/dev/null 2>&1; then
+              name=$(node -p "require('./$dir/package.json').name")
+              if npm view "$name@$VERSION" version >/dev/null 2>&1; then
+                echo "already published: $name@$VERSION (skip)"
+                continue
+              fi
+              npm publish "$dir" --access public --tag nightly --provenance
             fi
-            actual_name=$(node -p "require('./$dir/package.json').name")
-            actual_version=$(node -p "require('./$dir/package.json').version")
-            if [ "$actual_name" != "$package_name" ]; then
-              echo "Expected $package_name, got $actual_name"
-              exit 1
-            fi
-            if [ "$actual_version" != "$VERSION" ]; then
-              echo "Expected $package_name@$VERSION, got $actual_version"
-              exit 1
-            fi
-            ls -lh "$dir/bin/"
           done
-
-      - name: Publish to NPM with nightly tag
-        if: steps.check_commits.outputs.skip != 'true'
-        run: bun script/publish-npm.ts --tag nightly
-        working-directory: projects/console
+          if ! npm view "@trumbodev/cli@$VERSION" version >/dev/null 2>&1; then
+            npm publish cli --access public --tag nightly --provenance
+          else
+            echo "already published: @trumbodev/cli@$VERSION (skip)"
+          fi
 
       - name: Summary
         if: steps.check_commits.outputs.skip != 'true'

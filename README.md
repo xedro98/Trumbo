@@ -79,7 +79,9 @@ Bring your own API keys (Anthropic, OpenAI, Google, OpenRouter, Bedrock, Vertex,
 
 ## Quick start
 
-Install the CLI. The published binary is self-contained (Bun embedded), so no Node, Bun, or npm runtime is needed to run it.
+Install the CLI. `@trumbodev/cli` ships a **native Rust binary** for Windows,
+macOS, and Linux — the per-platform binary is pulled automatically via npm
+`optionalDependencies`, so no Node, Bun, or Rust runtime is needed to run it.
 
 ```bash
 # npm / pnpm / bun

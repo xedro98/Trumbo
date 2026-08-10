@@ -11,6 +11,21 @@
 
 
 
+## 3.9.0
+
+The CLI is now shipped as a native Rust binary (Rust TUI). See also the root
+CHANGELOG.
+
+### Changed
+- `@trumbodev/cli` now publishes the native Rust TUI binary (`trumbo`) for
+  Windows/macOS/Linux instead of the Bun/Node CLI. The Node CLI source remains
+  in this package and continues to power the VS Code extension and Trumbo Code
+  desktop app through the shared `@trumbodev/core` SDK — those apps are
+  unaffected.
+- Platform-only subcommands (`apps`, `databases`, `program`, `schedule`,
+  `security`, `team`, `skill`, `kanban`, `hook`, `history`, `connect`) are not
+  yet in the native CLI; they remain available in the sandboxed web console.
+
 ## 3.8.1
 
 macOS compatibility fixes — the darwin binaries now actually run on a Mac.

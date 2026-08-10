@@ -1,0 +1,107 @@
+{
+  "default": "quartz-1.0",
+  "web_search": "quartz-1.0",
+  "image_description": "quartz-1.0",
+  "session_summary": "quartz-1.0",
+  "models": [
+    {
+      "id": "quartz-1.0",
+      "model": "quartz-1.0",
+      "name": "Quartz 1.0",
+      "description": "Trumbo's adaptive reasoning frontier model",
+      "context_window": 256000,
+      "api_backend": "chat_completions",
+      "supports_backend_search": false,
+      "system_prompt_label": "Trumbo",
+      "show_model_fingerprint": true,
+      "supports_reasoning_effort": true,
+      "reasoning_effort": "medium",
+      "auto_compact_threshold_percent": 80,
+      "compaction_at_tokens": true,
+      "compactions_remaining": 1,
+      "reasoning_efforts": [
+        {
+          "value": "high",
+          "label": "High Effort",
+          "description": "Deep reasoning for hard engineering and research",
+          "default": false
+        },
+        {
+          "value": "medium",
+          "label": "Medium Effort",
+          "description": "Balanced effort with standard implementation and testing",
+          "default": true
+        },
+        {
+          "value": "low",
+          "label": "Low Effort",
+          "description": "Quick, fast implementations"
+        }
+      ]
+    },
+    {
+      "id": "quartz-1.0-lite",
+      "model": "quartz-1.0-lite",
+      "name": "Quartz 1.0 Lite",
+      "description": "Fast and economical Quartz for everyday agent loops",
+      "context_window": 128000,
+      "api_backend": "chat_completions",
+      "supports_backend_search": false,
+      "system_prompt_label": "Trumbo",
+      "show_model_fingerprint": true,
+      "supports_reasoning_effort": false,
+      "reasoning_effort": "medium",
+      "auto_compact_threshold_percent": 80,
+      "compaction_at_tokens": true,
+      "compactions_remaining": 1,
+      "reasoning_efforts": [
+        {
+          "value": "medium",
+          "label": "Medium Effort",
+          "description": "Balanced effort",
+          "default": true
+        },
+        {
+          "value": "low",
+          "label": "Low Effort",
+          "description": "Quick, fast implementations"
+        }
+      ]
+    },
+    {
+      "id": "quartz-1.0-hyper",
+      "model": "quartz-1.0-hyper",
+      "name": "Quartz 1.0 Hyper",
+      "description": "Flagship Quartz for maximum reasoning depth on hard engineering",
+      "context_window": 1000000,
+      "api_backend": "chat_completions",
+      "supports_backend_search": false,
+      "system_prompt_label": "Trumbo",
+      "show_model_fingerprint": true,
+      "supports_reasoning_effort": true,
+      "reasoning_effort": "high",
+      "auto_compact_threshold_percent": 80,
+      "compaction_at_tokens": true,
+      "compactions_remaining": 1,
+      "reasoning_efforts": [
+        {
+          "value": "high",
+          "label": "High Effort",
+          "description": "Highest implementation quality with extensive reasoning",
+          "default": true
+        },
+        {
+          "value": "medium",
+          "label": "Medium Effort",
+          "description": "Balanced effort",
+          "default": false
+        },
+        {
+          "value": "low",
+          "label": "Low Effort",
+          "description": "Quick, fast implementations"
+        }
+      ]
+    }
+  ]
+}

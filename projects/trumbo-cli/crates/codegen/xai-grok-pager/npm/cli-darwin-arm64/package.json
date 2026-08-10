@@ -1,0 +1,19 @@
+{
+    "name": "@trumbodev/cli-darwin-arm64",
+    "version": "3.9.0",
+    "description": "darwin-arm64 binary for @trumbodev/cli. Do not install directly; install @trumbodev/cli instead.",
+    "license": "Apache-2.0",
+    "files": [
+        "bin/",
+        "THIRD_PARTY_NOTICES.md"
+    ],
+    "os": [
+        "darwin"
+    ],
+    "cpu": [
+        "arm64"
+    ],
+    "publishConfig": {
+        "access": "public"
+    }
+}

@@ -1,0 +1,41 @@
+{
+    "name": "@trumbodev/cli",
+    "version": "3.9.0",
+    "description": "Trumbo CLI — native terminal agent (Rust TUI) for plans, subagents, and parallel work",
+    "license": "Apache-2.0",
+    "bin": {
+        "trumbo": "bin/trumbo"
+    },
+    "files": [
+        "bin/"
+    ],
+    "os": [
+        "darwin",
+        "linux",
+        "win32"
+    ],
+    "cpu": [
+        "arm64",
+        "x64"
+    ],
+    "scripts": {
+        "postinstall": "node bin/postinstall.js"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "engines": {
+        "node": ">=20"
+    },
+    "dependencies": {
+        "@iarna/toml": "^3.0.0"
+    },
+    "optionalDependencies": {
+        "@trumbodev/cli-darwin-arm64": "3.9.0",
+        "@trumbodev/cli-darwin-x64": "3.9.0",
+        "@trumbodev/cli-linux-arm64": "3.9.0",
+        "@trumbodev/cli-linux-x64": "3.9.0",
+        "@trumbodev/cli-win32-arm64": "3.9.0",
+        "@trumbodev/cli-win32-x64": "3.9.0"
+    }
+}
