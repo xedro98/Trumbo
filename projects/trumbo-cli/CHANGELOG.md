@@ -1,5 +1,16 @@
 # Trumbo CLI Changelog
 
+## 3.9.2 — 2026-08-10
+
+Self-update fix.
+
+### Fixed
+- `trumbo update` no longer points at the upstream grok npm package
+  (`@xai-official/grok`) nor spawns `npm`/`gh` by an unresolvable name. The
+  updater now targets `@trumbodev/cli` and resolves the npm executable as
+  `npm.cmd` on Windows, so `trumbo update` performs a real
+  `npm i -g @trumbodev/cli@<version>`.
+
 ## 3.9.1 — 2026-08-10
 
 Installer robustness fix for `@trumbodev/cli` on npm.

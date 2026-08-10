@@ -38,8 +38,8 @@ fn manual_install_cmd() -> &'static str {
 /// Build a reinstall hint for a known installer type.
 fn reinstall_hint(installer: &str) -> String {
     match installer {
-        "npm" => "Please reinstall via npm:\n  npm i -g @xai-official/grok".to_string(),
-        "gh-release" => "Please reinstall via GitHub Releases:\n  gh release download --repo xai-org-shared/grok-build --pattern 'grok-*' --output grok && chmod +x grok".to_string(),
+        "npm" => "Please reinstall via npm:\n  npm i -g @trumbodev/cli".to_string(),
+        "gh-release" => "Please reinstall via GitHub Releases:\n  gh release download --repo xedro98/Trumbo --pattern 'trumbo-*' --output trumbo && chmod +x trumbo".to_string(),
         _ => format!("Please reinstall via:\n  {}", manual_install_cmd()),
     }
 }
@@ -2332,7 +2332,7 @@ fn install_npm(target: Option<&str>, channel: &str, npm_registry: Option<&str>) 
     warn_if_other_grok_processes_running();
 
     let version_arg = match target {
-        Some(ver) => format!("@xai-official/grok@{ver}"),
+        Some(ver) => format!("@trumbodev/cli@{ver}"),
         None => {
             // All current callers resolve the version via get_latest_version
             // (which applies max(stable, alpha) for the alpha channel) before
@@ -2343,7 +2343,7 @@ fn install_npm(target: Option<&str>, channel: &str, npm_registry: Option<&str>) 
                 "install_npm called without a resolved version, falling back to dist-tag"
             );
             format!(
-                "@xai-official/grok@{}",
+                "@trumbodev/cli@{}",
                 if channel == "alpha" {
                     "alpha"
                 } else {
@@ -2361,7 +2361,8 @@ fn install_npm(target: Option<&str>, channel: &str, npm_registry: Option<&str>) 
     );
     pb.enable_steady_tick(Duration::from_millis(100));
 
-    let mut cmd = Command::new("npm");
+    let npm = if cfg!(windows) { "npm.cmd" } else { "npm" };
+    let mut cmd = Command::new(npm);
     cmd.args(["i", "-g", &version_arg]);
     if let Some(registry) = npm_registry {
         cmd.arg(format!("--registry={}", registry));
@@ -3624,7 +3625,7 @@ mod tests {
         let hint = reinstall_hint("npm");
         assert!(hint.contains("npm i -g"), "should suggest npm i -g: {hint}");
         assert!(
-            hint.contains("@xai-official/grok"),
+            hint.contains("@trumbodev/cli"),
             "should name the package: {hint}"
         );
     }
@@ -3637,7 +3638,7 @@ mod tests {
             "should suggest gh release download: {hint}"
         );
         assert!(
-            hint.contains("xai-org-shared/grok-build"),
+            hint.contains("xedro98/Trumbo"),
             "should name the repo: {hint}"
         );
     }

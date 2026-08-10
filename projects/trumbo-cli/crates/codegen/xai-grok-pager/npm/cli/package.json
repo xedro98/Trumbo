@@ -1,6 +1,6 @@
 {
     "name": "@trumbodev/cli",
-    "version": "3.9.1",
+    "version": "3.9.2",
     "description": "Trumbo CLI — native terminal agent (Rust TUI) for plans, subagents, and parallel work",
     "license": "Apache-2.0",
     "bin": {
@@ -31,12 +31,12 @@
         "@iarna/toml": "^3.0.0"
     },
     "optionalDependencies": {
-        "@trumbodev/cli-darwin-arm64": "3.9.1",
-        "@trumbodev/cli-darwin-x64": "3.9.1",
-        "@trumbodev/cli-linux-arm64": "3.9.1",
-        "@trumbodev/cli-linux-x64": "3.9.1",
-        "@trumbodev/cli-win32-arm64": "3.9.1",
-        "@trumbodev/cli-win32-x64": "3.9.1"
+        "@trumbodev/cli-darwin-arm64": "3.9.2",
+        "@trumbodev/cli-darwin-x64": "3.9.2",
+        "@trumbodev/cli-linux-arm64": "3.9.2",
+        "@trumbodev/cli-linux-x64": "3.9.2",
+        "@trumbodev/cli-win32-arm64": "3.9.2",
+        "@trumbodev/cli-win32-x64": "3.9.2"
     },
     "repository": {
         "type": "git",
