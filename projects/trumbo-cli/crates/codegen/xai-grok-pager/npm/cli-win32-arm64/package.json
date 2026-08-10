@@ -1,6 +1,6 @@
 {
     "name": "@trumbodev/cli-win32-arm64",
-    "version": "3.9.0",
+    "version": "3.9.1",
     "description": "win32-arm64 binary for @trumbodev/cli. Do not install directly; install @trumbodev/cli instead.",
     "license": "Apache-2.0",
     "files": [

@@ -106,15 +106,41 @@ function bootstrapCanonical(brPath, rawPath, version) {
     }
 }
 
+function platformPackageName() {
+    return `${pkgName}-${process.platform}-${process.arch}`;
+}
+
+// npm can skip the per-platform optional dependency (e.g. an install during
+// registry propagation, --no-optional, or a package-manager quirk), and npm
+// 11's allow-scripts policy may also block our postinstall. Self-heal on first
+// run: install the matching platform package globally, then re-resolve.
+function tryInstallPlatformPackage() {
+    const version = readLocalVersion();
+    if (!version) return false;
+    const pkg = platformPackageName();
+    console.error(`${pkgName}: platform package ${pkg} not installed — installing it once (${version})…`);
+    try {
+        const { execFileSync } = require('child_process');
+        const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+        execFileSync(npmCmd, ['install', '-g', `${pkg}@${version}`, '--no-save'], { stdio: 'inherit' });
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 function resolveBinary() {
     if (fs.existsSync(CANONICAL_PATH)) return CANONICAL_PATH;
 
-    const platformDir = resolvePlatformPackageDir();
+    let platformDir = resolvePlatformPackageDir();
+    if (!platformDir && tryInstallPlatformPackage()) {
+        platformDir = resolvePlatformPackageDir();
+    }
     if (!platformDir) {
         console.error(`${pkgName}: no platform binary installed for ${process.platform}-${process.arch}.`);
-        console.error(`  Expected sibling package @trumbodev/cli-${process.platform}-${process.arch}.`);
-        console.error(`  This usually means npm skipped optionalDependencies (e.g. --no-optional)`);
-        console.error(`  or the platform is not supported.`);
+        console.error(`  Expected sibling package ${platformPackageName()}.`);
+        console.error(`  The auto-install failed, or npm skipped optionalDependencies.`);
+        console.error(`  Fix: npm install -g ${platformPackageName()}@${readLocalVersion() || 'latest'}`);
         process.exit(1);
     }
 

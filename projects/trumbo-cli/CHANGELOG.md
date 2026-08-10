@@ -1,5 +1,17 @@
 # Trumbo CLI Changelog
 
+## 3.9.1 — 2026-08-10
+
+Installer robustness fix for `@trumbodev/cli` on npm.
+
+### Fixed
+- **Self-healing launcher**: if npm skipped the per-platform
+  `optionalDependencies` binary (an install during registry propagation,
+  `--no-optional`, or a package-manager quirk), `trumbo` now installs the
+  matching `@trumbodev/cli-<os>-<arch>` package on first run and proceeds,
+  instead of failing with "no platform binary installed". The Windows package
+  is named `@trumbodev/cli-win32-*`.
+
 ## 3.9.0 — 2026-08-10
 
 First npm release of the **native Rust Trumbo CLI** (`@trumbodev/cli`) —
