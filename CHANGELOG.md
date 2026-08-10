@@ -15,6 +15,13 @@ All notable changes to the Trumbo monorepo are recorded here. This file was
 restarted from scratch for the Trumbo brand — earlier history is not carried
 over.
 
+## [v3.9.2 / v0.0.35 / SDK v0.0.63] — 2026-08-10
+
+CLI 3.9.2 ships the native TUI with `trumbo update` self-update fix, complete
+cross-platform npm coverage (incl. Intel macOS), and docs.trumbo.dev rebranded
+to the Rust CLI. VS Code + Desktop 0.0.35 align with the SDK 0.0.63 session
+APIs.
+
 ## [v3.9.0] — 2026-08-10
 
 The CLI is now the **native Rust TUI** — a fast, flicker-free terminal agent
