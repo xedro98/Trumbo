@@ -102,7 +102,7 @@ Commands:
 
 ### `trumbo` (default)
 
-Start a task or enter interactive mode.
+Launch the interactive TUI or run a one-shot prompt.
 
 ```bash
 trumbo
@@ -111,126 +111,176 @@ trumbo "Run tests and fix failures"
 echo "prompt" | trumbo
 ```
 
-### `auth [options] [provider]`
+### `login`
 
-Configure authentication with an AI provider.
+Sign in with Trumbo device-code authentication (opens your browser).
 
 ```bash
-trumbo auth
+trumbo login
 ```
 
-### `config [options]`
+### `logout`
 
-Show current configuration.
+Clear the stored Trumbo token.
 
 ```bash
-trumbo config
+trumbo logout
 ```
 
-### `connect [options] [adapter]`
+### `trumbo`
 
-Connect to messaging platforms. See [Connectors](/cli/connectors).
+Authenticate and print subscription / plan / rate-limit status.
 
 ```bash
-trumbo connect
-trumbo connect [adapter]
+trumbo trumbo
+trumbo trumbo status
+```
+
+### `agent`
+
+Run the agent headlessly (no TUI): stdio, leader, or serve modes — for
+scripting and CI.
+
+```bash
+trumbo agent
+trumbo agent --stdio
+trumbo agent --serve
+```
+
+### `models`
+
+List the available model catalog (Quartz family).
+
+```bash
+trumbo models
 ```
 
 ### `mcp`
 
-Manage MCP servers. See [MCP](/mcp/mcp-overview).
+Manage MCP server configurations. See [MCP](/mcp/mcp-overview).
 
 ```bash
 trumbo mcp
 ```
 
-### `dev`
+### `plugin`
 
-Developer tools and utilities.
+Manage Trumbo plugins — install from file URLs, npm, git repositories, or
+local paths. See [Plugins](/customization/plugins).
 
 ```bash
-trumbo dev
+trumbo plugin install <source>
+trumbo plugin i <source>
+```
+
+### `memory`
+
+Manage cross-session memory.
+
+```bash
+trumbo memory
+```
+
+### `sessions`
+
+List, search, and restore past sessions.
+
+```bash
+trumbo sessions
+trumbo -c            # continue the most recent session
+trumbo -r            # browse saved sessions
+```
+
+### `worktree`
+
+Manage git worktrees for parallel/agent work.
+
+```bash
+trumbo worktree
 ```
 
 ### `doctor`
 
-Diagnose and fix configuration issues.
+Check the terminal, clipboard, and color support.
 
 ```bash
 trumbo doctor
 ```
 
-### `history|h [options]`
+### `update`
 
-List session history or manage saved sessions.
-
-```bash
-trumbo history
-trumbo h
-```
-
-### `hook`
-
-Handle a hook payload from stdin.
-
-```bash
-cat payload.json | trumbo hook
-```
-
-### `plugin`
-
-Manage Trumbo plugins. Install plugins from file URLs, npm, git repositories, or local paths. See [Plugins](/customization/plugins) for full details and the plugin manifest format.
-
-```bash
-trumbo plugin install <source>  # Install a plugin
-trumbo plugin i <source>        # Shorthand alias
-```
-
-| Option | Description |
-|--------|-------------|
-| `--npm` | Treat source as an npm package |
-| `--git` | Treat source as a git repository |
-| `--force` | Replace an existing install for the same source |
-| `--json` | Output result as JSON |
-| `--cwd <path>` | Install to `<path>/.trumbo/plugins` instead of the global directory |
-
-Try it with the [TypeScript Navigation Plugin](https://github.com/xedro98/Trumbo):
-
-```bash
-trumbo plugin install https://github.com/xedro98/Trumbo.git
-```
-
-### `schedule`
-
-Manage scheduled agents. See [Scheduling](/cli/scheduling).
-
-```bash
-trumbo schedule
-```
-
-### `hub`
-
-Manage the local hub daemon.
-
-```bash
-trumbo hub
-```
-
-### `update [options]`
-
-Check for updates and install if available.
+Check for updates and install via npm (`@trumbodev/cli`).
 
 ```bash
 trumbo update
 ```
 
-### `version`
+### `version` | `v`
 
-Show Trumbo CLI version number.
+Print the version string.
 
 ```bash
-trumbo version
-trumbo -V
+trumbo --version
+trumbo version --json
+```
+
+### `completions`
+
+Generate shell completion scripts.
+
+```bash
+trumbo completions bash
+trumbo completions zsh
+```
+
+### `inspect`
+
+Print the discovered configuration (paths, providers, settings).
+
+```bash
+trumbo inspect
+```
+
+### `leader`
+
+List, inspect, or kill leader processes.
+
+```bash
+trumbo leader list
+trumbo leader info <pid>
+trumbo leader stop-all
+```
+
+### `export`
+
+Export a session as Markdown.
+
+```bash
+trumbo export <session>
+```
+
+### `trace`
+
+Export or upload trace data.
+
+```bash
+trumbo trace
+```
+
+### `wrap`
+
+Run a command with clipboard forwarding.
+
+```bash
+trumbo wrap -- <command>
+```
+
+### `du` | `disk-usage`
+
+Show disk usage by the CLI's data directory.
+
+```bash
+trumbo du
 ```
 
 ## Environment Variables
