@@ -326,7 +326,7 @@ export const TrumboSettings = makeProviderSettingsSchema(
         description:
           "Directory containing the Trumbo CLI source (projects/console). Used for Bun dev fallback when no binary is on PATH.",
         providerSettingsForm: {
-          placeholder: "../cline-full/projects/console",
+          placeholder: "../console",
           clearWhenEmpty: "omit",
         },
       }),

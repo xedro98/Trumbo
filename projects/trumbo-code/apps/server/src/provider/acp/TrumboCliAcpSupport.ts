@@ -1,10 +1,12 @@
 // @effect-diagnostics nodeBuiltinImport:off globalErrorInEffectFailure:off
 
+import * as NodeChildProcess from "node:child_process";
 import * as NodeFS from "node:fs";
 import * as NodeOS from "node:os";
 import * as NodePath from "node:path";
 import * as NodeURL from "node:url";
 import * as Crypto from "effect/Crypto";
+import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
@@ -15,6 +17,7 @@ import * as EffectAcpErrors from "effect-acp/errors";
 import * as AcpSessionRuntime from "./AcpSessionRuntime.ts";
 import * as TrumboPlatformTokenManager from "../../auth/TrumboPlatformTokenManager.ts";
 import { HostProcessPlatform } from "@trumbo-code/shared/hostProcess";
+import { resolveSpawnCommand } from "@trumbo-code/shared/shell";
 
 const isWindowsHost = Effect.runSync(HostProcessPlatform) === "win32";
 
@@ -23,7 +26,7 @@ const TRUMBO_API_KEY_ENV = "TRUMBO_API_KEY";
 const TRUMBO_PROVIDER_ENV = "TRUMBO_PROVIDER";
 const TRUMBO_MODEL_ENV = "TRUMBO_MODEL";
 const TRUMBO_THINKING_LEVEL_ENV = "TRUMBO_THINKING_LEVEL";
-const TRUMBO_CLI_CWD_ENV = "TRUMBO_CLI_CWD";
+export const TRUMBO_CLI_CWD_ENV = "TRUMBO_CLI_CWD";
 const TRUMBO_ENABLE_AGENT_TEAMS_ENV = "TRUMBO_ENABLE_AGENT_TEAMS";
 const TRUMBO_ENABLE_SPAWN_AGENT_ENV = "TRUMBO_ENABLE_SPAWN_AGENT";
 
@@ -61,9 +64,20 @@ function resolveSiblingConsoleWorkspace(): string | undefined {
   if (!trumboCodeRoot) {
     return undefined;
   }
-  const sibling = NodePath.resolve(trumboCodeRoot, "../cline-full/projects/console");
-  if (NodeFS.existsSync(NodePath.join(sibling, "src", "index.ts"))) {
-    return sibling;
+  // The Trumbo CLI source lives as a sibling workspace in the monorepo:
+  //   cline-full/projects/console  (with trumbo-code at cline-full/projects/trumbo-code)
+  // Probe every plausible layout so the Bun dev fallback works regardless of
+  // how the checkout was arranged (folded monorepo, nested repo, packaged dev).
+  const candidates = [
+    NodePath.resolve(trumboCodeRoot, "../console"),
+    NodePath.resolve(trumboCodeRoot, "../cline-full/projects/console"),
+    NodePath.resolve(trumboCodeRoot, "../../projects/console"),
+    NodePath.resolve(trumboCodeRoot, "../../cline-full/projects/console"),
+  ];
+  for (const candidate of candidates) {
+    if (NodeFS.existsSync(NodePath.join(candidate, "src", "index.ts"))) {
+      return candidate;
+    }
   }
   return undefined;
 }
@@ -138,6 +152,100 @@ export interface TrumboCliAcpRuntimeInput extends Omit<
   readonly environment?: NodeJS.ProcessEnv;
 }
 
+const UNCAPPED_TRUMBO_ACP_HINT = "unexpected argument '--acp'";
+const ACP_CAPABILITY_PROBE_TIMEOUT = Duration.seconds(10);
+
+const resolveProbedSpawn = (
+  spawn: AcpSessionRuntime.AcpSpawnInput,
+  environment: NodeJS.ProcessEnv | undefined,
+): Effect.Effect<AcpSessionRuntime.AcpSpawnInput, never> =>
+  Effect.gen(function* () {
+    const env = { ...process.env, ...environment };
+    const resolved = yield* resolveSpawnCommand(spawn.command, spawn.args, {
+      env,
+      extendEnv: true,
+    });
+    return {
+      command: resolved.command,
+      args: resolved.args,
+      ...(spawn.cwd ? { cwd: spawn.cwd } : {}),
+      env: spawn.env ?? env,
+    };
+  });
+
+const runAcpCapabilityProbe = (
+  spawn: AcpSessionRuntime.AcpSpawnInput,
+): Effect.Effect<boolean, never> =>
+  Effect.callback((resume) => {
+    const args = [...spawn.args, "--help"];
+    const child = NodeChildProcess.spawn(spawn.command, args, {
+      ...(spawn.cwd ? { cwd: spawn.cwd } : {}),
+      ...(spawn.env ? { env: { ...process.env, ...spawn.env }, extendEnv: true } : {}),
+      stdio: ["ignore", "pipe", "pipe"],
+      windowsHide: true,
+    });
+
+    let stdout = "";
+    let stderr = "";
+    let settled = false;
+
+    const finish = (capable: boolean) => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      clearTimeout(timer);
+      if (!child.killed) {
+        child.kill();
+      }
+      resume(Effect.succeed(capable));
+    };
+
+    child.stdout?.on("data", (chunk) => {
+      stdout += String(chunk);
+    });
+    child.stderr?.on("data", (chunk) => {
+      stderr += String(chunk);
+    });
+    child.on("error", () => finish(false));
+    child.on("close", (code) => {
+      // The CLI accepts --acp when it prints its normal help (exit 0) instead of
+      // rejecting the flag as unknown. A binary that never heard of --acp (e.g.
+      // the native Rust TUI build) exits non-zero with the clap arg error.
+      const clapRejectedAcp = stderr.includes(UNCAPPED_TRUMBO_ACP_HINT) || code !== 0;
+      finish(!clapRejectedAcp);
+    });
+    const timer = setTimeout(() => finish(false), Duration.toMillis(ACP_CAPABILITY_PROBE_TIMEOUT));
+  });
+
+/**
+ * Verifies the resolved Trumbo CLI actually supports ACP mode (--acp). The
+ * npm-published `trumbo` is the native Rust TUI build, which does NOT accept
+ * --acp; only the TypeScript console CLI (bun run src/index.ts) serves the
+ * Agent Client Protocol. Fail fast with an actionable message instead of the
+ * cryptic "call-rpc failed for method initialize" surfaced later.
+ */
+const assertAcpCapableTrumboCli = (
+  spawn: AcpSessionRuntime.AcpSpawnInput,
+  environment: NodeJS.ProcessEnv | undefined,
+): Effect.Effect<void, Error> =>
+  Effect.gen(function* () {
+    const resolved = yield* resolveProbedSpawn(spawn, environment);
+    const capable = yield* runAcpCapabilityProbe(resolved);
+    if (capable) {
+      return;
+    }
+    const hint = resolved.cwd ? ` (cwd: ${resolved.cwd})` : "";
+    return yield* Effect.fail(
+      new Error(
+        [
+          `The Trumbo CLI at '${resolved.command}' does not support ACP mode (--acp)${hint}.`,
+          "Agent sessions in Trumbo Code require the ACP-capable Trumbo CLI. Install it with `npm install -g @trumbodev/cli`, or set the Trumbo provider's 'CLI binary path' / 'CLI workspace' to an ACP-capable build.",
+        ].join(" "),
+      ),
+    );
+  });
+
 export function buildTrumboCliAcpSpawnInput(
   binaryPath: string | undefined,
   cliCwd: string | undefined,
@@ -151,7 +259,17 @@ export function buildTrumboCliAcpSpawnInput(
   thinkingLevel?: string,
 ): AcpSessionRuntime.AcpSpawnInput {
   const configuredBinary = binaryPath?.trim();
-  if (configuredBinary) {
+  // The Trumbo settings schema defaults `binaryPath` to the bare package name
+  // "trumbo" (`makeBinaryPathSetting("trumbo")`). That name resolves to the
+  // npm-published Rust TUI, which does NOT speak ACP — it only shadows the
+  // ACP-capable console CLI. Treat the bare fallback name as *unconfigured*
+  // when an ACP-capable dev workspace (the TypeScript console CLI via Bun) is
+  // available; an explicit path is still honored verbatim.
+  const isPackageNameFallback = configuredBinary === "trumbo";
+  const devCwd = cliCwd?.trim() || resolveTrumboCliDevCwd(environment);
+  const useConfiguredBinary = Boolean(configuredBinary) && (!isPackageNameFallback || !devCwd);
+
+  if (useConfiguredBinary) {
     return {
       command: configuredBinary,
       args: ["--acp"],
@@ -166,7 +284,6 @@ export function buildTrumboCliAcpSpawnInput(
     };
   }
 
-  const devCwd = cliCwd?.trim() || resolveTrumboCliDevCwd(environment);
   if (devCwd) {
     const bunBinary = resolveBunBinary();
     return {
@@ -187,7 +304,7 @@ export function buildTrumboCliAcpSpawnInput(
   }
 
   return {
-    command: "trumbo",
+    command: configuredBinary ?? "trumbo",
     args: ["--acp"],
     env: buildTrumboApiEnv(environment, accessToken, model, undefined, featureFlags, thinkingLevel),
   };
@@ -226,6 +343,8 @@ export const makeTrumboCliAcpRuntime = (
       },
       input.thinkingLevel,
     );
+
+    yield* assertAcpCapableTrumboCli(spawn, input.environment);
 
     const acpContext = yield* Layer.build(
       AcpSessionRuntime.layer({
