@@ -9,13 +9,15 @@ import {
 
 describe("buildTrumboApiEnv", () => {
   it("defaults team and spawn flags to enabled when unset", () => {
-    const env = buildTrumboApiEnv(undefined, "token", "quartz-1.0");
+    const env = buildTrumboApiEnv(undefined, "quartz-1.0");
     expect(env.TRUMBO_ENABLE_AGENT_TEAMS).toBe("1");
     expect(env.TRUMBO_ENABLE_SPAWN_AGENT).toBe("1");
+    // No API key is injected: the CLI authenticates over ACP itself.
+    expect(env.TRUMBO_API_KEY).toBeUndefined();
   });
 
   it("honors explicit disable flags", () => {
-    const env = buildTrumboApiEnv(undefined, "token", "quartz-1.0", undefined, {
+    const env = buildTrumboApiEnv(undefined, "quartz-1.0", undefined, {
       enableAgentTeams: false,
       enableSpawnAgent: false,
     });
@@ -24,14 +26,14 @@ describe("buildTrumboApiEnv", () => {
   });
 
   it("forwards the thinking level when provided", () => {
-    const env = buildTrumboApiEnv(undefined, "token", "quartz-1.0", undefined, undefined, "high");
+    const env = buildTrumboApiEnv(undefined, "quartz-1.0", undefined, undefined, "high");
     expect(env.TRUMBO_THINKING_LEVEL).toBe("high");
   });
 
   it("omits the thinking level when unset or blank", () => {
-    const unset = buildTrumboApiEnv(undefined, "token", "quartz-1.0");
+    const unset = buildTrumboApiEnv(undefined, "quartz-1.0");
     expect(unset.TRUMBO_THINKING_LEVEL).toBeUndefined();
-    const blank = buildTrumboApiEnv(undefined, "token", "quartz-1.0", undefined, undefined, "  ");
+    const blank = buildTrumboApiEnv(undefined, "quartz-1.0", undefined, undefined, "  ");
     expect(blank.TRUMBO_THINKING_LEVEL).toBeUndefined();
   });
 });
@@ -57,7 +59,6 @@ describe("buildTrumboCliAcpSpawnInput", () => {
       "C:\\bin\\trumbo.exe",
       undefined,
       undefined,
-      "token",
       "quartz-1.0",
     );
     expect(spawn.command).toBe("C:\\bin\\trumbo.exe");
@@ -69,7 +70,6 @@ describe("buildTrumboCliAcpSpawnInput", () => {
       undefined,
       "C:\\dev\\console",
       undefined,
-      "token",
       "quartz-1.0",
     );
     expect(spawn.command).toMatch(/bun(\.exe)?$/u);
@@ -82,11 +82,9 @@ describe("buildTrumboCliAcpSpawnInput", () => {
       undefined,
       "C:\\dev\\console",
       undefined,
-      "token",
       "quartz-1.0",
     );
     expect(spawn.env).toMatchObject({
-      TRUMBO_API_KEY: "token",
       TRUMBO_PROVIDER: "trumbo",
       TRUMBO_MODEL: "quartz-1.0",
     });
@@ -94,18 +92,25 @@ describe("buildTrumboCliAcpSpawnInput", () => {
     expect(spawn.env?.TRUMBO_ENABLE_SPAWN_AGENT).toBe("1");
   });
 
+  it("does not inject a TRUMBO_API_KEY into the CLI env", () => {
+    // The desktop's platform-host session token is rejected by the
+    // api.trumbo.dev inference gateway (401 invalid_grant). The CLI authenticates
+    // itself over ACP with its own API-realm credential, so no API key is passed.
+    const spawn = buildTrumboCliAcpSpawnInput(
+      undefined,
+      "C:\\dev\\console",
+      undefined,
+      "quartz-1.0",
+    );
+    expect(spawn.env?.TRUMBO_API_KEY).toBeUndefined();
+  });
+
   it("treats the bare package-name binaryPath as unconfigured when a dev workspace exists", () => {
     // TrumboSettings decodes binaryPath to the bare package name "trumbo" by
     // default. That resolves to the npm Rust TUI — not ACP-capable — so when
     // the TypeScript console CLI is present as a sibling workspace, Bun dev
     // mode must win over the PATH fallback.
-    const spawn = buildTrumboCliAcpSpawnInput(
-      "trumbo",
-      undefined,
-      undefined,
-      "token",
-      "quartz-1.0",
-    );
+    const spawn = buildTrumboCliAcpSpawnInput("trumbo", undefined, undefined, "quartz-1.0");
     expect(spawn.command).toMatch(/bun(\.exe)?$/u);
     expect(spawn.args).toEqual(["run", "src/index.ts", "--acp"]);
     expect(spawn.cwd).toBeDefined();
@@ -116,7 +121,6 @@ describe("buildTrumboCliAcpSpawnInput", () => {
       "C:\\bin\\trumbo.exe",
       undefined,
       undefined,
-      "token",
       "quartz-1.0",
     );
     expect(spawn.command).toBe("C:\\bin\\trumbo.exe");
@@ -126,18 +130,12 @@ describe("buildTrumboCliAcpSpawnInput", () => {
   it("prefers the sibling console workspace over a bare `trumbo` PATH fallback", () => {
     // When the console CLI source is present as a sibling workspace, the dev
     // bun path is used so the ACP-capable CLI is always the one spawned.
-    const spawn = buildTrumboCliAcpSpawnInput(
-      undefined,
-      undefined,
-      undefined,
-      "token",
-      "quartz-1.0",
-    );
+    const spawn = buildTrumboCliAcpSpawnInput(undefined, undefined, undefined, "quartz-1.0");
     expect(spawn.args).toContain("--acp");
     expect(spawn.cwd).toBeDefined();
     expect(spawn.env).toMatchObject({
-      TRUMBO_API_KEY: "token",
       TRUMBO_PROVIDER: "trumbo",
     });
+    expect(spawn.env?.TRUMBO_API_KEY).toBeUndefined();
   });
 });

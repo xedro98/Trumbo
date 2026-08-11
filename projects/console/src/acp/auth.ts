@@ -1,7 +1,28 @@
 import type { ProviderSettingsManager } from "@trumbodev/core";
-import { loginAndSaveProviderOAuthCredentials } from "@trumbodev/core";
+import {
+	getProviderOAuthCredentialsFromSettings,
+	getValidTrumboCredentials,
+	loginAndSaveProviderOAuthCredentials,
+} from "@trumbodev/core";
+import { resolveTrumboApiBaseUrl } from "@trumbodev/shared";
 import { getPersistedProviderApiKey } from "../commands/auth";
 import { writeDiagnostic } from "../utils/output";
+
+/**
+ * The Trumbo inference gateway (`api.trumbo.dev`) authenticates with the CLI's
+ * API-realm session token, stored with the `workos:` prefix used by every
+ * Trumbo API credential. Set-aside tokens from other hosts (e.g. a desktop
+ * `platform.trumbo.dev` session) are rejected with `invalid_grant`, so the
+ * credential used for prompts must always come from the API realm.
+ */
+const TRUMBO_API_KEY_PREFIX = "workos:";
+
+function formatTrumboApiKeyForAcp(accessToken: string): string {
+	const token = accessToken.trim();
+	return token.toLowerCase().startsWith(TRUMBO_API_KEY_PREFIX)
+		? token
+		: `${TRUMBO_API_KEY_PREFIX}${token}`;
+}
 
 /**
  * Supported ACP OAuth provider IDs.
@@ -84,11 +105,30 @@ export async function authenticateAcpProvider(
 ): Promise<AcpAuthResult> {
 	const existing = providerSettingsManager.getProviderSettings(methodId);
 
-	// Check for already-stored credentials.
-	const existingKey = getPersistedProviderApiKey(methodId, existing);
-	if (existingKey) {
-		writeDiagnostic(`[acp/auth] Using existing credentials for ${methodId}`);
-		return { providerId: methodId, apiKey: existingKey };
+	if (methodId === "trumbo") {
+		// The persisted credential is validated + refreshed against the API realm
+		// before use. A stored-but-expired token is thrown away (falling through to
+		// a fresh device login) instead of being handed to the prompt path, where it
+		// would 401 with `invalid_grant Authentication required.`.
+		const stored = existing
+			? getProviderOAuthCredentialsFromSettings(methodId, existing)
+			: null;
+		const valid = stored
+			? await getValidTrumboCredentials(stored, {
+					apiBaseUrl: resolveTrumboApiBaseUrl(existing?.baseUrl ?? undefined),
+				})
+			: null;
+		if (valid?.access) {
+			writeDiagnostic(`[acp/auth] Using valid Trumbo credentials`);
+			return { providerId: methodId, apiKey: formatTrumboApiKeyForAcp(valid.access) };
+		}
+	} else {
+		// Check for already-stored credentials.
+		const existingKey = getPersistedProviderApiKey(methodId, existing);
+		if (existingKey) {
+			writeDiagnostic(`[acp/auth] Using existing credentials for ${methodId}`);
+			return { providerId: methodId, apiKey: existingKey };
+		}
 	}
 
 	// Perform a fresh OAuth login.

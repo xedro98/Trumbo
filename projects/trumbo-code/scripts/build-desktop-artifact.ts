@@ -1488,6 +1488,13 @@ export const createBuildConfig = Effect.fn("createBuildConfig")(function* (
     buildConfig.win = winConfig;
   }
 
+  // Ship the ACP-capable Trumbo CLI (compiled @trumbodev/cli) inside the app so
+  // packaged builds never fall back to the npm `trumbo` Rust TUI on PATH. The
+  // binary is staged by `stageBundledTrumboCli` into
+  // `stageAppDir/extra-resources/trumbo-cli` and copied to
+  // `<app>/resources/trumbo-cli` at install time.
+  buildConfig.extraResources = [{ from: "extra-resources/trumbo-cli", to: "trumbo-cli" }];
+
   return buildConfig;
 });
 
@@ -1582,6 +1589,57 @@ const stageWslNodePtyPrebuild = Effect.fn("stageWslNodePtyPrebuild")(function* (
 
   yield* Effect.log(
     `[desktop-artifact] Staged WSL node-pty prebuild (linux-${linuxArch}, node-pty ${nodePtyVersion}).`,
+  );
+});
+
+/**
+ * Build the ACP-capable Trumbo CLI (`@trumbodev/cli`, the `projects/console`
+ * workspace) for the host platform as a standalone binary and stage it into the
+ * Electron app so packaged builds can spawn `trumbo --acp` without relying on
+ * the npm-published Rust TUI on PATH.
+ */
+const stageBundledTrumboCli = Effect.fn("stageBundledTrumboCli")(function* (input: {
+  readonly stageAppDir: string;
+  readonly verbose: boolean;
+}) {
+  const repoRoot = yield* RepoRoot;
+  const path = yield* Path.Path;
+  const fs = yield* FileSystem.FileSystem;
+  const consoleRoot = path.join(repoRoot, "..", "console");
+
+  yield* Effect.log(`[desktop-artifact] Building bundled Trumbo CLI (${consoleRoot})...`);
+  const bunSpawn = yield* resolveSpawnCommand("bun", ["run", "build:platforms:single"]);
+  yield* runCommand(ChildProcess.make(bunSpawn.command, bunSpawn.args, { cwd: consoleRoot }), {
+    label: "bun run build:platforms:single (bundled Trumbo CLI)",
+    verbose: input.verbose,
+  });
+
+  const exeName = (yield* HostProcessPlatform) === "win32" ? "trumbo.exe" : "trumbo";
+  const cliDistRoot = path.join(consoleRoot, "dist");
+  const builtDirs = (yield* fs
+    .readDirectory(cliDistRoot)
+    .pipe(Effect.orElseSucceed(() => []))).filter((entry) => entry.startsWith("cli-"));
+  let cliBin: string | undefined;
+  for (const dir of builtDirs) {
+    const candidate = path.join(cliDistRoot, dir, "bin", exeName);
+    if (yield* fs.exists(candidate)) {
+      cliBin = candidate;
+      break;
+    }
+  }
+  if (!cliBin) {
+    return yield* Effect.fail(
+      new Error(
+        `Bundled Trumbo CLI build produced no binary (${path.join(cliDistRoot, "cli-*", "bin", exeName)}).`,
+      ),
+    );
+  }
+
+  const targetDir = path.join(input.stageAppDir, "extra-resources", "trumbo-cli");
+  yield* fs.makeDirectory(targetDir, { recursive: true });
+  yield* fs.copyFile(cliBin, path.join(targetDir, exeName));
+  yield* Effect.log(
+    `[desktop-artifact] Bundled Trumbo CLI ${exeName} (${cliBin}) into extra-resources/trumbo-cli`,
   );
 });
 
@@ -1864,6 +1922,10 @@ const buildDesktopArtifact = Effect.fn("buildDesktopArtifact")(function* (
       prebuildPath: options.wslPrebuild,
     });
   }
+
+  // Build + bundle the ACP-capable Trumbo CLI (host platform) so the packaged
+  // app never falls back to the non-ACP npm `trumbo` Rust TUI.
+  yield* stageBundledTrumboCli({ stageAppDir, verbose: options.verbose });
 
   // electron-builder treats several set-but-empty variables (e.g. CSC_LINK="")
   // as enabled, so copy the host env and scrub empty values instead of relying

@@ -553,7 +553,13 @@ export class AcpAgent implements Agent {
 		const cwd = session.cwd || process.cwd();
 		// Resolve credentials: env vars take precedence, then session provider.
 		const providerId = process.env.TRUMBO_PROVIDER ?? session.currentProviderId;
-		const apiKey = process.env.TRUMBO_API_KEY ?? this.authResult?.apiKey ?? "";
+		// For the Trumbo provider prefer the ACP-validated credential (API realm)
+		// over any ambient TRUMBO_API_KEY: the desktop upstreams a platform-host
+		// session token that the api.trumbo.dev gateway rejects with invalid_grant.
+		const apiKey =
+			providerId === "trumbo" && this.authResult?.apiKey
+				? this.authResult.apiKey
+				: process.env.TRUMBO_API_KEY ?? this.authResult?.apiKey ?? "";
 		const systemPrompt = await resolveSystemPrompt({
 			cwd,
 			providerId,

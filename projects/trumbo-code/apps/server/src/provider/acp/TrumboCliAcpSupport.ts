@@ -21,8 +21,6 @@ import { resolveSpawnCommand } from "@trumbo-code/shared/shell";
 
 const isWindowsHost = Effect.runSync(HostProcessPlatform) === "win32";
 
-/** Env var the Trumbo CLI's ACP agent reads to skip the OAuth flow. */
-const TRUMBO_API_KEY_ENV = "TRUMBO_API_KEY";
 const TRUMBO_PROVIDER_ENV = "TRUMBO_PROVIDER";
 const TRUMBO_MODEL_ENV = "TRUMBO_MODEL";
 const TRUMBO_THINKING_LEVEL_ENV = "TRUMBO_THINKING_LEVEL";
@@ -55,6 +53,36 @@ function resolveTrumboCodeWorkspaceRoot(): string | undefined {
     }
   } catch {
     // ignore
+  }
+  return undefined;
+}
+
+/**
+ * Packaged desktop builds ship the ACP-capable Trumbo CLI (the compiled
+ * `@trumbodev/cli`) at `<app>/resources/trumbo-cli/trumbo[.exe]`. Resolve it so
+ * a packaged app never falls back to the npm-published `trumbo` Rust TUI
+ * (which does not implement ACP). Dev checkouts have no bundled CLI — the
+ * sibling console workspace (Bun dev) covers them instead.
+ */
+function resolveBundledTrumboCli(): string | undefined {
+  try {
+    const exe = isWindowsHost ? "trumbo.exe" : "trumbo";
+    const bundleDir = NodePath.dirname(NodeURL.fileURLToPath(import.meta.url));
+    const candidates = [
+      // Electron main / ELECTRON_RUN_AS_NODE exposes `<app>/resources`.
+      ...(typeof process.resourcesPath === "string"
+        ? [NodePath.join(process.resourcesPath, "trumbo-cli", exe)]
+        : []),
+      // Walk up from .../resources/app.asar/apps/server/dist/bin.mjs
+      NodePath.resolve(bundleDir, "../../../../", "trumbo-cli", exe),
+    ];
+    for (const candidate of candidates) {
+      if (NodeFS.existsSync(candidate)) {
+        return candidate;
+      }
+    }
+  } catch {
+    // A bundled CLI is optional; fall back to PATH resolution when absent.
   }
   return undefined;
 }
@@ -110,7 +138,6 @@ function resolveTrumboCliFeatureFlag(
 
 export function buildTrumboApiEnv(
   environment: NodeJS.ProcessEnv | undefined,
-  accessToken: string,
   model: string | undefined,
   extra?: NodeJS.ProcessEnv,
   featureFlags?: {
@@ -123,7 +150,10 @@ export function buildTrumboApiEnv(
   return {
     ...environment,
     ...extra,
-    [TRUMBO_API_KEY_ENV]: accessToken,
+    // NOTE: intentionally no TRUMBO_API_KEY. The desktop's platform-host session
+    // token is rejected by the api.trumbo.dev inference gateway (401
+    // invalid_grant); the CLI authenticates itself over ACP with its own
+    // API-realm credential (validate/refresh, then a device login when stale).
     [TRUMBO_PROVIDER_ENV]: "trumbo",
     ...(model ? { [TRUMBO_MODEL_ENV]: model } : {}),
     ...(normalizedThinkingLevel ? { [TRUMBO_THINKING_LEVEL_ENV]: normalizedThinkingLevel } : {}),
@@ -253,7 +283,6 @@ export function buildTrumboCliAcpSpawnInput(
   binaryPath: string | undefined,
   cliCwd: string | undefined,
   environment: NodeJS.ProcessEnv | undefined,
-  accessToken: string,
   model: string | undefined,
   featureFlags?: {
     readonly enableAgentTeams?: boolean;
@@ -265,25 +294,18 @@ export function buildTrumboCliAcpSpawnInput(
   // The Trumbo settings schema defaults `binaryPath` to the bare package name
   // "trumbo" (`makeBinaryPathSetting("trumbo")`). That name resolves to the
   // npm-published Rust TUI, which does NOT speak ACP — it only shadows the
-  // ACP-capable console CLI. Treat the bare fallback name as *unconfigured*
-  // when an ACP-capable dev workspace (the TypeScript console CLI via Bun) is
-  // available; an explicit path is still honored verbatim.
+  // ACP-capable console CLI. Treat the bare fallback name as *unconfigured* so
+  // an ACP-capable build wins: an explicit path is honored verbatim, then the
+  // dev console workspace (Bun), then the bundled CLI in packaged builds, and
+  // only as a last resort the `trumbo` on PATH.
   const isPackageNameFallback = configuredBinary === "trumbo";
   const devCwd = cliCwd?.trim() || resolveTrumboCliDevCwd(environment);
-  const useConfiguredBinary = Boolean(configuredBinary) && (!isPackageNameFallback || !devCwd);
 
-  if (useConfiguredBinary) {
+  if (configuredBinary && !isPackageNameFallback) {
     return {
       command: configuredBinary,
       args: ["--acp"],
-      env: buildTrumboApiEnv(
-        environment,
-        accessToken,
-        model,
-        undefined,
-        featureFlags,
-        thinkingLevel,
-      ),
+      env: buildTrumboApiEnv(environment, model, undefined, featureFlags, thinkingLevel),
     };
   }
 
@@ -295,7 +317,6 @@ export function buildTrumboCliAcpSpawnInput(
       cwd: devCwd,
       env: buildTrumboApiEnv(
         environment,
-        accessToken,
         model,
         {
           PATH: pathWithBunOnPath(bunBinary, environment),
@@ -306,10 +327,21 @@ export function buildTrumboCliAcpSpawnInput(
     };
   }
 
+  const bundledCli = resolveBundledTrumboCli();
+  if (bundledCli) {
+    // Packaged build ships its own ACP-capable CLI; never fall back to the
+    // npm `trumbo` Rust TUI on PATH.
+    return {
+      command: bundledCli,
+      args: ["--acp"],
+      env: buildTrumboApiEnv(environment, model, undefined, featureFlags, thinkingLevel),
+    };
+  }
+
   return {
     command: configuredBinary ?? "trumbo",
     args: ["--acp"],
-    env: buildTrumboApiEnv(environment, accessToken, model, undefined, featureFlags, thinkingLevel),
+    env: buildTrumboApiEnv(environment, model, undefined, featureFlags, thinkingLevel),
   };
 }
 
@@ -334,7 +366,6 @@ export const makeTrumboCliAcpRuntime = (
       input.binaryPath,
       input.cliCwd,
       input.environment,
-      accessToken.value,
       input.model,
       {
         ...(input.enableAgentTeams !== undefined

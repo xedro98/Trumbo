@@ -218,7 +218,12 @@ async function buildCompiledBinary(input: {
 		process.exit(1);
 	}
 
-	await $`cp ${tmpOutfile} ${input.outfile} && chmod 755 ${input.outfile}`;
+	await $`cp ${tmpOutfile} ${input.outfile}`;
+	// Executable bit is a POSIX concept; `chmod` is unavailable on Windows hosts
+	// (no Git-for-Windows Unix tools on PATH), so skip it there.
+	if (!targetOs.toLowerCase().includes("win")) {
+		await $`chmod 755 ${input.outfile}`;
+	}
 	await $`rm -rf ${tmpDir}`;
 }
 
