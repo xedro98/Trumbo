@@ -153,7 +153,10 @@ export interface TrumboCliAcpRuntimeInput extends Omit<
 }
 
 const UNCAPPED_TRUMBO_ACP_HINT = "unexpected argument '--acp'";
-const ACP_CAPABILITY_PROBE_TIMEOUT = Duration.seconds(10);
+// Cold-starting the TypeScript console CLI (bun transpiles its full dependency
+// graph) can take well over the old 10s on first launch; give it plenty of
+// room so a slow-but-capable build is not rejected.
+const ACP_CAPABILITY_PROBE_TIMEOUT = Duration.seconds(45);
 
 const resolveProbedSpawn = (
   spawn: AcpSessionRuntime.AcpSpawnInput,
@@ -344,7 +347,14 @@ export const makeTrumboCliAcpRuntime = (
       input.thinkingLevel,
     );
 
-    yield* assertAcpCapableTrumboCli(spawn, input.environment);
+    // The Bun dev fallback is the project's own ACP-capable console CLI; probing
+    // it costs a cold bun boot and can false-negative when that boot exceeds the
+    // probe timeout, hard-failing a session that would otherwise start. Trust the
+    // dev workspace (identified by a spawn cwd — the only path that sets one) and
+    // probe only opaque binaries (explicit paths / PATH fallbacks).
+    if (spawn.cwd === undefined) {
+      yield* assertAcpCapableTrumboCli(spawn, input.environment);
+    }
 
     const acpContext = yield* Layer.build(
       AcpSessionRuntime.layer({
