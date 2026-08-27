@@ -37,8 +37,6 @@ pub struct RegisterRequest {
     pub parent_session_id: Option<String>,
     // --- Subagent-specific fields (optional, backward-compatible) ---
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub session_kind: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub subagent_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subagent_persona: Option<String>,
@@ -461,6 +459,23 @@ mod tests {
         assert!(json.get("repoHeadAtEnd").is_none());
     }
 
+    #[test]
+    fn empty_summary_is_sent_not_omitted() {
+        let req = UpdateRequest {
+            summary: Some(String::new()),
+            first_prompt: None,
+            last_turn_number: None,
+            repo_head_at_end: None,
+            restorable_turn_number: None,
+        };
+        let json = serde_json::to_value(&req).unwrap();
+        assert_eq!(
+            json.get("summary"),
+            Some(&serde_json::json!("")),
+            "unpin must POST summary:\"\" so a merge replica drops the prior title"
+        );
+    }
+
     // Wire-contract tests: server reads the camelCase `deviceId` key.
 
     fn minimal_register_request(device_id: Option<String>) -> RegisterRequest {
@@ -475,7 +490,6 @@ mod tests {
             hostname: None,
             device_id,
             parent_session_id: None,
-            session_kind: None,
             subagent_type: None,
             subagent_persona: None,
             subagent_role: None,
@@ -610,7 +624,6 @@ mod tests {
             hostname: None,
             device_id: None,
             parent_session_id: None,
-            session_kind: None,
             subagent_type: None,
             subagent_persona: None,
             subagent_role: None,

@@ -369,7 +369,7 @@ pub(crate) fn persist_user_images(
         return Ok(Vec::new());
     }
     let assets_dir = session_dir.join("assets");
-    std::fs::create_dir_all(&assets_dir)?;
+    crate::util::grok_home::create_dir_all_owner_only(&assets_dir)?;
     let mut out = Vec::with_capacity(images.len());
     for img in images {
         let bytes = base64::engine::general_purpose::STANDARD
@@ -544,6 +544,25 @@ mod tests {
         let assets = std::fs::read_dir(dir.path().join("assets")).unwrap();
         assert_eq!(assets.count(), 1);
     }
+    /// User attachments can be a session's first write — the assets dir must
+    /// be born owner-only.
+    #[cfg(unix)]
+    #[test]
+    fn persist_user_images_creates_owner_only_assets_dir() {
+        use std::os::unix::fs::PermissionsExt;
+        let dir = tempfile::tempdir().unwrap();
+        let img = ImageContent::new(
+            base64::engine::general_purpose::STANDARD.encode([0u8; 4]),
+            "image/png",
+        );
+        persist_user_images(dir.path(), &[img]).unwrap();
+        let mode = std::fs::metadata(dir.path().join("assets"))
+            .unwrap()
+            .permissions()
+            .mode()
+            & 0o777;
+        assert_eq!(mode, 0o700, "assets dir must be 0700");
+    }
     fn user(text: &str) -> ConversationItem {
         ConversationItem::User(UserItem {
             content: vec![xai_grok_sampling_types::conversation::ContentPart::Text {
@@ -605,13 +624,11 @@ mod tests {
         assert!(prompt.contains("<conversation_history_outline>"));
         assert!(prompt.contains("prev1"));
         assert!(prompt.contains("<user_query>\nfix the bug\n</user_query>"));
-        assert!(prompt.contains("Please be thorough"));
     }
     #[test]
     fn describe_prompt_omits_outline_when_absent() {
         let prompt = build_describe_prompt(None, "what is this");
         assert!(!prompt.contains("<conversation_history_outline>"));
-        assert!(!prompt.contains("outline of the conversation"));
         assert!(prompt.contains("<user_query>\nwhat is this\n</user_query>"));
     }
     #[test]

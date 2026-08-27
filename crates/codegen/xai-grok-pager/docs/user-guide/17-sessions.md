@@ -36,7 +36,11 @@ Trumbo stores each session in its own directory, grouped by working directory. I
   subagents/              # per-subagent metadata (meta.json); the child sessions live in the normal sessions tree
 ```
 
-`summary.json` is the index entry. It records the session summary and generated title, the model ID, the creation and update timestamps, the message counts, and a parent session reference for forked or restored sessions. `updates.jsonl` is the authoritative conversation log that drives `/resume` and session restore.
+`summary.json` is the index entry. It records the session summary and generated title, the model ID, the creation and update timestamps, the message counts, and a parent session reference for forked or restored sessions. It also records the latest last-turn summary and session recap so listing surfaces can show them. `updates.jsonl` is the authoritative conversation log that drives `/resume` and session restore.
+
+### Session titles
+
+The session title shown in the dashboard and `/resume` is generated automatically from the conversation. The prompt border shows a title only after a manual `/rename`, alongside the `Stashed` caption when a draft is stashed. Title generation starts right after your first prompt so a session always has a title, and then the title is regenerated from the whole conversation at a couple of early turns and frozen. This lets the title move past a vague first prompt to reflect what the session is really about, while staying stable afterward so you don't lose track of your sessions. A manual `/rename` always wins: once you rename a session, automatic generation never overrides it. Use `/rename --auto` to hand the title back to automatic generation.
 
 ---
 
@@ -124,9 +128,10 @@ Rename the current session's title:
 
 ```
 /rename <title>
+/rename --auto
 ```
 
-Alias: `/title`.
+Alias: `/title`. `/rename --auto` clears a manual title and re-enables auto-titling.
 
 ---
 
@@ -186,6 +191,8 @@ This shows:
 - Model (with a model hash for coding models)
 - API backend and sandbox profile (when set)
 - Context window usage (used and total tokens, with the percentage used)
+
+On the Session info tab, click a value to copy it, or drag to select a range (same highlight as the tool viewer). `c` copies the session ID and `y` copies the whole block. Copy uses the same clipboard route as the rest of Grok, including `grok wrap`.
 
 ---
 
@@ -287,7 +294,7 @@ Worktrees
     380.0 GB  session             12d ago    my-fix ~/.trumbo/worktrees/xai/worktree-abc
      32.3 GB  untracked (session) 40d ago           ~/.trumbo/worktrees/xai/worktree-old
 
-To reclaim space, run `trumbo worktree gc --max-age 7d --dry-run`, then the same command without `--dry-run`. Without `--max-age`, gc expires nothing.
+To reclaim space, run `trumbo worktree gc --max-age 7d --dry-run`, then the same command without `--dry-run`. Without `--max-age`, gc expires nothing, and it keeps a worktree whose work it cannot find elsewhere, naming each one.
 Untracked rows are not in the registry, so gc never visits them. Remove one with `trumbo worktree rm --dry-run <path>`, then without `--dry-run`.
 ```
 
@@ -302,6 +309,16 @@ Every worktree row in `--json` also carries `created_at`, `last_accessed_at`, an
 When the registry is unavailable, every row appears as `untracked` and the report names the reason. The `--json` `registry` field carries the same value: `read`, `absent`, `busy`, `unopenable`, or `corrupt`. A `busy` registry is held by another process, so retry. An `unopenable` one has a permission or I/O problem, so check the file. A `corrupt` one is the only case that calls for deletion: remove the file the report names, then run `trumbo worktree db rebuild`.
 
 To reclaim space, run `trumbo worktree gc --max-age 7d`, which removes tracked worktrees older than the age you give. Without `--max-age`, gc expires nothing, and it visits only worktrees the registry tracks. Remove an untracked worktree with `trumbo worktree rm <path>`. Both commands take `--dry-run` and report what they would do: gc counts the worktrees it would remove, and `rm` names the path. Neither inspects the working tree for uncommitted or unpushed work, so read the preview first.
+
+Each run judges as many worktrees as it can in about a minute, because the same pass runs on a timer beside your session and reading a whole working tree is not free. Anything it did not reach is counted as `Not judged this pass` and waits for the next run, so on a machine with a lot to reclaim, run gc again until that number is zero.
+
+Before removing an expired worktree, gc checks whether the removal would destroy work: uncommitted, untracked or ignored files, a commit no surviving ref holds, or state kept only in that worktree's git directory. A worktree it cannot check is kept as well. The report counts kept worktrees and names the reason, separately from the ones a live process held back. `--force` does not skip the check, and `trumbo worktree rm` does not apply it: it removes the path you name.
+
+Ignored files count as work, with one exception: a directory the repository's own ignore rules exclude and that either carries a tool's cache tag or is named like one of its output directories (`target`, `node_modules`, `.venv`, and the rest). A name alone is never enough, so a hand-written `build/` nobody excluded still keeps the worktree.
+
+A commit that only a worktree's own reflog names, which is what a `reset --hard` or an amend leaves behind, gets a lasting name under `refs/grok/reclaimed/<worktree>/<commit>` in the repository the worktree came from. Git counts a reflog as reachability when it prunes, so without that name removing the worktree is what would make the commit unreachable. Recover one with `git log refs/grok/reclaimed/` and `git branch <name> <commit>`.
+
+Those names do not accumulate. Each gc pass drops the ones that no longer hold anything: the commit is reachable from a real ref now, or it is more than 30 days old. The report counts them as `names_collected`.
 
 ---
 
@@ -323,11 +340,14 @@ The smaller state files -- `summary.json`, `plan.json`, and `signals.json` -- ar
 
 - `info` -- the session ID and working directory
 - `session_summary` and `generated_title` -- the session summary and its model-generated title
+- `title_is_manual` -- true when the title was set by a manual `/rename` (so automatic generation leaves it alone)
 - `created_at` and `updated_at` -- creation and last-update timestamps
 - `num_messages` and `num_chat_messages` -- update and chat-message counts
 - `current_model_id` -- the model in use
 - `parent_session_id` -- the source session for a fork or restore
 - `agent_name` -- the agent definition active when the session was last saved
+- `last_turn_summary` -- an ultra-short summary of the most recent turn
+- `last_recap` -- a bounded preview of the latest session recap
 
 ### Disk Usage
 

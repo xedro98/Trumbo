@@ -57,6 +57,7 @@ fn auth_error() -> xai_grok_sampler::SamplingErrorInfo {
         is_retryable: false,
         retry_after_secs: None,
         should_retry: None,
+        error_code: None,
         model_metadata: None,
         empty_response_context: None,
         doom_loop_triggers: None,
@@ -143,7 +144,7 @@ async fn no_emit_when_auth_manager_is_none() {
         .run_until(async {
             let (actor, _rx) = make_actor_with_auth_manager(None).await;
             crate::auth::attribution::reset_test_emit_count();
-            let _ = actor.handle_sampling_failure(auth_error()).await;
+            let _ = actor.handle_sampling_failure(auth_error(), 0).await;
             assert_eq!(
                 crate::auth::attribution::test_emit_count(),
                 0,
@@ -169,7 +170,7 @@ async fn no_recovery_without_auth_manager() {
             )
             .await;
             crate::auth::attribution::reset_test_emit_count();
-            let result = actor.handle_sampling_failure(auth_error()).await;
+            let result = actor.handle_sampling_failure(auth_error(), 0).await;
             assert!(
                 result.is_err(),
                 "no auth manager must fall through to terminal error"
@@ -196,7 +197,7 @@ async fn sampler_401_recovery_returns_refresh_and_retry() {
                 });
             let (_dir, am) = auth_manager_with_refresher(refresher);
             let (actor, _rx) = make_actor_with_auth_manager(Some(am)).await;
-            let result = actor.handle_sampling_failure(auth_error()).await;
+            let result = actor.handle_sampling_failure(auth_error(), 0).await;
             assert!(
                 matches!(
                     result,
@@ -237,7 +238,7 @@ async fn sampler_401_with_api_key_auth_skips_refresh_and_surfaces_error() {
             )
             .await;
 
-            let result = actor.handle_sampling_failure(auth_error()).await;
+            let result = actor.handle_sampling_failure(auth_error(), 0).await;
 
             assert!(
                 result.is_err(),
@@ -534,6 +535,7 @@ fn model_not_found_error() -> xai_grok_sampler::SamplingErrorInfo {
             is_retryable: false,
             retry_after_secs: None,
             should_retry: None,
+            error_code: None,
             model_metadata: None,
             empty_response_context: None,
             doom_loop_triggers: None,
@@ -558,7 +560,9 @@ async fn legacy_auth_hint_on_404_model_not_found() {
             });
 
             let (actor, _rx) = make_actor_with_auth_manager(Some(am)).await;
-            let result = actor.handle_sampling_failure(model_not_found_error()).await;
+            let result = actor
+                .handle_sampling_failure(model_not_found_error(), 0)
+                .await;
             let err = match result {
                 Err(e) => e,
                 Ok(_) => panic!("expected Err from handle_sampling_failure"),
@@ -613,6 +617,7 @@ fn unauthorized_401_error() -> xai_grok_sampler::SamplingErrorInfo {
             is_retryable: false,
             retry_after_secs: None,
             should_retry: None,
+            error_code: None,
             model_metadata: None,
             empty_response_context: None,
             doom_loop_triggers: None,
@@ -638,7 +643,7 @@ async fn legacy_auth_hint_on_401_unauthorized() {
 
             let (actor, _rx) = make_actor_with_auth_manager(Some(am)).await;
             let result = actor
-                .handle_sampling_failure(unauthorized_401_error())
+                .handle_sampling_failure(unauthorized_401_error(), 0)
                 .await;
             let err = match result {
                 Err(e) => e,
@@ -690,7 +695,7 @@ async fn no_legacy_hint_on_401_for_oidc_auth() {
 
             let (actor, _rx) = make_actor_with_auth_manager(Some(am)).await;
             let result = actor
-                .handle_sampling_failure(unauthorized_401_error())
+                .handle_sampling_failure(unauthorized_401_error(), 0)
                 .await;
             let err = match result {
                 Err(e) => e,
@@ -731,7 +736,9 @@ async fn no_legacy_hint_for_oidc_auth() {
             });
 
             let (actor, _rx) = make_actor_with_auth_manager(Some(am)).await;
-            let result = actor.handle_sampling_failure(model_not_found_error()).await;
+            let result = actor
+                .handle_sampling_failure(model_not_found_error(), 0)
+                .await;
             let err = match result {
                 Err(e) => e,
                 Ok(_) => panic!("expected Err from handle_sampling_failure"),
@@ -803,7 +810,7 @@ async fn sampler_401_session_method_with_stale_api_key_auth_type_still_recovers(
             )
             .await;
 
-            let result = actor.handle_sampling_failure(auth_error()).await;
+            let result = actor.handle_sampling_failure(auth_error(), 0).await;
 
             assert!(
                 matches!(
@@ -840,7 +847,7 @@ async fn sampler_401_oidc_method_with_stale_api_key_auth_type_still_recovers() {
             )
             .await;
 
-            let result = actor.handle_sampling_failure(auth_error()).await;
+            let result = actor.handle_sampling_failure(auth_error(), 0).await;
 
             assert!(
                 matches!(
@@ -1140,6 +1147,7 @@ async fn set_session_model_invalidates_byok_memo_for_same_model_id() {
                 api_backend: crate::sampling::ApiBackend::ChatCompletions,
                 auth_scheme: Default::default(),
                 extra_headers: Default::default(),
+                extra_response_includes: Vec::new(),
                 query_params: Default::default(),
                 env_http_headers: Default::default(),
                 context_window: 256_000,
@@ -1162,7 +1170,7 @@ async fn set_session_model_invalidates_byok_memo_for_same_model_id() {
                 header_injector: None,
             };
             let _ = actor
-                .handle_set_session_model(cfg, false, false, true, 85)
+                .handle_set_session_model(cfg, false, false, false, true, 85)
                 .await;
 
             assert!(
@@ -1233,6 +1241,7 @@ async fn switch_to_first_party_model_drops_minted_provider_token() {
                 api_backend: crate::sampling::ApiBackend::ChatCompletions,
                 auth_scheme: Default::default(),
                 extra_headers: Default::default(),
+                extra_response_includes: Vec::new(),
                 query_params: Default::default(),
                 env_http_headers: Default::default(),
                 context_window: 256_000,
@@ -1255,7 +1264,7 @@ async fn switch_to_first_party_model_drops_minted_provider_token() {
                 header_injector: None,
             };
             let _ = actor
-                .handle_set_session_model(cfg, false, false, true, 85)
+                .handle_set_session_model(cfg, false, false, false, true, 85)
                 .await;
 
             let creds = actor.chat_state_handle.get_credentials().await;
@@ -1289,7 +1298,7 @@ async fn sampler_401_on_provider_model_remints_and_resubmits() {
                 std::time::Duration::from_secs(60),
             );
 
-            let result = actor.handle_sampling_failure(auth_error()).await;
+            let result = actor.handle_sampling_failure(auth_error(), 0).await;
             assert!(
                 matches!(
                     result,
@@ -1331,7 +1340,7 @@ async fn sampler_non_auth_kind_401_on_provider_model_still_recovers() {
 
             let mut error = auth_error();
             error.kind = xai_grok_sampler::SamplingErrorKind::Api;
-            let result = actor.handle_sampling_failure(error).await;
+            let result = actor.handle_sampling_failure(error, 0).await;
             assert!(
                 matches!(
                     result,
@@ -1366,7 +1375,7 @@ async fn sampler_401_with_no_key_on_provider_model_mints_and_resubmits() {
             actor.chat_state_handle.update_credentials(creds);
             seed_provider_memo(&actor, provider).await;
 
-            let result = actor.handle_sampling_failure(auth_error()).await;
+            let result = actor.handle_sampling_failure(auth_error(), 0).await;
             assert!(
                 matches!(
                     result,
@@ -1412,7 +1421,7 @@ async fn sampler_401_on_provider_model_never_refreshes_session() {
                 std::time::Duration::from_secs(60),
             );
 
-            let result = actor.handle_sampling_failure(auth_error()).await;
+            let result = actor.handle_sampling_failure(auth_error(), 0).await;
             assert!(
                 matches!(
                     result,
@@ -1496,7 +1505,7 @@ async fn sampler_401_on_fresh_provider_token_surfaces_error() {
             .await;
             seed_provider_memo(&actor, provider).await;
 
-            let result = actor.handle_sampling_failure(auth_error()).await;
+            let result = actor.handle_sampling_failure(auth_error(), 0).await;
             assert!(
                 result.is_err(),
                 "a fresh-minted rejected token must surface the 401, not loop"

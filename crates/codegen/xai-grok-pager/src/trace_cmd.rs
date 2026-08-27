@@ -123,7 +123,7 @@ pub fn build_session_tar(
 
         let metadata = ExportMetadata {
             session_id: session_id.to_owned(),
-            grok_version: env!("VERSION_WITH_COMMIT").to_owned(),
+            grok_version: xai_grok_version::full_version().to_owned(),
             os: std::env::consts::OS.to_owned(),
             arch: std::env::consts::ARCH.to_owned(),
             exported_at: chrono::Utc::now().to_rfc3339(),

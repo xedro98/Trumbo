@@ -3,7 +3,7 @@ use crate::glyphs::sanitize_toast_message;
 
 fn expected_banner(client: &str, leader: &str) -> String {
     sanitize_toast_message(&format!(
-        "⚠ Version mismatch: client {client}, leader {leader} — restart trumbo to match"
+        "⚠ Version mismatch: client {client}, leader {leader}. Restart trumbo to match"
     ))
     .into_owned()
 }

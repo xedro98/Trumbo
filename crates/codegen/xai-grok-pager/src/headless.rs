@@ -22,6 +22,7 @@ use xai_grok_shell::sampling::types::{
     REASONING_EFFORT_META_KEY, parse_canonical_effort_token, reasoning_effort_meta_value,
 };
 use xai_grok_shell::util::config as cli_config;
+use xai_grok_telemetry::startup::PendingStartup;
 
 use crate::acp::model_state::{EffortTokenError, ModelState};
 use crate::acp::spawn::{AgentShutdownGuard, spawn_grok_shell};
@@ -33,7 +34,7 @@ use crate::headless::reducer::{
 
 mod ext_protocol;
 mod reducer;
-use ext_protocol::{ExtEvent, handle_ext_notification};
+use ext_protocol::{ExtEvent, handle_ext_notification, reply_headless_ext_method};
 
 mod cli;
 pub use cli::{HeadlessPrompt, OutputFormat, parse_json_schema, parse_permission_rules_lenient};
@@ -559,7 +560,15 @@ async fn open_session(
     }
 
     let new_resp: acp::NewSessionResponse = acp_send(
-        acp::NewSessionRequest::new(cwd.to_path_buf()).mcp_servers(mcp_servers),
+        acp::NewSessionRequest::new(cwd.to_path_buf())
+            .mcp_servers(mcp_servers)
+            // Fresh `-p` sessions persist as headless so `/resume` keeps them
+            // off its default pages; the load path above never restamps.
+            .meta(
+                serde_json::json!({ "sessionKind": "headless" })
+                    .as_object()
+                    .cloned(),
+            ),
         acp_tx,
     )
     .await?;
@@ -583,7 +592,7 @@ async fn open_session_with_id(
         acp::NewSessionRequest::new(cwd.to_path_buf())
             .mcp_servers(mcp_servers)
             .meta(
-                serde_json::json!({ "sessionId": session_id })
+                serde_json::json!({ "sessionId": session_id, "sessionKind": "headless" })
                     .as_object()
                     .cloned(),
             ),
@@ -617,7 +626,10 @@ async fn fork_then_open(
         ensure_session_id_available(nid, &new_cwd_str)?;
     }
     let parent_is_worktree = parent_session_is_worktree(parent_id, &write_cwd);
-    let payload = fork_session_params(parent_id, &write_cwd, new_id, parent_is_worktree);
+    let mut payload = fork_session_params(parent_id, &write_cwd, new_id, parent_is_worktree);
+    // Shared helper stamps `fork` for interactive `/fork`. `-p` children must
+    // stay headless: the load path below never restamps.
+    payload["sessionKind"] = serde_json::Value::String("headless".into());
     let fork_params = serde_json::value::to_raw_value(&payload)
         .map_err(|e| anyhow::anyhow!("serialize fork params: {e}"))?;
     let req = acp::ExtRequest::new("x.ai/session/fork", fork_params.into());
@@ -739,6 +751,7 @@ fn headless_materialize_ctx(
             crate::app::session_startup::TitleResolution::Allowed
         },
         restore_code,
+        recent_session_selection: crate::app::session_startup::RecentSessionSelection::Any,
         restore_progress_on_stdout: false,
     }
 }
@@ -791,8 +804,7 @@ pub async fn run_single_turn(
         cli_subagents: None,
         cli_web_search_model: None,
         cli_session_summary_model: None,
-        cli_experimental_memory: false,
-        cli_no_memory: false,
+        memory_enabled_override: None,
         disable_web_search: options.disable_web_search,
         todo_gate: false,
         laziness_debug_log: None,
@@ -805,6 +817,7 @@ pub async fn run_single_turn(
         options.yolo,
         options.permission_mode_flag.as_deref(),
         None,
+        xai_grok_shell::util::config::PermissionMode::Ask,
     );
 
     apply_agent_flag(&options.agent, &mut agent_config);
@@ -834,15 +847,16 @@ pub async fn run_single_turn(
 
     let cancel = CancellationToken::new();
     let memory_config = agent_config.memory_config.clone();
+    let mut pending_startup = Some(PendingStartup::new());
     let timer = xai_grok_telemetry::startup::begin(crate::acp::Owner::Client);
-    let report_startup_failure = |timer: &crate::acp::StartupTimer| {
+    let mut report_startup_failure = |timer: &crate::acp::StartupTimer| {
         timer.emit_telemetry(
             crate::acp::AgentKind::Embedded,
             crate::acp::StartupOutcome::Error,
             None,
             false,
         );
-        xai_grok_telemetry::startup::report_total(crate::acp::StartupOutcome::Error);
+        PendingStartup::finish_held(&mut pending_startup, crate::acp::StartupOutcome::Error);
     };
     let spawned = match spawn_grok_shell(agent_config, &cancel, memory_config).await {
         Ok(s) => s,
@@ -923,7 +937,10 @@ pub async fn run_single_turn(
         // Headless never creates a worktree from `-w`.
         has_worktree: false,
     })
-    .map_err(|e| anyhow::anyhow!("{e}"))?;
+    .map_err(|e| anyhow::anyhow!("{e}"))
+    .inspect_err(|_| {
+        PendingStartup::finish_held(&mut pending_startup, crate::acp::StartupOutcome::Error);
+    })?;
 
     let cwd_str = cwd.to_string_lossy().to_string();
     let materialized = session_startup::materialize_startup_for_cwd(
@@ -933,7 +950,7 @@ pub async fn run_single_turn(
     )
     .await
     .inspect_err(|_| {
-        xai_grok_telemetry::startup::report_total(crate::acp::StartupOutcome::Error)
+        PendingStartup::finish_held(&mut pending_startup, crate::acp::StartupOutcome::Error);
     })?;
 
     let restore_code = match &materialized {
@@ -986,13 +1003,13 @@ pub async fn run_single_turn(
     } = match opened {
         Ok(v) => v,
         Err(e) => {
-            xai_grok_telemetry::startup::report_total(crate::acp::StartupOutcome::Error);
+            PendingStartup::finish_held(&mut pending_startup, crate::acp::StartupOutcome::Error);
             let msg = format!("Couldn't create session: {e}");
             emitter.on_error(&msg, None);
             anyhow::bail!("{msg}");
         }
     };
-    xai_grok_telemetry::startup::report_total(crate::acp::StartupOutcome::Ok);
+    PendingStartup::finish_held(&mut pending_startup, crate::acp::StartupOutcome::Ok);
     tracing::debug!(
         elapsed_ms = t_session.elapsed().as_millis() as u64,
         session_id = %session_id.0,
@@ -1001,14 +1018,12 @@ pub async fn run_single_turn(
 
     let track_active = std::env::var("GROK_TRACK_HEADLESS").is_ok();
     if track_active {
-        let _ = xai_grok_shell::active_sessions::register(
-            xai_grok_shell::active_sessions::ActiveSession {
-                session_id: session_id.clone(),
-                pid: std::process::id(),
-                cwd: cwd.display().to_string(),
-                opened_at: chrono::Utc::now(),
-            },
-        );
+        let _ = xai_grok_active_sessions::register(xai_grok_active_sessions::ActiveSession {
+            session_id: session_id.clone(),
+            pid: std::process::id(),
+            cwd: cwd.display().to_string(),
+            opened_at: chrono::Utc::now(),
+        });
     }
 
     // Seed the reducer's session context BEFORE applying model/effort so a later failure carries it.
@@ -1032,6 +1047,44 @@ pub async fn run_single_turn(
             context_window: session_models.get_context_window(),
         });
     }
+
+    // One bounded catalog read covers what the session catalog cannot resolve.
+    let effort_unresolved = |token: &str| {
+        if parse_canonical_effort_token(token).is_some() {
+            return false;
+        }
+        let target = options
+            .model
+            .as_deref()
+            .and_then(|m| session_models.resolve_by_name_or_id(m))
+            .or_else(|| session_models.current.clone());
+        match target {
+            Some(model_id) => matches!(
+                session_models.resolve_effort_for_model(&model_id, token),
+                Err(EffortTokenError::UnknownToken { .. } | EffortTokenError::NoActiveModel)
+            ),
+            None => true,
+        }
+    };
+    let needs_fresh_catalog = options
+        .model
+        .as_deref()
+        .is_some_and(|m| session_models.resolve_by_name_or_id(m).is_none())
+        || options
+            .reasoning_effort
+            .as_deref()
+            .is_some_and(effort_unresolved);
+    let session_models = if needs_fresh_catalog {
+        match xai_grok_shell::cli_models::fetch_model_state(&acp_tx).await {
+            Ok(state) => ModelState::from(Some(state)),
+            Err(e) => {
+                tracing::warn!(error = %e, "headless: model catalog refresh failed; using session state");
+                session_models
+            }
+        }
+    } else {
+        session_models
+    };
 
     if let Err(e) = apply_headless_model_and_effort(
         &acp_tx,
@@ -1206,8 +1259,8 @@ pub async fn run_single_turn(
     crate::unified_log::flush_blocking().await;
 
     if track_active {
-        // Non-blocking flock so a slow/network ~/.trumbo can't hang exit.
-        let _ = xai_grok_shell::active_sessions::try_unregister(&session_id);
+// Non-blocking flock so a slow/network ~/.trumbo can't hang exit.
+        let _ = xai_grok_active_sessions::try_unregister(&session_id);
     }
     // A mid-turn ACP close already reaped above; return that error before the normal outcome.
     if connection_closed {
@@ -1244,9 +1297,9 @@ pub async fn run_single_turn(
             let is_max_turns = resp
                 .meta
                 .as_ref()
-                .and_then(|m| m.get("cancellationCategory"))
+                .and_then(|m| m.get(crate::app::CANCELLATION_CATEGORY_KEY))
                 .and_then(|v| v.as_str())
-                == Some("max_turns_reached");
+                == Some(xai_grok_shell::session::commands::MAX_TURNS_REACHED_CATEGORY);
             if is_max_turns {
                 emitter.on_max_turns();
                 emitter.on_end(&stop_reason, sid, rid);
@@ -1316,6 +1369,7 @@ fn reap_request_for_work(
             serde_json::value::to_raw_value(&KillTaskRequest {
                 session_id: session_id.0.to_string(),
                 task_id: id.clone(),
+                source: xai_grok_shell::extensions::task::TaskKillSource::Teardown,
             })?,
         ),
     };
@@ -1584,6 +1638,7 @@ fn handle_headless_acp_message(
                 )))
                 .ok();
         }
+        AcpClientMessageBox::ExtMethod(args) => reply_headless_ext_method(args),
         _ => {}
     }
 }

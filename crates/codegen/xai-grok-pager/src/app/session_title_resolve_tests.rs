@@ -79,6 +79,20 @@ fn sole_manual_rename_wins_among_duplicates() {
 }
 
 #[test]
+fn pulled_sole_manual_summary_wins_among_duplicate_autos() {
+    // Shape pull writes: generated_title + title_is_manual, session_summary
+    // matching the remote title (hop contract for `--resume <title>`).
+    let pulled = summary("pulled-hop", Some("Dup"), true);
+    assert_eq!(pulled.manual_title_opt().as_deref(), Some("Dup"));
+    let s = [
+        summary("auto1", Some("Dup"), false),
+        pulled,
+        summary("auto2", Some("Dup"), false),
+    ];
+    assert_eq!(id_of(select_by_title("dup", &s).unwrap()), "pulled-hop");
+}
+
+#[test]
 fn two_manual_renames_stay_ambiguous() {
     let s = [
         summary("man1", Some("Dup"), true),
@@ -163,6 +177,37 @@ fn pin_title_resume_finds_saved_profile_and_conflicts() {
         }
         other => panic!("expected Conflict, got {other:?}"),
     }
+}
+
+#[serial_test::serial(GROK_HOME)]
+#[test]
+fn headless_title_pin_is_caller_aware() {
+    let mut fx = GrokHomeFixture::new();
+    let cwd_str = fx.cwd_str();
+    let id = "abababab-1111-2222-3333-444444444444";
+    fx.write_summary(
+        &cwd_str,
+        id,
+        serde_json::json!({
+            "generated_title": "Batch Run",
+            "session_kind": "headless",
+        }),
+    );
+
+    let mut interactive =
+        crate::app::cli::PagerArgs::try_parse_from(["grok", "-r", "batch run"]).unwrap();
+    interactive
+        .pin_local_resume_target_for_cwd(Some(&cwd_str))
+        .unwrap();
+    assert_eq!(interactive.session_to_resume(), Some("batch run"));
+
+    let mut headless =
+        crate::app::cli::PagerArgs::try_parse_from(["grok", "-p", "next", "-r", "batch run"])
+            .unwrap();
+    headless
+        .pin_local_resume_target_for_cwd(Some(&cwd_str))
+        .unwrap();
+    assert_eq!(headless.session_to_resume(), Some(id));
 }
 
 /// Regression: a non-UUID remote id with a restored local child pins to the
@@ -254,6 +299,7 @@ fn pinned_local_ctx() -> crate::app::session_startup::MaterializeCtx {
         chat_mode: false,
         title_resolution: crate::app::session_startup::TitleResolution::PinnedPreSandbox,
         restore_code: false,
+        recent_session_selection: crate::app::session_startup::RecentSessionSelection::Interactive,
         restore_progress_on_stdout: false,
     }
 }
