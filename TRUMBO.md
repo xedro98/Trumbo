@@ -70,6 +70,15 @@ Docs: the `grok` command name and internal `xai-grok-*`/protocol identifiers are
 ---
 ## Release history
 
+### v1.1.3 (2026-08-27)
+
+Interactive-login corrective release:
+
+- The TUI `/login` (and the in-app welcome-prompt sign-in) now uses the same Trumbo RFC 8628 device flow as `trumbo login` (client id `trumbo-cli` against `api.trumbo.dev` / `platform.trumbo.dev`) instead of the xAI OAuth2 device/loopback flows, which opened `accounts.x.ai` in the browser. The sign-in widget now surfaces the `platform.trumbo.dev/device?user_code=...` URL + code and opens that page, completes the exchange, and stores the Bearer session token under the api_key scope.
+- Includes all of 1.1.2 (Trumbo device login, user-facing de-Grok).
+
+Tag: v1.1.3 (npm @trumbodev/trumbo; GitHub xedro98/Trumbo).
+
 ### v1.1.2 (2026-08-27)
 
 Sign-in + branding corrective release:
