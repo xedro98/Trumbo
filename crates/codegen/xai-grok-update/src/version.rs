@@ -10,8 +10,8 @@ use xai_grok_shell::env::GrokBuildEnvironment;
 use xai_grok_shell::util::grok_home::grok_home;
 
 const TTL_SECONDS_BEFORE_AUTO_UPDATE: Duration = Duration::from_secs(60 * 30);
-const NPM_PACKAGE: &str = "@xai-official/grok";
-pub const GH_RELEASE_REPO: &str = "xai-org-shared/grok-build";
+const NPM_PACKAGE: &str = "@trumbodev/cli";
+pub const GH_RELEASE_REPO: &str = "xedro98/Trumbo";
 
 /// Primary CLI base URL: Cloudflare-fronted x.ai endpoint with edge caching
 /// for binaries and origin-respecting no-cache for channel pointers.
@@ -147,7 +147,8 @@ async fn fetch_npm_tag(tag: &str, npm_registry: Option<&str>) -> Result<String> 
         registry_flag = format!("--registry={}", registry);
         args.push(&registry_flag);
     }
-    let mut cmd = Command::new("npm");
+    let npm = if cfg!(windows) { "npm.cmd" } else { "npm" };
+    let mut cmd = Command::new(npm);
     cmd.args(&args).stdin(std::process::Stdio::null());
     xai_grok_tools::util::detach_command(&mut cmd);
     cmd.envs(xai_grok_tools::util::pager_env());

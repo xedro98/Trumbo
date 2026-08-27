@@ -3567,7 +3567,7 @@ mod tests {
 
     #[test]
     fn hero_box_inactive_on_short_terminal() {
-        // 16 rows is one short of the 17 the box needs (11 box + 1 flex gap +
+        // 16 rows is well short of the 25 the box needs (19 box + 1 flex gap +
         // 5 fixed-below), so it falls back to the stacked layout.
         let area = Rect::new(0, 0, 90, 16);
         let layout = WelcomeLayout::compute(WelcomeLayoutInput {
@@ -3577,17 +3577,18 @@ mod tests {
         });
         assert!(
             !layout.has_hero_box(),
-            "hero box should be inactive at 90x16 (needs 17 rows)"
+            "hero box should be inactive at 90x16 (needs 25 rows)"
         );
     }
 
     #[test]
     fn hero_box_inactive_when_warning_would_overflow() {
-        // Regression: the box is forced to the full 7-row logo, so even a
-        // 3-item menu needs 11 box rows. A startup warning (error_height = 2)
-        // pushes the total past height 19, so the gate must fall back to the
-        // stacked layout instead of overflowing by a row.
-        let area = Rect::new(0, 0, 90, 19);
+        // Regression: the box is forced to the full 15-row logo, so even a
+        // 3-item menu needs 19 box rows (min_content_height 25 without a
+        // warning, 28 with error_height = 2). 26 sits between the two, so the
+        // gate must fall back to stacked when the warning is present instead
+        // of overflowing.
+        let area = Rect::new(0, 0, 90, 26);
         let with_warning = WelcomeLayout::compute(WelcomeLayoutInput {
             content_area: area,
             error_height: 2,
@@ -3638,12 +3639,13 @@ mod tests {
 
     #[test]
     fn hero_box_does_not_overflow_with_tall_menu() {
-        // A 6-item menu makes the box 2 rows taller than the default-4 box, so
-        // the centering pad (derived from the default box) must be clamped or
-        // the box gets pushed down and the version row clips at exactly
-        // min_content_height. 19 == min_content_height(0, 6, 0, 0): a 13-row box
-        // + 1 flex gap + 5 fixed-below.
-        let area = Rect::new(0, 0, 100, 19);
+        // The 15-row logo, not the menu, is the box's binding height (a 6-item
+        // menu leaves the box at the same 19 rows as the default-4 box), and the
+        // centering pad (derived from the default box) must be clamped or the
+        // version row clips at exactly min_content_height. 25 ==
+        // min_content_height(0, 6, 0, 0): a 19-row box + 1 flex gap + 5
+        // fixed-below.
+        let area = Rect::new(0, 0, 100, 25);
         let layout = WelcomeLayout::compute(WelcomeLayoutInput {
             content_area: area,
             menu_height: 6,
@@ -3669,9 +3671,9 @@ mod tests {
 
     #[test]
     fn hero_box_height_accounts_for_borders_and_padding() {
-        // At h >= 26, logo07 is used (7 lines). With menu_height=3:
-        // right_col = 2 + 0 + 0 + 1 + 3 = 6, inner = max(7, 6) = 7.
-        // hero_box_height = 2 (borders) + 2 (v_pad) + 7 = 11.
+        // logo07 is used (15 lines). With menu_height=3:
+        // right_col = 2 + 0 + 0 + 1 + 3 = 6, inner = max(15, 6) = 15.
+        // hero_box_height = 2 (borders) + 2 (v_pad) + 15 = 19.
         let area = Rect::new(0, 0, 100, 50);
         let layout = WelcomeLayout::compute(WelcomeLayoutInput {
             content_area: area,
@@ -3679,7 +3681,7 @@ mod tests {
             ..Default::default()
         });
         assert!(layout.has_hero_box());
-        assert_eq!(layout.hero_box.height, 11);
+        assert_eq!(layout.hero_box.height, 19);
     }
 
     #[test]
@@ -3755,11 +3757,13 @@ mod tests {
     }
 
     #[test]
-    fn hero_box_announcement_clamped_when_tight() {
-        // A real announcement can't disable the hero box: the slot is clamped to
-        // whatever still fits (the renderer trails a `…`), so the box stays
-        // active rather than falling back to the stacked layout.
-        let area = Rect::new(0, 0, 100, 17);
+    fn hero_box_announcement_rides_the_logo_rows() {
+        // The 15-row logo is the box's binding height, so an announcement no
+        // longer threatens the fit gate: once the box fits (>= 25 rows for a
+        // 3-item menu), a few announcement rows are absorbed by the logo's slack
+        // and the box stays active instead of falling back to the stacked
+        // layout. min_content_height(0, 3, 0, info) stays 25 while info <= 9.
+        let area = Rect::new(0, 0, 100, 30);
         let a = long_ann();
         let without = WelcomeLayout::compute(WelcomeLayoutInput {
             content_area: area,
@@ -3775,20 +3779,21 @@ mod tests {
         });
         assert!(
             with_ann.has_hero_box(),
-            "announcement clamps to fit instead of disabling the box"
+            "announcement rides the logo rows instead of disabling the box"
         );
         assert!(with_ann.hero_info.height > 0);
         assert!(
             hero_box::min_content_height(0, 3, 0, with_ann.hero_info.height) <= area.height,
-            "clamped slot must keep the box within the area"
+            "the in-box slot keeps the box within the area"
         );
     }
 
     #[test]
     fn hero_box_keeps_one_bottom_pad_below_actions() {
-        // With a changelog/announcement the subtitle is hidden, but there's
-        // still exactly one padding row between the actions and the bottom
-        // border. (menu=4 + info=3 fills the inner, so the menu reaches the pad.)
+        // With a changelog/announcement the subtitle is hidden. The 15-row logo
+        // is the box's binding height, so the 4-row menu + 6-row header leave
+        // slack below: 15 inner rows − (header 6 + menu 4) = 5 slack rows + 1
+        // border pad = 6 rows between the actions and the border.
         let area = Rect::new(0, 0, 100, 50);
         let a = long_ann();
         let no_info = WelcomeLayout::compute(WelcomeLayoutInput {
@@ -3808,8 +3813,8 @@ mod tests {
         let border_bottom = with_info.hero_box.y + with_info.hero_box.height - 1;
         assert_eq!(
             border_bottom - menu_bottom,
-            1,
-            "one pad row below the actions"
+            6,
+            "5 logo-dominant slack rows + 1 border pad below the actions"
         );
     }
 
