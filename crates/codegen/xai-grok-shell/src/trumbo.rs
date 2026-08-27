@@ -268,7 +268,7 @@ pub async fn status() -> Result<()> {
             }
         }
         None => {
-            println!("Not signed in to Trumbo. Run `trumbo trumbo login`.");
+            println!("Not signed in to Trumbo. Run `trumbo login`.");
             Ok(())
         }
     }
@@ -297,7 +297,7 @@ const RECOMMENDED_MODELS_PATH: &str = "/ai/trumbo/recommended-models";
 /// `GET {provider_base}/ai/trumbo/recommended-models` (`{trumbo, trumboPass}`).
 pub async fn recommended_models() -> Result<Vec<TrumboCatalogModel>> {
     let Some(token) = current_token() else {
-        bail!("Not signed in to Trumbo. Run `grok trumbo login`.");
+        bail!("Not signed in to Trumbo. Run `trumbo login`.");
     };
     let client = reqwest::Client::new();
     let url = format!("{}{RECOMMENDED_MODELS_PATH}", provider_base());
