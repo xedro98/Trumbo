@@ -125,12 +125,27 @@ impl XaiProtoBuilder {
             );
         }
 
+        // Cross-platform protoc invocation. On Windows `/dev/stdout` and
+        // `/dev/null` do not exist, so write the dependency makefile to a temp
+        // file and use the `NUL` device for the descriptor set.
+        let is_windows = cfg!(windows);
+        let descriptor_set_out = if is_windows { "NUL" } else { "/dev/null" };
+        let dependency_tmp = std::env::temp_dir().join(format!(
+            "xai-proto-build-{}-deps.make",
+            std::process::id()
+        ));
+
         // Can only process one input file when using --dependency_out=FILE.
         for proto in protos {
             let mut command = Command::new(protoc.unwrap_or(Path::new("protoc")));
+            let dependency_out = if is_windows {
+                dependency_tmp.as_os_str().to_string_lossy().into_owned()
+            } else {
+                "/dev/stdout".to_string()
+            };
             command
-                .arg("--dependency_out=/dev/stdout")
-                .arg("--descriptor_set_out=/dev/null");
+                .arg(format!("--dependency_out={dependency_out}"))
+                .arg(format!("--descriptor_set_out={descriptor_set_out}"));
 
             // Add protoc's well-known types include directory first (if found).
             // This is needed for Bazel sandboxed builds where protoc and its
@@ -156,14 +171,18 @@ impl XaiProtoBuilder {
                 return Err(anyhow::anyhow!("protoc command failed"));
             }
 
-            let output =
-                String::from_utf8(output.stdout).context("protoc command output not UTF-8")?;
+            let output = if is_windows {
+                fs::read_to_string(&dependency_tmp)
+                    .context("failed to read protoc dependency output")?
+            } else {
+                String::from_utf8(output.stdout).context("protoc command output not UTF-8")?
+            };
 
             let mut lines = output.lines();
             let first_line = lines.next().context("protoc command output is empty")?;
-            let prefix = "/dev/null:";
-            let rem = first_line.strip_prefix(prefix).with_context(|| {
-                format!("protoc command output must start with /dev/null: {output:?}")
+            let prefix = format!("{descriptor_set_out}:");
+            let rem = first_line.strip_prefix(&prefix).with_context(|| {
+                format!("protoc command output must start with {prefix}: {output:?}")
             })?;
             for line in iter::once(rem).chain(lines) {
                 let line = line.trim();
@@ -182,6 +201,8 @@ impl XaiProtoBuilder {
                 println!("cargo:rerun-if-changed={line}");
             }
         }
+
+        let _ = fs::remove_file(&dependency_tmp);
 
         Ok(())
     }
