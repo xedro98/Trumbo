@@ -70,6 +70,18 @@ Docs: the `grok` command name and internal `xai-grok-*`/protocol identifiers are
 ---
 ## Release history
 
+### v1.1.2 (2026-08-27)
+
+Sign-in + branding corrective release:
+
+- `trumbo login` / `trumbo logout` now use Trumbo's own RFC 8628 device-code flow against `api.trumbo.dev` / `platform.trumbo.dev` (client id `trumbo-cli`). Previously they hit xAI's OAuth2/device flow (`auth.x.ai`), which opened `accounts.x.ai` in the browser. Now `login` prints and opens the Trumbo sign-in page (`platform.trumbo.dev/device?user_code=...`), polls the token endpoint, verifies entitlement via `GET /api/v1/users/me/plan`, and stores the Bearer session token in `~/.trumbo/auth.json` under the `xai::api_key` scope so the existing BYOK path keeps working.
+- Removed user-facing Grok/xAI branding from the flows users actually see (login, update, version, crash, error copy): now reads Trumbo/`trumbo` (`grok update` hints -> `trumbo update`, `~/.grok` -> `~/.trumbo`), and the cross-product "Updating Grok ... -> ..." text is gone.
+- Internal identifiers (`xai-grok-*` crates, the ACP wire protocol, `refs/grok/...`) are retained for build/protocol compatibility.
+
+Shipped as npm `@trumbodev/trumbo@1.1.2` (meta) + `@trumbodev/trumbo-win32-x64@1.1.2` (native binary) and a v1.1.2 GitHub release with the Windows asset.
+
+Tag: v1.1.2 (npm @trumbodev/trumbo; GitHub xedro98/Trumbo).
+
 ### v1.1.1 (2026-08-27)
 
 Corrective release fixing the self-updater and its packaging:
