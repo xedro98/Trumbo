@@ -701,46 +701,14 @@ async fn run_auth_flow_steps(
         return crate::auth::oidc::run_login_flow(grok_com_config, auth_manager, channels).await;
     }
 
-    if let Some(ref oauth2_cfg) = grok_com_config.oauth2 {
-        if should_use_device_flow(login_override).await {
-            // On `NotEnabled` (no device endpoint) `channels` is untouched,
-            // so we can fall back to loopback below.
-            match crate::auth::device_code::run_device_code_login_channels(
-                &oauth2_cfg.issuer,
-                &oauth2_cfg.client_id,
-                &oauth2_cfg.scopes,
-                auth_manager,
-                &mut channels,
-            )
-            .await
-            {
-                Err(e)
-                    if matches!(
-                        e.downcast_ref::<crate::auth::device_code::DeviceCodeError>(),
-                        Some(crate::auth::device_code::DeviceCodeError::NotEnabled)
-                    ) =>
-                {
-                    tracing::warn!(
-                        "auth: device flow unavailable (404), falling back to loopback login"
-                    );
-                }
-                other => return other,
-            }
-        }
-        return crate::auth::oidc::run_login_flow_with_config(
-            &oauth2_cfg.as_oidc(),
-            auth_manager,
-            channels,
-        )
-        .await;
-    }
-
-    tracing::error!(
-        "auth: no OAuth2 configuration available (neither enterprise OIDC nor xAI OAuth2 configured)"
-    );
-    anyhow::bail!(
-        "No OAuth2 configuration available. Run `trumbo login` to authenticate, or contact your administrator if you use enterprise SSO."
-    )
+    // Trumbo native device login: sign in against api.trumbo.dev / platform.trumbo.dev
+    // instead of the xAI OAuth2 device/loopback flows, which otherwise open
+    // accounts.x.ai in the browser. The Bearer session token is stored under the
+    // api_key scope and returned as an ApiKey-mode GrokAuth so the caller can
+    // proceed immediately with the interactive session.
+    let url_tx = channels.as_mut().and_then(|c| c.url_tx.take());
+    let auth = crate::trumbo::login_tui(url_tx).await?;
+    Ok((auth, true))
 }
 
 /// Non-interactive auth refresh: returns valid credentials if available without

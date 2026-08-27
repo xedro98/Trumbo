@@ -253,6 +253,111 @@ pub async fn login() -> Result<()> {
     Ok(())
 }
 
+
+/// Trumbo device login for the TUI/IDE: surfaces the Trumbo sign-in URL through
+/// `url_tx` and opens the browser, polls the api.trumbo.dev token endpoint,
+/// verifies entitlement, and stores the Bearer session token under the api_key
+/// scope. Returns the newly-stored GrokAuth (ApiKey mode) so the interactive
+/// auth flow can return immediately without printing to stdout.
+pub async fn login_tui(
+    url_tx: Option<tokio::sync::oneshot::Sender<crate::auth::AuthUrlInfo>>,
+) -> anyhow::Result<crate::auth::GrokAuth> {
+    let client = reqwest::Client::new();
+    let root = api_root();
+
+    // 1. Request a device code from Trumbo's Better Auth endpoint.
+    let body = client
+        .post(format!("{root}/api/auth/device/code"))
+        .json(&serde_json::json!({ "client_id": TRUMBO_CLIENT_ID }))
+        .timeout(Duration::from_secs(30))
+        .send()
+        .await
+        .context("failed to start Trumbo device auth")?;
+    let body: Value = body
+        .json()
+        .await
+        .context("invalid device auth response")?;
+    let device_code = body["device_code"]
+        .as_str()
+        .context("device auth missing device_code")?
+        .to_string();
+    let user_code = body["user_code"]
+        .as_str()
+        .context("device auth missing user_code")?
+        .to_string();
+    let verification_uri = body["verification_uri"]
+        .as_str()
+        .context("device auth missing verification_uri")?;
+    let uri = body["verification_uri_complete"]
+        .as_str()
+        .unwrap_or(verification_uri)
+        .to_string();
+    let expires = Duration::from_secs(body["expires_in"].as_u64().unwrap_or(300).min(600));
+    let mut interval = Duration::from_secs(body["interval"].as_u64().unwrap_or(5).max(1));
+
+    // Surface the URL to the TUI before opening the browser so a slow launch
+    // cannot block the auth view that renders the sign-in widget.
+    if let Some(tx) = url_tx {
+        let _ = tx.send(crate::auth::AuthUrlInfo {
+            url: uri.clone(),
+            mode: crate::auth::AuthUrlMode::Device,
+        });
+    }
+    open_browser(&uri);
+
+    // 2. Poll the token endpoint.
+    let deadline = Instant::now() + expires.min(DEVICE_CODE_POLL_TIMEOUT);
+    let token = loop {
+        let resp = client
+            .post(format!("{root}/api/auth/device/token"))
+            .json(&serde_json::json!({
+                "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+                "device_code": device_code,
+                "client_id": TRUMBO_CLIENT_ID,
+            }))
+            .timeout(Duration::from_secs(30))
+            .send()
+            .await
+            .context("failed to poll Trumbo device token")?;
+        let status = resp.status();
+        let payload = resp
+            .json::<Value>()
+            .await
+            .context("invalid device token response")?;
+        if status.is_success() {
+            if let Some(t) = payload["access_token"].as_str() {
+                break t.to_string();
+            }
+        }
+        match payload["error"].as_str() {
+            Some("authorization_pending") => {}
+            Some("slow_down") => interval += Duration::from_secs(1),
+            Some("access_denied") => anyhow::bail!("Access denied."),
+            Some("expired_token") | Some("invalid_grant") => {
+                anyhow::bail!("Device code expired or invalid.")
+            }
+            _ => anyhow::bail!(
+                "Device auth failed: {}",
+                payload["error_description"].as_str().unwrap_or("unknown error")
+            ),
+        }
+        if Instant::now() > deadline {
+            anyhow::bail!("Device authentication timed out.");
+        }
+        tokio::time::sleep(interval).await;
+    };
+
+    // 3. Verify entitlement, then persist.
+    let plan = fetch_plan(&client, &token).await?;
+    assert_can_use(&plan)?;
+    store_api_key(&xai_grok_config::grok_home(), &token)?;
+    Ok(crate::auth::GrokAuth {
+        key: token,
+        auth_mode: crate::auth::AuthMode::ApiKey,
+        ..Default::default()
+    })
+}
+
 /// Print auth + entitlement status.
 pub async fn status() -> Result<()> {
     match current_token() {
