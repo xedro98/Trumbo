@@ -64,7 +64,7 @@ The port was done as a real 3-way merge (merge base `afbc0fb`), so **all** upstr
 - **Agent/session:** status line config, scheduler liveness, session checkpoint store, publish/recovery, foreign-session support, `xai-chat-state` compaction + image budget.
 - **Protocol:** `xai-tool-protocol` `bot_relay`, frames/methods expansion, error-code handling; `xai-tty-utils` child-wait / process-resource scope robustness.
 - **TUI:** textarea split into `editor`/editor-keys, richer dashboard/session picker, usage modal fields, consent & cancel-latency handling, bidi rendering, subagent lifecycle.
-- **Updater:** channel-aware reinstall hints targeting `@trumbodev/cli` (npm) and `xedro98/Trumbo` (GitHub releases).
+- **Updater:** channel-aware reinstall hints targeting `@trumbodev/trumbo` (npm) and `xedro98/Trumbo` (GitHub releases).
 
 Docs: the `grok` command name and internal `xai-grok-*`/protocol identifiers are kept verbatim for compatibility; the user-facing product brand, provider, model family, and home/config paths are Trumbo.
 ---
@@ -82,9 +82,9 @@ Full `cargo build -p xai-grok-pager-bin --release` is green on Windows (protoc a
 - `app.rs`: drop the now-removed `migrate_devbox_auth_if_legacy` call.
 - `mcp_doctor.rs`: remove the dead `try_discover_managed_servers` (upstream removed its managed-config API); live path is `merge_managed_mcp_servers_sourced`.
 - `persistence.rs`: rebranded to Trumbo, kept upstream's full writeback/session code.
-- `auto_update.rs` + `auto_update_tests.rs`: re-taken from upstream (restores `InstallPhaseError`/`wrap_download_err`/`corrected_arch`/`running_under_rosetta_on_apple_silicon`) and rebranded to `@trumbodev/cli` (npm) and `xedro98/Trumbo --pattern 'trumbo-*'` (GitHub Releases).
+- `auto_update.rs` + `auto_update_tests.rs`: re-taken from upstream (restores `InstallPhaseError`/`wrap_download_err`/`corrected_arch`/`running_under_rosetta_on_apple_silicon`) and rebranded to `@trumbodev/trumbo` (npm) and `xedro98/Trumbo --pattern 'trumbo-*'` (GitHub Releases).
 - `cli.rs`/`trace_cmd.rs`: use `xai_grok_version::full_version()` instead of compile-time `env!("VERSION_WITH_COMMIT")` (the lib crate has no build.rs).
 - `input.rs`: init `ActiveModal::SessionPicker::generation`/`detail_seq`.
 - `pager-bin/main.rs`: cover `Command::Trumbo(_)` in `process_identity`.
 
-Tag: `v1.1.0` (GitHub release page targets `xedro98/Trumbo`; npm package `@trumbodev/cli`).
+Tag: `v1.1.0` (GitHub release page targets `xedro98/Trumbo`; npm package `@trumbodev/trumbo`).
