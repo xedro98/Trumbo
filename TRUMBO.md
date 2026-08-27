@@ -67,3 +67,24 @@ The port was done as a real 3-way merge (merge base `afbc0fb`), so **all** upstr
 - **Updater:** channel-aware reinstall hints targeting `@trumbodev/cli` (npm) and `xedro98/Trumbo` (GitHub releases).
 
 Docs: the `grok` command name and internal `xai-grok-*`/protocol identifiers are kept verbatim for compatibility; the user-facing product brand, provider, model family, and home/config paths are Trumbo.
+---
+## Release history
+
+### v1.1.0 (2026-08-27)
+
+Feature release on top of the 08-25 upstream sync (see "Synced from upstream" above). Crate version bumped `1.0.10` -> `1.1.0` (`xai-grok-pager`, `xai-grok-pager-bin`, `xai-grok-shell`, `xai-grok-version`).
+
+Signed release build used `GROK_VERSION=1.1.0`; stamping via `xai-grok-pager-bin/build.rs` (`VERSION_WITH_COMMIT`) and runtime `xai_grok_version::full_version()`. Binary: `target/release/xai-grok-pager` -> `trumbo 1.1.0 (<commit12>) [alpha|stable]`.
+
+Full `cargo build -p xai-grok-pager-bin --release` is green on Windows (protoc at `D:/Torch/protoc-win/bin`, rustup toolchain per `rust-toolchain.toml`). Compile fixes landed during this release:
+
+- `config.rs`: alias `cli_chat_proxy_base_url`/`xai_api_base_url` defaults to the in-scope `CLI_CHAT_PROXY_BASE_URL_DEFAULT` const (`.to_string()`).
+- `app.rs`: drop the now-removed `migrate_devbox_auth_if_legacy` call.
+- `mcp_doctor.rs`: remove the dead `try_discover_managed_servers` (upstream removed its managed-config API); live path is `merge_managed_mcp_servers_sourced`.
+- `persistence.rs`: rebranded to Trumbo, kept upstream's full writeback/session code.
+- `auto_update.rs` + `auto_update_tests.rs`: re-taken from upstream (restores `InstallPhaseError`/`wrap_download_err`/`corrected_arch`/`running_under_rosetta_on_apple_silicon`) and rebranded to `@trumbodev/cli` (npm) and `xedro98/Trumbo --pattern 'trumbo-*'` (GitHub Releases).
+- `cli.rs`/`trace_cmd.rs`: use `xai_grok_version::full_version()` instead of compile-time `env!("VERSION_WITH_COMMIT")` (the lib crate has no build.rs).
+- `input.rs`: init `ActiveModal::SessionPicker::generation`/`detail_seq`.
+- `pager-bin/main.rs`: cover `Command::Trumbo(_)` in `process_identity`.
+
+Tag: `v1.1.0` (GitHub release page targets `xedro98/Trumbo`; npm package `@trumbodev/cli`).
