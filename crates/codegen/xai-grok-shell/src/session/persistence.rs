@@ -1264,6 +1264,739 @@ impl PersistenceHandle {
 
     /// Append after older buffered updates and wait for the durable barrier.
     ///
+    /// [`DurableAppendError::NotCommitted`] is safe to retry; [`DurableAppendError::Committed`]
+    /// means the replay line landed; [`DurableAppendError::AcknowledgementLost`] has unknown status.
+    /// No-op handles return `Unsupported`.
+    pub(crate) async fn append_update_durably(
+        &self,
+        update: SessionUpdate,
+    ) -> Result<(), DurableAppendError> {
+        if self.noop {
+            return Err(DurableAppendError::NotCommitted(io::Error::new(
+                io::ErrorKind::Unsupported,
+                "durable session update append is unsupported by a no-op persistence handle",
+            )));
+        }
+        let (respond_to, response) = tokio::sync::oneshot::channel();
+        self.tx
+            .send(PersistenceMsg::AppendUpdateDurablyAndAck { update, respond_to })
+            .map_err(|_| {
+                DurableAppendError::NotCommitted(io::Error::new(
+                    io::ErrorKind::BrokenPipe,
+                    "session persistence actor stopped before durable append dispatch",
+                ))
+            })?;
+        response
+            .await
+            .map_err(|_| {
+                DurableAppendError::AcknowledgementLost(io::Error::new(
+                    io::ErrorKind::BrokenPipe,
+                    "session persistence actor stopped before durable append acknowledgement",
+                ))
+            })?
+            .map_err(DurableAppendError::from)
+    }
+}
+
+enum PendingAppendOutcome {
+    CommittedOk(acp::SessionNotification),
+    CommittedErr(acp::SessionNotification, io::Error),
+    NotCommittedErr(acp::SessionNotification, io::Error),
+}
+
+struct SessionPersistence {
+    info: Info,
+    storage: Arc<dyn StorageAdapter>,
+    /// Pending ACP notification for merging consecutive text chunks
+    pending_notification: Option<acp::SessionNotification>,
+    rx: mpsc::UnboundedReceiver<PersistenceMsg>,
+    remote_sync: Option<RemoteSync>,
+    /// True only for sessions created this run (not resumed); gates the
+    /// writeback backfill so a resumed, already-synced session isn't re-sent.
+    created_fresh: bool,
+    /// WebSocket-based relay sync for real-time session sharing.
+    /// This streams updates to the relay backend in addition to local persistence.
+    relay_sync: Option<crate::relay::RelaySync>,
+    /// Session title generation lifecycle.
+    summary: crate::session::summary::SummaryGenerator,
+    registry_title_sync: Option<RegistryGeneratedTitleSync>,
+    /// Client gateway for `SessionSummaryGenerated` notifications. Used to
+    /// announce an auto-generated title only once it has actually been adopted
+    /// (see the `GeneratedTitle` handler), so a title rejected for racing a
+    /// manual `/rename` never reaches the client. `None` for the subagent
+    /// variant, whose lifecycle notifications are handled by the coordinator.
+    gateway: Option<GatewaySender>,
+    /// Read every turn, not at construction, so a session opened before the
+    /// decision landed still indexes.
+    search_index: crate::session::storage::search::SharedSearchIndex,
+    disk_full_tx: watch::Sender<bool>,
+    disk_full_notified: bool,
+}
+
+impl SessionPersistence {
+    fn try_merge_text(prev: &mut acp::ContentBlock, new: &acp::ContentBlock) -> bool {
+        match (prev, new) {
+            (acp::ContentBlock::Text(prev_text), acp::ContentBlock::Text(new_text))
+                if prev_text.annotations.is_none()
+                    && prev_text.meta.is_none()
+                    && new_text.annotations.is_none()
+                    && new_text.meta.is_none() =>
+            {
+                prev_text.text.push_str(&new_text.text);
+                true
+            }
+            _ => false,
+        }
+    }
+
+    // Empty chunks are chunks that have no content and no meta.
+    fn is_empty_chunk(update: &acp::SessionUpdate) -> bool {
+        match update {
+            acp::SessionUpdate::AgentMessageChunk(chunk)
+            | acp::SessionUpdate::AgentThoughtChunk(chunk) => {
+                let empty_text =
+                    matches!(&chunk.content, acp::ContentBlock::Text(t) if t.text.is_empty());
+                let no_meta = chunk.meta.is_none();
+                empty_text && no_meta
+            }
+            _ => false,
+        }
+    }
+
+    /// Attempt to merge consecutive ACP text notifications to reduce storage writes.
+    /// Returns Some(notification) if the pending notification should be written now.
+    fn maybe_merge_notification(
+        &mut self,
+        incoming: &acp::SessionNotification,
+    ) -> Option<acp::SessionNotification> {
+        // Always skip empty chunks - don't store them at all
+        if Self::is_empty_chunk(&incoming.update) {
+            return None;
+        }
+
+        let Some(pending) = self.pending_notification.take() else {
+            self.pending_notification = Some(incoming.clone());
+            return None;
+        };
+
+        let pending_update = pending.update.clone();
+        match (&incoming.update, pending_update) {
+            (
+                acp::SessionUpdate::AgentMessageChunk(new_chunk),
+                acp::SessionUpdate::AgentMessageChunk(mut pending_chunk),
+            )
+            | (
+                acp::SessionUpdate::AgentThoughtChunk(new_chunk),
+                acp::SessionUpdate::AgentThoughtChunk(mut pending_chunk),
+            ) => {
+                let did_merge = pending_chunk.meta.is_none()
+                    && new_chunk.meta.is_none()
+                    && Self::try_merge_text(&mut pending_chunk.content, &new_chunk.content);
+
+                if did_merge {
+                    let merged_update = match &incoming.update {
+                        acp::SessionUpdate::AgentMessageChunk(_) => {
+                            acp::SessionUpdate::AgentMessageChunk(pending_chunk)
+                        }
+                        acp::SessionUpdate::AgentThoughtChunk(_) => {
+                            acp::SessionUpdate::AgentThoughtChunk(pending_chunk)
+                        }
+                        _ => unreachable!(),
+                    };
+                    self.pending_notification = Some(
+                        acp::SessionNotification::new(incoming.session_id.clone(), merged_update)
+                            .meta(incoming.meta.clone()),
+                    );
+                    None
+                } else {
+                    self.pending_notification = Some(incoming.clone());
+                    Some(pending)
+                }
+            }
+            _ => {
+                self.pending_notification = Some(incoming.clone());
+                Some(pending)
+            }
+        }
+    }
+
+    async fn write_update(
+        &mut self,
+        update: &SessionUpdate,
+    ) -> Result<(), crate::session::storage::AppendUpdateError> {
+        let result = self
+            .storage
+            .append_update_commit_aware(&self.info, update)
+            .await;
+        self.observe_append_update(&result);
+        result
+    }
+
+    fn observe_io<T>(&mut self, result: &io::Result<T>) {
+        match result {
+            Ok(_) => self.clear_disk_full(),
+            Err(error) if is_disk_full_io_error(error) => self.mark_disk_full(),
+            Err(_) => {}
+        }
+    }
+
+    fn observe_append_update(
+        &mut self,
+        result: &Result<(), crate::session::storage::AppendUpdateError>,
+    ) {
+        match result {
+            Ok(()) => self.clear_disk_full(),
+            Err(
+                crate::session::storage::AppendUpdateError::NotCommitted(error)
+                | crate::session::storage::AppendUpdateError::Committed(error),
+            ) if is_disk_full_io_error(error) => self.mark_disk_full(),
+            Err(_) => {}
+        }
+    }
+
+    fn mark_disk_full(&mut self) {
+        if !*self.disk_full_tx.borrow() {
+            let _ = self.disk_full_tx.send(true);
+        }
+        if self.disk_full_notified {
+            return;
+        }
+        self.disk_full_notified = true;
+        self.emit_disk_full_notification();
+    }
+
+    fn clear_disk_full(&mut self) {
+        if *self.disk_full_tx.borrow() {
+            let _ = self.disk_full_tx.send(false);
+        }
+        self.disk_full_notified = false;
+    }
+
+    fn emit_disk_full_notification(&self) {
+        let Some(gateway) = &self.gateway else {
+            return;
+        };
+        let notification = XaiSessionNotification {
+            session_id: self.info.id.clone(),
+            update: XaiSessionUpdate::RetryState(RetryState::Failed {
+                error_type: DISK_FULL_ERROR_TYPE.to_string(),
+                message: DISK_FULL_USER_MESSAGE.to_string(),
+            }),
+            meta: None,
+        };
+        if let Ok(params) = serde_json::value::to_raw_value(&notification) {
+            gateway.forward_fire_and_forget(acp::ExtNotification::new(
+                "x.ai/session_notification",
+                params.into(),
+            ));
+        }
+    }
+
+    async fn probe_writable(&self) -> io::Result<()> {
+        let dir = self
+            .storage
+            .updates_file_path(&self.info)
+            .and_then(|path| path.parent().map(Path::to_path_buf))
+            .ok_or_else(|| {
+                io::Error::new(
+                    io::ErrorKind::NotFound,
+                    "session directory is unknown; cannot probe disk space",
+                )
+            })?;
+        tokio::task::spawn_blocking(move || {
+            std::fs::create_dir_all(&dir)?;
+            let probe = dir.join(".disk_ok");
+            std::fs::write(&probe, b"ok")?;
+            let _ = std::fs::remove_file(&probe);
+            io::Result::Ok(())
+        })
+        .await
+        .map_err(io::Error::other)?
+    }
+
+    fn queue_acp_sync(&self, notification: acp::SessionNotification) {
+        if let Some(sync) = &self.remote_sync {
+            sync.queue(notification.clone());
+        }
+        if let Some(relay) = &self.relay_sync {
+            relay.queue(notification);
+        }
+    }
+
+    /// Enable writeback for a session created `Local` before settings resolved:
+    /// build the sync and (for a fresh session) backfill its local-only history.
+    /// No-op once syncing, so a repeat upgrade is harmless.
+    async fn upgrade_to_writeback(&mut self, auth_manager: Arc<crate::auth::AuthManager>) {
+        if self.remote_sync.is_some() {
+            return;
+        }
+        // Flush the merge-pending notification so the backfill re-reads it.
+        let _ = self.flush_pending().await;
+        let persisted = match self.storage.load_session(&self.info).await {
+            Ok(persisted) => persisted,
+            Err(error) => {
+                tracing::warn!(%error, "writeback upgrade: failed to load session for backfill");
+                return;
+            }
+        };
+        let remote_sync = match init_remote_sync(
+            &persisted.summary,
+            StorageMode::Writeback,
+            Some(auth_manager),
+        ) {
+            Ok(Some(remote_sync)) => remote_sync,
+            // ZDR team, or nothing to do: leave the session local-only.
+            Ok(None) => return,
+            Err(error) => {
+                tracing::warn!(%error, "writeback upgrade: remote sync init failed");
+                return;
+            }
+        };
+        // Fresh-only backfill; see `backfill_updates_to_sync`.
+        let backfilled =
+            backfill_updates_to_sync(self.created_fresh, persisted.updates, &remote_sync);
+        if self.created_fresh {
+            tracing::info!(
+                session_id = %self.info.id,
+                backfilled,
+                "writeback enabled after settings arrival; backfilled local-only history",
+            );
+        } else {
+            tracing::info!(
+                session_id = %self.info.id,
+                "writeback enabled for resumed session; forward-only, no backfill",
+            );
+        }
+        self.remote_sync = Some(remote_sync);
+    }
+
+    fn finish_pending_append(
+        notification: acp::SessionNotification,
+        result: Result<(), crate::session::storage::AppendUpdateError>,
+    ) -> PendingAppendOutcome {
+        match result {
+            Ok(()) => PendingAppendOutcome::CommittedOk(notification),
+            Err(crate::session::storage::AppendUpdateError::NotCommitted(error)) => {
+                PendingAppendOutcome::NotCommittedErr(notification, error)
+            }
+            Err(crate::session::storage::AppendUpdateError::Committed(error)) => {
+                PendingAppendOutcome::CommittedErr(notification, error)
+            }
+        }
+    }
+
+    /// Restore uncommitted failures; sync committed records before returning errors.
+    async fn drain_pending(&mut self) -> Result<(), crate::session::storage::AppendUpdateError> {
+        if let Some(notification) = self.pending_notification.take() {
+            let result = self
+                .write_update(&SessionUpdate::Acp(Box::new(notification.clone())))
+                .await;
+            match Self::finish_pending_append(notification, result) {
+                PendingAppendOutcome::CommittedOk(notification) => {
+                    self.queue_acp_sync(notification);
+                }
+                PendingAppendOutcome::CommittedErr(notification, error) => {
+                    self.queue_acp_sync(notification);
+                    return Err(crate::session::storage::AppendUpdateError::Committed(error));
+                }
+                PendingAppendOutcome::NotCommittedErr(notification, error) => {
+                    self.pending_notification = Some(notification);
+                    return Err(crate::session::storage::AppendUpdateError::NotCommitted(
+                        error,
+                    ));
+                }
+            }
+        }
+        Ok(())
+    }
+
+    async fn handle_durable_append(
+        &mut self,
+        update: SessionUpdate,
+    ) -> Result<(), crate::session::storage::AppendUpdateError> {
+        self.drain_pending().await?;
+        let result = self
+            .storage
+            .append_update_durable_commit_aware(&self.info, &update)
+            .await;
+        self.observe_append_update(&result);
+        match (&update, &result) {
+            (SessionUpdate::Acp(notification), Ok(()))
+            | (
+                SessionUpdate::Acp(notification),
+                Err(crate::session::storage::AppendUpdateError::Committed(_)),
+            ) => self.queue_acp_sync((**notification).clone()),
+            _ => {}
+        }
+        result
+    }
+
+    /// Flush any pending merged ACP notification to disk and remote sync.
+    /// A no-op drain must not clear the disk-full latch.
+    async fn flush_pending(&mut self) -> io::Result<()> {
+        let result = self
+            .drain_pending()
+            .await
+            .map_err(crate::session::storage::AppendUpdateError::into_io_error);
+        if let Err(error) = &result {
+            tracing::warn!(%error, "failed to write pending update");
+        }
+        if let Some(sync) = &self.remote_sync {
+            sync.flush();
+        }
+        if let Some(relay) = &self.relay_sync {
+            relay.flush();
+        }
+        result
+    }
+
+    /// Flush pending writes and sync all session files to disk.
+    /// Called before CopyFile to ensure all data is persisted.
+    async fn flush_and_sync(&mut self) {
+        let _ = self.flush_pending().await;
+        if let Err(e) = self.storage.sync_session_files(&self.info).await {
+            tracing::warn!(?e, "Failed to sync session files to disk");
+        }
+    }
+
+    /// Announce a newly adopted auto title (first generation or refresh) to the
+    /// client, remote store, and session registry. Called only after the title
+    /// actually landed on disk, so a title rejected for racing a manual
+    /// `/rename` is never announced.
+    fn announce_adopted_title(&self, title: String) {
+        crate::session::summary::notify_client(&self.gateway, &self.info, &title);
+        if let Some(sync) = &self.remote_sync {
+            sync.set_title(title.clone());
+        }
+        if let Some(reg) = self.registry_title_sync.as_ref()
+            && !reg.suppress_for_zdr
+        {
+            let client = reg.client.clone();
+            let sid = self.info.id.to_string();
+            tokio::spawn(async move {
+                let req = crate::agent::session_registry_client::UpdateRequest {
+                    summary: Some(title),
+                    first_prompt: None,
+                    last_turn_number: None,
+                    repo_head_at_end: None,
+                    restorable_turn_number: None,
+                };
+                if let Err(e) = client.update(&sid, &req).await {
+                    tracing::warn!(
+                        error = %e,
+                        session_id = %sid,
+                        "session registry summary sync failed after title update"
+                    );
+                }
+            });
+        }
+    }
+
+    async fn run(mut self) {
+        // Persistence traffic counts as worktree activity; debounced so
+        // long-resident sessions (leader/remote, active for days without a
+        // re-open) stay out of gc expiry without per-message DB writes.
+        // The constructors fire the t=0 touch, so this starts at now().
+        let mut last_worktree_touch = std::time::Instant::now();
+        while let Some(msg) = self.rx.recv().await {
+            if last_worktree_touch.elapsed() >= WORKTREE_TOUCH_INTERVAL {
+                last_worktree_touch = std::time::Instant::now();
+                // Detached on purpose: opportunistic refresh, no ordering need.
+                spawn_worktree_touch(&self.info);
+            }
+            match msg {
+                PersistenceMsg::UpgradeToWriteback { auth_manager } => {
+                    self.upgrade_to_writeback(auth_manager).await;
+                }
+                PersistenceMsg::Flush => {
+                    let _ = self.flush_pending().await;
+                }
+                PersistenceMsg::FlushAndAck { respond_to } => {
+                    let result = self.flush_pending().await;
+                    let _ = respond_to.send(result);
+                }
+                PersistenceMsg::ProbeWritable { respond_to } => {
+                    let result = self.probe_writable().await;
+                    self.observe_io(&result);
+                    let _ = respond_to.send(result);
+                }
+                PersistenceMsg::Update(update) => {
+                    match update {
+                        SessionUpdate::Acp(notification) => {
+                            // ACP notifications use merging to coalesce consecutive text chunks
+                            if let Some(to_write) = self.maybe_merge_notification(&notification) {
+                                match self
+                                    .write_update(&SessionUpdate::Acp(Box::new(to_write.clone())))
+                                    .await
+                                {
+                                    Ok(())
+                                    | Err(crate::session::storage::AppendUpdateError::Committed(
+                                        _,
+                                    )) => {
+                                        self.queue_acp_sync(to_write);
+                                    }
+                                    Err(error) => tracing::warn!(%error, "failed to write update"),
+                                }
+                            }
+                        }
+                        SessionUpdate::Xai(_) => {
+                            // xAI notifications are written directly without merging
+                            if let Err(error) = self.write_update(&update).await {
+                                tracing::warn!(%error, "failed to write update");
+                            }
+                        }
+                    }
+                }
+                PersistenceMsg::AppendUpdateDurablyAndAck { update, respond_to } => {
+                    let result = self.handle_durable_append(update).await;
+                    let _ = respond_to.send(result);
+                }
+                PersistenceMsg::Chat(chat_msg) => {
+                    let result = self
+                        .storage
+                        .append_chat_message(&self.info, &chat_msg)
+                        .await;
+                    self.observe_io(&result);
+                    if let Err(e) = result {
+                        tracing::warn!(?e, "failed to write chat message");
+                    }
+                }
+                PersistenceMsg::AppendCwdSwitchAndAck { item, respond_to } => {
+                    let result = self
+                        .storage
+                        .append_cwd_switch_commit_aware(&self.info, &item)
+                        .await
+                        .map_err(|error| match error {
+                            crate::session::storage::AppendCwdSwitchError::NotCommitted(error) => {
+                                xai_chat_state::StrictAppendError::NotCommitted(error)
+                            }
+                            crate::session::storage::AppendCwdSwitchError::Committed {
+                                acknowledgement,
+                                source,
+                            } => xai_chat_state::StrictAppendError::Committed {
+                                acknowledgement,
+                                source,
+                            },
+                        });
+                    let _ = respond_to.send(result);
+                }
+                PersistenceMsg::ReplaceChatHistory(messages) => {
+                    tracing::info!(
+                        num_messages = messages.len(),
+                        "Replacing chat history (compaction)"
+                    );
+                    let result = self
+                        .storage
+                        .replace_chat_history(&self.info, &messages)
+                        .await;
+                    self.observe_io(&result);
+                    if let Err(e) = result {
+                        tracing::warn!(?e, "failed to replace chat history");
+                    }
+                }
+                PersistenceMsg::ReplaceChatHistoryForStripAndAck {
+                    messages,
+                    respond_to,
+                } => {
+                    // Backup gates the rewrite; see `strip_rewrite_gated`.
+                    let result = crate::session::storage::strip_rewrite_gated(
+                        self.storage.as_ref(),
+                        &self.info,
+                        &messages,
+                    )
+                    .await;
+                    self.observe_io(&result);
+                    if let Err(e) = &result {
+                        tracing::warn!(?e, "image-strip history rewrite failed");
+                    }
+                    let _ = respond_to.send(result);
+                }
+                PersistenceMsg::CurrentModel {
+                    model_id,
+                    agent_name,
+                    reasoning_effort,
+                } => {
+                    if let Err(e) = self
+                        .storage
+                        .update_current_model_and_agent(
+                            &self.info,
+                            &model_id,
+                            agent_name.as_deref(),
+                            reasoning_effort,
+                        )
+                        .await
+                    {
+                        tracing::warn!(?e, "failed to update current model");
+                    }
+                    if let Some(sync) = &self.remote_sync {
+                        sync.set_model_id(model_id.0.to_string());
+                    }
+                }
+                PersistenceMsg::PlanState(state) => {
+                    if let Err(e) = self.storage.write_plan_state(&self.info, &state).await {
+                        tracing::warn!(?e, "failed to write plan state");
+                    }
+                }
+                PersistenceMsg::PlanModeState(state) => {
+                    if let Err(e) = self.storage.write_plan_mode_state(&self.info, &state).await {
+                        tracing::warn!(?e, "failed to write plan mode state");
+                    }
+                }
+                PersistenceMsg::GoalModeState(state) => {
+                    if let Err(e) = self.storage.write_goal_mode_state(&self.info, &state).await {
+                        tracing::warn!(?e, "failed to write goal mode state");
+                    }
+                }
+                PersistenceMsg::DeleteGoalModeState { respond_to } => {
+                    let result = self.storage.delete_goal_mode_state(&self.info).await;
+                    if let Err(e) = &result {
+                        tracing::warn!(?e, "failed to delete goal mode state");
+                    }
+                    let _ = respond_to.send(result);
+                }
+                PersistenceMsg::WorkflowRunState(manifest) => {
+                    if let Err(error) = self
+                        .storage
+                        .write_workflow_run_state(&self.info, &manifest)
+                        .await
+                    {
+                        tracing::warn!(run_id = %manifest.state.run_id, ?error, "failed to write workflow run state");
+                    }
+                }
+                PersistenceMsg::WorkflowRunStateAndAck {
+                    manifest,
+                    respond_to,
+                } => {
+                    let result = self
+                        .storage
+                        .write_workflow_run_state(&self.info, &manifest)
+                        .await;
+                    if let Err(error) = &result {
+                        tracing::warn!(run_id = %manifest.state.run_id, ?error, "failed to write acknowledged workflow run state");
+                    }
+                    let _ = respond_to.send(result);
+                }
+                PersistenceMsg::DeleteWorkflowRunState(run_id) => {
+                    if let Err(e) = self
+                        .storage
+                        .delete_workflow_run_state(&self.info, &run_id)
+                        .await
+                    {
+                        tracing::warn!(%run_id, ?e, "failed to delete workflow run state");
+                    }
+                }
+                PersistenceMsg::ContentChunk(content_chunks) => {
+                    let content_part = content_chunks
+                        .content_chunks
+                        .into_iter()
+                        .filter_map(|content_chunk| match content_chunk {
+                            acp::ContentBlock::Text(text) => Some(text.text),
+                            _ => None,
+                        })
+                        .collect::<Vec<_>>()
+                        .join("\n");
+                    self.summary.update(content_part);
+
+                    // Notify session search index so this turn becomes searchable
+                    crate::session::storage::search::notify_session_updated(
+                        self.search_index.decision().writer(),
+                        &self.info.id.to_string(),
+                        &self.info.cwd,
+                    );
+                }
+                PersistenceMsg::GeneratedTitle(title) => {
+                    // Auto-generated titles must never overwrite a title the
+                    // user set via `/rename`. `set_generated_title_if_absent`
+                    // writes only when the session still has no title (checked
+                    // atomically under the summary lock) and reports whether it
+                    // did, so a manual rename that raced this generation wins
+                    // and its title is not clobbered locally or on remotes.
+                    match self
+                        .storage
+                        .set_generated_title_if_absent(&self.info, title.clone())
+                        .await
+                    {
+                        Ok(true) => self.announce_adopted_title(title),
+                        Ok(false) => {
+                            tracing::debug!(
+                                "skipped auto-generated title; session already has a title"
+                            );
+                        }
+                        Err(e) => {
+                            tracing::warn!(?e, "failed to persist generated session title");
+                        }
+                    }
+                }
+                PersistenceMsg::RegenerateTitle(title) => {
+                    // Overwrites an existing auto title but never a manual
+                    // `/rename` (enforced atomically under the summary lock);
+                    // `Ok(true)` means the refresh landed.
+                    match self
+                        .storage
+                        .regenerate_generated_title(&self.info, title.clone())
+                        .await
+                    {
+                        Ok(true) => self.announce_adopted_title(title),
+                        Ok(false) => {
+                            tracing::debug!("skipped title refresh; session has a manual title");
+                        }
+                        Err(e) => {
+                            tracing::warn!(?e, "failed to persist refreshed session title");
+                        }
+                    }
+                }
+                PersistenceMsg::LastRecap(recap) => {
+                    if let Err(e) = self.storage.set_last_recap(&self.info, recap).await {
+                        tracing::warn!(?e, "failed to persist session recap");
+                    }
+                }
+                PersistenceMsg::ManualTitleRenamed(title) => {
+                    if let Some(sync) = &self.remote_sync {
+                        sync.set_manual_title(title);
+                    }
+                }
+                PersistenceMsg::ResetTitleToAuto => {
+                    self.summary.reset();
+                    if let Some(sync) = &self.remote_sync {
+                        sync.clear_title();
+                    }
+                }
+                PersistenceMsg::LastTurnSummary(summary) => {
+                    if let Err(e) = self
+                        .storage
+                        .set_last_turn_summary(&self.info, summary)
+                        .await
+                    {
+                        tracing::warn!(?e, "failed to persist last turn summary");
+                    }
+                }
+                PersistenceMsg::RewindPoint(point) => {
+                    let result = self.storage.append_rewind_point(&self.info, &point).await;
+                    self.observe_io(&result);
+                    if let Err(e) = result {
+                        tracing::warn!(?e, "failed to write rewind point");
+                    }
+                }
+                PersistenceMsg::TruncateRewindPoints { from_index } => {
+                    if let Err(e) = self
+                        .storage
+                        .truncate_rewind_points_from(&self.info, from_index)
+                        .await
+                    {
+                        tracing::warn!(?e, from_index, "failed to truncate rewind points");
+                    }
+                }
+                PersistenceMsg::MergeRewindPointsFrom { target_index } => {
+                    if let Err(e) = self
+                        .storage
+                        .merge_rewind_points_from(&self.info, target_index)
+                        .await
+                    {
+                        tracing::warn!(?e, target_index, "failed to merge rewind points");
+                    }
+                }
+                PersistenceMsg::CollectionId(collection_id) => {
+                    if let Err(e) = self
                         .storage
                         .update_collection_id(&self.info, &collection_id)
                         .await
@@ -2377,3 +3110,9 @@ mod find_local_child_tests;
 mod resolve_local_session_tests;
 
 #[cfg(test)]
+#[path = "persistence_repo_wide_resolution_tests.rs"]
+mod repo_wide_resolution_tests;
+
+#[cfg(test)]
+#[path = "persistence_actor_lifetime_tests.rs"]
+mod actor_lifetime_tests;

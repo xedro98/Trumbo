@@ -901,8 +901,6 @@ pub async fn run_leader(
     suppress_otel();
     let auth: Option<GrokAuth> = crate::auth::try_noninteractive_auth_no_mint(ctx).await;
 
-    // ── Phase 6b: Legacy devbox auth migration ─────────────────────────────
-    let auth: Option<GrokAuth> = migrate_devbox_auth_if_legacy(auth, &agent_config).await;
 
     // A session-less leader that can still mint one (auth provider / devbox) will
     // acquire a trumbo.com session post-readiness whose fleet policy governs

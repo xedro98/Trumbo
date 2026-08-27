@@ -540,9 +540,9 @@ impl Default for EndpointsConfig {
         Self {
             cli_chat_proxy_base_url: std::env::var("GROK_CLI_CHAT_PROXY_BASE_URL")
                 .ok()
-                .or_else(|| Some(trumbo_provider_base_url())),
+                .or_else(|| Some(CLI_CHAT_PROXY_BASE_URL_DEFAULT.to_string())),
             xai_api_base_url: std::env::var("GROK_XAI_API_BASE_URL")
-                .unwrap_or_else(|_| trumbo_provider_base_url()),
+                .unwrap_or_else(|_| CLI_CHAT_PROXY_BASE_URL_DEFAULT.to_string()),
             alpha_test_key: None,
             models_base_url: env_string("GROK_MODELS_BASE_URL"),
             models_list_url: env_string("GROK_MODELS_LIST_URL"),

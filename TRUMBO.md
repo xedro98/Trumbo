@@ -48,3 +48,22 @@ grok                  # launch the TUI (welcome → model quartz-1.0)
 The TUI's login screen is bypassed once a Trumbo token is stored (the token is
 resolved via the `xai::api_key` scope), so you land directly in the 
 Grok-style welcome and can chat against Trumbo.
+---
+## Synced from upstream
+
+This fork is continuously synced with [xai-org/grok-build](https://github.com/xai-org/grok-build).
+
+- **Baseline (fork point):** internal grok-build rev `3e620a76` (upstream commit `afbc0fb`, 2026-08-07).
+- **Last synced:** upstream `77cd7eb` ("Synced from monorepo", 2026-08-25); `SOURCE_REV` = `28439e8a8712c363321cf6ff0c2d70cd058d2a7d`.
+
+The port was done as a real 3-way merge (merge base `afbc0fb`), so **all** upstream changes since the fork are carried in while Trumbo branding/providers stay intact. Highlights of what came in with the 08-25 sync:
+
+- **Worktrees & git safety:** new `xai-fast-worktree` git safety layer (working-tree reachability, ref guards, reclaimed-worktree reflog), `worktree gc` with process-scan and dry-run preview, NFS-related copy handling.
+- **Config:** layered config via `xai-grok-config` + env overlay (`TRUMBO_CONFIG` / `TRUMBO_CONFIG_PATH`), managed/requirements sync, toolset/web-search allowlists.
+- **Home dir** extracted to `xai-grok-home` (single source of truth for `~/.trumbo`, still migrates a legacy `~/.grok`), and `xai-grok-shell-terminal` extracted.
+- **Agent/session:** status line config, scheduler liveness, session checkpoint store, publish/recovery, foreign-session support, `xai-chat-state` compaction + image budget.
+- **Protocol:** `xai-tool-protocol` `bot_relay`, frames/methods expansion, error-code handling; `xai-tty-utils` child-wait / process-resource scope robustness.
+- **TUI:** textarea split into `editor`/editor-keys, richer dashboard/session picker, usage modal fields, consent & cancel-latency handling, bidi rendering, subagent lifecycle.
+- **Updater:** channel-aware reinstall hints targeting `@trumbodev/cli` (npm) and `xedro98/Trumbo` (GitHub releases).
+
+Docs: the `grok` command name and internal `xai-grok-*`/protocol identifiers are kept verbatim for compatibility; the user-facing product brand, provider, model family, and home/config paths are Trumbo.

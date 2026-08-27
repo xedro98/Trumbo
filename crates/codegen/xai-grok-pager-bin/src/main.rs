@@ -74,7 +74,8 @@ fn process_identity(command: Option<&Command>, is_interactive: bool) -> Option<P
             | Command::Completions { .. }
             | Command::Worktree(_)
             | Command::DiskUsage(_)
-            | Command::Workspace(_),
+            | Command::Workspace(_)
+            | Command::Trumbo(_),
         ) => (Entrypoint::Cli, Interactivity::Unattended),
         None if is_interactive => return None,
         None => (Entrypoint::Headless, Interactivity::Unattended),
