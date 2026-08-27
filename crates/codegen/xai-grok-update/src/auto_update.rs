@@ -2580,7 +2580,10 @@ fn install_npm(target: Option<&str>, channel: &str, npm_registry: Option<&str>) 
     );
     pb.enable_steady_tick(Duration::from_millis(100));
 
-    let mut cmd = Command::new("npm");
+    // npm on Windows ships as npm.cmd; CreateProcess only resolves .exe for a
+    // bare name, so resolve the .cmd shim explicitly or the spawn ENOENTs.
+    let npm_program = if cfg!(target_os = "windows") { "npm.cmd" } else { "npm" };
+    let mut cmd = Command::new(npm_program);
     cmd.args(["i", "-g", &version_arg]);
     if let Some(registry) = npm_registry {
         cmd.arg(format!("--registry={}", registry));

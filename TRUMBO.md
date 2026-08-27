@@ -70,6 +70,16 @@ Docs: the `grok` command name and internal `xai-grok-*`/protocol identifiers are
 ---
 ## Release history
 
+### v1.1.1 (2026-08-27)
+
+Corrective release fixing the self-updater and its packaging:
+
+- Updater npm channel repointed from `@trumbodev/cli` to `@trumbodev/trumbo`: `trumbo update` previously cross-targeted the separate TypeScript desktop CLI (@trumbodev/cli, v3.9.3), reported a bogus "Updating Grok 1.1.0 -> 3.9.3", and told users to reinstall the wrong package. It now targets the Rust TUI's own npm package and reports itself current.
+- Windows npm-based self-update fixed: the updater spawned bare npm, but on Windows npm ships as npm.cmd (CreateProcess only resolves .exe), so the install step failed with "program not found". It now resolves npm.cmd on Windows.
+- Republished to npm as @trumbodev/trumbo@1.1.1 (meta) + @trumbodev/trumbo-win32-x64@1.1.1 (native binary) and mirrored as the v1.1.1 GitHub release with the Windows asset.
+
+Tag: v1.1.1 (GitHub release targets xedro98/Trumbo; npm package @trumbodev/trumbo).
+
 ### v1.1.0 (2026-08-27)
 
 Feature release on top of the 08-25 upstream sync (see "Synced from upstream" above). Crate version bumped `1.0.10` -> `1.1.0` (`xai-grok-pager`, `xai-grok-pager-bin`, `xai-grok-shell`, `xai-grok-version`).
